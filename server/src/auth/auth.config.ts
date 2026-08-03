@@ -5,6 +5,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 export interface AuthConfigOptions {
   secret: string;
   baseURL: string;
+  trustedOrigins: string[];
 }
 
 /**
@@ -26,6 +27,7 @@ export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
   return betterAuth({
     secret: options.secret,
     baseURL: options.baseURL,
+    trustedOrigins: options.trustedOrigins,
     basePath: '/api/auth',
     database: prismaAdapter(prisma, { provider: 'postgresql' }),
     emailAndPassword: {

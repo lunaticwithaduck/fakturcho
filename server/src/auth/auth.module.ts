@@ -14,6 +14,7 @@ import { AUTH_INSTANCE } from './auth.tokens';
         createAuth(prisma, {
           secret: process.env.BETTER_AUTH_SECRET ?? 'dev-secret-change-me',
           baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:3001',
+          trustedOrigins: (process.env.APP_ORIGINS ?? 'http://localhost:3000').split(','),
         }),
       inject: [PrismaService],
     },

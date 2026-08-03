@@ -6,6 +6,7 @@ import { createAuth } from './auth.config';
 const AUTH_OPTIONS = {
   secret: 'test-secret-at-least-32-characters-long',
   baseURL: 'http://localhost:3001',
+  trustedOrigins: ['http://localhost:3000'],
 };
 
 describe('signup provisions a tenant', () => {
