@@ -1,0 +1,12 @@
+packages:
+  - app
+  - server
+  - backoffice
+  - design
+  - packages/*
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - '@tailwindcss/oxide'
+  - '@nestjs/core'

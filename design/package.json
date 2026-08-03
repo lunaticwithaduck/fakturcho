@@ -1,0 +1,13 @@
+{
+  "name": "@fakturcho/design",
+  "version": "0.0.0",
+  "private": true,
+  "main": "components/index.ts",
+  "types": "components/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
