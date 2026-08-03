@@ -5,23 +5,38 @@
   "scripts": {
     "dev": "nest start --watch",
     "build": "nest build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@fakturcho/shared-types": "workspace:*",
-    "@prisma/client": "^5.22.0",
     "@nestjs/common": "^10.4.15",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.4.15",
     "@nestjs/platform-express": "^10.4.15",
+    "@paddle/paddle-node-sdk": "^2.0.0",
+    "@prisma/client": "^5.22.0",
+    "better-auth": "^1.2.0",
+    "playwright": "^1.49.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "resend": "^4.0.0",
+    "rxjs": "^7.8.1",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
-    "prisma": "^5.22.0",
     "@nestjs/cli": "^10.4.9",
     "@nestjs/schematics": "^10.2.3",
+    "@nestjs/testing": "^10.4.15",
+    "@swc/core": "^1.10.0",
+    "@testcontainers/postgresql": "^10.16.0",
+    "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
-    "typescript": "^5.7.2"
+    "@types/pg": "^8.11.10",
+    "pg": "^8.13.1",
+    "prisma": "^5.22.0",
+    "typescript": "^5.7.2",
+    "unpdf": "^0.12.1",
+    "unplugin-swc": "^1.5.9",
+    "vitest": "^2.1.8"
   }
 }
