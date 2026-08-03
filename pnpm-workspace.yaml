@@ -10,3 +10,6 @@ onlyBuiltDependencies:
   - sharp
   - '@tailwindcss/oxide'
   - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - prisma

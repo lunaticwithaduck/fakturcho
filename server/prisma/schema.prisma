@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DocumentType {
+  INVOICE
+  PROFORMA
+  CREDIT_NOTE
+  DEBIT_NOTE
+  QUOTE
+}
+
+enum DocumentStatus {
+  DRAFT
+  SENT
+  PAID
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users          User[]
+  issuerProfile  IssuerProfile?
+  clients        Client[]
+  catalogueItems CatalogueItem[]
+  numberSeries   NumberSeries[]
+  documents      Document[]
+  subscription   Subscription?
+
+  @@map("account")
+}
+
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  accountId     String
+  account       Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions     Session[]
+  authAccounts AuthAccount[]
+
+  @@index([accountId])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("session")
+}
+
+model AuthAccount {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("auth_account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("verification")
+}
+
+model IssuerProfile {
+  id            String   @id @default(cuid())
+  accountId     String   @unique
+  account       Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  companyName   String?
+  eik           String?
+  mol           String?
+  addressLine   String?
+  city          String?
+  phone         String?
+  vatRegistered Boolean  @default(false)
+  vatNumber     String?
+  bankName      String?
+  iban          String?
+  bic           String?
+  altIban       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("issuer_profile")
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  accountId   String
+  account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  companyName String
+  eik         String?
+  vatNumber   String?
+  address     String?
+  email       String?
+  mol         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  documents Document[]
+
+  @@unique([accountId, eik])
+  @@index([accountId])
+  @@map("client")
+}
+
+model CatalogueItem {
+  id               String   @id @default(cuid())
+  accountId        String
+  account          Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  name             String
+  defaultUnitPrice Int
+  unit             String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([accountId])
+  @@map("catalogue_item")
+}
+
+model NumberSeries {
+  id           String       @id @default(cuid())
+  accountId    String
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  documentType DocumentType
+  nextNumber   BigInt       @default(1)
+  issuedCount  Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@unique([accountId, documentType])
+  @@map("number_series")
+}
+
+model Document {
+  id           String         @id @default(cuid())
+  accountId    String
+  account      Account        @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  documentType DocumentType
+  status       DocumentStatus @default(DRAFT)
+
+  number             BigInt?
+  numberPrefix       String?
+  numberSuffix       String?
+  referenceNumber    String?
+  originalDocumentId String?
+  originalDocument   Document?  @relation("DocumentCorrections", fields: [originalDocumentId], references: [id], onDelete: Restrict)
+  corrections        Document[] @relation("DocumentCorrections")
+
+  issuedAt   DateTime? @db.Date
+  taxEventAt DateTime? @db.Date
+  dueAt      DateTime? @db.Date
+  validUntil DateTime? @db.Date
+
+  subtotal           Int     @default(0)
+  discountTotal      Int     @default(0)
+  amount             Int     @default(0)
+  vatIncluded        Boolean @default(false)
+  vatRateBp          Int     @default(2000)
+  vatAmount          Int     @default(0)
+  vatExemptionGround String?
+  currency           String  @default("EUR")
+
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  preparedBy String?
+  notes      String?
+  emailText  String?
+  emailedAt  DateTime?
+  templateId String    @default("classic")
+
+  issuerCompanyName   String?
+  issuerEik           String?
+  issuerMol           String?
+  issuerAddressLine   String?
+  issuerCity          String?
+  issuerPhone         String?
+  issuerVatRegistered Boolean?
+  issuerVatNumber     String?
+  issuerBankName      String?
+  issuerIban          String?
+  issuerBic           String?
+  issuerAltIban       String?
+
+  recipientCompanyName String?
+  recipientEik         String?
+  recipientVatNumber   String?
+  recipientAddress     String?
+  recipientEmail       String?
+  recipientMol         String?
+
+  lineItems LineItem[]
+  discounts Discount[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([accountId, documentType, number])
+  @@index([accountId, status])
+  @@index([accountId, createdAt])
+  @@index([originalDocumentId])
+  @@map("document")
+}
+
+model LineItem {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  name       String
+  quantity   Decimal  @db.Decimal(14, 3)
+  unitPrice  Int
+  lineTotal  Int
+  sortOrder  Int
+
+  @@index([documentId])
+  @@map("line_item")
+}
+
+model Discount {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  label      String
+  percentBp  Int?
+  amount     Int?
+  sortOrder  Int      @default(0)
+
+  @@index([documentId])
+  @@map("discount")
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  accountId            String             @unique
+  account              Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  status               SubscriptionStatus @default(TRIALING)
+  paddleSubscriptionId String?            @unique
+  paddleCustomerId     String?
+  planId               String?
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@map("subscription")
+}
