@@ -1,124 +1,132 @@
 # Handoff
 
-State as of commit `aafe7da` (2026-08-04). Working tree clean. MVP phases 1–6 of
-`prompt/PLAN.md` are complete and each was committed only after its gate passed.
+State as of 2026-08-09. Phases 1–9 of `prompt/PLAN.md` are complete and gated:
+the MVP (1–6), credits billing (8, SPEC §11, invariants 20–23) and deployment
+(9, Railway). The app is **live in production** and a full signup → issue →
+render transaction has been verified against it.
 
 The authoritative documents are still `prompt/CLAUDE.md` (rules), `prompt/SPEC.md`
-(product + the 19 invariants) and `prompt/PLAN.md` (phases). This file only records
-what exists now, how to run it, and what is deliberately unfinished.
+(product + the 23 invariants) and `prompt/PLAN.md` (phases). `DEPLOY.md` is the
+deployment runbook. GitHub: `github.com/lunaticwithaduck/fakturcho`
+(`develop` = `main`).
 
-## Running it
+## Production
+
+Railway project `fakturcho` (id `96cc0007-8a18-43bc-b64e-39b55997d449`), one
+environment, three services:
+
+- **api** — `https://api-production-9b4c.up.railway.app` (health: `/api/health`)
+- **app** — `https://app-production-df6f.up.railway.app` (the product)
+- **Postgres** — referenced by the api as `${{Postgres.DATABASE_URL}}`
+
+Redeploy from the repo root: `railway up --service api --detach` /
+`--service app`. The Dockerfile per service is selected by the
+`RAILWAY_DOCKERFILE_PATH` service variable, not by railway.json (the
+config-file path is a UI-only setting). `BETTER_AUTH_SECRET` in production is
+a real generated secret. **Paddle and Resend keys are placeholders** — buying
+credits and sending email are the only two flows that don't work yet; see
+§Paddle below. A smoke account exists in prod: `smoke@fakturcho.bg` /
+`smoke-test-12345` (holds invoice № 1 of its series).
+
+## Billing model (SPEC §11)
+
+- Issuing any document costs **0,10 €**, deducted atomically inside the
+  issuance transaction, before the number claim. Insufficient balance → 402
+  `INSUFFICIENT_CREDITS`, no number claimed, document stays draft.
+- Credit packs 5/10/25 € = one-time Paddle purchases, fulfilled idempotently
+  on `transaction.completed` (unique `paddleTransactionId` on the ledger).
+- Signup grants 1,00 € once, in the account-creation transaction. No more
+  auto-trial subscription; a subscription (bought) = unlimited issuing.
+- `account.creditBalanceCents` always equals the ledger sum and is
+  CHECK-constrained ≥ 0 at the database.
+
+## Paddle — the missing piece (needs a human)
+
+1. Create a Paddle account (sandbox first), then in the dashboard create four
+   prices: one recurring subscription and three one-time (5, 10, 25 EUR).
+2. Create a webhook destination →
+   `https://api-production-9b4c.up.railway.app/api/billing/webhook`,
+   subscribe to `transaction.completed` + the three `subscription.*` events.
+3. Put the real values into the api service:
+   `railway variables --service api --set PADDLE_API_KEY=... --set
+   PADDLE_WEBHOOK_SECRET=... --set PADDLE_SUBSCRIPTION_PRICE_ID=pri_... --set
+   PADDLE_PRICE_PACK5=pri_... --set PADDLE_PRICE_PACK10=pri_... --set
+   PADDLE_PRICE_PACK25=pri_...` (add `PADDLE_ENVIRONMENT=production` when
+   leaving sandbox) and redeploy the api.
+4. Same idea for Resend: verify a sending domain, set `RESEND_API_KEY` and
+   `EMAIL_FROM`.
+
+## Running it locally
 
 ```
-docker compose -f server/docker-compose.yml up -d     # Postgres on :54329
+docker compose -f server/docker-compose.yml up -d     # Postgres on :54129
 pnpm install
-pnpm --filter @fakturcho/shared-types build           # server/app resolve the built dist
+pnpm --filter @fakturcho/shared-types build
 pnpm --filter @fakturcho/server exec prisma migrate deploy
 pnpm --filter @fakturcho/server dev                   # API on :3001
 pnpm --filter @fakturcho/app dev                      # product on :3000
 pnpm --filter @fakturcho/backoffice dev               # admin on :5173
 ```
 
-The app proxies `/api/*` to the server via `next.config.ts` rewrites, so the browser
-only ever talks to :3000 and session cookies are same-origin. Node 22 (`.nvmrc`).
-
-A demo account was seeded on 2026-08-04: `demo@fakturcho.bg` / `demo12345`
-(complete issuer profile, 4 clients, 4 catalogue items, 7 documents across all
-states). It lives in the Docker volume `server_fakturcho-db-data`, which survived
-`docker compose down` — bring the container back up and the data is still there.
-`docker compose down -v` destroys it; re-seed by signing up and entering data, or
-rewrite the seed script (it only used public API endpoints).
-
-Backoffice login is a hardcoded placeholder: `admin@fakturcho.bg` / `admin`.
+Local demo account: `demo@fakturcho.bg` / `demo12345` (in the Docker volume
+`server_fakturcho-db-data`; it got the retroactive 1,00 € grant).
+Backoffice login is still the hardcoded placeholder `admin@fakturcho.bg` /
+`admin`.
 
 ## Gates
 
 ```
 pnpm lint         # biome + scripts/lint-tokens.cjs
 pnpm typecheck    # all five packages
-pnpm test         # server vitest + app vitest
-pnpm --filter @fakturcho/app test:e2e   # Playwright, mobile + desktop, boots both servers
+pnpm test         # server vitest (227) + app vitest (118)
+pnpm --filter @fakturcho/app test:e2e   # Playwright, mobile + desktop
 ```
 
-Husky runs lint + typecheck + test on every commit, so a commit is expensive.
-The e2e suite is not in the pre-commit hook — run it before anything that touches
-the compose/issue/render path.
-
-Coverage: 19 server spec files (all 19 SPEC invariants against Testcontainers
-Postgres, including concurrent number claiming), 15 app test files, 1 e2e spec.
-
-## Layout
-
-```
-app/          Next 16 product. src/api (RTK Query, endpoint injection per domain),
-              src/store, src/auth (Better-Auth client + RequireAuth/RequireSubscription),
-              src/app/(app) routes, src/features/* feature modules, e2e/
-server/       NestJS API. src/documents + src/numbering (issuance, series, lifecycle),
-              src/money (totals, format, amount-in-words, VAT), src/render (the one
-              PDF renderer), src/auth src/clients src/catalogue src/issuer src/billing
-              src/email, src/testing/test-database.ts (Testcontainers harness)
-backoffice/   Vite + AntD admin, seeded mock data
-design/       tokens/tokens.css (single @theme block) + components/* primitives
-packages/shared-types/   the contract; built with tsup, consumed as @fakturcho/shared-types
-scripts/lint-tokens.cjs  token linter (no hex/px/rem/arbitrary values outside design/tokens)
-```
+Husky runs lint + typecheck + test on every commit. All 23 SPEC invariants
+have Testcontainers-backed tests, including concurrency for numbering (2) and
+credit deduction (21).
 
 ## Things that will bite you
 
-These were each found the hard way; the fix is in the tree but the reasoning is not
-obvious from the diff.
+Everything from the MVP handoff still holds; the reasoning lives in git
+history if you need it. Short list plus the new ones:
 
-- **Never `import type` a class you inject into a Nest constructor.** The type import
-  is erased at compile time and DI resolves `undefined` at runtime while every unit
-  test still passes. `biome`'s `useImportType` rule is therefore disabled for
-  `server/**` in `biome.json`. `server/src/testing/app-boot.smoke.spec.ts` boots the
-  real container to catch regressions of this class — keep it passing.
-- **Better-Auth `trustedOrigins`.** The browser reaches the API through the :3000
-  proxy, so the server must trust that origin or every signup/login is rejected with
-  `Invalid origin`. Driven by `APP_ORIGINS` in `server/.env`; add the real domain
-  before deploying.
-- **`biome.json` needs `unsafeParameterDecoratorsEnabled`**, or Biome cannot parse any
-  Nest controller using `@Body()`/`@Param()`.
-- **`shared-types` must be built** (`pnpm --filter @fakturcho/shared-types build`)
-  before the server runs compiled — the package resolves to `dist/`, not source.
-- **Prisma's `upsert` is not atomic** under transaction contention. Number claiming
-  uses raw `INSERT ... ON CONFLICT DO NOTHING` plus `SELECT ... FOR UPDATE` inside one
-  transaction. Do not "simplify" it back.
-- **Vitest and Playwright both glob `*.spec.ts`** — `app/vitest.config.ts` excludes
-  `e2e/**` to keep them apart.
-- **`next-env.d.ts`** is regenerated by `next dev` with quoting that biome would
-  rewrite, so it is excluded from biome in `biome.json`.
+- **Never `import type` a class you inject into a Nest constructor** — DI
+  resolves `undefined` at runtime while unit tests stay green. Guarded by
+  `app-boot.smoke.spec.ts`; keep it passing.
+- **Better-Auth `trustedOrigins`** — driven by `APP_ORIGINS`; must exactly
+  match the app's public origin or every signup/login fails.
+- **`SERVER_URL` is baked into the app at BUILD time** (Next rewrites are
+  serialized into `routes-manifest.json`). Changing it needs a rebuild of the
+  app image, not a restart.
+- **Windows reserves ephemeral port ranges after reboots** — that's why local
+  Postgres moved 54329 → 54129. If compose ever fails with "socket access
+  forbidden", check `netsh interface ipv4 show excludedportrange protocol=tcp`.
+- **Prisma `upsert` is not atomic** — number claiming and credit deduction
+  both use raw guarded SQL inside one transaction. Do not "simplify" them.
+- **The credit charge must precede the number claim** in the issuance
+  transaction, so a failed charge never burns a number (invariant 20).
+- **Webhook fulfilment is idempotent per `paddleTransactionId`** — a P2002 on
+  the ledger insert means "already processed", not an error.
 
 ## Open ends
 
-- **Backoffice has no real backend.** All five screens read seeded mock data through
-  hooks shaped like RTK Query's, so swapping in a real slice is mechanical — but the
-  server has no admin module (nothing under `server/src/admin`), and admin auth is the
-  hardcoded login above. This is the sanctioned first pass per `prompt/CLAUDE.md`, not
-  an oversight.
-- **Nav is text-only.** `design/components/index.ts` re-exports only `FileText`,
-  `HelpCircle` and `Plus` from lucide; `app/` cannot import `lucide-react` directly
-  because it is hoisted into `design/node_modules`. Add re-exports to use icons.
-- **`vatIncluded` is never sent from the composer** (always `false`). The server
-  implements and tests the VAT-inclusive back-out; only the UI toggle is missing.
-- **Secrets are placeholders.** `BETTER_AUTH_SECRET` is low-entropy and Paddle/Resend
-  keys are dummies. Paddle billing and Resend email are implemented and unit-tested
-  against mocks but have never run against the real services.
-- **Webhook raw body.** `main.ts` passes `rawBody: true` and the Paddle controller
-  prefers `req.rawBody`, falling back to re-stringified JSON. Confirm HMAC verification
-  against a real Paddle event before trusting it in production.
-- **No deployment setup.** No Dockerfile, no CI. The renderer needs Chromium in the
-  image (`playwright install --with-deps chromium`) and the fonts under
-  `server/assets/fonts`. Sibling repos deploy on Railway.
-- **Phase 7 `[LATER]` scope is deliberately unbuilt**: reminders, recurring documents,
-  saved templates, reporting, multiple visual templates. The data model does not
-  preclude them and the renderer already takes a `templateId`.
+- **Paddle + Resend keys** (above) — the only blockers to full functionality.
+- **Backoffice** still runs on mock data with fake auth and is deliberately
+  not deployed (`DEPLOY.md` explains).
+- **`vatIncluded`** still not exposed in the composer; server supports it.
+- **Custom domain** — both services run on `*.up.railway.app`; when a real
+  domain lands, update `APP_ORIGINS`, `BETTER_AUTH_URL`, `SERVER_URL`
+  (rebuild) and the Paddle webhook URL.
+- **No CI** — gates run locally via husky; GitHub Actions would be the next
+  step.
+- Phase 7 `[LATER]` scope (reminders, recurring, templates, reporting)
+  remains unbuilt by design.
 
 ## Rules worth restating
 
-An issued document is immutable and corrected only by a credit or debit note. Numbers
-are claimed at issuance inside a transaction and never reused. Rendering reads the
-document's frozen snapshot columns and must never join to the live issuer profile or
-client row. There is exactly one renderer — view, print and download are the same
-artifact. Money is integer cents everywhere except the render boundary. All
-user-facing copy is Bulgarian.
+An issued document is immutable and corrected only by a credit or debit note.
+Numbers are claimed at issuance inside a transaction and never reused; the
+credit charge lives in that same transaction. Rendering reads frozen snapshot
+columns only. There is exactly one renderer. Money is integer cents everywhere
+except the render boundary. All user-facing copy is Bulgarian.
