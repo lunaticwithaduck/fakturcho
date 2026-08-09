@@ -28,6 +28,10 @@ export function formatMoney(cents: Cents): string {
   return `${formatCents(cents)} €`;
 }
 
+export function formatSignedMoney(cents: Cents): string {
+  return cents > 0 ? `+${formatMoney(cents)}` : formatMoney(cents);
+}
+
 export function centsToEditableValue(cents: Cents | null): string {
   if (cents === null) return '';
   const { sign, wholePart, fractionPart } = splitCents(cents);

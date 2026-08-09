@@ -7,6 +7,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { href: '/documents', label: 'Документи' },
   { href: '/clients', label: 'Клиенти' },
   { href: '/catalogue', label: 'Каталог' },
+  { href: '/billing', label: 'Билинг' },
   { href: '/profile', label: 'Профил' },
 ];
 

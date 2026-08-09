@@ -1,5 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { CreditsService } from '../billing/credits.service';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { NumberingService } from '../numbering/numbering.service';
 import type { TestDatabase } from '../testing/test-database';
@@ -27,6 +28,7 @@ describe('DocumentIssuanceService', () => {
     issuanceService = new DocumentIssuanceService(
       prismaService,
       new NumberingService(prismaService),
+      new CreditsService(prismaService),
     );
   }, 120_000);
 

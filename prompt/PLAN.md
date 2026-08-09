@@ -27,6 +27,16 @@ Spec rulings, closed at the same time:
 - **On-screen viewing** is the generated PDF in a viewer, never a parallel
   HTML layout. (SPEC §8.)
 
+Rulings closed 2026-08-09:
+
+- **Billing model:** credits, pay-as-you-go — issuing any document type costs
+  0,10 €, deducted inside the issuance transaction. Packs of 5 / 10 / 25 € as
+  one-time Paddle purchases. The subscription stays as the unlimited tier; new
+  accounts get a 1,00 € signup grant instead of a trial subscription.
+  (SPEC §11, invariants 20–23.)
+- **Hosting:** Railway — Postgres plus two Docker services (API, app).
+  Backoffice is not deployed until it has a real admin API and real auth.
+
 ---
 
 ## Phases
@@ -100,6 +110,25 @@ usage, one report. Reports mocked at first pass. Lane: `backoffice/**`.
 
 Reminders, recurring, templates, reporting, multiple visual templates. One
 worker each, one at a time, each behind its own gate.
+
+### Phase 8 — Credits billing (2 workers, parallel; opened 2026-08-09)
+
+SPEC §11. Contract first — schema, migration, `shared-types` (you, frozen at
+the gate) — then lane S (`server/**` except `app.module.ts`/`main.ts`) and
+lane F (`app/**` except `next.config.ts`) in parallel. Invariants 20–23 are
+lane S's definition of done; lane F removes the full-app paywall and builds
+the billing screen.
+
+**Gate:** full repo gate plus e2e; invariants 20–23 green.
+
+### Phase 9 — Deployment (1 worker + you)
+
+Dockerfiles (server with Chromium and the Cyrillic fonts, app standalone),
+Railway config, `DEPLOY.md` at the root. Railway provisioning and real
+secrets are yours, never a worker's.
+
+**Gate:** both images build; a deployed environment serves signup → issue →
+render end to end.
 
 ---
 

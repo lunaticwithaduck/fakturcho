@@ -14,17 +14,22 @@ function sign(rawBody: string, secret: string, ts = Math.floor(Date.now() / 1000
   return `ts=${ts};h1=${hmac}`;
 }
 
-function subscriptionUpdatedPayload(accountId: string): string {
+function subscriptionPayload(
+  accountId: string,
+  eventType = 'subscription.updated',
+  status = 'active',
+  subscriptionId = 'sub_123',
+): string {
   const now = new Date().toISOString();
   const periodEnd = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
   return JSON.stringify({
     event_id: 'evt_1',
-    event_type: 'subscription.updated',
+    event_type: eventType,
     occurred_at: now,
     notification_id: 'ntf_1',
     data: {
-      id: 'sub_123',
-      status: 'active',
+      id: subscriptionId,
+      status,
       customer_id: 'ctm_123',
       address_id: 'add_1',
       business_id: null,
@@ -51,43 +56,61 @@ function subscriptionUpdatedPayload(accountId: string): string {
 
 describe('Paddle billing webhook', () => {
   let db: TestDatabase;
+  let paddle: PaddleService;
+  let billing: BillingService;
 
   beforeAll(async () => {
     process.env.PADDLE_WEBHOOK_SECRET = WEBHOOK_SECRET;
     process.env.PADDLE_API_KEY = 'test-api-key';
     db = await startTestDatabase();
+    paddle = new PaddleService();
+    billing = new BillingService(db.prisma as unknown as PrismaService, paddle);
   });
 
   afterAll(async () => {
     await db.stop();
   });
 
+  async function deliver(rawBody: string): Promise<void> {
+    const event = await paddle.parseWebhook(rawBody, sign(rawBody, WEBHOOK_SECRET));
+    await billing.handleWebhookEvent(event);
+  }
+
   it('rejects a badly signed webhook', async () => {
-    const paddle = new PaddleService();
-    const rawBody = subscriptionUpdatedPayload('acc_placeholder');
+    const rawBody = subscriptionPayload('acc_placeholder');
 
     await expect(paddle.parseWebhook(rawBody, sign(rawBody, 'wrong-secret'))).rejects.toThrow(
       DomainError,
     );
   });
 
-  it('updates the Subscription row from a signed subscription.updated event', async () => {
+  it('creates the Subscription row from a signed subscription.created event when none exists', async () => {
     const account = await db.prisma.account.create({ data: {} });
-    await db.prisma.subscription.create({ data: { accountId: account.id } });
 
-    const paddle = new PaddleService();
-    const rawBody = subscriptionUpdatedPayload(account.id);
-    const event = await paddle.parseWebhook(rawBody, sign(rawBody, WEBHOOK_SECRET));
+    await deliver(subscriptionPayload(account.id, 'subscription.created', 'active'));
 
-    const billing = new BillingService(db.prisma as unknown as PrismaService, paddle);
-    await billing.handleWebhookEvent(event);
+    const created = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(created.status).toBe(SubscriptionStatus.ACTIVE);
+    expect(created.paddleSubscriptionId).toBe('sub_123');
+    expect(created.paddleCustomerId).toBe('ctm_123');
+    expect(created.currentPeriodEnd).not.toBeNull();
+  });
 
+  it('updates the existing Subscription row on a later event, keeping the same row', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+
+    await deliver(subscriptionPayload(account.id, 'subscription.created', 'active', 'sub_456'));
+    const created = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+
+    await deliver(subscriptionPayload(account.id, 'subscription.canceled', 'canceled', 'sub_456'));
     const updated = await db.prisma.subscription.findUniqueOrThrow({
       where: { accountId: account.id },
     });
-    expect(updated.status).toBe(SubscriptionStatus.ACTIVE);
-    expect(updated.paddleSubscriptionId).toBe('sub_123');
-    expect(updated.paddleCustomerId).toBe('ctm_123');
-    expect(updated.currentPeriodEnd).not.toBeNull();
+    expect(updated.id).toBe(created.id);
+    expect(updated.status).toBe(SubscriptionStatus.CANCELED);
   });
 });

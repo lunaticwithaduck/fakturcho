@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { centsToEditableValue, formatDate, formatMoney, parseMoneyInput } from './format';
+import {
+  centsToEditableValue,
+  formatDate,
+  formatMoney,
+  formatSignedMoney,
+  parseMoneyInput,
+} from './format';
 
 describe('formatMoney', () => {
   const cases: Array<[number, string]> = [
@@ -13,6 +19,19 @@ describe('formatMoney', () => {
 
   it.each(cases)('formats %i cents as %s', (cents, expected) => {
     expect(formatMoney(cents)).toBe(expected);
+  });
+});
+
+describe('formatSignedMoney', () => {
+  const cases: Array<[number, string]> = [
+    [100, '+1,00 €'],
+    [-10, '-0,10 €'],
+    [0, '0,00 €'],
+    [250000, '+2 500,00 €'],
+  ];
+
+  it.each(cases)('formats %i cents as %s', (cents, expected) => {
+    expect(formatSignedMoney(cents)).toBe(expected);
   });
 });
 

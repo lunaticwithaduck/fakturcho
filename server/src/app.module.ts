@@ -9,6 +9,7 @@ import { ClientsModule } from './clients/clients.module';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { DocumentsModule } from './documents/documents.module';
 import { EmailModule } from './email/email.module';
+import { HealthModule } from './health/health.module';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { IssuerModule } from './issuer/issuer.module';
 import { NumberingModule } from './numbering/numbering.module';
@@ -27,6 +28,7 @@ import { RenderModule } from './render/render.module';
     RenderModule,
     BillingModule,
     EmailModule,
+    HealthModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

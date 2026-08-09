@@ -31,6 +31,7 @@ const MESSAGES_BY_CODE: Record<DomainErrorCode, string> = {
   VAT_GROUND_NOT_ALLOWED: 'Този избор на основание за неначисляване на ДДС не е разрешен.',
   CLIENT_EIK_DUPLICATE: 'Вече има клиент с този ЕИК.',
   SUBSCRIPTION_REQUIRED: 'Нужен е активен абонамент.',
+  INSUFFICIENT_CREDITS: 'Нямате достатъчно кредити. Издаването на документ струва 0,10 €.',
   VALIDATION_FAILED: 'Проверете въведените данни.',
   NOT_FOUND: 'Записът не е намерен.',
   UNAUTHORIZED: 'Нямате достъп.',

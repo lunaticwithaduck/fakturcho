@@ -24,6 +24,13 @@ describe('getApiErrorMessage', () => {
     expect(getApiErrorMessage(error)).toBe('Вече има клиент с този ЕИК.');
   });
 
+  it('maps the 402 INSUFFICIENT_CREDITS payload to the credits message', () => {
+    const error = { status: 402, data: { code: 'INSUFFICIENT_CREDITS' } };
+    expect(getApiErrorMessage(error)).toBe(
+      'Нямате достатъчно кредити. Издаването на документ струва 0,10 €.',
+    );
+  });
+
   it('falls back to a generic Bulgarian message', () => {
     expect(getApiErrorMessage(new Error('network down'))).toBe('Възникна грешка. Опитайте отново.');
   });

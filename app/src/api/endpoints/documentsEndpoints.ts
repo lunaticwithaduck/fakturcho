@@ -45,6 +45,8 @@ export const documentsApi = apiSlice.injectEndpoints({
         idTag('Document', arg.id),
         listTag('Document'),
         listTag('Series'),
+        listTag('CreditBalance'),
+        listTag('CreditLedger'),
       ],
     }),
     cancelDocument: builder.mutation<DocumentDto, string>({

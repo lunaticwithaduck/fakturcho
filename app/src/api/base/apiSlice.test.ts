@@ -47,6 +47,8 @@ describe('apiSlice base query', () => {
       'Document',
       'Series',
       'Subscription',
+      'CreditBalance',
+      'CreditLedger',
     ]);
   });
 

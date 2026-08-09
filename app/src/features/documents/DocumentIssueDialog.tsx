@@ -32,13 +32,13 @@ export function DocumentIssueDialog({
   const [issuedAt, setIssuedAt] = useState(todayIsoDate());
   const [overrideNumber, setOverrideNumber] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [showProfileLink, setShowProfileLink] = useState(false);
+  const [errorLink, setErrorLink] = useState<{ href: string; label: string } | null>(null);
 
   const seriesInfo = series?.find((entry) => entry.documentType === document.documentType) ?? null;
 
   async function handleConfirm() {
     setError(null);
-    setShowProfileLink(false);
+    setErrorLink(null);
     const body = {
       issuedAt,
       ...(seriesInfo?.overridable && overrideNumber.trim()
@@ -49,7 +49,13 @@ export function DocumentIssueDialog({
       await issueDocument({ id: document.id, body }).unwrap();
       onIssued();
     } catch (err) {
-      if (getApiErrorCode(err) === 'ISSUER_PROFILE_INCOMPLETE') setShowProfileLink(true);
+      const code = getApiErrorCode(err);
+      if (code === 'ISSUER_PROFILE_INCOMPLETE') {
+        setErrorLink({ href: '/profile', label: 'Към профила на издателя' });
+      }
+      if (code === 'INSUFFICIENT_CREDITS') {
+        setErrorLink({ href: '/billing', label: 'Купи кредити' });
+      }
       setError(getApiErrorMessage(err));
     }
   }
@@ -83,11 +89,11 @@ export function DocumentIssueDialog({
           {error ? (
             <p className="text-sm font-medium text-danger">
               {error}
-              {showProfileLink ? (
+              {errorLink ? (
                 <>
                   {' '}
-                  <Link href="/profile" className="underline">
-                    Към профила на издателя
+                  <Link href={errorLink.href} className="underline">
+                    {errorLink.label}
                   </Link>
                 </>
               ) : null}

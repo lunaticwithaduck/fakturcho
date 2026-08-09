@@ -1,10 +1,18 @@
-import type { CheckoutSessionDto, SubscriptionDto } from '@fakturcho/shared-types';
-import { Controller, Get, Headers, Post, Req } from '@nestjs/common';
+import type {
+  CheckoutSessionDto,
+  CreditBalanceDto,
+  CreditLedgerEntryDto,
+  SubscriptionDto,
+} from '@fakturcho/shared-types';
+import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
 import type { Request } from 'express';
 import { Public } from '../auth/public.decorator';
 import { AccountId } from '../common/account-id.decorator';
 import { DomainError } from '../common/domain-error';
+import { parseOrThrow } from '../documents/zod-parse.util';
 import { BillingService } from './billing.service';
+import { CreditsService } from './credits.service';
+import { checkoutRequestSchema } from './dto-schemas';
 import { PaddleService } from './paddle.service';
 
 interface RawBodyRequest extends Request {
@@ -15,17 +23,32 @@ interface RawBodyRequest extends Request {
 export class BillingController {
   constructor(
     private readonly billingService: BillingService,
+    private readonly creditsService: CreditsService,
     private readonly paddleService: PaddleService,
   ) {}
 
   @Get('subscription')
-  getSubscription(@AccountId() accountId: string): Promise<SubscriptionDto> {
+  getSubscription(@AccountId() accountId: string): Promise<SubscriptionDto | null> {
     return this.billingService.getSubscription(accountId);
   }
 
+  @Get('credits')
+  getCreditBalance(@AccountId() accountId: string): Promise<CreditBalanceDto> {
+    return this.creditsService.getBalance(accountId);
+  }
+
+  @Get('credits/ledger')
+  getCreditLedger(@AccountId() accountId: string): Promise<CreditLedgerEntryDto[]> {
+    return this.creditsService.getLedger(accountId);
+  }
+
   @Post('checkout')
-  createCheckout(@AccountId() accountId: string): Promise<CheckoutSessionDto> {
-    return this.billingService.createCheckout(accountId);
+  createCheckout(
+    @AccountId() accountId: string,
+    @Body() body: unknown,
+  ): Promise<CheckoutSessionDto> {
+    const request = parseOrThrow(checkoutRequestSchema, body);
+    return this.billingService.createCheckout(accountId, request.product);
   }
 
   @Public()

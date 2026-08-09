@@ -7,6 +7,8 @@ export const API_TAG_TYPES = [
   'Document',
   'Series',
   'Subscription',
+  'CreditBalance',
+  'CreditLedger',
 ] as const;
 
 export type ApiTagType = (typeof API_TAG_TYPES)[number];

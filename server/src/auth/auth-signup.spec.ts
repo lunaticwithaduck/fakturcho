@@ -1,4 +1,4 @@
-import { SubscriptionStatus } from '@prisma/client';
+import { SIGNUP_GRANT_CENTS } from '@fakturcho/shared-types';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { createAuth } from './auth.config';
@@ -20,7 +20,7 @@ describe('signup provisions a tenant', () => {
     await db.stop();
   });
 
-  it('creates user + account + empty issuer profile + trialing subscription, all linked', async () => {
+  it('creates user + account + empty issuer profile + signup credit grant, all linked', async () => {
     const auth = createAuth(db.prisma, AUTH_OPTIONS);
 
     const result = await auth.api.signUpEmail({
@@ -46,8 +46,16 @@ describe('signup provisions a tenant', () => {
     expect(issuerProfile?.vatRegistered).toBe(false);
 
     const subscription = await db.prisma.subscription.findUnique({ where: { accountId } });
-    expect(subscription).not.toBeNull();
-    expect(subscription?.status).toBe(SubscriptionStatus.TRIALING);
+    expect(subscription).toBeNull();
+
+    expect(account?.creditBalanceCents).toBe(SIGNUP_GRANT_CENTS);
+    const ledger = await db.prisma.creditLedgerEntry.findMany({ where: { accountId } });
+    expect(ledger).toHaveLength(1);
+    expect(ledger[0]).toMatchObject({
+      amountCents: SIGNUP_GRANT_CENTS,
+      reason: 'SIGNUP_GRANT',
+      documentId: null,
+    });
   });
 
   it('provisions a distinct account per signup', async () => {

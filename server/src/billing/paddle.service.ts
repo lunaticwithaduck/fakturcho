@@ -7,6 +7,7 @@ export interface CreateCheckoutInput {
   priceId: string;
   accountId: string;
   paddleCustomerId?: string | null;
+  creditCents?: number | null;
 }
 
 @Injectable()
@@ -28,7 +29,10 @@ export class PaddleService {
     const transaction = await this.client.transactions.create({
       items: [{ priceId: input.priceId, quantity: 1 }],
       ...(input.paddleCustomerId ? { customerId: input.paddleCustomerId } : {}),
-      customData: { accountId: input.accountId },
+      customData: {
+        accountId: input.accountId,
+        ...(typeof input.creditCents === 'number' ? { creditCents: input.creditCents } : {}),
+      },
       checkout: {},
     });
     const url = transaction.checkout?.url;

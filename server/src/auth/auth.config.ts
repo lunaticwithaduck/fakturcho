@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { grantSignupCredits } from '../billing/signup-grant';
 
 export interface AuthConfigOptions {
   secret: string;
@@ -17,7 +18,8 @@ async function provisionTenant(prisma: PrismaClient): Promise<string> {
   const account = await prisma.$transaction(async (tx) => {
     const created = await tx.account.create({ data: {} });
     await tx.issuerProfile.create({ data: { accountId: created.id } });
-    await tx.subscription.create({ data: { accountId: created.id } });
+    // SPEC §11: the signup grant lands in the transaction that creates the account, exactly once
+    await grantSignupCredits(tx, created.id);
     return created;
   });
   return account.id;

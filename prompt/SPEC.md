@@ -233,7 +233,8 @@ by editing it in place.
 - **Client and catalogue management** as first-class screens. **[MVP]**
 - **Email delivery** of the document, with the accompanying message stored on
   the record. **[MVP]**
-- **Auth** (email + password) and **subscription billing**. **[MVP]**
+- **Auth** (email + password) and **billing** — credits per issued document
+  plus an optional unlimited subscription (§11). **[MVP]**
 - **Payment reminders** for overdue documents. **[LATER]**
 - **Recurring documents** on a schedule. **[LATER]**
 - **Saved templates** for repeated document shapes. **[LATER]**
@@ -241,6 +242,33 @@ by editing it in place.
   receivables; accountant export. **[LATER]**
 - **Multiple visual templates** for the rendered document. **[LATER]** — but the
   renderer takes a template identifier from day one.
+
+---
+
+## 11. Billing [MVP]
+
+Two ways to pay, both through Paddle. Prices are EUR. (Closed 2026-08-09.)
+
+- **Credits, pay-as-you-go.** An account holds a credit balance in integer euro
+  cents. Issuing any document — every type in §2 — consumes **10 cents** at the
+  moment the number is claimed, inside the same transaction: the deduction and
+  the number claim commit or roll back together. If the balance is short,
+  issuance is rejected with `INSUFFICIENT_CREDITS` (HTTP 402), no number is
+  claimed, and the document stays `draft`. Drafts, clients, catalogue and
+  re-rendering of already-issued documents never consume credit.
+- **Credit packs.** 5 €, 10 € and 25 € one-time Paddle purchases crediting
+  their face value: 500, 1000, 2500 cents. Fulfilment happens on the Paddle
+  `transaction.completed` webhook and is idempotent per Paddle transaction id.
+- **Subscription, unlimited.** An account with a usable subscription (`active`,
+  or `trialing` with a future period end) issues without deduction. Managed
+  through Paddle subscription webhooks. Accounts no longer start with a trial
+  subscription; a subscription exists only once one is bought.
+- **Signup grant.** A new account is granted **100 cents** (10 documents)
+  exactly once, in the transaction that creates the account.
+- **Ledger.** Every balance change is an append-only ledger entry (signup
+  grant, purchase, issuance spend, adjustment). The account balance equals the
+  sum of its ledger at all times, and can never go below zero — enforced at the
+  database, not just the service.
 
 ---
 
@@ -281,3 +309,15 @@ These are the acceptance tests. Each is written before its implementation.
 19. Issuing any document on an account whose issuer profile is missing or
     incomplete (§4) is rejected with a domain error; the document stays
     `draft`. Saving the draft itself succeeds.
+20. Issuing on an account with no usable subscription and a balance of exactly
+    10 cents succeeds and leaves 0; the next issuance is rejected with
+    `INSUFFICIENT_CREDITS`, claims no number, and the document stays `draft`.
+21. Two concurrent issuances on an account holding 10 cents: exactly one
+    succeeds, the balance never goes negative, and the ledger matches the
+    balance. Test under transaction contention.
+22. Delivering the same `transaction.completed` webhook twice credits the pack
+    exactly once. After any sequence of grants, purchases and spends,
+    `creditBalanceCents` equals the ledger sum.
+23. An account with a usable subscription issues with no deduction and no
+    ledger entry; when the subscription lapses, issuance falls back to
+    credits.

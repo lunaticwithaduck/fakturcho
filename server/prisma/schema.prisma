@@ -30,9 +30,10 @@ enum SubscriptionStatus {
 }
 
 model Account {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  creditBalanceCents Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   users          User[]
   issuerProfile  IssuerProfile?
@@ -41,6 +42,7 @@ model Account {
   numberSeries   NumberSeries[]
   documents      Document[]
   subscription   Subscription?
+  creditLedger   CreditLedgerEntry[]
 
   @@map("account")
 }
@@ -237,8 +239,9 @@ model Document {
   recipientEmail       String?
   recipientMol         String?
 
-  lineItems LineItem[]
-  discounts Discount[]
+  lineItems         LineItem[]
+  discounts         Discount[]
+  creditLedgerEntry CreditLedgerEntry?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -290,4 +293,26 @@ model Subscription {
   updatedAt            DateTime           @updatedAt
 
   @@map("subscription")
+}
+
+enum CreditLedgerReason {
+  SIGNUP_GRANT
+  PURCHASE
+  ISSUANCE
+  ADJUSTMENT
+}
+
+model CreditLedgerEntry {
+  id                  String             @id @default(cuid())
+  accountId           String
+  account             Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amountCents         Int
+  reason              CreditLedgerReason
+  documentId          String?            @unique
+  document            Document?          @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  paddleTransactionId String?            @unique
+  createdAt           DateTime           @default(now())
+
+  @@index([accountId, createdAt])
+  @@map("credit_ledger_entry")
 }

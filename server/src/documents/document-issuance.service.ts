@@ -2,6 +2,7 @@ import type { DocumentDto, IssueDocumentRequest } from '@fakturcho/shared-types'
 import { isIssuerProfileComplete } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
+import { CreditsService } from '../billing/credits.service';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { fromPrismaDocumentType } from '../numbering/document-type.mapper';
@@ -16,6 +17,7 @@ export class DocumentIssuanceService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly numberingService: NumberingService,
+    private readonly creditsService: CreditsService,
   ) {}
 
   async issue(
@@ -48,6 +50,8 @@ export class DocumentIssuanceService {
 
     const record = await this.prisma.$transaction(
       async (tx) => {
+        // SPEC §11 invariant 20: the charge precedes the claim, so a rejected charge never claims a number
+        await this.creditsService.chargeForIssuance(tx, accountId, documentId);
         const number = await this.numberingService.claimNumber(
           tx,
           accountId,

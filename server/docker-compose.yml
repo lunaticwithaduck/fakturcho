@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: fakturcho
       POSTGRES_DB: fakturcho
     ports:
-      - '54329:5432'
+      - '54129:5432'
     volumes:
       - fakturcho-db-data:/var/lib/postgresql/data
 

@@ -2,7 +2,7 @@ import type { SaveDraftRequest } from '@fakturcho/shared-types';
 import type { PrismaClient } from '@prisma/client';
 
 export async function createAccount(prisma: PrismaClient): Promise<string> {
-  const account = await prisma.account.create({ data: {} });
+  const account = await prisma.account.create({ data: { creditBalanceCents: 1_000_000 } });
   return account.id;
 }
 
