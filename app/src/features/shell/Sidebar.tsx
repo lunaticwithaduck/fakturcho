@@ -1,7 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import brandIcon from './brand-icon.png';
 import { isNavItemActive, NAV_ITEMS } from './navItems';
 import { SignOutButton } from './SignOutButton';
 
@@ -10,7 +12,10 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-surface-raised px-4 py-6 md:flex">
-      <p className="px-2 text-lg font-bold text-text">Фактурчо</p>
+      <div className="flex items-center gap-2 px-2">
+        <Image src={brandIcon} alt="" className="h-7 w-7" />
+        <p className="text-lg font-bold text-text">Фактурчо</p>
+      </div>
       <nav className="mt-8 flex flex-1 flex-col gap-1">
         {NAV_ITEMS.map((item) => {
           const active = isNavItemActive(pathname, item.href);
