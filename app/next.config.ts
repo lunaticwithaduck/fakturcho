@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   transpilePackages: ['@fakturcho/design', '@fakturcho/shared-types'],
   async rewrites() {
     const serverUrl = process.env.SERVER_URL ?? 'http://localhost:3001';
