@@ -50,6 +50,34 @@ describe('EmailService', () => {
     expect(updated.emailedAt).not.toBeNull();
   });
 
+  it('refuses to email a draft — it renders nothing and sends nothing', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const document = await db.prisma.document.create({
+      data: { accountId: account.id, documentType: 'INVOICE', status: 'DRAFT', number: null },
+    });
+
+    const renderPdf = vi.fn();
+    const send = vi.fn();
+    const service = new EmailService(
+      db.prisma as unknown as PrismaService,
+      { renderPdf } as unknown as DocumentRenderer,
+      { send } as unknown as EmailSender,
+    );
+
+    await expect(
+      service.sendDocumentEmail(account.id, document.id, {
+        to: 'client@example.com',
+        emailText: 'x',
+      }),
+    ).rejects.toMatchObject({ code: 'DOCUMENT_NOT_ISSUED' });
+
+    expect(renderPdf).not.toHaveBeenCalled();
+    expect(send).not.toHaveBeenCalled();
+
+    const untouched = await db.prisma.document.findUniqueOrThrow({ where: { id: document.id } });
+    expect(untouched.emailedAt).toBeNull();
+  });
+
   it('rejects a document that belongs to a different account', async () => {
     const accountA = await db.prisma.account.create({ data: {} });
     const accountB = await db.prisma.account.create({ data: {} });

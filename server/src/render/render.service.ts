@@ -11,6 +11,7 @@ import { renderClassicTemplateHtml } from './templates/classic/template';
 export interface RenderedPdf {
   buffer: Buffer;
   filename: string;
+  isDraft: boolean;
 }
 
 @Injectable()
@@ -45,19 +46,21 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       documentType,
     });
 
+    const isDraft = document.status === 'DRAFT' || document.number === null;
+
     const html = renderClassicTemplateHtml({
       document,
       lineItems: document.lineItems,
       presentation,
       dualDisplayActive: isDualDisplayActive(),
+      isDraft,
     });
 
     const buffer = await this.renderHtmlToPdf(html);
-    const isDraft = document.status === 'DRAFT' || document.number === null;
     const number = document.number === null ? null : Number(document.number);
     const filename = buildDownloadFilename(documentType, isDraft, number);
 
-    return { buffer, filename };
+    return { buffer, filename, isDraft };
   }
 
   private async renderHtmlToPdf(html: string): Promise<Buffer> {

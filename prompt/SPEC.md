@@ -208,6 +208,11 @@ Properties that hold:
 - Download filenames are Bulgarian (`Фактура_0000000016.pdf`). Transported as an
   ASCII fallback plus an RFC 5987 `filename*` parameter — a raw Cyrillic
   filename in `Content-Disposition` is a hard error at the HTTP layer.
+- **A draft is preview-only.** Credit is spent at issuance (§11), so an unpaid
+  document must never leave the app as a usable artifact. A draft renders with a
+  `ЧЕРНОВА / БЕЗ ПРАВНА СИЛА` watermark, is served `inline` and never as an
+  attachment, and cannot be emailed. An issued document renders unwatermarked
+  and downloads freely — it has already been paid for.
 
 ---
 
@@ -321,3 +326,7 @@ These are the acceptance tests. Each is written before its implementation.
 23. An account with a usable subscription issues with no deduction and no
     ledger entry; when the subscription lapses, issuance falls back to
     credits.
+24. A draft render carries the `ЧЕРНОВА / БЕЗ ПРАВНА СИЛА` watermark and is
+    served `inline` whatever the request asks for; an issued render carries no
+    watermark. Emailing a draft is rejected with `DOCUMENT_NOT_ISSUED` (409) —
+    nothing is rendered and nothing is sent.

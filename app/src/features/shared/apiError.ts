@@ -25,6 +25,7 @@ const MESSAGES_BY_CODE: Record<DomainErrorCode, string> = {
   NUMBER_COLLISION: 'Номерът вече се използва. Опитайте отново.',
   SERIES_OVERRIDE_LOCKED: 'Поредицата вече има издадени документи — следващият номер е фиксиран.',
   DOCUMENT_IMMUTABLE: 'Издаден документ не може да бъде променян.',
+  DOCUMENT_NOT_ISSUED: 'Черновата не може да бъде изпратена. Издайте документа.',
   ORIGINAL_DOCUMENT_REQUIRED: 'Изберете оригиналния документ, за да продължите.',
   ISSUER_PROFILE_INCOMPLETE:
     'Профилът на издателя не е попълнен. Допълнете фирмените данни, за да издавате документи.',
