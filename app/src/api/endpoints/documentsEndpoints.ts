@@ -78,3 +78,8 @@ export const {
 export function getDocumentRenderUrl(id: string): string {
   return API_ROUTES.documentRender(id);
 }
+
+/** Same PDF, served `inline` so a browser viewer shows it instead of downloading it. */
+export function getDocumentPreviewUrl(id: string): string {
+  return `${API_ROUTES.documentRender(id)}?disposition=inline`;
+}

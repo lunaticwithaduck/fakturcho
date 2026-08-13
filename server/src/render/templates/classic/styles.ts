@@ -107,5 +107,33 @@ export function buildStyles(): string {
       justify-content: space-between;
       margin-top: 32px;
     }
+    .watermark {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-35deg);
+      color: rgba(17, 24, 39, 0.16);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      z-index: 10;
+    }
+    .watermark-main {
+      font-size: 86px;
+      font-weight: 700;
+      letter-spacing: 10px;
+      white-space: nowrap;
+    }
+    .watermark-sub {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      white-space: nowrap;
+    }
   `;
 }

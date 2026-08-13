@@ -163,6 +163,61 @@ describe('render pipeline', () => {
     expect(getSentBuffer()).not.toBeNull();
   });
 
+  it('stamps a draft render with the ЧЕРНОВА watermark', async () => {
+    const document = await seedDocument(db.prisma, {
+      accountId,
+      status: 'DRAFT',
+      number: null,
+    });
+    const { buffer } = await service.renderPdf(document.id, accountId);
+    // The watermark is letter-spaced, so pdf.js emits each glyph as its own text item.
+    const text = (await extractPdfText(buffer)).replace(/\s+/g, '');
+    expect(text).toContain('ЧЕРНОВА');
+    expect(text).toContain('БЕЗПРАВНАСИЛА');
+  });
+
+  it('leaves an issued render unwatermarked', async () => {
+    const document = await seedDocument(db.prisma, { accountId, number: 19 });
+    const { buffer } = await service.renderPdf(document.id, accountId);
+    const text = (await extractPdfText(buffer)).replace(/\s+/g, '');
+    expect(text).not.toContain('БЕЗПРАВНАСИЛА');
+  });
+
+  it('never offers a draft as an attachment, even when download is requested', async () => {
+    const document = await seedDocument(db.prisma, {
+      accountId,
+      status: 'DRAFT',
+      number: null,
+    });
+    const { res, headers } = createMockResponse();
+    await controller.render(document.id, accountId, res);
+
+    expect(headers['Content-Disposition']).toContain('inline;');
+    expect(headers['Content-Disposition']).not.toContain('attachment');
+  });
+
+  it('serves the PDF inline when the viewer asks for disposition=inline', async () => {
+    const document = await seedDocument(db.prisma, { accountId, number: 17 });
+    const { res, headers } = createMockResponse();
+    await controller.render(document.id, accountId, res, 'inline');
+
+    const disposition = headers['Content-Disposition'] ?? '';
+    expect(disposition).toContain('inline;');
+    expect(disposition).not.toContain('attachment');
+    expect(/filename="[\x20-\x7E]+"/.test(disposition)).toBe(true);
+    expect(decodeURIComponent(/filename\*=UTF-8''([^;]+)/.exec(disposition)?.[1] ?? '')).toBe(
+      'Фактура_0000000017.pdf',
+    );
+  });
+
+  it('falls back to attachment for an unrecognised disposition value', async () => {
+    const document = await seedDocument(db.prisma, { accountId, number: 18 });
+    const { res, headers } = createMockResponse();
+    await controller.render(document.id, accountId, res, 'nonsense');
+
+    expect(headers['Content-Disposition']).toContain('attachment;');
+  });
+
   it('a draft with no number renders with Чернова in the filename', async () => {
     const document = await seedDocument(db.prisma, {
       accountId,

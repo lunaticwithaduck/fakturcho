@@ -36,6 +36,9 @@ export class EmailService {
       where: { id: documentId, accountId },
     });
     if (!document) throw new DomainError('NOT_FOUND', 'Document not found');
+    if (document.status === 'DRAFT' || document.number === null) {
+      throw new DomainError('DOCUMENT_NOT_ISSUED', 'A draft cannot be emailed. Issue it first.');
+    }
 
     const rendered = await this.renderer.renderPdf(documentId, accountId);
     const subject = buildSubject(

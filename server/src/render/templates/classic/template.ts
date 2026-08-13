@@ -7,16 +7,18 @@ import { buildLineItemsTable } from './line-items';
 import { buildStyles } from './styles';
 import { buildTitle } from './title';
 import { buildAmountWordsBlock, buildTotalsBlock } from './totals-block';
+import { buildWatermark } from './watermark';
 
 export interface ClassicTemplateInput {
   document: Document;
   lineItems: readonly LineItem[];
   presentation: VatPresentation;
   dualDisplayActive: boolean;
+  isDraft: boolean;
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
-  const { document, lineItems, presentation, dualDisplayActive } = input;
+  const { document, lineItems, presentation, dualDisplayActive, isDraft } = input;
   const documentType = toSharedDocumentType(document.documentType);
   const isQuote = documentType === 'quote';
   const number = document.number === null ? null : Number(document.number);
@@ -28,6 +30,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <style>${buildStyles()}</style>
 </head>
 <body>
+  ${buildWatermark(isDraft)}
   <div class="header">
     ${buildRecipientBlock(document)}
     ${buildDatesBlock(document, isQuote)}

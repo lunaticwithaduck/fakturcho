@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { apiSlice } from '../base/apiSlice';
 import { installFetchMock, jsonResponse } from '../base/testFetchMock';
-import { documentsApi, getDocumentRenderUrl } from './documentsEndpoints';
+import { documentsApi, getDocumentPreviewUrl, getDocumentRenderUrl } from './documentsEndpoints';
 
 function createTestStore() {
   return configureStore({
@@ -14,6 +14,12 @@ function createTestStore() {
 describe('getDocumentRenderUrl', () => {
   it('builds the full, absolute render path for a document', () => {
     expect(getDocumentRenderUrl('doc-1')).toBe('/api/documents/doc-1/render');
+  });
+});
+
+describe('getDocumentPreviewUrl', () => {
+  it('asks for an inline disposition so the PDF renders instead of downloading', () => {
+    expect(getDocumentPreviewUrl('doc-1')).toBe('/api/documents/doc-1/render?disposition=inline');
   });
 });
 

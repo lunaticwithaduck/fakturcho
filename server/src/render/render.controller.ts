@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
 import { AccountId } from '../common/account-id.decorator';
 import { buildAsciiFallbackFilename, buildContentDisposition } from './content-disposition';
@@ -13,11 +13,17 @@ export class RenderController {
     @Param('id') id: string,
     @AccountId() accountId: string,
     @Res() res: Response,
+    @Query('disposition') disposition?: string,
   ): Promise<void> {
-    const { buffer, filename } = await this.renderService.renderPdf(id, accountId);
+    const { buffer, filename, isDraft } = await this.renderService.renderPdf(id, accountId);
     const asciiFilename = buildAsciiFallbackFilename(filename);
+    const dispositionType =
+      isDraft || disposition === 'inline' ? ('inline' as const) : ('attachment' as const);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', buildContentDisposition(filename, asciiFilename));
+    res.setHeader(
+      'Content-Disposition',
+      buildContentDisposition(filename, asciiFilename, dispositionType),
+    );
     res.send(buffer);
   }
 }

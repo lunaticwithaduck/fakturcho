@@ -21,6 +21,12 @@ export function buildAsciiFallbackFilename(filename: string): string {
   return `document_${suffix}.pdf`;
 }
 
-export function buildContentDisposition(filename: string, asciiFilename: string): string {
-  return `attachment; filename="${asciiFilename}"; filename*=UTF-8''${encodeURIComponent(filename)}`;
+export type DispositionType = 'attachment' | 'inline';
+
+export function buildContentDisposition(
+  filename: string,
+  asciiFilename: string,
+  type: DispositionType = 'attachment',
+): string {
+  return `${type}; filename="${asciiFilename}"; filename*=UTF-8''${encodeURIComponent(filename)}`;
 }
