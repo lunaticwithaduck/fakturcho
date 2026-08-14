@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import type { EventEntity } from '@paddle/paddle-node-sdk';
 import { Environment, Paddle } from '@paddle/paddle-node-sdk';
 import { DomainError } from '../common/domain-error';
+import { inspectPaddleConfig, type PaddleConfigReport } from './paddle-config';
 import { describePaddleFailure, toDomainError } from './paddle-errors';
 
 export interface CreateCheckoutInput {
@@ -16,18 +17,34 @@ export class PaddleService {
   private readonly logger = new Logger(PaddleService.name);
   private readonly client: Paddle;
   private readonly webhookSecret: string;
+  private readonly config: PaddleConfigReport;
 
   constructor() {
     const apiKey = process.env.PADDLE_API_KEY ?? '';
-    const environment =
-      process.env.PADDLE_ENVIRONMENT === 'production'
-        ? Environment.production
-        : Environment.sandbox;
-    this.client = new Paddle(apiKey, { environment });
     this.webhookSecret = process.env.PADDLE_WEBHOOK_SECRET ?? '';
+    this.config = inspectPaddleConfig({
+      environment: process.env.PADDLE_ENVIRONMENT,
+      apiKey,
+      webhookSecret: this.webhookSecret,
+    });
+    for (const problem of this.config.blocking) this.logger.error(problem);
+    for (const problem of this.config.warnings) this.logger.warn(problem);
+    this.logger.log(`Paddle client running against ${this.config.environment}`);
+
+    this.client = new Paddle(apiKey, {
+      environment:
+        this.config.environment === 'production' ? Environment.production : Environment.sandbox,
+    });
   }
 
   async createCheckoutTransaction(input: CreateCheckoutInput): Promise<string> {
+    const [blocker] = this.config.blocking;
+    if (blocker !== undefined) {
+      throw new DomainError('CHECKOUT_NOT_CONFIGURED', blocker, {
+        provider: ['paddle_credentials_mismatch', `environment ${this.config.environment}`],
+      });
+    }
+
     let transaction: Awaited<ReturnType<typeof this.client.transactions.create>>;
     try {
       transaction = await this.client.transactions.create({
