@@ -23,7 +23,7 @@ export function SignupForm() {
       setError(mapAuthErrorMessage(signUpError.code));
       return;
     }
-    router.push('/');
+    router.push('/documents');
   }
 
   return (

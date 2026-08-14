@@ -22,7 +22,7 @@ export function LoginForm() {
       setError(mapAuthErrorMessage(signInError.code));
       return;
     }
-    router.push('/');
+    router.push('/documents');
   }
 
   return (
