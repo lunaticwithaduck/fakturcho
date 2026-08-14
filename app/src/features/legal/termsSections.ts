@@ -1,4 +1,4 @@
-import { COMPANY, PRICING } from './company';
+import { COMPANY, describeEntity, PRICING } from './company';
 import type { LegalSection } from './LegalDocument';
 
 export const TERMS_INTRO = `Тези общи условия уреждат отношенията между ${COMPANY.legalName} и всяко лице, което използва уеб приложението ${COMPANY.productName} на адрес ${COMPANY.website}. С регистрацията на акаунт потребителят приема условията в този документ.`;
@@ -7,7 +7,7 @@ export const TERMS_SECTIONS: readonly LegalSection[] = [
   {
     heading: '1. Доставчик на услугата',
     paragraphs: [
-      `Услугата се предоставя от ${COMPANY.legalName}, ЕИК ${COMPANY.eik}, със седалище и адрес на управление ${COMPANY.address}.`,
+      `Услугата се предоставя от ${describeEntity()}.`,
       `Връзка с нас: ${COMPANY.supportEmail}. Отговаряме на запитвания в рамките на пет работни дни.`,
     ],
   },

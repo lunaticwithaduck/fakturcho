@@ -5,7 +5,7 @@ describe('legal entity details', () => {
   it('carries no demo placeholders — the policy pages state who the contracting entity is', () => {
     const identityFields = [
       COMPANY.legalName,
-      COMPANY.eik,
+      COMPANY.eik ?? '',
       COMPANY.address,
       COMPANY.supportEmail,
     ];

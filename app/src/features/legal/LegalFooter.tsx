@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { COMPANY } from './company';
+import { COMPANY, describeEntity } from './company';
 
 const LINKS = [
   { href: '/terms', label: 'Общи условия' },
@@ -20,9 +20,7 @@ export function LegalFooter() {
           Контакт
         </a>
       </nav>
-      <p className="text-xs text-text-subtle">
-        {COMPANY.legalName} · ЕИК {COMPANY.eik} · {COMPANY.address}
-      </p>
+      <p className="text-xs text-text-subtle">{describeEntity()}</p>
     </footer>
   );
 }

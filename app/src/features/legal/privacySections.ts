@@ -1,4 +1,4 @@
-import { COMPANY } from './company';
+import { COMPANY, describeEntity } from './company';
 import type { LegalSection } from './LegalDocument';
 
 export const PRIVACY_INTRO = `Този документ обяснява какви лични данни обработва ${COMPANY.productName}, на какво основание, пред кого ги разкрива и какви права има всяко засегнато лице. Политиката се прилага към уеб приложението на адрес ${COMPANY.website}.`;
@@ -7,7 +7,7 @@ export const PRIVACY_SECTIONS: readonly LegalSection[] = [
   {
     heading: '1. Администратор на лични данни',
     paragraphs: [
-      `Администратор е ${COMPANY.legalName}, ЕИК ${COMPANY.eik}, адрес ${COMPANY.address}, имейл ${COMPANY.supportEmail}.`,
+      `Администратор е ${describeEntity()}, имейл ${COMPANY.supportEmail}.`,
       'За данните, които потребителят въвежда за своите клиенти, потребителят е администратор, а Фактурчо действа като обработващ лични данни по негово нареждане.',
     ],
   },

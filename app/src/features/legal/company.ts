@@ -1,15 +1,31 @@
 export const COMPANY_PLACEHOLDER_MARKER = 'ДЕМО';
 
-export const COMPANY = {
-  legalName: '„Примерна Фирма“ ЕООД (ДЕМО)',
-  eik: '000000000 (ДЕМО)',
-  address: 'гр. София, ул. „Примерна“ 1 (ДЕМО)',
-  vatNumber: null as string | null,
-  supportEmail: 'support@example.com',
+interface CompanyDetails {
+  legalName: string;
+  eik: string | null;
+  address: string;
+  vatNumber: string | null;
+  supportEmail: string;
+  productName: string;
+  website: string;
+  lastUpdated: string;
+}
+
+export const COMPANY: CompanyDetails = {
+  legalName: '„Пачелиев Консултинг“ ЕООД',
+  eik: '208697044',
+  address: 'гр. София 1324, р-н Люлин, жк. Люлин, бл. 715, вх. Б, ет. 1, ап. 21',
+  vatNumber: null,
+  supportEmail: 'support@fakturcho.com',
   productName: 'Фактурчо',
   website: 'https://www.fakturcho.com',
   lastUpdated: '14.08.2026',
-} as const;
+};
+
+export function describeEntity(): string {
+  const identifier = COMPANY.eik === null ? '' : `, ЕИК ${COMPANY.eik}`;
+  return `${COMPANY.legalName}${identifier}, ${COMPANY.address}`;
+}
 
 export const PRICING = {
   perDocument: '0,10 €',
