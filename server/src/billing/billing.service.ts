@@ -18,6 +18,7 @@ import {
   Prisma,
   SubscriptionStatus as PrismaSubscriptionStatus,
 } from '@prisma/client';
+import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { PaddleService } from './paddle.service';
 
@@ -81,7 +82,13 @@ export class BillingService {
   async createCheckout(accountId: string, product: CheckoutProduct): Promise<CheckoutSessionDto> {
     const envName = PRICE_ENV_BY_PRODUCT[product];
     const priceId = process.env[envName];
-    if (!priceId) throw new Error(`${envName} is not configured`);
+    if (!priceId) {
+      throw new DomainError(
+        'CHECKOUT_NOT_CONFIGURED',
+        `${envName} is not set on the api service, so this product cannot be sold.`,
+        { provider: ['missing_price_env', envName] },
+      );
+    }
     const subscription = await this.prisma.subscription.findUnique({ where: { accountId } });
     const checkoutUrl = await this.paddle.createCheckoutTransaction({
       priceId,
