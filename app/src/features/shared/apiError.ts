@@ -36,6 +36,12 @@ const MESSAGES_BY_CODE: Record<DomainErrorCode, string> = {
   VALIDATION_FAILED: 'Проверете въведените данни.',
   NOT_FOUND: 'Записът не е намерен.',
   UNAUTHORIZED: 'Нямате достъп.',
+  CHECKOUT_NOT_CONFIGURED:
+    'Плащанията не са настроени докрай. Свържете се с нас — не е нужно да опитвате отново.',
+  PAYMENT_PROVIDER_ERROR: 'Доставчикът на плащания отказа заявката. Опитайте отново по-късно.',
+  PAYMENT_PROVIDER_UNREACHABLE:
+    'Доставчикът на плащания не отговаря. Опитайте отново след няколко минути.',
+  INTERNAL_ERROR: 'Възникна неочаквана грешка. Опитайте отново.',
 };
 
 const DEFAULT_MESSAGE = 'Възникна грешка. Опитайте отново.';
