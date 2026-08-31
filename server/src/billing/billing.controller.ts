@@ -3,7 +3,7 @@ import type {
   CreditLedgerEntryDto,
   WiseTransferInstructionsDto,
 } from '@fakturcho/shared-types';
-import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Logger, Post, Req } from '@nestjs/common';
 import type { Request } from 'express';
 import { Public } from '../auth/public.decorator';
 import { AccountId } from '../common/account-id.decorator';
@@ -19,6 +19,8 @@ interface RawBodyRequest extends Request {
 
 @Controller('api/billing')
 export class BillingController {
+  private readonly logger = new Logger(BillingController.name);
+
   constructor(
     private readonly creditsService: CreditsService,
     private readonly wiseService: WiseService,
@@ -49,6 +51,9 @@ export class BillingController {
     @Req() req: RawBodyRequest,
     @Headers('x-signature-sha256') signature: string | undefined,
   ): Promise<{ received: true }> {
+    this.logger.log(
+      `Wise webhook hit: signature=${signature ? 'present' : 'absent'} headers=${JSON.stringify(req.headers)} bodyLen=${req.rawBody?.length ?? 0}`,
+    );
     // Wise's own "verify this URL" reachability check (dashboard setup, and creating a
     // subscription via the API) sends an unsigned probe expecting a bare 2xx — it never carries
     // this header. A real event delivery always does. Treat an unsigned request as that harmless
