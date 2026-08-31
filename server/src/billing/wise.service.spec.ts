@@ -67,6 +67,25 @@ describe('WiseService', () => {
     });
   });
 
+  describe('live environment with no webhook key configured', () => {
+    it('boots without throwing, and fails closed on signature verification', () => {
+      const prevEnv = process.env.WISE_ENVIRONMENT;
+      const prevKey = process.env.WISE_WEBHOOK_PUBLIC_KEY;
+      process.env.WISE_ENVIRONMENT = 'live';
+      process.env.WISE_WEBHOOK_PUBLIC_KEY = '';
+      try {
+        // this must never throw — a missing live key can't take down every other route at boot
+        const wise = service();
+        expect(wise.verifyWebhookSignature('{"event_type":"balances#update"}', 'anything')).toBe(
+          false,
+        );
+      } finally {
+        process.env.WISE_ENVIRONMENT = prevEnv;
+        process.env.WISE_WEBHOOK_PUBLIC_KEY = prevKey;
+      }
+    });
+  });
+
   describe('verifyWebhookSignature', () => {
     it('accepts a body signed with the matching private key', () => {
       const body = '{"event_type":"balances#update"}';

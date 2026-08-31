@@ -54,11 +54,15 @@ export function inspectWiseConfig(input: {
   return { environment, blocking, warnings };
 }
 
+// Never throws — a missing live key is already surfaced as a `blocking` config problem (logged at
+// startup, and would reject checkout/webhook requests via WiseService's own guards); the app must
+// still boot for every OTHER route when this one credential isn't set yet, same as a missing
+// Paddle credential never crashed startup either.
 export function resolveWebhookPublicKey(input: {
   environment: WiseEnvironmentName;
   configured: string;
 }): string {
   if (input.configured !== '') return input.configured;
   if (input.environment === 'sandbox') return WISE_SANDBOX_WEBHOOK_PUBLIC_KEY;
-  throw new Error('no Wise webhook public key available for the live environment');
+  return '';
 }

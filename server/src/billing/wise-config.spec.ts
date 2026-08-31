@@ -70,7 +70,10 @@ describe('resolveWebhookPublicKey', () => {
     expect(key).toBe('custom-pem');
   });
 
-  it('throws in live with nothing configured — there is no safe default to fall back to', () => {
-    expect(() => resolveWebhookPublicKey({ environment: 'live', configured: '' })).toThrow();
+  it('never throws in live with nothing configured — returns empty rather than crashing app boot', () => {
+    // A missing live key is a `blocking` config problem (inspectWiseConfig), surfaced when checkout
+    // or the webhook is actually used — not something that should take down every other route.
+    const key = resolveWebhookPublicKey({ environment: 'live', configured: '' });
+    expect(key).toBe('');
   });
 });
