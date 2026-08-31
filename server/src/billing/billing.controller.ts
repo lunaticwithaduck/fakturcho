@@ -1,8 +1,7 @@
 import type {
-  CheckoutSessionDto,
   CreditBalanceDto,
   CreditLedgerEntryDto,
-  SubscriptionDto,
+  WiseTransferInstructionsDto,
 } from '@fakturcho/shared-types';
 import { Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
 import type { Request } from 'express';
@@ -10,10 +9,9 @@ import { Public } from '../auth/public.decorator';
 import { AccountId } from '../common/account-id.decorator';
 import { DomainError } from '../common/domain-error';
 import { parseOrThrow } from '../documents/zod-parse.util';
-import { BillingService } from './billing.service';
 import { CreditsService } from './credits.service';
 import { checkoutRequestSchema } from './dto-schemas';
-import { PaddleService } from './paddle.service';
+import { WiseService } from './wise.service';
 
 interface RawBodyRequest extends Request {
   rawBody?: Buffer;
@@ -22,15 +20,9 @@ interface RawBodyRequest extends Request {
 @Controller('api/billing')
 export class BillingController {
   constructor(
-    private readonly billingService: BillingService,
     private readonly creditsService: CreditsService,
-    private readonly paddleService: PaddleService,
+    private readonly wiseService: WiseService,
   ) {}
-
-  @Get('subscription')
-  getSubscription(@AccountId() accountId: string): Promise<SubscriptionDto | null> {
-    return this.billingService.getSubscription(accountId);
-  }
 
   @Get('credits')
   getCreditBalance(@AccountId() accountId: string): Promise<CreditBalanceDto> {
@@ -46,23 +38,25 @@ export class BillingController {
   createCheckout(
     @AccountId() accountId: string,
     @Body() body: unknown,
-  ): Promise<CheckoutSessionDto> {
+  ): Promise<WiseTransferInstructionsDto> {
     const request = parseOrThrow(checkoutRequestSchema, body);
-    return this.billingService.createCheckout(accountId, request.product);
+    return this.wiseService.createTransferInstructions(accountId, request.product);
   }
 
   @Public()
   @Post('webhook')
   async handleWebhook(
     @Req() req: RawBodyRequest,
-    @Headers('paddle-signature') signature: string | undefined,
+    @Headers('x-signature-sha256') signature: string | undefined,
   ): Promise<{ received: true }> {
     if (!signature) {
-      throw new DomainError('UNAUTHORIZED', 'Missing Paddle signature');
+      throw new DomainError('UNAUTHORIZED', 'Missing Wise signature');
     }
     const rawBody = req.rawBody ? req.rawBody.toString('utf-8') : JSON.stringify(req.body);
-    const event = await this.paddleService.parseWebhook(rawBody, signature);
-    await this.billingService.handleWebhookEvent(event);
+    if (!this.wiseService.verifyWebhookSignature(rawBody, signature)) {
+      throw new DomainError('UNAUTHORIZED', 'Invalid Wise webhook signature');
+    }
+    await this.wiseService.handleBalanceUpdateWebhook(JSON.parse(rawBody));
     return { received: true };
   }
 }

@@ -10,7 +10,6 @@ export const CREDIT_LEDGER_REASON_LABELS: Record<CreditLedgerReason, string> = {
 };
 
 export function balanceCaption(balance: CreditBalanceDto): string {
-  if (balance.hasUnlimitedSubscription) return 'Неограничени документи';
   if (balance.documentsRemaining === 1) return 'още 1 документ';
   return `още ${balance.documentsRemaining} документа`;
 }

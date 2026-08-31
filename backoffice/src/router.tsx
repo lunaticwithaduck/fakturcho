@@ -5,7 +5,6 @@ import { AccountsScreen } from './screens/accounts/AccountsScreen';
 import { DocumentsScreen } from './screens/documents/DocumentsScreen';
 import { LoginScreen } from './screens/login/LoginScreen';
 import { TurnoverReportScreen } from './screens/reports/TurnoverReportScreen';
-import { SubscriptionsScreen } from './screens/subscriptions/SubscriptionsScreen';
 import { UsageScreen } from './screens/usage/UsageScreen';
 
 export const router = createBrowserRouter([
@@ -21,7 +20,6 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/accounts" replace /> },
       { path: 'accounts', element: <AccountsScreen /> },
       { path: 'documents', element: <DocumentsScreen /> },
-      { path: 'subscriptions', element: <SubscriptionsScreen /> },
       { path: 'usage', element: <UsageScreen /> },
       { path: 'reports', element: <TurnoverReportScreen /> },
     ],

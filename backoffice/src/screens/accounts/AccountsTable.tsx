@@ -2,7 +2,6 @@ import type { TableColumnsType } from 'antd';
 import { Table, Tag } from 'antd';
 import type { AccountSummary } from '../../types/admin';
 import { formatDate } from '../../utils/date';
-import { SUBSCRIPTION_STATUS_COLORS, SUBSCRIPTION_STATUS_LABELS } from '../../utils/statusLabels';
 
 interface AccountsTableProps {
   accounts: AccountSummary[];
@@ -21,14 +20,6 @@ const COLUMNS: TableColumnsType<AccountSummary> = [
     render: (value: boolean) => (value ? <Tag color="blue">Да</Tag> : <Tag>Не</Tag>),
   },
   { title: 'Издадени документи', dataIndex: 'documentsIssued', key: 'documentsIssued' },
-  {
-    title: 'Абонамент',
-    dataIndex: 'subscriptionStatus',
-    key: 'subscriptionStatus',
-    render: (status: AccountSummary['subscriptionStatus']) => (
-      <Tag color={SUBSCRIPTION_STATUS_COLORS[status]}>{SUBSCRIPTION_STATUS_LABELS[status]}</Tag>
-    ),
-  },
   {
     title: 'Регистриран на',
     dataIndex: 'createdAt',

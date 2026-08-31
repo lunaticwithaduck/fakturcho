@@ -19,7 +19,7 @@ export const COMPANY: CompanyDetails = {
   supportEmail: 'support@fakturcho.com',
   productName: 'Фактурчо',
   website: 'https://www.fakturcho.com',
-  lastUpdated: '14.08.2026',
+  lastUpdated: '31.08.2026',
 };
 
 export function describeEntity(): string {
@@ -30,6 +30,5 @@ export function describeEntity(): string {
 export const PRICING = {
   perDocument: '0,10 €',
   packs: '5 €, 10 € и 25 €',
-  subscription: '5 € на месец',
   signupGrant: '1,00 €',
 } as const;

@@ -57,26 +57,18 @@ export function LandingPage() {
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-text">Цени</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-1">
             <Card className="flex flex-col gap-2 p-5">
               <h3 className="text-base font-semibold text-text">Плащате според ползването</h3>
               <p className="text-2xl font-bold text-text">{PRICING.perDocument}</p>
               <p className="text-sm leading-relaxed text-text-muted">
                 За всеки издаден документ. Чернови, клиенти и артикули са безплатни. Кредит се
-                зарежда с пакети от {PRICING.packs}.
-              </p>
-            </Card>
-            <Card className="flex flex-col gap-2 p-5">
-              <h3 className="text-base font-semibold text-text">Абонамент</h3>
-              <p className="text-2xl font-bold text-text">{PRICING.subscription}</p>
-              <p className="text-sm leading-relaxed text-text-muted">
-                Неограничено издаване, докато абонаментът е активен. Прекратява се по всяко време.
+                зарежда с пакети от {PRICING.packs}, чрез банков превод.
               </p>
             </Card>
           </div>
           <p className="text-sm text-text-muted">
-            Нов акаунт получава {PRICING.signupGrant} кредит при регистрация. Плащанията се
-            обработват от Paddle.
+            Нов акаунт получава {PRICING.signupGrant} кредит при регистрация.
           </p>
         </section>
       </main>

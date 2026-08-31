@@ -22,27 +22,20 @@ enum DocumentStatus {
   CANCELLED
 }
 
-enum SubscriptionStatus {
-  TRIALING
-  ACTIVE
-  PAST_DUE
-  CANCELED
-}
-
 model Account {
   id                 String   @id @default(cuid())
   creditBalanceCents Int      @default(0)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  users          User[]
-  issuerProfile  IssuerProfile?
-  clients        Client[]
-  catalogueItems CatalogueItem[]
-  numberSeries   NumberSeries[]
-  documents      Document[]
-  subscription   Subscription?
-  creditLedger   CreditLedgerEntry[]
+  users                User[]
+  issuerProfile        IssuerProfile?
+  clients              Client[]
+  catalogueItems       CatalogueItem[]
+  numberSeries         NumberSeries[]
+  documents            Document[]
+  creditLedger         CreditLedgerEntry[]
+  wisePendingPurchases WisePendingPurchase[]
 
   @@map("account")
 }
@@ -280,21 +273,6 @@ model Discount {
   @@map("discount")
 }
 
-model Subscription {
-  id                   String             @id @default(cuid())
-  accountId            String             @unique
-  account              Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  status               SubscriptionStatus @default(TRIALING)
-  paddleSubscriptionId String?            @unique
-  paddleCustomerId     String?
-  planId               String?
-  currentPeriodEnd     DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-
-  @@map("subscription")
-}
-
 enum CreditLedgerReason {
   SIGNUP_GRANT
   PURCHASE
@@ -303,16 +281,38 @@ enum CreditLedgerReason {
 }
 
 model CreditLedgerEntry {
-  id                  String             @id @default(cuid())
-  accountId           String
-  account             Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  amountCents         Int
-  reason              CreditLedgerReason
-  documentId          String?            @unique
-  document            Document?          @relation(fields: [documentId], references: [id], onDelete: SetNull)
-  paddleTransactionId String?            @unique
-  createdAt           DateTime           @default(now())
+  id                String             @id @default(cuid())
+  accountId         String
+  account           Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amountCents       Int
+  reason            CreditLedgerReason
+  documentId        String?            @unique
+  document          Document?          @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  wiseTransactionId String?            @unique
+  createdAt         DateTime           @default(now())
 
   @@index([accountId, createdAt])
   @@map("credit_ledger_entry")
+}
+
+enum WisePendingPurchaseStatus {
+  PENDING
+  FULFILLED
+  EXPIRED
+}
+
+model WisePendingPurchase {
+  id          String                    @id @default(cuid())
+  accountId   String
+  account     Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  reference   String                    @unique
+  creditCents Int
+  amountCents Int
+  currency    String
+  status      WisePendingPurchaseStatus @default(PENDING)
+  createdAt   DateTime                  @default(now())
+  fulfilledAt DateTime?
+
+  @@index([accountId, createdAt])
+  @@map("wise_pending_purchase")
 }

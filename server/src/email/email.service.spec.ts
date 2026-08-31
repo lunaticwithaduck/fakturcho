@@ -19,7 +19,7 @@ describe('EmailService', () => {
   it('renders the document, sends the email and persists emailText/emailedAt', async () => {
     const account = await db.prisma.account.create({ data: {} });
     const document = await db.prisma.document.create({
-      data: { accountId: account.id, documentType: 'INVOICE', number: 16n },
+      data: { accountId: account.id, documentType: 'INVOICE', status: 'SENT', number: 16n },
     });
 
     const renderPdf = vi.fn(async (_documentId: string, _accountId: string) => ({

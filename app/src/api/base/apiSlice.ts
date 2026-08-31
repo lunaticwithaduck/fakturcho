@@ -6,7 +6,6 @@ export const API_TAG_TYPES = [
   'CatalogueItem',
   'Document',
   'Series',
-  'Subscription',
   'CreditBalance',
   'CreditLedger',
 ] as const;

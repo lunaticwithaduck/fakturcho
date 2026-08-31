@@ -45,9 +45,6 @@ describe('signup provisions a tenant', () => {
     expect(issuerProfile?.companyName).toBeNull();
     expect(issuerProfile?.vatRegistered).toBe(false);
 
-    const subscription = await db.prisma.subscription.findUnique({ where: { accountId } });
-    expect(subscription).toBeNull();
-
     expect(account?.creditBalanceCents).toBe(SIGNUP_GRANT_CENTS);
     const ledger = await db.prisma.creditLedgerEntry.findMany({ where: { accountId } });
     expect(ledger).toHaveLength(1);

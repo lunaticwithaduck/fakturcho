@@ -28,9 +28,7 @@ describe('billingEndpoints wiring', () => {
   });
 
   it('requests the credit balance', async () => {
-    fetchMock.mockResolvedValue(
-      jsonResponse({ balanceCents: 100, documentsRemaining: 10, hasUnlimitedSubscription: false }),
-    );
+    fetchMock.mockResolvedValue(jsonResponse({ balanceCents: 100, documentsRemaining: 10 }));
     const store = createTestStore();
 
     await store.dispatch(billingApi.endpoints.getCreditBalance.initiate());
@@ -47,18 +45,18 @@ describe('billingEndpoints wiring', () => {
     expect(requestedPaths(fetchMock)).toEqual(['/api/billing/credits/ledger']);
   });
 
-  it('accepts a null subscription', async () => {
-    fetchMock.mockResolvedValue(jsonResponse(null));
-    const store = createTestStore();
-
-    const result = await store.dispatch(billingApi.endpoints.getSubscription.initiate());
-
-    expect(requestedPaths(fetchMock)).toEqual(['/api/billing/subscription']);
-    expect(result.data).toBeNull();
-  });
-
-  it('posts the chosen product to checkout', async () => {
-    fetchMock.mockResolvedValue(jsonResponse({ checkoutUrl: 'https://pay.example/x' }));
+  it('posts the chosen product to checkout and returns Wise transfer instructions', async () => {
+    fetchMock.mockResolvedValue(
+      jsonResponse({
+        reference: 'FKT-ABCD1234',
+        amountCents: 1000,
+        currency: 'EUR',
+        iban: 'BE00000000000000',
+        accountHolderName: 'Fakturcho',
+        bic: null,
+        expiresAt: '2026-09-07T00:00:00.000Z',
+      }),
+    );
     const store = createTestStore();
 
     await store.dispatch(billingApi.endpoints.createCheckout.initiate({ product: 'pack10' }));
@@ -73,11 +71,7 @@ describe('billingEndpoints wiring', () => {
     fetchMock.mockImplementation(async (request: Request) => {
       const path = new URL(request.url).pathname;
       if (path === '/api/billing/credits') {
-        return jsonResponse({
-          balanceCents: 100,
-          documentsRemaining: 10,
-          hasUnlimitedSubscription: false,
-        });
+        return jsonResponse({ balanceCents: 100, documentsRemaining: 10 });
       }
       return jsonResponse({ id: 'doc-1' });
     });
