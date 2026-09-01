@@ -14,9 +14,10 @@ export const API_ROUTES = {
   documentRender: (id: string) => `/api/documents/${id}/render`,
   documentEmail: (id: string) => `/api/documents/${id}/email`,
   series: '/api/series',
+  subscription: '/api/billing/subscription',
   creditBalance: '/api/billing/credits',
   creditLedger: '/api/billing/credits/ledger',
   checkout: '/api/billing/checkout',
-  billingWebhook: '/api/billing/webhook',
+  paddleWebhook: '/api/billing/webhook',
   health: '/api/health',
 } as const;

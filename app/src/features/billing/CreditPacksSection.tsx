@@ -1,9 +1,9 @@
 import { Button, Card } from '@design/components';
-import type { CreditPackId } from '@shared/types';
+import type { CheckoutProduct, CreditPackId } from '@shared/types';
 import { getPackOptions } from './billingDisplay';
 
 interface CreditPacksSectionProps {
-  pendingProduct: CreditPackId | null;
+  pendingProduct: CheckoutProduct | null;
   onBuy: (product: CreditPackId) => void;
 }
 
@@ -17,7 +17,7 @@ export function CreditPacksSection({ pendingProduct, onBuy }: CreditPacksSection
             <p className="text-xl font-bold text-text">{pack.priceLabel}</p>
             <p className="text-sm text-text-muted">{pack.documentsLabel}</p>
             <Button size="sm" disabled={pendingProduct !== null} onClick={() => onBuy(pack.id)}>
-              {pendingProduct === pack.id ? 'Зареждане...' : 'Купи'}
+              {pendingProduct === pack.id ? 'Пренасочване...' : 'Купи'}
             </Button>
           </Card>
         ))}

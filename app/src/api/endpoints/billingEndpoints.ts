@@ -1,9 +1,10 @@
 import { API_ROUTES } from '@fakturcho/shared-types';
 import type {
   CheckoutRequest,
+  CheckoutSessionDto,
   CreditBalanceDto,
   CreditLedgerEntryDto,
-  WiseTransferInstructionsDto,
+  SubscriptionDto,
 } from '@shared/types';
 import { apiSlice } from '../base/apiSlice';
 import { listTag } from '../base/tags';
@@ -19,11 +20,19 @@ export const billingApi = apiSlice.injectEndpoints({
       query: () => toApiPath(API_ROUTES.creditLedger),
       providesTags: [listTag('CreditLedger')],
     }),
-    createCheckout: builder.mutation<WiseTransferInstructionsDto, CheckoutRequest>({
+    getSubscription: builder.query<SubscriptionDto | null, void>({
+      query: () => toApiPath(API_ROUTES.subscription),
+      providesTags: [listTag('Subscription')],
+    }),
+    createCheckout: builder.mutation<CheckoutSessionDto, CheckoutRequest>({
       query: (body) => ({ url: toApiPath(API_ROUTES.checkout), method: 'POST', body }),
     }),
   }),
 });
 
-export const { useCreateCheckoutMutation, useGetCreditBalanceQuery, useGetCreditLedgerQuery } =
-  billingApi;
+export const {
+  useCreateCheckoutMutation,
+  useGetCreditBalanceQuery,
+  useGetCreditLedgerQuery,
+  useGetSubscriptionQuery,
+} = billingApi;
