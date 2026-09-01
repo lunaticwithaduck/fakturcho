@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   inspectWiseConfig,
   resolveWebhookPublicKey,
+  WISE_PRODUCTION_WEBHOOK_PUBLIC_KEY,
   WISE_SANDBOX_WEBHOOK_PUBLIC_KEY,
 } from './wise-config';
 
@@ -48,9 +49,10 @@ describe('inspectWiseConfig', () => {
     expect(report.blocking).toContain('WISE_ACCOUNT_HOLDER_NAME is not set');
   });
 
-  it('blocks (not warns) a missing webhook public key in live — no shared default exists', () => {
+  it('warns (not blocks) a missing webhook public key in live — falls back to the published key', () => {
     const report = inspectWiseConfig({ ...VALID, environment: 'live', webhookPublicKey: '' });
-    expect(report.blocking.some((m) => m.includes('WISE_WEBHOOK_PUBLIC_KEY'))).toBe(true);
+    expect(report.blocking).toEqual([]);
+    expect(report.warnings[0]).toContain('published live key');
   });
 
   it('passes clean live config with everything set', () => {
@@ -70,10 +72,8 @@ describe('resolveWebhookPublicKey', () => {
     expect(key).toBe('custom-pem');
   });
 
-  it('never throws in live with nothing configured — returns empty rather than crashing app boot', () => {
-    // A missing live key is a `blocking` config problem (inspectWiseConfig), surfaced when checkout
-    // or the webhook is actually used — not something that should take down every other route.
+  it('falls back to the published production key when unset in live', () => {
     const key = resolveWebhookPublicKey({ environment: 'live', configured: '' });
-    expect(key).toBe('');
+    expect(key).toBe(WISE_PRODUCTION_WEBHOOK_PUBLIC_KEY);
   });
 });
