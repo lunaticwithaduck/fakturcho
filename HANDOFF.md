@@ -20,38 +20,39 @@ Cyrillic filename. Smoke account: `smoke@fakturcho.bg` / `smoke-test-12345`
 
 ## The open thread — do these in order
 
-1. **Paddle: set the default payment link** (THE checkout blocker). Checkout
-   creation returns Paddle error `transaction_default_checkout_url_not_set`.
-   In the Paddle **sandbox** dashboard → Checkout → Checkout settings: if a
-   Paddle-hosted checkout option exists, enable it (zero code). Otherwise set
-   the default payment link to `https://www.fakturcho.com/billing`, create a
-   **client-side token** (Developer Tools → Authentication), and wire the
-   Paddle.js overlay into the billing feature: script include + initialize
-   with the token and `environment: 'sandbox'`; Paddle.js auto-opens the
-   checkout for the `_ptxn` query param that the redirect lands with. Token
-   goes in as `NEXT_PUBLIC_...` env — remember `SERVER_URL`-style build-time
-   baking applies to `NEXT_PUBLIC_*` too: set the var, rebuild the app.
-2. **Run the first real purchase test**: sign in as the smoke account on
-   `/billing`, buy the 5 € pack, pay with Paddle's sandbox card
-   `4242 4242 4242 4242` (any future expiry, any CVC). Expect: webhook 200 in
-   Paddle's notification log, balance 90 → 590 cents, a `purchase:+500`
-   ledger row. That closes the loop: checkout → payment → webhook →
-   idempotent fulfilment.
-3. **Install the Railway GitHub App** on the repo (Railway dashboard → api
+1. **Add the subscription plan variation**: create it with the curl in
+   `DEPLOY.md` § Revolut setup and set
+   `REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID` on the api service — until then
+   `POST /api/billing/checkout` with `{"product":"subscription"}` 500s with
+   `CHECKOUT_NOT_CONFIGURED`. Credit packs need no such setup, they already
+   work.
+2. **PATCH the live webhook to add the subscription events**: it is
+   registered (id `4695da35-a595-4c9f-b2d6-e3c937646745`) for the order
+   events only. Add `SUBSCRIPTION_INITIATED`, `SUBSCRIPTION_FINISHED`,
+   `SUBSCRIPTION_CANCELLED`, `SUBSCRIPTION_OVERDUE` or subscription status
+   changes never reach the app.
+3. **Run the first real purchase test** — this account is live, no sandbox:
+   sign in as the smoke account on `/billing`, buy the 5 € pack with a real
+   card. Expect: webhook 200, balance 90 → 590 cents, a `purchase:+500`
+   ledger row. Refund it straight after with
+   `POST https://merchant.revolut.com/api/orders/{order_id}/refund`
+   (`amount`/`currency` matching the order) so the test purchase does not
+   sit on the account.
+4. **Install the Railway GitHub App** on the repo (Railway dashboard → api
    service → Settings → Source → Configure GitHub App). Until installed,
    pushes do NOT auto-deploy and Railway's view of `main` goes stale —
    trigger builds by explicit SHA:
    `railway api 'mutation { serviceInstanceDeployV2(serviceId: "<id>", environmentId: "74c6f0c7-66e7-4aa9-a6df-424a79e9ed16", commitSha: "<full 40-char sha>") }'`
-4. **Repo → private** — only AFTER step 3, or Railway loses repo access
+5. **Repo → private** — only AFTER step 4, or Railway loses repo access
    (today's builds work only because the repo is public).
    `gh repo edit lunaticwithaduck/fakturcho --visibility private`
-5. **GoDaddy forwarding** for the apex: Domain Portfolio → fakturcho.com →
+6. **GoDaddy forwarding** for the apex: Domain Portfolio → fakturcho.com →
    Forwarding → `https://www.fakturcho.com`, 301. (GoDaddy has no ALIAS, so
    the apex can't CNAME to Railway; `https://` on the bare apex will not have
    a cert — GoDaddy limitation, Cloudflare DNS is the fix if it ever
    matters. The apex custom domain entry on Railway is left registered but
    dormant.)
-6. **Resend**, whenever email matters: verify a sending domain, set
+7. **Resend**, whenever email matters: verify a sending domain, set
    `RESEND_API_KEY` + `EMAIL_FROM` on the api service.
 
 ## Production configuration
@@ -60,12 +61,15 @@ All secrets live ONLY in Railway service variables — nothing sensitive is in
 this repo. Read them with `railway variables --service api`. Facts worth
 knowing:
 
-- Paddle **sandbox** is fully configured: products „Fakturcho кредити“
-  (pack5/pack10/pack25 one-time EUR prices, quantity locked 1, tax-inclusive)
-  and „Fakturcho абонамент“ (5 €/month recurring); webhook destination →
-  `/api/billing/webhook` with the four events; API key + webhook secret +
-  four price IDs deployed on the api service. **The Paddle API key expires
-  2026-11-07** (90-day default) — rotate before then.
+- Revolut Business Merchant API, **production** (no sandbox account exists;
+  the owner decided to go live directly): credit packs are plain orders
+  (500/1000/2500 cents, no catalog entry needed), the subscription is a
+  Revolut subscription plan variation (`REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID`);
+  webhook destination `4695da35-a595-4c9f-b2d6-e3c937646745` →
+  `/api/billing/webhook` with `ORDER_COMPLETED`, `ORDER_AUTHORISED`,
+  `ORDER_CANCELLED`, `ORDER_PAYMENT_AUTHENTICATED`, `ORDER_PAYMENT_DECLINED`,
+  `ORDER_PAYMENT_FAILED` — the four `SUBSCRIPTION_*` events still need adding
+  (see the revolut-billing branch report).
 - `APP_ORIGINS` currently trusts `https://fakturcho.com`,
   `https://www.fakturcho.com` and the Railway app domain.
 - `RAILWAY_DOCKERFILE_PATH` selects the Dockerfile per service (config-file
@@ -73,9 +77,6 @@ knowing:
   until set in the UI).
 - `SERVER_URL` (api URL) is baked into the app at BUILD time — changing it
   requires an app rebuild, not a restart.
-- Going to Paddle production later: new API key/webhook secret/price IDs from
-  the live dashboard, `PADDLE_ENVIRONMENT=production`, webhook URL re-created
-  against the live account.
 
 ## Resuming on the Mac
 
@@ -117,14 +118,14 @@ concurrency included) + 118 app tests + 1 e2e spec.
 - **The credit charge precedes the number claim** in one transaction
   (invariant 20) — a failed charge never burns a number. Deduction is a raw
   guarded UPDATE; do not "simplify" to read-then-write (invariant 21).
-- **Webhook fulfilment is idempotent** per `paddleTransactionId` — P2002 on
+- **Webhook fulfilment is idempotent** per `revolutOrderId` — P2002 on
   the ledger insert means already-processed, not an error (invariant 22).
 - **Prisma `upsert` is not atomic** — numbering uses raw
   `INSERT ... ON CONFLICT` + `SELECT ... FOR UPDATE`.
-- **Checkout flow expects Paddle's default payment link** — until it is set,
-  `POST /api/billing/checkout` 500s with
-  `transaction_default_checkout_url_not_set` (visible via the Paddle SDK log
-  line in `railway logs --service api`).
+- **Subscription checkout needs `REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID`** —
+  until it is set, `POST /api/billing/checkout` with
+  `{"product":"subscription"}` 500s with `CHECKOUT_NOT_CONFIGURED`. Credit
+  packs (`pack5`/`pack10`/`pack25`) need no such setup.
 - **`serviceInstanceDeployV2` without `commitSha` deploys Railway's stale
   view of the branch** (no GitHub App = no push webhooks). Pin the SHA.
 - **Windows only**: local Postgres moved 54329 → 54129 because Windows
@@ -145,4 +146,4 @@ An issued document is immutable; corrections are credit/debit notes. Numbers
 are claimed at issuance inside a transaction, never reused; the credit charge
 lives in that same transaction. Rendering reads frozen snapshots only; there
 is exactly one renderer. Money is integer cents everywhere except the render
-boundary. All user-facing copy is Bulgarian. Stripe is excluded — Paddle only.
+boundary. All user-facing copy is Bulgarian. Stripe is excluded — Revolut only.

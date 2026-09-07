@@ -252,7 +252,7 @@ by editing it in place.
 
 ## 11. Billing [MVP]
 
-Two ways to pay, both through Paddle. Prices are EUR. (Closed 2026-08-09.)
+Two ways to pay, both through Revolut. Prices are EUR. (Closed 2026-08-09.)
 
 - **Credits, pay-as-you-go.** An account holds a credit balance in integer euro
   cents. Issuing any document — every type in §2 — consumes **10 cents** at the
@@ -261,13 +261,14 @@ Two ways to pay, both through Paddle. Prices are EUR. (Closed 2026-08-09.)
   issuance is rejected with `INSUFFICIENT_CREDITS` (HTTP 402), no number is
   claimed, and the document stays `draft`. Drafts, clients, catalogue and
   re-rendering of already-issued documents never consume credit.
-- **Credit packs.** 5 €, 10 € and 25 € one-time Paddle purchases crediting
-  their face value: 500, 1000, 2500 cents. Fulfilment happens on the Paddle
-  `transaction.completed` webhook and is idempotent per Paddle transaction id.
+- **Credit packs.** 5 €, 10 € and 25 € one-time Revolut order purchases
+  crediting their face value: 500, 1000, 2500 cents. Fulfilment happens on the
+  Revolut `ORDER_COMPLETED` webhook and is idempotent per Revolut order id.
 - **Subscription, unlimited.** An account with a usable subscription (`active`,
   or `trialing` with a future period end) issues without deduction. Managed
-  through Paddle subscription webhooks. Accounts no longer start with a trial
-  subscription; a subscription exists only once one is bought.
+  through Revolut's Subscriptions API and subscription webhooks. Accounts no
+  longer start with a trial subscription; a subscription exists only once one
+  is bought.
 - **Signup grant.** A new account is granted **100 cents** (10 documents)
   exactly once, in the transaction that creates the account.
 - **Ledger.** Every balance change is an append-only ledger entry (signup
@@ -320,7 +321,7 @@ These are the acceptance tests. Each is written before its implementation.
 21. Two concurrent issuances on an account holding 10 cents: exactly one
     succeeds, the balance never goes negative, and the ledger matches the
     balance. Test under transaction contention.
-22. Delivering the same `transaction.completed` webhook twice credits the pack
+22. Delivering the same `ORDER_COMPLETED` webhook twice credits the pack
     exactly once. After any sequence of grants, purchases and spends,
     `creditBalanceCents` equals the ledger sum.
 23. An account with a usable subscription issues with no deduction and no

@@ -7,6 +7,7 @@ type MenuItem = NonNullable<MenuProps['items']>[number];
 const ITEMS: MenuItem[] = [
   { key: '/accounts', label: 'Абонати' },
   { key: '/documents', label: 'Документи' },
+  { key: '/subscriptions', label: 'Абонаменти' },
   { key: '/usage', label: 'Използване' },
   { key: '/reports', label: 'Справки' },
 ];

@@ -10,6 +10,7 @@ import { CreditLedgerReason } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { grantSignupCredits } from './signup-grant';
+import { isSubscriptionUsable } from './subscription-usability';
 
 const REASON_TO_DTO: Record<CreditLedgerReason, CreditLedgerReasonDto> = {
   SIGNUP_GRANT: 'signup_grant',
@@ -33,11 +34,15 @@ export class CreditsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getBalance(accountId: string): Promise<CreditBalanceDto> {
-    const account = await this.prisma.account.findUnique({ where: { id: accountId } });
+    const account = await this.prisma.account.findUnique({
+      where: { id: accountId },
+      include: { subscription: true },
+    });
     if (!account) throw new DomainError('NOT_FOUND', 'Account not found.');
     return {
       balanceCents: account.creditBalanceCents,
       documentsRemaining: Math.floor(account.creditBalanceCents / ISSUANCE_COST_CENTS),
+      hasUnlimitedSubscription: isSubscriptionUsable(account.subscription),
     };
   }
 
@@ -59,6 +64,10 @@ export class CreditsService {
     accountId: string,
     documentId: string,
   ): Promise<void> {
+    const subscription = await tx.subscription.findUnique({ where: { accountId } });
+    // SPEC §11 invariant 23: a usable subscription issues with no deduction and no ledger entry
+    if (isSubscriptionUsable(subscription)) return;
+
     // SPEC §11 invariant 21: atomic guarded deduction, never read-then-write
     const affected = await tx.$executeRaw`
       UPDATE "account"

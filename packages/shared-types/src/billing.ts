@@ -1,3 +1,5 @@
+import type { SubscriptionStatus } from './enums';
+
 export const ISSUANCE_COST_CENTS = 10;
 export const SIGNUP_GRANT_CENTS = 100;
 
@@ -10,13 +12,16 @@ export const CREDIT_PACKS: Record<CreditPackId, { eurCents: number }> = {
   pack25: { eurCents: 2500 },
 };
 
+export type CheckoutProduct = CreditPackId | 'subscription';
+
 export interface CheckoutRequest {
-  product: CreditPackId;
+  product: CheckoutProduct;
 }
 
 export interface CreditBalanceDto {
   balanceCents: number;
   documentsRemaining: number;
+  hasUnlimitedSubscription: boolean;
 }
 
 export const CREDIT_LEDGER_REASONS = [
@@ -35,12 +40,13 @@ export interface CreditLedgerEntryDto {
   createdAt: string;
 }
 
-export interface WiseTransferInstructionsDto {
-  reference: string;
-  amountCents: number;
-  currency: string;
-  iban: string;
-  accountHolderName: string;
-  bic: string | null;
-  expiresAt: string;
+export interface SubscriptionDto {
+  id: string;
+  status: SubscriptionStatus;
+  planId: string | null;
+  currentPeriodEnd: string | null;
+}
+
+export interface CheckoutSessionDto {
+  checkoutUrl: string;
 }

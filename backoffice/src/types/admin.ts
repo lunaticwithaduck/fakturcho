@@ -1,4 +1,10 @@
-import type { Cents, CurrencyCode, DocumentStatus, DocumentType } from '@fakturcho/shared-types';
+import type {
+  Cents,
+  CurrencyCode,
+  DocumentStatus,
+  DocumentType,
+  SubscriptionStatus,
+} from '@fakturcho/shared-types';
 
 export interface AccountSummary {
   id: string;
@@ -7,6 +13,7 @@ export interface AccountSummary {
   city: string;
   vatRegistered: boolean;
   documentsIssued: number;
+  subscriptionStatus: SubscriptionStatus;
   createdAt: string;
 }
 
@@ -18,10 +25,16 @@ export interface AccountDetail extends AccountSummary {
   email: string;
   iban: string;
   bic: string;
+  planName: string;
+  mrrCents: Cents;
+  currentPeriodEnd: string | null;
 }
+
+export type SubscriptionStatusFilter = SubscriptionStatus | 'all';
 
 export interface AccountListFilters {
   search: string;
+  status: SubscriptionStatusFilter;
 }
 
 export interface AdminDocumentSummary {
@@ -44,6 +57,25 @@ export interface DocumentListFilters {
   search: string;
   documentType: DocumentTypeFilter;
   status: DocumentStatusFilter;
+}
+
+export interface SubscriptionSummary {
+  id: string;
+  accountId: string;
+  accountName: string;
+  status: SubscriptionStatus;
+  planName: string;
+  mrrCents: Cents;
+  currentPeriodEnd: string | null;
+  createdAt: string;
+}
+
+export interface MrrSummary {
+  mrrCents: Cents;
+  activeCount: number;
+  trialingCount: number;
+  pastDueCount: number;
+  canceledCount: number;
 }
 
 export interface UsageMonthSummary {
