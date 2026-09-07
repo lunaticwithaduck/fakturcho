@@ -76,7 +76,7 @@ export function LandingPage() {
           </div>
           <p className="text-sm text-text-muted">
             Нов акаунт получава {PRICING.signupGrant} кредит при регистрация. Плащанията се
-            обработват от Paddle.
+            обработват през Revolut.
           </p>
         </section>
       </main>

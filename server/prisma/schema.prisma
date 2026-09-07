@@ -281,16 +281,16 @@ model Discount {
 }
 
 model Subscription {
-  id                   String             @id @default(cuid())
-  accountId            String             @unique
-  account              Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  status               SubscriptionStatus @default(TRIALING)
-  paddleSubscriptionId String?            @unique
-  paddleCustomerId     String?
-  planId               String?
-  currentPeriodEnd     DateTime?
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
+  id                    String             @id @default(cuid())
+  accountId             String             @unique
+  account               Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  status                SubscriptionStatus @default(TRIALING)
+  revolutSubscriptionId String?            @unique
+  revolutCustomerId     String?
+  planId                String?
+  currentPeriodEnd      DateTime?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
 
   @@map("subscription")
 }
@@ -310,7 +310,7 @@ model CreditLedgerEntry {
   reason              CreditLedgerReason
   documentId          String?            @unique
   document            Document?          @relation(fields: [documentId], references: [id], onDelete: SetNull)
-  paddleTransactionId String?            @unique
+  revolutOrderId      String?            @unique
   createdAt           DateTime           @default(now())
 
   @@index([accountId, createdAt])

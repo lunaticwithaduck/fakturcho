@@ -25,7 +25,7 @@ Closed 2026-08-03. Not open for renegotiation by a worker.
 - UI primitives: Radix + Tailwind 4. shadcn is a copy-source, never a dependency.
 - `*.styles.ts`: tailwind-variants.
 - Auth: Better-Auth.
-- Payments: Paddle Billing. Stripe and Stripe-owned services are excluded.
+- Payments: Revolut Business Merchant API. Stripe and Stripe-owned services are excluded.
 - PDF: server-side Chromium (Playwright) printing one HTML template.
 - Email: Resend.
 - Lint/format: Biome. The token linter in `scripts/` is separate and also runs

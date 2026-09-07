@@ -1,89 +1,58 @@
-import { createHmac } from 'node:crypto';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { BillingService } from './billing.service';
 import { CreditsService } from './credits.service';
-import { PaddleService } from './paddle.service';
+import type { RevolutOrder, RevolutService } from './revolut.service';
 import { grantSignupCredits } from './signup-grant';
 
-const WEBHOOK_SECRET = 'test-webhook-secret';
-
-function sign(rawBody: string, secret: string, ts = Math.floor(Date.now() / 1000)): string {
-  const hmac = createHmac('sha256', secret).update(`${ts}:${rawBody}`).digest('hex');
-  return `ts=${ts};h1=${hmac}`;
-}
-
-function transactionCompletedPayload(
-  accountId: string,
-  transactionId: string,
-  creditCents?: number,
-): string {
-  const now = new Date().toISOString();
-  return JSON.stringify({
-    event_id: `evt_${transactionId}`,
-    event_type: 'transaction.completed',
-    occurred_at: now,
-    notification_id: `ntf_${transactionId}`,
-    data: {
-      id: transactionId,
-      status: 'completed',
-      customer_id: 'ctm_123',
-      address_id: null,
-      business_id: null,
-      custom_data: creditCents === undefined ? { accountId } : { accountId, creditCents },
-      currency_code: 'EUR',
-      origin: 'web',
-      subscription_id: null,
-      invoice_id: null,
-      invoice_number: null,
-      collection_mode: 'automatic',
-      discount_id: null,
-      billing_details: null,
-      billing_period: null,
-      items: [],
-      details: null,
-      payments: [],
-      checkout: null,
-      created_at: now,
-      updated_at: now,
-      billed_at: null,
-      revised_at: null,
-    },
-  });
+function completedOrder(overrides: Partial<RevolutOrder> & Pick<RevolutOrder, 'id'>): RevolutOrder {
+  return {
+    state: 'completed',
+    merchantOrderExtRef: null,
+    metadata: {},
+    checkoutUrl: null,
+    ...overrides,
+  };
 }
 
 describe('credit pack fulfilment webhook', () => {
   let db: TestDatabase;
-  let billing: BillingService;
   let credits: CreditsService;
-  let paddle: PaddleService;
 
   beforeAll(async () => {
-    process.env.PADDLE_WEBHOOK_SECRET = WEBHOOK_SECRET;
-    process.env.PADDLE_API_KEY = 'test-api-key';
     db = await startTestDatabase();
-    paddle = new PaddleService();
-    const prismaService = db.prisma as unknown as PrismaService;
-    billing = new BillingService(prismaService, paddle);
-    credits = new CreditsService(prismaService);
+    credits = new CreditsService(db.prisma as unknown as PrismaService);
   }, 120_000);
 
   afterAll(async () => {
     await db.stop();
   });
 
-  async function deliver(rawBody: string): Promise<void> {
-    const event = await paddle.parseWebhook(rawBody, sign(rawBody, WEBHOOK_SECRET));
-    await billing.handleWebhookEvent(event);
+  function billingWith(getOrder: ReturnType<typeof vi.fn>): BillingService {
+    const revolut = { getOrder } as unknown as RevolutService;
+    return new BillingService(db.prisma as unknown as PrismaService, revolut);
   }
 
-  it('invariant 22: the same transaction.completed delivered twice credits the pack exactly once', async () => {
+  it('invariant 22: the same ORDER_COMPLETED delivered twice credits the pack exactly once', async () => {
     const account = await db.prisma.account.create({ data: {} });
-    const rawBody = transactionCompletedPayload(account.id, 'txn_dup', 500);
+    const getOrder = vi
+      .fn()
+      .mockResolvedValue(
+        completedOrder({ id: 'ord_dup', metadata: { accountId: account.id, creditCents: 500 } }),
+      );
+    const billing = billingWith(getOrder);
 
-    await deliver(rawBody);
-    await deliver(rawBody);
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_dup',
+      subscriptionId: null,
+    });
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_dup',
+      subscriptionId: null,
+    });
 
     const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
     expect(updated.creditBalanceCents).toBe(500);
@@ -95,7 +64,7 @@ describe('credit pack fulfilment webhook', () => {
     expect(entries[0]).toMatchObject({
       amountCents: 500,
       reason: 'PURCHASE',
-      paddleTransactionId: 'txn_dup',
+      revolutOrderId: 'ord_dup',
     });
   });
 
@@ -104,7 +73,18 @@ describe('credit pack fulfilment webhook', () => {
     const accountId = account.id;
 
     await db.prisma.$transaction((tx) => grantSignupCredits(tx, accountId));
-    await deliver(transactionCompletedPayload(accountId, 'txn_mixed', 500));
+
+    const getOrder = vi
+      .fn()
+      .mockResolvedValue(
+        completedOrder({ id: 'ord_mixed', metadata: { accountId, creditCents: 500 } }),
+      );
+    const billing = billingWith(getOrder);
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_mixed',
+      subscriptionId: null,
+    });
 
     for (let i = 0; i < 2; i += 1) {
       const document = await db.prisma.document.create({
@@ -113,7 +93,11 @@ describe('credit pack fulfilment webhook', () => {
       await db.prisma.$transaction((tx) => credits.chargeForIssuance(tx, accountId, document.id));
     }
 
-    await deliver(transactionCompletedPayload(accountId, 'txn_mixed', 500));
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_mixed',
+      subscriptionId: null,
+    });
 
     const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: accountId } });
     expect(updated.creditBalanceCents).toBe(580);
@@ -136,16 +120,43 @@ describe('credit pack fulfilment webhook', () => {
     });
   });
 
-  it('ignores transaction.completed events without creditCents in customData', async () => {
+  it('ignores ORDER_COMPLETED events without creditCents in metadata', async () => {
     const account = await db.prisma.account.create({ data: {} });
+    const getOrder = vi
+      .fn()
+      .mockResolvedValue(
+        completedOrder({ id: 'ord_no_credit', metadata: { accountId: account.id } }),
+      );
 
-    await deliver(transactionCompletedPayload(account.id, 'txn_subscription_billing'));
+    await billingWith(getOrder).handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_no_credit',
+      subscriptionId: null,
+    });
 
     const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
     expect(updated.creditBalanceCents).toBe(0);
-    const entries = await db.prisma.creditLedgerEntry.count({
-      where: { accountId: account.id },
-    });
+    const entries = await db.prisma.creditLedgerEntry.count({ where: { accountId: account.id } });
     expect(entries).toBe(0);
+  });
+
+  it('ignores an order that has not reached the completed state', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const getOrder = vi.fn().mockResolvedValue(
+      completedOrder({
+        id: 'ord_pending',
+        state: 'pending',
+        metadata: { accountId: account.id, creditCents: 500 },
+      }),
+    );
+
+    await billingWith(getOrder).handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_pending',
+      subscriptionId: null,
+    });
+
+    const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
+    expect(updated.creditBalanceCents).toBe(0);
   });
 });

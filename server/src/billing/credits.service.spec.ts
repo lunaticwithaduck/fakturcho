@@ -74,7 +74,7 @@ describe('CreditsService', () => {
         accountId: account.id,
         amountCents: 500,
         reason: 'PURCHASE',
-        paddleTransactionId: `txn_${account.id}`,
+        revolutOrderId: `ord_${account.id}`,
         createdAt: new Date('2026-02-02T00:00:00.000Z'),
       },
     });

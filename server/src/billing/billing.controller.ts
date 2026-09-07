@@ -13,7 +13,7 @@ import { parseOrThrow } from '../documents/zod-parse.util';
 import { BillingService } from './billing.service';
 import { CreditsService } from './credits.service';
 import { checkoutRequestSchema } from './dto-schemas';
-import { PaddleService } from './paddle.service';
+import { RevolutService } from './revolut.service';
 
 interface RawBodyRequest extends Request {
   rawBody?: Buffer;
@@ -24,7 +24,7 @@ export class BillingController {
   constructor(
     private readonly billingService: BillingService,
     private readonly creditsService: CreditsService,
-    private readonly paddleService: PaddleService,
+    private readonly revolutService: RevolutService,
   ) {}
 
   @Get('subscription')
@@ -55,14 +55,18 @@ export class BillingController {
   @Post('webhook')
   async handleWebhook(
     @Req() req: RawBodyRequest,
-    @Headers('paddle-signature') signature: string | undefined,
+    @Headers('revolut-signature') signature: string | undefined,
+    @Headers('revolut-request-timestamp') timestamp: string | undefined,
   ): Promise<{ received: true }> {
-    if (!signature) {
-      throw new DomainError('UNAUTHORIZED', 'Missing Paddle signature');
+    if (!signature || !timestamp) {
+      throw new DomainError('UNAUTHORIZED', 'Missing Revolut signature');
     }
     const rawBody = req.rawBody ? req.rawBody.toString('utf-8') : JSON.stringify(req.body);
-    const event = await this.paddleService.parseWebhook(rawBody, signature);
-    await this.billingService.handleWebhookEvent(event);
+    if (!this.revolutService.verifyWebhookSignature(rawBody, timestamp, signature)) {
+      throw new DomainError('UNAUTHORIZED', 'Invalid Revolut webhook signature');
+    }
+    const payload = this.revolutService.parseWebhookPayload(rawBody);
+    await this.billingService.handleWebhookEvent(payload);
     return { received: true };
   }
 }

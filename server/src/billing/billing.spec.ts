@@ -1,116 +1,168 @@
 import { createHmac } from 'node:crypto';
 import { SubscriptionStatus } from '@prisma/client';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { DomainError } from '../common/domain-error';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { BillingService } from './billing.service';
-import { PaddleService } from './paddle.service';
+import { RevolutService } from './revolut.service';
 
 const WEBHOOK_SECRET = 'test-webhook-secret';
 
-function sign(rawBody: string, secret: string, ts = Math.floor(Date.now() / 1000)): string {
-  const hmac = createHmac('sha256', secret).update(`${ts}:${rawBody}`).digest('hex');
-  return `ts=${ts};h1=${hmac}`;
+function sign(rawBody: string, secret: string, timestamp: string): string {
+  const hmac = createHmac('sha256', secret).update(`v1.${timestamp}.${rawBody}`).digest('hex');
+  return `v1=${hmac}`;
 }
 
-function subscriptionPayload(
-  accountId: string,
-  eventType = 'subscription.updated',
-  status = 'active',
-  subscriptionId = 'sub_123',
-): string {
-  const now = new Date().toISOString();
-  const periodEnd = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  return JSON.stringify({
-    event_id: 'evt_1',
-    event_type: eventType,
-    occurred_at: now,
-    notification_id: 'ntf_1',
-    data: {
-      id: subscriptionId,
-      status,
-      customer_id: 'ctm_123',
-      address_id: 'add_1',
-      business_id: null,
-      currency_code: 'EUR',
-      created_at: now,
-      updated_at: now,
-      started_at: null,
-      first_billed_at: null,
-      next_billed_at: null,
-      paused_at: null,
-      canceled_at: null,
-      discount: null,
-      collection_mode: 'automatic',
-      billing_details: null,
-      current_billing_period: { starts_at: now, ends_at: periodEnd },
-      billing_cycle: { interval: 'month', frequency: 1 },
-      scheduled_change: null,
-      items: [],
-      custom_data: { accountId },
-      import_meta: null,
-    },
-  });
-}
-
-describe('Paddle billing webhook', () => {
+describe('Revolut webhook signature verification', () => {
   let db: TestDatabase;
-  let paddle: PaddleService;
-  let billing: BillingService;
+  let revolut: RevolutService;
 
   beforeAll(async () => {
-    process.env.PADDLE_WEBHOOK_SECRET = WEBHOOK_SECRET;
-    process.env.PADDLE_API_KEY = 'test-api-key';
+    process.env.REVOLUT_WEBHOOK_SECRET = WEBHOOK_SECRET;
+    process.env.REVOLUT_API_KEY = 'sk_test';
     db = await startTestDatabase();
-    paddle = new PaddleService();
-    billing = new BillingService(db.prisma as unknown as PrismaService, paddle);
-  });
+    revolut = new RevolutService();
+  }, 120_000);
 
   afterAll(async () => {
     await db.stop();
   });
 
-  async function deliver(rawBody: string): Promise<void> {
-    const event = await paddle.parseWebhook(rawBody, sign(rawBody, WEBHOOK_SECRET));
-    await billing.handleWebhookEvent(event);
+  it('accepts a correctly signed payload', () => {
+    const rawBody = JSON.stringify({ event: 'ORDER_COMPLETED', order_id: 'ord_1' });
+    const timestamp = String(Date.now());
+    expect(
+      revolut.verifyWebhookSignature(rawBody, timestamp, sign(rawBody, WEBHOOK_SECRET, timestamp)),
+    ).toBe(true);
+  });
+
+  it('rejects a badly signed payload', () => {
+    const rawBody = JSON.stringify({ event: 'ORDER_COMPLETED', order_id: 'ord_1' });
+    const timestamp = String(Date.now());
+    expect(
+      revolut.verifyWebhookSignature(rawBody, timestamp, sign(rawBody, 'wrong-secret', timestamp)),
+    ).toBe(false);
+  });
+
+  it('accepts a match anywhere in a comma-separated rotation header', () => {
+    const rawBody = JSON.stringify({ event: 'ORDER_COMPLETED', order_id: 'ord_1' });
+    const timestamp = String(Date.now());
+    const header = `v1=deadbeef, ${sign(rawBody, WEBHOOK_SECRET, timestamp)}`;
+    expect(revolut.verifyWebhookSignature(rawBody, timestamp, header)).toBe(true);
+  });
+
+  it('rejects a payload signed with a different timestamp than the header carries', () => {
+    const rawBody = JSON.stringify({ event: 'ORDER_COMPLETED', order_id: 'ord_1' });
+    const signed = sign(rawBody, WEBHOOK_SECRET, '1000');
+    expect(revolut.verifyWebhookSignature(rawBody, '2000', signed)).toBe(false);
+  });
+});
+
+describe('subscription webhook status mapping', () => {
+  let db: TestDatabase;
+
+  beforeAll(async () => {
+    db = await startTestDatabase();
+  }, 120_000);
+
+  afterAll(async () => {
+    await db.stop();
+  });
+
+  function billingWith(getSubscription: ReturnType<typeof vi.fn>): BillingService {
+    const revolut = { getSubscription } as unknown as RevolutService;
+    return new BillingService(db.prisma as unknown as PrismaService, revolut);
   }
 
-  it('rejects a badly signed webhook', async () => {
-    const rawBody = subscriptionPayload('acc_placeholder');
-
-    await expect(paddle.parseWebhook(rawBody, sign(rawBody, 'wrong-secret'))).rejects.toThrow(
-      DomainError,
-    );
-  });
-
-  it('creates the Subscription row from a signed subscription.created event when none exists', async () => {
+  it('SUBSCRIPTION_INITIATED refreshes the row to active', async () => {
     const account = await db.prisma.account.create({ data: {} });
-
-    await deliver(subscriptionPayload(account.id, 'subscription.created', 'active'));
-
-    const created = await db.prisma.subscription.findUniqueOrThrow({
-      where: { accountId: account.id },
-    });
-    expect(created.status).toBe(SubscriptionStatus.ACTIVE);
-    expect(created.paddleSubscriptionId).toBe('sub_123');
-    expect(created.paddleCustomerId).toBe('ctm_123');
-    expect(created.currentPeriodEnd).not.toBeNull();
-  });
-
-  it('updates the existing Subscription row on a later event, keeping the same row', async () => {
-    const account = await db.prisma.account.create({ data: {} });
-
-    await deliver(subscriptionPayload(account.id, 'subscription.created', 'active', 'sub_456'));
-    const created = await db.prisma.subscription.findUniqueOrThrow({
-      where: { accountId: account.id },
+    await db.prisma.subscription.create({
+      data: { accountId: account.id, status: 'TRIALING', revolutSubscriptionId: 'sub_1' },
     });
 
-    await deliver(subscriptionPayload(account.id, 'subscription.canceled', 'canceled', 'sub_456'));
+    const getSubscription = vi
+      .fn()
+      .mockResolvedValue({ id: 'sub_1', state: 'active', setupOrderId: null, customerId: 'cus_1' });
+
+    await billingWith(getSubscription).handleWebhookEvent({
+      event: 'SUBSCRIPTION_INITIATED',
+      orderId: null,
+      subscriptionId: 'sub_1',
+    });
+
     const updated = await db.prisma.subscription.findUniqueOrThrow({
       where: { accountId: account.id },
     });
-    expect(updated.id).toBe(created.id);
+    expect(updated.status).toBe(SubscriptionStatus.ACTIVE);
+  });
+
+  it('SUBSCRIPTION_OVERDUE moves the row to past_due', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: { accountId: account.id, status: 'ACTIVE', revolutSubscriptionId: 'sub_2' },
+    });
+
+    const getSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_2',
+      state: 'overdue',
+      setupOrderId: null,
+      customerId: 'cus_1',
+    });
+
+    await billingWith(getSubscription).handleWebhookEvent({
+      event: 'SUBSCRIPTION_OVERDUE',
+      orderId: null,
+      subscriptionId: 'sub_2',
+    });
+
+    const updated = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(updated.status).toBe(SubscriptionStatus.PAST_DUE);
+  });
+
+  it('SUBSCRIPTION_CANCELLED moves the row to canceled', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: { accountId: account.id, status: 'ACTIVE', revolutSubscriptionId: 'sub_3' },
+    });
+
+    const getSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_3',
+      state: 'cancelled',
+      setupOrderId: null,
+      customerId: 'cus_1',
+    });
+
+    await billingWith(getSubscription).handleWebhookEvent({
+      event: 'SUBSCRIPTION_CANCELLED',
+      orderId: null,
+      subscriptionId: 'sub_3',
+    });
+
+    const updated = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
     expect(updated.status).toBe(SubscriptionStatus.CANCELED);
+  });
+
+  it('ignores a subscription event for an id with no matching row', async () => {
+    const getSubscription = vi.fn();
+    await billingWith(getSubscription).handleWebhookEvent({
+      event: 'SUBSCRIPTION_OVERDUE',
+      orderId: null,
+      subscriptionId: 'sub_missing',
+    });
+    expect(getSubscription).not.toHaveBeenCalled();
+  });
+
+  it('ignores an unrecognised event', async () => {
+    const getSubscription = vi.fn();
+    await billingWith(getSubscription).handleWebhookEvent({
+      event: 'ORDER_AUTHORISED',
+      orderId: 'ord_1',
+      subscriptionId: null,
+    });
+    expect(getSubscription).not.toHaveBeenCalled();
   });
 });

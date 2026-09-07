@@ -42,13 +42,11 @@ paths, so local artifacts (`node_modules`, `.next`, `.env`) never enter an image
 | `BETTER_AUTH_SECRET` | output of `openssl rand -base64 32` | generate once, keep secret |
 | `BETTER_AUTH_URL` | `https://api.fakturcho.bg` | the API service's public URL |
 | `APP_ORIGINS` | `https://app.fakturcho.bg` | the app's public URL, exactly (scheme + host, no trailing slash); comma-separate if several |
-| `PADDLE_API_KEY` | `pdl_live_apikey_…` | Paddle → Developer Tools → Authentication → API keys |
-| `PADDLE_ENVIRONMENT` | `production` | `sandbox` when using sandbox.paddle.com credentials |
-| `PADDLE_SUBSCRIPTION_PRICE_ID` | `pri_…` | Paddle Catalog: the recurring subscription price |
-| `PADDLE_PRICE_PACK5` | `pri_…` | Paddle Catalog: one-time 5 EUR credit-pack price |
-| `PADDLE_PRICE_PACK10` | `pri_…` | Paddle Catalog: one-time 10 EUR credit-pack price |
-| `PADDLE_PRICE_PACK25` | `pri_…` | Paddle Catalog: one-time 25 EUR credit-pack price |
-| `PADDLE_WEBHOOK_SECRET` | `pdl_ntf…` | secret key of the webhook destination (step 4 below) |
+| `REVOLUT_API_KEY` | `sk_...` | Revolut Business → Merchant API → API keys (secret key) |
+| `REVOLUT_PUBLIC_KEY` | `pk_...` | Revolut Business → Merchant API → API keys (public key; only needed by the Revolut Checkout widget, not the hosted redirect) |
+| `REVOLUT_ENVIRONMENT` | `production` | `sandbox` when using a sandbox-merchant.revolut.com account |
+| `REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID` | `pv_…` | Merchant API subscription plan variation id for the 5 €/month plan (see below) |
+| `REVOLUT_WEBHOOK_SECRET` | `wsk_…` | signing secret returned when the webhook destination is created (step below) |
 | `RESEND_API_KEY` | `re_…` | Resend → API Keys |
 | `EMAIL_FROM` | `Fakturcho <invoices@fakturcho.bg>` | address on a Resend-verified domain |
 
@@ -56,17 +54,57 @@ On boot the container runs `prisma migrate deploy` and then starts the API, so
 the first successful deploy creates the schema. The image is large (Chromium
 plus its OS dependencies) — that is expected.
 
-### Paddle setup
+### Revolut setup
 
-1. Paddle → Catalog → Products: create the subscription product with one
-   recurring price, and the credit packs as one-time prices at 5, 10 and 25 EUR.
-   Copy the four `pri_…` ids into the variables above.
-2. Developer Tools → Notifications → New destination:
-   - URL: `https://<api-domain>/api/billing/webhook`
-   - Subscribe to transaction and subscription events.
-   - Copy the destination's secret key into `PADDLE_WEBHOOK_SECRET`.
-3. `PADDLE_ENVIRONMENT` must match where the API key and prices were created
-   (`production` vs `sandbox`).
+Credit packs need no catalog entry — the amount is sent straight on the order
+(500/1000/2500 cents, `@fakturcho/shared-types` `CREDIT_PACKS`). The
+subscription needs a plan created once, up front:
+
+1. Create the subscription plan (5 €/month, one variation, no trial, billing
+   forever — `cycle_count: null`):
+   ```
+   curl -X POST https://merchant.revolut.com/api/subscription-plans \
+     -H "Authorization: Bearer $REVOLUT_API_KEY" \
+     -H "Revolut-Api-Version: 2024-09-01" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "name": "Fakturcho абонамент",
+       "variations": [{
+         "phases": [{
+           "ordinal": 1,
+           "cycle_duration": "P1M",
+           "cycle_count": null,
+           "amount": 500,
+           "currency": "EUR"
+         }]
+       }]
+     }'
+   ```
+   Copy the returned `variations[0].id` into `REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID`.
+2. Register the webhook destination (once per environment — the production
+   one is already registered, id `4695da35-a595-4c9f-b2d6-e3c937646745`;
+   PATCH it to add the four `SUBSCRIPTION_*` events rather than creating a
+   second destination):
+   ```
+   curl -X POST https://merchant.revolut.com/api/webhooks \
+     -H "Authorization: Bearer $REVOLUT_API_KEY" \
+     -H "Revolut-Api-Version: 2024-09-01" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "url": "https://<api-domain>/api/billing/webhook",
+       "events": [
+         "ORDER_COMPLETED", "ORDER_AUTHORISED", "ORDER_CANCELLED",
+         "SUBSCRIPTION_INITIATED", "SUBSCRIPTION_FINISHED",
+         "SUBSCRIPTION_CANCELLED", "SUBSCRIPTION_OVERDUE"
+       ]
+     }'
+   ```
+   The response's `signing_secret` (`wsk_…`) goes into `REVOLUT_WEBHOOK_SECRET`
+   — it is shown only on creation; rotate it via
+   `POST /api/webhooks/{id}/rotate-signing-secret` if it leaks.
+3. `REVOLUT_ENVIRONMENT` must match where the API key and plan were created
+   (`production` vs `sandbox`) — sandbox and production are separate Revolut
+   accounts with separate dashboards and keys.
 
 ### Resend setup
 
@@ -104,7 +142,7 @@ HTTP 200 — hence the healthcheck lives on `/login`.
 
 ## 4. Custom domains — order of operations
 
-1. Attach the API domain first. Update `BETTER_AUTH_URL` and the Paddle
+1. Attach the API domain first. Update `BETTER_AUTH_URL` and the Revolut
    webhook URL to it.
 2. Attach the app domain. Update `APP_ORIGINS` on the API to exactly that
    origin (otherwise every signup/login fails with an origin error).
