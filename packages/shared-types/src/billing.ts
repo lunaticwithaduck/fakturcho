@@ -24,6 +24,11 @@ export const SUBSCRIPTION_TIERS: Record<
   sub25: { priceCents: 2500, grantCents: 5000 },
 };
 
+export function perDocumentCents(priceCents: number, creditCents: number): number {
+  const documents = creditCents / ISSUANCE_COST_CENTS;
+  return Math.floor(priceCents / documents + 0.5);
+}
+
 export type CheckoutProduct = CreditPackId | SubscriptionTierId;
 
 export interface CheckoutRequest {

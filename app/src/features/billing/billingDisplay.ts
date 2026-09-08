@@ -2,6 +2,7 @@ import {
   CREDIT_PACK_IDS,
   CREDIT_PACKS,
   ISSUANCE_COST_CENTS,
+  perDocumentCents,
   SUBSCRIPTION_TIER_IDS,
   SUBSCRIPTION_TIERS,
 } from '@fakturcho/shared-types';
@@ -30,6 +31,7 @@ export interface PackOption {
   id: CreditPackId;
   priceLabel: string;
   documentsLabel: string;
+  perDocumentLabel: string;
 }
 
 export function getPackOptions(): PackOption[] {
@@ -37,6 +39,7 @@ export function getPackOptions(): PackOption[] {
     id,
     priceLabel: formatMoney(CREDIT_PACKS[id].eurCents),
     documentsLabel: `${CREDIT_PACKS[id].eurCents / ISSUANCE_COST_CENTS} документа`,
+    perDocumentLabel: `${formatMoney(ISSUANCE_COST_CENTS)} на документ`,
   }));
 }
 
@@ -45,6 +48,7 @@ export interface SubscriptionTierOption {
   title: string;
   body: string;
   grantLabel: string;
+  perDocumentLabel: string;
 }
 
 export function getSubscriptionTierOptions(): SubscriptionTierOption[] {
@@ -57,6 +61,7 @@ export function getSubscriptionTierOptions(): SubscriptionTierOption[] {
       title: `${documents} документа на месец за ${formatMoney(tier.priceCents)}`,
       body: `Зарежда ${grantLabel} кредит всеки месец; неизползваният кредит се запазва.`,
       grantLabel,
+      perDocumentLabel: `${formatMoney(perDocumentCents(tier.priceCents, tier.grantCents))} на документ`,
     };
   });
 }

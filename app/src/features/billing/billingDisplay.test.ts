@@ -35,9 +35,24 @@ describe('balanceCaption', () => {
 describe('getPackOptions', () => {
   it('derives price and document count for every pack', () => {
     expect(getPackOptions()).toEqual([
-      { id: 'pack5', priceLabel: '5,00 €', documentsLabel: '50 документа' },
-      { id: 'pack10', priceLabel: '10,00 €', documentsLabel: '100 документа' },
-      { id: 'pack25', priceLabel: '25,00 €', documentsLabel: '250 документа' },
+      {
+        id: 'pack5',
+        priceLabel: '5,00 €',
+        documentsLabel: '50 документа',
+        perDocumentLabel: '0,10 € на документ',
+      },
+      {
+        id: 'pack10',
+        priceLabel: '10,00 €',
+        documentsLabel: '100 документа',
+        perDocumentLabel: '0,10 € на документ',
+      },
+      {
+        id: 'pack25',
+        priceLabel: '25,00 €',
+        documentsLabel: '250 документа',
+        perDocumentLabel: '0,10 € на документ',
+      },
     ]);
   });
 });
@@ -50,18 +65,21 @@ describe('getSubscriptionTierOptions', () => {
         title: '100 документа на месец за 5,00 €',
         body: 'Зарежда 10,00 € кредит всеки месец; неизползваният кредит се запазва.',
         grantLabel: '10,00 €',
+        perDocumentLabel: '0,05 € на документ',
       },
       {
         id: 'sub10',
         title: '200 документа на месец за 10,00 €',
         body: 'Зарежда 20,00 € кредит всеки месец; неизползваният кредит се запазва.',
         grantLabel: '20,00 €',
+        perDocumentLabel: '0,05 € на документ',
       },
       {
         id: 'sub25',
         title: '500 документа на месец за 25,00 €',
         body: 'Зарежда 50,00 € кредит всеки месец; неизползваният кредит се запазва.',
         grantLabel: '50,00 €',
+        perDocumentLabel: '0,05 € на документ',
       },
     ]);
   });

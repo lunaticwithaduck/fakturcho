@@ -16,6 +16,7 @@ export function CreditPacksSection({ pendingProduct, onBuy }: CreditPacksSection
           <Card key={pack.id} className="flex flex-col items-center gap-2 text-center">
             <p className="text-xl font-bold text-text">{pack.priceLabel}</p>
             <p className="text-sm text-text-muted">{pack.documentsLabel}</p>
+            <p className="text-xs text-text-muted">{pack.perDocumentLabel}</p>
             <Button size="sm" disabled={pendingProduct !== null} onClick={() => onBuy(pack.id)}>
               {pendingProduct === pack.id ? 'Пренасочване...' : 'Купи'}
             </Button>
