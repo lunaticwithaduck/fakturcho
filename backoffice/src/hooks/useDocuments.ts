@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
-import { listDocuments } from '../data/documents';
-import type { AdminDocumentSummary, DocumentListFilters } from '../types/admin';
+import type { AdminDocumentSummary, DocumentListFilters } from '@fakturcho/shared-types';
+import { useListAdminDocumentsQuery } from '../api';
 
 export function useDocuments(filters: DocumentListFilters): {
   data: AdminDocumentSummary[];
   isLoading: boolean;
+  isError: boolean;
 } {
-  const data = useMemo(() => listDocuments(filters), [filters]);
-  return { data, isLoading: false };
+  const { data, isLoading, isError } = useListAdminDocumentsQuery(filters);
+  return { data: data ?? [], isLoading, isError };
 }

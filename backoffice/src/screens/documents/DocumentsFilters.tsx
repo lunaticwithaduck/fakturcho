@@ -1,3 +1,4 @@
+import type { DocumentStatusFilter, DocumentTypeFilter } from '@fakturcho/shared-types';
 import {
   DOCUMENT_STATUS_LABELS,
   DOCUMENT_STATUSES,
@@ -5,7 +6,6 @@ import {
   DOCUMENT_TYPES,
 } from '@fakturcho/shared-types';
 import { Flex, Input, Select } from 'antd';
-import type { DocumentStatusFilter, DocumentTypeFilter } from '../../types/admin';
 
 interface DocumentsFiltersProps {
   search: string;

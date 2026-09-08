@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
-import { getAvailableReportMonths } from '../data/reports';
+import { useListReportMonthsQuery } from '../api';
 
-export function useReportMonths(): { data: string[]; isLoading: boolean } {
-  const data = useMemo(() => getAvailableReportMonths(), []);
-  return { data, isLoading: false };
+export function useReportMonths(): { data: string[]; isLoading: boolean; isError: boolean } {
+  const { data, isLoading, isError } = useListReportMonthsQuery();
+  return { data: data ?? [], isLoading, isError };
 }

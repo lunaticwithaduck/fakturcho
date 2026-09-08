@@ -1,8 +1,11 @@
-import { useMemo } from 'react';
-import { listUsageMonths } from '../data/usage';
-import type { UsageMonthSummary } from '../types/admin';
+import type { UsageMonthSummary } from '@fakturcho/shared-types';
+import { useListUsageMonthsQuery } from '../api';
 
-export function useUsageMonths(): { data: UsageMonthSummary[]; isLoading: boolean } {
-  const data = useMemo(() => listUsageMonths(), []);
-  return { data, isLoading: false };
+export function useUsageMonths(): {
+  data: UsageMonthSummary[];
+  isLoading: boolean;
+  isError: boolean;
+} {
+  const { data, isLoading, isError } = useListUsageMonthsQuery();
+  return { data: data ?? [], isLoading, isError };
 }

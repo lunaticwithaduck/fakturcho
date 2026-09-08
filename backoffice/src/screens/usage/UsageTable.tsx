@@ -1,6 +1,6 @@
+import type { UsageMonthSummary } from '@fakturcho/shared-types';
 import type { TableColumnsType } from 'antd';
 import { Table } from 'antd';
-import type { UsageMonthSummary } from '../../types/admin';
 import { formatMonthLabel } from '../../utils/date';
 
 interface UsageTableProps {

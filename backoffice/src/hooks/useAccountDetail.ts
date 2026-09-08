@@ -1,11 +1,12 @@
-import { useMemo } from 'react';
-import { getAccountById } from '../data/accounts';
-import type { AccountDetail } from '../types/admin';
+import type { AccountDetail } from '@fakturcho/shared-types';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useGetAccountQuery } from '../api';
 
 export function useAccountDetail(accountId: string | null): {
   data: AccountDetail | undefined;
   isLoading: boolean;
+  isError: boolean;
 } {
-  const data = useMemo(() => (accountId ? getAccountById(accountId) : undefined), [accountId]);
-  return { data, isLoading: false };
+  const { data, isLoading, isError } = useGetAccountQuery(accountId ?? skipToken);
+  return { data, isLoading, isError };
 }

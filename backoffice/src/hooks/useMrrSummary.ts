@@ -1,8 +1,15 @@
-import { useMemo } from 'react';
-import { getMrrSummary } from '../data/subscriptions';
-import type { MrrSummary } from '../types/admin';
+import type { MrrSummary } from '@fakturcho/shared-types';
+import { useGetMrrSummaryQuery } from '../api';
 
-export function useMrrSummary(): { data: MrrSummary; isLoading: boolean } {
-  const data = useMemo(() => getMrrSummary(), []);
-  return { data, isLoading: false };
+const EMPTY_SUMMARY: MrrSummary = {
+  mrrCents: 0,
+  activeCount: 0,
+  trialingCount: 0,
+  pastDueCount: 0,
+  canceledCount: 0,
+};
+
+export function useMrrSummary(): { data: MrrSummary; isLoading: boolean; isError: boolean } {
+  const { data, isLoading, isError } = useGetMrrSummaryQuery();
+  return { data: data ?? EMPTY_SUMMARY, isLoading, isError };
 }

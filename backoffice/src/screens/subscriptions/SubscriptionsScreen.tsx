@@ -1,9 +1,10 @@
+import type { SubscriptionStatusFilter } from '@fakturcho/shared-types';
 import { SUBSCRIPTION_STATUSES } from '@fakturcho/shared-types';
 import { Select, Typography } from 'antd';
 import { useState } from 'react';
 import { useMrrSummary } from '../../hooks/useMrrSummary';
 import { useSubscriptions } from '../../hooks/useSubscriptions';
-import type { SubscriptionStatusFilter } from '../../types/admin';
+import { ApiErrorAlert } from '../../layout/ApiErrorAlert';
 import { SUBSCRIPTION_STATUS_LABELS } from '../../utils/statusLabels';
 import { SubscriptionsSummaryCards } from './SubscriptionsSummaryCards';
 import { SubscriptionsTable } from './SubscriptionsTable';
@@ -18,12 +19,13 @@ const STATUS_OPTIONS: { value: SubscriptionStatusFilter; label: string }[] = [
 
 export function SubscriptionsScreen() {
   const [status, setStatus] = useState<SubscriptionStatusFilter>('all');
-  const { data: subscriptions, isLoading } = useSubscriptions(status);
-  const { data: summary } = useMrrSummary();
+  const { data: subscriptions, isLoading, isError: subscriptionsError } = useSubscriptions(status);
+  const { data: summary, isError: summaryError } = useMrrSummary();
 
   return (
     <div>
       <Typography.Title level={3}>Абонаменти</Typography.Title>
+      {subscriptionsError || summaryError ? <ApiErrorAlert /> : null}
       <SubscriptionsSummaryCards summary={summary} />
       <Select<SubscriptionStatusFilter>
         value={status}

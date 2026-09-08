@@ -1,6 +1,6 @@
+import type { TurnoverReportRow } from '@fakturcho/shared-types';
 import type { TableColumnsType } from 'antd';
 import { Table } from 'antd';
-import type { TurnoverReportRow } from '../../types/admin';
 import { formatCents } from '../../utils/money';
 
 interface TurnoverReportTableProps {
