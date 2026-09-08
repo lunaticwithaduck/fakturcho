@@ -7,16 +7,27 @@ interface DocumentPdfViewerProps {
   documentId: string;
   title: string;
   status: DocumentStatus;
+  updatedAt: string;
 }
 
-export function DocumentPdfViewer({ documentId, title, status }: DocumentPdfViewerProps) {
-  const previewUrl = getDocumentPreviewUrl(documentId);
+export function DocumentPdfViewer({
+  documentId,
+  title,
+  status,
+  updatedAt,
+}: DocumentPdfViewerProps) {
+  const previewUrl = `${getDocumentPreviewUrl(documentId)}&v=${encodeURIComponent(updatedAt)}`;
   const canDownload = canDownloadDocument(status);
 
   return (
     <div className="flex flex-col gap-3">
       <div className="overflow-hidden rounded-lg border border-border bg-surface-sunken">
-        <iframe src={previewUrl} title={title} className="h-120 w-full sm:h-160 lg:h-192" />
+        <iframe
+          key={`${documentId}-${status}-${updatedAt}`}
+          src={previewUrl}
+          title={title}
+          className="h-120 w-full sm:h-160 lg:h-192"
+        />
       </div>
       {canDownload ? (
         <Button variant="secondary" size="sm" asChild className="self-start">

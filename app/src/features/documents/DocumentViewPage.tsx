@@ -86,7 +86,12 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         onEmail={() => setDialog('email')}
       />
 
-      <DocumentPdfViewer documentId={documentId} title={title} status={document.status} />
+      <DocumentPdfViewer
+        documentId={documentId}
+        title={title}
+        status={document.status}
+        updatedAt={document.updatedAt}
+      />
 
       {dialog === 'issue' ? (
         <DocumentIssueDialog
