@@ -271,9 +271,10 @@ Two ways to pay, both through Revolut. Prices are EUR. (Closed 2026-08-09.)
   id. Credits roll over and never expire. There is no exemption from issuance
   cost: a subscriber's issuance deducts 10 cents like any other account.
   Managed through Revolut's Subscriptions API and subscription webhooks;
-  status (`active`, `trialing`, `past_due`, `canceled`) drives display only.
-  Accounts no longer start with a trial subscription; a subscription exists
-  only once one is bought.
+  status (`active`, `trialing` (= Revolut `pending`, awaiting first payment),
+  `past_due`, `canceled`) drives display only, and only `active` is usable —
+  a pending checkout is not a free trial. Accounts no longer start with a
+  trial subscription; a subscription exists only once one is bought.
 - **Signup grant.** A new account is granted **100 cents** (10 documents)
   exactly once, in the transaction that creates the account.
 - **Ledger.** Every balance change is an append-only ledger entry (signup

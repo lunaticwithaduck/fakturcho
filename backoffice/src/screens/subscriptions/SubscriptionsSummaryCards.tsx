@@ -21,7 +21,7 @@ export function SubscriptionsSummaryCards({ summary }: SubscriptionsSummaryCards
       </Col>
       <Col span={6}>
         <Card>
-          <Statistic title="Пробен период" value={summary.trialingCount} />
+          <Statistic title="Чака плащане" value={summary.trialingCount} />
         </Card>
       </Col>
       <Col span={6}>

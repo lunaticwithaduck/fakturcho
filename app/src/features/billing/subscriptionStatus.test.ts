@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { isSubscriptionUsable, SUBSCRIPTION_STATUS_LABELS } from './subscriptionStatus';
 
 describe('isSubscriptionUsable', () => {
-  it('treats a trialing subscription as usable', () => {
-    expect(isSubscriptionUsable('trialing')).toBe(true);
+  it('treats a trialing subscription as not usable', () => {
+    expect(isSubscriptionUsable('trialing')).toBe(false);
   });
 
   it('treats an active subscription as usable', () => {
@@ -29,5 +29,9 @@ describe('SUBSCRIPTION_STATUS_LABELS', () => {
 
   it('labels an active subscription', () => {
     expect(SUBSCRIPTION_STATUS_LABELS.active).toBe('Активен');
+  });
+
+  it('labels a trialing subscription as awaiting payment', () => {
+    expect(SUBSCRIPTION_STATUS_LABELS.trialing).toBe('Чака плащане');
   });
 });
