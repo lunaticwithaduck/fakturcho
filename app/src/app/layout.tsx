@@ -5,7 +5,28 @@ import { uiFont } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Фактурчо',
+  metadataBase: new URL('https://www.fakturcho.com'),
+  title: {
+    default: 'Фактурчо — фактури за българския бизнес',
+    template: '%s — Фактурчо',
+  },
+  description:
+    'Издавайте фактури, проформи, кредитни и дебитни известия и оферти по българските изисквания. Плащате 0,10 € на издаден документ.',
+  openGraph: {
+    type: 'website',
+    locale: 'bg_BG',
+    siteName: 'Фактурчо',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  alternates: {
+    canonical: './',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

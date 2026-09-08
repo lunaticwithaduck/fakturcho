@@ -3,7 +3,7 @@ import { PRIVACY_INTRO, PRIVACY_SECTIONS } from '@app/features/legal/privacySect
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Политика за поверителност — Фактурчо',
+  title: 'Политика за поверителност',
   description: 'Как Фактурчо обработва лични данни.',
 };
 

@@ -3,7 +3,7 @@ import { TERMS_INTRO, TERMS_SECTIONS } from '@app/features/legal/termsSections';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Общи условия — Фактурчо',
+  title: 'Общи условия',
   description: 'Общите условия за ползване на Фактурчо.',
 };
 

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Фактурчо — фактури за българския бизнес',
+  title: { absolute: 'Фактурчо — фактури за българския бизнес' },
   description:
     'Издавайте фактури, проформи, кредитни и дебитни известия и оферти по българските изисквания. Плащате 0,10 € на издаден документ.',
 };
