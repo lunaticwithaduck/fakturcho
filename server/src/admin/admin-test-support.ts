@@ -100,5 +100,39 @@ export async function seedAdminFixtures(prisma: PrismaClient): Promise<AdminSeed
   await issuanceService.issue(accountBId, draftB1.id, {});
   await documentsService.saveDraft(accountBId, null, draftRequest());
 
+  const now = new Date();
+  const lastMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 15));
+  await prisma.creditLedgerEntry.create({
+    data: { accountId: accountAId, amountCents: 500, reason: 'SIGNUP_GRANT' },
+  });
+  await prisma.creditLedgerEntry.create({
+    data: { accountId: accountAId, amountCents: -10, reason: 'ISSUANCE' },
+  });
+  await prisma.creditLedgerEntry.create({
+    data: {
+      accountId: accountAId,
+      amountCents: 2000,
+      reason: 'PURCHASE',
+      revolutOrderId: 'admin-test-order-1',
+    },
+  });
+  await prisma.creditLedgerEntry.create({
+    data: {
+      accountId: accountAId,
+      amountCents: 3000,
+      reason: 'PURCHASE',
+      revolutOrderId: 'admin-test-order-2',
+    },
+  });
+  await prisma.creditLedgerEntry.create({
+    data: {
+      accountId: accountBId,
+      amountCents: 1500,
+      reason: 'PURCHASE',
+      revolutOrderId: 'admin-test-order-3',
+      createdAt: lastMonth,
+    },
+  });
+
   return { accountAId, accountBId };
 }

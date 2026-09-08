@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AdminGuard } from './admin.guard';
 import { AdminAccountsController } from './admin-accounts.controller';
 import { AdminAccountsService } from './admin-accounts.service';
+import { AdminCreditsController } from './admin-credits.controller';
+import { AdminCreditsService } from './admin-credits.service';
 import { AdminDocumentsController } from './admin-documents.controller';
 import { AdminDocumentsService } from './admin-documents.service';
 import { AdminMeController } from './admin-me.controller';
@@ -20,6 +22,7 @@ import { AdminUsageService } from './admin-usage.service';
     AdminSubscriptionsController,
     AdminUsageController,
     AdminReportsController,
+    AdminCreditsController,
   ],
   providers: [
     AdminGuard,
@@ -28,6 +31,7 @@ import { AdminUsageService } from './admin-usage.service';
     AdminSubscriptionsService,
     AdminUsageService,
     AdminReportsService,
+    AdminCreditsService,
   ],
 })
 export class AdminModule {}

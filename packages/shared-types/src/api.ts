@@ -29,4 +29,8 @@ export const API_ROUTES = {
   adminUsageMonths: '/api/admin/usage/months',
   adminReportsTurnover: '/api/admin/reports/turnover',
   adminReportsMonths: '/api/admin/reports/months',
+  adminCredits: '/api/admin/credits',
+  adminCreditsSummary: '/api/admin/credits/summary',
+  adminCreditsMonths: '/api/admin/credits/months',
+  adminCreditsPurchases: '/api/admin/credits/purchases',
 } as const;
