@@ -1,7 +1,7 @@
 import { formatDate } from '@app/features/shared/format';
 import { Button, Card } from '@design/components';
 import type { CheckoutProduct, SubscriptionDto } from '@shared/types';
-import { SUBSCRIPTION_STATUS_LABELS } from './subscriptionStatus';
+import { isSubscriptionUsable, SUBSCRIPTION_STATUS_LABELS } from './subscriptionStatus';
 
 interface SubscriptionCardProps {
   subscription: SubscriptionDto | null;
@@ -14,7 +14,7 @@ export function SubscriptionCard({
   pendingProduct,
   onSubscribe,
 }: SubscriptionCardProps) {
-  if (subscription) {
+  if (subscription && isSubscriptionUsable(subscription.status)) {
     return (
       <Card className="flex flex-col gap-1">
         <p className="text-sm font-medium text-text-muted">Абонамент</p>
@@ -36,6 +36,11 @@ export function SubscriptionCard({
   return (
     <Card className="flex flex-col items-start gap-3">
       <div className="flex flex-col gap-1">
+        {subscription ? (
+          <p className="text-sm font-medium text-text-muted">
+            Абонамент: {SUBSCRIPTION_STATUS_LABELS[subscription.status]}
+          </p>
+        ) : null}
         <p className="text-lg font-semibold text-text">100 документа на месец за 5 €</p>
         <p className="text-sm text-text-muted">
           Абонаментът зарежда 10 € кредит на всеки 30 дни — двойно спрямо пакетите. Неизползваният
