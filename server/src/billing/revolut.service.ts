@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
+import { cancelRevolutSubscription } from './revolut-cancel';
 import { inspectRevolutConfig, type RevolutConfigReport } from './revolut-config';
 import { describeRevolutFailure, RevolutApiError, toDomainError } from './revolut-errors';
 import type {
@@ -63,6 +64,8 @@ export class RevolutService {
     const order = await this.request<{
       id: string;
       state: string;
+      order_amount?: { value: number } | null;
+      amount?: number;
       merchant_order_data: { reference: string | null } | null;
       metadata: Record<string, unknown> | null;
       checkout_url?: string;
@@ -71,6 +74,7 @@ export class RevolutService {
     return {
       id: order.id,
       state: order.state,
+      amount: order.order_amount?.value ?? order.amount ?? 0,
       merchantOrderExtRef: order.merchant_order_data?.reference ?? null,
       metadata: order.metadata ?? {},
       checkoutUrl: order.checkout_url ?? null,
@@ -119,6 +123,15 @@ export class RevolutService {
       setupOrderId: subscription.setup_order_id ?? null,
       customerId: subscription.customer_id,
     };
+  }
+
+  cancelSubscription(subscriptionId: string): Promise<void> {
+    const { baseUrl, blocking, environment } = this.config;
+    return cancelRevolutSubscription(
+      { baseUrl, apiKey: this.apiKey, blocking, environment },
+      subscriptionId,
+      this.logger,
+    );
   }
 
   verifyWebhookSignature(rawBody: string, timestamp: string, signatureHeader: string): boolean {

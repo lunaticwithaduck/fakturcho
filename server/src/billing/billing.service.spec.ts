@@ -10,6 +10,7 @@ describe('BillingService', () => {
   beforeAll(async () => {
     db = await startTestDatabase();
     process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'plan_var_test';
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_10 = 'plan_var_test_10';
   }, 120_000);
 
   afterAll(async () => {
@@ -85,7 +86,7 @@ describe('BillingService', () => {
     });
     const revolut = { createCustomer, createSubscription, getOrder } as unknown as RevolutService;
 
-    const result = await serviceWith(revolut).createCheckout(account.id, 'subscription');
+    const result = await serviceWith(revolut).createCheckout(account.id, 'sub5');
     expect(result.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_setup');
     expect(createCustomer).toHaveBeenCalledWith({
       fullName: 'Тест Тестов',
@@ -102,7 +103,7 @@ describe('BillingService', () => {
     expect(stored.revolutCustomerId).toBe('cus_1');
     expect(stored.status).toBe('TRIALING');
 
-    await serviceWith(revolut).createCheckout(account.id, 'subscription');
+    await serviceWith(revolut).createCheckout(account.id, 'sub5');
     expect(createCustomer).toHaveBeenCalledTimes(1);
   });
 
@@ -111,11 +112,175 @@ describe('BillingService', () => {
     const account = await db.prisma.account.create({ data: {} });
     const revolut = {} as unknown as RevolutService;
 
-    await expect(
-      serviceWith(revolut).createCheckout(account.id, 'subscription'),
-    ).rejects.toMatchObject({
+    await expect(serviceWith(revolut).createCheckout(account.id, 'sub5')).rejects.toMatchObject({
       code: 'CHECKOUT_NOT_CONFIGURED',
     });
     process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'plan_var_test';
+  });
+
+  it('rejects a checkout for a tier whose env var is missing, naming that env var', async () => {
+    delete process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25;
+    const account = await db.prisma.account.create({ data: {} });
+    const revolut = {} as unknown as RevolutService;
+
+    await expect(serviceWith(revolut).createCheckout(account.id, 'sub25')).rejects.toMatchObject({
+      code: 'CHECKOUT_NOT_CONFIGURED',
+      message: expect.stringContaining('REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25'),
+    });
+  });
+
+  it('checking out a different tier replaces the plan id and cancels the previous Revolut subscription', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.user.create({
+      data: {
+        id: `usr_switch_${account.id}`,
+        name: 'Тест Тестов',
+        email: `switch_${account.id}@example.com`,
+        accountId: account.id,
+      },
+    });
+
+    const createCustomer = vi.fn().mockResolvedValue({ id: 'cus_switch' });
+    const createSubscription = vi
+      .fn()
+      .mockResolvedValueOnce({
+        id: 'sub_switch_old',
+        state: 'pending',
+        setupOrderId: 'ord_switch_old',
+        customerId: 'cus_switch',
+      })
+      .mockResolvedValueOnce({
+        id: 'sub_switch_new',
+        state: 'pending',
+        setupOrderId: 'ord_switch_new',
+        customerId: 'cus_switch',
+      });
+    const getOrder = vi
+      .fn()
+      .mockResolvedValueOnce({
+        id: 'ord_switch_old',
+        state: 'pending',
+        merchantOrderExtRef: null,
+        metadata: {},
+        checkoutUrl: 'https://checkout.revolut.com/pay/ord_switch_old',
+      })
+      .mockResolvedValueOnce({
+        id: 'ord_switch_new',
+        state: 'pending',
+        merchantOrderExtRef: null,
+        metadata: {},
+        checkoutUrl: 'https://checkout.revolut.com/pay/ord_switch_new',
+      });
+    const cancelSubscription = vi.fn().mockResolvedValue(undefined);
+    const revolut = {
+      createCustomer,
+      createSubscription,
+      getOrder,
+      cancelSubscription,
+    } as unknown as RevolutService;
+    const service = serviceWith(revolut);
+
+    await service.createCheckout(account.id, 'sub5');
+    await service.createCheckout(account.id, 'sub10');
+
+    const stored = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(stored.planId).toBe('plan_var_test_10');
+    expect(stored.revolutSubscriptionId).toBe('sub_switch_new');
+    expect(createCustomer).toHaveBeenCalledTimes(1);
+    expect(cancelSubscription).toHaveBeenCalledTimes(1);
+    expect(cancelSubscription).toHaveBeenCalledWith('sub_switch_old');
+  });
+
+  it('checking out the same tier on a pending subscription reuses the stored checkout url without a Revolut call', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.user.create({
+      data: {
+        id: `usr_resume_${account.id}`,
+        name: 'Тест Тестов',
+        email: `resume_${account.id}@example.com`,
+        accountId: account.id,
+      },
+    });
+
+    const createCustomer = vi.fn().mockResolvedValue({ id: 'cus_resume' });
+    const createSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_resume',
+      state: 'pending',
+      setupOrderId: 'ord_resume',
+      customerId: 'cus_resume',
+    });
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_resume',
+      state: 'pending',
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: 'https://checkout.revolut.com/pay/ord_resume',
+    });
+    const getSubscription = vi.fn();
+    const revolut = {
+      createCustomer,
+      createSubscription,
+      getOrder,
+      getSubscription,
+    } as unknown as RevolutService;
+    const service = serviceWith(revolut);
+
+    const first = await service.createCheckout(account.id, 'sub5');
+    const second = await service.createCheckout(account.id, 'sub5');
+
+    expect(first.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
+    expect(second.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
+    expect(createSubscription).toHaveBeenCalledTimes(1);
+    expect(getOrder).toHaveBeenCalledTimes(1);
+    expect(getSubscription).not.toHaveBeenCalled();
+
+    const rows = await db.prisma.subscription.findMany({ where: { accountId: account.id } });
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.planId).toBe('plan_var_test');
+    expect(rows[0]?.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
+    expect(rows[0]?.revolutSetupOrderId).toBe('ord_resume');
+  });
+
+  it('falls back to retrieving the setup order when a pending subscription has no stored checkout url', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+
+    await db.prisma.subscription.create({
+      data: {
+        accountId: account.id,
+        status: 'TRIALING',
+        planId: 'plan_var_test',
+        revolutSubscriptionId: 'sub_legacy',
+        revolutCustomerId: 'cus_legacy',
+      },
+    });
+
+    const getSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_legacy',
+      state: 'pending',
+      setupOrderId: 'ord_legacy',
+      customerId: 'cus_legacy',
+    });
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_legacy',
+      state: 'pending',
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: 'https://checkout.revolut.com/pay/ord_legacy',
+    });
+    const createSubscription = vi.fn();
+    const revolut = { getSubscription, getOrder, createSubscription } as unknown as RevolutService;
+
+    const result = await serviceWith(revolut).createCheckout(account.id, 'sub5');
+    expect(result.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_legacy');
+    expect(getSubscription).toHaveBeenCalledWith('sub_legacy');
+    expect(createSubscription).not.toHaveBeenCalled();
+
+    const stored = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(stored.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_legacy');
+    expect(stored.revolutSetupOrderId).toBe('ord_legacy');
   });
 });

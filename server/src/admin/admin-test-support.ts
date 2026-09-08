@@ -44,11 +44,12 @@ export async function seedAdminFixtures(prisma: PrismaClient): Promise<AdminSeed
       accountId: accountAId,
     },
   });
+  process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'admin-test-sub5-variation';
   await prisma.subscription.create({
     data: {
       accountId: accountAId,
       status: 'ACTIVE',
-      planId: 'business',
+      planId: 'admin-test-sub5-variation',
       currentPeriodEnd: new Date('2099-01-01'),
     },
   });

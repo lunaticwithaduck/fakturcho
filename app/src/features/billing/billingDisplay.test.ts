@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { balanceCaption, CREDIT_LEDGER_REASON_LABELS, getPackOptions } from './billingDisplay';
+import {
+  balanceCaption,
+  CREDIT_LEDGER_REASON_LABELS,
+  getPackOptions,
+  getSubscriptionTierOptions,
+} from './billingDisplay';
 
 describe('CREDIT_LEDGER_REASON_LABELS', () => {
   it('labels every ledger reason in Bulgarian', () => {
@@ -33,6 +38,31 @@ describe('getPackOptions', () => {
       { id: 'pack5', priceLabel: '5,00 €', documentsLabel: '50 документа' },
       { id: 'pack10', priceLabel: '10,00 €', documentsLabel: '100 документа' },
       { id: 'pack25', priceLabel: '25,00 €', documentsLabel: '250 документа' },
+    ]);
+  });
+});
+
+describe('getSubscriptionTierOptions', () => {
+  it('derives title, body and grant label for every tier', () => {
+    expect(getSubscriptionTierOptions()).toEqual([
+      {
+        id: 'sub5',
+        title: '100 документа на месец за 5,00 €',
+        body: 'Зарежда 10,00 € кредит всеки месец; неизползваният кредит се запазва.',
+        grantLabel: '10,00 €',
+      },
+      {
+        id: 'sub10',
+        title: '200 документа на месец за 10,00 €',
+        body: 'Зарежда 20,00 € кредит всеки месец; неизползваният кредит се запазва.',
+        grantLabel: '20,00 €',
+      },
+      {
+        id: 'sub25',
+        title: '500 документа на месец за 25,00 €',
+        body: 'Зарежда 50,00 € кредит всеки месец; неизползваният кредит се запазва.',
+        grantLabel: '50,00 €',
+      },
     ]);
   });
 });

@@ -30,6 +30,6 @@ export function describeEntity(): string {
 export const PRICING = {
   perDocument: '0,10 €',
   packs: '5 €, 10 € и 25 €',
-  subscription: '5 € на месец',
+  subscription: '5, 10 или 25 € на месец',
   signupGrant: '1,00 €',
 } as const;

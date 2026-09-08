@@ -9,6 +9,7 @@ export interface CreateOrderInput {
 export interface RevolutOrder {
   id: string;
   state: string;
+  amount: number;
   merchantOrderExtRef: string | null;
   metadata: Record<string, unknown>;
   checkoutUrl: string | null;

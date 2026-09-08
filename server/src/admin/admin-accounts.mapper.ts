@@ -1,5 +1,7 @@
 import type { AccountDetail, AccountSummary } from '@fakturcho/shared-types';
+import { SUBSCRIPTION_TIERS } from '@fakturcho/shared-types';
 import type { Account, IssuerProfile, Subscription } from '@prisma/client';
+import { tierForVariationId } from '../billing/subscription-tiers';
 import {
   accountDisplayName,
   firstUserEmail,
@@ -27,6 +29,8 @@ export function toAccountSummary(row: AccountRow): AccountSummary {
 }
 
 export function toAccountDetail(row: AccountRow): AccountDetail {
+  const tier = tierForVariationId(row.subscription?.planId ?? null);
+  const isActive = row.subscription?.status === 'ACTIVE';
   return {
     ...toAccountSummary(row),
     addressLine: row.issuerProfile?.addressLine ?? '',
@@ -36,8 +40,8 @@ export function toAccountDetail(row: AccountRow): AccountDetail {
     email: firstUserEmail(row.users),
     iban: row.issuerProfile?.iban ?? '',
     bic: row.issuerProfile?.bic ?? '',
-    planName: row.subscription?.planId ?? '',
-    mrrCents: 0,
+    planName: tier ?? '—',
+    mrrCents: isActive && tier ? SUBSCRIPTION_TIERS[tier].priceCents : 0,
     currentPeriodEnd: row.subscription?.currentPeriodEnd
       ? row.subscription.currentPeriodEnd.toISOString()
       : null,

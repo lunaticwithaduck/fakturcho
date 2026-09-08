@@ -47,7 +47,7 @@ describe('subscriptions, usage and reports', () => {
       accountId: seed.accountAId,
       accountName: 'Алфа ЕООД',
       status: 'active',
-      planName: 'business',
+      planName: 'sub5',
       mrrCents: 500,
     });
   });

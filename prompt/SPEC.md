@@ -264,14 +264,16 @@ Two ways to pay, both through Revolut. Prices are EUR. (Closed 2026-08-09.)
 - **Credit packs.** 5 €, 10 € and 25 € one-time Revolut order purchases
   crediting their face value: 500, 1000, 2500 cents. Fulfilment happens on the
   Revolut `ORDER_COMPLETED` webhook and is idempotent per Revolut order id.
-- **Subscription, recurring credit grant.** 5 €/month buys 10 € of credit
-  (1000 cents, double the pack rate) every billing period. Each paid period
-  credits the account through the same ledger as packs — reason
-  `subscription_grant`, idempotent per Revolut order id. Credits roll over and
-  never expire. There is no exemption from issuance cost: a subscriber's
-  issuance deducts 10 cents like any other account. Managed through Revolut's
-  Subscriptions API and subscription webhooks; status (`active`, `trialing`,
-  `past_due`, `canceled`) drives display only. Accounts no longer start with a
+- **Subscription, recurring credit grant.** Three tiers — 5 €, 10 € and 25 €
+  per month — each buy double their price in credit (1000, 2000, 5000 cents)
+  every billing period. Each paid period credits the account through the same
+  ledger as packs — reason `subscription_grant`, idempotent per Revolut order
+  id. Credits roll over and never expire. There is no exemption from issuance
+  cost: a subscriber's issuance deducts 10 cents like any other account.
+  Managed through Revolut's Subscriptions API and subscription webhooks;
+  status (`active`, `trialing` (= Revolut `pending`, awaiting first payment),
+  `past_due`, `canceled`) drives display only, and only `active` is usable —
+  a pending checkout is not a free trial. Accounts no longer start with a
   trial subscription; a subscription exists only once one is bought.
 - **Signup grant.** A new account is granted **100 cents** (10 documents)
   exactly once, in the transaction that creates the account.
@@ -328,10 +330,10 @@ These are the acceptance tests. Each is written before its implementation.
 22. Delivering the same `ORDER_COMPLETED` webhook twice credits the pack
     exactly once. After any sequence of grants, purchases and spends,
     `creditBalanceCents` equals the ledger sum.
-23. A successful subscription payment credits `SUBSCRIPTION_GRANT_CENTS`
-    exactly once per Revolut order; delivering the same webhook twice credits
-    once. A subscriber's issuance deducts 10 cents like any other account.
-    Credits roll over.
+23. A successful subscription payment credits its tier's `grantCents` from
+    `SUBSCRIPTION_TIERS` exactly once per Revolut order; delivering the same
+    webhook twice credits once. A subscriber's issuance deducts 10 cents like
+    any other account. Credits roll over.
 24. A draft render carries the `ЧЕРНОВА / БЕЗ ПРАВНА СИЛА` watermark and is
     served `inline` whatever the request asks for; an issued render carries no
     watermark. Emailing a draft is rejected with `DOCUMENT_NOT_ISSUED` (409) —
