@@ -4,6 +4,7 @@ import { UmamiClient, type UmamiMetric, type UmamiSeries, type UmamiStats } from
 
 const DEFAULT_RANGE_DAYS = 30;
 const DAY_MS = 24 * 60 * 60 * 1000;
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
 
 function num(value: number | { value: number } | null | undefined): number {
   if (value == null) return 0;
@@ -65,7 +66,9 @@ export class AdminTrafficService {
 
   private resolveRange(query: GetTrafficQuery): { startAt: number; endAt: number } {
     const parsedEnd = query.to ? Date.parse(query.to) : Number.NaN;
-    const endAt = Number.isFinite(parsedEnd) ? parsedEnd : Date.now();
+    const endAt = Number.isFinite(parsedEnd)
+      ? parsedEnd + (DATE_ONLY.test(query.to as string) ? DAY_MS : 0)
+      : Date.now();
     const parsedStart = query.from ? Date.parse(query.from) : Number.NaN;
     const startAt = Number.isFinite(parsedStart)
       ? parsedStart
