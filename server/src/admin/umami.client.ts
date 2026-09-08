@@ -155,7 +155,7 @@ export class UmamiClient {
 
   metrics(
     range: UmamiRange,
-    type: 'url' | 'referrer' | 'device',
+    type: 'path' | 'referrer' | 'device',
     limit = 8,
   ): Promise<UmamiMetric[] | null> {
     return this.get<UmamiMetric[]>(`/websites/${this.websiteId}/metrics`, {

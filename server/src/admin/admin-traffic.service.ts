@@ -29,7 +29,7 @@ export class AdminTrafficService {
       const [stats, series, pages, referrers, devices] = await Promise.all([
         this.umami.stats(range),
         this.umami.series(range),
-        this.umami.metrics(range, 'url'),
+        this.umami.metrics(range, 'path'),
         this.umami.metrics(range, 'referrer'),
         this.umami.metrics(range, 'device'),
       ]);

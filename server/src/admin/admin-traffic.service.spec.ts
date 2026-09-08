@@ -25,7 +25,7 @@ describe('AdminTrafficService', () => {
         sessions: [{ x: '2026-09-01', y: 40 }],
       }),
       metrics: vi.fn((_range, type) => {
-        if (type === 'url') return Promise.resolve([{ x: '/documents', y: 80 }]);
+        if (type === 'path') return Promise.resolve([{ x: '/documents', y: 80 }]);
         if (type === 'referrer') return Promise.resolve([{ x: 'google.com', y: 60 }]);
         return Promise.resolve([{ x: 'desktop', y: 90 }]);
       }),
