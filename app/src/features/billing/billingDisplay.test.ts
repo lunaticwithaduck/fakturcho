@@ -8,37 +8,22 @@ describe('CREDIT_LEDGER_REASON_LABELS', () => {
       purchase: 'Покупка на кредити',
       issuance: 'Издаден документ',
       adjustment: 'Корекция',
+      subscription_grant: 'Зареждане от абонамент',
     });
   });
 });
 
 describe('balanceCaption', () => {
-  it('shows the unlimited label when a subscription covers issuance', () => {
-    expect(
-      balanceCaption({ balanceCents: 0, documentsRemaining: 0, hasUnlimitedSubscription: true }),
-    ).toBe('Неограничени документи');
-  });
-
   it('counts the remaining documents', () => {
-    expect(
-      balanceCaption({
-        balanceCents: 100,
-        documentsRemaining: 10,
-        hasUnlimitedSubscription: false,
-      }),
-    ).toBe('още 10 документа');
+    expect(balanceCaption({ balanceCents: 100, documentsRemaining: 10 })).toBe('още 10 документа');
   });
 
   it('uses the singular form for one remaining document', () => {
-    expect(
-      balanceCaption({ balanceCents: 10, documentsRemaining: 1, hasUnlimitedSubscription: false }),
-    ).toBe('още 1 документ');
+    expect(balanceCaption({ balanceCents: 10, documentsRemaining: 1 })).toBe('още 1 документ');
   });
 
   it('handles an empty balance', () => {
-    expect(
-      balanceCaption({ balanceCents: 0, documentsRemaining: 0, hasUnlimitedSubscription: false }),
-    ).toBe('още 0 документа');
+    expect(balanceCaption({ balanceCents: 0, documentsRemaining: 0 })).toBe('още 0 документа');
   });
 });
 
