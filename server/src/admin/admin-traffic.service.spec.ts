@@ -70,6 +70,38 @@ describe('AdminTrafficService', () => {
     });
   });
 
+  it('treats a date-only "to" as inclusive of that whole day', async () => {
+    const stats = vi.fn().mockResolvedValue({});
+    const client = clientWith({
+      stats,
+      series: vi.fn().mockResolvedValue(null),
+      metrics: vi.fn().mockResolvedValue(null),
+    });
+
+    await new AdminTrafficService(client).overview({ to: '2026-09-08' });
+
+    expect(stats).toHaveBeenCalledWith({
+      startAt: Date.parse('2026-09-09') - 30 * 24 * 60 * 60 * 1000,
+      endAt: Date.parse('2026-09-09'),
+    });
+  });
+
+  it('gives a 24h range, not a zero-width one, when "from" equals "to"', async () => {
+    const stats = vi.fn().mockResolvedValue({});
+    const client = clientWith({
+      stats,
+      series: vi.fn().mockResolvedValue(null),
+      metrics: vi.fn().mockResolvedValue(null),
+    });
+
+    await new AdminTrafficService(client).overview({ from: '2026-09-08', to: '2026-09-08' });
+
+    expect(stats).toHaveBeenCalledWith({
+      startAt: Date.parse('2026-09-08'),
+      endAt: Date.parse('2026-09-09'),
+    });
+  });
+
   it('fails soft to a disconnected overview when the client throws', async () => {
     const client = clientWith({
       stats: vi.fn().mockRejectedValue(new Error('network down')),
