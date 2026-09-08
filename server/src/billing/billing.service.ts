@@ -1,16 +1,23 @@
-import type { CheckoutProduct, CheckoutSessionDto, SubscriptionDto } from '@fakturcho/shared-types';
-import { CREDIT_PACKS, SUBSCRIPTION_GRANT_CENTS } from '@fakturcho/shared-types';
+import type {
+  CheckoutProduct,
+  CheckoutSessionDto,
+  CreditPackId,
+  SubscriptionDto,
+  SubscriptionTierId,
+} from '@fakturcho/shared-types';
+import { CREDIT_PACKS, SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
-import {
-  CreditLedgerReason,
-  Prisma,
-  SubscriptionStatus as PrismaSubscriptionStatus,
-} from '@prisma/client';
-import { DomainError } from '../common/domain-error';
+import { CreditLedgerReason, Prisma } from '@prisma/client';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { RevolutService } from './revolut.service';
 import type { RevolutWebhookPayload } from './revolut-webhook';
+import { createSubscriptionCheckout } from './subscription-checkout';
 import { REVOLUT_STATE_TO_PRISMA, toSubscriptionDto } from './subscription-mapping';
+import { tierForVariationId } from './subscription-tiers';
+
+function isSubscriptionTier(product: CheckoutProduct): product is SubscriptionTierId {
+  return (SUBSCRIPTION_TIER_IDS as readonly string[]).includes(product);
+}
 
 function extractAccountId(metadata: Record<string, unknown>): string | null {
   const value = metadata.accountId;
@@ -41,8 +48,16 @@ export class BillingService {
   }
 
   async createCheckout(accountId: string, product: CheckoutProduct): Promise<CheckoutSessionDto> {
-    if (product === 'subscription') return this.createSubscriptionCheckout(accountId);
-    const amountCents = CREDIT_PACKS[product].eurCents;
+    if (isSubscriptionTier(product)) {
+      return createSubscriptionCheckout(
+        this.prisma,
+        this.revolut,
+        accountId,
+        product,
+        billingReturnUrl(),
+      );
+    }
+    const amountCents = CREDIT_PACKS[product as CreditPackId].eurCents;
     const order = await this.revolut.createCreditOrder({
       amountCents,
       currency: 'EUR',
@@ -69,75 +84,11 @@ export class BillingService {
     }
   }
 
-  private async createSubscriptionCheckout(accountId: string): Promise<CheckoutSessionDto> {
-    const planVariationId = process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID;
-    if (!planVariationId) {
-      throw new DomainError(
-        'CHECKOUT_NOT_CONFIGURED',
-        'REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID is not set on the api service, so the subscription cannot be sold.',
-        { provider: ['missing_plan_variation_env', 'REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID'] },
-      );
-    }
-
-    const existing = await this.prisma.subscription.findUnique({ where: { accountId } });
-    const customerId = existing?.revolutCustomerId ?? (await this.createCustomer(accountId));
-
-    const subscription = await this.revolut.createSubscription({
-      planVariationId,
-      customerId,
-      externalReference: accountId,
-      setupOrderRedirectUrl: billingReturnUrl(),
-    });
-
-    const subscriptionData = {
-      status: REVOLUT_STATE_TO_PRISMA[subscription.state] ?? PrismaSubscriptionStatus.TRIALING,
-      revolutSubscriptionId: subscription.id,
-      revolutCustomerId: customerId,
-      planId: planVariationId,
-      currentPeriodEnd: null,
-    };
-    await this.prisma.subscription.upsert({
-      where: { accountId },
-      create: { accountId, ...subscriptionData },
-      update: subscriptionData,
-    });
-
-    if (!subscription.setupOrderId) {
-      throw new DomainError(
-        'CHECKOUT_NOT_CONFIGURED',
-        'Revolut returned a subscription without a setup order to check out.',
-        { provider: ['no_setup_order', `subscription ${subscription.id}`] },
-      );
-    }
-    const setupOrder = await this.revolut.getOrder(subscription.setupOrderId);
-    if (!setupOrder.checkoutUrl) {
-      throw new DomainError(
-        'CHECKOUT_NOT_CONFIGURED',
-        'Revolut returned no checkout url for the subscription setup order.',
-        { provider: ['no_checkout_url', `order ${setupOrder.id}`] },
-      );
-    }
-    return { checkoutUrl: setupOrder.checkoutUrl };
-  }
-
-  private async createCustomer(accountId: string): Promise<string> {
-    const account = await this.prisma.account.findUniqueOrThrow({
-      where: { id: accountId },
-      include: { users: { take: 1 } },
-    });
-    const user = account.users[0];
-    const customer = await this.revolut.createCustomer({
-      fullName: user?.name ?? accountId,
-      email: user?.email ?? `${accountId}@fakturcho.invalid`,
-    });
-    return customer.id;
-  }
-
   private async fulfilOrder(orderId: string): Promise<void> {
     const order = await this.revolut.getOrder(orderId);
     if (order.state !== 'completed') return;
     if (order.subscriptionId) {
-      await this.fulfilSubscriptionGrant(order.id, order.subscriptionId);
+      await this.fulfilSubscriptionGrant(order.id, order.subscriptionId, order.amount);
       return;
     }
     const accountId = extractAccountId(order.metadata);
@@ -146,14 +97,20 @@ export class BillingService {
     await this.creditAccount(accountId, creditCents, CreditLedgerReason.PURCHASE, order.id);
   }
 
-  private async fulfilSubscriptionGrant(orderId: string, subscriptionId: string): Promise<void> {
+  private async fulfilSubscriptionGrant(
+    orderId: string,
+    subscriptionId: string,
+    orderAmountCents: number,
+  ): Promise<void> {
     const subscription = await this.prisma.subscription.findUnique({
       where: { revolutSubscriptionId: subscriptionId },
     });
     if (!subscription) return;
+    const tier = tierForVariationId(subscription.planId);
+    const grantCents = tier ? SUBSCRIPTION_TIERS[tier].grantCents : orderAmountCents * 2;
     await this.creditAccount(
       subscription.accountId,
-      SUBSCRIPTION_GRANT_CENTS,
+      grantCents,
       CreditLedgerReason.SUBSCRIPTION_GRANT,
       orderId,
     );

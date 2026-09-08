@@ -3,10 +3,11 @@ import type {
   SubscriptionStatusFilter,
   SubscriptionSummary,
 } from '@fakturcho/shared-types';
-import { SUBSCRIPTION_PRICE_CENTS } from '@fakturcho/shared-types';
+import { SUBSCRIPTION_TIERS } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { DTO_TO_STATUS, STATUS_TO_DTO } from '../billing/subscription-mapping';
+import { tierForVariationId } from '../billing/subscription-tiers';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { toSubscriptionSummary } from './admin-subscriptions.mapper';
 
@@ -35,9 +36,8 @@ export class AdminSubscriptionsService {
   }
 
   async summary(): Promise<MrrSummary> {
-    const grouped = await this.prisma.subscription.groupBy({
-      by: ['status'],
-      _count: { _all: true },
+    const rows = await this.prisma.subscription.findMany({
+      select: { status: true, planId: true },
     });
 
     const counts: MrrSummary = {
@@ -48,15 +48,18 @@ export class AdminSubscriptionsService {
       canceledCount: 0,
     };
 
-    for (const group of grouped) {
-      const status = STATUS_TO_DTO[group.status];
-      if (status === 'active') counts.activeCount = group._count._all;
-      if (status === 'trialing') counts.trialingCount = group._count._all;
-      if (status === 'past_due') counts.pastDueCount = group._count._all;
-      if (status === 'canceled') counts.canceledCount = group._count._all;
+    for (const row of rows) {
+      const status = STATUS_TO_DTO[row.status];
+      if (status === 'active') {
+        counts.activeCount += 1;
+        const tier = tierForVariationId(row.planId);
+        counts.mrrCents += tier ? SUBSCRIPTION_TIERS[tier].priceCents : 0;
+      }
+      if (status === 'trialing') counts.trialingCount += 1;
+      if (status === 'past_due') counts.pastDueCount += 1;
+      if (status === 'canceled') counts.canceledCount += 1;
     }
 
-    counts.mrrCents = counts.activeCount * SUBSCRIPTION_PRICE_CENTS;
     return counts;
   }
 }

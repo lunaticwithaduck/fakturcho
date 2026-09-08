@@ -63,6 +63,8 @@ export class RevolutService {
     const order = await this.request<{
       id: string;
       state: string;
+      order_amount?: { value: number } | null;
+      amount?: number;
       merchant_order_data: { reference: string | null } | null;
       metadata: Record<string, unknown> | null;
       checkout_url?: string;
@@ -71,6 +73,7 @@ export class RevolutService {
     return {
       id: order.id,
       state: order.state,
+      amount: order.order_amount?.value ?? order.amount ?? 0,
       merchantOrderExtRef: order.merchant_order_data?.reference ?? null,
       metadata: order.metadata ?? {},
       checkoutUrl: order.checkout_url ?? null,

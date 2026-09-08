@@ -60,8 +60,8 @@ describe('AdminAccountsService', () => {
       iban: 'BG00ALFA0000000000',
       bic: 'ALFABGSF',
       email: 'user-a@alfa.bg',
-      planName: 'business',
-      mrrCents: 0,
+      planName: 'sub5',
+      mrrCents: 500,
       creditBalanceCents: 999_980,
     });
     expect(detail.currentPeriodEnd).not.toBeNull();

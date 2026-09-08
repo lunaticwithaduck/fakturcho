@@ -9,6 +9,7 @@ import { grantSignupCredits } from './signup-grant';
 function completedOrder(overrides: Partial<RevolutOrder> & Pick<RevolutOrder, 'id'>): RevolutOrder {
   return {
     state: 'completed',
+    amount: 500,
     merchantOrderExtRef: null,
     metadata: {},
     checkoutUrl: null,
@@ -166,6 +167,9 @@ describe('subscription grant fulfilment', () => {
 
   beforeAll(async () => {
     db = await startTestDatabase();
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'webhook-test-sub5';
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_10 = 'webhook-test-sub10';
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25 = 'webhook-test-sub25';
   }, 120_000);
 
   afterAll(async () => {
@@ -177,7 +181,42 @@ describe('subscription grant fulfilment', () => {
     return new BillingService(db.prisma as unknown as PrismaService, revolut);
   }
 
-  it('invariant 23: a completed order carrying a subscription id credits SUBSCRIPTION_GRANT_CENTS once', async () => {
+  it.each([
+    ['webhook-test-sub5', 1000],
+    ['webhook-test-sub10', 2000],
+    ['webhook-test-sub25', 5000],
+  ])(
+    'invariant 23: a tier subscription grants its own grantCents (%s)',
+    async (planId, grantCents) => {
+      const account = await db.prisma.account.create({ data: {} });
+      await db.prisma.subscription.create({
+        data: {
+          accountId: account.id,
+          status: 'ACTIVE',
+          revolutSubscriptionId: `sub_tier_${planId}`,
+          planId,
+        },
+      });
+      const getOrder = vi.fn().mockResolvedValue(
+        completedOrder({
+          id: `ord_tier_${planId}`,
+          subscriptionId: `sub_tier_${planId}`,
+          amount: 999,
+        }),
+      );
+
+      await billingWith(getOrder).handleWebhookEvent({
+        event: 'ORDER_COMPLETED',
+        orderId: `ord_tier_${planId}`,
+        subscriptionId: null,
+      });
+
+      const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
+      expect(updated.creditBalanceCents).toBe(grantCents);
+    },
+  );
+
+  it('invariant 23: an unrecognised planId falls back to the order amount doubled', async () => {
     const account = await db.prisma.account.create({ data: {} });
     await db.prisma.subscription.create({
       data: { accountId: account.id, status: 'ACTIVE', revolutSubscriptionId: 'sub_grant_1' },
@@ -206,7 +245,7 @@ describe('subscription grant fulfilment', () => {
     });
   });
 
-  it('invariant 23: the same subscription-cycle order delivered twice credits once', async () => {
+  it('invariant 23: the same subscription-cycle order delivered twice credits once (fallback path)', async () => {
     const account = await db.prisma.account.create({ data: {} });
     await db.prisma.subscription.create({
       data: { accountId: account.id, status: 'ACTIVE', revolutSubscriptionId: 'sub_grant_2' },

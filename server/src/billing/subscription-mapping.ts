@@ -4,6 +4,7 @@ import type {
 } from '@fakturcho/shared-types';
 import type { Subscription } from '@prisma/client';
 import { SubscriptionStatus as PrismaSubscriptionStatus } from '@prisma/client';
+import { tierForVariationId } from './subscription-tiers';
 
 export const STATUS_TO_DTO: Record<PrismaSubscriptionStatus, SharedSubscriptionStatus> = {
   TRIALING: 'trialing',
@@ -33,6 +34,7 @@ export function toSubscriptionDto(subscription: Subscription): SubscriptionDto {
     id: subscription.id,
     status: STATUS_TO_DTO[subscription.status],
     planId: subscription.planId,
+    tier: tierForVariationId(subscription.planId),
     currentPeriodEnd: subscription.currentPeriodEnd
       ? subscription.currentPeriodEnd.toISOString()
       : null,

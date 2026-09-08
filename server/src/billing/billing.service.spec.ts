@@ -10,6 +10,7 @@ describe('BillingService', () => {
   beforeAll(async () => {
     db = await startTestDatabase();
     process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'plan_var_test';
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_10 = 'plan_var_test_10';
   }, 120_000);
 
   afterAll(async () => {
@@ -85,7 +86,7 @@ describe('BillingService', () => {
     });
     const revolut = { createCustomer, createSubscription, getOrder } as unknown as RevolutService;
 
-    const result = await serviceWith(revolut).createCheckout(account.id, 'subscription');
+    const result = await serviceWith(revolut).createCheckout(account.id, 'sub5');
     expect(result.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_setup');
     expect(createCustomer).toHaveBeenCalledWith({
       fullName: 'Тест Тестов',
@@ -102,7 +103,7 @@ describe('BillingService', () => {
     expect(stored.revolutCustomerId).toBe('cus_1');
     expect(stored.status).toBe('TRIALING');
 
-    await serviceWith(revolut).createCheckout(account.id, 'subscription');
+    await serviceWith(revolut).createCheckout(account.id, 'sub5');
     expect(createCustomer).toHaveBeenCalledTimes(1);
   });
 
@@ -111,11 +112,58 @@ describe('BillingService', () => {
     const account = await db.prisma.account.create({ data: {} });
     const revolut = {} as unknown as RevolutService;
 
-    await expect(
-      serviceWith(revolut).createCheckout(account.id, 'subscription'),
-    ).rejects.toMatchObject({
+    await expect(serviceWith(revolut).createCheckout(account.id, 'sub5')).rejects.toMatchObject({
       code: 'CHECKOUT_NOT_CONFIGURED',
     });
     process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'plan_var_test';
+  });
+
+  it('rejects a checkout for a tier whose env var is missing, naming that env var', async () => {
+    delete process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25;
+    const account = await db.prisma.account.create({ data: {} });
+    const revolut = {} as unknown as RevolutService;
+
+    await expect(serviceWith(revolut).createCheckout(account.id, 'sub25')).rejects.toMatchObject({
+      code: 'CHECKOUT_NOT_CONFIGURED',
+      message: expect.stringContaining('REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25'),
+    });
+  });
+
+  it('checking out a different tier replaces the plan id on the same subscription row', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.user.create({
+      data: {
+        id: `usr_switch_${account.id}`,
+        name: 'Тест Тестов',
+        email: `switch_${account.id}@example.com`,
+        accountId: account.id,
+      },
+    });
+
+    const createCustomer = vi.fn().mockResolvedValue({ id: 'cus_switch' });
+    const createSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_switch',
+      state: 'pending',
+      setupOrderId: 'ord_switch',
+      customerId: 'cus_switch',
+    });
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_switch',
+      state: 'pending',
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: 'https://checkout.revolut.com/pay/ord_switch',
+    });
+    const revolut = { createCustomer, createSubscription, getOrder } as unknown as RevolutService;
+    const service = serviceWith(revolut);
+
+    await service.createCheckout(account.id, 'sub5');
+    await service.createCheckout(account.id, 'sub10');
+
+    const stored = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(stored.planId).toBe('plan_var_test_10');
+    expect(createCustomer).toHaveBeenCalledTimes(1);
   });
 });
