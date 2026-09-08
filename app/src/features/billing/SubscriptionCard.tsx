@@ -22,9 +22,12 @@ export function SubscriptionCard({
           {SUBSCRIPTION_STATUS_LABELS[subscription.status]}
         </p>
         {subscription.currentPeriodEnd ? (
-          <p className="text-sm text-text-muted">
-            Текущият период изтича на {formatDate(subscription.currentPeriodEnd)}
-          </p>
+          <>
+            <p className="text-sm text-text-muted">
+              Текущият период изтича на {formatDate(subscription.currentPeriodEnd)}
+            </p>
+            <p className="text-sm text-text-muted">Следващото зареждане: 10 € кредит</p>
+          </>
         ) : null}
       </Card>
     );
@@ -33,9 +36,10 @@ export function SubscriptionCard({
   return (
     <Card className="flex flex-col items-start gap-3">
       <div className="flex flex-col gap-1">
-        <p className="text-lg font-semibold text-text">Неограничени документи с абонамент</p>
+        <p className="text-lg font-semibold text-text">100 документа на месец за 5 €</p>
         <p className="text-sm text-text-muted">
-          Издавайте без да мислите за кредити — месечен абонамент без лимит.
+          Абонаментът зарежда 10 € кредит на всеки 30 дни — двойно спрямо пакетите. Неизползваният
+          кредит се запазва.
         </p>
       </div>
       <Button disabled={pendingProduct !== null} onClick={onSubscribe}>

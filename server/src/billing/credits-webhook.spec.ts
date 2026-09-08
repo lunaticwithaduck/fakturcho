@@ -12,6 +12,7 @@ function completedOrder(overrides: Partial<RevolutOrder> & Pick<RevolutOrder, 'i
     merchantOrderExtRef: null,
     metadata: {},
     checkoutUrl: null,
+    subscriptionId: null,
     ...overrides,
   };
 }
@@ -116,7 +117,6 @@ describe('credit pack fulfilment webhook', () => {
     expect(balance).toEqual({
       balanceCents: 580,
       documentsRemaining: 58,
-      hasUnlimitedSubscription: false,
     });
   });
 
@@ -158,5 +158,95 @@ describe('credit pack fulfilment webhook', () => {
 
     const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
     expect(updated.creditBalanceCents).toBe(0);
+  });
+});
+
+describe('subscription grant fulfilment', () => {
+  let db: TestDatabase;
+
+  beforeAll(async () => {
+    db = await startTestDatabase();
+  }, 120_000);
+
+  afterAll(async () => {
+    await db.stop();
+  });
+
+  function billingWith(getOrder: ReturnType<typeof vi.fn>): BillingService {
+    const revolut = { getOrder } as unknown as RevolutService;
+    return new BillingService(db.prisma as unknown as PrismaService, revolut);
+  }
+
+  it('invariant 23: a completed order carrying a subscription id credits SUBSCRIPTION_GRANT_CENTS once', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: { accountId: account.id, status: 'ACTIVE', revolutSubscriptionId: 'sub_grant_1' },
+    });
+    const getOrder = vi
+      .fn()
+      .mockResolvedValue(completedOrder({ id: 'ord_cycle_1', subscriptionId: 'sub_grant_1' }));
+
+    await billingWith(getOrder).handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_cycle_1',
+      subscriptionId: null,
+    });
+
+    const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
+    expect(updated.creditBalanceCents).toBe(1000);
+
+    const entries = await db.prisma.creditLedgerEntry.findMany({
+      where: { accountId: account.id },
+    });
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({
+      amountCents: 1000,
+      reason: 'SUBSCRIPTION_GRANT',
+      revolutOrderId: 'ord_cycle_1',
+    });
+  });
+
+  it('invariant 23: the same subscription-cycle order delivered twice credits once', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: { accountId: account.id, status: 'ACTIVE', revolutSubscriptionId: 'sub_grant_2' },
+    });
+    const getOrder = vi
+      .fn()
+      .mockResolvedValue(completedOrder({ id: 'ord_cycle_2', subscriptionId: 'sub_grant_2' }));
+    const billing = billingWith(getOrder);
+
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_cycle_2',
+      subscriptionId: null,
+    });
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_cycle_2',
+      subscriptionId: null,
+    });
+
+    const updated = await db.prisma.account.findUniqueOrThrow({ where: { id: account.id } });
+    expect(updated.creditBalanceCents).toBe(1000);
+    const entries = await db.prisma.creditLedgerEntry.count({ where: { accountId: account.id } });
+    expect(entries).toBe(1);
+  });
+
+  it('ignores a subscription-cycle order with no matching subscription row', async () => {
+    const getOrder = vi
+      .fn()
+      .mockResolvedValue(completedOrder({ id: 'ord_cycle_orphan', subscriptionId: 'sub_missing' }));
+
+    await billingWith(getOrder).handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_cycle_orphan',
+      subscriptionId: null,
+    });
+
+    const entries = await db.prisma.creditLedgerEntry.count({
+      where: { revolutOrderId: 'ord_cycle_orphan' },
+    });
+    expect(entries).toBe(0);
   });
 });

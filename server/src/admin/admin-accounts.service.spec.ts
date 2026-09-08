@@ -62,7 +62,7 @@ describe('AdminAccountsService', () => {
       email: 'user-a@alfa.bg',
       planName: 'business',
       mrrCents: 0,
-      creditBalanceCents: 1_000_000,
+      creditBalanceCents: 999_980,
     });
     expect(detail.currentPeriodEnd).not.toBeNull();
   });

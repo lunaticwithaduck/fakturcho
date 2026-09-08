@@ -298,6 +298,7 @@ model Subscription {
 
 enum CreditLedgerReason {
   SIGNUP_GRANT
+  SUBSCRIPTION_GRANT
   PURCHASE
   ISSUANCE
   ADJUSTMENT

@@ -71,7 +71,8 @@ export function LandingPage() {
               <h3 className="text-base font-semibold text-text">Абонамент</h3>
               <p className="text-2xl font-bold text-text">{PRICING.subscription}</p>
               <p className="text-sm leading-relaxed text-text-muted">
-                Неограничено издаване, докато абонаментът е активен. Прекратява се по всяко време.
+                10 € кредит (100 документа) всеки месец. Неизползваният кредит се запазва.
+                Прекратява се по всяко време.
               </p>
             </Card>
           </div>

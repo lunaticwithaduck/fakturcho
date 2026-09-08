@@ -3,6 +3,7 @@ import type {
   SubscriptionStatusFilter,
   SubscriptionSummary,
 } from '@fakturcho/shared-types';
+import { SUBSCRIPTION_PRICE_CENTS } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import type { Prisma } from '@prisma/client';
 import { DTO_TO_STATUS, STATUS_TO_DTO } from '../billing/subscription-mapping';
@@ -55,6 +56,7 @@ export class AdminSubscriptionsService {
       if (status === 'canceled') counts.canceledCount = group._count._all;
     }
 
+    counts.mrrCents = counts.activeCount * SUBSCRIPTION_PRICE_CENTS;
     return counts;
   }
 }

@@ -239,7 +239,7 @@ by editing it in place.
 - **Email delivery** of the document, with the accompanying message stored on
   the record. **[MVP]**
 - **Auth** (email + password) and **billing** — credits per issued document
-  plus an optional unlimited subscription (§11). **[MVP]**
+  plus an optional recurring subscription that grants credit (§11). **[MVP]**
 - **Payment reminders** for overdue documents. **[LATER]**
 - **Recurring documents** on a schedule. **[LATER]**
 - **Saved templates** for repeated document shapes. **[LATER]**
@@ -264,17 +264,21 @@ Two ways to pay, both through Revolut. Prices are EUR. (Closed 2026-08-09.)
 - **Credit packs.** 5 €, 10 € and 25 € one-time Revolut order purchases
   crediting their face value: 500, 1000, 2500 cents. Fulfilment happens on the
   Revolut `ORDER_COMPLETED` webhook and is idempotent per Revolut order id.
-- **Subscription, unlimited.** An account with a usable subscription (`active`,
-  or `trialing` with a future period end) issues without deduction. Managed
-  through Revolut's Subscriptions API and subscription webhooks. Accounts no
-  longer start with a trial subscription; a subscription exists only once one
-  is bought.
+- **Subscription, recurring credit grant.** 5 €/month buys 10 € of credit
+  (1000 cents, double the pack rate) every billing period. Each paid period
+  credits the account through the same ledger as packs — reason
+  `subscription_grant`, idempotent per Revolut order id. Credits roll over and
+  never expire. There is no exemption from issuance cost: a subscriber's
+  issuance deducts 10 cents like any other account. Managed through Revolut's
+  Subscriptions API and subscription webhooks; status (`active`, `trialing`,
+  `past_due`, `canceled`) drives display only. Accounts no longer start with a
+  trial subscription; a subscription exists only once one is bought.
 - **Signup grant.** A new account is granted **100 cents** (10 documents)
   exactly once, in the transaction that creates the account.
 - **Ledger.** Every balance change is an append-only ledger entry (signup
-  grant, purchase, issuance spend, adjustment). The account balance equals the
-  sum of its ledger at all times, and can never go below zero — enforced at the
-  database, not just the service.
+  grant, purchase, subscription grant, issuance spend, adjustment). The
+  account balance equals the sum of its ledger at all times, and can never go
+  below zero — enforced at the database, not just the service.
 
 ---
 
@@ -315,18 +319,19 @@ These are the acceptance tests. Each is written before its implementation.
 19. Issuing any document on an account whose issuer profile is missing or
     incomplete (§4) is rejected with a domain error; the document stays
     `draft`. Saving the draft itself succeeds.
-20. Issuing on an account with no usable subscription and a balance of exactly
-    10 cents succeeds and leaves 0; the next issuance is rejected with
-    `INSUFFICIENT_CREDITS`, claims no number, and the document stays `draft`.
+20. Issuing on an account with a balance of exactly 10 cents succeeds and
+    leaves 0; the next issuance is rejected with `INSUFFICIENT_CREDITS`,
+    claims no number, and the document stays `draft`.
 21. Two concurrent issuances on an account holding 10 cents: exactly one
     succeeds, the balance never goes negative, and the ledger matches the
     balance. Test under transaction contention.
 22. Delivering the same `ORDER_COMPLETED` webhook twice credits the pack
     exactly once. After any sequence of grants, purchases and spends,
     `creditBalanceCents` equals the ledger sum.
-23. An account with a usable subscription issues with no deduction and no
-    ledger entry; when the subscription lapses, issuance falls back to
-    credits.
+23. A successful subscription payment credits `SUBSCRIPTION_GRANT_CENTS`
+    exactly once per Revolut order; delivering the same webhook twice credits
+    once. A subscriber's issuance deducts 10 cents like any other account.
+    Credits roll over.
 24. A draft render carries the `ЧЕРНОВА / БЕЗ ПРАВНА СИЛА` watermark and is
     served `inline` whatever the request asks for; an issued render carries no
     watermark. Emailing a draft is rejected with `DOCUMENT_NOT_ISSUED` (409) —
