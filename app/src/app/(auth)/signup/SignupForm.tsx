@@ -2,7 +2,9 @@
 
 import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { trackEvent } from '@app/features/shared/analytics';
+import { formatMoney } from '@app/features/shared/format';
 import { Button, Card, Input } from '@design/components';
+import { SIGNUP_GRANT_CENTS } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
 
@@ -32,7 +34,9 @@ export function SignupForm() {
     <Card className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-semibold text-text">Регистрация във Фактурчо</h1>
-        <p className="text-sm text-text-muted">Създайте безплатен акаунт за пробния период.</p>
+        <p className="text-sm text-text-muted">
+          Създайте безплатен акаунт. Получавате {formatMoney(SIGNUP_GRANT_CENTS)} начален кредит.
+        </p>
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
         <Input
