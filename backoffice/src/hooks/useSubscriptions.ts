@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
-import { listSubscriptions } from '../data/subscriptions';
-import type { SubscriptionStatusFilter, SubscriptionSummary } from '../types/admin';
+import type { SubscriptionStatusFilter, SubscriptionSummary } from '@fakturcho/shared-types';
+import { useListSubscriptionsQuery } from '../api';
 
 export function useSubscriptions(status: SubscriptionStatusFilter): {
   data: SubscriptionSummary[];
   isLoading: boolean;
+  isError: boolean;
 } {
-  const data = useMemo(() => listSubscriptions(status), [status]);
-  return { data, isLoading: false };
+  const { data, isLoading, isError } = useListSubscriptionsQuery(status);
+  return { data: data ?? [], isLoading, isError };
 }

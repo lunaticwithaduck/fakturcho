@@ -1,10 +1,7 @@
-import type {
-  Cents,
-  CurrencyCode,
-  DocumentStatus,
-  DocumentType,
-  SubscriptionStatus,
-} from '@fakturcho/shared-types';
+import type { DocumentStatus, DocumentType, SubscriptionStatus, UserRole } from './enums';
+import type { Cents, CurrencyCode } from './money';
+
+export type AccountSubscriptionStatus = SubscriptionStatus | 'none';
 
 export interface AccountSummary {
   id: string;
@@ -13,7 +10,7 @@ export interface AccountSummary {
   city: string;
   vatRegistered: boolean;
   documentsIssued: number;
-  subscriptionStatus: SubscriptionStatus;
+  subscriptionStatus: AccountSubscriptionStatus;
   createdAt: string;
 }
 
@@ -28,9 +25,10 @@ export interface AccountDetail extends AccountSummary {
   planName: string;
   mrrCents: Cents;
   currentPeriodEnd: string | null;
+  creditBalanceCents: Cents;
 }
 
-export type SubscriptionStatusFilter = SubscriptionStatus | 'all';
+export type SubscriptionStatusFilter = AccountSubscriptionStatus | 'all';
 
 export interface AccountListFilters {
   search: string;
@@ -90,4 +88,11 @@ export interface TurnoverReportRow {
   accountName: string;
   documentsIssued: number;
   turnoverCents: Cents;
+}
+
+export interface AdminMeDto {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
 }

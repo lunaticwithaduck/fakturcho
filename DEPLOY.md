@@ -1,16 +1,15 @@
 # Deploying fakturcho to Railway
 
-One Railway project, three services:
+One Railway project, four services:
 
 | Service | Source | Purpose |
 | --- | --- | --- |
 | Postgres | Railway managed database | data |
 | `fakturcho-api` | `server/Dockerfile` | NestJS API + PDF renderer (Chromium) |
 | `fakturcho-app` | `app/Dockerfile` | Next.js product |
+| `fakturcho-backoffice` | `backoffice/Dockerfile` | internal admin (§6) |
 
-`backoffice/` is **not** deployed — see the note at the end.
-
-Both Dockerfiles build from the **repo root** as context (they need
+All three Dockerfiles build from the **repo root** as context (they need
 `packages/shared-types` and, for the app, `design/`). They copy only explicit
 paths, so local artifacts (`node_modules`, `.next`, `.env`) never enter an image.
 
@@ -179,10 +178,57 @@ docker run --rm -p 3000:3000 -e PORT=3000 fakturcho-app
 
 The app build needs network access (`next/font` downloads Inter at build time).
 
-## Why backoffice is not deployed
+## 6. Backoffice service (`fakturcho-backoffice`)
 
-`backoffice/` is the sanctioned first pass from `prompt/CLAUDE.md`: every
-screen reads seeded mock data, its login is a hardcoded placeholder and the
-server has no admin module behind it. Deploying it would expose a fake admin
-surface with no real authentication. It stays local until a server-side admin
-module and real admin auth exist.
+`backoffice/` is a Vite SPA served by the tiny Node static server in
+`backoffice/server.mjs`. It authenticates against the same Better-Auth
+instance as `fakturcho-api` and reads `/api/admin/*`, guarded server-side by
+`AdminGuard` (`role = 'admin'` on the `user` row).
+
+1. **Create → GitHub Repo** → same repository, third service.
+2. **Settings → Config-as-code file path**: `backoffice/railway.json`
+   (builder `DOCKERFILE`, `backoffice/Dockerfile`, healthcheck `/login`,
+   ON_FAILURE restarts). Root Directory stays `/`.
+3. Variables:
+
+| Variable | Example | Where it comes from |
+| --- | --- | --- |
+| `API_URL` | `https://api.fakturcho.bg` | the API service's URL (internal `http://<api-service-name>.railway.internal:3001` also works and avoids a network hop) |
+| `PORT` | — | injected by Railway automatically; do not set |
+
+Leave `VITE_API_URL` **unset** (build arg default `""`). The backoffice never
+calls the API cross-origin: `server.mjs` proxies every `/api/*` request to
+`API_URL` server-side, the same way `app/next.config.ts`'s `/api/*` rewrite
+proxies the product's API calls to `SERVER_URL`. From the browser's point of
+view the backoffice and its API calls share one origin, so the Better-Auth
+session cookie is always same-site — no `sameSite: 'none'` / cross-site
+cookie configuration is needed, on either service. (Setting `VITE_API_URL`
+to a build-time URL instead is possible but switches the browser to real
+cross-origin requests, which the API's cookies are not configured for —
+don't do that in production.)
+
+4. Add the backoffice's public origin to the **api** service's `APP_ORIGINS`
+   (comma-separated, alongside the app's origin) — Better-Auth rejects
+   sign-in from an untrusted origin.
+
+### Promoting a user to admin
+
+The backoffice has no self-service admin signup — grant `role = 'admin'` by
+hand, once, on the production database:
+
+```sql
+update "user" set role = 'admin' where email = 'owner@fakturcho.bg';
+```
+
+Any existing signed-up user works; a fresh signup always gets `role = 'user'`
+(the field is not settable from the signup request).
+
+### First-deploy smoke test
+
+1. Sign up (or reuse an existing app account), run the SQL above against
+   that email.
+2. Open the backoffice URL → Bulgarian login screen.
+3. Sign in with that email/password → lands on **Абонати** with the real
+   account list.
+4. A non-admin account signs in, is immediately signed back out with
+   "Нямате администраторски достъп."

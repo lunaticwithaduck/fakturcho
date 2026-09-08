@@ -1,24 +1,48 @@
 import { Alert, Button, Card, Flex, Form, Input, Typography } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { checkCredentials, setAuthenticated } from '../../auth/authStorage';
+import { useLazyGetMeQuery } from '../../api';
+import { authClient } from '../../auth/authClient';
 
 interface LoginFormValues {
   email: string;
   password: string;
 }
 
+const GENERIC_ERROR = 'Грешен имейл или парола.';
+const NOT_ADMIN_ERROR = 'Нямате администраторски достъп.';
+
 export function LoginScreen() {
   const navigate = useNavigate();
-  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [fetchMe] = useLazyGetMeQuery();
 
-  const handleFinish = (values: LoginFormValues) => {
-    if (checkCredentials(values.email, values.password)) {
-      setAuthenticated();
-      navigate('/accounts', { replace: true });
+  const handleFinish = async (values: LoginFormValues) => {
+    setSubmitting(true);
+    setError(null);
+
+    const signInResult = await authClient.signIn.email({
+      email: values.email,
+      password: values.password,
+    });
+    if (signInResult.error) {
+      setError(GENERIC_ERROR);
+      setSubmitting(false);
       return;
     }
-    setHasError(true);
+
+    const me = await fetchMe()
+      .unwrap()
+      .catch(() => null);
+    if (me?.role !== 'admin') {
+      await authClient.signOut();
+      setError(NOT_ADMIN_ERROR);
+      setSubmitting(false);
+      return;
+    }
+
+    navigate('/accounts', { replace: true });
   };
 
   return (
@@ -27,16 +51,8 @@ export function LoginScreen() {
         <Typography.Title level={3} style={{ textAlign: 'center' }}>
           Фактурчо — админ
         </Typography.Title>
-        <Typography.Paragraph type="secondary" style={{ textAlign: 'center' }}>
-          Демонстрационен вход, докато няма истинско админ API за оторизация.
-        </Typography.Paragraph>
-        {hasError ? (
-          <Alert
-            type="error"
-            message="Грешен имейл или парола"
-            showIcon
-            style={{ marginBottom: 16 }}
-          />
+        {error ? (
+          <Alert type="error" message={error} showIcon style={{ marginBottom: 16 }} />
         ) : null}
         <Form<LoginFormValues> layout="vertical" onFinish={handleFinish} requiredMark={false}>
           <Form.Item
@@ -54,7 +70,7 @@ export function LoginScreen() {
             <Input.Password autoComplete="current-password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+            <Button type="primary" htmlType="submit" block loading={submitting}>
               Вход
             </Button>
           </Form.Item>

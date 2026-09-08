@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { AdminModule } from './admin/admin.module';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { BillingModule } from './billing/billing.module';
@@ -29,6 +30,7 @@ import { RenderModule } from './render/render.module';
     BillingModule,
     EmailModule,
     HealthModule,
+    AdminModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

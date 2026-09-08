@@ -1,4 +1,8 @@
-import type { DocumentStatus, SubscriptionStatus } from '@fakturcho/shared-types';
+import type {
+  AccountSubscriptionStatus,
+  DocumentStatus,
+  SubscriptionStatus,
+} from '@fakturcho/shared-types';
 
 export const SUBSCRIPTION_STATUS_LABELS: Record<SubscriptionStatus, string> = {
   trialing: 'Пробен период',
@@ -12,6 +16,16 @@ export const SUBSCRIPTION_STATUS_COLORS: Record<SubscriptionStatus, string> = {
   active: 'green',
   past_due: 'gold',
   canceled: 'red',
+};
+
+export const ACCOUNT_SUBSCRIPTION_STATUS_LABELS: Record<AccountSubscriptionStatus, string> = {
+  ...SUBSCRIPTION_STATUS_LABELS,
+  none: 'Без абонамент',
+};
+
+export const ACCOUNT_SUBSCRIPTION_STATUS_COLORS: Record<AccountSubscriptionStatus, string> = {
+  ...SUBSCRIPTION_STATUS_COLORS,
+  none: 'default',
 };
 
 export const DOCUMENT_STATUS_COLORS: Record<DocumentStatus, string> = {

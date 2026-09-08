@@ -1,7 +1,7 @@
+import type { AdminDocumentSummary } from '@fakturcho/shared-types';
 import { DOCUMENT_STATUS_LABELS, DOCUMENT_TYPE_LABELS } from '@fakturcho/shared-types';
 import type { TableColumnsType } from 'antd';
 import { Table, Tag } from 'antd';
-import type { AdminDocumentSummary } from '../../types/admin';
 import { formatDate } from '../../utils/date';
 import { formatCents } from '../../utils/money';
 import { DOCUMENT_STATUS_COLORS } from '../../utils/statusLabels';

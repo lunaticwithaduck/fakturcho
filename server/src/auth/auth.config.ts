@@ -46,6 +46,11 @@ export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
           // hook always overwrites this placeholder with the real tenant id.
           defaultValue: '',
         },
+        role: {
+          type: 'string',
+          input: false,
+          defaultValue: 'user',
+        },
       },
     },
     account: {

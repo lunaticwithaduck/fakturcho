@@ -1,11 +1,11 @@
-import { useMemo } from 'react';
-import { listAccounts } from '../data/accounts';
-import type { AccountListFilters, AccountSummary } from '../types/admin';
+import type { AccountListFilters, AccountSummary } from '@fakturcho/shared-types';
+import { useListAccountsQuery } from '../api';
 
 export function useAccounts(filters: AccountListFilters): {
   data: AccountSummary[];
   isLoading: boolean;
+  isError: boolean;
 } {
-  const data = useMemo(() => listAccounts(filters), [filters]);
-  return { data, isLoading: false };
+  const { data, isLoading, isError } = useListAccountsQuery(filters);
+  return { data: data ?? [], isLoading, isError };
 }

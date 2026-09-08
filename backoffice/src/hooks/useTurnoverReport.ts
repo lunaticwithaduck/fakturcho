@@ -1,11 +1,12 @@
-import { useMemo } from 'react';
-import { getTurnoverReport } from '../data/reports';
-import type { TurnoverReportRow } from '../types/admin';
+import type { TurnoverReportRow } from '@fakturcho/shared-types';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useGetTurnoverReportQuery } from '../api';
 
 export function useTurnoverReport(month: string): {
   data: TurnoverReportRow[];
   isLoading: boolean;
+  isError: boolean;
 } {
-  const data = useMemo(() => getTurnoverReport(month), [month]);
-  return { data, isLoading: false };
+  const { data, isLoading, isError } = useGetTurnoverReportQuery(month || skipToken);
+  return { data: data ?? [], isLoading, isError };
 }

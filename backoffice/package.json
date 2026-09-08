@@ -13,6 +13,7 @@
     "@fakturcho/shared-types": "workspace:*",
     "@reduxjs/toolkit": "^2.3.0",
     "antd": "^5.26.4",
+    "better-auth": "^1.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",

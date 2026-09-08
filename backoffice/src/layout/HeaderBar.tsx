@@ -1,14 +1,14 @@
 import { Button, Layout, Typography } from 'antd';
 import { useNavigate } from 'react-router';
-import { clearAuthenticated } from '../auth/authStorage';
+import { authClient } from '../auth/authClient';
 
 const { Header } = Layout;
 
 export function HeaderBar() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    clearAuthenticated();
+  const handleLogout = async () => {
+    await authClient.signOut();
     navigate('/login', { replace: true });
   };
 

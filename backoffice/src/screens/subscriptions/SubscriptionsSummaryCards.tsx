@@ -1,5 +1,5 @@
+import type { MrrSummary } from '@fakturcho/shared-types';
 import { Card, Col, Row, Statistic } from 'antd';
-import type { MrrSummary } from '../../types/admin';
 import { formatCents } from '../../utils/money';
 
 interface SubscriptionsSummaryCardsProps {

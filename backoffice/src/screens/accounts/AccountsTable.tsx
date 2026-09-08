@@ -1,8 +1,11 @@
+import type { AccountSummary } from '@fakturcho/shared-types';
 import type { TableColumnsType } from 'antd';
 import { Table, Tag } from 'antd';
-import type { AccountSummary } from '../../types/admin';
 import { formatDate } from '../../utils/date';
-import { SUBSCRIPTION_STATUS_COLORS, SUBSCRIPTION_STATUS_LABELS } from '../../utils/statusLabels';
+import {
+  ACCOUNT_SUBSCRIPTION_STATUS_COLORS,
+  ACCOUNT_SUBSCRIPTION_STATUS_LABELS,
+} from '../../utils/statusLabels';
 
 interface AccountsTableProps {
   accounts: AccountSummary[];
@@ -26,7 +29,9 @@ const COLUMNS: TableColumnsType<AccountSummary> = [
     dataIndex: 'subscriptionStatus',
     key: 'subscriptionStatus',
     render: (status: AccountSummary['subscriptionStatus']) => (
-      <Tag color={SUBSCRIPTION_STATUS_COLORS[status]}>{SUBSCRIPTION_STATUS_LABELS[status]}</Tag>
+      <Tag color={ACCOUNT_SUBSCRIPTION_STATUS_COLORS[status]}>
+        {ACCOUNT_SUBSCRIPTION_STATUS_LABELS[status]}
+      </Tag>
     ),
   },
   {

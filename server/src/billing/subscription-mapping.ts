@@ -12,6 +12,13 @@ export const STATUS_TO_DTO: Record<PrismaSubscriptionStatus, SharedSubscriptionS
   CANCELED: 'canceled',
 };
 
+export const DTO_TO_STATUS: Record<SharedSubscriptionStatus, PrismaSubscriptionStatus> = {
+  trialing: PrismaSubscriptionStatus.TRIALING,
+  active: PrismaSubscriptionStatus.ACTIVE,
+  past_due: PrismaSubscriptionStatus.PAST_DUE,
+  canceled: PrismaSubscriptionStatus.CANCELED,
+};
+
 export const REVOLUT_STATE_TO_PRISMA: Record<string, PrismaSubscriptionStatus> = {
   pending: PrismaSubscriptionStatus.TRIALING,
   active: PrismaSubscriptionStatus.ACTIVE,

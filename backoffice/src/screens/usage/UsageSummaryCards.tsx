@@ -1,5 +1,5 @@
+import type { UsageMonthSummary } from '@fakturcho/shared-types';
 import { Card, Col, Row, Statistic } from 'antd';
-import type { UsageMonthSummary } from '../../types/admin';
 
 interface UsageSummaryCardsProps {
   latest: UsageMonthSummary | undefined;

@@ -53,6 +53,7 @@ model User {
   email         String   @unique
   emailVerified Boolean  @default(false)
   image         String?
+  role          String   @default("user")
   accountId     String
   account       Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())

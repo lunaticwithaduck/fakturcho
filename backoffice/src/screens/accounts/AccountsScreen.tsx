@@ -1,7 +1,8 @@
+import type { SubscriptionStatusFilter } from '@fakturcho/shared-types';
 import { Typography } from 'antd';
 import { useState } from 'react';
 import { useAccounts } from '../../hooks/useAccounts';
-import type { SubscriptionStatusFilter } from '../../types/admin';
+import { ApiErrorAlert } from '../../layout/ApiErrorAlert';
 import { AccountDetailDrawer } from './AccountDetailDrawer';
 import { AccountsFilters } from './AccountsFilters';
 import { AccountsTable } from './AccountsTable';
@@ -11,11 +12,12 @@ export function AccountsScreen() {
   const [status, setStatus] = useState<SubscriptionStatusFilter>('all');
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
 
-  const { data: accounts, isLoading } = useAccounts({ search, status });
+  const { data: accounts, isLoading, isError } = useAccounts({ search, status });
 
   return (
     <div>
       <Typography.Title level={3}>Абонати</Typography.Title>
+      {isError ? <ApiErrorAlert /> : null}
       <AccountsFilters
         search={search}
         onSearchChange={setSearch}

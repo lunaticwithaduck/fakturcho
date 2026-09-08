@@ -1,6 +1,6 @@
+import type { SubscriptionSummary } from '@fakturcho/shared-types';
 import type { TableColumnsType } from 'antd';
 import { Table, Tag } from 'antd';
-import type { SubscriptionSummary } from '../../types/admin';
 import { formatDate } from '../../utils/date';
 import { formatCents } from '../../utils/money';
 import { SUBSCRIPTION_STATUS_COLORS, SUBSCRIPTION_STATUS_LABELS } from '../../utils/statusLabels';
