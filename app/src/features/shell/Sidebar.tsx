@@ -11,7 +11,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-surface-raised px-4 py-6 md:flex">
+    <aside className="hidden w-60 shrink-0 flex-col overflow-y-auto border-r border-border bg-surface-raised px-4 py-6 md:sticky md:top-0 md:flex md:h-dvh">
       <div className="flex items-center gap-2 px-2">
         <Image src={brandIcon} alt="" className="h-7 w-7" />
         <p className="text-lg font-bold text-text">Фактурчо</p>
