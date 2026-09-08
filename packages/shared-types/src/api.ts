@@ -20,4 +20,13 @@ export const API_ROUTES = {
   checkout: '/api/billing/checkout',
   revolutWebhook: '/api/billing/webhook',
   health: '/api/health',
+  adminMe: '/api/admin/me',
+  adminAccounts: '/api/admin/accounts',
+  adminAccount: (id: string) => `/api/admin/accounts/${id}`,
+  adminDocuments: '/api/admin/documents',
+  adminSubscriptions: '/api/admin/subscriptions',
+  adminSubscriptionsSummary: '/api/admin/subscriptions/summary',
+  adminUsageMonths: '/api/admin/usage/months',
+  adminReportsTurnover: '/api/admin/reports/turnover',
+  adminReportsMonths: '/api/admin/reports/months',
 } as const;
