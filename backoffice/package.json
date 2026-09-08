@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ant-design/plots": "^2.6.8",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@fakturcho/shared-types": "workspace:*",
     "@reduxjs/toolkit": "^2.3.0",

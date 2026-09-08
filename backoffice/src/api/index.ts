@@ -6,4 +6,5 @@ export * from './endpoints/documentsEndpoints';
 export * from './endpoints/meEndpoints';
 export * from './endpoints/reportsEndpoints';
 export * from './endpoints/subscriptionsEndpoints';
+export * from './endpoints/trafficEndpoints';
 export * from './endpoints/usageEndpoints';
