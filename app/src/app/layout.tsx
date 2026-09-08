@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import type { ReactNode } from 'react';
 import { Providers } from '../store/providers';
 import { uiFont } from './fonts';
 import './globals.css';
+
+const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
+const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.fakturcho.com'),
@@ -34,6 +38,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="bg" className={uiFont.variable}>
       <body className="bg-surface font-sans text-text antialiased">
         <Providers>{children}</Providers>
+        {umamiSrc && umamiWebsiteId ? (
+          <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
+        ) : null}
       </body>
     </html>
   );

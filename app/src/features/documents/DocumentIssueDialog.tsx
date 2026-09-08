@@ -1,6 +1,7 @@
 'use client';
 
 import { useIssueDocumentMutation, useListSeriesQuery } from '@app/api';
+import { trackEvent } from '@app/features/shared/analytics';
 import { getApiErrorCode, getApiErrorMessage } from '@app/features/shared/apiError';
 import { todayIsoDate } from '@app/features/shared/format';
 import {
@@ -47,6 +48,7 @@ export function DocumentIssueDialog({
     };
     try {
       await issueDocument({ id: document.id, body }).unwrap();
+      trackEvent('document_issued', { documentType: document.documentType });
       onIssued();
     } catch (err) {
       const code = getApiErrorCode(err);
