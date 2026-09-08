@@ -1,7 +1,7 @@
 import { DocumentComposerPage } from '@app/features/documents/DocumentComposerPage';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = { title: 'Редактиране на документ — Фактурчо' };
+export const metadata: Metadata = { title: 'Редактиране на документ' };
 
 interface EditDocumentPageProps {
   params: Promise<{ id: string }>;

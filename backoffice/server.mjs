@@ -67,6 +67,12 @@ async function proxyApi(req, res) {
 }
 
 createServer(async (req, res) => {
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  if (req.url === '/robots.txt') {
+    res.writeHead(200, { 'content-type': 'text/plain' });
+    res.end('User-agent: *\nDisallow: /\n');
+    return;
+  }
   if (req.url?.startsWith('/api/')) {
     await proxyApi(req, res);
     return;

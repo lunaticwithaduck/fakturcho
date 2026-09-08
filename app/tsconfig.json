@@ -10,7 +10,8 @@
     "paths": {
       "@app/*": ["./src/*"],
       "@design/*": ["../design/*"],
-      "@shared/types": ["../packages/shared-types/src/index.ts"]
+      "@shared/types": ["../packages/shared-types/src/index.ts"],
+      "@og/*": ["./opengraph/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

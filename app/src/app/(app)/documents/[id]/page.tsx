@@ -1,7 +1,7 @@
 import { DocumentViewPage } from '@app/features/documents/DocumentViewPage';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = { title: 'Документ — Фактурчо' };
+export const metadata: Metadata = { title: 'Документ' };
 
 interface ViewDocumentPageProps {
   params: Promise<{ id: string }>;

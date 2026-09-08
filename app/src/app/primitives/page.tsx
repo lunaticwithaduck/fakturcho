@@ -38,6 +38,7 @@ import {
   TooltipTrigger,
   toast,
 } from '@design/components';
+import { notFound } from 'next/navigation';
 
 const buttonVariants = ['primary', 'secondary', 'ghost', 'danger'] as const;
 const buttonSizes = ['sm', 'md', 'lg'] as const;
@@ -50,6 +51,7 @@ const badgeLabels = {
 };
 
 export default function PrimitivesPage() {
+  if (process.env.NODE_ENV === 'production') notFound();
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-10 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-text">Дизайн система — Фактурчо</h1>

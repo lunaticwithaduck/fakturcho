@@ -3,7 +3,7 @@ import { REFUND_INTRO, REFUND_SECTIONS } from '@app/features/legal/refundSection
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Възстановяване на суми — Фактурчо',
+  title: 'Възстановяване на суми',
   description: 'Кога и как Фактурчо възстановява платени суми.',
 };
 

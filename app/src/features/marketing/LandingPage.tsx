@@ -6,6 +6,7 @@ import brandIcon from '@app/features/shell/brand-icon.png';
 import { Button, Card } from '@design/components';
 import Image from 'next/image';
 import Link from 'next/link';
+import { LandingFaq } from './LandingFaq';
 
 const CAPABILITIES = [
   'Фактури, проформи, кредитни и дебитни известия, оферти и стокови разписки.',
@@ -80,6 +81,8 @@ export function LandingPage() {
             обработват през Revolut.
           </p>
         </section>
+
+        <LandingFaq />
       </main>
 
       <LegalFooter />
