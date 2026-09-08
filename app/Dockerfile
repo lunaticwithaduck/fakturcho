@@ -20,6 +20,7 @@ COPY design/lib design/lib
 COPY design/components design/components
 COPY app/next.config.ts app/tsconfig.json app/postcss.config.mjs app/next-env.d.ts app/
 COPY app/src app/src
+COPY app/opengraph app/opengraph
 # The /api/* rewrite bakes SERVER_URL into the build output; Railway must supply
 # it as a service variable so it reaches both this ARG and the runtime env.
 ARG SERVER_URL=http://localhost:3001
