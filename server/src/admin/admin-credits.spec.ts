@@ -25,13 +25,13 @@ describe('admin credit sales report', () => {
     await db.stop();
   });
 
-  it('summary totals only PURCHASE entries', async () => {
+  it('summary totals PURCHASE and SUBSCRIPTION_GRANT entries', async () => {
     const summary = await service.summary();
     expect(summary).toEqual({
-      soldAllTimeCents: 6500,
-      soldThisMonthCents: 5000,
-      purchasesAllTime: 3,
-      purchasesThisMonth: 2,
+      soldAllTimeCents: 7500,
+      soldThisMonthCents: 6000,
+      purchasesAllTime: 4,
+      purchasesThisMonth: 3,
     });
   });
 
@@ -40,8 +40,8 @@ describe('admin credit sales report', () => {
     expect(months).toHaveLength(12);
     expect(months.find((row) => row.month === currentMonth)).toEqual({
       month: currentMonth,
-      soldCents: 5000,
-      purchases: 2,
+      soldCents: 6000,
+      purchases: 3,
     });
     expect(months.find((row) => row.month === lastMonth)).toEqual({
       month: lastMonth,
@@ -55,15 +55,17 @@ describe('admin credit sales report', () => {
     }
   });
 
-  it('purchases lists only PURCHASE entries with account names', async () => {
+  it('purchases lists PURCHASE and SUBSCRIPTION_GRANT entries with account names', async () => {
     const rows = await service.purchases();
-    expect(rows).toHaveLength(3);
+    expect(rows).toHaveLength(4);
 
     const alfaRows = rows.filter((row) => row.accountId === seed.accountAId);
     const betaRows = rows.filter((row) => row.accountId === seed.accountBId);
-    expect(alfaRows).toHaveLength(2);
+    expect(alfaRows).toHaveLength(3);
     expect(betaRows).toHaveLength(1);
-    expect(alfaRows.map((row) => row.amountCents).sort()).toEqual([2000, 3000]);
+    expect(alfaRows.map((row) => row.amountCents).sort((a, b) => a - b)).toEqual([
+      1000, 2000, 3000,
+    ]);
     expect(betaRows[0]).toMatchObject({
       accountName: 'Бета ООД',
       amountCents: 1500,

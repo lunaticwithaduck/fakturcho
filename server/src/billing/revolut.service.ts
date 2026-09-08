@@ -66,6 +66,7 @@ export class RevolutService {
       merchant_order_data: { reference: string | null } | null;
       metadata: Record<string, unknown> | null;
       checkout_url?: string;
+      subscription_data?: { subscription_id: string } | null;
     }>('GET', `/orders/${orderId}`);
     return {
       id: order.id,
@@ -73,6 +74,7 @@ export class RevolutService {
       merchantOrderExtRef: order.merchant_order_data?.reference ?? null,
       metadata: order.metadata ?? {},
       checkoutUrl: order.checkout_url ?? null,
+      subscriptionId: order.subscription_data?.subscription_id ?? null,
     };
   }
 

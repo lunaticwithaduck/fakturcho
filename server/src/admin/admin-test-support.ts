@@ -133,6 +133,14 @@ export async function seedAdminFixtures(prisma: PrismaClient): Promise<AdminSeed
       createdAt: lastMonth,
     },
   });
+  await prisma.creditLedgerEntry.create({
+    data: {
+      accountId: accountAId,
+      amountCents: 1000,
+      reason: 'SUBSCRIPTION_GRANT',
+      revolutOrderId: 'admin-test-order-4',
+    },
+  });
 
   return { accountAId, accountBId };
 }

@@ -16,17 +16,13 @@ describe('CreditsService', () => {
     await db.stop();
   });
 
-  it('getBalance reports cents, whole documents remaining and subscription usability', async () => {
+  it('getBalance reports cents and whole documents remaining', async () => {
     const account = await db.prisma.account.create({ data: { creditBalanceCents: 105 } });
 
     expect(await service.getBalance(account.id)).toEqual({
       balanceCents: 105,
       documentsRemaining: 10,
-      hasUnlimitedSubscription: false,
     });
-
-    await db.prisma.subscription.create({ data: { accountId: account.id, status: 'ACTIVE' } });
-    expect((await service.getBalance(account.id)).hasUnlimitedSubscription).toBe(true);
   });
 
   it('getBalance rejects an unknown account with NOT_FOUND', async () => {

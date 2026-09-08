@@ -24,11 +24,13 @@ const CREDIT_MONTHS_SQL = Prisma.sql`
       SUM("amountCents") AS sold_cents,
       COUNT(*) AS purchases
     FROM "credit_ledger_entry"
-    WHERE "reason" = 'PURCHASE'
+    WHERE "reason" IN ('PURCHASE', 'SUBSCRIPTION_GRANT')
     GROUP BY 1
   ) sales ON sales.month = months.month
   ORDER BY months.month DESC
 `;
+
+const SOLD_CREDIT_REASONS = [CreditLedgerReason.PURCHASE, CreditLedgerReason.SUBSCRIPTION_GRANT];
 
 const PURCHASE_INCLUDE = {
   account: {
@@ -48,12 +50,12 @@ export class AdminCreditsService {
 
     const [allTime, thisMonth] = await Promise.all([
       this.prisma.creditLedgerEntry.aggregate({
-        where: { reason: CreditLedgerReason.PURCHASE },
+        where: { reason: { in: SOLD_CREDIT_REASONS } },
         _sum: { amountCents: true },
         _count: { _all: true },
       }),
       this.prisma.creditLedgerEntry.aggregate({
-        where: { reason: CreditLedgerReason.PURCHASE, createdAt: { gte: start, lt: end } },
+        where: { reason: { in: SOLD_CREDIT_REASONS }, createdAt: { gte: start, lt: end } },
         _sum: { amountCents: true },
         _count: { _all: true },
       }),
@@ -73,7 +75,7 @@ export class AdminCreditsService {
 
   async purchases(): Promise<CreditPurchaseRow[]> {
     const rows = await this.prisma.creditLedgerEntry.findMany({
-      where: { reason: CreditLedgerReason.PURCHASE },
+      where: { reason: { in: SOLD_CREDIT_REASONS } },
       include: PURCHASE_INCLUDE,
       orderBy: { createdAt: 'desc' },
       take: 200,
