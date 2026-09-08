@@ -1,8 +1,8 @@
 import { readFile, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
-import { extname, join } from 'node:path';
+import { extname, join, resolve, sep } from 'node:path';
 
-const ROOT = join(import.meta.dirname, 'dist');
+const ROOT = resolve(join(import.meta.dirname, 'dist'));
 const PORT = process.env.PORT ?? 3000;
 const API_URL = process.env.API_URL ?? 'http://localhost:3001';
 
@@ -18,7 +18,10 @@ const MIME = {
 };
 
 async function resolveFile(pathname) {
-  const candidate = join(ROOT, pathname);
+  const candidate = resolve(join(ROOT, pathname));
+  if (!candidate.startsWith(ROOT + sep)) {
+    return join(ROOT, 'index.html');
+  }
   try {
     const info = await stat(candidate);
     if (info.isFile()) return candidate;
