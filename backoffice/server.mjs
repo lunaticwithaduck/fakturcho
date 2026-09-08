@@ -37,7 +37,8 @@ async function proxyApi(req, res) {
 
   const headers = new Headers();
   for (const [key, value] of Object.entries(req.headers)) {
-    if (value === undefined || key === 'host' || key === 'connection') continue;
+    if (value === undefined || key === 'host' || key === 'connection' || key === 'accept-encoding')
+      continue;
     headers.set(key, Array.isArray(value) ? value.join(', ') : value);
   }
 
@@ -48,9 +49,15 @@ async function proxyApi(req, res) {
     redirect: 'manual',
   });
 
+  const STRIPPED = new Set([
+    'set-cookie',
+    'content-encoding',
+    'content-length',
+    'transfer-encoding',
+  ]);
   const responseHeaders = {};
   for (const [key, value] of upstream.headers) {
-    if (key.toLowerCase() !== 'set-cookie') responseHeaders[key] = value;
+    if (!STRIPPED.has(key.toLowerCase())) responseHeaders[key] = value;
   }
   const setCookie = upstream.headers.getSetCookie?.() ?? [];
   if (setCookie.length > 0) responseHeaders['set-cookie'] = setCookie;
