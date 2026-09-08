@@ -12,6 +12,7 @@ export interface RevolutOrder {
   merchantOrderExtRef: string | null;
   metadata: Record<string, unknown>;
   checkoutUrl: string | null;
+  subscriptionId: string | null;
 }
 
 export interface CreateCustomerInput {

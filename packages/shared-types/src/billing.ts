@@ -2,6 +2,8 @@ import type { SubscriptionStatus } from './enums';
 
 export const ISSUANCE_COST_CENTS = 10;
 export const SIGNUP_GRANT_CENTS = 100;
+export const SUBSCRIPTION_PRICE_CENTS = 500;
+export const SUBSCRIPTION_GRANT_CENTS = 1000;
 
 export const CREDIT_PACK_IDS = ['pack5', 'pack10', 'pack25'] as const;
 export type CreditPackId = (typeof CREDIT_PACK_IDS)[number];
@@ -21,7 +23,6 @@ export interface CheckoutRequest {
 export interface CreditBalanceDto {
   balanceCents: number;
   documentsRemaining: number;
-  hasUnlimitedSubscription: boolean;
 }
 
 export const CREDIT_LEDGER_REASONS = [
@@ -29,6 +30,7 @@ export const CREDIT_LEDGER_REASONS = [
   'purchase',
   'issuance',
   'adjustment',
+  'subscription_grant',
 ] as const;
 export type CreditLedgerReason = (typeof CREDIT_LEDGER_REASONS)[number];
 

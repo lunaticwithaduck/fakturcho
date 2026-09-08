@@ -28,9 +28,7 @@ describe('billingEndpoints wiring', () => {
   });
 
   it('requests the credit balance', async () => {
-    fetchMock.mockResolvedValue(
-      jsonResponse({ balanceCents: 100, documentsRemaining: 10, hasUnlimitedSubscription: false }),
-    );
+    fetchMock.mockResolvedValue(jsonResponse({ balanceCents: 100, documentsRemaining: 10 }));
     const store = createTestStore();
 
     await store.dispatch(billingApi.endpoints.getCreditBalance.initiate());
@@ -73,11 +71,7 @@ describe('billingEndpoints wiring', () => {
     fetchMock.mockImplementation(async (request: Request) => {
       const path = new URL(request.url).pathname;
       if (path === '/api/billing/credits') {
-        return jsonResponse({
-          balanceCents: 100,
-          documentsRemaining: 10,
-          hasUnlimitedSubscription: false,
-        });
+        return jsonResponse({ balanceCents: 100, documentsRemaining: 10 });
       }
       return jsonResponse({ id: 'doc-1' });
     });

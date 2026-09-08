@@ -1,5 +1,5 @@
 import type { CheckoutProduct, CheckoutSessionDto, SubscriptionDto } from '@fakturcho/shared-types';
-import { CREDIT_PACKS } from '@fakturcho/shared-types';
+import { CREDIT_PACKS, SUBSCRIPTION_GRANT_CENTS } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import {
   CreditLedgerReason,
@@ -56,7 +56,7 @@ export class BillingService {
   async handleWebhookEvent(payload: RevolutWebhookPayload): Promise<void> {
     switch (payload.event) {
       case 'ORDER_COMPLETED':
-        if (payload.orderId) await this.fulfilCreditPurchase(payload.orderId);
+        if (payload.orderId) await this.fulfilOrder(payload.orderId);
         return;
       case 'SUBSCRIPTION_INITIATED':
       case 'SUBSCRIPTION_FINISHED':
@@ -133,29 +133,50 @@ export class BillingService {
     return customer.id;
   }
 
-  private async fulfilCreditPurchase(orderId: string): Promise<void> {
+  private async fulfilOrder(orderId: string): Promise<void> {
     const order = await this.revolut.getOrder(orderId);
     if (order.state !== 'completed') return;
+    if (order.subscriptionId) {
+      await this.fulfilSubscriptionGrant(order.id, order.subscriptionId);
+      return;
+    }
     const accountId = extractAccountId(order.metadata);
     const creditCents = extractCreditCents(order.metadata);
     if (!accountId || creditCents === null) return;
+    await this.creditAccount(accountId, creditCents, CreditLedgerReason.PURCHASE, order.id);
+  }
+
+  private async fulfilSubscriptionGrant(orderId: string, subscriptionId: string): Promise<void> {
+    const subscription = await this.prisma.subscription.findUnique({
+      where: { revolutSubscriptionId: subscriptionId },
+    });
+    if (!subscription) return;
+    await this.creditAccount(
+      subscription.accountId,
+      SUBSCRIPTION_GRANT_CENTS,
+      CreditLedgerReason.SUBSCRIPTION_GRANT,
+      orderId,
+    );
+  }
+
+  private async creditAccount(
+    accountId: string,
+    amountCents: number,
+    reason: CreditLedgerReason,
+    revolutOrderId: string,
+  ): Promise<void> {
     try {
       await this.prisma.$transaction([
         this.prisma.creditLedgerEntry.create({
-          data: {
-            accountId,
-            amountCents: creditCents,
-            reason: CreditLedgerReason.PURCHASE,
-            revolutOrderId: order.id,
-          },
+          data: { accountId, amountCents, reason, revolutOrderId },
         }),
         this.prisma.account.update({
           where: { id: accountId },
-          data: { creditBalanceCents: { increment: creditCents } },
+          data: { creditBalanceCents: { increment: amountCents } },
         }),
       ]);
     } catch (error) {
-      // SPEC §11 invariant 22: a duplicate delivery hits the revolutOrderId unique index
+      // SPEC §11 invariant 22/23: a duplicate delivery hits the revolutOrderId unique index
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') return;
       throw error;
     }

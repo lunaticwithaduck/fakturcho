@@ -103,7 +103,8 @@ design/components/Button/
 - Numbers are claimed at issuance, inside a transaction, never at creation.
 - Issuing costs credit (SPEC §11): the 10-cent deduction happens inside the
   issuance transaction with the number claim — both commit or neither does.
-  Accounts with a usable subscription are exempt.
+  This applies to every account; a subscription grants credit, it does not
+  exempt issuance from it.
 - The next-number override is honoured only on a series with no issued
   documents; afterwards the sequence is fixed.
 - Party details are snapshotted onto the document row at issuance. Rendering

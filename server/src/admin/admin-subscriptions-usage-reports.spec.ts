@@ -32,7 +32,7 @@ describe('subscriptions, usage and reports', () => {
   it('subscriptions summary counts by status', async () => {
     const summary = await subscriptionsService.summary();
     expect(summary).toMatchObject({
-      mrrCents: 0,
+      mrrCents: 500,
       activeCount: 1,
       trialingCount: 0,
       pastDueCount: 0,
@@ -48,7 +48,7 @@ describe('subscriptions, usage and reports', () => {
       accountName: 'Алфа ЕООД',
       status: 'active',
       planName: 'business',
-      mrrCents: 0,
+      mrrCents: 500,
     });
   });
 

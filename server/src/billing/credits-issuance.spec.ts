@@ -106,33 +106,31 @@ describe('credits at issuance', () => {
     expect(issuedCount).toBe(1);
   });
 
-  it('invariant 23: a usable subscription issues with no deduction and no ledger entry; a lapsed one falls back to credits', async () => {
+  it('invariant 23: a subscriber issuance deducts 10 cents like any other account', async () => {
     const accountId = await createFundedAccount(20);
     await prisma.subscription.create({ data: { accountId, status: 'ACTIVE' } });
 
     const first = await documentsService.saveDraft(accountId, null, draftRequest());
-    const issuedFree = await issuanceService.issue(accountId, first.id, {});
-    expect(issuedFree.status).toBe('sent');
+    const issued = await issuanceService.issue(accountId, first.id, {});
+    expect(issued.status).toBe('sent');
 
-    const afterSubscribed = await prisma.account.findUniqueOrThrow({ where: { id: accountId } });
-    expect(afterSubscribed.creditBalanceCents).toBe(20);
-    const freeEntries = await prisma.creditLedgerEntry.count({
-      where: { accountId, reason: 'ISSUANCE' },
-    });
-    expect(freeEntries).toBe(0);
-
-    await prisma.subscription.update({ where: { accountId }, data: { status: 'CANCELED' } });
-
-    const second = await documentsService.saveDraft(accountId, null, draftRequest());
-    await issuanceService.issue(accountId, second.id, {});
-
-    const afterLapse = await prisma.account.findUniqueOrThrow({ where: { id: accountId } });
-    expect(afterLapse.creditBalanceCents).toBe(10);
+    const afterFirst = await prisma.account.findUniqueOrThrow({ where: { id: accountId } });
+    expect(afterFirst.creditBalanceCents).toBe(10);
     const spendEntries = await prisma.creditLedgerEntry.findMany({
       where: { accountId, reason: 'ISSUANCE' },
     });
     expect(spendEntries).toHaveLength(1);
     expect(spendEntries[0]?.amountCents).toBe(-10);
-    expect(spendEntries[0]?.documentId).toBe(second.id);
+    expect(spendEntries[0]?.documentId).toBe(first.id);
+
+    const ledger = await prisma.creditLedgerEntry.findMany({ where: { accountId } });
+    const ledgerSum = ledger.reduce((sum, entry) => sum + entry.amountCents, 0);
+    expect(ledgerSum).toBe(afterFirst.creditBalanceCents);
+
+    const second = await documentsService.saveDraft(accountId, null, draftRequest());
+    await issuanceService.issue(accountId, second.id, {});
+
+    const afterSecond = await prisma.account.findUniqueOrThrow({ where: { id: accountId } });
+    expect(afterSecond.creditBalanceCents).toBe(0);
   });
 });
