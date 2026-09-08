@@ -1,5 +1,6 @@
 import { COMPANY, PRICING } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
+import { LANDING_FAQ } from '@app/features/marketing/landingFaq';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -40,9 +41,20 @@ function buildJsonLd() {
     url: COMPANY.website,
     logo: `${COMPANY.website}/opengraph-image`,
   };
+  const faqPage = {
+    '@type': 'FAQPage',
+    mainEntity: LANDING_FAQ.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
   return JSON.stringify({
     '@context': 'https://schema.org',
-    '@graph': [softwareApplication, organization],
+    '@graph': [softwareApplication, organization, faqPage],
   }).replace(/</g, '\\u003c');
 }
 
