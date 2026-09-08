@@ -22,8 +22,22 @@ export async function createSubscriptionCheckout(
     existing.planId === planVariationId &&
     existing.revolutSubscriptionId
   ) {
+    if (existing.checkoutUrl) return { checkoutUrl: existing.checkoutUrl };
     const resumed = await resumePendingCheckout(revolut, existing.revolutSubscriptionId);
-    if (resumed) return resumed;
+    if (resumed) {
+      await prisma.subscription.update({
+        where: { accountId },
+        data: {
+          checkoutUrl: resumed.checkoutUrl,
+          revolutSetupOrderId: resumed.setupOrderId,
+        },
+      });
+      return { checkoutUrl: resumed.checkoutUrl };
+    }
+  }
+
+  if (existing?.revolutSubscriptionId) {
+    await revolut.cancelSubscription(existing.revolutSubscriptionId);
   }
 
   const customerId =
@@ -34,19 +48,6 @@ export async function createSubscriptionCheckout(
     customerId,
     externalReference: accountId,
     setupOrderRedirectUrl: returnUrl,
-  });
-
-  const subscriptionData = {
-    status: REVOLUT_STATE_TO_PRISMA[subscription.state] ?? PrismaSubscriptionStatus.TRIALING,
-    revolutSubscriptionId: subscription.id,
-    revolutCustomerId: customerId,
-    planId: planVariationId,
-    currentPeriodEnd: null,
-  };
-  await prisma.subscription.upsert({
-    where: { accountId },
-    create: { accountId, ...subscriptionData },
-    update: subscriptionData,
   });
 
   if (!subscription.setupOrderId) {
@@ -64,18 +65,36 @@ export async function createSubscriptionCheckout(
       { provider: ['no_checkout_url', `order ${setupOrder.id}`] },
     );
   }
+
+  const subscriptionData = {
+    status: REVOLUT_STATE_TO_PRISMA[subscription.state] ?? PrismaSubscriptionStatus.TRIALING,
+    revolutSubscriptionId: subscription.id,
+    revolutCustomerId: customerId,
+    revolutSetupOrderId: subscription.setupOrderId,
+    checkoutUrl: setupOrder.checkoutUrl,
+    planId: planVariationId,
+    currentPeriodEnd: null,
+  };
+  await prisma.subscription.upsert({
+    where: { accountId },
+    create: { accountId, ...subscriptionData },
+    update: subscriptionData,
+  });
+
   return { checkoutUrl: setupOrder.checkoutUrl };
 }
 
 async function resumePendingCheckout(
   revolut: RevolutService,
   revolutSubscriptionId: string,
-): Promise<CheckoutSessionDto | null> {
+): Promise<{ checkoutUrl: string; setupOrderId: string } | null> {
   try {
     const subscription = await revolut.getSubscription(revolutSubscriptionId);
     if (!subscription.setupOrderId) return null;
     const setupOrder = await revolut.getOrder(subscription.setupOrderId);
-    return setupOrder.checkoutUrl ? { checkoutUrl: setupOrder.checkoutUrl } : null;
+    return setupOrder.checkoutUrl
+      ? { checkoutUrl: setupOrder.checkoutUrl, setupOrderId: subscription.setupOrderId }
+      : null;
   } catch {
     return null;
   }

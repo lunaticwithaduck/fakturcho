@@ -288,6 +288,8 @@ model Subscription {
   status                SubscriptionStatus @default(TRIALING)
   revolutSubscriptionId String?            @unique
   revolutCustomerId     String?
+  revolutSetupOrderId   String?
+  checkoutUrl           String?
   planId                String?
   currentPeriodEnd      DateTime?
   createdAt             DateTime           @default(now())

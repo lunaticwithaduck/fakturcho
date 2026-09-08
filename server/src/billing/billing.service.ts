@@ -7,7 +7,11 @@ import type {
 } from '@fakturcho/shared-types';
 import { CREDIT_PACKS, SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
-import { CreditLedgerReason, Prisma } from '@prisma/client';
+import {
+  CreditLedgerReason,
+  Prisma,
+  SubscriptionStatus as PrismaSubscriptionStatus,
+} from '@prisma/client';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { RevolutService } from './revolut.service';
 import type { RevolutWebhookPayload } from './revolut-webhook';
@@ -149,7 +153,7 @@ export class BillingService {
     if (!status) return;
     await this.prisma.subscription.update({
       where: { revolutSubscriptionId: subscriptionId },
-      data: { status },
+      data: status === PrismaSubscriptionStatus.ACTIVE ? { status, checkoutUrl: null } : { status },
     });
   }
 }

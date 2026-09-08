@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
+import { cancelRevolutSubscription } from './revolut-cancel';
 import { inspectRevolutConfig, type RevolutConfigReport } from './revolut-config';
 import { describeRevolutFailure, RevolutApiError, toDomainError } from './revolut-errors';
 import type {
@@ -122,6 +123,15 @@ export class RevolutService {
       setupOrderId: subscription.setup_order_id ?? null,
       customerId: subscription.customer_id,
     };
+  }
+
+  cancelSubscription(subscriptionId: string): Promise<void> {
+    const { baseUrl, blocking, environment } = this.config;
+    return cancelRevolutSubscription(
+      { baseUrl, apiKey: this.apiKey, blocking, environment },
+      subscriptionId,
+      this.logger,
+    );
   }
 
   verifyWebhookSignature(rawBody: string, timestamp: string, signatureHeader: string): boolean {
