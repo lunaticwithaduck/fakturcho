@@ -33,4 +33,5 @@ export const API_ROUTES = {
   adminCreditsSummary: '/api/admin/credits/summary',
   adminCreditsMonths: '/api/admin/credits/months',
   adminCreditsPurchases: '/api/admin/credits/purchases',
+  adminTraffic: '/api/admin/analytics/traffic',
 } as const;

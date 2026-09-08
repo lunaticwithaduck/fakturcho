@@ -11,8 +11,11 @@ import { AdminReportsController } from './admin-reports.controller';
 import { AdminReportsService } from './admin-reports.service';
 import { AdminSubscriptionsController } from './admin-subscriptions.controller';
 import { AdminSubscriptionsService } from './admin-subscriptions.service';
+import { AdminTrafficController } from './admin-traffic.controller';
+import { AdminTrafficService } from './admin-traffic.service';
 import { AdminUsageController } from './admin-usage.controller';
 import { AdminUsageService } from './admin-usage.service';
+import { UmamiClient } from './umami.client';
 
 @Module({
   controllers: [
@@ -23,6 +26,7 @@ import { AdminUsageService } from './admin-usage.service';
     AdminUsageController,
     AdminReportsController,
     AdminCreditsController,
+    AdminTrafficController,
   ],
   providers: [
     AdminGuard,
@@ -32,6 +36,8 @@ import { AdminUsageService } from './admin-usage.service';
     AdminUsageService,
     AdminReportsService,
     AdminCreditsService,
+    AdminTrafficService,
+    UmamiClient,
   ],
 })
 export class AdminModule {}

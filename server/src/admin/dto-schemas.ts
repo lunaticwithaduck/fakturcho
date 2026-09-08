@@ -19,3 +19,14 @@ export const subscriptionListQuerySchema = z.object({
 export const turnoverQuerySchema = z.object({
   month: z.string().regex(/^\d{4}-\d{2}$/, 'Expected YYYY-MM'),
 });
+
+export const trafficQuerySchema = z.object({
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD')
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD')
+    .optional(),
+});

@@ -118,3 +118,46 @@ export interface CreditPurchaseRow {
   amountCents: Cents;
   revolutOrderId: string | null;
 }
+
+export interface TrafficSeriesPoint {
+  date: string;
+  visitors: number;
+  pageviews: number;
+}
+
+export interface TrafficReferrerRow {
+  referrer: string;
+  visitors: number;
+  pageviews: number;
+}
+
+export interface TrafficPageRow {
+  path: string;
+  pageviews: number;
+  uniqueVisitors: number;
+}
+
+export interface TrafficDeviceRow {
+  device: string;
+  visitors: number;
+}
+
+export interface TrafficOverview {
+  connected: boolean;
+  visitors: number;
+  uniqueVisitors: number;
+  pageviews: number;
+  sessions: number;
+  bounceRatePct: number;
+  avgDurationSec: number;
+  series: TrafficSeriesPoint[];
+  referrers: TrafficReferrerRow[];
+  pages: TrafficPageRow[];
+  devices: TrafficDeviceRow[];
+  dashboardUrl: string | null;
+}
+
+export interface GetTrafficQuery {
+  from?: string | undefined;
+  to?: string | undefined;
+}
