@@ -135,7 +135,10 @@ concurrency included) + 118 app tests + 1 e2e spec.
 
 ## Open ends (unchanged by design)
 
-- Backoffice: mock data + hardcoded auth, deliberately not deployed.
+- Backoffice: real admin API + Better-Auth session auth (`role = 'admin'`
+  gate) now wired end-to-end; still not deployed to Railway — see DEPLOY.md
+  §6 for the recipe (new service, `API_URL`, `APP_ORIGINS`, promote-to-admin
+  SQL). No CI to verify against, so smoke it once before flipping traffic.
 - `vatIncluded` not exposed in the composer; server supports and tests it.
 - No CI — gates are husky-local. GitHub Actions is the natural next step.
 - Phase 7 `[LATER]` scope (reminders, recurring, templates, reporting).
