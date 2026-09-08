@@ -166,4 +166,57 @@ describe('BillingService', () => {
     expect(stored.planId).toBe('plan_var_test_10');
     expect(createCustomer).toHaveBeenCalledTimes(1);
   });
+
+  it('checking out the same tier on a pending subscription resumes its checkout without creating a new one', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.user.create({
+      data: {
+        id: `usr_resume_${account.id}`,
+        name: 'Тест Тестов',
+        email: `resume_${account.id}@example.com`,
+        accountId: account.id,
+      },
+    });
+
+    const createCustomer = vi.fn().mockResolvedValue({ id: 'cus_resume' });
+    const createSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_resume',
+      state: 'pending',
+      setupOrderId: 'ord_resume',
+      customerId: 'cus_resume',
+    });
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_resume',
+      state: 'pending',
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: 'https://checkout.revolut.com/pay/ord_resume',
+    });
+    const getSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_resume',
+      state: 'pending',
+      setupOrderId: 'ord_resume',
+      customerId: 'cus_resume',
+    });
+    const revolut = {
+      createCustomer,
+      createSubscription,
+      getOrder,
+      getSubscription,
+    } as unknown as RevolutService;
+    const service = serviceWith(revolut);
+
+    const first = await service.createCheckout(account.id, 'sub5');
+    const second = await service.createCheckout(account.id, 'sub5');
+
+    expect(first.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
+    expect(second.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
+    expect(createSubscription).toHaveBeenCalledTimes(1);
+    expect(getSubscription).toHaveBeenCalledTimes(1);
+    expect(getSubscription).toHaveBeenCalledWith('sub_resume');
+
+    const rows = await db.prisma.subscription.findMany({ where: { accountId: account.id } });
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.planId).toBe('plan_var_test');
+  });
 });

@@ -1,5 +1,5 @@
 import { formatDate } from '@app/features/shared/format';
-import { Card } from '@design/components';
+import { Button, Card } from '@design/components';
 import type { CheckoutProduct, SubscriptionDto, SubscriptionTierId } from '@shared/types';
 import { getSubscriptionTierOptions } from './billingDisplay';
 import { SubscriptionTierOption } from './SubscriptionTierOption';
@@ -58,12 +58,26 @@ export function SubscriptionCard({
     );
   }
 
+  const pendingTier = subscription && subscription.status === 'trialing' ? subscription.tier : null;
+
   return (
     <Card className="flex flex-col items-start gap-3">
       {subscription ? (
-        <p className="text-sm font-medium text-text-muted">
-          Абонамент: {SUBSCRIPTION_STATUS_LABELS[subscription.status]}
-        </p>
+        <div className="flex w-full flex-col gap-2">
+          <p className="text-sm font-medium text-text-muted">
+            Абонамент: {SUBSCRIPTION_STATUS_LABELS[subscription.status]}
+          </p>
+          {pendingTier ? (
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={pendingProduct !== null}
+              onClick={() => onSelectTier(pendingTier)}
+            >
+              {pendingProduct === pendingTier ? 'Пренасочване...' : 'Продължи към плащане'}
+            </Button>
+          ) : null}
+        </div>
       ) : null}
       <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
         {tierOptions.map((option) => (

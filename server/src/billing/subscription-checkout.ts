@@ -16,6 +16,16 @@ export async function createSubscriptionCheckout(
   const planVariationId = variationIdFor(tier);
 
   const existing = await prisma.subscription.findUnique({ where: { accountId } });
+
+  if (
+    existing?.status === PrismaSubscriptionStatus.TRIALING &&
+    existing.planId === planVariationId &&
+    existing.revolutSubscriptionId
+  ) {
+    const resumed = await resumePendingCheckout(revolut, existing.revolutSubscriptionId);
+    if (resumed) return resumed;
+  }
+
   const customerId =
     existing?.revolutCustomerId ?? (await createCustomer(prisma, revolut, accountId));
 
@@ -55,6 +65,20 @@ export async function createSubscriptionCheckout(
     );
   }
   return { checkoutUrl: setupOrder.checkoutUrl };
+}
+
+async function resumePendingCheckout(
+  revolut: RevolutService,
+  revolutSubscriptionId: string,
+): Promise<CheckoutSessionDto | null> {
+  try {
+    const subscription = await revolut.getSubscription(revolutSubscriptionId);
+    if (!subscription.setupOrderId) return null;
+    const setupOrder = await revolut.getOrder(subscription.setupOrderId);
+    return setupOrder.checkoutUrl ? { checkoutUrl: setupOrder.checkoutUrl } : null;
+  } catch {
+    return null;
+  }
 }
 
 async function createCustomer(
