@@ -20,6 +20,7 @@ export function SubscriptionTierOption({
     <Card className="flex flex-col items-start gap-2">
       <p className="text-base font-semibold text-text">{option.title}</p>
       <p className="text-sm text-text-muted">{option.body}</p>
+      <p className="text-xs text-text-muted">{option.perDocumentLabel}</p>
       <Button size="sm" disabled={disabled} onClick={onSelect}>
         {pending ? 'Пренасочване...' : buttonLabel}
       </Button>

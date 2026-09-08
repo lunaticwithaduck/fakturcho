@@ -5,10 +5,17 @@ import { LegalFooter } from '@app/features/legal/LegalFooter';
 import { formatMoney } from '@app/features/shared/format';
 import brandIcon from '@app/features/shell/brand-icon.png';
 import { Button, Card } from '@design/components';
-import { SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@shared/types';
+import { perDocumentCents, SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@shared/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LandingFaq } from './LandingFaq';
+
+const tierPerDocumentCents = SUBSCRIPTION_TIER_IDS.map((id) =>
+  perDocumentCents(SUBSCRIPTION_TIERS[id].priceCents, SUBSCRIPTION_TIERS[id].grantCents),
+);
+const sameTierPerDocument = tierPerDocumentCents.every(
+  (cents) => cents === tierPerDocumentCents[0],
+);
 
 const CAPABILITIES = [
   'Фактури, проформи, кредитни и дебитни известия, оферти и стокови разписки.',
@@ -73,13 +80,21 @@ export function LandingPage() {
               <h3 className="text-base font-semibold text-text">Абонамент</h3>
               <p className="text-2xl font-bold text-text">{PRICING.subscription}</p>
               <ul className="flex flex-col gap-1 text-sm leading-relaxed text-text-muted">
-                {SUBSCRIPTION_TIER_IDS.map((id) => (
+                {SUBSCRIPTION_TIER_IDS.map((id, index) => (
                   <li key={id}>
                     {formatMoney(SUBSCRIPTION_TIERS[id].priceCents)} →{' '}
                     {formatMoney(SUBSCRIPTION_TIERS[id].grantCents)} кредит на месец
+                    {sameTierPerDocument
+                      ? null
+                      : ` (${formatMoney(tierPerDocumentCents[index] ?? 0)} на документ)`}
                   </li>
                 ))}
               </ul>
+              {sameTierPerDocument ? (
+                <p className="text-sm leading-relaxed text-text-muted">
+                  {formatMoney(tierPerDocumentCents[0] ?? 0)} на документ
+                </p>
+              ) : null}
               <p className="text-sm leading-relaxed text-text-muted">
                 Неизползваният кредит се запазва. Прекратява се по всяко време.
               </p>

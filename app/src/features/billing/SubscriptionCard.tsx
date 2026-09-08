@@ -36,6 +36,7 @@ export function SubscriptionCard({
               Следващото зареждане: {active.grantLabel} кредит
             </p>
           ) : null}
+          {active ? <p className="text-xs text-text-muted">{active.perDocumentLabel}</p> : null}
         </div>
         {otherTiers.length > 0 ? (
           <div className="flex flex-col gap-2">
