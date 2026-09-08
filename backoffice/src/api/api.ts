@@ -8,6 +8,7 @@ export const API_TAG_TYPES = [
   'Usage',
   'Report',
   'Credits',
+  'Traffic',
 ] as const;
 export type ApiTagType = (typeof API_TAG_TYPES)[number];
 

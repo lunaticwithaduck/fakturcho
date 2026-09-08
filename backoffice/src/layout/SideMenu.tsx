@@ -10,6 +10,7 @@ const ITEMS: MenuItem[] = [
   { key: '/subscriptions', label: 'Абонаменти' },
   { key: '/usage', label: 'Използване' },
   { key: '/reports', label: 'Справки' },
+  { key: '/traffic', label: 'Трафик' },
 ];
 
 export function SideMenu() {

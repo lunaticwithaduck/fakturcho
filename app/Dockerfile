@@ -24,7 +24,11 @@ COPY app/opengraph app/opengraph
 # The /api/* rewrite bakes SERVER_URL into the build output; Railway must supply
 # it as a service variable so it reaches both this ARG and the runtime env.
 ARG SERVER_URL=http://localhost:3001
+ARG NEXT_PUBLIC_UMAMI_SRC
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID
 ENV SERVER_URL=$SERVER_URL \
+    NEXT_PUBLIC_UMAMI_SRC=$NEXT_PUBLIC_UMAMI_SRC \
+    NEXT_PUBLIC_UMAMI_WEBSITE_ID=$NEXT_PUBLIC_UMAMI_WEBSITE_ID \
     NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @fakturcho/shared-types build \
   && pnpm --filter @fakturcho/app build

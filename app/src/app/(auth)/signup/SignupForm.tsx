@@ -1,6 +1,7 @@
 'use client';
 
 import { mapAuthErrorMessage, signUp } from '@app/auth';
+import { trackEvent } from '@app/features/shared/analytics';
 import { Button, Card, Input } from '@design/components';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
@@ -23,6 +24,7 @@ export function SignupForm() {
       setError(mapAuthErrorMessage(signUpError.code));
       return;
     }
+    trackEvent('signup');
     router.push('/documents');
   }
 

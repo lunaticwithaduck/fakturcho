@@ -232,3 +232,45 @@ Any existing signed-up user works; a fresh signup always gets `role = 'user'`
    account list.
 4. A non-admin account signs in, is immediately signed back out with
    "Нямате администраторски достъп."
+
+## 7. Umami analytics
+
+Self-hosted, cookieless analytics. Feeds the backoffice **Трафик** page
+(`GET /api/admin/analytics/traffic`), which proxies Umami's Stats API. The
+integration **fails soft**: unconfigured or unreachable Umami returns a
+zeroed, `connected: false` payload and the page shows a clear not-connected
+alert — nothing 500s, so this ships before Umami is provisioned.
+
+1. **Postgres** — Railway → New → Database → PostgreSQL (`umami-db`). Umami
+   manages its own schema; give it its own database, don't reuse the app one.
+2. **Umami service** — Railway → New → Deploy from Docker image:
+   - Image: `ghcr.io/umami-software/umami:postgresql-latest`
+   - Variables: `DATABASE_URL` = the `umami-db` connection string (Railway
+     reference), `APP_SECRET` = `openssl rand -base64 32`, `PORT` = `3000`.
+   - Networking → Generate Domain.
+3. Open the Umami URL → log in with the default `admin` / `umami` → change
+   the password immediately (Settings → Profile).
+4. Settings → Websites → Add website. Name `Fakturcho`, domain
+   `www.fakturcho.com`. Open it and copy the **Website ID** (a UUID). The
+   tracker script is `<umami-url>/script.js`.
+5. **App build vars** (`fakturcho-app`, build-time — `NEXT_PUBLIC_*` are
+   inlined at build, so set these before the first build and rebuild after
+   changing them):
+
+| Variable | Value |
+| --- | --- |
+| `NEXT_PUBLIC_UMAMI_SRC` | `https://umami-production-2965.up.railway.app/script.js` |
+| `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | the website UUID from step 4 |
+
+6. **API runtime vars** (`fakturcho-api`, rotate without a rebuild):
+
+| Variable | Value |
+| --- | --- |
+| `UMAMI_API_URL` | `https://umami-production-2965.up.railway.app` |
+| `UMAMI_WEBSITE_ID` | the website UUID from step 4 |
+| `UMAMI_USERNAME` | `admin` (or a dedicated read-only Umami user) |
+| `UMAMI_PASSWORD` | that account's password |
+
+`UmamiClient` logs into `POST {UMAMI_API_URL}/api/auth/login` and caches the
+bearer token in memory, re-logging in once on a 401. Redeploy the API and
+rebuild the app; the Трафик page then shows real numbers.
