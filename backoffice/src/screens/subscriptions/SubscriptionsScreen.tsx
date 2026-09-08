@@ -6,6 +6,7 @@ import { useMrrSummary } from '../../hooks/useMrrSummary';
 import { useSubscriptions } from '../../hooks/useSubscriptions';
 import { ApiErrorAlert } from '../../layout/ApiErrorAlert';
 import { SUBSCRIPTION_STATUS_LABELS } from '../../utils/statusLabels';
+import { CreditSalesSection } from './CreditSalesSection';
 import { SubscriptionsSummaryCards } from './SubscriptionsSummaryCards';
 import { SubscriptionsTable } from './SubscriptionsTable';
 
@@ -34,6 +35,7 @@ export function SubscriptionsScreen() {
         style={{ width: 220, marginBottom: 16 }}
       />
       <SubscriptionsTable subscriptions={subscriptions} loading={isLoading} />
+      <CreditSalesSection />
     </div>
   );
 }
