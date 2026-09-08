@@ -2,8 +2,10 @@
 
 import { PRICING } from '@app/features/legal/company';
 import { LegalFooter } from '@app/features/legal/LegalFooter';
+import { formatMoney } from '@app/features/shared/format';
 import brandIcon from '@app/features/shell/brand-icon.png';
 import { Button, Card } from '@design/components';
+import { SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@shared/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { LandingFaq } from './LandingFaq';
@@ -70,9 +72,16 @@ export function LandingPage() {
             <Card className="flex flex-col gap-2 p-5">
               <h3 className="text-base font-semibold text-text">Абонамент</h3>
               <p className="text-2xl font-bold text-text">{PRICING.subscription}</p>
+              <ul className="flex flex-col gap-1 text-sm leading-relaxed text-text-muted">
+                {SUBSCRIPTION_TIER_IDS.map((id) => (
+                  <li key={id}>
+                    {formatMoney(SUBSCRIPTION_TIERS[id].priceCents)} →{' '}
+                    {formatMoney(SUBSCRIPTION_TIERS[id].grantCents)} кредит на месец
+                  </li>
+                ))}
+              </ul>
               <p className="text-sm leading-relaxed text-text-muted">
-                10 € кредит (100 документа) всеки месец. Неизползваният кредит се запазва.
-                Прекратява се по всяко време.
+                Неизползваният кредит се запазва. Прекратява се по всяко време.
               </p>
             </Card>
           </div>

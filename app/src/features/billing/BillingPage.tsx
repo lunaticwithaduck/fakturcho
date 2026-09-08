@@ -39,7 +39,7 @@ export function BillingPage() {
       <SubscriptionCard
         subscription={subscription ?? null}
         pendingProduct={pendingProduct}
-        onSubscribe={() => startCheckout('subscription')}
+        onSelectTier={startCheckout}
       />
       <LedgerSection entries={ledger} />
     </div>
