@@ -96,3 +96,25 @@ export interface AdminMeDto {
   name: string;
   role: UserRole;
 }
+
+export interface CreditSalesSummary {
+  soldAllTimeCents: Cents;
+  soldThisMonthCents: Cents;
+  purchasesAllTime: number;
+  purchasesThisMonth: number;
+}
+
+export interface CreditSalesMonth {
+  month: string;
+  soldCents: Cents;
+  purchases: number;
+}
+
+export interface CreditPurchaseRow {
+  id: string;
+  createdAt: string;
+  accountId: string;
+  accountName: string;
+  amountCents: Cents;
+  revolutOrderId: string | null;
+}
