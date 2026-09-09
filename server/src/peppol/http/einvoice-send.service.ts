@@ -5,6 +5,7 @@ import { DocumentsService } from '../../documents/documents.service';
 import { toUblXml } from '../../einvoice/ubl-mapper';
 import { PrismaService } from '../../infrastructure/prisma/prisma.service';
 import { PeppolService } from '../peppol.service';
+import { shouldRetry } from '../peppol-retry-policy';
 import {
   type EinvoiceTransmissionDto,
   toEinvoiceTransmissionDto,
@@ -27,6 +28,19 @@ export class EinvoiceSendService {
         'Only issued documents can be sent as an e-invoice.',
       );
     }
+
+    const existing = await this.prisma.einvoiceTransmission.findUnique({ where: { documentId } });
+
+    if (existing && !shouldRetry({ status: existing.status, retryCount: existing.retryCount })) {
+      throw new DomainError(
+        'DOCUMENT_IMMUTABLE',
+        existing.status === 'REJECTED'
+          ? 'This e-invoice has been rejected too many times and can no longer be resent.'
+          : 'This e-invoice has already been sent and cannot be resent.',
+      );
+    }
+
+    const nextRetryCount = existing ? existing.retryCount + 1 : 0;
 
     const ublXml = this.buildUblXml(document);
 
@@ -53,14 +67,14 @@ export class EinvoiceSendService {
         provider: result.provider,
         providerMessageId: result.providerMessageId,
         errorText: result.errorText ?? null,
-        retryCount: result.retryCount,
+        retryCount: nextRetryCount,
       },
       update: {
         status: result.status,
         provider: result.provider,
         providerMessageId: result.providerMessageId,
         errorText: result.errorText ?? null,
-        retryCount: result.retryCount,
+        retryCount: nextRetryCount,
       },
     });
 

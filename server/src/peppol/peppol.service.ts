@@ -8,7 +8,6 @@ export interface PeppolTransmissionRecord {
   provider: string;
   providerMessageId: string;
   errorText?: string;
-  retryCount: number;
 }
 
 @Injectable()
@@ -37,7 +36,6 @@ export class PeppolService {
       provider: this.transport.providerName,
       providerMessageId: result.providerMessageId,
       ...(result.errorText !== undefined ? { errorText: result.errorText } : {}),
-      retryCount: 0,
     };
   }
 }
