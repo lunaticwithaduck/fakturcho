@@ -1,9 +1,9 @@
 'use client';
 
 import { Select, SelectItem } from '@design/components';
-import { DOCUMENT_TYPE_LABELS, DOCUMENT_TYPES } from '@fakturcho/shared-types';
-import type { DocumentType } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import { DOCUMENT_TYPES, getDocumentTypeLabel } from '@fakturcho/shared-types';
+import type { DocumentType, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface ComposerDocumentTypeFieldProps {
   value: DocumentType;
@@ -12,6 +12,7 @@ interface ComposerDocumentTypeFieldProps {
 
 export function ComposerDocumentTypeField({ value, onChange }: ComposerDocumentTypeFieldProps) {
   const t = useTranslations('documents');
+  const locale = useLocale() as Locale;
 
   return (
     <Select
@@ -21,7 +22,7 @@ export function ComposerDocumentTypeField({ value, onChange }: ComposerDocumentT
     >
       {DOCUMENT_TYPES.map((type) => (
         <SelectItem key={type} value={type}>
-          {DOCUMENT_TYPE_LABELS[type]}
+          {getDocumentTypeLabel(type, locale)}
         </SelectItem>
       ))}
     </Select>

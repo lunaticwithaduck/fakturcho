@@ -33,4 +33,33 @@ describe('DocumentStatusTabs', () => {
 
     consoleError.mockRestore();
   });
+
+  it('renders the Bulgarian status tab labels unchanged', () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <DocumentStatusTabs value="all" onChange={vi.fn()} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('tab', { name: 'Чернова' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Издадена' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'ПЛАТЕНО' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'ПРОСРОЧЕНА' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'АНУЛИРАНА' })).toBeTruthy();
+  });
+
+  it('renders English status tab labels instead of Bulgarian when the locale is English', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <DocumentStatusTabs value="all" onChange={vi.fn()} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('tab', { name: 'Draft' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Issued' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'PAID' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'OVERDUE' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'CANCELLED' })).toBeTruthy();
+    expect(screen.queryByRole('tab', { name: 'Чернова' })).toBeNull();
+  });
 });

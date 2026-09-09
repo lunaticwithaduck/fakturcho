@@ -35,4 +35,25 @@ describe('DocumentTypeFilterSelect', () => {
 
     consoleError.mockRestore();
   });
+
+  it('renders the Bulgarian selected type label unchanged', () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <DocumentTypeFilterSelect value="proforma" onChange={vi.fn()} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByText('Проформа фактура')).toBeTruthy();
+  });
+
+  it('renders the English selected type label instead of Bulgarian', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <DocumentTypeFilterSelect value="proforma" onChange={vi.fn()} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByText('Proforma invoice')).toBeTruthy();
+    expect(screen.queryByText('Проформа фактура')).toBeNull();
+  });
 });

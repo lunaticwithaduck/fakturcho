@@ -1,6 +1,7 @@
 import { Badge } from '@design/components';
-import { DOCUMENT_STATUS_LABELS } from '@fakturcho/shared-types';
-import type { DocumentStatus } from '@shared/types';
+import { getDocumentStatusLabel } from '@fakturcho/shared-types';
+import type { DocumentStatus, Locale } from '@shared/types';
+import { useLocale } from 'next-intl';
 import { getStatusBadgeVariant } from './statusBadge';
 
 interface DocumentStatusBadgeProps {
@@ -8,5 +9,9 @@ interface DocumentStatusBadgeProps {
 }
 
 export function DocumentStatusBadge({ status }: DocumentStatusBadgeProps) {
-  return <Badge variant={getStatusBadgeVariant(status)}>{DOCUMENT_STATUS_LABELS[status]}</Badge>;
+  const locale = useLocale() as Locale;
+
+  return (
+    <Badge variant={getStatusBadgeVariant(status)}>{getDocumentStatusLabel(status, locale)}</Badge>
+  );
 }

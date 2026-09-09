@@ -1,3 +1,5 @@
+import type { Locale } from './countries';
+
 export const DOCUMENT_TYPES = [
   'invoice',
   'proforma',
@@ -14,6 +16,18 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   debit_note: 'Дебитно известие',
   quote: 'Ценова оферта',
 };
+
+export const DOCUMENT_TYPE_LABELS_EN: Record<DocumentType, string> = {
+  invoice: 'Invoice',
+  proforma: 'Proforma invoice',
+  credit_note: 'Credit note',
+  debit_note: 'Debit note',
+  quote: 'Quote',
+};
+
+export function getDocumentTypeLabel(type: DocumentType, locale: Locale): string {
+  return locale === 'en' ? DOCUMENT_TYPE_LABELS_EN[type] : DOCUMENT_TYPE_LABELS[type];
+}
 
 export const TAX_DOCUMENT_TYPES: Record<DocumentType, boolean> = {
   invoice: true,
@@ -38,6 +52,18 @@ export const DOCUMENT_STATUS_LABELS: Record<DocumentStatus, string> = {
   overdue: 'ПРОСРОЧЕНА',
   cancelled: 'АНУЛИРАНА',
 };
+
+export const DOCUMENT_STATUS_LABELS_EN: Record<DocumentStatus, string> = {
+  draft: 'Draft',
+  sent: 'Issued',
+  paid: 'PAID',
+  overdue: 'OVERDUE',
+  cancelled: 'CANCELLED',
+};
+
+export function getDocumentStatusLabel(status: DocumentStatus, locale: Locale): string {
+  return locale === 'en' ? DOCUMENT_STATUS_LABELS_EN[status] : DOCUMENT_STATUS_LABELS[status];
+}
 
 export const SUBSCRIPTION_STATUSES = ['trialing', 'active', 'past_due', 'canceled'] as const;
 export type SubscriptionStatus = (typeof SUBSCRIPTION_STATUSES)[number];
