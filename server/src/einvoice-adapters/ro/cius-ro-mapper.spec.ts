@@ -39,6 +39,46 @@ describe('toCiusRoXml — RO domestic, standard rate', () => {
     expect(xml).toContain('<cbc:RegistrationName>Exemplu Consulting SRL</cbc:RegistrationName>');
     expect(xml).toContain('<cbc:RegistrationName>Client Exemplu SA</cbc:RegistrationName>');
   });
+
+  it('does not emit CountrySubentity when no county option is supplied', () => {
+    expect(xml).not.toContain('CountrySubentity');
+  });
+});
+
+describe('toCiusRoXml — options: countyRegion (CountrySubentity)', () => {
+  it('emits the issuer county on the supplier postal address when supplied', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, { issuerCountyRegion: 'București' });
+    const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    expect(xml.slice(0, customerPartyIndex)).toContain(
+      '<cbc:CountrySubentity>București</cbc:CountrySubentity><cac:Country>',
+    );
+    expect(xml.slice(customerPartyIndex)).not.toContain('CountrySubentity');
+  });
+
+  it('emits the recipient county on the customer postal address when supplied', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, { recipientCountyRegion: 'Cluj' });
+    const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    expect(xml.slice(0, customerPartyIndex)).not.toContain('CountrySubentity');
+    expect(xml.slice(customerPartyIndex)).toContain(
+      '<cbc:CountrySubentity>Cluj</cbc:CountrySubentity><cac:Country>',
+    );
+  });
+
+  it('emits both counties independently in their own party blocks', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, {
+      issuerCountyRegion: 'București',
+      recipientCountyRegion: 'Cluj',
+    });
+    const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    expect(xml.slice(0, customerPartyIndex)).toContain(
+      '<cbc:CountrySubentity>București</cbc:CountrySubentity>',
+    );
+    expect(xml.slice(customerPartyIndex)).toContain(
+      '<cbc:CountrySubentity>Cluj</cbc:CountrySubentity>',
+    );
+    expect(xml.slice(0, customerPartyIndex)).not.toContain('Cluj');
+    expect(xml.slice(customerPartyIndex)).not.toContain('București');
+  });
 });
 
 describe('toCiusRoXml — Romanian CUI/VAT validation', () => {

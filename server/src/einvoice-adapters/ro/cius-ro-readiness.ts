@@ -2,7 +2,15 @@ import type { DocumentDto } from '@fakturcho/shared-types';
 import { checkEinvoiceReadiness, type EinvoiceReadiness } from '../../einvoice/readiness';
 import { isValidRomanianCui, isValidRomanianVatNumber } from './ro-cui';
 
-export function checkCiusRoReadiness(document: DocumentDto): EinvoiceReadiness {
+export interface CheckCiusRoReadinessOptions {
+  issuerCountyRegion?: string;
+  recipientCountyRegion?: string;
+}
+
+export function checkCiusRoReadiness(
+  document: DocumentDto,
+  options: CheckCiusRoReadinessOptions = {},
+): EinvoiceReadiness {
   const base = checkEinvoiceReadiness(document);
   const missingFields = [...base.missingFields];
 
@@ -20,6 +28,10 @@ export function checkCiusRoReadiness(document: DocumentDto): EinvoiceReadiness {
         missingFields.push('issuer VAT number is not a valid RO-prefixed CUI (CIUS-RO)');
       }
     }
+
+    if (!options.issuerCountyRegion) {
+      missingFields.push('issuer county/județ (CIUS-RO CountrySubentity)');
+    }
   }
 
   if (document.recipient.country === 'RO') {
@@ -31,6 +43,10 @@ export function checkCiusRoReadiness(document: DocumentDto): EinvoiceReadiness {
 
     if (document.recipient.vatNumber && !isValidRomanianVatNumber(document.recipient.vatNumber)) {
       missingFields.push('recipient VAT number is not a valid RO-prefixed CUI (CIUS-RO)');
+    }
+
+    if (!options.recipientCountyRegion) {
+      missingFields.push('recipient county/județ (CIUS-RO CountrySubentity)');
     }
   }
 
