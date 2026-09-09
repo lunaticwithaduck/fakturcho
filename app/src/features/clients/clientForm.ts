@@ -12,6 +12,8 @@ export interface ClientFormValues {
   mol: string;
   country: string;
   documentLanguage: Locale | null;
+  peppolEndpointId: string;
+  peppolScheme: string;
 }
 
 export function clientToFormValues(client: ClientDto | null): ClientFormValues {
@@ -24,6 +26,8 @@ export function clientToFormValues(client: ClientDto | null): ClientFormValues {
     mol: client?.mol ?? '',
     country: client?.country ?? 'BG',
     documentLanguage: client?.documentLanguage ?? null,
+    peppolEndpointId: client?.peppolEndpointId ?? '',
+    peppolScheme: client?.peppolScheme ?? '',
   };
 }
 
@@ -37,6 +41,8 @@ function toRequestBody(values: ClientFormValues): CreateClientRequest {
     mol: values.mol.trim() || null,
     country: values.country,
     documentLanguage: values.documentLanguage,
+    peppolEndpointId: values.peppolEndpointId.trim() || null,
+    peppolScheme: values.peppolScheme.trim() || null,
   };
 }
 

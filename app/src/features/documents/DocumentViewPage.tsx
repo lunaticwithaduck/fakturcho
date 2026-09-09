@@ -2,12 +2,14 @@
 
 import {
   useCancelDocumentMutation,
+  useGetClientQuery,
   useGetDocumentQuery,
   useMarkDocumentPaidMutation,
 } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { EmptyState, Skeleton, toast } from '@design/components';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -17,6 +19,7 @@ import { DocumentIssueDialog } from './DocumentIssueDialog';
 import { DocumentPdfViewer } from './DocumentPdfViewer';
 import { DocumentStatusBadge } from './DocumentStatusBadge';
 import { formatDocumentTitle } from './documentTitle';
+import { EinvoicePanel } from './EinvoicePanel';
 
 type DialogKind = 'issue' | 'email' | 'cancel' | null;
 
@@ -29,6 +32,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
   const t = useTranslations('documents');
   const router = useRouter();
   const { data: document, isLoading } = useGetDocumentQuery(documentId);
+  const { data: client } = useGetClientQuery(document?.clientId ?? skipToken);
   const [cancelDocument, { isLoading: isCancelling }] = useCancelDocumentMutation();
   const [markPaid, { isLoading: isMarkingPaid }] = useMarkDocumentPaidMutation();
   const [dialog, setDialog] = useState<DialogKind>(autoOpenIssue ? 'issue' : null);
@@ -95,6 +99,8 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         onCancel={() => setDialog('cancel')}
         onEmail={() => setDialog('email')}
       />
+
+      <EinvoicePanel documentId={documentId} status={document.status} client={client} />
 
       <DocumentPdfViewer
         documentId={documentId}

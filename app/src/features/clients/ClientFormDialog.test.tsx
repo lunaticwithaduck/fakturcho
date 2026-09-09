@@ -55,6 +55,8 @@ describe('ClientFormDialog', () => {
     expect(screen.getByLabelText('Език на документите')).toBeTruthy();
     expect(screen.getByLabelText('Имейл')).toBeTruthy();
     expect(screen.getByLabelText('МОЛ')).toBeTruthy();
+    expect(screen.getByLabelText('Peppol идентификатор (Endpoint ID)')).toBeTruthy();
+    expect(screen.getByLabelText('Peppol схема')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Отказ' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Запази' })).toBeTruthy();
   });
@@ -68,6 +70,8 @@ describe('ClientFormDialog', () => {
     expect(screen.getByLabelText('Company name')).toBeTruthy();
     expect(screen.getByLabelText('Country')).toBeTruthy();
     expect(screen.getByLabelText('Document language')).toBeTruthy();
+    expect(screen.getByLabelText('Peppol endpoint ID')).toBeTruthy();
+    expect(screen.getByLabelText('Peppol scheme')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Save' })).toBeTruthy();
     expect(consoleError).not.toHaveBeenCalled();
@@ -108,5 +112,38 @@ describe('ClientFormDialog', () => {
     const body = await request.json();
     expect(body.country).toBe('DE');
     expect(body.documentLanguage).toBe('en');
+  });
+
+  it('round-trips the Peppol endpoint id and scheme through the request body', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'ACME' } });
+    fireEvent.change(screen.getByLabelText('Peppol идентификатор (Endpoint ID)'), {
+      target: { value: '0088:1234567890123' },
+    });
+    fireEvent.change(screen.getByLabelText('Peppol схема'), { target: { value: '0088' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.peppolEndpointId).toBe('0088:1234567890123');
+    expect(body.peppolScheme).toBe('0088');
+  });
+
+  it('sends null for blank Peppol fields', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'ACME' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.peppolEndpointId).toBeNull();
+    expect(body.peppolScheme).toBeNull();
   });
 });

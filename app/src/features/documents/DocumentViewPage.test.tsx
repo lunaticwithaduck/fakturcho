@@ -75,10 +75,15 @@ const document: DocumentDto = {
 
 vi.mock('@app/api', () => ({
   useGetDocumentQuery: () => ({ data: document, isLoading: false }),
+  useGetClientQuery: () => ({ data: undefined }),
   useCancelDocumentMutation: () => [vi.fn(), { isLoading: false }],
   useMarkDocumentPaidMutation: () => [vi.fn(), { isLoading: false }],
+  useGetEinvoiceReadinessQuery: () => ({ data: { ready: true, missingFields: [] } }),
+  useGetEinvoiceTransmissionQuery: () => ({ data: null }),
+  useSendEinvoicePeppolMutation: () => [vi.fn(), { isLoading: false }],
   getDocumentPreviewUrl: (id: string) => `/api/documents/${id}/render?disposition=inline`,
   getDocumentRenderUrl: (id: string) => `/api/documents/${id}/render`,
+  getEinvoiceXmlUrl: (id: string) => `/api/documents/${id}/einvoice/xml`,
 }));
 
 vi.mock('next/navigation', () => ({
@@ -100,6 +105,7 @@ describe('DocumentViewPage', () => {
     expect(screen.getByRole('button', { name: 'Изпрати по имейл' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Анулирай' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Изтегли PDF' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Изтегли е-фактура (XML)' })).toBeTruthy();
   });
 
   it('resolves the English messages for the same keys without missing-key warnings', () => {
@@ -116,6 +122,7 @@ describe('DocumentViewPage', () => {
     expect(screen.getByRole('button', { name: 'Send by email' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Download PDF' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Download e-invoice (XML)' })).toBeTruthy();
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();

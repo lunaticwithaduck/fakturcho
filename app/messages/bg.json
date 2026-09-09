@@ -156,6 +156,16 @@
         "saveAndIssue": "Запази и издай",
         "cancel": "Отказ"
       }
+    },
+    "peppol": {
+      "downloadXml": "Изтегли е-фактура (XML)",
+      "notReadyHint": "Липсващи данни за е-фактура: {fields}",
+      "send": "Изпрати през Peppol",
+      "sending": "Изпращане...",
+      "statusQueued": "На изчакване",
+      "statusSent": "Изпратено",
+      "statusDelivered": "Доставено",
+      "statusRejected": "Отхвърлено"
     }
   },
   "billing": {
@@ -262,6 +272,8 @@
     "addressLabel": "Адрес",
     "emailLabel": "Имейл",
     "molLabel": "МОЛ",
+    "peppolEndpointIdLabel": "Peppol идентификатор (Endpoint ID)",
+    "peppolSchemeLabel": "Peppol схема",
     "countryLabel": "Държава",
     "documentLanguageLabel": "Език на документите",
     "documentLanguageOptionSame": "Както при издателя",

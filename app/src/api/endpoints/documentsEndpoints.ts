@@ -16,6 +16,41 @@ export interface DocumentListResponse {
   total: number;
 }
 
+export interface EinvoiceReadinessResult {
+  ready: boolean;
+  missingFields: string[];
+}
+
+export type EinvoiceTransmissionStatus = 'QUEUED' | 'SENT' | 'DELIVERED' | 'REJECTED';
+
+export interface EinvoiceTransmissionDto {
+  documentId: string;
+  status: EinvoiceTransmissionStatus;
+  provider: string;
+  providerMessageId: string | null;
+  receipt: string | null;
+  errorText: string | null;
+  retryCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function einvoiceReadinessRoute(id: string): string {
+  return `${API_ROUTES.document(id)}/einvoice/readiness`;
+}
+
+function einvoiceXmlRoute(id: string): string {
+  return `${API_ROUTES.document(id)}/einvoice/xml`;
+}
+
+function einvoiceSendRoute(id: string): string {
+  return `${API_ROUTES.document(id)}/einvoice/send`;
+}
+
+function einvoiceTransmissionRoute(id: string): string {
+  return `${API_ROUTES.document(id)}/einvoice/transmission`;
+}
+
 export const documentsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     listDocuments: builder.query<DocumentListResponse, DocumentListQuery | undefined>({
@@ -61,6 +96,18 @@ export const documentsApi = apiSlice.injectEndpoints({
       query: () => toApiPath(API_ROUTES.series),
       providesTags: [listTag('Series')],
     }),
+    getEinvoiceReadiness: builder.query<EinvoiceReadinessResult, string>({
+      query: (id) => toApiPath(einvoiceReadinessRoute(id)),
+      providesTags: (_result, _error, id) => [idTag('Document', id)],
+    }),
+    getEinvoiceTransmission: builder.query<EinvoiceTransmissionDto | null, string>({
+      query: (id) => toApiPath(einvoiceTransmissionRoute(id)),
+      providesTags: (_result, _error, id) => [idTag('Document', id)],
+    }),
+    sendEinvoicePeppol: builder.mutation<EinvoiceTransmissionDto, string>({
+      query: (id) => ({ url: toApiPath(einvoiceSendRoute(id)), method: 'POST' }),
+      invalidatesTags: (_result, _error, id) => [idTag('Document', id)],
+    }),
   }),
 });
 
@@ -73,6 +120,9 @@ export const {
   useCancelDocumentMutation,
   useMarkDocumentPaidMutation,
   useListSeriesQuery,
+  useGetEinvoiceReadinessQuery,
+  useGetEinvoiceTransmissionQuery,
+  useSendEinvoicePeppolMutation,
 } = documentsApi;
 
 export function getDocumentRenderUrl(id: string): string {
@@ -82,4 +132,8 @@ export function getDocumentRenderUrl(id: string): string {
 /** Same PDF, served `inline` so a browser viewer shows it instead of downloading it. */
 export function getDocumentPreviewUrl(id: string): string {
   return `${API_ROUTES.documentRender(id)}?disposition=inline`;
+}
+
+export function getEinvoiceXmlUrl(id: string): string {
+  return einvoiceXmlRoute(id);
 }

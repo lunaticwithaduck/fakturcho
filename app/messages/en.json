@@ -156,6 +156,16 @@
         "saveAndIssue": "Save and issue",
         "cancel": "Cancel"
       }
+    },
+    "peppol": {
+      "downloadXml": "Download e-invoice (XML)",
+      "notReadyHint": "Missing e-invoice data: {fields}",
+      "send": "Send via Peppol",
+      "sending": "Sending...",
+      "statusQueued": "Queued",
+      "statusSent": "Sent",
+      "statusDelivered": "Delivered",
+      "statusRejected": "Rejected"
     }
   },
   "billing": {
@@ -262,6 +272,8 @@
     "addressLabel": "Address",
     "emailLabel": "Email",
     "molLabel": "Representative",
+    "peppolEndpointIdLabel": "Peppol endpoint ID",
+    "peppolSchemeLabel": "Peppol scheme",
     "countryLabel": "Country",
     "documentLanguageLabel": "Document language",
     "documentLanguageOptionSame": "Same as issuer",
