@@ -4,8 +4,10 @@ import { amountInWords } from '../../../money/amount-in-words';
 import { formatBgn, formatEur } from '../../../money/format';
 import type { VatPresentation } from '../../../money/vat';
 import { escapeHtml } from './html-utils';
+import type { ClassicLocaleContext } from './locale';
 
-export function buildAmountWordsBlock(document: Document): string {
+export function buildAmountWordsBlock(document: Document, locale: ClassicLocaleContext): string {
+  if (locale.language !== 'bg') return '';
   return `<div class="amount-words">${escapeHtml(amountInWords(document.amount))}</div>`;
 }
 
@@ -16,23 +18,25 @@ function totalsRow(label: string, value: string, className = 'totals-row'): stri
 export function buildTotalsBlock(
   document: Document,
   presentation: VatPresentation,
-  dualDisplayActive: boolean,
+  showBgnSuffix: boolean,
+  locale: ClassicLocaleContext,
 ): string {
+  const { labels } = locale;
   const base = document.subtotal - document.discountTotal;
   const vatRows = presentation.vatCharged
-    ? totalsRow('Данъчна основа:', formatEur(base)) +
-      totalsRow(`ДДС (${document.vatRateBp / 100}%):`, formatEur(document.vatAmount))
+    ? totalsRow(labels.vatBasePrefix, formatEur(base)) +
+      totalsRow(labels.vatRatePrefix(document.vatRateBp / 100), formatEur(document.vatAmount))
     : '';
-  const bgnSuffix = dualDisplayActive ? ` / ${formatBgn(eurCentsToBgnCents(document.amount))}` : '';
+  const bgnSuffix = showBgnSuffix ? ` / ${formatBgn(eurCentsToBgnCents(document.amount))}` : '';
   const dueValue = `${formatEur(document.amount)}${bgnSuffix}`;
   const totals = `<div class="totals">
     ${vatRows}
-    ${totalsRow('Общо:', formatEur(document.amount), 'totals-row total')}
-    ${totalsRow('Сума за плащане:', dueValue, 'totals-row due')}
+    ${totalsRow(labels.totalLabel, formatEur(document.amount), 'totals-row total')}
+    ${totalsRow(labels.dueLabel, dueValue, 'totals-row due')}
   </div>`;
   const exemption =
     presentation.showExemptionLine && presentation.exemptionGround
-      ? `<div class="exemption">Основание за неначисляване на ДДС: ${escapeHtml(presentation.exemptionGround)}</div>`
+      ? `<div class="exemption">${labels.exemptionPrefix}${escapeHtml(presentation.exemptionGround)}</div>`
       : '';
   return `${totals}${exemption}`;
 }

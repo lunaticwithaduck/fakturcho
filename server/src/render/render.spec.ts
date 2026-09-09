@@ -227,4 +227,35 @@ describe('render pipeline', () => {
     const { filename } = await service.renderPdf(document.id, accountId);
     expect(filename).toBe('Фактура_Чернова.pdf');
   });
+
+  it('renders English labels and omits the Bulgarian-only blocks when documentLanguage is en', async () => {
+    const document = await seedDocument(db.prisma, {
+      accountId,
+      documentType: 'INVOICE',
+      number: 20,
+      overrides: { documentLanguage: 'en' },
+    });
+    const { buffer, filename } = await service.renderPdf(document.id, accountId);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Recipient:');
+    expect(text).toContain('Company registration no.: 987654321');
+    expect(text).not.toContain('МОЛ');
+    expect(text).not.toContain('Съставил');
+    expect(text).not.toContain('(Оригинал)');
+    expect(text).not.toContain('лв.');
+    expect(filename).toBe('Фактура_0000000020.pdf');
+  });
+
+  it('derives English from a non-Bulgarian issuer country when documentLanguage is unset', async () => {
+    const document = await seedDocument(db.prisma, {
+      accountId,
+      documentType: 'INVOICE',
+      number: 21,
+      overrides: { issuerCountry: 'DE' },
+    });
+    const { buffer } = await service.renderPdf(document.id, accountId);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Amount due:');
+    expect(text).not.toContain('Сума за плащане');
+  });
 });
