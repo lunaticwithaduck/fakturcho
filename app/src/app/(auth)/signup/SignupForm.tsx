@@ -28,14 +28,12 @@ export function SignupForm() {
     event.preventDefault();
     setError(null);
     setIsSubmitting(true);
-    const { error: signUpError } = await signUp.email({ name, email, password });
+    const { error: signUpError } = await signUp.email({ name, email, password, country });
     setIsSubmitting(false);
     if (signUpError) {
       setError(mapAuthErrorMessage(signUpError.code));
       return;
     }
-    // TODO: persist `country` (drives User.locale via getCountryConfig) once
-    // shared-types/server expose a way to set it — none exists today.
     trackEvent('signup');
     router.push('/documents');
   }
