@@ -1,6 +1,7 @@
 import { formatMoney } from '@app/features/shared/format';
 import { Button, Card } from '@design/components';
 import type { CatalogueItemDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 
 interface CatalogueRowProps {
   item: CatalogueItemDto;
@@ -9,6 +10,8 @@ interface CatalogueRowProps {
 }
 
 export function CatalogueRow({ item, onEdit, onDelete }: CatalogueRowProps) {
+  const t = useTranslations('catalogue');
+
   return (
     <Card className="flex items-center justify-between gap-4">
       <div className="flex min-w-0 flex-col gap-0.5">
@@ -19,10 +22,10 @@ export function CatalogueRow({ item, onEdit, onDelete }: CatalogueRowProps) {
       </div>
       <div className="flex shrink-0 gap-1">
         <Button variant="ghost" size="sm" onClick={() => onEdit(item)}>
-          Редактирай
+          {t('edit')}
         </Button>
         <Button variant="ghost" size="sm" onClick={() => onDelete(item)}>
-          Изтрий
+          {t('delete')}
         </Button>
       </div>
     </Card>
