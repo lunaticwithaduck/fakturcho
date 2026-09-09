@@ -6,9 +6,17 @@ const COUNTRY_PREFIX_PATTERN = /^[A-Z]{2}/;
 
 const PERSONAL_CODICE_FISCALE_PATTERN = /^[A-Z]{6}\d{2}[A-EHLMPRST]\d{2}[A-Z]\d{3}[A-Z]$/;
 
+const CODICE_DESTINATARIO_MISSING =
+  'Codice Destinatario (7-character SDI recipient channel code) or recipient PEC email — not yet modeled on DocumentDto/Client';
+
 export interface FatturaPaReadiness {
   ready: boolean;
   missingFields: string[];
+}
+
+export interface CheckFatturaPaReadinessOptions {
+  sdiRecipientCode?: string;
+  pec?: string;
 }
 
 export function isValidPartitaIva(value: string): boolean {
@@ -35,7 +43,10 @@ export function isValidCodiceFiscale(value: string): boolean {
   return PERSONAL_CODICE_FISCALE_PATTERN.test(trimmed);
 }
 
-export function checkFatturaPaReadiness(document: DocumentDto): FatturaPaReadiness {
+export function checkFatturaPaReadiness(
+  document: DocumentDto,
+  options: CheckFatturaPaReadinessOptions = {},
+): FatturaPaReadiness {
   if (!FATTURAPA_DOCUMENT_TYPES.includes(document.documentType)) {
     return {
       ready: false,
@@ -82,9 +93,9 @@ export function checkFatturaPaReadiness(document: DocumentDto): FatturaPaReadine
     missingFields.push('at least one line item');
   }
 
-  missingFields.push(
-    'Codice Destinatario (7-character SDI recipient channel code) or recipient PEC email — not yet modeled on DocumentDto/Client',
-  );
+  if (!options.sdiRecipientCode && !options.pec) {
+    missingFields.push(CODICE_DESTINATARIO_MISSING);
+  }
 
   return { ready: missingFields.length === 0, missingFields };
 }

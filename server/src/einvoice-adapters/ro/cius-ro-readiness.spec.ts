@@ -4,11 +4,33 @@ import { roDomesticStandardInvoice } from './__fixtures__/ro-domestic-standard';
 import { checkCiusRoReadiness } from './cius-ro-readiness';
 
 describe('checkCiusRoReadiness — fully populated RO fixture', () => {
-  it('is ready for the RO domestic standard-rate fixture', () => {
+  it('flags both counties as missing when no options are supplied', () => {
     expect(checkCiusRoReadiness(roDomesticStandardInvoice)).toEqual({
+      ready: false,
+      missingFields: [
+        'issuer county/județ (CIUS-RO CountrySubentity)',
+        'recipient county/județ (CIUS-RO CountrySubentity)',
+      ],
+    });
+  });
+
+  it('is ready once both counties are supplied via options', () => {
+    expect(
+      checkCiusRoReadiness(roDomesticStandardInvoice, {
+        issuerCountyRegion: 'București',
+        recipientCountyRegion: 'Cluj',
+      }),
+    ).toEqual({
       ready: true,
       missingFields: [],
     });
+  });
+
+  it('still flags the recipient county when only the issuer county is supplied', () => {
+    const result = checkCiusRoReadiness(roDomesticStandardInvoice, {
+      issuerCountyRegion: 'București',
+    });
+    expect(result.missingFields).toEqual(['recipient county/județ (CIUS-RO CountrySubentity)']);
   });
 });
 
@@ -96,7 +118,8 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
         eik: 'HRB 654321',
       },
     };
-    const result = checkCiusRoReadiness(notRomanian);
+    const result = checkCiusRoReadiness(notRomanian, { issuerCountyRegion: 'București' });
     expect(result.missingFields.some((field) => field.includes('CUI'))).toBe(false);
+    expect(result.missingFields.some((field) => field.includes('county'))).toBe(false);
   });
 });

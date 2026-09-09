@@ -21,6 +21,13 @@ const PAYMENT_MEANS_TO_MODALITA: Record<string, string> = {
 
 const COUNTRY_PREFIX_PATTERN = /^[A-Z]{2}/;
 
+const DEFAULT_CODICE_DESTINATARIO = '0000000';
+
+export interface ToFatturaPaXmlOptions {
+  sdiRecipientCode?: string;
+  pec?: string;
+}
+
 function assertFatturaPaEligible(documentType: DocumentType): FatturaPaDocumentType {
   if (
     documentType === 'invoice' ||
@@ -40,15 +47,19 @@ function progressivoInvio(documentId: string): string {
   return sanitized || '0000000001';
 }
 
-function transmissionBlock(document: DocumentDto): string {
+function transmissionBlock(document: DocumentDto, options: ToFatturaPaXmlOptions): string {
   const senderVat = document.issuer.vatNumber ?? '';
   const senderDigits = COUNTRY_PREFIX_PATTERN.test(senderVat) ? senderVat.slice(2) : senderVat;
+  const codiceDestinatario = options.sdiRecipientCode ?? DEFAULT_CODICE_DESTINATARIO;
+  const pecBlock =
+    !options.sdiRecipientCode && options.pec ? el('PECDestinatario', options.pec) : '';
   return (
     '<DatiTrasmissione>' +
     `<IdTrasmittente>${el('IdPaese', 'IT')}${el('IdCodice', senderDigits || '00000000000')}</IdTrasmittente>` +
     el('ProgressivoInvio', progressivoInvio(document.id)) +
     el('FormatoTrasmissione', 'FPR12') +
-    el('CodiceDestinatario', '0000000') +
+    el('CodiceDestinatario', codiceDestinatario) +
+    pecBlock +
     '</DatiTrasmissione>'
   );
 }
@@ -84,12 +95,12 @@ function paymentBlock(document: DocumentDto): string {
   );
 }
 
-export function toFatturaPaXml(document: DocumentDto): string {
+export function toFatturaPaXml(document: DocumentDto, options: ToFatturaPaXmlOptions = {}): string {
   const kind = assertFatturaPaEligible(document.documentType);
 
   const header =
     '<FatturaElettronicaHeader>' +
-    transmissionBlock(document) +
+    transmissionBlock(document, options) +
     cedentePrestatoreBlock(document.issuer) +
     cessionarioCommittenteBlock(document.recipient) +
     '</FatturaElettronicaHeader>';

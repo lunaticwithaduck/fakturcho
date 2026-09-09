@@ -65,6 +65,35 @@ describe('toFatturaPaXml — IT domestic, standard 22% rate', () => {
     expect(xml).toContain('<DataScadenzaPagamento>2026-09-19</DataScadenzaPagamento>');
     expect(xml).toContain('<IBAN>IT60X0542811101000000123456</IBAN>');
   });
+
+  it('does not emit PECDestinatario when no options are supplied', () => {
+    expect(xml).not.toContain('<PECDestinatario>');
+  });
+});
+
+describe('toFatturaPaXml — options: sdiRecipientCode and pec', () => {
+  it('uses the supplied SDI recipient code instead of the zero placeholder', () => {
+    const xml = toFatturaPaXml(itDomesticStandardInvoice, { sdiRecipientCode: 'ABC1234' });
+    expect(xml).toContain('<CodiceDestinatario>ABC1234</CodiceDestinatario>');
+    expect(xml).not.toContain('<PECDestinatario>');
+  });
+
+  it('keeps the zero placeholder and adds PECDestinatario when only a PEC is supplied', () => {
+    const xml = toFatturaPaXml(itDomesticStandardInvoice, {
+      pec: 'fatture@bianchi.legalmail.it',
+    });
+    expect(xml).toContain('<CodiceDestinatario>0000000</CodiceDestinatario>');
+    expect(xml).toContain('<PECDestinatario>fatture@bianchi.legalmail.it</PECDestinatario>');
+  });
+
+  it('prefers the SDI recipient code and omits PECDestinatario when both are supplied', () => {
+    const xml = toFatturaPaXml(itDomesticStandardInvoice, {
+      sdiRecipientCode: 'ABC1234',
+      pec: 'fatture@bianchi.legalmail.it',
+    });
+    expect(xml).toContain('<CodiceDestinatario>ABC1234</CodiceDestinatario>');
+    expect(xml).not.toContain('<PECDestinatario>');
+  });
 });
 
 describe('toFatturaPaXml — Natura codes for non-standard VAT categories', () => {

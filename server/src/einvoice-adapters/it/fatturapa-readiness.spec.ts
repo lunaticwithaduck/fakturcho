@@ -43,10 +43,30 @@ describe('isValidCodiceFiscale', () => {
 });
 
 describe('checkFatturaPaReadiness — the golden IT domestic fixture', () => {
-  it('flags only the not-yet-modeled Codice Destinatario / PEC field', () => {
+  it('flags only the not-yet-modeled Codice Destinatario / PEC field when no options are supplied', () => {
     expect(checkFatturaPaReadiness(itDomesticStandardInvoice)).toEqual({
       ready: false,
       missingFields: [CODICE_DESTINATARIO_MESSAGE],
+    });
+  });
+
+  it('is ready when an SDI recipient code is supplied via options', () => {
+    expect(
+      checkFatturaPaReadiness(itDomesticStandardInvoice, { sdiRecipientCode: 'ABC1234' }),
+    ).toEqual({
+      ready: true,
+      missingFields: [],
+    });
+  });
+
+  it('is ready when a recipient PEC address is supplied via options', () => {
+    expect(
+      checkFatturaPaReadiness(itDomesticStandardInvoice, {
+        pec: 'fatture@bianchi.legalmail.it',
+      }),
+    ).toEqual({
+      ready: true,
+      missingFields: [],
     });
   });
 });
