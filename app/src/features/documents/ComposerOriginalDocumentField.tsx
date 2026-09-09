@@ -34,7 +34,7 @@ export function ComposerOriginalDocumentField({
     >
       {options.map((document) => (
         <SelectItem key={document.id} value={document.id}>
-          {formatDocumentTitle(document)} —{' '}
+          {formatDocumentTitle(document, (key, values) => t(`title.${key}`, values))} —{' '}
           {document.recipientCompanyName ?? t('composer.originalDocument.noClient')}
         </SelectItem>
       ))}
