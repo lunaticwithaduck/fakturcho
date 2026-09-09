@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
+import { LocaleProvider } from '../i18n/LocaleProvider';
 import { Providers } from '../store/providers';
 import { uiFont } from './fonts';
 import './globals.css';
@@ -40,7 +41,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="bg" className={uiFont.variable}>
       <body className="bg-surface font-sans text-text antialiased">
         <NextIntlClientProvider>
-          <Providers>{children}</Providers>
+          <LocaleProvider>
+            <Providers>{children}</Providers>
+          </LocaleProvider>
         </NextIntlClientProvider>
         {umamiSrc && umamiWebsiteId ? (
           <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
