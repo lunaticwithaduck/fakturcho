@@ -37,7 +37,6 @@ describe('PeppolService.transmit', () => {
       status: EinvoiceTransmissionStatus.SENT,
       provider: 'fake',
       providerMessageId: 'msg-1',
-      retryCount: 0,
     });
   });
 
@@ -57,7 +56,6 @@ describe('PeppolService.transmit', () => {
       provider: 'fake',
       providerMessageId: '',
       errorText: 'malformed ublXml',
-      retryCount: 0,
     });
   });
 
