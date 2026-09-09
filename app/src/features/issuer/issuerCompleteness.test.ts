@@ -24,18 +24,18 @@ const BASE: IssuerProfileDto = {
 };
 
 describe('getMissingIssuerFields', () => {
-  it('reports nothing missing for a complete non-VAT-registered profile', () => {
+  it('reports nothing missing for a complete non-VAT-registered BG profile', () => {
     expect(getMissingIssuerFields(BASE)).toEqual([]);
   });
 
-  it('lists every blank required field', () => {
+  it('lists every blank required field for BG', () => {
     const profile: IssuerProfileDto = { ...BASE, companyName: null, city: '  ' };
-    expect(getMissingIssuerFields(profile)).toEqual(['Фирма', 'Град']);
+    expect(getMissingIssuerFields(profile)).toEqual(['companyName', 'city']);
   });
 
   it('requires a VAT number only when VAT-registered', () => {
     const registeredWithout: IssuerProfileDto = { ...BASE, vatRegistered: true, vatNumber: null };
-    expect(getMissingIssuerFields(registeredWithout)).toEqual(['ДДС номер']);
+    expect(getMissingIssuerFields(registeredWithout)).toEqual(['vatNumber']);
 
     const registeredWith: IssuerProfileDto = {
       ...BASE,
@@ -43,5 +43,39 @@ describe('getMissingIssuerFields', () => {
       vatNumber: 'BG123456789',
     };
     expect(getMissingIssuerFields(registeredWith)).toEqual([]);
+  });
+
+  it('requires street and postcode instead of addressLine for a non-BG country', () => {
+    const deProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'DE',
+      addressLine: null,
+      street: null,
+      postcode: null,
+    };
+    expect(getMissingIssuerFields(deProfile)).toEqual(['street', 'postcode']);
+  });
+
+  it('does not require eik for a non-BG country', () => {
+    const deProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'DE',
+      eik: null,
+      street: 'Hauptstr. 1',
+      postcode: '10115',
+    };
+    expect(getMissingIssuerFields(deProfile)).toEqual([]);
+  });
+
+  it('is complete for a fully filled non-EU country profile', () => {
+    const usProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'US',
+      eik: null,
+      addressLine: null,
+      street: '1 Main St',
+      postcode: '10001',
+    };
+    expect(getMissingIssuerFields(usProfile)).toEqual([]);
   });
 });

@@ -3,6 +3,7 @@
 import { signOut } from '@app/auth';
 import { Button } from '@design/components';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 type SignOutButtonProps = {
@@ -10,6 +11,7 @@ type SignOutButtonProps = {
 };
 
 export function SignOutButton({ className }: SignOutButtonProps) {
+  const t = useTranslations('shell');
   const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
@@ -27,7 +29,7 @@ export function SignOutButton({ className }: SignOutButtonProps) {
       onClick={handleSignOut}
       {...(className !== undefined ? { className } : {})}
     >
-      Изход
+      {t('signOut')}
     </Button>
   );
 }

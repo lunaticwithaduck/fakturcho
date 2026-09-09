@@ -8,7 +8,10 @@ export interface IssuerProfileFormValues {
   eik: string;
   mol: string;
   addressLine: string;
+  street: string;
+  postcode: string;
   city: string;
+  country: string;
   phone: string;
   vatRegistered: boolean;
   vatNumber: string;
@@ -24,7 +27,10 @@ function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
     eik: profile.eik ?? '',
     mol: profile.mol ?? '',
     addressLine: profile.addressLine ?? '',
+    street: profile.street ?? '',
+    postcode: profile.postcode ?? '',
     city: profile.city ?? '',
+    country: profile.country,
     phone: profile.phone ?? '',
     vatRegistered: profile.vatRegistered,
     vatNumber: profile.vatNumber ?? '',
@@ -41,7 +47,10 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
     eik: values.eik.trim() || null,
     mol: values.mol.trim() || null,
     addressLine: values.addressLine.trim() || null,
+    street: values.street.trim() || null,
+    postcode: values.postcode.trim() || null,
     city: values.city.trim() || null,
+    country: values.country,
     phone: values.phone.trim() || null,
     vatRegistered: values.vatRegistered,
     vatNumber: values.vatRegistered ? values.vatNumber.trim() || null : null,

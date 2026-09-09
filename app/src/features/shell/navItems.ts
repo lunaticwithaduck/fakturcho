@@ -1,14 +1,16 @@
+export type NavItemLabelKey = 'documents' | 'clients' | 'catalogue' | 'billing' | 'profile';
+
 export interface NavItem {
   href: string;
-  label: string;
+  labelKey: NavItemLabelKey;
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { href: '/documents', label: 'Документи' },
-  { href: '/clients', label: 'Клиенти' },
-  { href: '/catalogue', label: 'Каталог' },
-  { href: '/billing', label: 'Билинг' },
-  { href: '/profile', label: 'Профил' },
+  { href: '/documents', labelKey: 'documents' },
+  { href: '/clients', labelKey: 'clients' },
+  { href: '/catalogue', labelKey: 'catalogue' },
+  { href: '/billing', labelKey: 'billing' },
+  { href: '/profile', labelKey: 'profile' },
 ];
 
 export function isNavItemActive(pathname: string, href: string): boolean {

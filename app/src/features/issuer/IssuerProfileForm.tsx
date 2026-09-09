@@ -2,6 +2,7 @@
 
 import { Button, Card, toast } from '@design/components';
 import type { IssuerProfileDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { IssuerBankFields } from './IssuerBankFields';
 import { IssuerCompanyFields } from './IssuerCompanyFields';
 import { IssuerProfileCompletenessHint } from './IssuerProfileCompletenessHint';
@@ -13,13 +14,14 @@ interface IssuerProfileFormProps {
 }
 
 export function IssuerProfileForm({ profile }: IssuerProfileFormProps) {
+  const t = useTranslations('issuer');
   const form = useIssuerProfileForm(profile, () => {
-    toast({ title: 'Профилът е запазен' });
+    toast({ title: t('savedToast') });
   });
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-5">
-      <h1 className="text-2xl font-bold text-text">Профил на издателя</h1>
+      <h1 className="text-2xl font-bold text-text">{t('title')}</h1>
       <IssuerProfileCompletenessHint profile={profile} />
       <form className="flex flex-col gap-6" onSubmit={form.handleSubmit} noValidate>
         <Card>
@@ -33,7 +35,7 @@ export function IssuerProfileForm({ profile }: IssuerProfileFormProps) {
         </Card>
         {form.error ? <p className="text-sm font-medium text-danger">{form.error}</p> : null}
         <Button type="submit" disabled={form.isSubmitting} className="self-start">
-          {form.isSubmitting ? 'Запазване...' : 'Запази профила'}
+          {form.isSubmitting ? t('saving') : t('save')}
         </Button>
       </form>
     </div>

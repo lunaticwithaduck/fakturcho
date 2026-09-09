@@ -3,7 +3,7 @@ import { isNavItemActive, NAV_ITEMS } from './navItems';
 
 describe('NAV_ITEMS', () => {
   it('links the billing page', () => {
-    expect(NAV_ITEMS).toContainEqual({ href: '/billing', label: 'Билинг' });
+    expect(NAV_ITEMS).toContainEqual({ href: '/billing', labelKey: 'billing' });
   });
 });
 

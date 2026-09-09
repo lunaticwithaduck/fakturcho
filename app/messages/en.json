@@ -8,5 +8,117 @@
     "submit": "Log in",
     "noAccount": "Don't have an account?",
     "signupLink": "Sign up"
+  },
+  "issuer": {
+    "title": "Issuer profile",
+    "savedToast": "Profile saved",
+    "saving": "Saving...",
+    "save": "Save profile",
+    "companyFields": {
+      "heading": "Company details",
+      "companyName": "Company",
+      "eik": "Company ID / VAT ID",
+      "mol": "Authorized representative",
+      "country": "Country",
+      "addressLine": "Address",
+      "street": "Street and number",
+      "postcode": "Postal code",
+      "city": "City",
+      "phone": "Phone"
+    },
+    "vatFields": {
+      "heading": "VAT registration",
+      "vatRegistered": "VAT registered",
+      "vatNumber": "VAT number"
+    },
+    "bankFields": {
+      "heading": "Bank account",
+      "bankName": "Bank",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "altIban": "Alternative account"
+    },
+    "completenessHint": {
+      "title": "Profile is not ready for issuing",
+      "body": "Complete the following fields to be able to issue documents: {fields}.",
+      "fields": {
+        "companyName": "Company",
+        "eik": "Company ID / VAT ID",
+        "addressLine": "Address",
+        "street": "Street and number",
+        "postcode": "Postal code",
+        "city": "City",
+        "vatNumber": "VAT number"
+      }
+    },
+    "countries": {
+      "AT": "Austria",
+      "BE": "Belgium",
+      "BG": "Bulgaria",
+      "CH": "Switzerland",
+      "CY": "Cyprus",
+      "CZ": "Czechia",
+      "DE": "Germany",
+      "DK": "Denmark",
+      "EE": "Estonia",
+      "ES": "Spain",
+      "FI": "Finland",
+      "FR": "France",
+      "GB": "United Kingdom",
+      "GR": "Greece",
+      "HR": "Croatia",
+      "HU": "Hungary",
+      "IE": "Ireland",
+      "IT": "Italy",
+      "LT": "Lithuania",
+      "LU": "Luxembourg",
+      "LV": "Latvia",
+      "MT": "Malta",
+      "NL": "Netherlands",
+      "NO": "Norway",
+      "PL": "Poland",
+      "PT": "Portugal",
+      "RO": "Romania",
+      "SE": "Sweden",
+      "SI": "Slovenia",
+      "SK": "Slovakia",
+      "US": "United States"
+    }
+  },
+  "shell": {
+    "brandName": "Fakturcho",
+    "signOut": "Sign out",
+    "navItems": {
+      "documents": "Documents",
+      "clients": "Clients",
+      "catalogue": "Catalogue",
+      "billing": "Billing",
+      "profile": "Profile"
+    },
+    "confirmDialog": {
+      "cancel": "Cancel",
+      "confirming": "Please wait..."
+    },
+    "apiErrorFallback": "An error occurred. Please try again.",
+    "apiErrors": {
+      "NUMBER_COLLISION": "The number is already in use. Please try again.",
+      "SERIES_OVERRIDE_LOCKED": "The series already has issued documents — the next number is fixed.",
+      "DOCUMENT_IMMUTABLE": "An issued document cannot be changed.",
+      "DOCUMENT_NOT_ISSUED": "The draft cannot be sent. Issue the document first.",
+      "ORIGINAL_DOCUMENT_REQUIRED": "Select the original document to continue.",
+      "ISSUER_PROFILE_INCOMPLETE": "The issuer profile is incomplete. Fill in the company details to issue documents.",
+      "VAT_GROUND_NOT_ALLOWED": "This VAT exemption ground is not allowed.",
+      "CLIENT_EIK_DUPLICATE": "A client with this company ID already exists.",
+      "SUBSCRIPTION_REQUIRED": "An active subscription is required.",
+      "INSUFFICIENT_CREDITS": "Insufficient credit. Issuing a document costs €0.10.",
+      "VALIDATION_FAILED": "Check the entered data.",
+      "NOT_FOUND": "The record was not found.",
+      "UNAUTHORIZED": "You do not have access.",
+      "FORBIDDEN": "You do not have access.",
+      "CHECKOUT_NOT_CONFIGURED": "Payments are not fully configured. Contact us — no need to try again.",
+      "PAYMENT_PROVIDER_ERROR": "The payment provider declined the request. Please try again later.",
+      "PAYMENT_PROVIDER_UNREACHABLE": "The payment provider is not responding. Please try again in a few minutes.",
+      "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
+    }
   }
 }
