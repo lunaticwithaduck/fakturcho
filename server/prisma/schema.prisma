@@ -39,6 +39,13 @@ enum VatCategory {
   O
 }
 
+enum EinvoiceTransmissionStatus {
+  QUEUED
+  SENT
+  DELIVERED
+  REJECTED
+}
+
 model Account {
   id                 String   @id @default(cuid())
   creditBalanceCents Int      @default(0)
@@ -275,9 +282,10 @@ model Document {
   recipientMol         String?
   documentLanguage     String?
 
-  lineItems         LineItem[]
-  discounts         Discount[]
-  creditLedgerEntry CreditLedgerEntry?
+  lineItems            LineItem[]
+  discounts            Discount[]
+  creditLedgerEntry    CreditLedgerEntry?
+  einvoiceTransmission EinvoiceTransmission?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -357,4 +365,21 @@ model CreditLedgerEntry {
 
   @@index([accountId, createdAt])
   @@map("credit_ledger_entry")
+}
+
+model EinvoiceTransmission {
+  id                String                     @id @default(cuid())
+  documentId        String                     @unique
+  document          Document                   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  status            EinvoiceTransmissionStatus @default(QUEUED)
+  provider          String
+  providerMessageId String?
+  receipt           String?
+  errorText         String?
+  retryCount        Int                        @default(0)
+  createdAt         DateTime                   @default(now())
+  updatedAt         DateTime                   @updatedAt
+
+  @@index([status])
+  @@map("einvoice_transmission")
 }
