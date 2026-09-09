@@ -129,4 +129,52 @@ describe('DocumentIssuanceService', () => {
     expect(refetched.issuer.mol).toBeNull();
     expect(refetched.issuer.companyName).toBe('Тест ЕООД');
   });
+
+  it('issuance snapshot copies issuer and recipient country, street and postcode', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'DE',
+      street: 'Musterstrasse 1',
+      postcode: '10115',
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'DE',
+      street: 'Kundenweg 2',
+      postcode: '10117',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+
+    expect(issued.issuer.country).toBe('DE');
+    expect(issued.issuer.street).toBe('Musterstrasse 1');
+    expect(issued.issuer.postcode).toBe('10115');
+    expect(issued.recipient.country).toBe('DE');
+    expect(issued.recipient.street).toBe('Kundenweg 2');
+    expect(issued.recipient.postcode).toBe('10117');
+  });
+
+  it('documentLanguage is set from the client at draft save and survives issuance unchanged', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const client = await createTestClient(prisma, accountId, { documentLanguage: 'en' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    expect(draft.documentLanguage).toBe('en');
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.documentLanguage).toBe('en');
+
+    await prisma.client.update({ where: { id: client.id }, data: { documentLanguage: 'bg' } });
+    const refetched = await documentsService.get(accountId, issued.id);
+    expect(refetched.documentLanguage).toBe('en');
+  });
 });

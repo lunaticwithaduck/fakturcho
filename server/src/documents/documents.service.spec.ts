@@ -8,7 +8,12 @@ import type { TestDatabase } from '../testing/test-database';
 import { startTestDatabase } from '../testing/test-database';
 import { DocumentIssuanceService } from './document-issuance.service';
 import { DocumentsService } from './documents.service';
-import { createAccount, createCompleteIssuerProfile, draftRequest } from './test-support';
+import {
+  createAccount,
+  createCompleteIssuerProfile,
+  createTestClient,
+  draftRequest,
+} from './test-support';
 
 describe('DocumentsService', () => {
   let db: TestDatabase;
@@ -92,5 +97,162 @@ describe('DocumentsService', () => {
     await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
       code: 'ISSUER_PROFILE_INCOMPLETE',
     });
+  });
+
+  it('BG-default draft behavior is unchanged: no clientId, no language, no per-line VAT fields', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    expect(draft.documentLanguage).toBeNull();
+    expect(draft.buyerReference).toBeNull();
+    expect(draft.paymentMeansCode).toBeNull();
+    expect(draft.paymentTermsNote).toBeNull();
+    expect(draft.deliveryDate).toBeNull();
+    expect(draft.lineItems).toHaveLength(1);
+    expect(draft.lineItems[0]).toMatchObject({
+      vatRateBp: 2000,
+      vatCategory: 'S',
+      unitCode: null,
+    });
+  });
+
+  it('buyerReference, paymentMeansCode, paymentTermsNote and deliveryDate round-trip through a save', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        buyerReference: 'PO-1234',
+        paymentMeansCode: '30',
+        paymentTermsNote: 'Net 30',
+        deliveryDate: '2026-09-15',
+      }),
+    );
+
+    expect(draft.buyerReference).toBe('PO-1234');
+    expect(draft.paymentMeansCode).toBe('30');
+    expect(draft.paymentTermsNote).toBe('Net 30');
+    expect(draft.deliveryDate).toBe('2026-09-15');
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.buyerReference).toBe('PO-1234');
+    expect(refetched.paymentMeansCode).toBe('30');
+    expect(refetched.paymentTermsNote).toBe('Net 30');
+    expect(refetched.deliveryDate).toBe('2026-09-15');
+  });
+
+  it('per-line vatRateBp, vatCategory and unitCode round-trip through a save', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        lineItems: [
+          {
+            name: 'Консултация',
+            quantity: '2',
+            unitPrice: 5000,
+            sortOrder: 0,
+            vatRateBp: 900,
+            vatCategory: 'Z',
+            unitCode: 'HUR',
+          },
+        ],
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({
+      vatRateBp: 900,
+      vatCategory: 'Z',
+      unitCode: 'HUR',
+    });
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.lineItems[0]).toMatchObject({
+      vatRateBp: 900,
+      vatCategory: 'Z',
+      unitCode: 'HUR',
+    });
+  });
+
+  it('documentLanguage is resolved from the client at draft save time', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const client = await createTestClient(prisma, accountId, { documentLanguage: 'en' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    expect(draft.documentLanguage).toBe('en');
+
+    const clientWithoutLanguage = await createTestClient(prisma, accountId);
+    const draftWithoutLanguage = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: clientWithoutLanguage.id }),
+    );
+    expect(draftWithoutLanguage.documentLanguage).toBeNull();
+  });
+
+  it('reverse-charge: an unset line vatCategory defaults to AE at 0 rate for a cross-border EU B2B pair', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    const client = await createTestClient(prisma, accountId, { country: 'DE' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'AE', vatRateBp: 0 });
+  });
+
+  it('reverse-charge: an explicit vatCategory is always honored, even cross-border', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    const client = await createTestClient(prisma, accountId, { country: 'DE' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [
+          {
+            name: 'Услуга',
+            quantity: '1',
+            unitPrice: 1000,
+            sortOrder: 0,
+            vatCategory: 'S',
+            vatRateBp: 2000,
+          },
+        ],
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+  });
+
+  it('reverse-charge does not apply for a domestic BG-BG pair', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    const client = await createTestClient(prisma, accountId, { country: 'BG' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
   });
 });

@@ -10,6 +10,11 @@ export async function createCompleteIssuerProfile(
   prisma: PrismaClient,
   accountId: string,
   mol: string | null = 'Иван Иванов',
+  overrides: Partial<{
+    country: string;
+    street: string | null;
+    postcode: string | null;
+  }> = {},
 ) {
   return prisma.issuerProfile.create({
     data: {
@@ -20,12 +25,22 @@ export async function createCompleteIssuerProfile(
       addressLine: 'ул. Тестова 1',
       city: 'София',
       vatRegistered: false,
+      ...overrides,
     },
   });
 }
 
-export async function createTestClient(prisma: PrismaClient, accountId: string) {
-  return prisma.client.create({ data: { accountId, companyName: 'Клиент ООД' } });
+export async function createTestClient(
+  prisma: PrismaClient,
+  accountId: string,
+  overrides: Partial<{
+    country: string;
+    street: string | null;
+    postcode: string | null;
+    documentLanguage: string | null;
+  }> = {},
+) {
+  return prisma.client.create({ data: { accountId, companyName: 'Клиент ООД', ...overrides } });
 }
 
 export function draftRequest(overrides: Partial<SaveDraftRequest> = {}): SaveDraftRequest {

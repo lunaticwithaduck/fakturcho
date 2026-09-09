@@ -10,6 +10,7 @@ import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { computeLineTotal } from '../money/totals';
+import { resolveLineVatCategory } from '../vat-eu/reverse-charge';
 import { toDocumentDto } from './document.mapper';
 import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
@@ -47,7 +48,16 @@ export class DocumentsService {
     }
 
     const issuerProfile = await this.prisma.issuerProfile.findUnique({ where: { accountId } });
-    const data = buildDraftData(accountId, request, issuerProfile?.vatRegistered ?? false);
+    const client = request.clientId
+      ? await this.prisma.client.findFirst({ where: { id: request.clientId, accountId } })
+      : null;
+
+    const data = {
+      ...buildDraftData(accountId, request, issuerProfile?.vatRegistered ?? false),
+      documentLanguage: client?.documentLanguage ?? null,
+    };
+
+    const issuerCountry = issuerProfile?.country ?? 'BG';
 
     const record = await this.prisma.$transaction(async (tx) => {
       const document = existingId
@@ -59,14 +69,26 @@ export class DocumentsService {
 
       if (request.lineItems.length > 0) {
         await tx.lineItem.createMany({
-          data: request.lineItems.map((line, index) => ({
-            documentId: document.id,
-            name: line.name,
-            quantity: line.quantity,
-            unitPrice: line.unitPrice,
-            lineTotal: computeLineTotal(line.quantity, line.unitPrice),
-            sortOrder: line.sortOrder ?? index,
-          })),
+          data: request.lineItems.map((line, index) => {
+            const vatCategory =
+              line.vatCategory !== undefined
+                ? line.vatCategory
+                : resolveLineVatCategory(issuerCountry, client?.country ?? null);
+            const vatRateBp =
+              line.vatRateBp !== undefined ? line.vatRateBp : vatCategory === 'AE' ? 0 : 2000;
+
+            return {
+              documentId: document.id,
+              name: line.name,
+              quantity: line.quantity,
+              unitPrice: line.unitPrice,
+              lineTotal: computeLineTotal(line.quantity, line.unitPrice),
+              sortOrder: line.sortOrder ?? index,
+              vatRateBp,
+              vatCategory,
+              unitCode: line.unitCode ?? null,
+            };
+          }),
         });
       }
 
