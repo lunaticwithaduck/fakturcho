@@ -39,6 +39,7 @@ export const roDomesticStandardInvoice: DocumentDto = {
     addressLine: 'Str. Victoriei 10, București',
     street: 'Str. Victoriei 10',
     postcode: '010071',
+    countyRegion: null,
     city: 'București',
     country: 'RO',
     phone: '+40 21 123 4567',
@@ -56,9 +57,12 @@ export const roDomesticStandardInvoice: DocumentDto = {
     address: 'Str. Republicii 5, Cluj-Napoca',
     street: 'Str. Republicii 5',
     postcode: '400015',
+    countyRegion: null,
     country: 'RO',
     email: 'contabilitate@client-exemplu.ro',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

@@ -39,6 +39,7 @@ export const esDomesticStandardInvoice: DocumentDto = {
     addressLine: 'Calle Mayor 10, 28013 Madrid',
     street: 'Calle Mayor 10',
     postcode: '28013',
+    countyRegion: null,
     city: 'Madrid',
     country: 'ES',
     phone: '+34 910 123 456',
@@ -56,9 +57,12 @@ export const esDomesticStandardInvoice: DocumentDto = {
     address: 'Valencia',
     street: 'Avenida del Puerto 22',
     postcode: '46023',
+    countyRegion: null,
     country: 'ES',
     email: 'administracion@comerciallevante.es',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

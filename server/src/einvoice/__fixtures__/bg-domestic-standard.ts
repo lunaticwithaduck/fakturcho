@@ -39,6 +39,7 @@ export const bgDomesticStandardInvoice: DocumentDto = {
     addressLine: 'ул. Витоша 15, гр. София',
     street: 'ул. Витоша 15',
     postcode: '1000',
+    countyRegion: null,
     city: 'София',
     country: 'BG',
     phone: '+359 888 123 456',
@@ -56,9 +57,12 @@ export const bgDomesticStandardInvoice: DocumentDto = {
     address: 'бул. Свобода 5, гр. Пловдив',
     street: 'бул. Свобода 5',
     postcode: '4000',
+    countyRegion: null,
     country: 'BG',
     email: 'office@client.bg',
     mol: 'Петър Георгиев',
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

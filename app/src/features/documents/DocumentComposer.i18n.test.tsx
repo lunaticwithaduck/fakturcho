@@ -52,6 +52,7 @@ const ISSUER_SNAPSHOT: IssuerSnapshotDto = {
   addressLine: null,
   street: null,
   postcode: null,
+  countyRegion: null,
   city: null,
   country: null,
   phone: null,
@@ -70,9 +71,12 @@ const RECIPIENT_SNAPSHOT: RecipientSnapshotDto = {
   address: null,
   street: null,
   postcode: null,
+  countyRegion: null,
   country: null,
   email: null,
   mol: null,
+  sdiRecipientCode: null,
+  pec: null,
 };
 
 const BASE_DOCUMENT: DocumentDto = {

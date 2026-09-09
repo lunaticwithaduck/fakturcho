@@ -39,6 +39,7 @@ export const deDomesticB2GInvoice: DocumentDto = {
     addressLine: 'Musterstraße 10, 10115 Berlin',
     street: 'Musterstraße 10',
     postcode: '10115',
+    countyRegion: null,
     city: 'Berlin',
     country: 'DE',
     phone: '+49 30 1234567',
@@ -56,9 +57,12 @@ export const deDomesticB2GInvoice: DocumentDto = {
     address: 'Rathausplatz 1, 12345 Musterstadt',
     street: 'Rathausplatz 1',
     postcode: '12345',
+    countyRegion: null,
     country: 'DE',
     email: 'rechnungseingang@musterstadt.de',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

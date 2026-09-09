@@ -39,6 +39,7 @@ export const plDomesticStandardInvoice: DocumentDto = {
     addressLine: 'ul. Marszałkowska 10, 00-590 Warszawa',
     street: 'ul. Marszałkowska 10',
     postcode: '00-590',
+    countyRegion: null,
     city: 'Warszawa',
     country: 'PL',
     phone: '+48 22 123 45 67',
@@ -56,9 +57,12 @@ export const plDomesticStandardInvoice: DocumentDto = {
     address: 'ul. Nowy Świat 5, 00-029 Warszawa',
     street: 'ul. Nowy Świat 5',
     postcode: '00-029',
+    countyRegion: null,
     country: 'PL',
     email: 'biuro@klient.pl',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

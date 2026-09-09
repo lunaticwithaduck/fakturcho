@@ -39,6 +39,7 @@ export const frDomesticStandardInvoice: DocumentDto = {
     addressLine: '10 rue de la Paix, 75002 Paris',
     street: '10 rue de la Paix',
     postcode: '75002',
+    countyRegion: null,
     city: 'Paris',
     country: 'FR',
     phone: '+33 1 23 45 67 89',
@@ -56,9 +57,12 @@ export const frDomesticStandardInvoice: DocumentDto = {
     address: '5 avenue des Champs-Élysées, 75008 Paris',
     street: '5 avenue des Champs-Élysées',
     postcode: '75008',
+    countyRegion: null,
     country: 'FR',
     email: 'contact@client-exemple.fr',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

@@ -266,6 +266,7 @@ model Document {
   issuerAddressLine   String?
   issuerStreet        String?
   issuerPostcode      String?
+  issuerCountyRegion  String?
   issuerCity          String?
   issuerCountry       String?
   issuerPhone         String?
@@ -276,16 +277,19 @@ model Document {
   issuerBic           String?
   issuerAltIban       String?
 
-  recipientCompanyName String?
-  recipientEik         String?
-  recipientVatNumber   String?
-  recipientAddress     String?
-  recipientStreet      String?
-  recipientPostcode    String?
-  recipientCountry     String?
-  recipientEmail       String?
-  recipientMol         String?
-  documentLanguage     String?
+  recipientCompanyName      String?
+  recipientEik              String?
+  recipientVatNumber        String?
+  recipientAddress          String?
+  recipientStreet           String?
+  recipientPostcode         String?
+  recipientCountyRegion     String?
+  recipientCountry          String?
+  recipientEmail            String?
+  recipientMol              String?
+  recipientSdiRecipientCode String?
+  recipientPec              String?
+  documentLanguage          String?
 
   lineItems            LineItem[]
   discounts            Discount[]

@@ -30,6 +30,7 @@ export interface IssuerSnapshotDto {
   addressLine: string | null;
   street: string | null;
   postcode: string | null;
+  countyRegion: string | null;
   city: string | null;
   country: string | null;
   phone: string | null;
@@ -48,9 +49,12 @@ export interface RecipientSnapshotDto {
   address: string | null;
   street: string | null;
   postcode: string | null;
+  countyRegion: string | null;
   country: string | null;
   email: string | null;
   mol: string | null;
+  sdiRecipientCode: string | null;
+  pec: string | null;
 }
 
 export interface DocumentDto {

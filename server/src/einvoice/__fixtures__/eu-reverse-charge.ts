@@ -39,6 +39,7 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
     addressLine: 'ул. Витоша 15, гр. София',
     street: 'ул. Витоша 15',
     postcode: '1000',
+    countyRegion: null,
     city: 'София',
     country: 'BG',
     phone: '+359 888 123 456',
@@ -56,9 +57,12 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
     address: 'Musterstraße 10, 10115 Berlin',
     street: 'Musterstraße 10',
     postcode: '10115',
+    countyRegion: null,
     country: 'DE',
     email: 'buchhaltung@muster.de',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

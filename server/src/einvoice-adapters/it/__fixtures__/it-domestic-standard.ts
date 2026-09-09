@@ -39,6 +39,7 @@ export const itDomesticStandardInvoice: DocumentDto = {
     addressLine: 'Via Roma 10, 20121 Milano',
     street: 'Via Roma 10',
     postcode: '20121',
+    countyRegion: null,
     city: 'Milano',
     country: 'IT',
     phone: '+39 02 1234567',
@@ -56,9 +57,12 @@ export const itDomesticStandardInvoice: DocumentDto = {
     address: 'Via Torino 5, 10121 Torino',
     street: 'Via Torino 5',
     postcode: '10121',
+    countyRegion: null,
     country: 'IT',
     email: 'ufficio@bianchi.it',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {

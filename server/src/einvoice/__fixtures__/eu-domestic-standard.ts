@@ -39,6 +39,7 @@ export const deDomesticStandardInvoice: DocumentDto = {
     addressLine: 'Musterstraße 10, 10115 Berlin',
     street: 'Musterstraße 10',
     postcode: '10115',
+    countyRegion: null,
     city: 'Berlin',
     country: 'DE',
     phone: '+49 30 1234567',
@@ -56,9 +57,12 @@ export const deDomesticStandardInvoice: DocumentDto = {
     address: 'Beispielweg 3, 80331 München',
     street: 'Beispielweg 3',
     postcode: '80331',
+    countyRegion: null,
     country: 'DE',
     email: 'buchhaltung@beispiel.de',
     mol: null,
+    sdiRecipientCode: null,
+    pec: null,
   },
   lineItems: [
     {
