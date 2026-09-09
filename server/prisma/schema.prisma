@@ -140,6 +140,7 @@ model IssuerProfile {
   addressLine      String?
   street           String?
   postcode         String?
+  countyRegion     String?
   city             String?
   country          String   @default("BG")
   phone            String?
@@ -167,12 +168,15 @@ model Client {
   address          String?
   street           String?
   postcode         String?
+  countyRegion     String?
   country          String   @default("BG")
   documentLanguage String?
   email            String?
   mol              String?
   peppolEndpointId String?
   peppolScheme     String?
+  sdiRecipientCode String?
+  pec              String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

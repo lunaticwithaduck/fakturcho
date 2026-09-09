@@ -10,6 +10,7 @@ export interface UpdateIssuerProfileInput {
   addressLine?: string | null | undefined;
   street?: string | null | undefined;
   postcode?: string | null | undefined;
+  countyRegion?: string | null | undefined;
   city?: string | null | undefined;
   country?: string | undefined;
   phone?: string | null | undefined;
@@ -32,6 +33,7 @@ function toDto(profile: IssuerProfile): IssuerProfileDto {
     addressLine: profile.addressLine,
     street: profile.street,
     postcode: profile.postcode,
+    countyRegion: profile.countyRegion,
     city: profile.city,
     country: profile.country,
     phone: profile.phone,
@@ -70,6 +72,7 @@ export class IssuerService {
       ...(input.addressLine !== undefined ? { addressLine: input.addressLine } : {}),
       ...(input.street !== undefined ? { street: input.street } : {}),
       ...(input.postcode !== undefined ? { postcode: input.postcode } : {}),
+      ...(input.countyRegion !== undefined ? { countyRegion: input.countyRegion } : {}),
       ...(input.city !== undefined ? { city: input.city } : {}),
       ...(input.country !== undefined ? { country: input.country } : {}),
       ...(input.phone !== undefined ? { phone: input.phone } : {}),

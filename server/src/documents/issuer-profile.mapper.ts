@@ -11,6 +11,7 @@ export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerP
     addressLine: profile.addressLine,
     street: profile.street,
     postcode: profile.postcode,
+    countyRegion: profile.countyRegion,
     city: profile.city,
     country: profile.country,
     phone: profile.phone,

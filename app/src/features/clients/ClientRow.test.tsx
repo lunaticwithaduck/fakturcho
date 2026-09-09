@@ -14,12 +14,15 @@ const client = {
   address: null,
   street: null,
   postcode: null,
+  countyRegion: null,
   country: 'BG',
   documentLanguage: null,
   email: 'office@acme.bg',
   mol: null,
   peppolEndpointId: null,
   peppolScheme: null,
+  sdiRecipientCode: null,
+  pec: null,
 };
 
 afterEach(cleanup);

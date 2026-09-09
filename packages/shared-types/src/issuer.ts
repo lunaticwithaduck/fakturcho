@@ -8,6 +8,7 @@ export interface IssuerProfileDto {
   addressLine: string | null;
   street: string | null;
   postcode: string | null;
+  countyRegion: string | null;
   city: string | null;
   country: string;
   phone: string | null;
@@ -28,6 +29,7 @@ export interface UpdateIssuerProfileRequest {
   addressLine?: string | null;
   street?: string | null;
   postcode?: string | null;
+  countyRegion?: string | null;
   city?: string | null;
   country?: string;
   phone?: string | null;

@@ -10,6 +10,7 @@ const BASE: IssuerProfileDto = {
   addressLine: 'ул. Тестова 1',
   street: null,
   postcode: null,
+  countyRegion: null,
   city: 'София',
   country: 'BG',
   phone: null,

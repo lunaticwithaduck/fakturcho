@@ -8,12 +8,15 @@ export interface ClientDto {
   address: string | null;
   street: string | null;
   postcode: string | null;
+  countyRegion: string | null;
   country: string;
   documentLanguage: Locale | null;
   email: string | null;
   mol: string | null;
   peppolEndpointId: string | null;
   peppolScheme: string | null;
+  sdiRecipientCode: string | null;
+  pec: string | null;
 }
 
 export interface CreateClientRequest {
@@ -23,12 +26,15 @@ export interface CreateClientRequest {
   address?: string | null;
   street?: string | null;
   postcode?: string | null;
+  countyRegion?: string | null;
   country?: string;
   documentLanguage?: Locale | null;
   email?: string | null;
   mol?: string | null;
   peppolEndpointId?: string | null;
   peppolScheme?: string | null;
+  sdiRecipientCode?: string | null;
+  pec?: string | null;
 }
 
 export type UpdateClientRequest = Partial<CreateClientRequest>;
