@@ -3,9 +3,11 @@
 import { mapAuthErrorMessage, signIn } from '@app/auth';
 import { Button, Card, Input } from '@design/components';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 export function LoginForm() {
+  const t = useTranslations('login');
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,12 +30,12 @@ export function LoginForm() {
   return (
     <Card className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-semibold text-text">Вход във Фактурчо</h1>
-        <p className="text-sm text-text-muted">Въведете имейл и парола, за да продължите.</p>
+        <h1 className="text-xl font-semibold text-text">{t('title')}</h1>
+        <p className="text-sm text-text-muted">{t('subtitle')}</p>
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
         <Input
-          label="Имейл"
+          label={t('emailLabel')}
           type="email"
           name="email"
           autoComplete="email"
@@ -42,7 +44,7 @@ export function LoginForm() {
           onChange={(event) => setEmail(event.target.value)}
         />
         <Input
-          label="Парола"
+          label={t('passwordLabel')}
           type="password"
           name="password"
           autoComplete="current-password"
@@ -52,13 +54,13 @@ export function LoginForm() {
         />
         {error ? <p className="text-sm text-danger">{error}</p> : null}
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Влизане...' : 'Вход'}
+          {isSubmitting ? t('submitting') : t('submit')}
         </Button>
       </form>
       <p className="text-center text-sm text-text-muted">
-        Нямате акаунт?{' '}
+        {t('noAccount')}{' '}
         <a className="font-medium text-accent" href="/signup">
-          Регистрирайте се
+          {t('signupLink')}
         </a>
       </p>
     </Card>

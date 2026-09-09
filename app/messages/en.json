@@ -1,0 +1,12 @@
+{
+  "login": {
+    "title": "Log in to Fakturcho",
+    "subtitle": "Enter your email and password to continue.",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "submitting": "Signing in...",
+    "submit": "Log in",
+    "noAccount": "Don't have an account?",
+    "signupLink": "Sign up"
+  }
+}
