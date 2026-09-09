@@ -1,11 +1,14 @@
 import type { DocumentType, EmailDocumentRequest } from '@fakturcho/shared-types';
-import { DOCUMENT_TYPE_LABELS, formatDocumentNumber } from '@fakturcho/shared-types';
+import { formatDocumentNumber } from '@fakturcho/shared-types';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
+import { type Locale, resolveEmailLocale } from './locale';
 import { type DocumentRenderer, EMAIL_SENDER, type EmailSender, RENDER_SERVICE } from './ports';
+import { buildDocumentSubject } from './subject-templates';
 
 function buildSubject(
+  locale: Locale,
   documentType: string,
   numberPrefix: string | null,
   number: bigint | null,
@@ -13,10 +16,10 @@ function buildSubject(
 ): string {
   // Prisma's enum values (INVOICE, CREDIT_NOTE, ...) are the uppercase form of
   // shared-types' DocumentType (invoice, credit_note, ...) by construction.
-  const label = DOCUMENT_TYPE_LABELS[documentType.toLowerCase() as DocumentType];
-  if (number === null) return label;
+  const type = documentType.toLowerCase() as DocumentType;
+  if (number === null) return buildDocumentSubject(locale, type, null);
   const formatted = `${numberPrefix ?? ''}${formatDocumentNumber(Number(number))}${numberSuffix ?? ''}`;
-  return `${label} № ${formatted}`;
+  return buildDocumentSubject(locale, type, formatted);
 }
 
 @Injectable()
@@ -41,7 +44,13 @@ export class EmailService {
     }
 
     const rendered = await this.renderer.renderPdf(documentId, accountId);
+    const locale = resolveEmailLocale(
+      document.documentLanguage,
+      document.issuerCountry,
+      document.recipientCountry,
+    );
     const subject = buildSubject(
+      locale,
       document.documentType,
       document.numberPrefix,
       document.number,
@@ -53,6 +62,7 @@ export class EmailService {
       subject,
       text: body.emailText,
       attachment: { filename: rendered.filename, content: rendered.buffer },
+      locale,
     });
 
     await this.prisma.document.update({

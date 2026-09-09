@@ -1,3 +1,5 @@
+import type { Locale } from './locale';
+
 export interface RenderedDocument {
   buffer: Buffer;
   filename: string;
@@ -12,6 +14,7 @@ export interface SendEmailInput {
   subject: string;
   text: string;
   attachment: { filename: string; content: Buffer };
+  locale: Locale;
 }
 
 export interface EmailSender {

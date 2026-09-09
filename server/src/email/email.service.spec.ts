@@ -43,11 +43,78 @@ describe('EmailService', () => {
     const sentInput = send.mock.calls[0]?.[0];
     expect(sentInput?.to).toBe('client@example.com');
     expect(sentInput?.subject).toBe('Фактура № 0000000016');
+    expect(sentInput?.locale).toBe('bg');
     expect(sentInput?.attachment.filename).toBe('Фактура_0000000016.pdf');
 
     const updated = await db.prisma.document.findUniqueOrThrow({ where: { id: document.id } });
     expect(updated.emailText).toBe('Здравейте, прилагаме фактурата.');
     expect(updated.emailedAt).not.toBeNull();
+  });
+
+  it('resolves an English subject and locale for a document with documentLanguage=en', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const document = await db.prisma.document.create({
+      data: {
+        accountId: account.id,
+        documentType: 'CREDIT_NOTE',
+        status: 'SENT',
+        number: 7n,
+        documentLanguage: 'en',
+      },
+    });
+
+    const renderPdf = vi.fn(async () => ({
+      buffer: Buffer.from('%PDF-1.4 fake'),
+      filename: 'Credit note_0000000007.pdf',
+    }));
+    const renderer: DocumentRenderer = { renderPdf };
+
+    const send = vi.fn(async (_input: SendEmailInput): Promise<void> => {});
+    const sender: EmailSender = { send };
+
+    const service = new EmailService(db.prisma as unknown as PrismaService, renderer, sender);
+
+    await service.sendDocumentEmail(account.id, document.id, {
+      to: 'client@example.com',
+      emailText: 'Hi, please find the credit note attached.',
+    });
+
+    const sentInput = send.mock.calls[0]?.[0];
+    expect(sentInput?.subject).toBe('Credit note No. 0000000007');
+    expect(sentInput?.locale).toBe('en');
+  });
+
+  it('derives English from the issuer country when documentLanguage is unset', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const document = await db.prisma.document.create({
+      data: {
+        accountId: account.id,
+        documentType: 'INVOICE',
+        status: 'SENT',
+        number: 9n,
+        issuerCountry: 'DE',
+      },
+    });
+
+    const renderPdf = vi.fn(async () => ({
+      buffer: Buffer.from('%PDF-1.4 fake'),
+      filename: 'Invoice_0000000009.pdf',
+    }));
+    const renderer: DocumentRenderer = { renderPdf };
+
+    const send = vi.fn(async (_input: SendEmailInput): Promise<void> => {});
+    const sender: EmailSender = { send };
+
+    const service = new EmailService(db.prisma as unknown as PrismaService, renderer, sender);
+
+    await service.sendDocumentEmail(account.id, document.id, {
+      to: 'client@example.com',
+      emailText: 'Hi, invoice attached.',
+    });
+
+    const sentInput = send.mock.calls[0]?.[0];
+    expect(sentInput?.subject).toBe('Invoice No. 0000000009');
+    expect(sentInput?.locale).toBe('en');
   });
 
   it('refuses to email a draft — it renders nothing and sends nothing', async () => {
