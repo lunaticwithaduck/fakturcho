@@ -1,0 +1,45 @@
+// @vitest-environment jsdom
+import { cleanup, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { LandingPage } from './LandingPage';
+
+vi.mock('next/image', () => ({
+  default: ({ src, alt, priority: _priority, ...rest }: Record<string, unknown>) => (
+    <img src={src as string} alt={alt as string} {...rest} />
+  ),
+}));
+
+afterEach(cleanup);
+
+describe('LandingPage', () => {
+  it('renders the Bulgarian copy unchanged by default', () => {
+    render(<LandingPage />);
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Фактури, които отговарят на българските изисквания',
+      }),
+    ).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Какво можете да издавате' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Цени' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Често задавани въпроси' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Вход' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Създай акаунт' })).toBeTruthy();
+    expect(screen.getByText('Общи условия')).toBeTruthy();
+  });
+
+  it('renders the English copy for locale="en" with English legal links', () => {
+    render(<LandingPage locale="en" />);
+
+    expect(
+      screen.getByRole('heading', { name: 'Invoices that meet Bulgarian requirements' }),
+    ).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'What you can issue' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Pricing' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Frequently asked questions' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Log in' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Create account' })).toBeTruthy();
+    expect(screen.getByText('Terms of Service')).toBeTruthy();
+    expect(screen.getByText('Terms of Service').getAttribute('href')).toBe('/en/terms');
+  });
+});

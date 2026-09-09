@@ -20,6 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'bg_BG',
+    alternateLocale: ['en_US'],
     siteName: 'Фактурчо',
   },
   twitter: {

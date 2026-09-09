@@ -6,12 +6,23 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+const TITLE = 'Fakturcho — invoicing for Bulgarian businesses';
+const DESCRIPTION =
+  'Issue invoices, proformas, credit and debit notes and quotes under Bulgarian requirements. Pay 0.10 € per issued document.';
+
 export const metadata: Metadata = {
-  title: { absolute: 'Фактурчо — фактури за българския бизнес' },
-  description:
-    'Издавайте фактури, проформи, кредитни и дебитни известия и оферти по българските изисквания. Плащате 0,10 € на издаден документ.',
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    alternateLocale: ['bg_BG'],
+    siteName: 'Fakturcho',
+    title: TITLE,
+    description: DESCRIPTION,
+  },
   alternates: {
-    canonical: '/',
+    canonical: '/en',
     languages: {
       bg: '/',
       en: '/en',
@@ -22,36 +33,36 @@ export const metadata: Metadata = {
 function buildJsonLd() {
   const softwareApplication = {
     '@type': 'SoftwareApplication',
-    name: COMPANY.productName,
+    name: 'Fakturcho',
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
-    inLanguage: 'bg',
-    url: COMPANY.website,
-    description: metadata.description,
+    inLanguage: 'en',
+    url: `${COMPANY.website}/en`,
+    description: DESCRIPTION,
     offers: [
       {
         '@type': 'Offer',
         price: '0.10',
         priceCurrency: 'EUR',
-        description: 'на издаден документ',
+        description: 'per issued document',
       },
       ...SUBSCRIPTION_TIER_IDS.map((id) => ({
         '@type': 'Offer',
         price: (SUBSCRIPTION_TIERS[id].priceCents / 100).toFixed(2),
         priceCurrency: 'EUR',
-        description: `абонамент на месец, зарежда ${(SUBSCRIPTION_TIERS[id].grantCents / 100).toFixed(2)} € кредит`,
+        description: `monthly subscription, grants ${(SUBSCRIPTION_TIERS[id].grantCents / 100).toFixed(2)} € credit`,
       })),
     ],
   };
   const organization = {
     '@type': 'Organization',
-    name: COMPANY.productName,
-    url: COMPANY.website,
-    logo: `${COMPANY.website}/opengraph-image`,
+    name: 'Fakturcho',
+    url: `${COMPANY.website}/en`,
+    logo: `${COMPANY.website}/en/opengraph-image`,
   };
   const faqPage = {
     '@type': 'FAQPage',
-    mainEntity: getLandingFaq('bg').map((item) => ({
+    mainEntity: getLandingFaq('en').map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {
@@ -66,7 +77,7 @@ function buildJsonLd() {
   }).replace(/</g, '\\u003c');
 }
 
-export default async function HomePage() {
+export default async function EnglishHomePage() {
   const store = await cookies();
   if (store.getAll().some((entry) => entry.name.endsWith('session_token'))) {
     redirect('/documents');
@@ -74,7 +85,7 @@ export default async function HomePage() {
   return (
     <>
       <script type="application/ld+json">{buildJsonLd()}</script>
-      <LandingPage />
+      <LandingPage locale="en" />
     </>
   );
 }

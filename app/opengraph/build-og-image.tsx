@@ -10,11 +10,21 @@ const SURFACE_SUNKEN = '#eef0f3';
 const ACCENT = '#1d4fd8';
 const TEXT_MUTED = '#5c6472';
 
+export interface OgImageContent {
+  brand: string;
+  tagline: string;
+}
+
+const BG_CONTENT: OgImageContent = {
+  brand: 'Фактурчо',
+  tagline: 'Фактури за българския бизнес',
+};
+
 async function readAsset(relativePath: string): Promise<Buffer> {
   return readFile(fileURLToPath(new URL(relativePath, import.meta.url)));
 }
 
-export async function renderOgImage(): Promise<ImageResponse> {
+export async function renderOgImage(content: OgImageContent = BG_CONTENT): Promise<ImageResponse> {
   const [interRegular, interBold, brandIcon] = await Promise.all([
     readAsset('../src/app/fonts/Inter-Regular.ttf'),
     readAsset('../src/app/fonts/Inter-Bold.ttf'),
@@ -40,11 +50,9 @@ export async function renderOgImage(): Promise<ImageResponse> {
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
         <img src={brandIconSrc} alt="" width={96} height={96} style={{ borderRadius: 24 }} />
-        <span style={{ fontSize: 56, fontWeight: 700, color: ACCENT }}>Фактурчо</span>
+        <span style={{ fontSize: 56, fontWeight: 700, color: ACCENT }}>{content.brand}</span>
       </div>
-      <span style={{ fontSize: 40, fontWeight: 400, color: TEXT_MUTED }}>
-        Фактури за българския бизнес
-      </span>
+      <span style={{ fontSize: 40, fontWeight: 400, color: TEXT_MUTED }}>{content.tagline}</span>
     </div>,
     {
       width: WIDTH,
