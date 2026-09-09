@@ -8,5 +8,57 @@
     "submit": "Log in",
     "noAccount": "Don't have an account?",
     "signupLink": "Sign up"
+  },
+  "billing": {
+    "pageTitle": "Billing",
+    "balance": {
+      "label": "Balance",
+      "remaining": "{count, plural, one {1 document left} other {# documents left}}"
+    },
+    "ledgerReasons": {
+      "signupGrant": "Signup bonus",
+      "purchase": "Credit purchase",
+      "issuance": "Document issued",
+      "adjustment": "Adjustment",
+      "subscriptionGrant": "Subscription top-up"
+    },
+    "packs": {
+      "heading": "Credit packs",
+      "documents": "{count} documents"
+    },
+    "perDocument": "{price} per document",
+    "tiers": {
+      "title": "{documents} documents per month for {price}",
+      "body": "Tops up {grant} credit every month; unused credit carries over."
+    },
+    "subscription": {
+      "label": "Subscription",
+      "periodEnds": "Current period ends on {date}",
+      "nextGrant": "Next top-up: {grant} credit",
+      "switchTo": "Switch to",
+      "statusLine": "Subscription: {status}"
+    },
+    "subscriptionStatus": {
+      "trialing": "Awaiting payment",
+      "active": "Active",
+      "pastDue": "Payment overdue",
+      "canceled": "Canceled"
+    },
+    "actions": {
+      "buy": "Buy",
+      "activate": "Activate",
+      "switch": "Switch",
+      "continueToPayment": "Continue to payment",
+      "redirecting": "Redirecting..."
+    },
+    "ledger": {
+      "heading": "Recent activity",
+      "emptyTitle": "No activity yet",
+      "emptyDescription": "Every change to your balance will show up here — bonuses, purchases and issued documents."
+    },
+    "checkoutError": {
+      "title": "Redirect error",
+      "description": "Could not start checkout. Please try again."
+    }
   }
 }

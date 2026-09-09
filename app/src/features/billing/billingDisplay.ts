@@ -12,19 +12,23 @@ import type {
   CreditPackId,
   SubscriptionTierId,
 } from '@shared/types';
+import type { useTranslations } from 'next-intl';
 import { formatMoney } from '../shared/format';
 
-export const CREDIT_LEDGER_REASON_LABELS: Record<CreditLedgerReason, string> = {
-  signup_grant: 'Начален бонус',
-  purchase: 'Покупка на кредити',
-  issuance: 'Издаден документ',
-  adjustment: 'Корекция',
-  subscription_grant: 'Зареждане от абонамент',
-};
+export type Translate = ReturnType<typeof useTranslations>;
 
-export function balanceCaption(balance: CreditBalanceDto): string {
-  if (balance.documentsRemaining === 1) return 'още 1 документ';
-  return `още ${balance.documentsRemaining} документа`;
+export function getCreditLedgerReasonLabels(t: Translate): Record<CreditLedgerReason, string> {
+  return {
+    signup_grant: t('ledgerReasons.signupGrant'),
+    purchase: t('ledgerReasons.purchase'),
+    issuance: t('ledgerReasons.issuance'),
+    adjustment: t('ledgerReasons.adjustment'),
+    subscription_grant: t('ledgerReasons.subscriptionGrant'),
+  };
+}
+
+export function balanceCaption(balance: CreditBalanceDto, t: Translate): string {
+  return t('balance.remaining', { count: balance.documentsRemaining });
 }
 
 export interface PackOption {
@@ -34,12 +38,14 @@ export interface PackOption {
   perDocumentLabel: string;
 }
 
-export function getPackOptions(): PackOption[] {
+export function getPackOptions(t: Translate): PackOption[] {
   return CREDIT_PACK_IDS.map((id) => ({
     id,
     priceLabel: formatMoney(CREDIT_PACKS[id].eurCents),
-    documentsLabel: `${CREDIT_PACKS[id].eurCents / ISSUANCE_COST_CENTS} документа`,
-    perDocumentLabel: `${formatMoney(ISSUANCE_COST_CENTS)} на документ`,
+    documentsLabel: t('packs.documents', {
+      count: CREDIT_PACKS[id].eurCents / ISSUANCE_COST_CENTS,
+    }),
+    perDocumentLabel: t('perDocument', { price: formatMoney(ISSUANCE_COST_CENTS) }),
   }));
 }
 
@@ -51,17 +57,19 @@ export interface SubscriptionTierOption {
   perDocumentLabel: string;
 }
 
-export function getSubscriptionTierOptions(): SubscriptionTierOption[] {
+export function getSubscriptionTierOptions(t: Translate): SubscriptionTierOption[] {
   return SUBSCRIPTION_TIER_IDS.map((id) => {
     const tier = SUBSCRIPTION_TIERS[id];
     const documents = tier.grantCents / ISSUANCE_COST_CENTS;
     const grantLabel = formatMoney(tier.grantCents);
     return {
       id,
-      title: `${documents} документа на месец за ${formatMoney(tier.priceCents)}`,
-      body: `Зарежда ${grantLabel} кредит всеки месец; неизползваният кредит се запазва.`,
+      title: t('tiers.title', { documents, price: formatMoney(tier.priceCents) }),
+      body: t('tiers.body', { grant: grantLabel }),
       grantLabel,
-      perDocumentLabel: `${formatMoney(perDocumentCents(tier.priceCents, tier.grantCents))} на документ`,
+      perDocumentLabel: t('perDocument', {
+        price: formatMoney(perDocumentCents(tier.priceCents, tier.grantCents)),
+      }),
     };
   });
 }

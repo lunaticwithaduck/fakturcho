@@ -1,5 +1,6 @@
 import { Button, Card } from '@design/components';
 import type { CheckoutProduct, CreditPackId } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { getPackOptions } from './billingDisplay';
 
 interface CreditPacksSectionProps {
@@ -8,17 +9,18 @@ interface CreditPacksSectionProps {
 }
 
 export function CreditPacksSection({ pendingProduct, onBuy }: CreditPacksSectionProps) {
+  const t = useTranslations('billing');
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold text-text">Пакети кредити</h2>
+      <h2 className="text-lg font-semibold text-text">{t('packs.heading')}</h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {getPackOptions().map((pack) => (
+        {getPackOptions(t).map((pack) => (
           <Card key={pack.id} className="flex flex-col items-center gap-2 text-center">
             <p className="text-xl font-bold text-text">{pack.priceLabel}</p>
             <p className="text-sm text-text-muted">{pack.documentsLabel}</p>
             <p className="text-xs text-text-muted">{pack.perDocumentLabel}</p>
             <Button size="sm" disabled={pendingProduct !== null} onClick={() => onBuy(pack.id)}>
-              {pendingProduct === pack.id ? 'Пренасочване...' : 'Купи'}
+              {pendingProduct === pack.id ? t('actions.redirecting') : t('actions.buy')}
             </Button>
           </Card>
         ))}
