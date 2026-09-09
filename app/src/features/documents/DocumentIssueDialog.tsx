@@ -15,6 +15,7 @@ import {
 import { formatDocumentNumber } from '@fakturcho/shared-types';
 import type { DocumentDto } from '@shared/types';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 interface DocumentIssueDialogProps {
@@ -28,6 +29,7 @@ export function DocumentIssueDialog({
   onOpenChange,
   onIssued,
 }: DocumentIssueDialogProps) {
+  const t = useTranslations('documents.dialogs.issue');
   const { data: series } = useListSeriesQuery();
   const [issueDocument, { isLoading }] = useIssueDocumentMutation();
   const [issuedAt, setIssuedAt] = useState(todayIsoDate());
@@ -53,10 +55,10 @@ export function DocumentIssueDialog({
     } catch (err) {
       const code = getApiErrorCode(err);
       if (code === 'ISSUER_PROFILE_INCOMPLETE') {
-        setErrorLink({ href: '/profile', label: 'Към профила на издателя' });
+        setErrorLink({ href: '/profile', label: t('profileLink') });
       }
       if (code === 'INSUFFICIENT_CREDITS') {
-        setErrorLink({ href: '/billing', label: 'Купи кредити' });
+        setErrorLink({ href: '/billing', label: t('creditsLink') });
       }
       setError(getApiErrorMessage(err));
     }
@@ -65,27 +67,27 @@ export function DocumentIssueDialog({
   return (
     <Dialog open onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogTitle>Издаване на документ</DialogTitle>
+        <DialogTitle>{t('title')}</DialogTitle>
         <DialogDescription>
           {seriesInfo
-            ? `Следващ номер в поредицата: ${formatDocumentNumber(seriesInfo.nextNumber)}`
-            : 'Зареждане на поредицата...'}
+            ? t('nextNumber', { number: formatDocumentNumber(seriesInfo.nextNumber) })
+            : t('loadingSeries')}
         </DialogDescription>
         <div className="flex flex-col gap-4">
           <Input
-            label="Дата на издаване"
+            label={t('issuedAtLabel')}
             type="date"
             value={issuedAt}
             onChange={(event) => setIssuedAt(event.target.value)}
           />
           {seriesInfo?.overridable ? (
             <Input
-              label="Замени следващия номер (по избор)"
+              label={t('overrideNumberLabel')}
               type="number"
               min={1}
               value={overrideNumber}
               onChange={(event) => setOverrideNumber(event.target.value)}
-              hint="Разрешено само докато поредицата няма издадени документи."
+              hint={t('overrideNumberHint')}
             />
           ) : null}
           {error ? (
@@ -103,10 +105,10 @@ export function DocumentIssueDialog({
           ) : null}
           <div className="flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Отказ
+              {t('cancel')}
             </Button>
             <Button type="button" disabled={isLoading} onClick={handleConfirm}>
-              {isLoading ? 'Издаване...' : 'Издай'}
+              {isLoading ? t('issuing') : t('confirm')}
             </Button>
           </div>
         </div>

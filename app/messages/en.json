@@ -8,5 +8,73 @@
     "submit": "Log in",
     "noAccount": "Don't have an account?",
     "signupLink": "Sign up"
+  },
+  "documents": {
+    "list": {
+      "pageTitle": "Documents",
+      "newDocument": "New document",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search by client or reference",
+      "typeFilterLabel": "Document type",
+      "allTypes": "All types",
+      "noClient": "No client",
+      "emptyTitle": "You have no documents",
+      "emptyFilteredDescription": "No documents match the filters.",
+      "emptyDescription": "Create your first document to see it here."
+    },
+    "statusTabs": {
+      "all": "All"
+    },
+    "title": {
+      "draft": "{label} — draft",
+      "numbered": "{label} No. {number}",
+      "originalMarker": " (Original)"
+    },
+    "actions": {
+      "edit": "Edit",
+      "issue": "Issue",
+      "markPaid": "Mark as paid",
+      "markingPaid": "Marking...",
+      "email": "Send by email",
+      "cancel": "Cancel"
+    },
+    "dialogs": {
+      "email": {
+        "title": "Send by email",
+        "recipientLabel": "Recipient email",
+        "messageLabel": "Message",
+        "cancel": "Cancel",
+        "sending": "Sending...",
+        "send": "Send"
+      },
+      "issue": {
+        "title": "Issue document",
+        "nextNumber": "Next number in the series: {number}",
+        "loadingSeries": "Loading the series...",
+        "issuedAtLabel": "Issue date",
+        "overrideNumberLabel": "Override the next number (optional)",
+        "overrideNumberHint": "Allowed only while the series has no issued documents.",
+        "profileLink": "Go to issuer profile",
+        "creditsLink": "Buy credits",
+        "cancel": "Cancel",
+        "issuing": "Issuing...",
+        "confirm": "Issue"
+      },
+      "cancel": {
+        "title": "Cancel document",
+        "description": "Are you sure you want to cancel the document? The number remains reserved and is not reused.",
+        "confirm": "Cancel"
+      }
+    },
+    "view": {
+      "notFound": "Document not found",
+      "downloadPdf": "Download PDF",
+      "draftPreviewNotice": "The draft is shown only as a watermarked preview. Issue the document to download or send it.",
+      "markedPaidToast": "Document marked as paid",
+      "errorToastTitle": "Error",
+      "cancelledToast": "Document cancelled",
+      "issuedToast": "Document issued",
+      "emailSentToast": "Email sent"
+    }
   }
 }

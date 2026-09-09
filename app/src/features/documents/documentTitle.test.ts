@@ -1,8 +1,22 @@
+import bgMessages from '@messages/bg.json';
+import enMessages from '@messages/en.json';
+import { createTranslator } from 'next-intl';
 import { describe, expect, it } from 'vitest';
-import { formatDocumentTitle } from './documentTitle';
+import { type DocumentTitleTranslator, formatDocumentTitle } from './documentTitle';
+
+const bgT = createTranslator({
+  locale: 'bg',
+  messages: bgMessages,
+  namespace: 'documents.title',
+}) as DocumentTitleTranslator;
+const enT = createTranslator({
+  locale: 'en',
+  messages: enMessages,
+  namespace: 'documents.title',
+}) as DocumentTitleTranslator;
 
 describe('formatDocumentTitle', () => {
-  it('renders a draft without a number as a draft label', () => {
+  it('renders a draft without a number as a draft label (default fallback, unchanged)', () => {
     expect(
       formatDocumentTitle({
         documentType: 'invoice',
@@ -13,7 +27,7 @@ describe('formatDocumentTitle', () => {
     ).toBe('Фактура — чернова');
   });
 
-  it('marks a tax document as (Оригинал)', () => {
+  it('marks a tax document as (Оригинал) (default fallback, unchanged)', () => {
     expect(
       formatDocumentTitle({
         documentType: 'invoice',
@@ -24,7 +38,7 @@ describe('formatDocumentTitle', () => {
     ).toBe('Фактура № 0000000016 (Оригинал)');
   });
 
-  it('does not mark a proforma or a quote', () => {
+  it('does not mark a proforma or a quote (default fallback, unchanged)', () => {
     expect(
       formatDocumentTitle({
         documentType: 'proforma',
@@ -43,7 +57,7 @@ describe('formatDocumentTitle', () => {
     ).toBe('Ценова оферта № 0000000003');
   });
 
-  it('includes the prefix and suffix around the padded number', () => {
+  it('includes the prefix and suffix around the padded number (default fallback, unchanged)', () => {
     expect(
       formatDocumentTitle({
         documentType: 'credit_note',
@@ -52,5 +66,35 @@ describe('formatDocumentTitle', () => {
         numberSuffix: '/2026',
       }),
     ).toBe('Кредитно известие № A-0000000005/2026 (Оригинал)');
+  });
+
+  it('renders byte-identical Bulgarian when driven by the bg.json translator', () => {
+    expect(
+      formatDocumentTitle(
+        { documentType: 'invoice', number: null, numberPrefix: null, numberSuffix: null },
+        bgT,
+      ),
+    ).toBe('Фактура — чернова');
+    expect(
+      formatDocumentTitle(
+        { documentType: 'invoice', number: 16, numberPrefix: null, numberSuffix: null },
+        bgT,
+      ),
+    ).toBe('Фактура № 0000000016 (Оригинал)');
+  });
+
+  it('resolves cleanly with the en.json translator', () => {
+    expect(
+      formatDocumentTitle(
+        { documentType: 'invoice', number: null, numberPrefix: null, numberSuffix: null },
+        enT,
+      ),
+    ).toBe('Фактура — draft');
+    expect(
+      formatDocumentTitle(
+        { documentType: 'invoice', number: 16, numberPrefix: null, numberSuffix: null },
+        enT,
+      ),
+    ).toBe('Фактура No. 0000000016 (Original)');
   });
 });

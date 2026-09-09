@@ -8,5 +8,73 @@
     "submit": "Вход",
     "noAccount": "Нямате акаунт?",
     "signupLink": "Регистрирайте се"
+  },
+  "documents": {
+    "list": {
+      "pageTitle": "Документи",
+      "newDocument": "Нов документ",
+      "searchLabel": "Търсене",
+      "searchPlaceholder": "Търсене по клиент или референция",
+      "typeFilterLabel": "Вид документ",
+      "allTypes": "Всички видове",
+      "noClient": "Без клиент",
+      "emptyTitle": "Нямате документи",
+      "emptyFilteredDescription": "Няма документи, отговарящи на филтрите.",
+      "emptyDescription": "Създайте първия си документ, за да го видите тук."
+    },
+    "statusTabs": {
+      "all": "Всички"
+    },
+    "title": {
+      "draft": "{label} — чернова",
+      "numbered": "{label} № {number}",
+      "originalMarker": " (Оригинал)"
+    },
+    "actions": {
+      "edit": "Редактирай",
+      "issue": "Издай",
+      "markPaid": "Отбележи като платена",
+      "markingPaid": "Отбелязване...",
+      "email": "Изпрати по имейл",
+      "cancel": "Анулирай"
+    },
+    "dialogs": {
+      "email": {
+        "title": "Изпращане по имейл",
+        "recipientLabel": "Имейл на получателя",
+        "messageLabel": "Съобщение",
+        "cancel": "Отказ",
+        "sending": "Изпращане...",
+        "send": "Изпрати"
+      },
+      "issue": {
+        "title": "Издаване на документ",
+        "nextNumber": "Следващ номер в поредицата: {number}",
+        "loadingSeries": "Зареждане на поредицата...",
+        "issuedAtLabel": "Дата на издаване",
+        "overrideNumberLabel": "Замени следващия номер (по избор)",
+        "overrideNumberHint": "Разрешено само докато поредицата няма издадени документи.",
+        "profileLink": "Към профила на издателя",
+        "creditsLink": "Купи кредити",
+        "cancel": "Отказ",
+        "issuing": "Издаване...",
+        "confirm": "Издай"
+      },
+      "cancel": {
+        "title": "Анулиране на документ",
+        "description": "Сигурни ли сте, че искате да анулирате документа? Номерът остава запазен и не се преизползва.",
+        "confirm": "Анулирай"
+      }
+    },
+    "view": {
+      "notFound": "Документът не е намерен",
+      "downloadPdf": "Изтегли PDF",
+      "draftPreviewNotice": "Черновата се показва само като преглед с воден знак. Издайте документа, за да го изтеглите или изпратите.",
+      "markedPaidToast": "Документът е отбелязан като платен",
+      "errorToastTitle": "Грешка",
+      "cancelledToast": "Документът е анулиран",
+      "issuedToast": "Документът е издаден",
+      "emailSentToast": "Имейлът е изпратен"
+    }
   }
 }

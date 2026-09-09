@@ -4,12 +4,14 @@ import { useListDocumentsQuery } from '@app/api';
 import { Button, EmptyState, Input, Skeleton } from '@design/components';
 import type { DocumentType } from '@shared/types';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { DocumentListItemCard } from './DocumentListItemCard';
 import { DocumentStatusTabs, type StatusFilter } from './DocumentStatusTabs';
 import { DocumentTypeFilterSelect } from './DocumentTypeFilterSelect';
 
 export function DocumentsListPage() {
+  const t = useTranslations('documents.list');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [documentType, setDocumentType] = useState<DocumentType | 'all'>('all');
   const [search, setSearch] = useState('');
@@ -27,9 +29,9 @@ export function DocumentsListPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-text">Документи</h1>
+        <h1 className="text-2xl font-bold text-text">{t('pageTitle')}</h1>
         <Button asChild>
-          <Link href="/documents/new">Нов документ</Link>
+          <Link href="/documents/new">{t('newDocument')}</Link>
         </Button>
       </div>
 
@@ -38,8 +40,8 @@ export function DocumentsListPage() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <DocumentTypeFilterSelect value={documentType} onChange={setDocumentType} />
         <Input
-          label="Търсене"
-          placeholder="Търсене по клиент или референция"
+          label={t('searchLabel')}
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
@@ -53,15 +55,11 @@ export function DocumentsListPage() {
         </div>
       ) : items.length === 0 ? (
         <EmptyState
-          title="Нямате документи"
-          description={
-            hasFilters
-              ? 'Няма документи, отговарящи на филтрите.'
-              : 'Създайте първия си документ, за да го видите тук.'
-          }
+          title={t('emptyTitle')}
+          description={hasFilters ? t('emptyFilteredDescription') : t('emptyDescription')}
           action={
             <Button size="sm" asChild>
-              <Link href="/documents/new">Нов документ</Link>
+              <Link href="/documents/new">{t('newDocument')}</Link>
             </Button>
           }
         />

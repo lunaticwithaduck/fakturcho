@@ -4,6 +4,7 @@ import { useSendDocumentEmailMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Button, Dialog, DialogContent, DialogTitle, Input, Textarea } from '@design/components';
 import type { DocumentDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 interface DocumentEmailDialogProps {
@@ -13,6 +14,7 @@ interface DocumentEmailDialogProps {
 }
 
 export function DocumentEmailDialog({ document, onOpenChange, onSent }: DocumentEmailDialogProps) {
+  const t = useTranslations('documents.dialogs.email');
   const [sendEmail, { isLoading }] = useSendDocumentEmailMutation();
   const [to, setTo] = useState(document.recipient.email ?? '');
   const [message, setMessage] = useState(document.emailText ?? '');
@@ -32,27 +34,27 @@ export function DocumentEmailDialog({ document, onOpenChange, onSent }: Document
   return (
     <Dialog open onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogTitle>Изпращане по имейл</DialogTitle>
+        <DialogTitle>{t('title')}</DialogTitle>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
           <Input
-            label="Имейл на получателя"
+            label={t('recipientLabel')}
             type="email"
             required
             value={to}
             onChange={(event) => setTo(event.target.value)}
           />
           <Textarea
-            label="Съобщение"
+            label={t('messageLabel')}
             value={message}
             onChange={(event) => setMessage(event.target.value)}
           />
           {error ? <p className="text-sm font-medium text-danger">{error}</p> : null}
           <div className="flex justify-end gap-2">
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>
-              Отказ
+              {t('cancel')}
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Изпращане...' : 'Изпрати'}
+              {isLoading ? t('sending') : t('send')}
             </Button>
           </div>
         </form>
