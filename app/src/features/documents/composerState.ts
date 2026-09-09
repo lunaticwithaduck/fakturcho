@@ -39,6 +39,11 @@ export interface ComposerFormState {
   discounts: DiscountFormState[];
 }
 
+export type ComposerValidationErrorKey =
+  | 'missingOriginalDocument'
+  | 'missingLineItems'
+  | 'missingVatGround';
+
 function makeKey(): string {
   return crypto.randomUUID();
 }
@@ -152,18 +157,21 @@ export function toSaveDraftRequest(state: ComposerFormState, vat: VatTreatment):
   };
 }
 
-export function validateComposerState(state: ComposerFormState, vat: VatTreatment): string | null {
+export function validateComposerState(
+  state: ComposerFormState,
+  vat: VatTreatment,
+): ComposerValidationErrorKey | null {
   const isCorrection = (CORRECTION_DOCUMENT_TYPES as readonly DocumentType[]).includes(
     state.documentType,
   );
   if (isCorrection && !state.originalDocumentId) {
-    return 'Изберете оригиналния документ, за да продължите.';
+    return 'missingOriginalDocument';
   }
   if (state.lineItems.filter(isCompleteLineItem).length === 0) {
-    return 'Добавете поне един артикул с попълнени наименование, количество и цена.';
+    return 'missingLineItems';
   }
   if (vat.groundSelectable && !state.vatExemptionGround) {
-    return 'Изберете основание за неначисляване на ДДС.';
+    return 'missingVatGround';
   }
   return null;
 }

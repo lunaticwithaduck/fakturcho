@@ -12,6 +12,7 @@ import type {
   IssuerProfileDto,
 } from '@shared/types';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 import { ComposerActions } from './ComposerActions';
 import { ComposerClientField } from './ComposerClientField';
@@ -42,6 +43,7 @@ export function DocumentComposerForm({
   catalogueItems,
   issuerProfile,
 }: DocumentComposerFormProps) {
+  const t = useTranslations('documents');
   const router = useRouter();
   const controller = useComposerState(existing);
   const { state, setField, patchState } = controller;
@@ -75,7 +77,7 @@ export function DocumentComposerForm({
     setError(null);
     const validationError = validateComposerState(state, vat);
     if (validationError) {
-      setError(validationError);
+      setError(t(`composer.errors.${validationError}`));
       return null;
     }
     const body = toSaveDraftRequest(state, vat);
@@ -93,7 +95,7 @@ export function DocumentComposerForm({
     event.preventDefault();
     const result = await persist();
     if (result) {
-      toast({ title: 'Черновата е запазена' });
+      toast({ title: t('composer.draftSaved') });
       router.push(`/documents/${result.id}`);
     }
   }
@@ -110,7 +112,7 @@ export function DocumentComposerForm({
       noValidate
     >
       <h1 className="text-2xl font-bold text-text">
-        {documentId ? 'Редактиране на документ' : 'Нов документ'}
+        {documentId ? t('composer.titleEdit') : t('composer.titleNew')}
       </h1>
 
       <Card className="flex flex-col gap-4">

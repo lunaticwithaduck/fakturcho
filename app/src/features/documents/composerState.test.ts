@@ -83,16 +83,16 @@ describe('toSaveDraftRequest', () => {
 describe('validateComposerState', () => {
   it('requires an original document for credit and debit notes', () => {
     const state = withOneCompleteLine({ ...blankComposerState(), documentType: 'debit_note' });
-    expect(validateComposerState(state, VAT_20)).toMatch(/оригинал/i);
+    expect(validateComposerState(state, VAT_20)).toBe('missingOriginalDocument');
   });
 
   it('requires at least one complete line item', () => {
-    expect(validateComposerState(blankComposerState(), VAT_20)).toMatch(/артикул/i);
+    expect(validateComposerState(blankComposerState(), VAT_20)).toBe('missingLineItems');
   });
 
   it('requires a VAT ground when one is selectable but unset', () => {
     const state = withOneCompleteLine(blankComposerState());
-    expect(validateComposerState(state, VAT_GROUND)).toMatch(/основание/i);
+    expect(validateComposerState(state, VAT_GROUND)).toBe('missingVatGround');
   });
 
   it('passes for a complete invoice with standard VAT', () => {

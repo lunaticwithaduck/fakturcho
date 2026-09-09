@@ -3,6 +3,7 @@
 import { formatMoney } from '@app/features/shared/format';
 import { Input } from '@design/components';
 import type { CatalogueItemDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 interface CatalogueAutocompleteInputProps {
@@ -18,6 +19,7 @@ export function CatalogueAutocompleteInput({
   onChangeName,
   onSelectItem,
 }: CatalogueAutocompleteInputProps) {
+  const t = useTranslations('documents');
   const [isOpen, setIsOpen] = useState(false);
   const query = value.trim().toLowerCase();
   const matches = (
@@ -27,7 +29,7 @@ export function CatalogueAutocompleteInput({
   return (
     <div className="relative">
       <Input
-        label="Наименование"
+        label={t('composer.lineItems.nameLabel')}
         required
         value={value}
         onFocus={() => setIsOpen(true)}

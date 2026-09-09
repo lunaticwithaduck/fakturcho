@@ -1,4 +1,7 @@
+'use client';
+
 import { Button } from '@design/components';
+import { useTranslations } from 'next-intl';
 import { ComposerDiscountRow } from './ComposerDiscountRow';
 import type { DiscountFormState } from './composerState';
 
@@ -15,9 +18,11 @@ export function ComposerDiscountsList({
   onChange,
   onRemove,
 }: ComposerDiscountsListProps) {
+  const t = useTranslations('documents');
+
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold text-text">Отстъпки</h2>
+      <h2 className="text-lg font-semibold text-text">{t('composer.discounts.heading')}</h2>
       {discounts.map((discount) => (
         <ComposerDiscountRow
           key={discount.key}
@@ -27,7 +32,7 @@ export function ComposerDiscountsList({
         />
       ))}
       <Button type="button" variant="secondary" size="sm" onClick={onAdd} className="self-start">
-        Добави отстъпка
+        {t('composer.discounts.addButton')}
       </Button>
     </div>
   );
