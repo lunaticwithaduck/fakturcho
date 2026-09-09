@@ -1,4 +1,6 @@
-import type { Cents } from '@shared/types';
+import type { Cents, Locale } from '@shared/types';
+
+const EN_LOCALE_TAG = 'en-IE';
 
 function groupThousands(value: number): string {
   const digits = String(value);
@@ -61,4 +63,47 @@ export function formatDate(value: string | null | undefined): string {
 
 export function todayIsoDate(): string {
   return new Date().toISOString().slice(0, 10);
+}
+
+function formatCentsEn(cents: Cents): string {
+  const { sign, wholePart, fractionPart } = splitCents(cents);
+  return `${sign}${new Intl.NumberFormat(EN_LOCALE_TAG).format(wholePart)}.${String(fractionPart).padStart(2, '0')}`;
+}
+
+export function formatCentsForLocale(cents: Cents, locale: Locale): string {
+  return locale === 'bg' ? formatCents(cents) : formatCentsEn(cents);
+}
+
+export function formatMoneyForLocale(cents: Cents, locale: Locale): string {
+  return locale === 'bg' ? formatMoney(cents) : `${formatCentsEn(cents)} €`;
+}
+
+function parseMoneyInputEn(raw: string): Cents | null {
+  const trimmed = raw.trim();
+  if (trimmed === '') return null;
+  const negative = trimmed.startsWith('-');
+  const withoutSign = negative ? trimmed.slice(1) : trimmed;
+  const withoutThousands = withoutSign.replace(/,/g, '');
+  if (!/^\d+(\.\d{1,2})?$/.test(withoutThousands)) return null;
+  const [wholePart = '0', fractionPart = ''] = withoutThousands.split('.');
+  const cents = Number(wholePart) * 100 + Number(fractionPart.padEnd(2, '0'));
+  return negative ? -cents : cents;
+}
+
+export function parseMoneyInputForLocale(raw: string, locale: Locale): Cents | null {
+  return locale === 'bg' ? parseMoneyInput(raw) : parseMoneyInputEn(raw);
+}
+
+export function formatDateForLocale(value: string | null | undefined, locale: Locale): string {
+  if (!value) return '';
+  if (locale === 'bg') return formatDate(value);
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (!match) return '';
+  const [, year, month, day] = match;
+  return new Intl.DateTimeFormat(EN_LOCALE_TAG, {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(Number(year), Number(month) - 1, Number(day))));
 }

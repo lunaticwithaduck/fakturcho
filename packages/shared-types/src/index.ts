@@ -4,6 +4,7 @@ export * from './billing';
 export * from './catalogue';
 export * from './clients';
 export * from './config';
+export * from './countries';
 export * from './documents';
 export * from './enums';
 export * from './errors';

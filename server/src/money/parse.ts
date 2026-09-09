@@ -1,4 +1,4 @@
-import type { Cents } from '@fakturcho/shared-types';
+import type { Cents, Locale } from '@fakturcho/shared-types';
 
 export function parseCents(input: string): Cents {
   const trimmed = input.trim();
@@ -22,4 +22,22 @@ export function parseDate(input: string): Date {
   const month = Number(match[2]);
   const year = Number(match[3]);
   return new Date(Date.UTC(year, month - 1, day));
+}
+
+function parseCentsEn(input: string): Cents {
+  const trimmed = input.trim();
+  if (trimmed === '') throw new Error('Empty amount');
+  const negative = trimmed.startsWith('-');
+  const withoutSign = negative ? trimmed.slice(1) : trimmed;
+  const withoutThousands = withoutSign.replace(/,/g, '');
+  if (!/^\d+(\.\d{1,2})?$/.test(withoutThousands)) {
+    throw new Error(`Invalid amount: ${input}`);
+  }
+  const [wholePart = '0', fractionPart = ''] = withoutThousands.split('.');
+  const cents = Number(wholePart) * 100 + Number(fractionPart.padEnd(2, '0'));
+  return negative ? -cents : cents;
+}
+
+export function parseMoneyInputForLocale(input: string, locale: Locale): Cents {
+  return locale === 'bg' ? parseCents(input) : parseCentsEn(input);
 }
