@@ -1,6 +1,18 @@
 import { SUBSCRIPTION_STATUSES } from '@fakturcho/shared-types';
+import bgMessages from '@messages/bg.json';
+import { createTranslator } from 'next-intl';
 import { describe, expect, it } from 'vitest';
-import { isSubscriptionUsable, SUBSCRIPTION_STATUS_LABELS } from './subscriptionStatus';
+import {
+  getSubscriptionStatusLabels,
+  isSubscriptionUsable,
+  type Translate,
+} from './subscriptionStatus';
+
+const t = createTranslator({
+  locale: 'bg',
+  messages: bgMessages,
+  namespace: 'billing',
+}) as unknown as Translate;
 
 describe('isSubscriptionUsable', () => {
   it('treats a trialing subscription as not usable', () => {
@@ -20,18 +32,19 @@ describe('isSubscriptionUsable', () => {
   });
 });
 
-describe('SUBSCRIPTION_STATUS_LABELS', () => {
+describe('getSubscriptionStatusLabels', () => {
   it('labels every subscription status in Bulgarian', () => {
+    const labels = getSubscriptionStatusLabels(t);
     for (const status of SUBSCRIPTION_STATUSES) {
-      expect(SUBSCRIPTION_STATUS_LABELS[status]).toBeTruthy();
+      expect(labels[status]).toBeTruthy();
     }
   });
 
   it('labels an active subscription', () => {
-    expect(SUBSCRIPTION_STATUS_LABELS.active).toBe('Активен');
+    expect(getSubscriptionStatusLabels(t).active).toBe('Активен');
   });
 
   it('labels a trialing subscription as awaiting payment', () => {
-    expect(SUBSCRIPTION_STATUS_LABELS.trialing).toBe('Чака плащане');
+    expect(getSubscriptionStatusLabels(t).trialing).toBe('Чака плащане');
   });
 });

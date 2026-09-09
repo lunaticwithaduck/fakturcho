@@ -1,9 +1,10 @@
 import { formatDate } from '@app/features/shared/format';
 import { Button, Card } from '@design/components';
 import type { CheckoutProduct, SubscriptionDto, SubscriptionTierId } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { getSubscriptionTierOptions } from './billingDisplay';
 import { SubscriptionTierOption } from './SubscriptionTierOption';
-import { isSubscriptionUsable, SUBSCRIPTION_STATUS_LABELS } from './subscriptionStatus';
+import { getSubscriptionStatusLabels, isSubscriptionUsable } from './subscriptionStatus';
 
 interface SubscriptionCardProps {
   subscription: SubscriptionDto | null;
@@ -16,7 +17,8 @@ export function SubscriptionCard({
   pendingProduct,
   onSelectTier,
 }: SubscriptionCardProps) {
-  const tierOptions = getSubscriptionTierOptions();
+  const t = useTranslations('billing');
+  const tierOptions = getSubscriptionTierOptions(t);
 
   if (subscription && isSubscriptionUsable(subscription.status) && subscription.tier) {
     const active = tierOptions.find((option) => option.id === subscription.tier);
@@ -24,29 +26,31 @@ export function SubscriptionCard({
     return (
       <Card className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-medium text-text-muted">Абонамент</p>
-          <p className="text-lg font-semibold text-text">{active?.title ?? 'Активен'}</p>
+          <p className="text-sm font-medium text-text-muted">{t('subscription.label')}</p>
+          <p className="text-lg font-semibold text-text">
+            {active?.title ?? t('subscriptionStatus.active')}
+          </p>
           {subscription.currentPeriodEnd ? (
             <p className="text-sm text-text-muted">
-              Текущият период изтича на {formatDate(subscription.currentPeriodEnd)}
+              {t('subscription.periodEnds', { date: formatDate(subscription.currentPeriodEnd) })}
             </p>
           ) : null}
           {active ? (
             <p className="text-sm text-text-muted">
-              Следващото зареждане: {active.grantLabel} кредит
+              {t('subscription.nextGrant', { grant: active.grantLabel })}
             </p>
           ) : null}
           {active ? <p className="text-xs text-text-muted">{active.perDocumentLabel}</p> : null}
         </div>
         {otherTiers.length > 0 ? (
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-text-muted">Смени на</p>
+            <p className="text-sm font-medium text-text-muted">{t('subscription.switchTo')}</p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {otherTiers.map((option) => (
                 <SubscriptionTierOption
                   key={option.id}
                   option={option}
-                  buttonLabel="Смени"
+                  buttonLabel={t('actions.switch')}
                   pending={pendingProduct === option.id}
                   disabled={pendingProduct !== null}
                   onSelect={() => onSelectTier(option.id)}
@@ -66,7 +70,9 @@ export function SubscriptionCard({
       {subscription ? (
         <div className="flex w-full flex-col gap-2">
           <p className="text-sm font-medium text-text-muted">
-            Абонамент: {SUBSCRIPTION_STATUS_LABELS[subscription.status]}
+            {t('subscription.statusLine', {
+              status: getSubscriptionStatusLabels(t)[subscription.status],
+            })}
           </p>
           {pendingTier ? (
             <Button
@@ -75,7 +81,9 @@ export function SubscriptionCard({
               disabled={pendingProduct !== null}
               onClick={() => onSelectTier(pendingTier)}
             >
-              {pendingProduct === pendingTier ? 'Пренасочване...' : 'Продължи към плащане'}
+              {pendingProduct === pendingTier
+                ? t('actions.redirecting')
+                : t('actions.continueToPayment')}
             </Button>
           ) : null}
         </div>
@@ -85,7 +93,7 @@ export function SubscriptionCard({
           <SubscriptionTierOption
             key={option.id}
             option={option}
-            buttonLabel="Активирай"
+            buttonLabel={t('actions.activate')}
             pending={pendingProduct === option.id}
             disabled={pendingProduct !== null}
             onSelect={() => onSelectTier(option.id)}

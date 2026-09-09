@@ -76,5 +76,57 @@
       "issuedToast": "Документът е издаден",
       "emailSentToast": "Имейлът е изпратен"
     }
+  },
+  "billing": {
+    "pageTitle": "Билинг",
+    "balance": {
+      "label": "Баланс",
+      "remaining": "още {count, plural, one {1 документ} other {# документа}}"
+    },
+    "ledgerReasons": {
+      "signupGrant": "Начален бонус",
+      "purchase": "Покупка на кредити",
+      "issuance": "Издаден документ",
+      "adjustment": "Корекция",
+      "subscriptionGrant": "Зареждане от абонамент"
+    },
+    "packs": {
+      "heading": "Пакети кредити",
+      "documents": "{count} документа"
+    },
+    "perDocument": "{price} на документ",
+    "tiers": {
+      "title": "{documents} документа на месец за {price}",
+      "body": "Зарежда {grant} кредит всеки месец; неизползваният кредит се запазва."
+    },
+    "subscription": {
+      "label": "Абонамент",
+      "periodEnds": "Текущият период изтича на {date}",
+      "nextGrant": "Следващото зареждане: {grant} кредит",
+      "switchTo": "Смени на",
+      "statusLine": "Абонамент: {status}"
+    },
+    "subscriptionStatus": {
+      "trialing": "Чака плащане",
+      "active": "Активен",
+      "pastDue": "Просрочено плащане",
+      "canceled": "Прекратен"
+    },
+    "actions": {
+      "buy": "Купи",
+      "activate": "Активирай",
+      "switch": "Смени",
+      "continueToPayment": "Продължи към плащане",
+      "redirecting": "Пренасочване..."
+    },
+    "ledger": {
+      "heading": "Последни движения",
+      "emptyTitle": "Няма движения",
+      "emptyDescription": "Тук ще виждате всяка промяна по баланса ви — бонуси, покупки и издадени документи."
+    },
+    "checkoutError": {
+      "title": "Грешка при пренасочване",
+      "description": "Неуспешно стартиране на плащането. Опитайте отново."
+    }
   }
 }
