@@ -4,9 +4,10 @@ import { createAuth } from './auth.config';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './auth.guard';
 import { AUTH_INSTANCE } from './auth.tokens';
+import { MeController } from './me.controller';
 
 @Module({
-  controllers: [AuthController],
+  controllers: [AuthController, MeController],
   providers: [
     {
       provide: AUTH_INSTANCE,

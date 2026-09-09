@@ -1,3 +1,4 @@
+import { getCountryConfig } from '@fakturcho/shared-types';
 import type { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -51,6 +52,17 @@ export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
           input: false,
           defaultValue: 'user',
         },
+        locale: {
+          type: 'string',
+          required: false,
+          input: true,
+          defaultValue: 'bg',
+        },
+        country: {
+          type: 'string',
+          required: false,
+          input: true,
+        },
       },
     },
     account: {
@@ -61,7 +73,11 @@ export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
         create: {
           before: async (user) => {
             const accountId = await provisionTenant(prisma);
-            return { data: { ...user, accountId } };
+            const locale =
+              typeof user.country === 'string' && user.country.length > 0
+                ? getCountryConfig(user.country).locale
+                : user.locale;
+            return { data: { ...user, accountId, locale } };
           },
         },
       },

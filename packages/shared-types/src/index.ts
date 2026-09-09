@@ -9,5 +9,6 @@ export * from './documents';
 export * from './enums';
 export * from './errors';
 export * from './issuer';
+export * from './me';
 export * from './money';
 export * from './vat';

@@ -2,6 +2,7 @@ export const API_ROUTES = {
   auth: '/api/auth',
   config: '/api/config',
   issuerProfile: '/api/issuer-profile',
+  me: '/api/me',
   clients: '/api/clients',
   client: (id: string) => `/api/clients/${id}`,
   catalogue: '/api/catalogue',

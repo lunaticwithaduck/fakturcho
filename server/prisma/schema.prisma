@@ -72,6 +72,7 @@ model User {
   image         String?
   role          String   @default("user")
   locale        String   @default("bg")
+  country       String?
   accountId     String
   account       Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())

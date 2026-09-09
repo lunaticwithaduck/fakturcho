@@ -36,6 +36,7 @@ describe('signup provisions a tenant', () => {
 
     const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
     expect(user.accountId).toBe(accountId);
+    expect(user.locale).toBe('bg');
 
     const account = await db.prisma.account.findUnique({ where: { id: accountId } });
     expect(account).not.toBeNull();
@@ -69,5 +70,53 @@ describe('signup provisions a tenant', () => {
     });
 
     expect(first.user.accountId).not.toBe(second.user.accountId);
+  });
+
+  it('derives locale from a non-BG country at signup', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Hans Muller',
+        email: 'hans@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('en');
+  });
+
+  it('ignores a client-supplied locale and derives it from country instead', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Spoofed User',
+        email: 'spoofed@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+        locale: 'bg',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('en');
+  });
+
+  it('defaults to bg when no country is provided, unchanged from before', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'No Country User',
+        email: 'no-country@example.com',
+        password: 'correct-horse-battery',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('bg');
   });
 });
