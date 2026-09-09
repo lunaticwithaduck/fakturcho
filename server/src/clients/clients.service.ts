@@ -10,8 +10,14 @@ export interface CreateClientInput {
   eik?: string | null | undefined;
   vatNumber?: string | null | undefined;
   address?: string | null | undefined;
+  street?: string | null | undefined;
+  postcode?: string | null | undefined;
+  country?: string | undefined;
+  documentLanguage?: ClientDto['documentLanguage'] | undefined;
   email?: string | null | undefined;
   mol?: string | null | undefined;
+  peppolEndpointId?: string | null | undefined;
+  peppolScheme?: string | null | undefined;
 }
 
 export interface UpdateClientInput {
@@ -19,8 +25,14 @@ export interface UpdateClientInput {
   eik?: string | null | undefined;
   vatNumber?: string | null | undefined;
   address?: string | null | undefined;
+  street?: string | null | undefined;
+  postcode?: string | null | undefined;
+  country?: string | undefined;
+  documentLanguage?: ClientDto['documentLanguage'] | undefined;
   email?: string | null | undefined;
   mol?: string | null | undefined;
+  peppolEndpointId?: string | null | undefined;
+  peppolScheme?: string | null | undefined;
 }
 
 function toDto(client: Client): ClientDto {
@@ -30,8 +42,14 @@ function toDto(client: Client): ClientDto {
     eik: client.eik,
     vatNumber: client.vatNumber,
     address: client.address,
+    street: client.street,
+    postcode: client.postcode,
+    country: client.country,
+    documentLanguage: client.documentLanguage as ClientDto['documentLanguage'],
     email: client.email,
     mol: client.mol,
+    peppolEndpointId: client.peppolEndpointId,
+    peppolScheme: client.peppolScheme,
   };
 }
 
@@ -74,8 +92,14 @@ export class ClientsService {
           eik,
           vatNumber: input.vatNumber ?? null,
           address: input.address ?? null,
+          street: input.street ?? null,
+          postcode: input.postcode ?? null,
+          country: input.country ?? 'BG',
+          documentLanguage: input.documentLanguage ?? null,
           email: input.email ?? null,
           mol: input.mol ?? null,
+          peppolEndpointId: input.peppolEndpointId ?? null,
+          peppolScheme: input.peppolScheme ?? null,
         },
       });
       return toDto(client);
@@ -100,8 +124,18 @@ export class ClientsService {
           ...(eik !== undefined ? { eik } : {}),
           ...(input.vatNumber !== undefined ? { vatNumber: input.vatNumber } : {}),
           ...(input.address !== undefined ? { address: input.address } : {}),
+          ...(input.street !== undefined ? { street: input.street } : {}),
+          ...(input.postcode !== undefined ? { postcode: input.postcode } : {}),
+          ...(input.country !== undefined ? { country: input.country } : {}),
+          ...(input.documentLanguage !== undefined
+            ? { documentLanguage: input.documentLanguage }
+            : {}),
           ...(input.email !== undefined ? { email: input.email } : {}),
           ...(input.mol !== undefined ? { mol: input.mol } : {}),
+          ...(input.peppolEndpointId !== undefined
+            ? { peppolEndpointId: input.peppolEndpointId }
+            : {}),
+          ...(input.peppolScheme !== undefined ? { peppolScheme: input.peppolScheme } : {}),
         },
       });
       return toDto(client);

@@ -1,15 +1,15 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: fakturcho-db
+    container_name: fakturcho-eu-db
     environment:
       POSTGRES_USER: fakturcho
       POSTGRES_PASSWORD: fakturcho
       POSTGRES_DB: fakturcho
     ports:
-      - '54129:5432'
+      - '54130:5432'
     volumes:
-      - fakturcho-db-data:/var/lib/postgresql/data
+      - fakturcho-eu-db-data:/var/lib/postgresql/data
 
 volumes:
-  fakturcho-db-data:
+  fakturcho-eu-db-data:

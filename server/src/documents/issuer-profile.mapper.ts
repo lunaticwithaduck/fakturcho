@@ -9,7 +9,10 @@ export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerP
     eik: profile.eik,
     mol: profile.mol,
     addressLine: profile.addressLine,
+    street: profile.street,
+    postcode: profile.postcode,
     city: profile.city,
+    country: profile.country,
     phone: profile.phone,
     vatRegistered: profile.vatRegistered,
     vatNumber: profile.vatNumber,
@@ -17,5 +20,7 @@ export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerP
     iban: profile.iban,
     bic: profile.bic,
     altIban: profile.altIban,
+    peppolEndpointId: profile.peppolEndpointId,
+    peppolScheme: profile.peppolScheme,
   };
 }

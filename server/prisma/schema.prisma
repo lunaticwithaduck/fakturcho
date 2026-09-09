@@ -29,6 +29,16 @@ enum SubscriptionStatus {
   CANCELED
 }
 
+enum VatCategory {
+  S
+  Z
+  E
+  AE
+  K
+  G
+  O
+}
+
 model Account {
   id                 String   @id @default(cuid())
   creditBalanceCents Int      @default(0)
@@ -54,6 +64,7 @@ model User {
   emailVerified Boolean  @default(false)
   image         String?
   role          String   @default("user")
+  locale        String   @default("bg")
   accountId     String
   account       Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
@@ -113,39 +124,50 @@ model Verification {
 }
 
 model IssuerProfile {
-  id            String   @id @default(cuid())
-  accountId     String   @unique
-  account       Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  companyName   String?
-  eik           String?
-  mol           String?
-  addressLine   String?
-  city          String?
-  phone         String?
-  vatRegistered Boolean  @default(false)
-  vatNumber     String?
-  bankName      String?
-  iban          String?
-  bic           String?
-  altIban       String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id               String   @id @default(cuid())
+  accountId        String   @unique
+  account          Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  companyName      String?
+  eik              String?
+  mol              String?
+  addressLine      String?
+  street           String?
+  postcode         String?
+  city             String?
+  country          String   @default("BG")
+  phone            String?
+  vatRegistered    Boolean  @default(false)
+  vatNumber        String?
+  bankName         String?
+  iban             String?
+  bic              String?
+  altIban          String?
+  peppolEndpointId String?
+  peppolScheme     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@map("issuer_profile")
 }
 
 model Client {
-  id          String   @id @default(cuid())
-  accountId   String
-  account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  companyName String
-  eik         String?
-  vatNumber   String?
-  address     String?
-  email       String?
-  mol         String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String   @id @default(cuid())
+  accountId        String
+  account          Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  companyName      String
+  eik              String?
+  vatNumber        String?
+  address          String?
+  street           String?
+  postcode         String?
+  country          String   @default("BG")
+  documentLanguage String?
+  email            String?
+  mol              String?
+  peppolEndpointId String?
+  peppolScheme     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   documents Document[]
 
@@ -161,6 +183,7 @@ model CatalogueItem {
   name             String
   defaultUnitPrice Int
   unit             String
+  unitCode         String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -197,10 +220,15 @@ model Document {
   originalDocument   Document?  @relation("DocumentCorrections", fields: [originalDocumentId], references: [id], onDelete: Restrict)
   corrections        Document[] @relation("DocumentCorrections")
 
-  issuedAt   DateTime? @db.Date
-  taxEventAt DateTime? @db.Date
-  dueAt      DateTime? @db.Date
-  validUntil DateTime? @db.Date
+  issuedAt     DateTime? @db.Date
+  taxEventAt   DateTime? @db.Date
+  dueAt        DateTime? @db.Date
+  validUntil   DateTime? @db.Date
+  deliveryDate DateTime? @db.Date
+
+  buyerReference   String?
+  paymentMeansCode String?
+  paymentTermsNote String?
 
   subtotal           Int     @default(0)
   discountTotal      Int     @default(0)
@@ -224,7 +252,10 @@ model Document {
   issuerEik           String?
   issuerMol           String?
   issuerAddressLine   String?
+  issuerStreet        String?
+  issuerPostcode      String?
   issuerCity          String?
+  issuerCountry       String?
   issuerPhone         String?
   issuerVatRegistered Boolean?
   issuerVatNumber     String?
@@ -237,8 +268,12 @@ model Document {
   recipientEik         String?
   recipientVatNumber   String?
   recipientAddress     String?
+  recipientStreet      String?
+  recipientPostcode    String?
+  recipientCountry     String?
   recipientEmail       String?
   recipientMol         String?
+  documentLanguage     String?
 
   lineItems         LineItem[]
   discounts         Discount[]
@@ -255,14 +290,17 @@ model Document {
 }
 
 model LineItem {
-  id         String   @id @default(cuid())
-  documentId String
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  name       String
-  quantity   Decimal  @db.Decimal(14, 3)
-  unitPrice  Int
-  lineTotal  Int
-  sortOrder  Int
+  id          String      @id @default(cuid())
+  documentId  String
+  document    Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  name        String
+  quantity    Decimal     @db.Decimal(14, 3)
+  unitPrice   Int
+  lineTotal   Int
+  sortOrder   Int
+  vatRateBp   Int         @default(2000)
+  vatCategory VatCategory @default(S)
+  unitCode    String?
 
   @@index([documentId])
   @@map("line_item")
@@ -307,15 +345,15 @@ enum CreditLedgerReason {
 }
 
 model CreditLedgerEntry {
-  id                  String             @id @default(cuid())
-  accountId           String
-  account             Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  amountCents         Int
-  reason              CreditLedgerReason
-  documentId          String?            @unique
-  document            Document?          @relation(fields: [documentId], references: [id], onDelete: SetNull)
-  revolutOrderId      String?            @unique
-  createdAt           DateTime           @default(now())
+  id             String             @id @default(cuid())
+  accountId      String
+  account        Account            @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amountCents    Int
+  reason         CreditLedgerReason
+  documentId     String?            @unique
+  document       Document?          @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  revolutOrderId String?            @unique
+  createdAt      DateTime           @default(now())
 
   @@index([accountId, createdAt])
   @@map("credit_ledger_entry")

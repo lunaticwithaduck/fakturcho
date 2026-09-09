@@ -8,7 +8,10 @@ export interface UpdateIssuerProfileInput {
   eik?: string | null | undefined;
   mol?: string | null | undefined;
   addressLine?: string | null | undefined;
+  street?: string | null | undefined;
+  postcode?: string | null | undefined;
   city?: string | null | undefined;
+  country?: string | undefined;
   phone?: string | null | undefined;
   vatRegistered?: boolean | undefined;
   vatNumber?: string | null | undefined;
@@ -16,6 +19,8 @@ export interface UpdateIssuerProfileInput {
   iban?: string | null | undefined;
   bic?: string | null | undefined;
   altIban?: string | null | undefined;
+  peppolEndpointId?: string | null | undefined;
+  peppolScheme?: string | null | undefined;
 }
 
 function toDto(profile: IssuerProfile): IssuerProfileDto {
@@ -25,7 +30,10 @@ function toDto(profile: IssuerProfile): IssuerProfileDto {
     eik: profile.eik,
     mol: profile.mol,
     addressLine: profile.addressLine,
+    street: profile.street,
+    postcode: profile.postcode,
     city: profile.city,
+    country: profile.country,
     phone: profile.phone,
     vatRegistered: profile.vatRegistered,
     vatNumber: profile.vatNumber,
@@ -33,6 +41,8 @@ function toDto(profile: IssuerProfile): IssuerProfileDto {
     iban: profile.iban,
     bic: profile.bic,
     altIban: profile.altIban,
+    peppolEndpointId: profile.peppolEndpointId,
+    peppolScheme: profile.peppolScheme,
   };
 }
 
@@ -58,7 +68,10 @@ export class IssuerService {
       ...(input.eik !== undefined ? { eik: input.eik } : {}),
       ...(input.mol !== undefined ? { mol: input.mol } : {}),
       ...(input.addressLine !== undefined ? { addressLine: input.addressLine } : {}),
+      ...(input.street !== undefined ? { street: input.street } : {}),
+      ...(input.postcode !== undefined ? { postcode: input.postcode } : {}),
       ...(input.city !== undefined ? { city: input.city } : {}),
+      ...(input.country !== undefined ? { country: input.country } : {}),
       ...(input.phone !== undefined ? { phone: input.phone } : {}),
       ...(input.vatRegistered !== undefined ? { vatRegistered: input.vatRegistered } : {}),
       ...(input.vatNumber !== undefined ? { vatNumber: input.vatNumber } : {}),
@@ -66,6 +79,8 @@ export class IssuerService {
       ...(input.iban !== undefined ? { iban: input.iban } : {}),
       ...(input.bic !== undefined ? { bic: input.bic } : {}),
       ...(input.altIban !== undefined ? { altIban: input.altIban } : {}),
+      ...(input.peppolEndpointId !== undefined ? { peppolEndpointId: input.peppolEndpointId } : {}),
+      ...(input.peppolScheme !== undefined ? { peppolScheme: input.peppolScheme } : {}),
     };
     const profile = await this.prisma.issuerProfile.upsert({
       where: { accountId },

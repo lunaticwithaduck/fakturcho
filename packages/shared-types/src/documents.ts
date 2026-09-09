@@ -1,5 +1,7 @@
+import type { Locale } from './countries';
 import type { DocumentStatus, DocumentType } from './enums';
 import type { Cents, CurrencyCode } from './money';
+import type { VatCategory } from './vat';
 
 export interface LineItemDto {
   id: string;
@@ -8,6 +10,9 @@ export interface LineItemDto {
   unitPrice: Cents;
   lineTotal: Cents;
   sortOrder: number;
+  vatRateBp: number;
+  vatCategory: VatCategory;
+  unitCode: string | null;
 }
 
 export interface DiscountDto {
@@ -23,7 +28,10 @@ export interface IssuerSnapshotDto {
   eik: string | null;
   mol: string | null;
   addressLine: string | null;
+  street: string | null;
+  postcode: string | null;
   city: string | null;
+  country: string | null;
   phone: string | null;
   vatRegistered: boolean | null;
   vatNumber: string | null;
@@ -38,6 +46,9 @@ export interface RecipientSnapshotDto {
   eik: string | null;
   vatNumber: string | null;
   address: string | null;
+  street: string | null;
+  postcode: string | null;
+  country: string | null;
   email: string | null;
   mol: string | null;
 }
@@ -55,6 +66,10 @@ export interface DocumentDto {
   taxEventAt: string | null;
   dueAt: string | null;
   validUntil: string | null;
+  deliveryDate: string | null;
+  buyerReference: string | null;
+  paymentMeansCode: string | null;
+  paymentTermsNote: string | null;
   subtotal: Cents;
   discountTotal: Cents;
   amount: Cents;
@@ -69,6 +84,7 @@ export interface DocumentDto {
   emailText: string | null;
   emailedAt: string | null;
   templateId: string;
+  documentLanguage: Locale | null;
   issuer: IssuerSnapshotDto;
   recipient: RecipientSnapshotDto;
   lineItems: LineItemDto[];
@@ -97,6 +113,9 @@ export interface LineItemInput {
   quantity: string;
   unitPrice: Cents;
   sortOrder: number;
+  vatRateBp?: number;
+  vatCategory?: VatCategory;
+  unitCode?: string | null;
 }
 
 export interface DiscountInput {
@@ -113,6 +132,10 @@ export interface SaveDraftRequest {
   taxEventAt?: string | null;
   dueAt?: string | null;
   validUntil?: string | null;
+  deliveryDate?: string | null;
+  buyerReference?: string | null;
+  paymentMeansCode?: string | null;
+  paymentTermsNote?: string | null;
   vatIncluded?: boolean;
   vatExemptionGround?: string | null;
   clientId?: string | null;
@@ -120,6 +143,7 @@ export interface SaveDraftRequest {
   notes?: string | null;
   emailText?: string | null;
   templateId?: string;
+  documentLanguage?: Locale | null;
   lineItems: LineItemInput[];
   discounts?: DiscountInput[];
 }

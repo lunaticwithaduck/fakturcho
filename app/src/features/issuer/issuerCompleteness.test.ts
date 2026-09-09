@@ -8,7 +8,10 @@ const BASE: IssuerProfileDto = {
   eik: '123456789',
   mol: null,
   addressLine: 'ул. Тестова 1',
+  street: null,
+  postcode: null,
   city: 'София',
+  country: 'BG',
   phone: null,
   vatRegistered: false,
   vatNumber: null,
@@ -16,6 +19,8 @@ const BASE: IssuerProfileDto = {
   iban: null,
   bic: null,
   altIban: null,
+  peppolEndpointId: null,
+  peppolScheme: null,
 };
 
 describe('getMissingIssuerFields', () => {
