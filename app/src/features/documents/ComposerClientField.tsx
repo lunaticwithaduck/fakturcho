@@ -3,6 +3,7 @@
 import { ClientFormDialog } from '@app/features/clients/ClientFormDialog';
 import { Button, Select, SelectItem } from '@design/components';
 import type { ClientDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 const NONE_VALUE = 'none';
@@ -14,16 +15,17 @@ interface ComposerClientFieldProps {
 }
 
 export function ComposerClientField({ clientId, clients, onChange }: ComposerClientFieldProps) {
+  const t = useTranslations('documents');
   const [isCreating, setIsCreating] = useState(false);
 
   return (
     <div className="flex flex-col gap-2">
       <Select
-        label="Клиент"
+        label={t('composer.client.label')}
         value={clientId ?? NONE_VALUE}
         onValueChange={(next) => onChange(next === NONE_VALUE ? null : next)}
       >
-        <SelectItem value={NONE_VALUE}>Без клиент</SelectItem>
+        <SelectItem value={NONE_VALUE}>{t('composer.client.none')}</SelectItem>
         {clients.map((client) => (
           <SelectItem key={client.id} value={client.id}>
             {client.companyName}
@@ -37,7 +39,7 @@ export function ComposerClientField({ clientId, clients, onChange }: ComposerCli
         className="self-start"
         onClick={() => setIsCreating(true)}
       >
-        + Нов клиент
+        {t('composer.client.addNew')}
       </Button>
       {isCreating ? (
         <ClientFormDialog

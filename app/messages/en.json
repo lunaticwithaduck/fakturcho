@@ -75,6 +75,87 @@
       "cancelledToast": "Document cancelled",
       "issuedToast": "Document issued",
       "emailSentToast": "Email sent"
+    },
+    "composer": {
+      "titleNew": "New document",
+      "titleEdit": "Edit document",
+      "draftSaved": "Draft saved",
+      "requiredField": "Required field",
+      "notFound": {
+        "title": "Document not found",
+        "action": "Go to documents"
+      },
+      "notDraft": {
+        "title": "Only drafts can be edited",
+        "description": "This document has already been issued and is immutable. An issued document is corrected with a credit or debit note.",
+        "action": "Go to document"
+      },
+      "errors": {
+        "missingOriginalDocument": "Select the original document to continue.",
+        "missingLineItems": "Add at least one line item with a name, quantity and price.",
+        "missingVatGround": "Select a reason for not charging VAT."
+      },
+      "documentType": {
+        "label": "Document type"
+      },
+      "client": {
+        "label": "Client",
+        "none": "No client",
+        "addNew": "+ New client"
+      },
+      "details": {
+        "referenceNumber": "Reference number",
+        "validUntil": "Valid until",
+        "taxEventAt": "Tax event date",
+        "dueAt": "Due date"
+      },
+      "originalDocument": {
+        "label": "Original document",
+        "placeholder": "Select document",
+        "noClient": "No client"
+      },
+      "lineItems": {
+        "heading": "Line items",
+        "nameLabel": "Name",
+        "quantityLabel": "Quantity",
+        "priceLabel": "Price",
+        "totalLabel": "Total",
+        "removeButton": "Remove",
+        "addButton": "Add item"
+      },
+      "discounts": {
+        "heading": "Discounts",
+        "reasonLabel": "Discount reason",
+        "modePercent": "Percent",
+        "modeAmount": "Amount",
+        "percentLabel": "Percent %",
+        "amountLabel": "Amount",
+        "removeButton": "Remove",
+        "addButton": "Add discount"
+      },
+      "vat": {
+        "heading": "VAT",
+        "chargeLabel": "Charge VAT (20%)",
+        "groundLabel": "Reason for not charging VAT",
+        "groundPlaceholder": "Select reason"
+      },
+      "totals": {
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "taxBase": "Tax base",
+        "vat": "VAT (20%)",
+        "total": "Total"
+      },
+      "notes": {
+        "notesLabel": "Notes",
+        "preparedByLabel": "Prepared by"
+      },
+      "actions": {
+        "saveDraft": "Save draft",
+        "saving": "Saving...",
+        "saveAndIssue": "Save and issue",
+        "cancel": "Cancel"
+      }
     }
   },
   "billing": {

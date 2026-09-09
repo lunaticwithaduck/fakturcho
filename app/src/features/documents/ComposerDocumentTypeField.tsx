@@ -1,6 +1,9 @@
+'use client';
+
 import { Select, SelectItem } from '@design/components';
 import { DOCUMENT_TYPE_LABELS, DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { DocumentType } from '@shared/types';
+import { useTranslations } from 'next-intl';
 
 interface ComposerDocumentTypeFieldProps {
   value: DocumentType;
@@ -8,9 +11,11 @@ interface ComposerDocumentTypeFieldProps {
 }
 
 export function ComposerDocumentTypeField({ value, onChange }: ComposerDocumentTypeFieldProps) {
+  const t = useTranslations('documents');
+
   return (
     <Select
-      label="Вид документ"
+      label={t('composer.documentType.label')}
       value={value}
       onValueChange={(next) => onChange(next as DocumentType)}
     >

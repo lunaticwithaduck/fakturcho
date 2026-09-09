@@ -75,6 +75,87 @@
       "cancelledToast": "Документът е анулиран",
       "issuedToast": "Документът е издаден",
       "emailSentToast": "Имейлът е изпратен"
+    },
+    "composer": {
+      "titleNew": "Нов документ",
+      "titleEdit": "Редактиране на документ",
+      "draftSaved": "Черновата е запазена",
+      "requiredField": "Задължително поле",
+      "notFound": {
+        "title": "Документът не е намерен",
+        "action": "Към документите"
+      },
+      "notDraft": {
+        "title": "Само чернови могат да се редактират",
+        "description": "Този документ вече е издаден и е неизменяем. Издаден документ се коригира с кредитно или дебитно известие.",
+        "action": "Към документа"
+      },
+      "errors": {
+        "missingOriginalDocument": "Изберете оригиналния документ, за да продължите.",
+        "missingLineItems": "Добавете поне един артикул с попълнени наименование, количество и цена.",
+        "missingVatGround": "Изберете основание за неначисляване на ДДС."
+      },
+      "documentType": {
+        "label": "Вид документ"
+      },
+      "client": {
+        "label": "Клиент",
+        "none": "Без клиент",
+        "addNew": "+ Нов клиент"
+      },
+      "details": {
+        "referenceNumber": "Референтен номер",
+        "validUntil": "Валидно до",
+        "taxEventAt": "Данъчно събитие",
+        "dueAt": "Падеж"
+      },
+      "originalDocument": {
+        "label": "Оригинален документ",
+        "placeholder": "Изберете документ",
+        "noClient": "Без клиент"
+      },
+      "lineItems": {
+        "heading": "Артикули",
+        "nameLabel": "Наименование",
+        "quantityLabel": "Количество",
+        "priceLabel": "Цена",
+        "totalLabel": "Общо",
+        "removeButton": "Премахни",
+        "addButton": "Добави артикул"
+      },
+      "discounts": {
+        "heading": "Отстъпки",
+        "reasonLabel": "Основание за отстъпка",
+        "modePercent": "Процент",
+        "modeAmount": "Сума",
+        "percentLabel": "Процент %",
+        "amountLabel": "Сума",
+        "removeButton": "Премахни",
+        "addButton": "Добави отстъпка"
+      },
+      "vat": {
+        "heading": "ДДС",
+        "chargeLabel": "Начисли ДДС (20%)",
+        "groundLabel": "Основание за неначисляване на ДДС",
+        "groundPlaceholder": "Изберете основание"
+      },
+      "totals": {
+        "subtotal": "Междинна сума",
+        "discount": "Отстъпка",
+        "taxBase": "Данъчна основа",
+        "vat": "ДДС (20%)",
+        "total": "Общо"
+      },
+      "notes": {
+        "notesLabel": "Бележки",
+        "preparedByLabel": "Съставил"
+      },
+      "actions": {
+        "saveDraft": "Запази чернова",
+        "saving": "Запазване...",
+        "saveAndIssue": "Запази и издай",
+        "cancel": "Отказ"
+      }
     }
   },
   "billing": {
