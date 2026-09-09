@@ -1,5 +1,5 @@
 import type { Document } from '@prisma/client';
-import { formatDate } from '../../../money/format';
+import { formatDateForLocale } from '../../../money/format';
 import { escapeHtml, line } from './html-utils';
 import type { ClassicLabels } from './labels';
 import type { ClassicLocaleContext } from './locale';
@@ -26,13 +26,19 @@ export function buildDatesBlock(
   locale: ClassicLocaleContext,
 ): string {
   const { labels } = locale;
-  const issuedAt = document.issuedAt ? formatDate(document.issuedAt) : '—';
+  const issuedAt = document.issuedAt
+    ? formatDateForLocale(document.issuedAt, locale.language)
+    : '—';
   const rows = [`<div>${labels.issuedAtPrefix}${issuedAt}</div>`];
   if (isQuote) {
-    const validUntil = document.validUntil ? formatDate(document.validUntil) : '—';
+    const validUntil = document.validUntil
+      ? formatDateForLocale(document.validUntil, locale.language)
+      : '—';
     rows.push(`<div>${labels.validUntilPrefix}${validUntil}</div>`);
   } else {
-    const taxEventAt = document.taxEventAt ? formatDate(document.taxEventAt) : '—';
+    const taxEventAt = document.taxEventAt
+      ? formatDateForLocale(document.taxEventAt, locale.language)
+      : '—';
     rows.push(`<div>${labels.taxEventPrefix}${taxEventAt}</div>`);
   }
   rows.push(buildStatusMarker(document.status, labels));

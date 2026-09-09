@@ -60,8 +60,8 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Recipient:');
     expect(html).toContain('Company registration no.: 987654321');
     expect(html).toContain('VAT no.: BG987654321');
-    expect(html).toContain('Issue date: 02.08.2026');
-    expect(html).toContain('Tax event: 02.08.2026');
+    expect(html).toContain('Issue date: 02/08/2026');
+    expect(html).toContain('Tax event: 02/08/2026');
     expect(html).toContain('Invoice # 0000000001');
     expect(html).not.toContain('(Original)');
     expect(html).not.toContain('Оригинал');
