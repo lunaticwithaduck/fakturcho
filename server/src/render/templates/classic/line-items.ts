@@ -1,5 +1,5 @@
 import type { LineItem } from '@prisma/client';
-import { formatCents } from '../../../money/format';
+import { formatCentsForLocale } from '../../../money/format';
 import { escapeHtml } from './html-utils';
 import type { ClassicLocaleContext } from './locale';
 
@@ -14,14 +14,14 @@ export function buildLineItemsTable(
   lineItems: readonly LineItem[],
   locale: ClassicLocaleContext,
 ): string {
-  const { labels } = locale;
+  const { labels, language } = locale;
   const rows = lineItems
     .map(
       (item) => `<tr>
         <td>${escapeHtml(item.name)}</td>
         <td>${formatQuantity(item.quantity)}</td>
-        <td>${formatCents(item.unitPrice)}</td>
-        <td>${formatCents(item.lineTotal)}</td>
+        <td>${formatCentsForLocale(item.unitPrice, language)}</td>
+        <td>${formatCentsForLocale(item.lineTotal, language)}</td>
       </tr>`,
     )
     .join('');
