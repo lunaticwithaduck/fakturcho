@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@design/components';
+import { useTranslations } from 'next-intl';
 
 interface ConfirmDialogProps {
   title: string;
@@ -28,6 +29,8 @@ export function ConfirmDialog({
   onOpenChange,
   onConfirm,
 }: ConfirmDialogProps) {
+  const t = useTranslations('shell');
+
   return (
     <Dialog open onOpenChange={onOpenChange}>
       <DialogContent>
@@ -36,11 +39,11 @@ export function ConfirmDialog({
         <div className="flex justify-end gap-2 pt-2">
           <DialogClose asChild>
             <Button type="button" variant="ghost">
-              Отказ
+              {t('confirmDialog.cancel')}
             </Button>
           </DialogClose>
           <Button type="button" variant={variant} disabled={isConfirming} onClick={onConfirm}>
-            {isConfirming ? 'Изчакайте...' : confirmLabel}
+            {isConfirming ? t('confirmDialog.confirming') : confirmLabel}
           </Button>
         </div>
       </DialogContent>
