@@ -5,6 +5,7 @@ import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { Button, EmptyState, Input, Plus, Skeleton, toast } from '@design/components';
 import type { ClientDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { ClientFormDialog } from './ClientFormDialog';
 import { ClientRow } from './ClientRow';
@@ -12,6 +13,7 @@ import { ClientRow } from './ClientRow';
 type DialogState = { mode: 'create' } | { mode: 'edit'; client: ClientDto } | null;
 
 export function ClientsListPage() {
+  const t = useTranslations('clients');
   const { data, isLoading } = useListClientsQuery();
   const [deleteClient, { isLoading: isDeleting }] = useDeleteClientMutation();
   const [search, setSearch] = useState('');
@@ -33,11 +35,11 @@ export function ClientsListPage() {
     if (!pendingDelete) return;
     try {
       await deleteClient(pendingDelete.id).unwrap();
-      toast({ title: 'Клиентът е изтрит' });
+      toast({ title: t('deleteToastTitle') });
       setPendingDelete(null);
     } catch (error) {
       toast({
-        title: 'Неуспешно изтриване',
+        title: t('deleteErrorTitle'),
         description: getApiErrorMessage(error),
         variant: 'danger',
       });
@@ -47,15 +49,15 @@ export function ClientsListPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-text">Клиенти</h1>
+        <h1 className="text-2xl font-bold text-text">{t('pageTitle')}</h1>
         <Button iconLeft={Plus} onClick={() => setDialogState({ mode: 'create' })}>
-          Нов клиент
+          {t('newClient')}
         </Button>
       </div>
 
       <Input
-        label="Търсене"
-        placeholder="Търсене по фирма или ЕИК"
+        label={t('searchLabel')}
+        placeholder={t('searchPlaceholder')}
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />
@@ -68,11 +70,11 @@ export function ClientsListPage() {
         </div>
       ) : filtered.length === 0 ? (
         <EmptyState
-          title="Нямате клиенти"
-          description="Добавете първия си клиент, за да го използвате при съставяне на документи."
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
           action={
             <Button iconLeft={Plus} size="sm" onClick={() => setDialogState({ mode: 'create' })}>
-              Нов клиент
+              {t('newClient')}
             </Button>
           }
         />
@@ -97,7 +99,7 @@ export function ClientsListPage() {
             if (!open) setDialogState(null);
           }}
           onSaved={() => {
-            toast({ title: 'Клиентът е запазен' });
+            toast({ title: t('saveToastTitle') });
             setDialogState(null);
           }}
         />
@@ -105,9 +107,9 @@ export function ClientsListPage() {
 
       {pendingDelete ? (
         <ConfirmDialog
-          title="Изтриване на клиент"
-          description={`Сигурни ли сте, че искате да изтриете "${pendingDelete.companyName}"? Действието е необратимо.`}
-          confirmLabel="Изтрий"
+          title={t('deleteDialogTitle')}
+          description={t('deleteDialogDescription', { name: pendingDelete.companyName })}
+          confirmLabel={t('delete')}
           isConfirming={isDeleting}
           onOpenChange={(open) => {
             if (!open) setPendingDelete(null);

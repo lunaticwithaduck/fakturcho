@@ -1,6 +1,6 @@
 import { useCreateClientMutation, useUpdateClientMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
-import type { ClientDto, CreateClientRequest } from '@shared/types';
+import type { ClientDto, CreateClientRequest, Locale } from '@shared/types';
 import { type FormEvent, useState } from 'react';
 
 export interface ClientFormValues {
@@ -10,6 +10,8 @@ export interface ClientFormValues {
   address: string;
   email: string;
   mol: string;
+  country: string;
+  documentLanguage: Locale | null;
 }
 
 export function clientToFormValues(client: ClientDto | null): ClientFormValues {
@@ -20,6 +22,8 @@ export function clientToFormValues(client: ClientDto | null): ClientFormValues {
     address: client?.address ?? '',
     email: client?.email ?? '',
     mol: client?.mol ?? '',
+    country: client?.country ?? 'BG',
+    documentLanguage: client?.documentLanguage ?? null,
   };
 }
 
@@ -31,6 +35,8 @@ function toRequestBody(values: ClientFormValues): CreateClientRequest {
     address: values.address.trim() || null,
     email: values.email.trim() || null,
     mol: values.mol.trim() || null,
+    country: values.country,
+    documentLanguage: values.documentLanguage,
   };
 }
 
