@@ -1,4 +1,5 @@
 import type { LineItemDto, VatCategory } from '@fakturcho/shared-types';
+import { computeVatSubtotals } from '../../vat-eu/subtotals';
 
 export interface Fa3VatBucket {
   netTag: string;
@@ -41,19 +42,19 @@ function bucketTags(
 }
 
 export function groupFa3VatBuckets(lineItems: readonly LineItemDto[]): Fa3VatBucket[] {
-  const groups = new Map<string, Fa3VatBucket>();
-  for (const line of lineItems) {
-    const { netTag, vatTag } = bucketTags(line.vatCategory, line.vatRateBp);
-    const vatAmount = vatTag ? Math.round((line.lineTotal * line.vatRateBp) / 10000) : 0;
-    const existing = groups.get(netTag);
+  const buckets = new Map<string, Fa3VatBucket>();
+  for (const subtotal of computeVatSubtotals(lineItems)) {
+    const { netTag, vatTag } = bucketTags(subtotal.vatCategory, subtotal.rateBp);
+    const vatAmount = vatTag ? subtotal.vatAmount : 0;
+    const existing = buckets.get(netTag);
     if (existing) {
-      existing.taxableAmount += line.lineTotal;
+      existing.taxableAmount += subtotal.taxableAmount;
       existing.vatAmount += vatAmount;
       continue;
     }
-    groups.set(netTag, { netTag, vatTag, taxableAmount: line.lineTotal, vatAmount });
+    buckets.set(netTag, { netTag, vatTag, taxableAmount: subtotal.taxableAmount, vatAmount });
   }
-  return [...groups.values()];
+  return [...buckets.values()];
 }
 
 export function vatRateCode(category: VatCategory, rateBp: number): string {
