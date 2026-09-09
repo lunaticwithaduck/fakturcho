@@ -10,8 +10,9 @@ import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { EmptyState, Skeleton, toast } from '@design/components';
 import { skipToken } from '@reduxjs/toolkit/query/react';
+import type { Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { DocumentActionBar } from './DocumentActionBar';
 import { DocumentEmailDialog } from './DocumentEmailDialog';
@@ -30,6 +31,7 @@ interface DocumentViewPageProps {
 
 export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPageProps) {
   const t = useTranslations('documents');
+  const locale = useLocale() as Locale;
   const router = useRouter();
   const { data: document, isLoading } = useGetDocumentQuery(documentId);
   const { data: client } = useGetClientQuery(document?.clientId ?? skipToken);
@@ -54,7 +56,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
     return <EmptyState title={t('view.notFound')} />;
   }
 
-  const title = formatDocumentTitle(document, (key, values) => t(`title.${key}`, values));
+  const title = formatDocumentTitle(document, (key, values) => t(`title.${key}`, values), locale);
 
   async function handleMarkPaid() {
     try {

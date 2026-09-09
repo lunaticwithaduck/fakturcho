@@ -79,7 +79,7 @@ describe('ComposerOriginalDocumentField', () => {
 
     const listbox = await openOptions('Original document');
 
-    expect(within(listbox).getByText('Фактура — draft — ACME EOOD')).toBeTruthy();
-    expect(within(listbox).getByText('Фактура No. 0000000042 (Original) — Beta OOD')).toBeTruthy();
+    expect(within(listbox).getByText('Invoice — draft — ACME EOOD')).toBeTruthy();
+    expect(within(listbox).getByText('Invoice No. 0000000042 (Original) — Beta OOD')).toBeTruthy();
   });
 });

@@ -121,7 +121,7 @@ describe('DocumentViewPage', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByRole('heading', { name: 'Фактура No. 0000000016 (Original)' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Invoice No. 0000000016 (Original)' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Mark as paid' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Send by email' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeTruthy();

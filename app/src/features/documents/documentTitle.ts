@@ -1,9 +1,9 @@
 import {
-  DOCUMENT_TYPE_LABELS,
   formatDocumentNumber,
+  getDocumentTypeLabel,
   TAX_DOCUMENT_TYPES,
 } from '@fakturcho/shared-types';
-import type { DocumentType } from '@shared/types';
+import type { DocumentType, Locale } from '@shared/types';
 
 export interface DocumentTitleInput {
   documentType: DocumentType;
@@ -35,8 +35,9 @@ function fallbackTranslate(key: string, values?: Record<string, string | number>
 export function formatDocumentTitle(
   input: DocumentTitleInput,
   t: DocumentTitleTranslator = fallbackTranslate,
+  locale: Locale = 'bg',
 ): string {
-  const label = DOCUMENT_TYPE_LABELS[input.documentType];
+  const label = getDocumentTypeLabel(input.documentType, locale);
   if (input.number === null) return t('draft', { label });
   const marker = TAX_DOCUMENT_TYPES[input.documentType] ? t('originalMarker') : '';
   const number = `${input.numberPrefix ?? ''}${formatDocumentNumber(input.number)}${input.numberSuffix ?? ''}`;

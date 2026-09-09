@@ -1,8 +1,8 @@
 import { formatDate, formatMoney } from '@app/features/shared/format';
 import { Card } from '@design/components';
-import type { DocumentListItemDto } from '@shared/types';
+import type { DocumentListItemDto, Locale } from '@shared/types';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { DocumentStatusBadge } from './DocumentStatusBadge';
 import { formatDocumentTitle } from './documentTitle';
 
@@ -12,7 +12,8 @@ interface DocumentListItemCardProps {
 
 export function DocumentListItemCard({ document }: DocumentListItemCardProps) {
   const t = useTranslations('documents');
-  const title = formatDocumentTitle(document, (key, values) => t(`title.${key}`, values));
+  const locale = useLocale() as Locale;
+  const title = formatDocumentTitle(document, (key, values) => t(`title.${key}`, values), locale);
 
   return (
     <Link href={`/documents/${document.id}`}>

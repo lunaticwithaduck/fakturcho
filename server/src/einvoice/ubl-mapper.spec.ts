@@ -1,29 +1,13 @@
 import type { DocumentDto, VatSubtotal } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
+import { computeVatSubtotals } from '../vat-eu/subtotals';
 import { bgDomesticStandardInvoice } from './__fixtures__/bg-domestic-standard';
 import { deDomesticStandardInvoice } from './__fixtures__/eu-domestic-standard';
 import { bgToEuReverseChargeInvoice } from './__fixtures__/eu-reverse-charge';
 import { toUblXml } from './ubl-mapper';
 
 function expectedSubtotals(document: DocumentDto): VatSubtotal[] {
-  const groups = new Map<string, VatSubtotal>();
-  for (const line of document.lineItems) {
-    const key = `${line.vatCategory}:${line.vatRateBp}`;
-    const vatAmount = Math.round((line.lineTotal * line.vatRateBp) / 10000);
-    const existing = groups.get(key);
-    if (existing) {
-      existing.taxableAmount += line.lineTotal;
-      existing.vatAmount += vatAmount;
-      continue;
-    }
-    groups.set(key, {
-      vatCategory: line.vatCategory,
-      rateBp: line.vatRateBp,
-      taxableAmount: line.lineTotal,
-      vatAmount,
-    });
-  }
-  return [...groups.values()];
+  return computeVatSubtotals(document.lineItems);
 }
 
 function countOccurrences(haystack: string, needle: string): number {
