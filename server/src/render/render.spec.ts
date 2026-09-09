@@ -243,7 +243,7 @@ describe('render pipeline', () => {
     expect(text).not.toContain('Съставил');
     expect(text).not.toContain('(Оригинал)');
     expect(text).not.toContain('лв.');
-    expect(filename).toBe('Фактура_0000000020.pdf');
+    expect(filename).toBe('Invoice_0000000020.pdf');
   });
 
   it('derives English from a non-Bulgarian issuer country when documentLanguage is unset', async () => {

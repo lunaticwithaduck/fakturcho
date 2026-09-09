@@ -1,7 +1,7 @@
 import {
-  DOCUMENT_TYPE_LABELS,
   type DocumentType,
   formatDocumentNumber,
+  getDocumentTypeLabel,
 } from '@fakturcho/shared-types';
 import type { ClassicLanguage } from './templates/classic/labels';
 
@@ -11,7 +11,7 @@ export function buildDownloadFilename(
   number: number | null,
   language: ClassicLanguage,
 ): string {
-  const label = DOCUMENT_TYPE_LABELS[documentType];
+  const label = getDocumentTypeLabel(documentType, language);
   const draftMarker = language === 'bg' ? 'Чернова' : 'Draft';
   const numberPart = isDraft || number === null ? draftMarker : formatDocumentNumber(number);
   return `${label}_${numberPart}.pdf`;
