@@ -1,6 +1,7 @@
 import type { LineItem } from '@prisma/client';
 import { formatCents } from '../../../money/format';
 import { escapeHtml } from './html-utils';
+import type { ClassicLocaleContext } from './locale';
 
 function formatQuantity(raw: unknown): string {
   const numeric = Number(raw);
@@ -9,7 +10,11 @@ function formatQuantity(raw: unknown): string {
   return trimmed.replace('.', ',');
 }
 
-export function buildLineItemsTable(lineItems: readonly LineItem[]): string {
+export function buildLineItemsTable(
+  lineItems: readonly LineItem[],
+  locale: ClassicLocaleContext,
+): string {
+  const { labels } = locale;
   const rows = lineItems
     .map(
       (item) => `<tr>
@@ -23,10 +28,10 @@ export function buildLineItemsTable(lineItems: readonly LineItem[]): string {
   return `<table class="line-items">
     <thead>
       <tr>
-        <th>Наименование</th>
-        <th>Количество</th>
-        <th>Цена</th>
-        <th>Общо</th>
+        <th>${labels.colName}</th>
+        <th>${labels.colQuantity}</th>
+        <th>${labels.colPrice}</th>
+        <th>${labels.colTotal}</th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>

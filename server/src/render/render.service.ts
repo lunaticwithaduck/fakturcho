@@ -5,6 +5,7 @@ import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
 import { isDualDisplayActive } from './dual-display';
+import { resolveDocumentLanguage } from './language';
 import { toSharedDocumentType } from './prisma-mappers';
 import { renderClassicTemplateHtml } from './templates/classic/template';
 
@@ -47,6 +48,7 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
     });
 
     const isDraft = document.status === 'DRAFT' || document.number === null;
+    const language = resolveDocumentLanguage(document.documentLanguage, document.issuerCountry);
 
     const html = renderClassicTemplateHtml({
       document,
@@ -54,11 +56,12 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       presentation,
       dualDisplayActive: isDualDisplayActive(),
       isDraft,
+      language,
     });
 
     const buffer = await this.renderHtmlToPdf(html);
     const number = document.number === null ? null : Number(document.number);
-    const filename = buildDownloadFilename(documentType, isDraft, number);
+    const filename = buildDownloadFilename(documentType, isDraft, number, language);
 
     return { buffer, filename, isDraft };
   }
