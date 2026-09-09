@@ -14,6 +14,7 @@ export async function createCompleteIssuerProfile(
     country: string;
     street: string | null;
     postcode: string | null;
+    vatRegistered: boolean;
   }> = {},
 ) {
   return prisma.issuerProfile.create({
@@ -38,6 +39,7 @@ export async function createTestClient(
     street: string | null;
     postcode: string | null;
     documentLanguage: string | null;
+    vatNumber: string | null;
   }> = {},
 ) {
   return prisma.client.create({ data: { accountId, companyName: 'Клиент ООД', ...overrides } });

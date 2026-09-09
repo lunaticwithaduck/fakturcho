@@ -118,6 +118,59 @@ describe('DocumentsService', () => {
     });
   });
 
+  it('BG-only document totals are byte-identical to the flat computation (non-negotiable)', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { vatRegistered: true });
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    expect(draft.subtotal).toBe(1000);
+    expect(draft.discountTotal).toBe(0);
+    expect(draft.vatAmount).toBe(200);
+    expect(draft.amount).toBe(1200);
+  });
+
+  it('document totals reflect per-line VAT categories for a mixed-rate document', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'DE',
+      vatNumber: 'DE123456789',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [
+          { name: 'Консултация', quantity: '1', unitPrice: 100000, sortOrder: 0 },
+          {
+            name: 'Хостинг',
+            quantity: '1',
+            unitPrice: 50000,
+            sortOrder: 1,
+            vatCategory: 'S',
+            vatRateBp: 2000,
+          },
+        ],
+      }),
+    );
+
+    const reverseChargedLine = draft.lineItems.find((line) => line.sortOrder === 0);
+    const standardLine = draft.lineItems.find((line) => line.sortOrder === 1);
+    expect(reverseChargedLine).toMatchObject({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(standardLine).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+
+    expect(draft.subtotal).toBe(150000);
+    expect(draft.discountTotal).toBe(0);
+    expect(draft.vatAmount).toBe(10000);
+    expect(draft.amount).toBe(160000);
+  });
+
   it('buyerReference, paymentMeansCode, paymentTermsNote and deliveryDate round-trip through a save', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);
@@ -202,7 +255,24 @@ describe('DocumentsService', () => {
     expect(draftWithoutLanguage.documentLanguage).toBeNull();
   });
 
-  it('reverse-charge: an unset line vatCategory defaults to AE at 0 rate for a cross-border EU B2B pair', async () => {
+  it('reverse-charge: an unset line vatCategory defaults to AE at 0 rate for a cross-border EU client with a valid VAT number', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'DE',
+      vatNumber: 'DE123456789',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'AE', vatRateBp: 0 });
+  });
+
+  it('reverse-charge: a cross-border EU client with no VAT number stays S at the issuer standard rate', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
     const client = await createTestClient(prisma, accountId, { country: 'DE' });
@@ -213,7 +283,24 @@ describe('DocumentsService', () => {
       draftRequest({ clientId: client.id }),
     );
 
-    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+  });
+
+  it('reverse-charge: a cross-border EU client with a badly formatted VAT number stays S at the issuer standard rate', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'DE' });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'BG',
+      vatNumber: 'BG123',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
   });
 
   it('reverse-charge: an explicit vatCategory is always honored, even cross-border', async () => {
@@ -242,10 +329,13 @@ describe('DocumentsService', () => {
     expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
   });
 
-  it('reverse-charge does not apply for a domestic BG-BG pair', async () => {
+  it('reverse-charge does not apply for a domestic BG-BG pair, VAT number or not', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
-    const client = await createTestClient(prisma, accountId, { country: 'BG' });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'BG',
+      vatNumber: 'BG123456789',
+    });
 
     const draft = await documentsService.saveDraft(
       accountId,

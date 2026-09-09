@@ -10,7 +10,7 @@ import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { computeLineTotal } from '../money/totals';
-import { resolveLineVatCategory } from '../vat-eu/reverse-charge';
+import { hasValidVatNumberFormat, resolveLineVatCategory } from '../vat-eu/reverse-charge';
 import { toDocumentDto } from './document.mapper';
 import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
@@ -52,12 +52,36 @@ export class DocumentsService {
       ? await this.prisma.client.findFirst({ where: { id: request.clientId, accountId } })
       : null;
 
+    const issuerCountry = issuerProfile?.country ?? 'BG';
+    const clientHasValidVatNumber = client
+      ? hasValidVatNumberFormat(client.vatNumber, client.country)
+      : false;
+
+    const resolvedLineItems = request.lineItems.map((line) => {
+      const vatCategory =
+        line.vatCategory !== undefined
+          ? line.vatCategory
+          : resolveLineVatCategory(
+              issuerCountry,
+              client?.country ?? null,
+              undefined,
+              clientHasValidVatNumber,
+            );
+      const vatRateBp =
+        line.vatRateBp !== undefined ? line.vatRateBp : vatCategory === 'AE' ? 0 : 2000;
+
+      return { ...line, vatCategory, vatRateBp };
+    });
+
     const data = {
-      ...buildDraftData(accountId, request, issuerProfile?.vatRegistered ?? false),
+      ...buildDraftData(
+        accountId,
+        request,
+        issuerProfile?.vatRegistered ?? false,
+        resolvedLineItems,
+      ),
       documentLanguage: client?.documentLanguage ?? null,
     };
-
-    const issuerCountry = issuerProfile?.country ?? 'BG';
 
     const record = await this.prisma.$transaction(async (tx) => {
       const document = existingId
@@ -67,28 +91,19 @@ export class DocumentsService {
       await tx.lineItem.deleteMany({ where: { documentId: document.id } });
       await tx.discount.deleteMany({ where: { documentId: document.id } });
 
-      if (request.lineItems.length > 0) {
+      if (resolvedLineItems.length > 0) {
         await tx.lineItem.createMany({
-          data: request.lineItems.map((line, index) => {
-            const vatCategory =
-              line.vatCategory !== undefined
-                ? line.vatCategory
-                : resolveLineVatCategory(issuerCountry, client?.country ?? null);
-            const vatRateBp =
-              line.vatRateBp !== undefined ? line.vatRateBp : vatCategory === 'AE' ? 0 : 2000;
-
-            return {
-              documentId: document.id,
-              name: line.name,
-              quantity: line.quantity,
-              unitPrice: line.unitPrice,
-              lineTotal: computeLineTotal(line.quantity, line.unitPrice),
-              sortOrder: line.sortOrder ?? index,
-              vatRateBp,
-              vatCategory,
-              unitCode: line.unitCode ?? null,
-            };
-          }),
+          data: resolvedLineItems.map((line, index) => ({
+            documentId: document.id,
+            name: line.name,
+            quantity: line.quantity,
+            unitPrice: line.unitPrice,
+            lineTotal: computeLineTotal(line.quantity, line.unitPrice),
+            sortOrder: line.sortOrder ?? index,
+            vatRateBp: line.vatRateBp,
+            vatCategory: line.vatCategory,
+            unitCode: line.unitCode ?? null,
+          })),
         });
       }
 
