@@ -84,8 +84,14 @@ describe('EinvoicePanel', () => {
     ).toBeTruthy();
   });
 
-  it('hides the send-via-Peppol button when the client has no Peppol endpoint', () => {
+  it('hides the send-via-Peppol button when the client has no Peppol endpoint (scheme only)', () => {
     renderPanel('sent', { ...client, peppolEndpointId: null });
+
+    expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
+  });
+
+  it('hides the send-via-Peppol button when the client has no Peppol scheme (endpoint only)', () => {
+    renderPanel('sent', { ...client, peppolScheme: null });
 
     expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
   });
@@ -96,7 +102,7 @@ describe('EinvoicePanel', () => {
     expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
   });
 
-  it('calls the send mutation when a Peppol endpoint is set', () => {
+  it('shows and calls the send mutation only when both the Peppol endpoint and scheme are set', () => {
     renderPanel('sent', client);
 
     fireEvent.click(screen.getByRole('button', { name: 'Изпрати през Peppol' }));
