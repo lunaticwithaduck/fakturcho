@@ -3,16 +3,24 @@
 import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { trackEvent } from '@app/features/shared/analytics';
 import { formatMoney } from '@app/features/shared/format';
-import { Button, Card, Input } from '@design/components';
-import { SIGNUP_GRANT_CENTS } from '@shared/types';
+import { Button, Card, Input, Select, SelectItem } from '@design/components';
+import { EU_VAT_AREA_COUNTRIES, SIGNUP_GRANT_CENTS } from '@shared/types';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
+const SIGNUP_COUNTRIES = [
+  'BG',
+  ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG'),
+] as const;
+
 export function SignupForm() {
+  const t = useTranslations('auth');
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [country, setCountry] = useState<string>('BG');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -26,6 +34,8 @@ export function SignupForm() {
       setError(mapAuthErrorMessage(signUpError.code));
       return;
     }
+    // TODO: persist `country` (drives User.locale via getCountryConfig) once
+    // shared-types/server expose a way to set it — none exists today.
     trackEvent('signup');
     router.push('/documents');
   }
@@ -33,14 +43,14 @@ export function SignupForm() {
   return (
     <Card className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-semibold text-text">Регистрация във Фактурчо</h1>
+        <h1 className="text-xl font-semibold text-text">{t('signupTitle')}</h1>
         <p className="text-sm text-text-muted">
-          Създайте безплатен акаунт. Получавате {formatMoney(SIGNUP_GRANT_CENTS)} начален кредит.
+          {t('signupSubtitle', { amount: formatMoney(SIGNUP_GRANT_CENTS) })}
         </p>
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
         <Input
-          label="Име"
+          label={t('nameLabel')}
           type="text"
           name="name"
           autoComplete="name"
@@ -49,7 +59,7 @@ export function SignupForm() {
           onChange={(event) => setName(event.target.value)}
         />
         <Input
-          label="Имейл"
+          label={t('emailLabel')}
           type="email"
           name="email"
           autoComplete="email"
@@ -58,7 +68,7 @@ export function SignupForm() {
           onChange={(event) => setEmail(event.target.value)}
         />
         <Input
-          label="Парола"
+          label={t('passwordLabel')}
           type="password"
           name="password"
           autoComplete="new-password"
@@ -67,15 +77,22 @@ export function SignupForm() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
+        <Select label={t('countryLabel')} value={country} onValueChange={setCountry}>
+          {SIGNUP_COUNTRIES.map((code) => (
+            <SelectItem key={code} value={code}>
+              {t(`countries.${code}`)}
+            </SelectItem>
+          ))}
+        </Select>
         {error ? <p className="text-sm text-danger">{error}</p> : null}
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Регистрация...' : 'Регистрация'}
+          {isSubmitting ? t('signupSubmitting') : t('signupSubmit')}
         </Button>
       </form>
       <p className="text-center text-sm text-text-muted">
-        Вече имате акаунт?{' '}
+        {t('haveAccount')}{' '}
         <a className="font-medium text-accent" href="/login">
-          Вход
+          {t('loginLink')}
         </a>
       </p>
     </Card>
