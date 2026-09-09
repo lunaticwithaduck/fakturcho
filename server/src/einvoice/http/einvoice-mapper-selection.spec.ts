@@ -1,6 +1,8 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { XRECHNUNG_CUSTOMIZATION_ID } from '../../einvoice-adapters/de/xrechnung-mapper';
+import { itDomesticStandardInvoice } from '../../einvoice-adapters/it/__fixtures__/it-domestic-standard';
+import { roDomesticStandardInvoice } from '../../einvoice-adapters/ro/__fixtures__/ro-domestic-standard';
 import { bgDomesticStandardInvoice } from '../__fixtures__/bg-domestic-standard';
 import { deDomesticStandardInvoice } from '../__fixtures__/eu-domestic-standard';
 import { selectEinvoiceReadinessCheck, selectEinvoiceXmlMapper } from './einvoice-mapper-selection';
@@ -25,6 +27,57 @@ describe('selectEinvoiceXmlMapper', () => {
 
   it('falls back to the core mapper for a country with no adapter, including BG explicitly', () => {
     expect(selectEinvoiceXmlMapper('BG')).toBe(selectEinvoiceXmlMapper(null));
+  });
+
+  it('maps a RO-issuer document with no countyRegion set exactly as the bare CIUS-RO adapter would', () => {
+    const xml = selectEinvoiceXmlMapper(roDomesticStandardInvoice.issuer.country)(
+      roDomesticStandardInvoice,
+    );
+    expect(xml).not.toContain('CountrySubentity');
+  });
+
+  it('threads issuer and recipient countyRegion from the document into the CIUS-RO adapter', () => {
+    const document: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, countyRegion: 'București' },
+      recipient: { ...roDomesticStandardInvoice.recipient, countyRegion: 'Cluj' },
+    };
+    const xml = selectEinvoiceXmlMapper(document.issuer.country)(document);
+    const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    expect(xml.slice(0, customerPartyIndex)).toContain(
+      '<cbc:CountrySubentity>București</cbc:CountrySubentity><cac:Country>',
+    );
+    expect(xml.slice(customerPartyIndex)).toContain(
+      '<cbc:CountrySubentity>Cluj</cbc:CountrySubentity><cac:Country>',
+    );
+  });
+
+  it('maps an IT-issuer document with no sdiRecipientCode/pec set exactly as the bare FatturaPA adapter would', () => {
+    const xml = selectEinvoiceXmlMapper(itDomesticStandardInvoice.issuer.country)(
+      itDomesticStandardInvoice,
+    );
+    expect(xml).toContain('<CodiceDestinatario>0000000</CodiceDestinatario>');
+    expect(xml).not.toContain('<PECDestinatario>');
+  });
+
+  it('threads the recipient sdiRecipientCode from the document into the FatturaPA adapter', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      recipient: { ...itDomesticStandardInvoice.recipient, sdiRecipientCode: 'ABC1234' },
+    };
+    const xml = selectEinvoiceXmlMapper(document.issuer.country)(document);
+    expect(xml).toContain('<CodiceDestinatario>ABC1234</CodiceDestinatario>');
+    expect(xml).not.toContain('<PECDestinatario>');
+  });
+
+  it('threads the recipient pec from the document into the FatturaPA adapter when no SDI code is set', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      recipient: { ...itDomesticStandardInvoice.recipient, pec: 'fatture@bianchi.legalmail.it' },
+    };
+    const xml = selectEinvoiceXmlMapper(document.issuer.country)(document);
+    expect(xml).toContain('<CodiceDestinatario>0000000</CodiceDestinatario>');
+    expect(xml).toContain('<PECDestinatario>fatture@bianchi.legalmail.it</PECDestinatario>');
   });
 });
 
@@ -52,5 +105,54 @@ describe('selectEinvoiceReadinessCheck', () => {
     const result = selectEinvoiceReadinessCheck(unissued.issuer.country)(unissued);
     expect(result.ready).toBe(false);
     expect(result.missingFields).toContain('document number (document must be issued)');
+  });
+
+  it('flags both counties as missing for a RO document with no countyRegion set, matching the bare adapter', () => {
+    const result = selectEinvoiceReadinessCheck(roDomesticStandardInvoice.issuer.country)(
+      roDomesticStandardInvoice,
+    );
+    expect(result).toEqual({
+      ready: false,
+      missingFields: [
+        'issuer county/județ (CIUS-RO CountrySubentity)',
+        'recipient county/județ (CIUS-RO CountrySubentity)',
+      ],
+    });
+  });
+
+  it('no longer flags county as missing once the document carries issuer and recipient countyRegion', () => {
+    const document: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, countyRegion: 'București' },
+      recipient: { ...roDomesticStandardInvoice.recipient, countyRegion: 'Cluj' },
+    };
+    const result = selectEinvoiceReadinessCheck(document.issuer.country)(document);
+    expect(result.missingFields.some((field) => field.includes('county'))).toBe(false);
+  });
+
+  it('flags the SDI/PEC field as missing for an IT document with neither set, matching the bare adapter', () => {
+    const result = selectEinvoiceReadinessCheck(itDomesticStandardInvoice.issuer.country)(
+      itDomesticStandardInvoice,
+    );
+    expect(result.ready).toBe(false);
+    expect(result.missingFields.some((field) => field.includes('Codice Destinatario'))).toBe(true);
+  });
+
+  it('no longer flags SDI/PEC as missing once the document carries a recipient sdiRecipientCode', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      recipient: { ...itDomesticStandardInvoice.recipient, sdiRecipientCode: 'ABC1234' },
+    };
+    const result = selectEinvoiceReadinessCheck(document.issuer.country)(document);
+    expect(result).toEqual({ ready: true, missingFields: [] });
+  });
+
+  it('no longer flags SDI/PEC as missing once the document carries a recipient pec', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      recipient: { ...itDomesticStandardInvoice.recipient, pec: 'fatture@bianchi.legalmail.it' },
+    };
+    const result = selectEinvoiceReadinessCheck(document.issuer.country)(document);
+    expect(result).toEqual({ ready: true, missingFields: [] });
   });
 });
