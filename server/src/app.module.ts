@@ -14,6 +14,8 @@ import { HealthModule } from './health/health.module';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { IssuerModule } from './issuer/issuer.module';
 import { NumberingModule } from './numbering/numbering.module';
+import { PeppolHttpModule } from './peppol/http/peppol-http.module';
+import { PeppolModule } from './peppol/peppol.module';
 import { RenderModule } from './render/render.module';
 
 @Module({
@@ -31,6 +33,8 @@ import { RenderModule } from './render/render.module';
     EmailModule,
     HealthModule,
     AdminModule,
+    PeppolModule,
+    PeppolHttpModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
