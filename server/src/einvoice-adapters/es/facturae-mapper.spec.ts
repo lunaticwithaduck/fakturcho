@@ -130,3 +130,61 @@ describe('toFacturaeXml — mixed VAT rates produce one TaxesOutputs entry per r
     expect(countOccurrences(xml, '<InvoiceLine>')).toBe(2);
   });
 });
+
+describe('toFacturaeXml — a document discount is reflected in the aggregated TaxesOutputs', () => {
+  it('keeps TaxesOutputs and InvoiceTotals consistent with the discounted taxable base', () => {
+    const discounted: DocumentDto = {
+      ...esDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 14940,
+      amount: 104940,
+      lineItems: [
+        {
+          id: 'line-1',
+          name: 'Consultoría',
+          quantity: '1',
+          unitPrice: 60000,
+          lineTotal: 60000,
+          sortOrder: 0,
+          vatRateBp: 2100,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+        {
+          id: 'line-2',
+          name: 'Material',
+          quantity: '1',
+          unitPrice: 40000,
+          lineTotal: 40000,
+          sortOrder: 1,
+          vatRateBp: 1000,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+      ],
+    };
+    const xml = toFacturaeXml(discounted);
+
+    const headerStart = xml.indexOf('<TaxesOutputs>');
+    const headerEnd = xml.indexOf('</TaxesOutputs>');
+    const headerBlock = xml.slice(headerStart, headerEnd);
+
+    expect(headerBlock).toContain('<TaxableBase><TotalAmount>540.00</TotalAmount></TaxableBase>');
+    expect(headerBlock).toContain('<TaxAmount><TotalAmount>113.40</TotalAmount></TaxAmount>');
+    expect(headerBlock).toContain('<TaxableBase><TotalAmount>360.00</TotalAmount></TaxableBase>');
+    expect(headerBlock).toContain('<TaxAmount><TotalAmount>36.00</TotalAmount></TaxAmount>');
+
+    const taxableSum = [
+      ...headerBlock.matchAll(/<TaxableBase><TotalAmount>([\d.]+)<\/TotalAmount>/g),
+    ].reduce((sum, m) => sum + Number(m[1]), 0);
+    const vatSum = [
+      ...headerBlock.matchAll(/<TaxAmount><TotalAmount>([\d.]+)<\/TotalAmount>/g),
+    ].reduce((sum, m) => sum + Number(m[1]), 0);
+
+    expect(taxableSum.toFixed(2)).toBe('900.00');
+    expect(vatSum.toFixed(2)).toBe('149.40');
+    expect(xml).toContain('<TotalTaxOutputs>149.40</TotalTaxOutputs>');
+    expect(xml).toContain('<InvoiceTotal>1049.40</InvoiceTotal>');
+  });
+});

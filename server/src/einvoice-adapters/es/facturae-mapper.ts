@@ -1,5 +1,6 @@
 import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
 import { formatDocumentNumber } from '@fakturcho/shared-types';
+import { discountAdjustedLines } from '../../einvoice/discount';
 import { itemsBlock } from './facturae-lines';
 import { buyerPartyBlock, sellerPartyBlock } from './facturae-parties';
 import { invoiceTotalsBlock, taxesOutputsBlock } from './facturae-totals';
@@ -75,7 +76,9 @@ export function toFacturaeXml(document: DocumentDto): string {
   const invoiceBody =
     invoiceHeaderBlock(document, kind) +
     invoiceIssueDataBlock(document) +
-    taxesOutputsBlock(document.lineItems) +
+    taxesOutputsBlock(
+      discountAdjustedLines(document.lineItems, document.subtotal, document.discountTotal),
+    ) +
     invoiceTotalsBlock(document) +
     itemsBlock(document.lineItems);
 

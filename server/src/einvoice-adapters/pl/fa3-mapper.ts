@@ -1,5 +1,6 @@
 import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
 import { formatDocumentNumber } from '@fakturcho/shared-types';
+import { discountAdjustedLines } from '../../einvoice/discount';
 import { lineBlock } from './fa3-lines';
 import { buyerParty, sellerParty } from './fa3-parties';
 import { groupFa3VatBuckets } from './fa3-vat-groups';
@@ -38,7 +39,12 @@ function headerBlock(generatedAt: string): string {
 }
 
 function amountsBlock(document: DocumentDto): string {
-  const buckets = groupFa3VatBuckets(document.lineItems);
+  const lines = discountAdjustedLines(
+    document.lineItems,
+    document.subtotal,
+    document.discountTotal,
+  );
+  const buckets = groupFa3VatBuckets(lines);
   const amountTags = buckets
     .map((bucket) => {
       const net = textEl(bucket.netTag, toDecimalString(bucket.taxableAmount));

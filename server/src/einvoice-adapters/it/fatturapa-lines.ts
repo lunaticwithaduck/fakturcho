@@ -1,4 +1,5 @@
 import type { DocumentDto, LineItemDto, VatCategory, VatSubtotal } from '@fakturcho/shared-types';
+import { discountAdjustedLines } from '../../einvoice/discount';
 import { computeVatSubtotals } from '../../vat-eu/subtotals';
 import { el, optionalEl, toAmountString, toRateString } from './xml';
 
@@ -49,7 +50,12 @@ function datiRiepilogoBlock(group: VatSubtotal, exemptionGround: string | null):
 
 export function beniServiziBlock(document: DocumentDto): string {
   const lines = document.lineItems.map((line, index) => dettaglioLineaBlock(line, index)).join('');
-  const riepilogo = groupByVat(document.lineItems)
+  const discounted = discountAdjustedLines(
+    document.lineItems,
+    document.subtotal,
+    document.discountTotal,
+  );
+  const riepilogo = groupByVat(discounted)
     .map((group) => datiRiepilogoBlock(group, document.vatExemptionGround))
     .join('');
   return `<DatiBeniServizi>${lines}${riepilogo}</DatiBeniServizi>`;

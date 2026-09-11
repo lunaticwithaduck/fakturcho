@@ -78,3 +78,31 @@ describe('toFrenchUblXml — validation', () => {
     expect(xml).toContain('<cbc:IdentificationCode>DE</cbc:IdentificationCode>');
   });
 });
+
+describe('toFrenchUblXml — inherits the discount-adjusted VAT breakdown from the core mapper', () => {
+  it('does not double count VAT when the document carries a discount', () => {
+    const discounted: DocumentDto = {
+      ...frDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 18000,
+      amount: 108000,
+      lineItems: [
+        {
+          id: 'line-1',
+          name: 'Conseil',
+          quantity: '1',
+          unitPrice: 100000,
+          lineTotal: 100000,
+          sortOrder: 0,
+          vatRateBp: 2000,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+      ],
+    };
+    const xml = toFrenchUblXml(discounted);
+    expect(xml).toContain('<cbc:TaxableAmount currencyID="EUR">900.00</cbc:TaxableAmount>');
+    expect(xml).toContain('<cbc:TaxAmount currencyID="EUR">180.00</cbc:TaxAmount>');
+  });
+});

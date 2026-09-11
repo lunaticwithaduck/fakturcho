@@ -165,6 +165,45 @@ describe('EinvoiceSendService', () => {
     await expect(einvoiceSendService.send(accountId, draft.id)).rejects.toThrow(DomainError);
   });
 
+  it('rejects sending a cancelled document', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const issued = await issueDocumentForPeppolClient(accountId);
+    await issuanceService.cancel(accountId, issued.id);
+
+    await expect(einvoiceSendService.send(accountId, issued.id)).rejects.toThrow(DomainError);
+
+    const stored = await prisma.einvoiceTransmission.findUnique({
+      where: { documentId: issued.id },
+    });
+    expect(stored).toBeNull();
+  });
+
+  it("does not leak another account's document: send returns NOT_FOUND", async () => {
+    const ownerAccountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, ownerAccountId);
+    const issued = await issueDocumentForPeppolClient(ownerAccountId);
+
+    const strangerAccountId = await createAccount(prisma);
+
+    await expect(einvoiceSendService.send(strangerAccountId, issued.id)).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+    });
+  });
+
+  it("does not leak another account's document: getTransmission returns NOT_FOUND", async () => {
+    const ownerAccountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, ownerAccountId);
+    const issued = await issueDocumentForPeppolClient(ownerAccountId);
+    await einvoiceSendService.send(ownerAccountId, issued.id);
+
+    const strangerAccountId = await createAccount(prisma);
+
+    await expect(
+      einvoiceSendService.getTransmission(strangerAccountId, issued.id),
+    ).rejects.toMatchObject({ code: 'NOT_FOUND' });
+  });
+
   it('rejects sending an issued proforma document', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);

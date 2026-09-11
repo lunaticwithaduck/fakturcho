@@ -144,3 +144,40 @@ describe('toFa3Xml — XML escaping', () => {
     expect(xml).not.toContain('A & B <Trading>');
   });
 });
+
+describe('toFa3Xml — a document discount is reflected in the P_13/P_14 buckets', () => {
+  it('keeps the buckets consistent with the discounted taxable base', () => {
+    const discounted: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 15300,
+      amount: 105300,
+      lineItems: [
+        {
+          ...baseLineItem,
+          id: 'line-1',
+          lineTotal: 60000,
+          unitPrice: 60000,
+          vatRateBp: 2300,
+          vatCategory: 'S',
+        },
+        {
+          ...baseLineItem,
+          id: 'line-2',
+          lineTotal: 40000,
+          unitPrice: 40000,
+          vatRateBp: 800,
+          vatCategory: 'S',
+        },
+      ],
+    };
+    const xml = toFa3Xml(discounted);
+
+    expect(xml).toContain('<P_13_1>540.00</P_13_1>');
+    expect(xml).toContain('<P_14_1>124.20</P_14_1>');
+    expect(xml).toContain('<P_13_2>360.00</P_13_2>');
+    expect(xml).toContain('<P_14_2>28.80</P_14_2>');
+    expect(xml).toContain('<P_15>1053.00</P_15>');
+  });
+});

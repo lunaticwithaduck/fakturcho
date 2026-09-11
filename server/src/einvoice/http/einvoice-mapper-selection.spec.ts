@@ -29,6 +29,24 @@ describe('selectEinvoiceXmlMapper', () => {
     expect(selectEinvoiceXmlMapper('BG')).toBe(selectEinvoiceXmlMapper(null));
   });
 
+  it('is case-insensitive on the issuer country code', () => {
+    const xml = selectEinvoiceXmlMapper('de')(deDomesticStandardInvoice);
+    expect(xml).toContain(
+      `<cbc:CustomizationID>${XRECHNUNG_CUSTOMIZATION_ID}</cbc:CustomizationID>`,
+    );
+  });
+
+  it('tolerates surrounding whitespace on the issuer country code', () => {
+    const xml = selectEinvoiceXmlMapper(' DE ')(deDomesticStandardInvoice);
+    expect(xml).toContain(
+      `<cbc:CustomizationID>${XRECHNUNG_CUSTOMIZATION_ID}</cbc:CustomizationID>`,
+    );
+  });
+
+  it('falls back to the core mapper for a non-EU country', () => {
+    expect(selectEinvoiceXmlMapper('US')).toBe(selectEinvoiceXmlMapper(null));
+  });
+
   it('maps a RO-issuer document with no countyRegion set exactly as the bare CIUS-RO adapter would', () => {
     const xml = selectEinvoiceXmlMapper(roDomesticStandardInvoice.issuer.country)(
       roDomesticStandardInvoice,
@@ -82,6 +100,11 @@ describe('selectEinvoiceXmlMapper', () => {
 });
 
 describe('selectEinvoiceReadinessCheck', () => {
+  it('is case-insensitive on the issuer country code', () => {
+    const result = selectEinvoiceReadinessCheck('de')(deDomesticStandardInvoice);
+    expect(result.ready).toBe(true);
+  });
+
   it('is ready for the fully populated BG fixture', () => {
     const result = selectEinvoiceReadinessCheck(bgDomesticStandardInvoice.issuer.country)(
       bgDomesticStandardInvoice,

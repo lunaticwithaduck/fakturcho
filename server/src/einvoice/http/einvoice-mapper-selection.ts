@@ -61,16 +61,22 @@ const READINESS_CHECKS_BY_ISSUER_COUNTRY: Record<string, ReadinessCheck> = {
   PL: (document) => checkFa3Readiness(document),
 };
 
+function normalizeCountry(issuerCountry: string | null): string | null {
+  return issuerCountry ? issuerCountry.trim().toUpperCase() : null;
+}
+
 export function selectEinvoiceXmlMapper(issuerCountry: string | null): XmlMapper {
-  if (issuerCountry && issuerCountry in XML_MAPPERS_BY_ISSUER_COUNTRY) {
-    return XML_MAPPERS_BY_ISSUER_COUNTRY[issuerCountry] as XmlMapper;
+  const country = normalizeCountry(issuerCountry);
+  if (country && country in XML_MAPPERS_BY_ISSUER_COUNTRY) {
+    return XML_MAPPERS_BY_ISSUER_COUNTRY[country] as XmlMapper;
   }
   return toUblXml;
 }
 
 export function selectEinvoiceReadinessCheck(issuerCountry: string | null): ReadinessCheck {
-  if (issuerCountry && issuerCountry in READINESS_CHECKS_BY_ISSUER_COUNTRY) {
-    return READINESS_CHECKS_BY_ISSUER_COUNTRY[issuerCountry] as ReadinessCheck;
+  const country = normalizeCountry(issuerCountry);
+  if (country && country in READINESS_CHECKS_BY_ISSUER_COUNTRY) {
+    return READINESS_CHECKS_BY_ISSUER_COUNTRY[country] as ReadinessCheck;
   }
   return checkEinvoiceReadiness;
 }

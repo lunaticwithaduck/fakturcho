@@ -1,3 +1,4 @@
+import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { deDomesticStandardInvoice } from '../../einvoice/__fixtures__/eu-domestic-standard';
 import { deDomesticB2GInvoice } from './__fixtures__/de-domestic-b2g';
@@ -48,5 +49,33 @@ describe('toXRechnungXml — without a Leitweg-ID and no existing buyer referenc
   it('omits BuyerReference entirely, same as the core mapper', () => {
     const xml = toXRechnungXml(deDomesticB2GInvoice);
     expect(xml).not.toContain('<cbc:BuyerReference>');
+  });
+});
+
+describe('toXRechnungXml — inherits the discount-adjusted VAT breakdown from the core mapper', () => {
+  it('does not double count VAT when the document carries a discount', () => {
+    const discounted: DocumentDto = {
+      ...deDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 17100,
+      amount: 107100,
+      lineItems: [
+        {
+          id: 'line-1',
+          name: 'Beratung',
+          quantity: '1',
+          unitPrice: 100000,
+          lineTotal: 100000,
+          sortOrder: 0,
+          vatRateBp: 1900,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+      ],
+    };
+    const xml = toXRechnungXml(discounted);
+    expect(xml).toContain('<cbc:TaxableAmount currencyID="EUR">900.00</cbc:TaxableAmount>');
+    expect(xml).toContain('<cbc:TaxAmount currencyID="EUR">171.00</cbc:TaxAmount>');
   });
 });
