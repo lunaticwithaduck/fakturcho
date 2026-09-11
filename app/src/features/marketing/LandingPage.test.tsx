@@ -25,6 +25,10 @@ describe('LandingPage', () => {
     expect(screen.getByRole('heading', { name: 'Често задавани въпроси' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Вход' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'Създай акаунт' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Вход' }).getAttribute('href')).toBe('/login');
+    expect(screen.getByRole('link', { name: 'Създай акаунт' }).getAttribute('href')).toBe(
+      '/signup',
+    );
     expect(screen.getByText('Общи условия')).toBeTruthy();
   });
 
@@ -41,5 +45,9 @@ describe('LandingPage', () => {
     expect(screen.getByRole('link', { name: 'Create account' })).toBeTruthy();
     expect(screen.getByText('Terms of Service')).toBeTruthy();
     expect(screen.getByText('Terms of Service').getAttribute('href')).toBe('/en/terms');
+    expect(screen.getByRole('link', { name: 'Log in' }).getAttribute('href')).toBe('/en/login');
+    expect(screen.getByRole('link', { name: 'Create account' }).getAttribute('href')).toBe(
+      '/en/signup',
+    );
   });
 });

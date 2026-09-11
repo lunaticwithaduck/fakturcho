@@ -34,12 +34,25 @@ describe('LoginForm', () => {
     expect(screen.getByRole('link', { name: 'Регистрирайте се' })).toBeTruthy();
   });
 
+  it('links to the Bulgarian signup page by default', () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <LoginForm />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Регистрирайте се' })).toHaveProperty(
+      'href',
+      'http://localhost:3000/signup',
+    );
+  });
+
   it('resolves the English messages for the same keys without missing-key warnings', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
       <NextIntlClientProvider locale="en" messages={enMessages}>
-        <LoginForm />
+        <LoginForm locale="en" />
       </NextIntlClientProvider>,
     );
 
@@ -52,5 +65,18 @@ describe('LoginForm', () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+
+  it('links to the English signup page when rendered for the en route', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <LoginForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Sign up' })).toHaveProperty(
+      'href',
+      'http://localhost:3000/en/signup',
+    );
   });
 });

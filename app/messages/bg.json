@@ -430,6 +430,8 @@
     "emailLabel": "Имейл",
     "passwordLabel": "Парола",
     "countryLabel": "Държава",
+    "countryPlaceholder": "Изберете държава",
+    "countryRequired": "Моля, изберете държава.",
     "signupSubmitting": "Регистрация...",
     "signupSubmit": "Регистрация",
     "haveAccount": "Вече имате акаунт?",
