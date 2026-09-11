@@ -3,15 +3,27 @@ import { Body, Controller, Get, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
 import { DomainError } from '../common/domain-error';
+import {
+  countryCodeSchema,
+  countyRegionSchema,
+  peppolEndpointIdSchema,
+  peppolSchemeSchema,
+  postcodeSchema,
+  streetSchema,
+} from '../common/eu-field-schemas';
 import type { UpdateIssuerProfileInput } from './issuer.service';
 import { IssuerService } from './issuer.service';
 
-const updateIssuerProfileSchema = z.object({
+export const updateIssuerProfileSchema = z.object({
   companyName: z.string().nullable().optional(),
   eik: z.string().nullable().optional(),
   mol: z.string().nullable().optional(),
   addressLine: z.string().nullable().optional(),
+  street: streetSchema.nullable().optional(),
+  postcode: postcodeSchema.nullable().optional(),
+  countyRegion: countyRegionSchema.nullable().optional(),
   city: z.string().nullable().optional(),
+  country: countryCodeSchema.optional(),
   phone: z.string().nullable().optional(),
   vatRegistered: z.boolean().optional(),
   vatNumber: z.string().nullable().optional(),
@@ -19,6 +31,8 @@ const updateIssuerProfileSchema = z.object({
   iban: z.string().nullable().optional(),
   bic: z.string().nullable().optional(),
   altIban: z.string().nullable().optional(),
+  peppolEndpointId: peppolEndpointIdSchema.nullable().optional(),
+  peppolScheme: peppolSchemeSchema.nullable().optional(),
 });
 
 function parseBody<T>(schema: z.ZodType<T>, data: unknown): T {

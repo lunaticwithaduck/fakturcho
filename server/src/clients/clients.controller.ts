@@ -1,18 +1,38 @@
 import type { ClientDto } from '@fakturcho/shared-types';
+import { SUPPORTED_LOCALES } from '@fakturcho/shared-types';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
 import { DomainError } from '../common/domain-error';
+import {
+  countryCodeSchema,
+  countyRegionSchema,
+  pecSchema,
+  peppolEndpointIdSchema,
+  peppolSchemeSchema,
+  postcodeSchema,
+  sdiRecipientCodeSchema,
+  streetSchema,
+} from '../common/eu-field-schemas';
 import type { CreateClientInput, UpdateClientInput } from './clients.service';
 import { ClientsService } from './clients.service';
 
-const createClientSchema = z.object({
+export const createClientSchema = z.object({
   companyName: z.string().min(1),
   eik: z.string().nullable().optional(),
   vatNumber: z.string().nullable().optional(),
   address: z.string().nullable().optional(),
+  street: streetSchema.nullable().optional(),
+  postcode: postcodeSchema.nullable().optional(),
+  countyRegion: countyRegionSchema.nullable().optional(),
+  country: countryCodeSchema.optional(),
+  documentLanguage: z.enum(SUPPORTED_LOCALES).nullable().optional(),
   email: z.string().nullable().optional(),
   mol: z.string().nullable().optional(),
+  peppolEndpointId: peppolEndpointIdSchema.nullable().optional(),
+  peppolScheme: peppolSchemeSchema.nullable().optional(),
+  sdiRecipientCode: sdiRecipientCodeSchema.nullable().optional(),
+  pec: pecSchema.nullable().optional(),
 });
 
 const updateClientSchema = createClientSchema.partial();

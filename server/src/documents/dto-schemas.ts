@@ -1,11 +1,20 @@
-import { DOCUMENT_STATUSES, DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import {
+  DOCUMENT_STATUSES,
+  DOCUMENT_TYPES,
+  SUPPORTED_LOCALES,
+  VAT_CATEGORIES,
+} from '@fakturcho/shared-types';
 import { z } from 'zod';
+import { isoDateSchema, paymentMeansCodeSchema } from '../common/eu-field-schemas';
 
 const lineItemInputSchema = z.object({
   name: z.string().min(1),
   quantity: z.string().min(1),
   unitPrice: z.number().int(),
   sortOrder: z.number().int(),
+  vatRateBp: z.number().int().optional(),
+  vatCategory: z.enum(VAT_CATEGORIES).optional(),
+  unitCode: z.string().nullish(),
 });
 
 const discountInputSchema = z.object({
@@ -22,6 +31,10 @@ export const saveDraftRequestSchema = z.object({
   taxEventAt: z.string().nullish(),
   dueAt: z.string().nullish(),
   validUntil: z.string().nullish(),
+  deliveryDate: isoDateSchema.nullish(),
+  buyerReference: z.string().nullish(),
+  paymentMeansCode: paymentMeansCodeSchema.nullish(),
+  paymentTermsNote: z.string().nullish(),
   vatIncluded: z.boolean().optional(),
   vatExemptionGround: z.string().nullish(),
   clientId: z.string().nullish(),
@@ -29,6 +42,7 @@ export const saveDraftRequestSchema = z.object({
   notes: z.string().nullish(),
   emailText: z.string().nullish(),
   templateId: z.string().optional(),
+  documentLanguage: z.enum(SUPPORTED_LOCALES).nullish(),
   lineItems: z.array(lineItemInputSchema),
   discounts: z.array(discountInputSchema).optional(),
 });
