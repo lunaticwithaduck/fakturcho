@@ -112,6 +112,58 @@ subscription needs a plan created once, up front:
 2. Create an API key → `RESEND_API_KEY`.
 3. `EMAIL_FROM` must use the verified domain.
 
+### Spain (AEAT Verifactu + FACe)
+
+Every ES invoice is reported to AEAT via Verifactu; a public-body recipient
+additionally goes to FACe. Full protocol detail and citations:
+`server/src/einvoice-adapters/es/AEAT.md`.
+
+| Variable | Example | Where it comes from |
+| --- | --- | --- |
+| `AEAT_ENVIRONMENT` | `test` | `test` talks to AEAT's "pruebas" (external test) environment (`prewww1.aeat.es`), `prod` to the real one (`www1.agenciatributaria.gob.es`) |
+| `AEAT_CLIENT_CERT_PEM` | — | the certificate below, PEM |
+| `AEAT_CLIENT_KEY_PEM` | — | its private key, PEM |
+| `AEAT_CA_PEM` | — | optional: an extra CA to trust when verifying AEAT's own TLS certificate |
+| `AEAT_ISSUER_NIF` | `B12345674` | the tenant's own NIF/CIF — Verifactu keeps one hash chain per issuer |
+| `AEAT_SOFTWARE_NIF` | — | the *software producer's* own NIF (fakturcho's, not the tenant's) |
+| `AEAT_SOFTWARE_NAME` | `Fakturcho` | optional, defaults to `Fakturcho` |
+| `AEAT_SOFTWARE_VERSION` | `1.0` | optional, defaults to `1.0` |
+| `AEAT_SOFTWARE_APP_ID` | `01` | optional 2-character id fakturcho assigns itself, defaults to `01` |
+| `FACE_ENVIRONMENT` | `test` | `test` talks to FACe's staging portal (`se-face-webservice.redsara.es`), `prod` to `webservice.face.gob.es` |
+| `FACE_SIGNING_CERT_PEM` | — | certificate used to WS-Security-sign every FACe request, PEM |
+| `FACE_SIGNING_KEY_PEM` | — | its private key, PEM |
+
+1. **Certificate requirements.** Both Verifactu (TLS client certificate) and
+   FACe (WS-Security XML signature) require a *qualified* electronic
+   certificate recognised by AEAT/@firma — a personal FNMT "Certificado de
+   Representante" for the company, an "apoderado" certificate, or a company
+   seal ("sello electrónico") certificate. A self-signed or ordinary TLS
+   certificate will not authenticate against either service. The same
+   certificate can usually serve both `AEAT_CLIENT_CERT_PEM`/`_KEY_PEM` and
+   `FACE_SIGNING_CERT_PEM`/`_KEY_PEM`, but they are separate variables so a
+   different certificate can be used per service if AEAT and the FACe
+   integration end up under different legal representatives.
+2. **The pruebas (test) environment.** AEAT's `AEAT_ENVIRONMENT=test`
+   endpoint (`prewww1.aeat.es`) is AEAT's own "Portal de Pruebas Externas" —
+   it still requires a real qualified certificate to connect (there is no
+   anonymous sandbox), but records submitted there never reach the
+   production ledger. FACe's `FACE_ENVIRONMENT=test`
+   (`se-face-webservice.redsara.es`) is a separate staging deployment of the
+   whole platform with its own DIR3 directory — a public-body recipient must
+   be registered there too before a test submission will route anywhere.
+3. **DIR3 data a public-body client must supply.** Before invoicing a public
+   body, get its three DIR3 codes (each 9 characters — a letter followed by
+   8 digits, e.g. `L01280796`) from the client itself or from FACe's own
+   directory search: órgano gestor (the contracting/receiving body), unidad
+   tramitadora (the unit that processes it) and oficina contable (the
+   accounting office that pays it). This adapter has no dedicated field for
+   them — set the document's buyer reference to
+   `DIR3:<organoGestor>:<unidadTramitadora>:<oficinaContable>` and both the
+   Facturae `AdministrativeCentres` block and the FACe routing decision pick
+   it up automatically (see `face-dir3.ts`). Getting any of the three codes
+   wrong routes the invoice to the wrong desk inside that public body, not a
+   rejection FACe can detect on its own.
+
 ## 3. App service (`fakturcho-app`)
 
 1. **Create → GitHub Repo** → same repository, second service.
