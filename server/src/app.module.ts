@@ -10,6 +10,7 @@ import { ClientsModule } from './clients/clients.module';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { DocumentsModule } from './documents/documents.module';
 import { EmailModule } from './email/email.module';
+import { FeatureFlagsModule } from './feature-flags/feature-flags.module';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { IssuerModule } from './issuer/issuer.module';
@@ -22,6 +23,7 @@ import { RenderModule } from './render/render.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    FeatureFlagsModule,
     AuthModule,
     IssuerModule,
     ClientsModule,

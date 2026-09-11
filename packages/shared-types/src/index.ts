@@ -8,6 +8,7 @@ export * from './countries';
 export * from './documents';
 export * from './enums';
 export * from './errors';
+export * from './feature-flags';
 export * from './issuer';
 export * from './me';
 export * from './money';

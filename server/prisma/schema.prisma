@@ -392,3 +392,11 @@ model EinvoiceTransmission {
   @@index([status])
   @@map("einvoice_transmission")
 }
+
+model FeatureFlag {
+  key       String   @id
+  enabled   Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+
+  @@map("feature_flag")
+}

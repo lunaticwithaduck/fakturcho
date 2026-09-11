@@ -1,3 +1,4 @@
+import type { FeatureFlagKey } from '@fakturcho/shared-types';
 import { getCountryConfig, SUPPORTED_LOCALES } from '@fakturcho/shared-types';
 import type { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
@@ -9,6 +10,12 @@ export interface AuthConfigOptions {
   baseURL: string;
   trustedOrigins: string[];
 }
+
+export interface FeatureFlagsReader {
+  isEnabled(key: FeatureFlagKey): Promise<boolean>;
+}
+
+const ALWAYS_ENABLED: FeatureFlagsReader = { isEnabled: async () => true };
 
 /**
  * Runs inside databaseHooks.user.create.before, not .after: the User row has
@@ -30,7 +37,11 @@ function isSupportedLocale(value: unknown): value is (typeof SUPPORTED_LOCALES)[
   return typeof value === 'string' && (SUPPORTED_LOCALES as readonly string[]).includes(value);
 }
 
-export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
+export function createAuth(
+  prisma: PrismaClient,
+  options: AuthConfigOptions,
+  flags: FeatureFlagsReader = ALWAYS_ENABLED,
+) {
   return betterAuth({
     secret: options.secret,
     baseURL: options.baseURL,
@@ -77,8 +88,10 @@ export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
         create: {
           before: async (user) => {
             const accountId = await provisionTenant(prisma);
-            const locale =
-              typeof user.country === 'string' && user.country.length > 0
+            const enLocale = await flags.isEnabled('EN_LOCALE');
+            const locale = !enLocale
+              ? 'bg'
+              : typeof user.country === 'string' && user.country.length > 0
                 ? getCountryConfig(user.country).locale
                 : isSupportedLocale(user.locale)
                   ? user.locale

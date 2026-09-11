@@ -2,6 +2,7 @@ import type { DocumentType, EmailDocumentRequest } from '@fakturcho/shared-types
 import { formatDocumentNumber } from '@fakturcho/shared-types';
 import { Inject, Injectable } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { type Locale, resolveEmailLocale } from './locale';
 import { type DocumentRenderer, EMAIL_SENDER, type EmailSender, RENDER_SERVICE } from './ports';
@@ -28,6 +29,7 @@ export class EmailService {
     private readonly prisma: PrismaService,
     @Inject(RENDER_SERVICE) private readonly renderer: DocumentRenderer,
     @Inject(EMAIL_SENDER) private readonly sender: EmailSender,
+    private readonly flags: FeatureFlagsService = new FeatureFlagsService(prisma),
   ) {}
 
   async sendDocumentEmail(
@@ -44,11 +46,14 @@ export class EmailService {
     }
 
     const rendered = await this.renderer.renderPdf(documentId, accountId);
-    const locale = resolveEmailLocale(
-      document.documentLanguage,
-      document.issuerCountry,
-      document.recipientCountry,
-    );
+    const enLocale = await this.flags.isEnabled('EN_LOCALE');
+    const locale = enLocale
+      ? resolveEmailLocale(
+          document.documentLanguage,
+          document.issuerCountry,
+          document.recipientCountry,
+        )
+      : 'bg';
     const subject = buildSubject(
       locale,
       document.documentType,
