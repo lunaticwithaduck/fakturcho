@@ -5,6 +5,7 @@ import { itDomesticStandardInvoice } from '../../einvoice-adapters/it/__fixtures
 import { roDomesticStandardInvoice } from '../../einvoice-adapters/ro/__fixtures__/ro-domestic-standard';
 import { bgDomesticStandardInvoice } from '../__fixtures__/bg-domestic-standard';
 import { deDomesticStandardInvoice } from '../__fixtures__/eu-domestic-standard';
+import { EINVOICE_MISSING_FIELD_CODES } from '../readiness';
 import { selectEinvoiceReadinessCheck, selectEinvoiceXmlMapper } from './einvoice-mapper-selection';
 
 describe('selectEinvoiceXmlMapper', () => {
@@ -127,7 +128,7 @@ describe('selectEinvoiceReadinessCheck', () => {
     };
     const result = selectEinvoiceReadinessCheck(unissued.issuer.country)(unissued);
     expect(result.ready).toBe(false);
-    expect(result.missingFields).toContain('document number (document must be issued)');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentNumber);
   });
 
   it('flags both counties as missing for a RO document with no countyRegion set, matching the bare adapter', () => {
@@ -137,8 +138,8 @@ describe('selectEinvoiceReadinessCheck', () => {
     expect(result).toEqual({
       ready: false,
       missingFields: [
-        'issuer county/județ (CIUS-RO CountrySubentity)',
-        'recipient county/județ (CIUS-RO CountrySubentity)',
+        EINVOICE_MISSING_FIELD_CODES.issuerCountyRegion,
+        EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion,
       ],
     });
   });
@@ -150,7 +151,8 @@ describe('selectEinvoiceReadinessCheck', () => {
       recipient: { ...roDomesticStandardInvoice.recipient, countyRegion: 'Cluj' },
     };
     const result = selectEinvoiceReadinessCheck(document.issuer.country)(document);
-    expect(result.missingFields.some((field) => field.includes('county'))).toBe(false);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.issuerCountyRegion);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion);
   });
 
   it('flags the SDI/PEC field as missing for an IT document with neither set, matching the bare adapter', () => {
@@ -158,7 +160,7 @@ describe('selectEinvoiceReadinessCheck', () => {
       itDomesticStandardInvoice,
     );
     expect(result.ready).toBe(false);
-    expect(result.missingFields.some((field) => field.includes('Codice Destinatario'))).toBe(true);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.recipientSdiCodeOrPec);
   });
 
   it('no longer flags SDI/PEC as missing once the document carries a recipient sdiRecipientCode', () => {

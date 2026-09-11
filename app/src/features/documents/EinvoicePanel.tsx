@@ -14,6 +14,64 @@ import { useState } from 'react';
 import { canDownloadDocument } from './documentDownload';
 import { getPeppolStatusBadgeVariant, getPeppolStatusMessageKey } from './peppolStatus';
 
+const KNOWN_MISSING_FIELD_CODES = new Set([
+  'document.type',
+  'document.number',
+  'document.issuedAt',
+  'document.vatExemptionGround',
+  'document.lineItems',
+  'document.buyerReference',
+  'document.buyerReferenceOrLeitwegId',
+  'document.leitwegIdFormat',
+  'line.unitCode',
+  'issuer.companyName',
+  'issuer.country',
+  'issuer.street',
+  'issuer.postcode',
+  'issuer.vatNumber',
+  'issuer.phone',
+  'issuer.iban',
+  'issuer.vatNumberOrRegistrationId',
+  'issuer.cui',
+  'issuer.cuiChecksum',
+  'issuer.vatNumberRoPrefix',
+  'issuer.vatNumberRoFormat',
+  'issuer.countyRegion',
+  'issuer.sirenOrSiret',
+  'issuer.vatNumberFrFormat',
+  'issuer.esTaxId',
+  'issuer.esTaxIdInvalid',
+  'issuer.partitaIva',
+  'issuer.partitaIvaInvalid',
+  'issuer.codiceFiscale',
+  'issuer.codiceFiscaleInvalid',
+  'issuer.nip',
+  'issuer.nipChecksum',
+  'recipient.companyName',
+  'recipient.country',
+  'recipient.street',
+  'recipient.postcode',
+  'recipient.vatNumberReverseCharge',
+  'recipient.cui',
+  'recipient.cuiChecksum',
+  'recipient.vatNumberRoFormat',
+  'recipient.countyRegion',
+  'recipient.sirenOrSiret',
+  'recipient.vatNumberFrFormat',
+  'recipient.esTaxId',
+  'recipient.esTaxIdInvalid',
+  'recipient.partitaIvaOrCodiceFiscale',
+  'recipient.partitaIvaInvalid',
+  'recipient.codiceFiscaleInvalid',
+  'recipient.sdiCodeOrPec',
+  'recipient.nip',
+  'recipient.nipChecksum',
+]);
+
+function getMissingFieldMessageKey(code: string): string {
+  return KNOWN_MISSING_FIELD_CODES.has(code) ? `missingFields.${code}` : 'missingFieldFallback';
+}
+
 interface EinvoicePanelProps {
   documentId: string;
   status: DocumentStatus;
@@ -44,6 +102,9 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
 
   const canSendPeppol =
     status !== 'cancelled' && Boolean(client?.peppolEndpointId && client?.peppolScheme);
+  const missingFieldMessages = readiness
+    ? Array.from(new Set(readiness.missingFields.map((code) => t(getMissingFieldMessageKey(code)))))
+    : [];
 
   return (
     <div className="flex flex-col gap-2">
@@ -55,7 +116,7 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
 
       {readiness && !readiness.ready ? (
         <p className="text-sm text-text-muted">
-          {t('notReadyHint', { fields: readiness.missingFields.join(', ') })}
+          {t('notReadyHint', { fields: missingFieldMessages.join(', ') })}
         </p>
       ) : null}
 

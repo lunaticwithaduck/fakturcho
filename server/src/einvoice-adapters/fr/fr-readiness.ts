@@ -1,5 +1,9 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
-import { checkEinvoiceReadiness, type EinvoiceReadiness } from '../../einvoice/readiness';
+import {
+  checkEinvoiceReadiness,
+  EINVOICE_MISSING_FIELD_CODES,
+  type EinvoiceReadiness,
+} from '../../einvoice/readiness';
 import { isValidFrenchVatNumber, resolveFrenchBusinessIdentifier } from './fr-identifiers';
 
 export function checkFrenchEinvoiceReadiness(document: DocumentDto): EinvoiceReadiness {
@@ -8,22 +12,22 @@ export function checkFrenchEinvoiceReadiness(document: DocumentDto): EinvoiceRea
 
   if (document.issuer.country === 'FR') {
     if (resolveFrenchBusinessIdentifier(document.issuer.eik) === null) {
-      missingFields.push('issuer SIREN or SIRET (French national business identifier)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerSirenOrSiret);
     }
     if (document.issuer.vatNumber !== null && !isValidFrenchVatNumber(document.issuer.vatNumber)) {
-      missingFields.push('issuer VAT number in the French format ("FR" + 11 characters)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerVatNumberFrFormat);
     }
   }
 
   if (document.recipient.country === 'FR') {
     if (resolveFrenchBusinessIdentifier(document.recipient.eik) === null) {
-      missingFields.push('recipient SIREN or SIRET (French national business identifier)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientSirenOrSiret);
     }
     if (
       document.recipient.vatNumber !== null &&
       !isValidFrenchVatNumber(document.recipient.vatNumber)
     ) {
-      missingFields.push('recipient VAT number in the French format ("FR" + 11 characters)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientVatNumberFrFormat);
     }
   }
 

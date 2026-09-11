@@ -1,14 +1,12 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 import { itDomesticStandardInvoice } from './__fixtures__/it-domestic-standard';
 import {
   checkFatturaPaReadiness,
   isValidCodiceFiscale,
   isValidPartitaIva,
 } from './fatturapa-readiness';
-
-const CODICE_DESTINATARIO_MESSAGE =
-  'Codice Destinatario (7-character SDI recipient channel code) or recipient PEC email — not yet modeled on DocumentDto/Client';
 
 describe('isValidPartitaIva', () => {
   it('accepts a valid 11-digit Partita IVA', () => {
@@ -46,7 +44,7 @@ describe('checkFatturaPaReadiness — the golden IT domestic fixture', () => {
   it('flags only the not-yet-modeled Codice Destinatario / PEC field when no options are supplied', () => {
     expect(checkFatturaPaReadiness(itDomesticStandardInvoice)).toEqual({
       ready: false,
-      missingFields: [CODICE_DESTINATARIO_MESSAGE],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.recipientSdiCodeOrPec],
     });
   });
 
@@ -76,7 +74,7 @@ describe('checkFatturaPaReadiness — out-of-scope document types', () => {
     const proforma: DocumentDto = { ...itDomesticStandardInvoice, documentType: 'proforma' };
     expect(checkFatturaPaReadiness(proforma)).toEqual({
       ready: false,
-      missingFields: ['document type must be an invoice, credit note or debit note'],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
     });
   });
 
@@ -93,7 +91,7 @@ describe('checkFatturaPaReadiness — Partita IVA and Codice Fiscale checks', ()
       issuer: { ...itDomesticStandardInvoice.issuer, vatNumber: null },
     };
     expect(checkFatturaPaReadiness(document).missingFields).toContain(
-      'issuer Partita IVA (VAT number)',
+      EINVOICE_MISSING_FIELD_CODES.issuerPartitaIva,
     );
   });
 
@@ -103,7 +101,7 @@ describe('checkFatturaPaReadiness — Partita IVA and Codice Fiscale checks', ()
       issuer: { ...itDomesticStandardInvoice.issuer, vatNumber: 'IT01234567898' },
     };
     expect(checkFatturaPaReadiness(document).missingFields).toContain(
-      'issuer Partita IVA is not a valid Italian VAT number',
+      EINVOICE_MISSING_FIELD_CODES.issuerPartitaIvaInvalid,
     );
   });
 
@@ -112,7 +110,9 @@ describe('checkFatturaPaReadiness — Partita IVA and Codice Fiscale checks', ()
       ...itDomesticStandardInvoice,
       issuer: { ...itDomesticStandardInvoice.issuer, eik: null },
     };
-    expect(checkFatturaPaReadiness(document).missingFields).toContain('issuer Codice Fiscale');
+    expect(checkFatturaPaReadiness(document).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerCodiceFiscale,
+    );
   });
 
   it('flags a missing recipient Partita IVA and Codice Fiscale together', () => {
@@ -121,7 +121,7 @@ describe('checkFatturaPaReadiness — Partita IVA and Codice Fiscale checks', ()
       recipient: { ...itDomesticStandardInvoice.recipient, vatNumber: null, eik: null },
     };
     expect(checkFatturaPaReadiness(document).missingFields).toContain(
-      'recipient Partita IVA or Codice Fiscale',
+      EINVOICE_MISSING_FIELD_CODES.recipientPartitaIvaOrCodiceFiscale,
     );
   });
 
@@ -131,7 +131,7 @@ describe('checkFatturaPaReadiness — Partita IVA and Codice Fiscale checks', ()
       recipient: { ...itDomesticStandardInvoice.recipient, eik: 'not-a-codice-fiscale' },
     };
     expect(checkFatturaPaReadiness(document).missingFields).toContain(
-      'recipient Codice Fiscale is not a valid format',
+      EINVOICE_MISSING_FIELD_CODES.recipientCodiceFiscaleInvalid,
     );
   });
 });
@@ -142,11 +142,15 @@ describe('checkFatturaPaReadiness — required parties and line items', () => {
       ...itDomesticStandardInvoice,
       issuer: { ...itDomesticStandardInvoice.issuer, companyName: null },
     };
-    expect(checkFatturaPaReadiness(document).missingFields).toContain('issuer company name');
+    expect(checkFatturaPaReadiness(document).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerCompanyName,
+    );
   });
 
   it('flags a document with no line items', () => {
     const document: DocumentDto = { ...itDomesticStandardInvoice, lineItems: [] };
-    expect(checkFatturaPaReadiness(document).missingFields).toContain('at least one line item');
+    expect(checkFatturaPaReadiness(document).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentLineItems,
+    );
   });
 });

@@ -1,5 +1,6 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 import { roDomesticStandardInvoice } from './__fixtures__/ro-domestic-standard';
 import { checkCiusRoReadiness } from './cius-ro-readiness';
 
@@ -8,8 +9,8 @@ describe('checkCiusRoReadiness — fully populated RO fixture', () => {
     expect(checkCiusRoReadiness(roDomesticStandardInvoice)).toEqual({
       ready: false,
       missingFields: [
-        'issuer county/județ (CIUS-RO CountrySubentity)',
-        'recipient county/județ (CIUS-RO CountrySubentity)',
+        EINVOICE_MISSING_FIELD_CODES.issuerCountyRegion,
+        EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion,
       ],
     });
   });
@@ -30,7 +31,7 @@ describe('checkCiusRoReadiness — fully populated RO fixture', () => {
     const result = checkCiusRoReadiness(roDomesticStandardInvoice, {
       issuerCountyRegion: 'București',
     });
-    expect(result.missingFields).toEqual(['recipient county/județ (CIUS-RO CountrySubentity)']);
+    expect(result.missingFields).toEqual([EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion]);
   });
 });
 
@@ -42,7 +43,7 @@ describe('checkCiusRoReadiness — inherits core EN 16931 checks', () => {
       issuedAt: null,
     };
     expect(checkCiusRoReadiness(draft).missingFields).toContain(
-      'document number (document must be issued)',
+      EINVOICE_MISSING_FIELD_CODES.documentNumber,
     );
   });
 });
@@ -54,7 +55,7 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       issuer: { ...roDomesticStandardInvoice.issuer, eik: null },
     };
     expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
-      'issuer CUI (Romanian tax registration code, required by CIUS-RO)',
+      EINVOICE_MISSING_FIELD_CODES.issuerCui,
     );
   });
 
@@ -64,7 +65,7 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       issuer: { ...roDomesticStandardInvoice.issuer, eik: '18547291' },
     };
     expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
-      'issuer CUI fails the Romanian checksum (CIUS-RO)',
+      EINVOICE_MISSING_FIELD_CODES.issuerCuiChecksum,
     );
   });
 
@@ -74,7 +75,7 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       issuer: { ...roDomesticStandardInvoice.issuer, vatNumber: null },
     };
     expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
-      'issuer RO VAT number (CIUS-RO requires the RO prefix)',
+      EINVOICE_MISSING_FIELD_CODES.issuerVatNumberRoPrefix,
     );
   });
 
@@ -84,7 +85,7 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       issuer: { ...roDomesticStandardInvoice.issuer, vatNumber: '18547290' },
     };
     expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
-      'issuer VAT number is not a valid RO-prefixed CUI (CIUS-RO)',
+      EINVOICE_MISSING_FIELD_CODES.issuerVatNumberRoFormat,
     );
   });
 
@@ -94,7 +95,7 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       recipient: { ...roDomesticStandardInvoice.recipient, eik: null },
     };
     expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
-      'recipient CUI (Romanian tax registration code, required by CIUS-RO)',
+      EINVOICE_MISSING_FIELD_CODES.recipientCui,
     );
   });
 
@@ -104,7 +105,7 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       recipient: { ...roDomesticStandardInvoice.recipient, vatNumber: 'RO14399841' },
     };
     expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
-      'recipient VAT number is not a valid RO-prefixed CUI (CIUS-RO)',
+      EINVOICE_MISSING_FIELD_CODES.recipientVatNumberRoFormat,
     );
   });
 
@@ -119,7 +120,8 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
       },
     };
     const result = checkCiusRoReadiness(notRomanian, { issuerCountyRegion: 'București' });
-    expect(result.missingFields.some((field) => field.includes('CUI'))).toBe(false);
-    expect(result.missingFields.some((field) => field.includes('county'))).toBe(false);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCui);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCuiChecksum);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion);
   });
 });

@@ -75,13 +75,52 @@ describe('EinvoicePanel', () => {
 
   it('lists the missing fields when the document is not einvoice-ready', () => {
     readinessResult = {
-      data: { ready: false, missingFields: ['issuer.vatNumber', 'recipient.address'] },
+      data: { ready: false, missingFields: ['issuer.vatNumber', 'recipient.street'] },
     };
     renderPanel('sent', client);
 
     expect(
-      screen.getByText('Липсващи данни за е-фактура: issuer.vatNumber, recipient.address'),
+      screen.getByText(
+        'Липсващи данни за е-фактура: Липсва ДДС номер на издателя., Липсва адрес (улица) на получателя.',
+      ),
     ).toBeTruthy();
+  });
+
+  it('deduplicates repeated missing-field codes', () => {
+    readinessResult = {
+      data: { ready: false, missingFields: ['line.unitCode', 'line.unitCode'] },
+    };
+    renderPanel('sent', client);
+
+    expect(
+      screen.getByText(
+        'Липсващи данни за е-фактура: На един или повече редове липсва мерна единица.',
+      ),
+    ).toBeTruthy();
+  });
+
+  it('falls back to a generic hint for an unknown missing-field code', () => {
+    readinessResult = {
+      data: { ready: false, missingFields: ['some.future.code'] },
+    };
+    renderPanel('sent', client);
+
+    expect(
+      screen.getByText('Липсващи данни за е-фактура: Липсват данни за е-фактура.'),
+    ).toBeTruthy();
+  });
+
+  it('translates the same missing-field codes into English', () => {
+    readinessResult = {
+      data: { ready: false, missingFields: ['issuer.vatNumber'] },
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <EinvoicePanel documentId="doc-1" status="sent" client={client} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByText('Missing e-invoice data: Missing issuer VAT number.')).toBeTruthy();
   });
 
   it('hides the send-via-Peppol button when the client has no Peppol endpoint (scheme only)', () => {
