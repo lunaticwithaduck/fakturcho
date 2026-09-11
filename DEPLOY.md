@@ -274,3 +274,11 @@ alert — nothing 500s, so this ships before Umami is provisioned.
 `UmamiClient` logs into `POST {UMAMI_API_URL}/api/auth/login` and caches the
 bearer token in memory, re-logging in once on a 401. Redeploy the API and
 rebuild the app; the Трафик page then shows real numbers.
+
+## 8. Feature flags
+
+`EN_LOCALE`, `EINVOICE` and `PEPPOL` are not environment variables — they live
+in the `feature_flag` table (seeded off by the first migration that creates
+it) and are read through `FeatureFlagsService`, cached in memory for a few
+seconds. Toggle them at **backoffice → Функции**; a change takes effect
+across the API and the app within that cache window, no redeploy needed.
