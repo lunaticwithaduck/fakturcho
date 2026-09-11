@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
+import { FeatureFlagsProvider, getFeatureFlags } from '../feature-flags';
 import { LocaleProvider } from '../i18n/LocaleProvider';
 import { Providers } from '../store/providers';
 import { uiFont } from './fonts';
@@ -36,15 +37,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const flags = await getFeatureFlags();
+
   return (
     <html lang="bg" className={uiFont.variable}>
       <body className="bg-surface font-sans text-text antialiased">
-        <NextIntlClientProvider>
-          <LocaleProvider>
-            <Providers>{children}</Providers>
-          </LocaleProvider>
-        </NextIntlClientProvider>
+        <FeatureFlagsProvider flags={flags}>
+          <NextIntlClientProvider>
+            <LocaleProvider>
+              <Providers>{children}</Providers>
+            </LocaleProvider>
+          </NextIntlClientProvider>
+        </FeatureFlagsProvider>
         {umamiSrc && umamiWebsiteId ? (
           <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         ) : null}

@@ -94,6 +94,10 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
+vi.mock('@app/feature-flags', () => ({
+  useFeatureFlags: () => ({ EN_LOCALE: true, EINVOICE: true, PEPPOL: true }),
+}));
+
 afterEach(cleanup);
 
 describe('DocumentViewPage', () => {

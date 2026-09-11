@@ -6,6 +6,7 @@ import {
   useGetEinvoiceTransmissionQuery,
   useSendEinvoicePeppolMutation,
 } from '@app/api';
+import { useFeatureFlags } from '@app/feature-flags';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Badge, Button } from '@design/components';
 import type { ClientDto, DocumentStatus, Locale } from '@shared/types';
@@ -81,15 +82,18 @@ interface EinvoicePanelProps {
 export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps) {
   const t = useTranslations('documents.peppol');
   const locale = useLocale() as Locale;
+  const { EINVOICE, PEPPOL } = useFeatureFlags();
   const isIssued = canDownloadDocument(status);
-  const { data: readiness } = useGetEinvoiceReadinessQuery(documentId, { skip: !isIssued });
+  const { data: readiness } = useGetEinvoiceReadinessQuery(documentId, {
+    skip: !isIssued || !EINVOICE,
+  });
   const { data: transmission } = useGetEinvoiceTransmissionQuery(documentId, {
-    skip: !isIssued,
+    skip: !isIssued || !EINVOICE || !PEPPOL,
   });
   const [sendPeppol, { isLoading: isSending }] = useSendEinvoicePeppolMutation();
   const [sendError, setSendError] = useState<string | null>(null);
 
-  if (!isIssued) return null;
+  if (!isIssued || !EINVOICE) return null;
 
   async function handleSend() {
     setSendError(null);
@@ -101,7 +105,7 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
   }
 
   const canSendPeppol =
-    status !== 'cancelled' && Boolean(client?.peppolEndpointId && client?.peppolScheme);
+    PEPPOL && status !== 'cancelled' && Boolean(client?.peppolEndpointId && client?.peppolScheme);
   const missingFieldMessages = readiness
     ? Array.from(new Set(readiness.missingFields.map((code) => t(getMissingFieldMessageKey(code)))))
     : [];
@@ -133,7 +137,7 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
         </div>
       ) : null}
 
-      {transmission?.errorText ? (
+      {PEPPOL && transmission?.errorText ? (
         <p className="text-sm font-medium text-danger">{transmission.errorText}</p>
       ) : null}
       {sendError ? <p className="text-sm font-medium text-danger">{sendError}</p> : null}

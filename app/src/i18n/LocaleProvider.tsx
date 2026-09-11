@@ -1,5 +1,6 @@
 'use client';
 
+import { useFeatureFlags } from '@app/feature-flags';
 import type { Locale } from '@fakturcho/shared-types';
 import { API_ROUTES } from '@fakturcho/shared-types';
 import { NextIntlClientProvider } from 'next-intl';
@@ -12,9 +13,12 @@ interface Override {
 }
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
+  const { EN_LOCALE: enLocale } = useFeatureFlags();
   const [override, setOverride] = useState<Override | null>(null);
 
   useEffect(() => {
+    if (!enLocale) return;
+
     const controller = new AbortController();
 
     async function resolve() {
@@ -32,7 +36,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
     resolve().catch(() => {});
     return () => controller.abort();
-  }, []);
+  }, [enLocale]);
 
   useEffect(() => {
     if (override) document.documentElement.lang = override.locale;

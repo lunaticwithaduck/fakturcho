@@ -1,21 +1,12 @@
-'use client';
-
+import { getFeatureFlags } from '@app/feature-flags';
+import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { useEffect } from 'react';
+import { EnglishHtmlLang } from './EnglishHtmlLang';
 
-function EnglishHtmlLang() {
-  useEffect(() => {
-    const root = document.documentElement;
-    const previous = root.lang;
-    root.lang = 'en';
-    return () => {
-      root.lang = previous;
-    };
-  }, []);
-  return null;
-}
+export default async function EnglishLayout({ children }: { children: ReactNode }) {
+  const flags = await getFeatureFlags();
+  if (!flags.EN_LOCALE) notFound();
 
-export default function EnglishLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <EnglishHtmlLang />
