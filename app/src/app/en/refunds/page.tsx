@@ -5,13 +5,14 @@ import type { Metadata } from 'next';
 const doc = getLegalDoc('refunds', 'en');
 
 export const metadata: Metadata = {
-  title: doc.metaTitle,
+  title: { absolute: doc.metaTitle },
   description: doc.metaDescription,
   alternates: {
     canonical: '/en/refunds',
     languages: {
       bg: '/refunds',
       en: '/en/refunds',
+      'x-default': '/refunds',
     },
   },
 };

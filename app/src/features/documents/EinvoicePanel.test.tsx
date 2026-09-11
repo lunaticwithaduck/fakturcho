@@ -44,7 +44,7 @@ afterEach(() => {
   transmissionResult = { data: null };
 });
 
-function renderPanel(status: 'draft' | 'sent', clientDto: ClientDto | undefined) {
+function renderPanel(status: 'draft' | 'sent' | 'cancelled', clientDto: ClientDto | undefined) {
   return render(
     <NextIntlClientProvider locale="bg" messages={bgMessages}>
       <EinvoicePanel documentId="doc-1" status={status} client={clientDto} />
@@ -108,6 +108,12 @@ describe('EinvoicePanel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Изпрати през Peppol' }));
 
     expect(sendMock).toHaveBeenCalledWith('doc-1');
+  });
+
+  it('hides the send-via-Peppol button for a cancelled document', () => {
+    renderPanel('cancelled', client);
+
+    expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
   });
 
   it('shows the transmission status and error text once sent', () => {

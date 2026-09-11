@@ -1,6 +1,7 @@
 import { useUpdateIssuerProfileMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
-import type { IssuerProfileDto, UpdateIssuerProfileRequest } from '@shared/types';
+import type { IssuerProfileDto, Locale, UpdateIssuerProfileRequest } from '@shared/types';
+import { useLocale } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 export interface IssuerProfileFormValues {
@@ -65,6 +66,7 @@ export function useIssuerProfileForm(
   profile: IssuerProfileDto,
   onSaved: (profile: IssuerProfileDto) => void,
 ) {
+  const locale = useLocale() as Locale;
   const [values, setValues] = useState<IssuerProfileFormValues>(() => toValues(profile));
   const [error, setError] = useState<string | null>(null);
   const [updateProfile, { isLoading }] = useUpdateIssuerProfileMutation();
@@ -84,7 +86,7 @@ export function useIssuerProfileForm(
       setValues(toValues(result));
       onSaved(result);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
     }
   }
 

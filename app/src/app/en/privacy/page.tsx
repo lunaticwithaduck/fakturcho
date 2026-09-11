@@ -5,13 +5,14 @@ import type { Metadata } from 'next';
 const doc = getLegalDoc('privacy', 'en');
 
 export const metadata: Metadata = {
-  title: doc.metaTitle,
+  title: { absolute: doc.metaTitle },
   description: doc.metaDescription,
   alternates: {
     canonical: '/en/privacy',
     languages: {
       bg: '/privacy',
       en: '/en/privacy',
+      'x-default': '/privacy',
     },
   },
 };

@@ -4,8 +4,8 @@ import { useDeleteCatalogueItemMutation, useListCatalogueItemsQuery } from '@app
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { Button, EmptyState, Input, Plus, Skeleton, toast } from '@design/components';
-import type { CatalogueItemDto } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import type { CatalogueItemDto, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { CatalogueFormDialog } from './CatalogueFormDialog';
 import { CatalogueRow } from './CatalogueRow';
@@ -14,6 +14,7 @@ type DialogState = { mode: 'create' } | { mode: 'edit'; item: CatalogueItemDto }
 
 export function CatalogueListPage() {
   const t = useTranslations('catalogue');
+  const locale = useLocale() as Locale;
   const { data, isLoading } = useListCatalogueItemsQuery();
   const [deleteItem, { isLoading: isDeleting }] = useDeleteCatalogueItemMutation();
   const [search, setSearch] = useState('');
@@ -36,7 +37,7 @@ export function CatalogueListPage() {
     } catch (error) {
       toast({
         title: t('deleteErrorTitle'),
-        description: getApiErrorMessage(error),
+        description: getApiErrorMessage(error, locale),
         variant: 'danger',
       });
     }

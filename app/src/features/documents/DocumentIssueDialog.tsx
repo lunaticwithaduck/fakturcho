@@ -13,9 +13,9 @@ import {
   Input,
 } from '@design/components';
 import { formatDocumentNumber } from '@fakturcho/shared-types';
-import type { DocumentDto } from '@shared/types';
+import type { DocumentDto, Locale } from '@shared/types';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 interface DocumentIssueDialogProps {
@@ -30,6 +30,7 @@ export function DocumentIssueDialog({
   onIssued,
 }: DocumentIssueDialogProps) {
   const t = useTranslations('documents.dialogs.issue');
+  const locale = useLocale() as Locale;
   const { data: series } = useListSeriesQuery();
   const [issueDocument, { isLoading }] = useIssueDocumentMutation();
   const [issuedAt, setIssuedAt] = useState(todayIsoDate());
@@ -53,14 +54,14 @@ export function DocumentIssueDialog({
       trackEvent('document_issued', { documentType: document.documentType });
       onIssued();
     } catch (err) {
-      const code = getApiErrorCode(err);
+      const code = getApiErrorCode(err, locale);
       if (code === 'ISSUER_PROFILE_INCOMPLETE') {
         setErrorLink({ href: '/profile', label: t('profileLink') });
       }
       if (code === 'INSUFFICIENT_CREDITS') {
         setErrorLink({ href: '/billing', label: t('creditsLink') });
       }
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
     }
   }
 

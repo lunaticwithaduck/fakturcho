@@ -1,6 +1,7 @@
 import { useCreateClientMutation, useUpdateClientMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import type { ClientDto, CreateClientRequest, Locale } from '@shared/types';
+import { useLocale } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 export interface ClientFormValues {
@@ -47,6 +48,7 @@ function toRequestBody(values: ClientFormValues): CreateClientRequest {
 }
 
 export function useClientForm(client: ClientDto | null, onSaved: (client: ClientDto) => void) {
+  const locale = useLocale() as Locale;
   const [values, setValues] = useState<ClientFormValues>(() => clientToFormValues(client));
   const [error, setError] = useState<string | null>(null);
   const [createClient, createState] = useCreateClientMutation();
@@ -66,7 +68,7 @@ export function useClientForm(client: ClientDto | null, onSaved: (client: Client
         : await createClient(body).unwrap();
       onSaved(result);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
     }
   }
 

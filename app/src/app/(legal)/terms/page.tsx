@@ -10,6 +10,7 @@ export const metadata: Metadata = {
     languages: {
       bg: '/terms',
       en: '/en/terms',
+      'x-default': '/terms',
     },
   },
 };

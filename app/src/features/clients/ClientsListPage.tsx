@@ -4,8 +4,8 @@ import { useDeleteClientMutation, useListClientsQuery } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { Button, EmptyState, Input, Plus, Skeleton, toast } from '@design/components';
-import type { ClientDto } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import type { ClientDto, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { ClientFormDialog } from './ClientFormDialog';
 import { ClientRow } from './ClientRow';
@@ -14,6 +14,7 @@ type DialogState = { mode: 'create' } | { mode: 'edit'; client: ClientDto } | nu
 
 export function ClientsListPage() {
   const t = useTranslations('clients');
+  const locale = useLocale() as Locale;
   const { data, isLoading } = useListClientsQuery();
   const [deleteClient, { isLoading: isDeleting }] = useDeleteClientMutation();
   const [search, setSearch] = useState('');
@@ -40,7 +41,7 @@ export function ClientsListPage() {
     } catch (error) {
       toast({
         title: t('deleteErrorTitle'),
-        description: getApiErrorMessage(error),
+        description: getApiErrorMessage(error, locale),
         variant: 'danger',
       });
     }
