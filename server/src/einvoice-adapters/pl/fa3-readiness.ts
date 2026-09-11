@@ -1,4 +1,5 @@
 import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 import { isValidNip } from './nip';
 
 const FA3_DOCUMENT_TYPES: readonly DocumentType[] = ['invoice', 'credit_note', 'debit_note'];
@@ -12,44 +13,47 @@ export function checkFa3Readiness(document: DocumentDto): Fa3Readiness {
   if (!FA3_DOCUMENT_TYPES.includes(document.documentType)) {
     return {
       ready: false,
-      missingFields: ['document type must be an invoice, credit note or debit note'],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
     };
   }
 
   const missingFields: string[] = [];
 
-  if (document.number === null) missingFields.push('document number (document must be issued)');
-  if (document.issuedAt === null) missingFields.push('issue date');
+  if (document.number === null) missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentNumber);
+  if (document.issuedAt === null) missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentIssuedAt);
 
-  if (!document.issuer.companyName) missingFields.push('issuer company name');
-  if (!document.issuer.street) missingFields.push('issuer street address');
-  if (!document.issuer.postcode) missingFields.push('issuer postcode');
+  if (!document.issuer.companyName)
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCompanyName);
+  if (!document.issuer.street) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
+  if (!document.issuer.postcode) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
 
   if (!document.issuer.vatNumber) {
-    missingFields.push('issuer NIP (required for KSeF submission)');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerNip);
   } else if (!isValidNip(document.issuer.vatNumber)) {
-    missingFields.push('issuer NIP fails the checksum validation');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerNipChecksum);
   }
 
-  if (!document.recipient.companyName) missingFields.push('recipient company name');
-  if (!document.recipient.country) missingFields.push('recipient country');
+  if (!document.recipient.companyName)
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCompanyName);
+  if (!document.recipient.country)
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCountry);
 
   const isDomesticBuyer = document.recipient.country === 'PL';
   if (isDomesticBuyer) {
     if (!document.recipient.vatNumber) {
-      missingFields.push('recipient NIP (required for a domestic Polish buyer)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientNip);
     } else if (!isValidNip(document.recipient.vatNumber)) {
-      missingFields.push('recipient NIP fails the checksum validation');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientNipChecksum);
     }
   }
 
   const hasReverseCharge = document.lineItems.some((line) => line.vatCategory === 'AE');
   if (hasReverseCharge && !isDomesticBuyer && !document.recipient.vatNumber) {
-    missingFields.push('recipient VAT number (required for intra-EU reverse charge)');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientVatNumberReverseCharge);
   }
 
   if (document.lineItems.length === 0) {
-    missingFields.push('at least one line item');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentLineItems);
   }
 
   return { ready: missingFields.length === 0, missingFields };

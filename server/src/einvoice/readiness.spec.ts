@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { bgDomesticStandardInvoice } from './__fixtures__/bg-domestic-standard';
 import { deDomesticStandardInvoice } from './__fixtures__/eu-domestic-standard';
 import { bgToEuReverseChargeInvoice } from './__fixtures__/eu-reverse-charge';
-import { checkEinvoiceReadiness } from './readiness';
+import { checkEinvoiceReadiness, EINVOICE_MISSING_FIELD_CODES } from './readiness';
 
 describe('checkEinvoiceReadiness — fully populated fixtures', () => {
   it('is ready for the BG domestic standard-rate fixture', () => {
@@ -33,7 +33,7 @@ describe('checkEinvoiceReadiness — out-of-scope document types', () => {
     const proforma: DocumentDto = { ...bgDomesticStandardInvoice, documentType: 'proforma' };
     expect(checkEinvoiceReadiness(proforma)).toEqual({
       ready: false,
-      missingFields: ['document type must be an invoice, credit note or debit note'],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
     });
   });
 
@@ -48,8 +48,8 @@ describe('checkEinvoiceReadiness — issuance and party fields', () => {
     const draft: DocumentDto = { ...bgDomesticStandardInvoice, number: null, issuedAt: null };
     const result = checkEinvoiceReadiness(draft);
     expect(result.ready).toBe(false);
-    expect(result.missingFields).toContain('document number (document must be issued)');
-    expect(result.missingFields).toContain('issue date');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentNumber);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentIssuedAt);
   });
 
   it('flags a missing issuer street and postcode', () => {
@@ -58,8 +58,8 @@ describe('checkEinvoiceReadiness — issuance and party fields', () => {
       issuer: { ...bgDomesticStandardInvoice.issuer, street: null, postcode: null },
     };
     const result = checkEinvoiceReadiness(incomplete);
-    expect(result.missingFields).toContain('issuer street address');
-    expect(result.missingFields).toContain('issuer postcode');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
   });
 
   it('flags a missing recipient country', () => {
@@ -67,7 +67,9 @@ describe('checkEinvoiceReadiness — issuance and party fields', () => {
       ...bgDomesticStandardInvoice,
       recipient: { ...bgDomesticStandardInvoice.recipient, country: null },
     };
-    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain('recipient country');
+    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.recipientCountry,
+    );
   });
 
   it('flags a VAT-registered issuer with no VAT number', () => {
@@ -75,7 +77,9 @@ describe('checkEinvoiceReadiness — issuance and party fields', () => {
       ...bgDomesticStandardInvoice,
       issuer: { ...bgDomesticStandardInvoice.issuer, vatNumber: null },
     };
-    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain('issuer VAT number');
+    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerVatNumber,
+    );
   });
 });
 
@@ -86,20 +90,20 @@ describe('checkEinvoiceReadiness — reverse charge and exemption grounds', () =
       recipient: { ...bgToEuReverseChargeInvoice.recipient, vatNumber: null },
     };
     expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
-      'recipient VAT number (required for intra-EU reverse charge)',
+      EINVOICE_MISSING_FIELD_CODES.recipientVatNumberReverseCharge,
     );
   });
 
   it('flags a missing exemption ground when a non-standard category has none', () => {
     const incomplete: DocumentDto = { ...bgToEuReverseChargeInvoice, vatExemptionGround: null };
     expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
-      'VAT exemption ground (required for the selected VAT category)',
+      EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround,
     );
   });
 
   it('does not require an exemption ground for the standard category', () => {
     expect(checkEinvoiceReadiness(bgDomesticStandardInvoice).missingFields).not.toContain(
-      'VAT exemption ground (required for the selected VAT category)',
+      EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround,
     );
   });
 });
@@ -113,13 +117,15 @@ describe('checkEinvoiceReadiness — line items', () => {
       lineItems: [{ ...line, unitCode: null }],
     };
     expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
-      `unit code on line item "${line.name}"`,
+      EINVOICE_MISSING_FIELD_CODES.lineUnitCode,
     );
   });
 
   it('flags a document with no line items', () => {
     const incomplete: DocumentDto = { ...bgDomesticStandardInvoice, lineItems: [] };
-    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain('at least one line item');
+    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentLineItems,
+    );
   });
 });
 
@@ -127,7 +133,7 @@ describe('checkEinvoiceReadiness — payment means', () => {
   it('flags a missing buyer reference for credit-transfer payment means', () => {
     const incomplete: DocumentDto = { ...bgDomesticStandardInvoice, buyerReference: null };
     expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
-      'buyer reference (required for the selected payment means)',
+      EINVOICE_MISSING_FIELD_CODES.documentBuyerReference,
     );
   });
 
@@ -138,7 +144,7 @@ describe('checkEinvoiceReadiness — payment means', () => {
       buyerReference: null,
     };
     expect(checkEinvoiceReadiness(noPaymentMeans).missingFields).not.toContain(
-      'buyer reference (required for the selected payment means)',
+      EINVOICE_MISSING_FIELD_CODES.documentBuyerReference,
     );
   });
 });

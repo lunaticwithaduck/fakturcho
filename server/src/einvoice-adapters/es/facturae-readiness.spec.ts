@@ -1,5 +1,6 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 import { esDomesticStandardInvoice } from './__fixtures__/es-domestic-standard';
 import { checkFacturaeReadiness } from './facturae-readiness';
 
@@ -17,7 +18,7 @@ describe('checkFacturaeReadiness — out-of-scope document types', () => {
     const proforma: DocumentDto = { ...esDomesticStandardInvoice, documentType: 'proforma' };
     expect(checkFacturaeReadiness(proforma)).toEqual({
       ready: false,
-      missingFields: ['document type must be an invoice, credit note or debit note'],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
     });
   });
 });
@@ -27,8 +28,8 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
     const draft: DocumentDto = { ...esDomesticStandardInvoice, number: null, issuedAt: null };
     const result = checkFacturaeReadiness(draft);
     expect(result.ready).toBe(false);
-    expect(result.missingFields).toContain('document number (document must be issued)');
-    expect(result.missingFields).toContain('issue date');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentNumber);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentIssuedAt);
   });
 
   it('flags a missing issuer street and postcode', () => {
@@ -37,8 +38,8 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
       issuer: { ...esDomesticStandardInvoice.issuer, street: null, postcode: null },
     };
     const result = checkFacturaeReadiness(incomplete);
-    expect(result.missingFields).toContain('issuer street address');
-    expect(result.missingFields).toContain('issuer postcode');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
   });
 
   it('flags a missing recipient country', () => {
@@ -46,7 +47,9 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
       ...esDomesticStandardInvoice,
       recipient: { ...esDomesticStandardInvoice.recipient, country: null },
     };
-    expect(checkFacturaeReadiness(incomplete).missingFields).toContain('recipient country');
+    expect(checkFacturaeReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.recipientCountry,
+    );
   });
 
   it('flags a missing tax identifier on both parties', () => {
@@ -56,8 +59,8 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
       recipient: { ...esDomesticStandardInvoice.recipient, eik: null, vatNumber: null },
     };
     const result = checkFacturaeReadiness(incomplete);
-    expect(result.missingFields).toContain('issuer NIF/CIF/NIE tax identifier');
-    expect(result.missingFields).toContain('recipient NIF/CIF/NIE tax identifier');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerEsTaxId);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.recipientEsTaxId);
   });
 
   it('flags an invalid CIF check character on the issuer', () => {
@@ -67,9 +70,7 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
     };
     const result = checkFacturaeReadiness(incomplete);
     expect(result.ready).toBe(false);
-    expect(
-      result.missingFields.some((field) => field.startsWith('issuer tax identifier "B12345678"')),
-    ).toBe(true);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerEsTaxIdInvalid);
   });
 
   it('accepts a bare NIF for a recipient acting as an individual', () => {
@@ -78,8 +79,8 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
       recipient: { ...esDomesticStandardInvoice.recipient, eik: '12345678Z', vatNumber: null },
     };
     const { missingFields } = checkFacturaeReadiness(individual);
-    expect(missingFields.some((field) => field.startsWith('recipient tax identifier'))).toBe(false);
-    expect(missingFields).not.toContain('recipient NIF/CIF/NIE tax identifier');
+    expect(missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientEsTaxIdInvalid);
+    expect(missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientEsTaxId);
   });
 
   it('falls back to a stripped ES-prefixed VAT number when eik is absent', () => {
@@ -94,6 +95,8 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
 describe('checkFacturaeReadiness — line items', () => {
   it('flags a document with no line items', () => {
     const incomplete: DocumentDto = { ...esDomesticStandardInvoice, lineItems: [] };
-    expect(checkFacturaeReadiness(incomplete).missingFields).toContain('at least one line item');
+    expect(checkFacturaeReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentLineItems,
+    );
   });
 });

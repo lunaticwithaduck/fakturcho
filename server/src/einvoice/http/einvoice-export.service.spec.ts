@@ -18,6 +18,7 @@ import type { TestDatabase } from '../../testing/test-database';
 import { startTestDatabase } from '../../testing/test-database';
 import { bgDomesticStandardInvoice } from '../__fixtures__/bg-domestic-standard';
 import { deDomesticStandardInvoice } from '../__fixtures__/eu-domestic-standard';
+import { EINVOICE_MISSING_FIELD_CODES } from '../readiness';
 import { EinvoiceExportService } from './einvoice-export.service';
 
 function stubDocumentsService(document: DocumentDto): DocumentsService {
@@ -56,7 +57,7 @@ describe('EinvoiceExportService', () => {
     const service = new EinvoiceExportService(stubDocumentsService(draft));
     const result = await service.getReadiness('acc-1', draft.id);
     expect(result.ready).toBe(false);
-    expect(result.missingFields).toContain('document number (document must be issued)');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentNumber);
   });
 
   it('rejects exporting a draft document with DOCUMENT_NOT_ISSUED, not a raw crash', async () => {

@@ -1,6 +1,7 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { deDomesticStandardInvoice } from '../../einvoice/__fixtures__/eu-domestic-standard';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 import { deDomesticB2GInvoice } from './__fixtures__/de-domestic-b2g';
 import { checkXRechnungReadiness } from './xrechnung-readiness';
 
@@ -18,7 +19,7 @@ describe('checkXRechnungReadiness — DE domestic B2B fixture', () => {
       issuer: { ...deDomesticStandardInvoice.issuer, phone: null },
     };
     expect(checkXRechnungReadiness(incomplete).missingFields).toContain(
-      'issuer phone number (XRechnung requires a seller contact channel, per BR-DE-2)',
+      EINVOICE_MISSING_FIELD_CODES.issuerPhone,
     );
   });
 
@@ -28,7 +29,7 @@ describe('checkXRechnungReadiness — DE domestic B2B fixture', () => {
       issuer: { ...deDomesticStandardInvoice.issuer, iban: null },
     };
     expect(checkXRechnungReadiness(incomplete).missingFields).toContain(
-      'issuer IBAN (required for the selected credit transfer payment means, per BR-DE-18)',
+      EINVOICE_MISSING_FIELD_CODES.issuerIban,
     );
   });
 
@@ -38,7 +39,7 @@ describe('checkXRechnungReadiness — DE domestic B2B fixture', () => {
       issuer: { ...deDomesticStandardInvoice.issuer, vatNumber: null, eik: null },
     };
     expect(checkXRechnungReadiness(incomplete).missingFields).toContain(
-      'issuer VAT number or legal registration id (per BR-DE-4/BR-DE-5)',
+      EINVOICE_MISSING_FIELD_CODES.issuerVatNumberOrRegistrationId,
     );
   });
 });
@@ -46,7 +47,7 @@ describe('checkXRechnungReadiness — DE domestic B2B fixture', () => {
 describe('checkXRechnungReadiness — DE B2G fixture', () => {
   it('flags a missing buyer reference / Leitweg-ID when neither is present', () => {
     expect(checkXRechnungReadiness(deDomesticB2GInvoice).missingFields).toContain(
-      'buyer reference or Leitweg-ID (XRechnung requires one, per BR-DE-1)',
+      EINVOICE_MISSING_FIELD_CODES.documentBuyerReferenceOrLeitwegId,
     );
   });
 
@@ -61,8 +62,6 @@ describe('checkXRechnungReadiness — DE B2G fixture', () => {
     const result = checkXRechnungReadiness(deDomesticB2GInvoice, {
       leitwegId: 'not-a-leitweg-id',
     });
-    expect(result.missingFields).toContain(
-      'Leitweg-ID does not match the routing-id/sub-id/checksum format',
-    );
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentLeitwegIdFormat);
   });
 });

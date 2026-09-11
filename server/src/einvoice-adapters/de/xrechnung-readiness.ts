@@ -1,5 +1,5 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
-import { checkEinvoiceReadiness } from '../../einvoice/readiness';
+import { checkEinvoiceReadiness, EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 
 const CREDIT_TRANSFER_PAYMENT_MEANS: readonly string[] = ['30', '58'];
 
@@ -27,17 +27,15 @@ export function checkXRechnungReadiness(
   const missingFields = [...core.missingFields];
 
   if (!effectiveBuyerReference) {
-    missingFields.push('buyer reference or Leitweg-ID (XRechnung requires one, per BR-DE-1)');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentBuyerReferenceOrLeitwegId);
   }
 
   if (options.leitwegId && !LEITWEG_ID_PATTERN.test(options.leitwegId)) {
-    missingFields.push('Leitweg-ID does not match the routing-id/sub-id/checksum format');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentLeitwegIdFormat);
   }
 
   if (!document.issuer.phone) {
-    missingFields.push(
-      'issuer phone number (XRechnung requires a seller contact channel, per BR-DE-2)',
-    );
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPhone);
   }
 
   if (
@@ -45,13 +43,11 @@ export function checkXRechnungReadiness(
     CREDIT_TRANSFER_PAYMENT_MEANS.includes(document.paymentMeansCode) &&
     !document.issuer.iban
   ) {
-    missingFields.push(
-      'issuer IBAN (required for the selected credit transfer payment means, per BR-DE-18)',
-    );
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerIban);
   }
 
   if (!document.issuer.vatNumber && !document.issuer.eik) {
-    missingFields.push('issuer VAT number or legal registration id (per BR-DE-4/BR-DE-5)');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerVatNumberOrRegistrationId);
   }
 
   return { ready: missingFields.length === 0, missingFields };

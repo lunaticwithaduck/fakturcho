@@ -1,5 +1,9 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
-import { checkEinvoiceReadiness, type EinvoiceReadiness } from '../../einvoice/readiness';
+import {
+  checkEinvoiceReadiness,
+  EINVOICE_MISSING_FIELD_CODES,
+  type EinvoiceReadiness,
+} from '../../einvoice/readiness';
 import { isValidRomanianCui, isValidRomanianVatNumber } from './ro-cui';
 
 export interface CheckCiusRoReadinessOptions {
@@ -16,37 +20,37 @@ export function checkCiusRoReadiness(
 
   if (document.issuer.country === 'RO') {
     if (!document.issuer.eik) {
-      missingFields.push('issuer CUI (Romanian tax registration code, required by CIUS-RO)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCui);
     } else if (!isValidRomanianCui(document.issuer.eik)) {
-      missingFields.push('issuer CUI fails the Romanian checksum (CIUS-RO)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCuiChecksum);
     }
 
     if (document.issuer.vatRegistered) {
       if (!document.issuer.vatNumber) {
-        missingFields.push('issuer RO VAT number (CIUS-RO requires the RO prefix)');
+        missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerVatNumberRoPrefix);
       } else if (!isValidRomanianVatNumber(document.issuer.vatNumber)) {
-        missingFields.push('issuer VAT number is not a valid RO-prefixed CUI (CIUS-RO)');
+        missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerVatNumberRoFormat);
       }
     }
 
     if (!options.issuerCountyRegion) {
-      missingFields.push('issuer county/județ (CIUS-RO CountrySubentity)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCountyRegion);
     }
   }
 
   if (document.recipient.country === 'RO') {
     if (!document.recipient.eik) {
-      missingFields.push('recipient CUI (Romanian tax registration code, required by CIUS-RO)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCui);
     } else if (!isValidRomanianCui(document.recipient.eik)) {
-      missingFields.push('recipient CUI fails the Romanian checksum (CIUS-RO)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCuiChecksum);
     }
 
     if (document.recipient.vatNumber && !isValidRomanianVatNumber(document.recipient.vatNumber)) {
-      missingFields.push('recipient VAT number is not a valid RO-prefixed CUI (CIUS-RO)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientVatNumberRoFormat);
     }
 
     if (!options.recipientCountyRegion) {
-      missingFields.push('recipient county/județ (CIUS-RO CountrySubentity)');
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion);
     }
   }
 

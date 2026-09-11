@@ -1,13 +1,11 @@
 import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 
 const FATTURAPA_DOCUMENT_TYPES: readonly DocumentType[] = ['invoice', 'credit_note', 'debit_note'];
 
 const COUNTRY_PREFIX_PATTERN = /^[A-Z]{2}/;
 
 const PERSONAL_CODICE_FISCALE_PATTERN = /^[A-Z]{6}\d{2}[A-EHLMPRST]\d{2}[A-Z]\d{3}[A-Z]$/;
-
-const CODICE_DESTINATARIO_MISSING =
-  'Codice Destinatario (7-character SDI recipient channel code) or recipient PEC email — not yet modeled on DocumentDto/Client';
 
 export interface FatturaPaReadiness {
   ready: boolean;
@@ -50,51 +48,54 @@ export function checkFatturaPaReadiness(
   if (!FATTURAPA_DOCUMENT_TYPES.includes(document.documentType)) {
     return {
       ready: false,
-      missingFields: ['document type must be an invoice, credit note or debit note'],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
     };
   }
 
   const missingFields: string[] = [];
 
-  if (document.number === null) missingFields.push('document number (document must be issued)');
-  if (document.issuedAt === null) missingFields.push('issue date');
+  if (document.number === null) missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentNumber);
+  if (document.issuedAt === null) missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentIssuedAt);
 
-  if (!document.issuer.companyName) missingFields.push('issuer company name');
-  if (!document.issuer.country) missingFields.push('issuer country');
-  if (!document.issuer.street) missingFields.push('issuer street address');
-  if (!document.issuer.postcode) missingFields.push('issuer postcode');
+  if (!document.issuer.companyName)
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCompanyName);
+  if (!document.issuer.country) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCountry);
+  if (!document.issuer.street) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
+  if (!document.issuer.postcode) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
 
   if (!document.issuer.vatNumber) {
-    missingFields.push('issuer Partita IVA (VAT number)');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPartitaIva);
   } else if (!isValidPartitaIva(document.issuer.vatNumber)) {
-    missingFields.push('issuer Partita IVA is not a valid Italian VAT number');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPartitaIvaInvalid);
   }
 
   if (!document.issuer.eik) {
-    missingFields.push('issuer Codice Fiscale');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCodiceFiscale);
   } else if (!isValidCodiceFiscale(document.issuer.eik)) {
-    missingFields.push('issuer Codice Fiscale is not a valid format');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCodiceFiscaleInvalid);
   }
 
-  if (!document.recipient.companyName) missingFields.push('recipient company name');
-  if (!document.recipient.country) missingFields.push('recipient country');
+  if (!document.recipient.companyName)
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCompanyName);
+  if (!document.recipient.country)
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCountry);
 
   if (!document.recipient.vatNumber && !document.recipient.eik) {
-    missingFields.push('recipient Partita IVA or Codice Fiscale');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientPartitaIvaOrCodiceFiscale);
   }
   if (document.recipient.vatNumber && !isValidPartitaIva(document.recipient.vatNumber)) {
-    missingFields.push('recipient Partita IVA is not a valid Italian VAT number');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientPartitaIvaInvalid);
   }
   if (document.recipient.eik && !isValidCodiceFiscale(document.recipient.eik)) {
-    missingFields.push('recipient Codice Fiscale is not a valid format');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCodiceFiscaleInvalid);
   }
 
   if (document.lineItems.length === 0) {
-    missingFields.push('at least one line item');
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentLineItems);
   }
 
   if (!options.sdiRecipientCode && !options.pec) {
-    missingFields.push(CODICE_DESTINATARIO_MISSING);
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientSdiCodeOrPec);
   }
 
   return { ready: missingFields.length === 0, missingFields };

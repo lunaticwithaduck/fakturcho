@@ -1,5 +1,6 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
 import { plDomesticStandardInvoice } from './__fixtures__/pl-domestic-standard';
 import { checkFa3Readiness } from './fa3-readiness';
 
@@ -17,7 +18,7 @@ describe('checkFa3Readiness — out-of-scope document types', () => {
     const proforma: DocumentDto = { ...plDomesticStandardInvoice, documentType: 'proforma' };
     expect(checkFa3Readiness(proforma)).toEqual({
       ready: false,
-      missingFields: ['document type must be an invoice, credit note or debit note'],
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
     });
   });
 
@@ -32,8 +33,8 @@ describe('checkFa3Readiness — issuance and party fields', () => {
     const draft: DocumentDto = { ...plDomesticStandardInvoice, number: null, issuedAt: null };
     const result = checkFa3Readiness(draft);
     expect(result.ready).toBe(false);
-    expect(result.missingFields).toContain('document number (document must be issued)');
-    expect(result.missingFields).toContain('issue date');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentNumber);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.documentIssuedAt);
   });
 
   it('flags a missing issuer street and postcode', () => {
@@ -42,8 +43,8 @@ describe('checkFa3Readiness — issuance and party fields', () => {
       issuer: { ...plDomesticStandardInvoice.issuer, street: null, postcode: null },
     };
     const result = checkFa3Readiness(incomplete);
-    expect(result.missingFields).toContain('issuer street address');
-    expect(result.missingFields).toContain('issuer postcode');
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
+    expect(result.missingFields).toContain(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
   });
 });
 
@@ -54,7 +55,7 @@ describe('checkFa3Readiness — NIP validation', () => {
       issuer: { ...plDomesticStandardInvoice.issuer, vatNumber: null },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
-      'issuer NIP (required for KSeF submission)',
+      EINVOICE_MISSING_FIELD_CODES.issuerNip,
     );
   });
 
@@ -64,7 +65,7 @@ describe('checkFa3Readiness — NIP validation', () => {
       issuer: { ...plDomesticStandardInvoice.issuer, vatNumber: 'PL1234563219' },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
-      'issuer NIP fails the checksum validation',
+      EINVOICE_MISSING_FIELD_CODES.issuerNipChecksum,
     );
   });
 
@@ -74,7 +75,7 @@ describe('checkFa3Readiness — NIP validation', () => {
       recipient: { ...plDomesticStandardInvoice.recipient, vatNumber: null },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
-      'recipient NIP (required for a domestic Polish buyer)',
+      EINVOICE_MISSING_FIELD_CODES.recipientNip,
     );
   });
 
@@ -84,7 +85,7 @@ describe('checkFa3Readiness — NIP validation', () => {
       recipient: { ...plDomesticStandardInvoice.recipient, vatNumber: 'PL1234563219' },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
-      'recipient NIP fails the checksum validation',
+      EINVOICE_MISSING_FIELD_CODES.recipientNipChecksum,
     );
   });
 
@@ -98,7 +99,7 @@ describe('checkFa3Readiness — NIP validation', () => {
       },
     };
     expect(checkFa3Readiness(foreignBuyer).missingFields).not.toContain(
-      'recipient NIP (required for a domestic Polish buyer)',
+      EINVOICE_MISSING_FIELD_CODES.recipientNip,
     );
   });
 });
@@ -106,6 +107,8 @@ describe('checkFa3Readiness — NIP validation', () => {
 describe('checkFa3Readiness — line items', () => {
   it('flags a document with no line items', () => {
     const incomplete: DocumentDto = { ...plDomesticStandardInvoice, lineItems: [] };
-    expect(checkFa3Readiness(incomplete).missingFields).toContain('at least one line item');
+    expect(checkFa3Readiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentLineItems,
+    );
   });
 });
