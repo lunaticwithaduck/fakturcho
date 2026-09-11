@@ -1,5 +1,6 @@
 import bgMessages from '@messages/bg.json';
-import type { DomainErrorCode } from '@shared/types';
+import enMessages from '@messages/en.json';
+import type { DomainErrorCode, Locale } from '@shared/types';
 
 interface ApiErrorBody {
   code?: string;
@@ -22,20 +23,28 @@ function extractBody(error: unknown): ApiErrorBody | null {
   return data as ApiErrorBody;
 }
 
-const API_ERROR_MESSAGES = bgMessages.shell.apiErrors as Record<DomainErrorCode, string>;
-const DEFAULT_MESSAGE: string = bgMessages.shell.apiErrorFallback;
-
-function isKnownCode(code: string): code is DomainErrorCode {
-  return code in API_ERROR_MESSAGES;
+interface ShellMessages {
+  apiErrors: Record<DomainErrorCode, string>;
+  apiErrorFallback: string;
 }
 
-export function getApiErrorCode(error: unknown): DomainErrorCode | null {
+const MESSAGES_BY_LOCALE: Record<Locale, ShellMessages> = {
+  bg: bgMessages.shell as ShellMessages,
+  en: enMessages.shell as ShellMessages,
+};
+
+function isKnownCode(code: string, locale: Locale): code is DomainErrorCode {
+  return code in MESSAGES_BY_LOCALE[locale].apiErrors;
+}
+
+export function getApiErrorCode(error: unknown, locale: Locale): DomainErrorCode | null {
   const body = extractBody(error);
-  if (!body || typeof body.code !== 'string' || !isKnownCode(body.code)) return null;
+  if (!body || typeof body.code !== 'string' || !isKnownCode(body.code, locale)) return null;
   return body.code;
 }
 
-export function getApiErrorMessage(error: unknown): string {
-  const code = getApiErrorCode(error);
-  return code ? API_ERROR_MESSAGES[code] : DEFAULT_MESSAGE;
+export function getApiErrorMessage(error: unknown, locale: Locale): string {
+  const code = getApiErrorCode(error, locale);
+  const messages = MESSAGES_BY_LOCALE[locale];
+  return code ? messages.apiErrors[code] : messages.apiErrorFallback;
 }

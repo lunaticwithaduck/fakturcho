@@ -65,7 +65,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
     } catch (err) {
       toast({
         title: t('view.errorToastTitle'),
-        description: getApiErrorMessage(err),
+        description: getApiErrorMessage(err, locale),
         variant: 'danger',
       });
     }
@@ -79,7 +79,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
     } catch (err) {
       toast({
         title: t('view.errorToastTitle'),
-        description: getApiErrorMessage(err),
+        description: getApiErrorMessage(err, locale),
         variant: 'danger',
       });
     }

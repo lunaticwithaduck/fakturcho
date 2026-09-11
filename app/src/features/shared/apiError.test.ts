@@ -4,34 +4,54 @@ import { getApiErrorCode, getApiErrorMessage } from './apiError';
 describe('getApiErrorCode', () => {
   it('reads a known domain error code from a fetchBaseQuery error', () => {
     const error = { status: 422, data: { code: 'ISSUER_PROFILE_INCOMPLETE', message: 'x' } };
-    expect(getApiErrorCode(error)).toBe('ISSUER_PROFILE_INCOMPLETE');
+    expect(getApiErrorCode(error, 'bg')).toBe('ISSUER_PROFILE_INCOMPLETE');
   });
 
   it('returns null for an unrecognized code', () => {
     const error = { status: 500, data: { code: 'SOMETHING_ELSE' } };
-    expect(getApiErrorCode(error)).toBeNull();
+    expect(getApiErrorCode(error, 'bg')).toBeNull();
   });
 
   it('returns null when there is no error body', () => {
-    expect(getApiErrorCode({ status: 500 })).toBeNull();
-    expect(getApiErrorCode(undefined)).toBeNull();
+    expect(getApiErrorCode({ status: 500 }, 'bg')).toBeNull();
+    expect(getApiErrorCode(undefined, 'bg')).toBeNull();
   });
 });
 
 describe('getApiErrorMessage', () => {
   it('maps CLIENT_EIK_DUPLICATE to a Bulgarian message', () => {
     const error = { status: 409, data: { code: 'CLIENT_EIK_DUPLICATE' } };
-    expect(getApiErrorMessage(error)).toBe('Вече има клиент с този ЕИК.');
+    expect(getApiErrorMessage(error, 'bg')).toBe('Вече има клиент с този ЕИК.');
   });
 
   it('maps the 402 INSUFFICIENT_CREDITS payload to the credits message', () => {
     const error = { status: 402, data: { code: 'INSUFFICIENT_CREDITS' } };
-    expect(getApiErrorMessage(error)).toBe(
+    expect(getApiErrorMessage(error, 'bg')).toBe(
       'Нямате достатъчно кредити. Издаването на документ струва 0,10 €.',
     );
   });
 
   it('falls back to a generic Bulgarian message', () => {
-    expect(getApiErrorMessage(new Error('network down'))).toBe('Възникна грешка. Опитайте отново.');
+    expect(getApiErrorMessage(new Error('network down'), 'bg')).toBe(
+      'Възникна грешка. Опитайте отново.',
+    );
+  });
+
+  it('maps CLIENT_EIK_DUPLICATE to an English message', () => {
+    const error = { status: 409, data: { code: 'CLIENT_EIK_DUPLICATE' } };
+    expect(getApiErrorMessage(error, 'en')).toBe('A client with this company ID already exists.');
+  });
+
+  it('maps the 402 INSUFFICIENT_CREDITS payload to the English credits message', () => {
+    const error = { status: 402, data: { code: 'INSUFFICIENT_CREDITS' } };
+    expect(getApiErrorMessage(error, 'en')).toBe(
+      'Insufficient credit. Issuing a document costs €0.10.',
+    );
+  });
+
+  it('falls back to a generic English message', () => {
+    expect(getApiErrorMessage(new Error('network down'), 'en')).toBe(
+      'An error occurred. Please try again.',
+    );
   });
 });

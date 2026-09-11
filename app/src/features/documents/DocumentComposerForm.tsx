@@ -10,9 +10,10 @@ import type {
   DocumentDto,
   DocumentType,
   IssuerProfileDto,
+  Locale,
 } from '@shared/types';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 import { ComposerActions } from './ComposerActions';
 import { ComposerClientField } from './ComposerClientField';
@@ -44,6 +45,7 @@ export function DocumentComposerForm({
   issuerProfile,
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
+  const locale = useLocale() as Locale;
   const router = useRouter();
   const controller = useComposerState(existing);
   const { state, setField, patchState } = controller;
@@ -86,7 +88,7 @@ export function DocumentComposerForm({
         ? await updateDraft({ id: documentId, body }).unwrap()
         : await saveDraft(body).unwrap();
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
       return null;
     }
   }

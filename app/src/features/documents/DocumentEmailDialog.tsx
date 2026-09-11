@@ -3,8 +3,8 @@
 import { useSendDocumentEmailMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Button, Dialog, DialogContent, DialogTitle, Input, Textarea } from '@design/components';
-import type { DocumentDto } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import type { DocumentDto, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 interface DocumentEmailDialogProps {
@@ -15,6 +15,7 @@ interface DocumentEmailDialogProps {
 
 export function DocumentEmailDialog({ document, onOpenChange, onSent }: DocumentEmailDialogProps) {
   const t = useTranslations('documents.dialogs.email');
+  const locale = useLocale() as Locale;
   const [sendEmail, { isLoading }] = useSendDocumentEmailMutation();
   const [to, setTo] = useState(document.recipient.email ?? '');
   const [message, setMessage] = useState(document.emailText ?? '');
@@ -27,7 +28,7 @@ export function DocumentEmailDialog({ document, onOpenChange, onSent }: Document
       await sendEmail({ id: document.id, body: { to, emailText: message } }).unwrap();
       onSent();
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
     }
   }
 

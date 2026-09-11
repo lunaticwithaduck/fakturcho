@@ -1,7 +1,7 @@
 import { useCreateCatalogueItemMutation, useUpdateCatalogueItemMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
-import type { CatalogueItemDto, Cents, CreateCatalogueItemRequest } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import type { CatalogueItemDto, Cents, CreateCatalogueItemRequest, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 export interface CatalogueFormValues {
@@ -38,6 +38,7 @@ export function useCatalogueForm(
   onSaved: (item: CatalogueItemDto) => void,
 ) {
   const t = useTranslations('catalogue');
+  const locale = useLocale() as Locale;
   const [values, setValues] = useState<CatalogueFormValues>(() =>
     catalogueItemToFormValues(item, t('defaultUnit')),
   );
@@ -63,7 +64,7 @@ export function useCatalogueForm(
         : await createItem(body).unwrap();
       onSaved(result);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
     }
   }
 

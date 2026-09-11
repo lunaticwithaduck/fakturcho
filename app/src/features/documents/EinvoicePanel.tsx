@@ -8,8 +8,8 @@ import {
 } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Badge, Button } from '@design/components';
-import type { ClientDto, DocumentStatus } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import type { ClientDto, DocumentStatus, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { canDownloadDocument } from './documentDownload';
 import { getPeppolStatusBadgeVariant, getPeppolStatusMessageKey } from './peppolStatus';
@@ -22,6 +22,7 @@ interface EinvoicePanelProps {
 
 export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps) {
   const t = useTranslations('documents.peppol');
+  const locale = useLocale() as Locale;
   const isIssued = canDownloadDocument(status);
   const { data: readiness } = useGetEinvoiceReadinessQuery(documentId, { skip: !isIssued });
   const { data: transmission } = useGetEinvoiceTransmissionQuery(documentId, {
@@ -37,7 +38,7 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
     try {
       await sendPeppol(documentId).unwrap();
     } catch (err) {
-      setSendError(getApiErrorMessage(err));
+      setSendError(getApiErrorMessage(err, locale));
     }
   }
 
