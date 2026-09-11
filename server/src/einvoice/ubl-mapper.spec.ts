@@ -204,3 +204,67 @@ describe('toUblXml — XML escaping', () => {
     expect(xml).not.toContain('A & B <Trading>');
   });
 });
+
+describe('toUblXml — a document discount is reflected in the TaxSubtotal breakdown', () => {
+  it('keeps the sum of TaxSubtotal amounts consistent with the document-level totals', () => {
+    const discounted: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 14940,
+      amount: 104940,
+      lineItems: [
+        {
+          id: 'line-1',
+          name: 'Консултация',
+          quantity: '1',
+          unitPrice: 60000,
+          lineTotal: 60000,
+          sortOrder: 0,
+          vatRateBp: 2100,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+        {
+          id: 'line-2',
+          name: 'Материали',
+          quantity: '1',
+          unitPrice: 40000,
+          lineTotal: 40000,
+          sortOrder: 1,
+          vatRateBp: 1000,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+      ],
+    };
+    const xml = toUblXml(discounted);
+
+    const taxTotalStart = xml.indexOf('<cac:TaxTotal>');
+    const taxTotalEnd = xml.indexOf('</cac:TaxTotal>') + '</cac:TaxTotal>'.length;
+    const taxTotalBlock = xml.slice(taxTotalStart, taxTotalEnd);
+
+    expect(taxTotalBlock).toContain('<cbc:TaxAmount currencyID="EUR">149.40</cbc:TaxAmount>');
+    expect(taxTotalBlock).toContain(
+      '<cbc:TaxableAmount currencyID="EUR">540.00</cbc:TaxableAmount>',
+    );
+    expect(taxTotalBlock).toContain(
+      '<cbc:TaxableAmount currencyID="EUR">360.00</cbc:TaxableAmount>',
+    );
+
+    const taxableSum = [
+      ...taxTotalBlock.matchAll(
+        /<cbc:TaxableAmount currencyID="EUR">([\d.]+)<\/cbc:TaxableAmount>/g,
+      ),
+    ].reduce((sum, m) => sum + Number(m[1]), 0);
+    const subtotalVatSum = [
+      ...taxTotalBlock.matchAll(/<cac:TaxSubtotal>.*?<cbc:TaxAmount currencyID="EUR">([\d.]+)</g),
+    ].reduce((sum, m) => sum + Number(m[1]), 0);
+
+    expect(taxableSum.toFixed(2)).toBe('900.00');
+    expect(taxableSum.toFixed(2)).toBe(
+      ((discounted.subtotal - discounted.discountTotal) / 100).toFixed(2),
+    );
+    expect(subtotalVatSum.toFixed(2)).toBe((discounted.vatAmount / 100).toFixed(2));
+  });
+});

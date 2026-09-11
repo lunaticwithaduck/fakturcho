@@ -142,3 +142,59 @@ describe('toFatturaPaXml — document type codes', () => {
     );
   });
 });
+
+describe('toFatturaPaXml — a document discount is reflected in DatiRiepilogo', () => {
+  it('keeps DatiRiepilogo consistent with the discounted taxable base', () => {
+    const discounted: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 14940,
+      amount: 104940,
+      lineItems: [
+        {
+          id: 'line-1',
+          name: 'Consulenza',
+          quantity: '1',
+          unitPrice: 60000,
+          lineTotal: 60000,
+          sortOrder: 0,
+          vatRateBp: 2100,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+        {
+          id: 'line-2',
+          name: 'Materiale',
+          quantity: '1',
+          unitPrice: 40000,
+          lineTotal: 40000,
+          sortOrder: 1,
+          vatRateBp: 1000,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+      ],
+    };
+    const xml = toFatturaPaXml(discounted);
+
+    const riepilogoStart = xml.indexOf('<DatiRiepilogo>');
+    const riepilogoBlock = xml.slice(riepilogoStart);
+
+    expect(riepilogoBlock).toContain('<ImponibileImporto>540.00</ImponibileImporto>');
+    expect(riepilogoBlock).toContain('<Imposta>113.40</Imposta>');
+    expect(riepilogoBlock).toContain('<ImponibileImporto>360.00</ImponibileImporto>');
+    expect(riepilogoBlock).toContain('<Imposta>36.00</Imposta>');
+
+    const taxableSum = [
+      ...riepilogoBlock.matchAll(/<ImponibileImporto>([\d.]+)<\/ImponibileImporto>/g),
+    ].reduce((sum, m) => sum + Number(m[1]), 0);
+    const vatSum = [...riepilogoBlock.matchAll(/<Imposta>([\d.]+)<\/Imposta>/g)].reduce(
+      (sum, m) => sum + Number(m[1]),
+      0,
+    );
+
+    expect(taxableSum.toFixed(2)).toBe('900.00');
+    expect(vatSum.toFixed(2)).toBe('149.40');
+  });
+});

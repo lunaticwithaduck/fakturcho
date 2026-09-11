@@ -134,3 +134,31 @@ describe('toCiusRoXml — out-of-scope document types', () => {
     expect(() => toCiusRoXml(proforma)).toThrow();
   });
 });
+
+describe('toCiusRoXml — inherits the discount-adjusted VAT breakdown from the core mapper', () => {
+  it('does not double count VAT when the document carries a discount', () => {
+    const discounted: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 17100,
+      amount: 107100,
+      lineItems: [
+        {
+          id: 'line-1',
+          name: 'Consultanță',
+          quantity: '1',
+          unitPrice: 100000,
+          lineTotal: 100000,
+          sortOrder: 0,
+          vatRateBp: 1900,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+      ],
+    };
+    const xml = toCiusRoXml(discounted);
+    expect(xml).toContain('<cbc:TaxableAmount currencyID="EUR">900.00</cbc:TaxableAmount>');
+    expect(xml).toContain('<cbc:TaxAmount currencyID="EUR">171.00</cbc:TaxAmount>');
+  });
+});

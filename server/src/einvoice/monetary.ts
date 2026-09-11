@@ -1,4 +1,5 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
+import { discountAdjustedLines } from './discount';
 import { groupVatSubtotals } from './vat-grouping';
 import { dateOnly, textEl, toDecimalString, toPercentString } from './xml';
 
@@ -26,7 +27,12 @@ export function paymentTermsBlock(document: DocumentDto): string {
 }
 
 export function taxTotalBlock(document: DocumentDto): string {
-  const subtotalXml = groupVatSubtotals(document.lineItems)
+  const lines = discountAdjustedLines(
+    document.lineItems,
+    document.subtotal,
+    document.discountTotal,
+  );
+  const subtotalXml = groupVatSubtotals(lines)
     .map((subtotal) => {
       const exemptionReason =
         subtotal.vatCategory !== 'S' && subtotal.vatCategory !== 'Z' && document.vatExemptionGround
