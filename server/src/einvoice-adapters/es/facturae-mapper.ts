@@ -1,6 +1,6 @@
 import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
-import { formatDocumentNumber } from '@fakturcho/shared-types';
 import { discountAdjustedLines } from '../../einvoice/discount';
+import { invoiceSeriesNumber } from './es-invoice-id';
 import { itemsBlock } from './facturae-lines';
 import { buyerPartyBlock, sellerPartyBlock } from './facturae-parties';
 import { invoiceTotalsBlock, taxesOutputsBlock } from './facturae-totals';
@@ -47,8 +47,7 @@ function fileHeaderBlock(document: DocumentDto): string {
 }
 
 function invoiceHeaderBlock(document: DocumentDto, kind: FacturaeDocumentType): string {
-  const documentNumber = document.number !== null ? formatDocumentNumber(document.number) : '';
-  const idWithAffixes = `${document.numberPrefix ?? ''}${documentNumber}${document.numberSuffix ?? ''}`;
+  const idWithAffixes = invoiceSeriesNumber(document);
   return (
     '<InvoiceHeader>' +
     textEl('InvoiceNumber', idWithAffixes) +
@@ -86,7 +85,7 @@ export function toFacturaeXml(document: DocumentDto): string {
     '<?xml version="1.0" encoding="UTF-8"?>' +
     `<Facturae xmlns="${FACTURAE_NAMESPACE}">` +
     fileHeaderBlock(document) +
-    `<Parties>${sellerPartyBlock(document.issuer)}${buyerPartyBlock(document.recipient)}</Parties>` +
+    `<Parties>${sellerPartyBlock(document.issuer)}${buyerPartyBlock(document)}</Parties>` +
     `<Invoices><Invoice>${invoiceBody}</Invoice></Invoices>` +
     '</Facturae>'
   );

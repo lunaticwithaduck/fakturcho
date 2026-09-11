@@ -1,8 +1,9 @@
-import type { IssuerSnapshotDto, RecipientSnapshotDto } from '@fakturcho/shared-types';
+import type { DocumentDto, IssuerSnapshotDto, RecipientSnapshotDto } from '@fakturcho/shared-types';
+import { parseDir3BuyerReference } from './face-dir3';
 import { residenceTypeCode, toAlpha3CountryCode } from './facturae-countries';
 import { optionalTextEl, textEl } from './xml';
 
-function taxIdOf(eik: string | null, vatNumber: string | null): string {
+export function taxIdOf(eik: string | null, vatNumber: string | null): string {
   if (eik) return eik;
   if (vatNumber?.toUpperCase().startsWith('ES')) return vatNumber.slice(2);
   return vatNumber ?? '';
@@ -37,7 +38,11 @@ interface PartyFields {
   country: string | null;
 }
 
-function partyBlock(roleTag: 'SellerParty' | 'BuyerParty', fields: PartyFields): string {
+function partyBlock(
+  roleTag: 'SellerParty' | 'BuyerParty',
+  fields: PartyFields,
+  extra = '',
+): string {
   const isSpain = (fields.country ?? '').toUpperCase() === 'ES';
   const taxIdentification =
     '<TaxIdentification>' +
@@ -50,7 +55,7 @@ function partyBlock(roleTag: 'SellerParty' | 'BuyerParty', fields: PartyFields):
     optionalTextEl('CorporateName', fields.companyName) +
     addressBlock(isSpain, fields.street, fields.postcode, fields.city, fields.country) +
     '</LegalEntity>';
-  return `<${roleTag}>${taxIdentification}${legalEntity}</${roleTag}>`;
+  return `<${roleTag}>${taxIdentification}${legalEntity}${extra}</${roleTag}>`;
 }
 
 export function sellerPartyBlock(issuer: IssuerSnapshotDto): string {
@@ -64,14 +69,39 @@ export function sellerPartyBlock(issuer: IssuerSnapshotDto): string {
   });
 }
 
-export function buyerPartyBlock(recipient: RecipientSnapshotDto): string {
+// AdministrativeCentres/AdministrativeCentre carries the DIR3 codes (órgano gestor,
+// unidad tramitadora, oficina contable) a public-body buyer requires for FACe routing.
+// RoleTypeCode: 01 Oficina Contable, 02 Órgano Gestor, 03 Unidad Tramitadora.
+function administrativeCentresBlock(document: DocumentDto): string {
+  const dir3 = parseDir3BuyerReference(document.buyerReference);
+  if (!dir3) return '';
+  const centre = (roleTypeCode: '01' | '02' | '03', centreCode: string): string =>
+    '<AdministrativeCentre>' +
+    textEl('CentreCode', centreCode) +
+    textEl('RoleTypeCode', roleTypeCode) +
+    '</AdministrativeCentre>';
+  return (
+    '<AdministrativeCentres>' +
+    centre('02', dir3.organoGestor) +
+    centre('03', dir3.unidadTramitadora) +
+    centre('01', dir3.oficinaContable) +
+    '</AdministrativeCentres>'
+  );
+}
+
+export function buyerPartyBlock(document: DocumentDto): string {
+  const recipient: RecipientSnapshotDto = document.recipient;
   const city = recipient.address ?? null;
-  return partyBlock('BuyerParty', {
-    companyName: recipient.companyName,
-    taxId: taxIdOf(recipient.eik, recipient.vatNumber),
-    street: recipient.street,
-    postcode: recipient.postcode,
-    city,
-    country: recipient.country,
-  });
+  return partyBlock(
+    'BuyerParty',
+    {
+      companyName: recipient.companyName,
+      taxId: taxIdOf(recipient.eik, recipient.vatNumber),
+      street: recipient.street,
+      postcode: recipient.postcode,
+      city,
+      country: recipient.country,
+    },
+    administrativeCentresBlock(document),
+  );
 }
