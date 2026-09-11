@@ -158,6 +158,79 @@ describe('DocumentIssuanceService', () => {
     expect(issued.recipient.postcode).toBe('10117');
   });
 
+  it('issuance persists every draft field: document metadata, per-line VAT fields, and both party snapshots', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'IT',
+      street: 'Via Roma 1',
+      postcode: '00100',
+      countyRegion: 'RM',
+      vatRegistered: true,
+      vatNumber: 'IT12345678901',
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'IT',
+      street: 'Via Napoli 2',
+      postcode: '80100',
+      countyRegion: 'NA',
+      documentLanguage: 'en',
+      sdiRecipientCode: 'ABCDEFG',
+      pec: 'client@pec.it',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        buyerReference: 'PO-9001',
+        paymentMeansCode: '30',
+        paymentTermsNote: 'Net 30',
+        deliveryDate: '2026-09-20',
+        lineItems: [
+          {
+            name: 'Consulenza',
+            quantity: '2',
+            unitPrice: 5000,
+            sortOrder: 0,
+            vatRateBp: 900,
+            vatCategory: 'Z',
+            unitCode: 'HUR',
+          },
+        ],
+      }),
+    );
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    const refetched = await documentsService.get(accountId, issued.id);
+
+    for (const document of [issued, refetched]) {
+      expect(document.buyerReference).toBe('PO-9001');
+      expect(document.paymentMeansCode).toBe('30');
+      expect(document.paymentTermsNote).toBe('Net 30');
+      expect(document.deliveryDate).toBe('2026-09-20');
+      expect(document.documentLanguage).toBe('en');
+      expect(document.lineItems[0]).toMatchObject({
+        vatRateBp: 900,
+        vatCategory: 'Z',
+        unitCode: 'HUR',
+      });
+      expect(document.issuer).toMatchObject({
+        country: 'IT',
+        street: 'Via Roma 1',
+        postcode: '00100',
+        countyRegion: 'RM',
+      });
+      expect(document.recipient).toMatchObject({
+        country: 'IT',
+        street: 'Via Napoli 2',
+        postcode: '80100',
+        countyRegion: 'NA',
+        sdiRecipientCode: 'ABCDEFG',
+        pec: 'client@pec.it',
+      });
+    }
+  });
+
   it('documentLanguage is set from the client at draft save and survives issuance unchanged', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);

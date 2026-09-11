@@ -16,6 +16,7 @@ import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
 import { buildDocumentListWhere } from './document-list-query';
 import { buildDraftData } from './draft-data.builder';
+import { resolveVatTreatment } from './vat-treatment';
 
 @Injectable()
 export class DocumentsService {
@@ -53,34 +54,46 @@ export class DocumentsService {
       : null;
 
     const issuerCountry = issuerProfile?.country ?? 'BG';
+    const issuerVatRegistered = issuerProfile?.vatRegistered ?? false;
     const clientHasValidVatNumber = client
       ? hasValidVatNumberFormat(client.vatNumber, client.country)
       : false;
+
+    const vat = resolveVatTreatment({
+      documentType: request.documentType,
+      vatRegistered: issuerVatRegistered,
+      requestedGround: request.vatExemptionGround ?? null,
+    });
 
     const resolvedLineItems = request.lineItems.map((line) => {
       const vatCategory =
         line.vatCategory !== undefined
           ? line.vatCategory
-          : resolveLineVatCategory(
-              issuerCountry,
-              client?.country ?? null,
-              undefined,
-              clientHasValidVatNumber,
-            );
+          : !vat.vatCharged
+            ? 'O'
+            : resolveLineVatCategory(
+                issuerCountry,
+                client?.country ?? null,
+                undefined,
+                clientHasValidVatNumber,
+                issuerVatRegistered,
+              );
       const vatRateBp =
-        line.vatRateBp !== undefined ? line.vatRateBp : vatCategory === 'AE' ? 0 : 2000;
+        line.vatRateBp !== undefined
+          ? line.vatRateBp
+          : vatCategory === 'AE' || vatCategory === 'O'
+            ? 0
+            : 2000;
 
       return { ...line, vatCategory, vatRateBp };
     });
 
     const data = {
-      ...buildDraftData(
-        accountId,
-        request,
-        issuerProfile?.vatRegistered ?? false,
-        resolvedLineItems,
-      ),
-      documentLanguage: client?.documentLanguage ?? null,
+      ...buildDraftData(accountId, request, vat, resolvedLineItems),
+      documentLanguage:
+        request.documentLanguage !== undefined
+          ? request.documentLanguage
+          : (client?.documentLanguage ?? null),
     };
 
     const record = await this.prisma.$transaction(async (tx) => {

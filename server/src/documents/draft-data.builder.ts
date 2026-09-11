@@ -9,7 +9,7 @@ import { computeDocumentTotals, computeLineTotal, type DocumentTotals } from '..
 import { toPrismaDocumentType } from '../numbering/document-type.mapper';
 import { computeVatSubtotals } from '../vat-eu/subtotals';
 import { parseDateOnly } from './date.util';
-import { resolveVatTreatment } from './vat-treatment';
+import type { VatTreatment } from './vat-treatment';
 
 export interface ResolvedDraftLineItem {
   quantity: string;
@@ -27,6 +27,23 @@ function hasExplicitLineVat(request: SaveDraftRequest): boolean {
   return request.lineItems.some(
     (line) => line.vatCategory !== undefined || line.vatRateBp !== undefined,
   );
+}
+
+function distributeDiscount<T extends { lineTotal: Cents }>(
+  lines: readonly T[],
+  discountTotal: Cents,
+  subtotal: Cents,
+): T[] {
+  let allocated = 0;
+  let cumulativeExact = 0;
+  return lines.map((line, index) => {
+    cumulativeExact += (line.lineTotal * discountTotal) / subtotal;
+    const cumulativeRounded =
+      index === lines.length - 1 ? discountTotal : roundHalfUp(cumulativeExact, 0);
+    const lineDiscount = cumulativeRounded - allocated;
+    allocated = cumulativeRounded;
+    return { ...line, lineTotal: line.lineTotal - lineDiscount };
+  });
 }
 
 function computeGroupedTotals(
@@ -54,10 +71,7 @@ function computeGroupedTotals(
   const discountedLines =
     discountTotal === 0 || subtotal === 0
       ? rawLines
-      : rawLines.map((line) => ({
-          ...line,
-          lineTotal: line.lineTotal - roundHalfUp((line.lineTotal * discountTotal) / subtotal, 0),
-        }));
+      : distributeDiscount(rawLines, discountTotal, subtotal);
 
   const groups = computeVatSubtotals(discountedLines);
   const vatAmount = groups.reduce((sum, group) => sum + group.vatAmount, 0);
@@ -69,15 +83,9 @@ function computeGroupedTotals(
 export function buildDraftData(
   accountId: string,
   request: SaveDraftRequest,
-  vatRegistered: boolean,
+  vat: VatTreatment,
   resolvedLineItems: readonly ResolvedDraftLineItem[],
 ): Prisma.DocumentUncheckedCreateInput {
-  const vat = resolveVatTreatment({
-    documentType: request.documentType,
-    vatRegistered,
-    requestedGround: request.vatExemptionGround ?? null,
-  });
-
   const discounts = (request.discounts ?? []).map((discount) => ({
     percentBp: discount.percentBp ?? null,
     amount: discount.amount ?? null,

@@ -15,7 +15,14 @@ export function resolveLineVatCategory(
   clientCountry: string | null,
   requestedCategory?: VatCategory,
   clientHasValidVatNumber = true,
+  issuerVatRegistered = true,
 ): VatCategory {
-  if (clientHasValidVatNumber && isReverseCharge(issuerCountry, clientCountry)) return 'AE';
+  if (
+    issuerVatRegistered &&
+    clientHasValidVatNumber &&
+    isReverseCharge(issuerCountry, clientCountry)
+  ) {
+    return 'AE';
+  }
   return requestedCategory ?? 'S';
 }

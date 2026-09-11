@@ -41,6 +41,18 @@ describe('resolveLineVatCategory', () => {
   it('does not need a VAT number to skip reverse charge domestically', () => {
     expect(resolveLineVatCategory('BG', 'BG', undefined, false)).toBe('S');
   });
+
+  it('does not apply reverse charge when the issuer is not VAT-registered', () => {
+    expect(resolveLineVatCategory('BG', 'DE', undefined, true, false)).toBe('S');
+  });
+
+  it('honors the requested category when reverse charge is denied for an unregistered issuer', () => {
+    expect(resolveLineVatCategory('BG', 'DE', 'Z', true, false)).toBe('Z');
+  });
+
+  it('still applies reverse charge when the issuer is VAT-registered', () => {
+    expect(resolveLineVatCategory('BG', 'DE', undefined, true, true)).toBe('AE');
+  });
 });
 
 describe('hasValidVatNumberFormat', () => {

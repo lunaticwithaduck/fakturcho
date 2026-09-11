@@ -112,8 +112,8 @@ describe('DocumentsService', () => {
     expect(draft.deliveryDate).toBeNull();
     expect(draft.lineItems).toHaveLength(1);
     expect(draft.lineItems[0]).toMatchObject({
-      vatRateBp: 2000,
-      vatCategory: 'S',
+      vatRateBp: 0,
+      vatCategory: 'O',
       unitCode: null,
     });
   });
@@ -257,7 +257,10 @@ describe('DocumentsService', () => {
 
   it('reverse-charge: an unset line vatCategory defaults to AE at 0 rate for a cross-border EU client with a valid VAT number', async () => {
     const accountId = await createAccount(prisma);
-    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
     const client = await createTestClient(prisma, accountId, {
       country: 'DE',
       vatNumber: 'DE123456789',
@@ -272,9 +275,30 @@ describe('DocumentsService', () => {
     expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'AE', vatRateBp: 0 });
   });
 
-  it('reverse-charge: a cross-border EU client with no VAT number stays S at the issuer standard rate', async () => {
+  it('reverse-charge: an unset line vatCategory does not become AE when the issuer is not VAT-registered', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'DE',
+      vatNumber: 'DE123456789',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+    expect(draft.vatAmount).toBe(0);
+  });
+
+  it('reverse-charge: a cross-border EU client with no VAT number stays S at the issuer standard rate', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
     const client = await createTestClient(prisma, accountId, { country: 'DE' });
 
     const draft = await documentsService.saveDraft(
@@ -288,7 +312,10 @@ describe('DocumentsService', () => {
 
   it('reverse-charge: a cross-border EU client with a badly formatted VAT number stays S at the issuer standard rate', async () => {
     const accountId = await createAccount(prisma);
-    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'DE' });
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'DE',
+      vatRegistered: true,
+    });
     const client = await createTestClient(prisma, accountId, {
       country: 'BG',
       vatNumber: 'BG123',
@@ -331,7 +358,10 @@ describe('DocumentsService', () => {
 
   it('reverse-charge does not apply for a domestic BG-BG pair, VAT number or not', async () => {
     const accountId = await createAccount(prisma);
-    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
     const client = await createTestClient(prisma, accountId, {
       country: 'BG',
       vatNumber: 'BG123456789',
