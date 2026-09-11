@@ -37,5 +37,14 @@ ALTER TABLE "line_item" ADD COLUMN     "unitCode" TEXT,
 ADD COLUMN     "vatCategory" "VatCategory" NOT NULL DEFAULT 'S',
 ADD COLUMN     "vatRateBp" INTEGER NOT NULL DEFAULT 2000;
 
+-- Backfill: existing lines predate per-line VAT, so the S/2000 default above
+-- is wrong for a line whose document never charged VAT. Align both columns
+-- with the parent document's rate instead.
+UPDATE "line_item" AS li
+SET "vatRateBp" = d."vatRateBp",
+    "vatCategory" = CASE WHEN d."vatRateBp" = 0 THEN 'O' ELSE 'S' END::"VatCategory"
+FROM "document" AS d
+WHERE li."documentId" = d."id";
+
 -- AlterTable
 ALTER TABLE "user" ADD COLUMN     "locale" TEXT NOT NULL DEFAULT 'bg';
