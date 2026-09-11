@@ -481,6 +481,8 @@
       "CHECKOUT_NOT_CONFIGURED": "Payments are not fully configured. Contact us — no need to try again.",
       "PAYMENT_PROVIDER_ERROR": "The payment provider declined the request. Please try again later.",
       "PAYMENT_PROVIDER_UNREACHABLE": "The payment provider is not responding. Please try again in a few minutes.",
+      "EINVOICE_TRANSPORT_NOT_CONFIGURED": "The e-invoice provider is not configured.",
+      "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "This provider does not support status checks.",
       "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
     }
   },

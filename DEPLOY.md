@@ -274,3 +274,29 @@ alert — nothing 500s, so this ships before Umami is provisioned.
 `UmamiClient` logs into `POST {UMAMI_API_URL}/api/auth/login` and caches the
 bearer token in memory, re-logging in once on a 401. Redeploy the API and
 rebuild the app; the Трафик page then shows real numbers.
+
+## 8. E-invoice transports
+
+Each issuer country routes to at most one real transport, picked by
+`document.issuer.country` in `EinvoiceTransportRegistry.forCountry`
+(`server/src/einvoice/transport/transport-registry.ts`). A country with no
+registered transport falls back to the Peppol network via `PeppolService`.
+Production binds `PEPPOL_TRANSPORT` to `NotConfiguredPeppolTransport`
+until a real access-point client is wired up — sending for a Peppol-routed
+country then fails honestly with `EINVOICE_TRANSPORT_NOT_CONFIGURED`
+instead of pretending to deliver.
+
+Country transports register themselves in
+`server/src/einvoice/transport/einvoice-transport.module.ts` — import the
+country's module and add its transport class to the token list; the registry
+picks it up from `document.issuer.country` automatically. Each transport's
+own `isConfigured()` decides whether `/send` proceeds or throws
+`EINVOICE_TRANSPORT_NOT_CONFIGURED` naming that provider — no transmission
+row is written when a provider is unconfigured. `POST
+/api/documents/:id/einvoice/refresh` polls `checkStatus` on providers that
+implement it and returns 409 for the ones that don't (Peppol, or any
+transport without status polling).
+
+Per-country credentials (API keys, certificates, SFTP/webservice
+endpoints) are documented by each country's own worker alongside its
+transport implementation.

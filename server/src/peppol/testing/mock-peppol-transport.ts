@@ -4,7 +4,7 @@ import type {
   PeppolSendParams,
   PeppolSendResult,
   PeppolTransport,
-} from './peppol-transport.interface';
+} from '../peppol-transport.interface';
 
 function looksMalformed(ublXml: string): boolean {
   const trimmed = ublXml.trim();

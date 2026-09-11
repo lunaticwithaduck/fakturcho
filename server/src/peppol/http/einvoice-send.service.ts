@@ -1,11 +1,17 @@
-import type { DocumentDto } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import { DomainError } from '../../common/domain-error';
 import { DocumentsService } from '../../documents/documents.service';
-import { toUblXml } from '../../einvoice/ubl-mapper';
+import { EinvoiceTransportRegistry } from '../../einvoice/transport/transport-registry';
 import { PrismaService } from '../../infrastructure/prisma/prisma.service';
 import { PeppolService } from '../peppol.service';
 import { shouldRetry } from '../peppol-retry-policy';
+import {
+  buildEinvoiceXml,
+  loadTransportRecipient,
+  STATUS_BY_TRANSPORT_STATUS,
+  sendViaPeppol,
+  sendViaTransport,
+} from './einvoice-send-routing';
 import {
   type EinvoiceTransmissionDto,
   toEinvoiceTransmissionDto,
@@ -17,6 +23,7 @@ export class EinvoiceSendService {
     private readonly prisma: PrismaService,
     private readonly documentsService: DocumentsService,
     private readonly peppolService: PeppolService,
+    private readonly transportRegistry: EinvoiceTransportRegistry,
   ) {}
 
   async send(accountId: string, documentId: string): Promise<EinvoiceTransmissionDto> {
@@ -41,41 +48,26 @@ export class EinvoiceSendService {
     }
 
     const nextRetryCount = existing ? existing.retryCount + 1 : 0;
+    const transport = this.transportRegistry.forCountry(document.issuer.country);
 
-    const ublXml = this.buildUblXml(document);
-
-    const client = document.clientId
-      ? await this.prisma.client.findFirst({ where: { id: document.clientId, accountId } })
-      : null;
-
-    if (!client?.peppolEndpointId || !client?.peppolScheme) {
-      throw new DomainError('VALIDATION_FAILED', 'The client has no Peppol endpoint registered.');
+    if (transport && !transport.isConfigured()) {
+      throw new DomainError(
+        'EINVOICE_TRANSPORT_NOT_CONFIGURED',
+        `${transport.providerName} is not configured for automatic e-invoice delivery.`,
+      );
     }
 
-    const result = await this.peppolService.transmit(
-      documentId,
-      client.peppolEndpointId,
-      client.peppolScheme,
-      ublXml,
-    );
+    const xml = buildEinvoiceXml(document);
+    const recipient = await loadTransportRecipient(this.prisma, accountId, document);
+
+    const fields = transport
+      ? await sendViaTransport(transport, documentId, document, xml, recipient)
+      : await sendViaPeppol(this.peppolService, documentId, recipient, xml);
 
     const record = await this.prisma.einvoiceTransmission.upsert({
       where: { documentId },
-      create: {
-        documentId: result.documentId,
-        status: result.status,
-        provider: result.provider,
-        providerMessageId: result.providerMessageId,
-        errorText: result.errorText ?? null,
-        retryCount: nextRetryCount,
-      },
-      update: {
-        status: result.status,
-        provider: result.provider,
-        providerMessageId: result.providerMessageId,
-        errorText: result.errorText ?? null,
-        retryCount: nextRetryCount,
-      },
+      create: { documentId, ...fields, retryCount: nextRetryCount },
+      update: { ...fields, retryCount: nextRetryCount },
     });
 
     return toEinvoiceTransmissionDto(record);
@@ -90,14 +82,34 @@ export class EinvoiceSendService {
     return record ? toEinvoiceTransmissionDto(record) : null;
   }
 
-  private buildUblXml(document: DocumentDto): string {
-    try {
-      return toUblXml(document);
-    } catch (error) {
+  async refresh(accountId: string, documentId: string): Promise<EinvoiceTransmissionDto> {
+    const document = await this.documentsService.get(accountId, documentId);
+    const existing = await this.prisma.einvoiceTransmission.findUnique({ where: { documentId } });
+
+    if (!existing) {
+      throw new DomainError('NOT_FOUND', 'No e-invoice transmission exists for this document.');
+    }
+
+    const transport = this.transportRegistry.forCountry(document.issuer.country);
+
+    if (!transport?.checkStatus) {
       throw new DomainError(
-        'VALIDATION_FAILED',
-        error instanceof Error ? error.message : 'This document type has no e-invoice export.',
+        'EINVOICE_STATUS_POLLING_NOT_SUPPORTED',
+        `${transport ? transport.providerName : 'peppol'} does not support status polling.`,
       );
     }
+
+    const statusResult = await transport.checkStatus(existing.providerMessageId ?? '');
+
+    const record = await this.prisma.einvoiceTransmission.update({
+      where: { documentId },
+      data: {
+        status: STATUS_BY_TRANSPORT_STATUS[statusResult.status],
+        receipt: statusResult.receipt ?? null,
+        errorText: statusResult.errorText ?? null,
+      },
+    });
+
+    return toEinvoiceTransmissionDto(record);
   }
 }
