@@ -16,7 +16,7 @@ export class EinvoiceExportService {
   async getXml(accountId: string, documentId: string): Promise<string> {
     const document = await this.documentsService.get(accountId, documentId);
 
-    if (document.status === 'draft') {
+    if (document.status === 'draft' || document.status === 'cancelled') {
       throw new DomainError(
         'DOCUMENT_NOT_ISSUED',
         'Only an issued document can be exported as an e-invoice.',

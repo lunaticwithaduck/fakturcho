@@ -22,7 +22,7 @@ export class EinvoiceSendService {
   async send(accountId: string, documentId: string): Promise<EinvoiceTransmissionDto> {
     const document = await this.documentsService.get(accountId, documentId);
 
-    if (document.status === 'draft') {
+    if (document.status === 'draft' || document.status === 'cancelled') {
       throw new DomainError(
         'DOCUMENT_NOT_ISSUED',
         'Only issued documents can be sent as an e-invoice.',
