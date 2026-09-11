@@ -430,6 +430,8 @@
     "emailLabel": "Email",
     "passwordLabel": "Password",
     "countryLabel": "Country",
+    "countryPlaceholder": "Select your country",
+    "countryRequired": "Please select a country.",
     "signupSubmitting": "Signing up...",
     "signupSubmit": "Sign up",
     "haveAccount": "Already have an account?",

@@ -1,7 +1,7 @@
 'use client';
 
 import { Skeleton } from '@design/components';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useAuthSession } from './hooks';
@@ -9,12 +9,13 @@ import { useAuthSession } from './hooks';
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { session, isPending } = useAuthSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isPending && !session) {
-      router.replace('/login');
+      router.replace(pathname?.startsWith('/en') ? '/en/login' : '/login');
     }
-  }, [isPending, session, router]);
+  }, [isPending, session, router, pathname]);
 
   if (isPending || !session) {
     return (

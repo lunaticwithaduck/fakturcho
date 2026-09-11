@@ -32,6 +32,8 @@ export function LandingPage({ locale = 'bg' }: LandingPageProps) {
   const content = getMarketingContent(locale);
   const pricing = pricingForLocale(locale);
   const homeHref = locale === 'bg' ? '/' : '/en';
+  const loginHref = locale === 'bg' ? '/login' : '/en/login';
+  const signupHref = locale === 'bg' ? '/signup' : '/en/signup';
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-12 px-4 py-10">
@@ -42,10 +44,10 @@ export function LandingPage({ locale = 'bg' }: LandingPageProps) {
         </Link>
         <div className="flex items-center gap-3">
           <Button variant="secondary" size="sm" asChild>
-            <Link href="/login">{content.nav.login}</Link>
+            <Link href={loginHref}>{content.nav.login}</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="/signup">{content.nav.signup}</Link>
+            <Link href={signupHref}>{content.nav.signup}</Link>
           </Button>
         </div>
       </header>

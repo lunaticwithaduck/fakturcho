@@ -31,8 +31,8 @@ The product supports gap-free sequential numbering, VAT under the Bulgarian VAT 
 ## Pages
 
 - [Home](https://www.fakturcho.com/en): product, features and pricing.
-- [Sign up](https://www.fakturcho.com/signup): create a free account.
-- [Log in](https://www.fakturcho.com/login): log in to an existing account.
+- [Sign up](https://www.fakturcho.com/en/signup): create a free account.
+- [Log in](https://www.fakturcho.com/en/login): log in to an existing account.
 - [Terms of Service](https://www.fakturcho.com/en/terms): terms for using the service.
 - [Privacy Policy](https://www.fakturcho.com/en/privacy): personal data processing.
 - [Refunds](https://www.fakturcho.com/en/refunds): refund policy for payments.

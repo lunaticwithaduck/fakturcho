@@ -4,6 +4,7 @@ import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { trackEvent } from '@app/features/shared/analytics';
 import { formatMoney } from '@app/features/shared/format';
 import { Button, Card, Input, Select, SelectItem } from '@design/components';
+import type { Locale } from '@shared/types';
 import { EU_VAT_AREA_COUNTRIES, SIGNUP_GRANT_CENTS } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -14,18 +15,27 @@ const SIGNUP_COUNTRIES = [
   ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG'),
 ] as const;
 
-export function SignupForm() {
+interface SignupFormProps {
+  locale?: Locale;
+}
+
+export function SignupForm({ locale = 'bg' }: SignupFormProps) {
   const t = useTranslations('auth');
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [country, setCountry] = useState<string>('BG');
+  const [country, setCountry] = useState<string>(locale === 'bg' ? 'BG' : '');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const loginHref = locale === 'bg' ? '/login' : '/en/login';
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!country) {
+      setError(t('countryRequired'));
+      return;
+    }
     setError(null);
     setIsSubmitting(true);
     const { error: signUpError } = await signUp.email({ name, email, password, country });
@@ -75,7 +85,12 @@ export function SignupForm() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <Select label={t('countryLabel')} value={country} onValueChange={setCountry}>
+        <Select
+          label={t('countryLabel')}
+          placeholder={t('countryPlaceholder')}
+          value={country}
+          onValueChange={setCountry}
+        >
           {SIGNUP_COUNTRIES.map((code) => (
             <SelectItem key={code} value={code}>
               {t(`countries.${code}`)}
@@ -89,7 +104,7 @@ export function SignupForm() {
       </form>
       <p className="text-center text-sm text-text-muted">
         {t('haveAccount')}{' '}
-        <a className="font-medium text-accent" href="/login">
+        <a className="font-medium text-accent" href={loginHref}>
           {t('loginLink')}
         </a>
       </p>

@@ -1,13 +1,15 @@
 // @vitest-environment jsdom
 import bgMessages from '@messages/bg.json';
 import enMessages from '@messages/en.json';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SignupForm } from './SignupForm';
 
+const signUpMock = vi.fn().mockResolvedValue({ error: null });
+
 vi.mock('@app/auth', () => ({
-  signUp: { email: vi.fn() },
+  signUp: { email: (...args: unknown[]) => signUpMock(...args) },
   mapAuthErrorMessage: vi.fn(),
 }));
 
@@ -15,7 +17,10 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  signUpMock.mockClear();
+});
 
 describe('SignupForm', () => {
   it('renders the Bulgarian copy unchanged', () => {
@@ -48,12 +53,25 @@ describe('SignupForm', () => {
     expect(screen.getByLabelText('Държава').textContent).toContain('България');
   });
 
+  it('links to the Bulgarian login page by default', () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <SignupForm />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Вход' })).toHaveProperty(
+      'href',
+      'http://localhost:3000/login',
+    );
+  });
+
   it('resolves the English messages for the same keys without missing-key warnings', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
       <NextIntlClientProvider locale="en" messages={enMessages}>
-        <SignupForm />
+        <SignupForm locale="en" />
       </NextIntlClientProvider>,
     );
 
@@ -68,5 +86,44 @@ describe('SignupForm', () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+
+  it('does not preselect Bulgaria for an English visitor', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <SignupForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Country').textContent).not.toContain('Bulgaria');
+  });
+
+  it('links to the English login page when rendered for the en route', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <SignupForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Log in' })).toHaveProperty(
+      'href',
+      'http://localhost:3000/en/login',
+    );
+  });
+
+  it('rejects submission without a chosen country on the en route', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <SignupForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Jane' } });
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'jane@example.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'password123' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Sign up' }));
+
+    expect(screen.getByText('Please select a country.')).toBeTruthy();
+    expect(signUpMock).not.toHaveBeenCalled();
   });
 });

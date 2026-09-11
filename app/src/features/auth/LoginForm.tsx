@@ -2,17 +2,23 @@
 
 import { mapAuthErrorMessage, signIn } from '@app/auth';
 import { Button, Card, Input } from '@design/components';
+import type { Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
-export function LoginForm() {
+interface LoginFormProps {
+  locale?: Locale;
+}
+
+export function LoginForm({ locale = 'bg' }: LoginFormProps) {
   const t = useTranslations('login');
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const signupHref = locale === 'bg' ? '/signup' : '/en/signup';
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,7 +65,7 @@ export function LoginForm() {
       </form>
       <p className="text-center text-sm text-text-muted">
         {t('noAccount')}{' '}
-        <a className="font-medium text-accent" href="/signup">
+        <a className="font-medium text-accent" href={signupHref}>
           {t('signupLink')}
         </a>
       </p>

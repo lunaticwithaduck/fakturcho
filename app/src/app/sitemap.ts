@@ -19,11 +19,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE_URL}/signup`,
       changeFrequency: 'weekly',
       priority: 0.8,
+      alternates: {
+        languages: {
+          bg: `${BASE_URL}/signup`,
+          en: `${BASE_URL}/en/signup`,
+        },
+      },
     },
     {
       url: `${BASE_URL}/login`,
       changeFrequency: 'weekly',
       priority: 0.8,
+      alternates: {
+        languages: {
+          bg: `${BASE_URL}/login`,
+          en: `${BASE_URL}/en/login`,
+        },
+      },
     },
     {
       url: `${BASE_URL}/privacy`,
@@ -66,6 +78,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: BASE_URL,
           en: `${BASE_URL}/en`,
+        },
+      },
+    },
+    {
+      url: `${BASE_URL}/en/signup`,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      alternates: {
+        languages: {
+          bg: `${BASE_URL}/signup`,
+          en: `${BASE_URL}/en/signup`,
+        },
+      },
+    },
+    {
+      url: `${BASE_URL}/en/login`,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      alternates: {
+        languages: {
+          bg: `${BASE_URL}/login`,
+          en: `${BASE_URL}/en/login`,
         },
       },
     },
