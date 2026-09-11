@@ -386,7 +386,7 @@ transport without status polling).
 Per-country credentials (API keys, certificates, SFTP/webservice
 endpoints) are documented by each country's own worker alongside its
 transport implementation.
-## 8. Poland (KSeF)
+### Poland (KSeF)
 
 `KsefTransport` (`server/src/einvoice-adapters/pl/ksef-transport.ts`) sends
 FA(3) invoices straight to the Ministry of Finance's KSeF 2.0 API — no
