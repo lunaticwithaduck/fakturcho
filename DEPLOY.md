@@ -112,6 +112,38 @@ subscription needs a plan created once, up front:
 2. Create an API key → `RESEND_API_KEY`.
 3. `EMAIL_FROM` must use the verified domain.
 
+### Italy (SDI)
+
+FatturaPA has no PEPPOL path — every invoice to an Italian counterparty goes
+through the Sistema di Interscambio (SdI) over the SDICoop channel, and
+direct accreditation to SDICoop is the only official transmission route (no
+private intermediary bypasses it; an "intermediario" is just another
+accredited transmitter). Full protocol detail and citations:
+`server/src/einvoice-adapters/it/SDI.md`.
+
+1. Accreditation is done on **https://www.fatturapa.gov.it**, under the
+   channel-accreditation procedure ("Fatture e Corrispettivi" → accreditation
+   for SDICoop). It requires: a PEC (or equivalent certified-mail) address, a
+   subscribed "accordo di servizio", and the endpoints of your own
+   `TrasmissioneFatture` callback service (where SdI pushes delivery/rejection
+   notifications back). After submission SdI runs interoperability
+   ("qualificazione") tests against your system, then issues the **client
+   certificate** used to authenticate every subsequent call.
+2. **The test endpoint (`testservizi.fatturapa.it`) is not a public sandbox**
+   — it only accepts calls from parties who completed the accreditation above
+   and hold test credentials for it. There is no anonymous way to try
+   SDICoop before accrediting.
+3. Once accredited, put the certificate material in the API service's env
+   (see `server/.env.example`): `SDI_ENVIRONMENT`, `SDI_CLIENT_CERT_PEM`,
+   `SDI_CLIENT_KEY_PEM`, `SDI_CA_PEM` (each PEM, literal or base64), and
+   `SDI_SENDER_VAT`, the accredited sender's own VAT/fiscal identifier used to
+   build the `RiceviFile` filename.
+4. `SdiTransport.checkStatus` is intentionally unimplemented — SdI has no
+   status-query operation, it pushes outcomes to the `TrasmissioneFatture`
+   callback endpoint declared during accreditation. Building that receiver
+   and wiring RC/NS/MC/NE/DT/AT notifications into document status is a
+   follow-up, not part of this adapter.
+
 ## 3. App service (`fakturcho-app`)
 
 1. **Create → GitHub Repo** → same repository, second service.
