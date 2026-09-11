@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     languages: {
       bg: '/privacy',
       en: '/en/privacy',
+      'x-default': '/privacy',
     },
   },
 };

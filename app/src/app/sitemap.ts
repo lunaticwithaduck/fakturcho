@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: BASE_URL,
           en: `${BASE_URL}/en`,
+          'x-default': BASE_URL,
         },
       },
     },
@@ -33,6 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: `${BASE_URL}/privacy`,
           en: `${BASE_URL}/en/privacy`,
+          'x-default': `${BASE_URL}/privacy`,
         },
       },
     },
@@ -44,6 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: `${BASE_URL}/terms`,
           en: `${BASE_URL}/en/terms`,
+          'x-default': `${BASE_URL}/terms`,
         },
       },
     },
@@ -55,6 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: `${BASE_URL}/refunds`,
           en: `${BASE_URL}/en/refunds`,
+          'x-default': `${BASE_URL}/refunds`,
         },
       },
     },
@@ -66,6 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: BASE_URL,
           en: `${BASE_URL}/en`,
+          'x-default': BASE_URL,
         },
       },
     },
@@ -77,6 +82,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: `${BASE_URL}/privacy`,
           en: `${BASE_URL}/en/privacy`,
+          'x-default': `${BASE_URL}/privacy`,
         },
       },
     },
@@ -88,6 +94,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: `${BASE_URL}/terms`,
           en: `${BASE_URL}/en/terms`,
+          'x-default': `${BASE_URL}/terms`,
         },
       },
     },
@@ -99,6 +106,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           bg: `${BASE_URL}/refunds`,
           en: `${BASE_URL}/en/refunds`,
+          'x-default': `${BASE_URL}/refunds`,
         },
       },
     },

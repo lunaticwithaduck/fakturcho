@@ -89,4 +89,33 @@ describe('LocaleProvider', () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(screen.getByText('Имейл')).toBeTruthy();
   });
+
+  it('sets the html lang attribute once an English override resolves', async () => {
+    document.documentElement.lang = 'bg';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ locale: 'en' }),
+      }),
+    );
+
+    renderProbe();
+
+    await waitFor(() => expect(document.documentElement.lang).toBe('en'));
+  });
+
+  it('leaves the html lang attribute alone when the locale stays Bulgarian', async () => {
+    document.documentElement.lang = 'bg';
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ locale: 'bg' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderProbe();
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(document.documentElement.lang).toBe('bg');
+  });
 });

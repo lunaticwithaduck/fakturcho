@@ -34,6 +34,10 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    if (override) document.documentElement.lang = override.locale;
+  }, [override]);
+
   if (!override) return children;
 
   return (

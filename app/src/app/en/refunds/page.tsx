@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     languages: {
       bg: '/refunds',
       en: '/en/refunds',
+      'x-default': '/refunds',
     },
   },
 };
