@@ -1,4 +1,4 @@
-import type { Document, LineItem } from '@prisma/client';
+import type { Discount, Document, LineItem } from '@prisma/client';
 
 export function buildFakeDocument(overrides: Record<string, unknown> = {}): Document {
   return {
@@ -80,6 +80,20 @@ export function buildFakeLineItems(overrides: Record<string, unknown> = {}): rea
       ...overrides,
     },
   ] as unknown as LineItem[];
+}
+
+export function buildFakeDiscounts(overrides: Record<string, unknown> = {}): readonly Discount[] {
+  return [
+    {
+      id: 'disc_1',
+      documentId: 'doc_1',
+      label: 'Лоялен клиент',
+      percentBp: 1000,
+      amount: null,
+      sortOrder: 0,
+      ...overrides,
+    },
+  ] as unknown as Discount[];
 }
 
 export function buildFakeMixedLineItems(): readonly LineItem[] {

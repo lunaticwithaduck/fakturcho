@@ -22,6 +22,8 @@ export interface ClassicLabels {
   colTotal: string;
   vatBasePrefix: string;
   vatRatePrefix: (percent: number) => string;
+  subtotalLabel: string;
+  discountRowLabel: (percent: number | null, customLabel: string | null) => string;
   totalLabel: string;
   dueLabel: string;
   exemptionPrefix: string;
@@ -52,6 +54,9 @@ const bg: ClassicLabels = {
   colTotal: 'Общо',
   vatBasePrefix: 'Данъчна основа:',
   vatRatePrefix: (percent) => `ДДС (${percent}%):`,
+  subtotalLabel: 'Междинна сума:',
+  discountRowLabel: (percent, customLabel) =>
+    `Отстъпка${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Общо:',
   dueLabel: 'Сума за плащане:',
   exemptionPrefix: 'Основание за неначисляване на ДДС: ',
@@ -88,6 +93,9 @@ const en: ClassicLabels = {
   colTotal: 'Total',
   vatBasePrefix: 'Taxable amount:',
   vatRatePrefix: (percent) => `VAT (${percent}%):`,
+  subtotalLabel: 'Subtotal:',
+  discountRowLabel: (percent, customLabel) =>
+    `Discount${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Total:',
   dueLabel: 'Amount due:',
   exemptionPrefix: 'VAT exemption ground: ',
