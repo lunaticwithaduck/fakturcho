@@ -1,5 +1,7 @@
 import type { Type } from '@nestjs/common';
 import { Module } from '@nestjs/common';
+import { EsTransport } from '../../einvoice-adapters/es/es-transport';
+import { EsTransportModule } from '../../einvoice-adapters/es/es-transport.module';
 import { ChorusProTransport } from '../../einvoice-adapters/fr/chorus-pro-transport';
 import { FrTransportModule } from '../../einvoice-adapters/fr/fr-transport.module';
 import { ItTransportModule } from '../../einvoice-adapters/it/it-transport.module';
@@ -16,12 +18,14 @@ const COUNTRY_TRANSPORT_MODULES: Type<unknown>[] = [
   ItTransportModule,
   PlTransportModule,
   FrTransportModule,
+  EsTransportModule,
 ];
 const COUNTRY_TRANSPORT_TOKENS: Type<EinvoiceTransport>[] = [
   AnafTransport,
   SdiTransport,
   KsefTransport,
   ChorusProTransport,
+  EsTransport,
 ];
 
 @Module({
