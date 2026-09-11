@@ -42,7 +42,8 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
     }
   }
 
-  const canSendPeppol = Boolean(client?.peppolEndpointId && client?.peppolScheme);
+  const canSendPeppol =
+    status !== 'cancelled' && Boolean(client?.peppolEndpointId && client?.peppolScheme);
 
   return (
     <div className="flex flex-col gap-2">
