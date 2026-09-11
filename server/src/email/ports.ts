@@ -15,6 +15,8 @@ export interface SendEmailInput {
   text: string;
   attachment: { filename: string; content: Buffer };
   locale: Locale;
+  issuerName: string | null;
+  replyTo: string | null;
 }
 
 export interface EmailSender {

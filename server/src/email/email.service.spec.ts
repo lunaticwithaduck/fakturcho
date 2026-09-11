@@ -16,8 +16,22 @@ describe('EmailService', () => {
     await db.stop();
   });
 
-  it('renders the document, sends the email and persists emailText/emailedAt', async () => {
+  async function createAccountWithUser(localPart: string) {
     const account = await db.prisma.account.create({ data: {} });
+    const userEmail = `${localPart}_${account.id}@example.com`;
+    await db.prisma.user.create({
+      data: {
+        id: `usr_${account.id}`,
+        name: 'Тест Тестов',
+        email: userEmail,
+        accountId: account.id,
+      },
+    });
+    return { account, userEmail };
+  }
+
+  it('renders the document, sends the email and persists emailText/emailedAt', async () => {
+    const { account, userEmail } = await createAccountWithUser('owner');
     const document = await db.prisma.document.create({
       data: { accountId: account.id, documentType: 'INVOICE', status: 'SENT', number: 16n },
     });
@@ -45,6 +59,8 @@ describe('EmailService', () => {
     expect(sentInput?.subject).toBe('Фактура № 0000000016');
     expect(sentInput?.locale).toBe('bg');
     expect(sentInput?.attachment.filename).toBe('Фактура_0000000016.pdf');
+    expect(sentInput?.issuerName).toBeNull();
+    expect(sentInput?.replyTo).toBe(userEmail);
 
     const updated = await db.prisma.document.findUniqueOrThrow({ where: { id: document.id } });
     expect(updated.emailText).toBe('Здравейте, прилагаме фактурата.');
@@ -52,7 +68,7 @@ describe('EmailService', () => {
   });
 
   it('resolves an English subject and locale for a document with documentLanguage=en', async () => {
-    const account = await db.prisma.account.create({ data: {} });
+    const { account } = await createAccountWithUser('owner');
     const document = await db.prisma.document.create({
       data: {
         accountId: account.id,
@@ -85,7 +101,7 @@ describe('EmailService', () => {
   });
 
   it('derives English from the issuer country when documentLanguage is unset', async () => {
-    const account = await db.prisma.account.create({ data: {} });
+    const { account } = await createAccountWithUser('owner');
     const document = await db.prisma.document.create({
       data: {
         accountId: account.id,
@@ -117,8 +133,38 @@ describe('EmailService', () => {
     expect(sentInput?.locale).toBe('en');
   });
 
+  it('passes the issuer company name and the account user email as reply-to', async () => {
+    const { account, userEmail } = await createAccountWithUser('boyko');
+    const document = await db.prisma.document.create({
+      data: {
+        accountId: account.id,
+        documentType: 'INVOICE',
+        status: 'SENT',
+        number: 3n,
+        issuerCompanyName: 'Бояна ЕООД',
+      },
+    });
+
+    const renderer: DocumentRenderer = {
+      renderPdf: vi.fn(async () => ({ buffer: Buffer.from(''), filename: 'x.pdf' })),
+    };
+    const send = vi.fn(async (_input: SendEmailInput): Promise<void> => {});
+    const sender: EmailSender = { send };
+
+    const service = new EmailService(db.prisma as unknown as PrismaService, renderer, sender);
+
+    await service.sendDocumentEmail(account.id, document.id, {
+      to: 'client@example.com',
+      emailText: 'x',
+    });
+
+    const sentInput = send.mock.calls[0]?.[0];
+    expect(sentInput?.issuerName).toBe('Бояна ЕООД');
+    expect(sentInput?.replyTo).toBe(userEmail);
+  });
+
   it('refuses to email a draft — it renders nothing and sends nothing', async () => {
-    const account = await db.prisma.account.create({ data: {} });
+    const { account } = await createAccountWithUser('owner');
     const document = await db.prisma.document.create({
       data: { accountId: account.id, documentType: 'INVOICE', status: 'DRAFT', number: null },
     });
@@ -162,5 +208,30 @@ describe('EmailService', () => {
         emailText: 'x',
       }),
     ).rejects.toThrow(DomainError);
+  });
+
+  it('fails with a clear DomainError instead of sending without a reply-to when the account has no user', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const document = await db.prisma.document.create({
+      data: { accountId: account.id, documentType: 'INVOICE', status: 'SENT', number: 21n },
+    });
+
+    const renderPdf = vi.fn();
+    const send = vi.fn();
+    const service = new EmailService(
+      db.prisma as unknown as PrismaService,
+      { renderPdf } as unknown as DocumentRenderer,
+      { send } as unknown as EmailSender,
+    );
+
+    await expect(
+      service.sendDocumentEmail(account.id, document.id, {
+        to: 'client@example.com',
+        emailText: 'x',
+      }),
+    ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
+
+    expect(renderPdf).not.toHaveBeenCalled();
+    expect(send).not.toHaveBeenCalled();
   });
 });

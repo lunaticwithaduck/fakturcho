@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const sendMock = vi.fn(async () => ({ data: { id: 'x' }, error: null }));
+interface SendResult {
+  data: { id: string } | null;
+  error: { message: string } | null;
+}
+
+const sendMock = vi.fn<() => Promise<SendResult>>(async () => ({ data: { id: 'x' }, error: null }));
 
 vi.mock('resend', () => ({
   Resend: vi.fn().mockImplementation(() => ({ emails: { send: sendMock } })),
@@ -19,9 +24,8 @@ describe('ResendService', () => {
     process.env = { ...originalEnv };
   });
 
-  it('sends bg mail from the .bg address by default', async () => {
+  it('sends from Fakturcho with the user as reply-to when the document has no issuer name', async () => {
     delete process.env.EMAIL_FROM;
-    delete process.env.EMAIL_FROM_BG;
     const service = new ResendService();
 
     await service.send({
@@ -30,15 +34,20 @@ describe('ResendService', () => {
       text: 'x',
       attachment: { filename: 'a.pdf', content: Buffer.from('') },
       locale: 'bg',
+      issuerName: null,
+      replyTo: 'owner@example.com',
     });
 
     expect(sendMock).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'Fakturcho <invoices@fakturcho.bg>' }),
+      expect.objectContaining({
+        from: 'Fakturcho <invoices@fakturcho.bg>',
+        replyTo: 'owner@example.com',
+      }),
     );
   });
 
-  it('sends en mail from the .com address by default', async () => {
-    delete process.env.EMAIL_FROM_EN;
+  it('names the issuer in the From display name and keeps the verified address, for either locale', async () => {
+    delete process.env.EMAIL_FROM;
     const service = new ResendService();
 
     await service.send({
@@ -47,16 +56,17 @@ describe('ResendService', () => {
       text: 'x',
       attachment: { filename: 'a.pdf', content: Buffer.from('') },
       locale: 'en',
+      issuerName: 'Acme Ltd',
+      replyTo: 'owner@example.com',
     });
 
     expect(sendMock).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'Fakturcho <invoices@fakturcho.com>' }),
+      expect.objectContaining({ from: 'Acme Ltd via Fakturcho <invoices@fakturcho.bg>' }),
     );
   });
 
-  it('honours EMAIL_FROM_BG / EMAIL_FROM_EN overrides', async () => {
-    process.env.EMAIL_FROM_BG = 'BG Test <a@fakturcho.bg>';
-    process.env.EMAIL_FROM_EN = 'EN Test <a@fakturcho.com>';
+  it('honours EMAIL_FROM for the sender address, dropping any locale split', async () => {
+    process.env.EMAIL_FROM = 'Fakturcho <invoices@custom.example>';
     const service = new ResendService();
 
     await service.send({
@@ -65,16 +75,17 @@ describe('ResendService', () => {
       text: 't',
       attachment: { filename: 'f.pdf', content: Buffer.from('') },
       locale: 'en',
+      issuerName: 'Acme',
+      replyTo: 'owner@example.com',
     });
 
     expect(sendMock).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'EN Test <a@fakturcho.com>' }),
+      expect.objectContaining({ from: 'Acme via Fakturcho <invoices@custom.example>' }),
     );
   });
 
-  it('falls back to legacy EMAIL_FROM for bg when EMAIL_FROM_BG is unset', async () => {
-    delete process.env.EMAIL_FROM_BG;
-    process.env.EMAIL_FROM = 'Legacy <legacy@fakturcho.bg>';
+  it('quotes an issuer name that contains a comma', async () => {
+    delete process.env.EMAIL_FROM;
     const service = new ResendService();
 
     await service.send({
@@ -83,10 +94,72 @@ describe('ResendService', () => {
       text: 't',
       attachment: { filename: 'f.pdf', content: Buffer.from('') },
       locale: 'bg',
+      issuerName: 'Smith, Jones & Co',
+      replyTo: 'owner@example.com',
     });
 
     expect(sendMock).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'Legacy <legacy@fakturcho.bg>' }),
+      expect.objectContaining({
+        from: '"Smith, Jones & Co via Fakturcho" <invoices@fakturcho.bg>',
+      }),
     );
+  });
+
+  it('quotes and escapes an issuer name that contains a double quote', async () => {
+    delete process.env.EMAIL_FROM;
+    const service = new ResendService();
+
+    await service.send({
+      to: 'client@example.com',
+      subject: 's',
+      text: 't',
+      attachment: { filename: 'f.pdf', content: Buffer.from('') },
+      locale: 'bg',
+      issuerName: 'The "Best" Bakery',
+      replyTo: 'owner@example.com',
+    });
+
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        from: '"The \\"Best\\" Bakery via Fakturcho" <invoices@fakturcho.bg>',
+      }),
+    );
+  });
+
+  it('RFC 2047-encodes a Cyrillic issuer name', async () => {
+    delete process.env.EMAIL_FROM;
+    const service = new ResendService();
+
+    await service.send({
+      to: 'client@example.com',
+      subject: 'Фактура № 1',
+      text: 'x',
+      attachment: { filename: 'a.pdf', content: Buffer.from('') },
+      locale: 'bg',
+      issuerName: 'Иванов ЕООД',
+      replyTo: 'owner@example.com',
+    });
+
+    const expectedName = `=?UTF-8?B?${Buffer.from('Иванов ЕООД via Fakturcho', 'utf8').toString('base64')}?=`;
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.objectContaining({ from: `${expectedName} <invoices@fakturcho.bg>` }),
+    );
+  });
+
+  it('throws when Resend reports an error', async () => {
+    sendMock.mockResolvedValueOnce({ data: null, error: { message: 'bad request' } });
+    const service = new ResendService();
+
+    await expect(
+      service.send({
+        to: 'client@example.com',
+        subject: 's',
+        text: 't',
+        attachment: { filename: 'f.pdf', content: Buffer.from('') },
+        locale: 'bg',
+        issuerName: null,
+        replyTo: 'owner@example.com',
+      }),
+    ).rejects.toThrow('bad request');
   });
 });

@@ -37,10 +37,18 @@ export class EmailService {
   ): Promise<void> {
     const document = await this.prisma.document.findFirst({
       where: { id: documentId, accountId },
+      include: { account: { include: { users: { take: 1 } } } },
     });
     if (!document) throw new DomainError('NOT_FOUND', 'Document not found');
     if (document.status === 'DRAFT' || document.number === null) {
       throw new DomainError('DOCUMENT_NOT_ISSUED', 'A draft cannot be emailed. Issue it first.');
+    }
+    const userEmail = document.account.users[0]?.email;
+    if (!userEmail) {
+      throw new DomainError(
+        'VALIDATION_FAILED',
+        'This account has no user email to reply to. Add a user before emailing documents.',
+      );
     }
 
     const rendered = await this.renderer.renderPdf(documentId, accountId);
@@ -63,6 +71,8 @@ export class EmailService {
       text: body.emailText,
       attachment: { filename: rendered.filename, content: rendered.buffer },
       locale,
+      issuerName: document.issuerCompanyName,
+      replyTo: userEmail,
     });
 
     await this.prisma.document.update({
