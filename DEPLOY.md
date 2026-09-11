@@ -112,6 +112,31 @@ subscription needs a plan created once, up front:
 2. Create an API key → `RESEND_API_KEY`.
 3. `EMAIL_FROM` must use the verified domain.
 
+### France (Chorus Pro)
+
+Chorus Pro is B2G only — French public-sector recipients. There is no PDP
+wired up for French B2B (see `server/src/einvoice-adapters/fr/CHORUSPRO.md`);
+`CHORUSPRO_*` vars are optional and the transport is simply unconfigured
+until they're set.
+
+1. Create a PISTE account at https://developer.aife.economie.gouv.fr,
+   choosing the **"Universal"** organization so the Chorus Pro APIs show up
+   in the catalog.
+2. Declare an **application** in the PISTE portal to get an OAuth2
+   `client_id` / `client_secret` pair for the sandbox (qualification)
+   environment → `CHORUSPRO_CLIENT_ID` / `CHORUSPRO_CLIENT_SECRET`. A second
+   pair is issued once qualification tests pass and you request production
+   access.
+3. Inside Chorus Pro itself (portail.chorus-pro.gouv.fr, not PISTE), create
+   a **technical account** ("compte technique") for your structure with API
+   rights enabled → `CHORUSPRO_TECH_LOGIN` / `CHORUSPRO_TECH_PASSWORD`. This
+   account authenticates the `cpro-account` header and is unrelated to the
+   PISTE login.
+4. `CHORUSPRO_ENVIRONMENT=sandbox` targets
+   `sandbox-oauth.piste.gouv.fr` / `sandbox-api.piste.gouv.fr` (qualification
+   data, safe to test against); `prod` targets `oauth.piste.gouv.fr` /
+   `api.piste.gouv.fr` and files real B2G invoices.
+
 ## 3. App service (`fakturcho-app`)
 
 1. **Create → GitHub Repo** → same repository, second service.
