@@ -16,7 +16,7 @@ import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
 import { buildDocumentListWhere } from './document-list-query';
 import { buildDraftData } from './draft-data.builder';
-import { resolveVatTreatment } from './vat-treatment';
+import { applyLineVatGroups, resolveVatTreatment } from './vat-treatment';
 
 @Injectable()
 export class DocumentsService {
@@ -88,8 +88,10 @@ export class DocumentsService {
       return { ...line, vatCategory, vatRateBp };
     });
 
+    const documentVat = applyLineVatGroups(vat, resolvedLineItems);
+
     const data = {
-      ...buildDraftData(accountId, request, vat, resolvedLineItems),
+      ...buildDraftData(accountId, request, documentVat, resolvedLineItems),
       documentLanguage:
         request.documentLanguage !== undefined
           ? request.documentLanguage

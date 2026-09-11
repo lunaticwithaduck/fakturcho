@@ -171,6 +171,46 @@ describe('DocumentsService', () => {
     expect(draft.amount).toBe(160000);
   });
 
+  it('a vatExemptionGround needed for the reverse-charged line does not zero out a mixed document', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'DE',
+      vatRegistered: true,
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        vatExemptionGround: 'чл.21 от ЗДДС',
+        lineItems: [
+          {
+            name: 'Консултация',
+            quantity: '1',
+            unitPrice: 50000,
+            sortOrder: 0,
+            vatCategory: 'AE',
+            vatRateBp: 0,
+          },
+          {
+            name: 'Хостинг',
+            quantity: '1',
+            unitPrice: 50000,
+            sortOrder: 1,
+            vatCategory: 'S',
+            vatRateBp: 2000,
+          },
+        ],
+      }),
+    );
+
+    expect(draft.vatExemptionGround).toBe('чл.21 от ЗДДС');
+    expect(draft.vatRateBp).toBeGreaterThan(0);
+    expect(draft.subtotal).toBe(100000);
+    expect(draft.vatAmount).toBe(10000);
+    expect(draft.amount).toBe(110000);
+  });
+
   it('buyerReference, paymentMeansCode, paymentTermsNote and deliveryDate round-trip through a save', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);

@@ -81,3 +81,32 @@ export function buildFakeLineItems(overrides: Record<string, unknown> = {}): rea
     },
   ] as unknown as LineItem[];
 }
+
+export function buildFakeMixedLineItems(): readonly LineItem[] {
+  return [
+    {
+      id: 'li_1',
+      documentId: 'doc_1',
+      name: 'Консултация (обратно начисляване)',
+      quantity: '1',
+      unitPrice: 50000,
+      lineTotal: 50000,
+      sortOrder: 0,
+      vatRateBp: 0,
+      vatCategory: 'AE',
+      unitCode: null,
+    },
+    {
+      id: 'li_2',
+      documentId: 'doc_1',
+      name: 'Хостинг',
+      quantity: '1',
+      unitPrice: 50000,
+      lineTotal: 50000,
+      sortOrder: 1,
+      vatRateBp: 2000,
+      vatCategory: 'S',
+      unitCode: null,
+    },
+  ] as unknown as LineItem[];
+}

@@ -43,7 +43,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
   ${buildLineItemsTable(lineItems, locale)}
   ${buildAmountWordsBlock(document, locale)}
-  ${buildTotalsBlock(document, presentation, showBgnSuffix, locale)}
+  ${buildTotalsBlock(document, lineItems, presentation, showBgnSuffix, locale)}
   ${buildIssuerBlock(document, locale)}
   ${locale.showSignatureRow ? buildSignatureRow(document, locale) : ''}
 </body>

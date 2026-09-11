@@ -1,4 +1,4 @@
-import type { DocumentType } from '@fakturcho/shared-types';
+import type { DocumentType, VatCategory } from '@fakturcho/shared-types';
 import {
   DEFAULT_EXEMPTION_GROUND,
   DEFAULT_VAT_RATE_BP,
@@ -28,4 +28,21 @@ export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
     return { vatCharged: false, vatRateBp: 0, vatExemptionGround: input.requestedGround };
   }
   return { vatCharged: true, vatRateBp: DEFAULT_VAT_RATE_BP, vatExemptionGround: null };
+}
+
+export interface VatTreatmentLine {
+  vatCategory: VatCategory;
+  vatRateBp: number;
+}
+
+// A requested exemption ground zeroes the document above, which is right only if every
+// line is actually exempt or reverse-charged. Once any line carries real VAT, the ground
+// is a note on the exempt lines, not the whole document's treatment.
+export function applyLineVatGroups(
+  treatment: VatTreatment,
+  lines: readonly VatTreatmentLine[],
+): VatTreatment {
+  const chargedRates = lines.filter((line) => line.vatRateBp > 0).map((line) => line.vatRateBp);
+  if (chargedRates.length === 0) return treatment;
+  return { ...treatment, vatCharged: true, vatRateBp: Math.max(...chargedRates) };
 }

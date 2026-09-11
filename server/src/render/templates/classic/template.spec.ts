@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { VatPresentation } from '../../../money/vat';
+import { resolveVatPresentation } from '../../../money/vat';
 import { renderClassicTemplateHtml } from './template';
-import { buildFakeDocument, buildFakeLineItems } from './testing/fake-document';
+import {
+  buildFakeDocument,
+  buildFakeLineItems,
+  buildFakeMixedLineItems,
+} from './testing/fake-document';
 
 const vatChargedPresentation: VatPresentation = {
   vatCharged: true,
@@ -129,5 +134,75 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Валидно до: 02.09.2026');
     expect(html).not.toContain('Данъчно събитие');
     expect(html).not.toContain('(Оригинал)');
+  });
+
+  it('renders a per-category VAT breakdown for a mixed reverse-charge + standard-rate document (bg)', () => {
+    const document = buildFakeDocument({
+      subtotal: 100000,
+      discountTotal: 0,
+      amount: 110000,
+      vatRateBp: 2000,
+      vatAmount: 10000,
+      vatExemptionGround: 'чл.21 от ЗДДС',
+    });
+    const presentation = resolveVatPresentation({
+      vatRegistered: true,
+      vatRateBp: document.vatRateBp,
+      vatExemptionGround: document.vatExemptionGround,
+      documentType: 'invoice',
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeMixedLineItems(),
+      presentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'bg',
+    });
+
+    expect(html).toContain('Данъчна основа:');
+    expect(html).toContain('500,00 €');
+    expect(html).toContain('ДДС (20%):');
+    expect(html).toContain('100,00 €');
+    expect(html).toContain('Основание за неначисляване на ДДС: чл.21 от ЗДДС');
+    expect(html).not.toContain('ДДС (0%):');
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect(html).toContain('1 100,00 €');
+  });
+
+  it('renders a per-category VAT breakdown for a mixed reverse-charge + standard-rate document (en)', () => {
+    const document = buildFakeDocument({
+      subtotal: 100000,
+      discountTotal: 0,
+      amount: 110000,
+      vatRateBp: 2000,
+      vatAmount: 10000,
+      vatExemptionGround: 'чл.21 от ЗДДС',
+    });
+    const presentation = resolveVatPresentation({
+      vatRegistered: true,
+      vatRateBp: document.vatRateBp,
+      vatExemptionGround: document.vatExemptionGround,
+      documentType: 'invoice',
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeMixedLineItems(),
+      presentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'en',
+    });
+
+    expect(html).toContain('Taxable amount:');
+    expect(html).toContain('500.00 €');
+    expect(html).toContain('VAT (20%):');
+    expect(html).toContain('100.00 €');
+    expect(html).toContain('VAT exemption ground: чл.21 от ЗДДС');
+    expect(html).not.toContain('VAT (0%):');
+    expect((html.match(/Taxable amount:/g) ?? []).length).toBe(1);
+    expect(html).toContain('1,100.00 €');
   });
 });
