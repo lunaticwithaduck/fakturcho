@@ -9,11 +9,17 @@ import {
   createCompleteIssuerProfile,
   draftRequest,
 } from '../../documents/test-support';
+import type {
+  EinvoiceTransport,
+  EinvoiceTransportSendParams,
+  EinvoiceTransportSendResult,
+  EinvoiceTransportStatusResult,
+} from '../../einvoice/transport/einvoice-transport.interface';
+import { EinvoiceTransportRegistry } from '../../einvoice/transport/transport-registry';
 import type { PrismaService } from '../../infrastructure/prisma/prisma.service';
 import { NumberingService } from '../../numbering/numbering.service';
 import type { TestDatabase } from '../../testing/test-database';
 import { startTestDatabase } from '../../testing/test-database';
-import { MockPeppolTransport } from '../mock-peppol-transport';
 import { PeppolService } from '../peppol.service';
 import type {
   PeppolLookupResult,
@@ -21,6 +27,7 @@ import type {
   PeppolSendResult,
   PeppolTransport,
 } from '../peppol-transport.interface';
+import { MockPeppolTransport } from '../testing/mock-peppol-transport';
 import { EinvoiceSendService } from './einvoice-send.service';
 
 class ScriptedPeppolTransport implements PeppolTransport {
@@ -45,6 +52,45 @@ class ScriptedPeppolTransport implements PeppolTransport {
   }
 }
 
+interface FakeTransportHandle extends EinvoiceTransport {
+  captured?: EinvoiceTransportSendParams;
+}
+
+function fakeEinvoiceTransport(options: {
+  providerName: string;
+  country: string;
+  configured?: boolean;
+  result?: EinvoiceTransportSendResult;
+  statusResults?: EinvoiceTransportStatusResult[];
+}): FakeTransportHandle {
+  let statusCallCount = 0;
+  const statusResults = options.statusResults ?? [];
+
+  const transport: FakeTransportHandle = {
+    providerName: options.providerName,
+    country: options.country,
+    isConfigured: () => options.configured ?? true,
+    async send(params: EinvoiceTransportSendParams): Promise<EinvoiceTransportSendResult> {
+      transport.captured = params;
+      return options.result ?? { providerMessageId: 'fake-1', status: 'sent' };
+    },
+  };
+
+  if (statusResults.length === 0) return transport;
+
+  transport.checkStatus = async (
+    _providerMessageId: string,
+  ): Promise<EinvoiceTransportStatusResult> => {
+    const index = Math.min(statusCallCount, statusResults.length - 1);
+    const status = statusResults[index];
+    statusCallCount += 1;
+    if (!status) throw new Error('fakeEinvoiceTransport requires at least one status result');
+    return status;
+  };
+
+  return transport;
+}
+
 describe('EinvoiceSendService', () => {
   let db: TestDatabase;
   let prisma: PrismaClient;
@@ -63,16 +109,24 @@ describe('EinvoiceSendService', () => {
       new NumberingService(prismaService),
       new CreditsService(prismaService),
     );
-    einvoiceSendService = new EinvoiceSendService(
-      prismaService,
-      documentsService,
-      new PeppolService(new MockPeppolTransport()),
-    );
+    einvoiceSendService = buildService(new MockPeppolTransport(), []);
   }, 120_000);
 
   afterAll(async () => {
     await db.stop();
   });
+
+  function buildService(
+    peppolTransport: PeppolTransport,
+    transports: EinvoiceTransport[],
+  ): EinvoiceSendService {
+    return new EinvoiceSendService(
+      prismaService,
+      documentsService,
+      new PeppolService(peppolTransport),
+      new EinvoiceTransportRegistry(transports),
+    );
+  }
 
   async function createPeppolClient(accountId: string, companyName = 'Клиент с Peppol') {
     return prisma.client.create({
@@ -263,14 +317,11 @@ describe('EinvoiceSendService', () => {
     await createCompleteIssuerProfile(prisma, accountId);
     const issued = await issueDocumentForPeppolClient(accountId);
 
-    const rejectingService = new EinvoiceSendService(
-      prismaService,
-      documentsService,
-      new PeppolService(
-        new ScriptedPeppolTransport([
-          { providerMessageId: '', status: 'rejected', errorText: 'peer unreachable' },
-        ]),
-      ),
+    const rejectingService = buildService(
+      new ScriptedPeppolTransport([
+        { providerMessageId: '', status: 'rejected', errorText: 'peer unreachable' },
+      ]),
+      [],
     );
 
     const first = await rejectingService.send(accountId, issued.id);
@@ -287,14 +338,11 @@ describe('EinvoiceSendService', () => {
     await createCompleteIssuerProfile(prisma, accountId);
     const issued = await issueDocumentForPeppolClient(accountId);
 
-    const rejectingService = new EinvoiceSendService(
-      prismaService,
-      documentsService,
-      new PeppolService(
-        new ScriptedPeppolTransport([
-          { providerMessageId: '', status: 'rejected', errorText: 'peer unreachable' },
-        ]),
-      ),
+    const rejectingService = buildService(
+      new ScriptedPeppolTransport([
+        { providerMessageId: '', status: 'rejected', errorText: 'peer unreachable' },
+      ]),
+      [],
     );
 
     await rejectingService.send(accountId, issued.id);
@@ -311,5 +359,163 @@ describe('EinvoiceSendService', () => {
     });
     expect(stored?.status).toBe('REJECTED');
     expect(stored?.retryCount).toBe(3);
+  });
+
+  describe('routing by issuer country', () => {
+    it('routes a RO-issued document to the transport registered for RO, not Peppol', async () => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(prisma, accountId, undefined, {
+        country: 'RO',
+        street: 'Bulevardul Unirii 1',
+        postcode: '030167',
+      });
+      const client = await prisma.client.create({
+        data: { accountId, companyName: 'Client SRL', vatNumber: 'RO18547290', countyRegion: 'B' },
+      });
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({ clientId: client.id }),
+      );
+      const issued = await issuanceService.issue(accountId, draft.id, {});
+
+      const roTransport = fakeEinvoiceTransport({ providerName: 'anaf', country: 'RO' });
+      const service = buildService(new MockPeppolTransport(), [roTransport]);
+
+      const transmission = await service.send(accountId, issued.id);
+
+      expect(transmission.provider).toBe('anaf');
+      expect(transmission.status).toBe('SENT');
+      expect(roTransport.captured?.documentId).toBe(issued.id);
+      expect(roTransport.captured?.recipient.vatNumber).toBe('RO18547290');
+      expect(roTransport.captured?.recipient.countyRegion).toBe('B');
+    });
+
+    it('falls back to Peppol for a BG-issued document when no country transport is registered', async () => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(prisma, accountId, undefined, { country: 'BG' });
+      const itTransport = fakeEinvoiceTransport({ providerName: 'sdi', country: 'IT' });
+      const issued = await issueDocumentForPeppolClient(accountId);
+
+      const service = buildService(new MockPeppolTransport(), [itTransport]);
+
+      const transmission = await service.send(accountId, issued.id);
+
+      expect(transmission.provider).toBe('mock');
+      expect(itTransport.captured).toBeUndefined();
+    });
+
+    it('throws EINVOICE_TRANSPORT_NOT_CONFIGURED and writes no row when the registered transport is not configured', async () => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(prisma, accountId, undefined, {
+        country: 'IT',
+        street: 'Via Roma 1',
+        postcode: '00100',
+      });
+      const client = await prisma.client.create({
+        data: { accountId, companyName: 'Cliente SRL' },
+      });
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({ clientId: client.id }),
+      );
+      const issued = await issuanceService.issue(accountId, draft.id, {});
+
+      const unconfiguredTransport = fakeEinvoiceTransport({
+        providerName: 'sdi',
+        country: 'IT',
+        configured: false,
+      });
+      const service = buildService(new MockPeppolTransport(), [unconfiguredTransport]);
+
+      await expect(service.send(accountId, issued.id)).rejects.toMatchObject({
+        code: 'EINVOICE_TRANSPORT_NOT_CONFIGURED',
+      });
+
+      const stored = await prisma.einvoiceTransmission.findUnique({
+        where: { documentId: issued.id },
+      });
+      expect(stored).toBeNull();
+    });
+  });
+
+  describe('refresh', () => {
+    it('polls checkStatus on the registered transport and updates the row', async () => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(prisma, accountId, undefined, {
+        country: 'RO',
+        street: 'Bulevardul Unirii 1',
+        postcode: '030167',
+      });
+      const client = await prisma.client.create({
+        data: { accountId, companyName: 'Client SRL' },
+      });
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({ clientId: client.id }),
+      );
+      const issued = await issuanceService.issue(accountId, draft.id, {});
+
+      const roTransport = fakeEinvoiceTransport({
+        providerName: 'anaf',
+        country: 'RO',
+        statusResults: [{ status: 'accepted', receipt: 'receipt-xml' }],
+      });
+      const service = buildService(new MockPeppolTransport(), [roTransport]);
+
+      await service.send(accountId, issued.id);
+      const refreshed = await service.refresh(accountId, issued.id);
+
+      expect(refreshed.status).toBe('ACCEPTED');
+      expect(refreshed.receipt).toBe('receipt-xml');
+
+      const stored = await prisma.einvoiceTransmission.findUnique({
+        where: { documentId: issued.id },
+      });
+      expect(stored?.status).toBe('ACCEPTED');
+    });
+
+    it('returns 409 refreshing a Peppol-routed transmission, which has no status polling', async () => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(prisma, accountId, undefined, { country: 'BG' });
+      const issued = await issueDocumentForPeppolClient(accountId);
+
+      await einvoiceSendService.send(accountId, issued.id);
+
+      await expect(einvoiceSendService.refresh(accountId, issued.id)).rejects.toMatchObject({
+        code: 'EINVOICE_STATUS_POLLING_NOT_SUPPORTED',
+        status: 409,
+      });
+    });
+
+    it('returns 409 refreshing a registered transport that does not support status polling', async () => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(prisma, accountId, undefined, {
+        country: 'RO',
+        street: 'Bulevardul Unirii 1',
+        postcode: '030167',
+      });
+      const client = await prisma.client.create({
+        data: { accountId, companyName: 'Client SRL' },
+      });
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({ clientId: client.id }),
+      );
+      const issued = await issuanceService.issue(accountId, draft.id, {});
+
+      const roTransport = fakeEinvoiceTransport({ providerName: 'anaf', country: 'RO' });
+      const service = buildService(new MockPeppolTransport(), [roTransport]);
+
+      await service.send(accountId, issued.id);
+
+      await expect(service.refresh(accountId, issued.id)).rejects.toMatchObject({
+        code: 'EINVOICE_STATUS_POLLING_NOT_SUPPORTED',
+        status: 409,
+      });
+    });
   });
 });

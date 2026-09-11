@@ -13,6 +13,14 @@ export class EinvoiceSendController {
     return this.einvoiceSendService.send(accountId, id);
   }
 
+  @Post(':id/einvoice/refresh')
+  refresh(
+    @AccountId() accountId: string,
+    @Param('id') id: string,
+  ): Promise<EinvoiceTransmissionDto> {
+    return this.einvoiceSendService.refresh(accountId, id);
+  }
+
   @Get(':id/einvoice/transmission')
   getTransmission(
     @AccountId() accountId: string,

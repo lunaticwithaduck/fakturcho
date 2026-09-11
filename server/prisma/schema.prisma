@@ -44,6 +44,8 @@ enum EinvoiceTransmissionStatus {
   SENT
   DELIVERED
   REJECTED
+  PENDING
+  ACCEPTED
 }
 
 model Account {
