@@ -29,6 +29,7 @@ const client: ClientDto = {
 const sendMock = vi.fn().mockReturnValue({ unwrap: () => Promise.resolve({}) });
 let readinessResult: { data: unknown } = { data: { ready: true, missingFields: [] } };
 let transmissionResult: { data: unknown } = { data: null };
+let flagsResult = { EN_LOCALE: true, EINVOICE: true, PEPPOL: true };
 
 vi.mock('@app/api', () => ({
   useGetEinvoiceReadinessQuery: () => readinessResult,
@@ -37,11 +38,16 @@ vi.mock('@app/api', () => ({
   getEinvoiceXmlUrl: (id: string) => `/api/documents/${id}/einvoice/xml`,
 }));
 
+vi.mock('@app/feature-flags', () => ({
+  useFeatureFlags: () => flagsResult,
+}));
+
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
   readinessResult = { data: { ready: true, missingFields: [] } };
   transmissionResult = { data: null };
+  flagsResult = { EN_LOCALE: true, EINVOICE: true, PEPPOL: true };
 });
 
 function renderPanel(status: 'draft' | 'sent' | 'cancelled', clientDto: ClientDto | undefined) {
@@ -189,5 +195,35 @@ describe('EinvoicePanel', () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+
+  it('EINVOICE off: renders nothing at all for an issued document', () => {
+    flagsResult = { EN_LOCALE: true, EINVOICE: false, PEPPOL: true };
+    renderPanel('sent', client);
+
+    expect(screen.queryByRole('link', { name: 'Изтегли е-фактура (XML)' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
+  });
+
+  it('PEPPOL off: keeps the XML download but hides the send button and transmission status', () => {
+    flagsResult = { EN_LOCALE: true, EINVOICE: true, PEPPOL: false };
+    transmissionResult = {
+      data: {
+        documentId: 'doc-1',
+        status: 'REJECTED',
+        provider: 'test',
+        providerMessageId: null,
+        receipt: null,
+        errorText: 'Invalid recipient endpoint',
+        retryCount: 1,
+        createdAt: '2026-09-09T00:00:00.000Z',
+        updatedAt: '2026-09-09T00:00:00.000Z',
+      },
+    };
+    renderPanel('sent', client);
+
+    expect(screen.getByRole('link', { name: 'Изтегли е-фактура (XML)' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
+    expect(screen.queryByText('Invalid recipient endpoint')).toBeNull();
   });
 });

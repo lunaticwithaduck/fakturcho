@@ -1,6 +1,7 @@
 import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common';
 import { type Browser, chromium } from 'playwright';
 import { DomainError } from '../common/domain-error';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
@@ -19,7 +20,10 @@ export interface RenderedPdf {
 export class RenderService implements OnModuleInit, OnModuleDestroy {
   private browser: Browser | null = null;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly flags: FeatureFlagsService = new FeatureFlagsService(prisma),
+  ) {}
 
   async onModuleInit(): Promise<void> {
     this.browser = await chromium.launch();
@@ -51,7 +55,10 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
     });
 
     const isDraft = document.status === 'DRAFT' || document.number === null;
-    const language = resolveDocumentLanguage(document.documentLanguage, document.issuerCountry);
+    const enLocale = await this.flags.isEnabled('EN_LOCALE');
+    const language = enLocale
+      ? resolveDocumentLanguage(document.documentLanguage, document.issuerCountry)
+      : 'bg';
 
     const html = renderClassicTemplateHtml({
       document,

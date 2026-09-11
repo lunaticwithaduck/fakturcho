@@ -3,6 +3,7 @@ import { RequireAuth } from './auth/RequireAuth';
 import { AppLayout } from './layout/AppLayout';
 import { AccountsScreen } from './screens/accounts/AccountsScreen';
 import { DocumentsScreen } from './screens/documents/DocumentsScreen';
+import { FeaturesScreen } from './screens/features/FeaturesScreen';
 import { LoginScreen } from './screens/login/LoginScreen';
 import { TurnoverReportScreen } from './screens/reports/TurnoverReportScreen';
 import { SubscriptionsScreen } from './screens/subscriptions/SubscriptionsScreen';
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       { path: 'usage', element: <UsageScreen /> },
       { path: 'reports', element: <TurnoverReportScreen /> },
       { path: 'traffic', element: <TrafficScreen /> },
+      { path: 'features', element: <FeaturesScreen /> },
     ],
   },
   { path: '*', element: <Navigate to="/accounts" replace /> },

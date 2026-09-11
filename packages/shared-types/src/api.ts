@@ -21,6 +21,7 @@ export const API_ROUTES = {
   checkout: '/api/billing/checkout',
   revolutWebhook: '/api/billing/webhook',
   health: '/api/health',
+  featureFlags: '/api/feature-flags',
   adminMe: '/api/admin/me',
   adminAccounts: '/api/admin/accounts',
   adminAccount: (id: string) => `/api/admin/accounts/${id}`,
@@ -35,4 +36,6 @@ export const API_ROUTES = {
   adminCreditsMonths: '/api/admin/credits/months',
   adminCreditsPurchases: '/api/admin/credits/purchases',
   adminTraffic: '/api/admin/analytics/traffic',
+  adminFeatureFlags: '/api/admin/feature-flags',
+  adminFeatureFlag: (key: string) => `/api/admin/feature-flags/${key}`,
 } as const;

@@ -1,5 +1,7 @@
 import { SIGNUP_GRANT_CENTS } from '@fakturcho/shared-types';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
+import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { createAuth } from './auth.config';
 
@@ -150,5 +152,26 @@ describe('signup provisions a tenant', () => {
 
     const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
     expect(user.locale).toBe('bg');
+  });
+
+  it('EN_LOCALE off: still stores the country, but derives locale bg', async () => {
+    const flags = new FeatureFlagsService(db.prisma as unknown as PrismaService);
+    await flags.setEnabled('EN_LOCALE', false);
+    const auth = createAuth(db.prisma, AUTH_OPTIONS, flags);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Off Flag User',
+        email: 'off-flag@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.country).toBe('DE');
+    expect(user.locale).toBe('bg');
+
+    await flags.setEnabled('EN_LOCALE', true);
   });
 });

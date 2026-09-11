@@ -1,4 +1,5 @@
 import { RequireAuth } from '@app/auth';
+import { getFeatureFlags } from '@app/feature-flags';
 import { AppShell } from '@app/features/shell/AppShell';
 import { DEFAULT_LOCALE, isLocale, loadMessages } from '@app/i18n/locale';
 import type { MeDto } from '@shared/types';
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-async function resolveLocaleOverride() {
+async function resolveLocaleOverride(enLocale: boolean) {
+  if (!enLocale) return null;
+
   try {
     const store = await cookies();
     const cookieHeader = store
@@ -39,7 +42,8 @@ async function resolveLocaleOverride() {
 }
 
 export default async function AppGroupLayout({ children }: { children: ReactNode }) {
-  const override = await resolveLocaleOverride();
+  const flags = await getFeatureFlags();
+  const override = await resolveLocaleOverride(flags.EN_LOCALE);
 
   const shell = (
     <RequireAuth>

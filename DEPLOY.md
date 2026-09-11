@@ -418,3 +418,10 @@ Runtime vars (`server/.env.example`):
    `KSEF_ENVIRONMENT=test` and there is no need to touch a real company's
    KSeF account to develop against it. DEMO and PROD require a real NIP with
    a real token generated as above.
+## 9. Feature flags
+
+`EN_LOCALE`, `EINVOICE` and `PEPPOL` are not environment variables — they live
+in the `feature_flag` table (seeded off by the first migration that creates
+it) and are read through `FeatureFlagsService`, cached in memory for a few
+seconds. Toggle them at **backoffice → Функции**; a change takes effect
+across the API and the app within that cache window, no redeploy needed.

@@ -2,6 +2,7 @@ import { DEFAULT_EXEMPTION_GROUND } from '@fakturcho/shared-types';
 import type { Response } from 'express';
 import { extractText, getDocumentProxy } from 'unpdf';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { RenderController } from './render.controller';
@@ -30,13 +31,16 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
 
 describe('render pipeline', () => {
   let db: TestDatabase;
+  let flags: FeatureFlagsService;
   let service: RenderService;
   let controller: RenderController;
   let accountId: string;
 
   beforeAll(async () => {
     db = await startTestDatabase();
-    service = new RenderService(db.prisma as unknown as PrismaService);
+    flags = new FeatureFlagsService(db.prisma as unknown as PrismaService);
+    await flags.setEnabled('EN_LOCALE', true);
+    service = new RenderService(db.prisma as unknown as PrismaService, flags);
     await service.onModuleInit();
     controller = new RenderController(service);
     const account = await db.prisma.account.create({ data: {} });
@@ -257,5 +261,24 @@ describe('render pipeline', () => {
     const text = await extractPdfText(buffer);
     expect(text).toContain('Amount due:');
     expect(text).not.toContain('Сума за плащане');
+  });
+
+  it('EN_LOCALE off: renders Bulgarian even for a document tagged documentLanguage=en', async () => {
+    await flags.setEnabled('EN_LOCALE', false);
+    try {
+      const document = await seedDocument(db.prisma, {
+        accountId,
+        documentType: 'INVOICE',
+        number: 22,
+        overrides: { documentLanguage: 'en' },
+      });
+      const { buffer, filename } = await service.renderPdf(document.id, accountId);
+      const text = await extractPdfText(buffer);
+      expect(text).not.toContain('Recipient:');
+      expect(text).toContain('Получател:');
+      expect(filename).toBe('Фактура_0000000022.pdf');
+    } finally {
+      await flags.setEnabled('EN_LOCALE', true);
+    }
   });
 });

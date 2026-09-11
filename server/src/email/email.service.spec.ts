@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { DomainError } from '../common/domain-error';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { EmailService } from './email.service';
@@ -10,6 +11,7 @@ describe('EmailService', () => {
 
   beforeAll(async () => {
     db = await startTestDatabase();
+    await db.prisma.featureFlag.update({ where: { key: 'EN_LOCALE' }, data: { enabled: true } });
   });
 
   afterAll(async () => {
@@ -233,5 +235,47 @@ describe('EmailService', () => {
 
     expect(renderPdf).not.toHaveBeenCalled();
     expect(send).not.toHaveBeenCalled();
+  });
+
+  it('EN_LOCALE off: falls back to a Bulgarian subject and locale despite documentLanguage=en', async () => {
+    const { account } = await createAccountWithUser('owner');
+    const document = await db.prisma.document.create({
+      data: {
+        accountId: account.id,
+        documentType: 'CREDIT_NOTE',
+        status: 'SENT',
+        number: 8n,
+        documentLanguage: 'en',
+      },
+    });
+
+    const flags = new FeatureFlagsService(db.prisma as unknown as PrismaService);
+    await flags.setEnabled('EN_LOCALE', false);
+
+    const renderPdf = vi.fn(async () => ({
+      buffer: Buffer.from('%PDF-1.4 fake'),
+      filename: 'Кредитно известие_0000000008.pdf',
+    }));
+    const renderer: DocumentRenderer = { renderPdf };
+    const send = vi.fn(async (_input: SendEmailInput): Promise<void> => {});
+    const sender: EmailSender = { send };
+
+    const service = new EmailService(
+      db.prisma as unknown as PrismaService,
+      renderer,
+      sender,
+      flags,
+    );
+
+    await service.sendDocumentEmail(account.id, document.id, {
+      to: 'client@example.com',
+      emailText: 'x',
+    });
+
+    const sentInput = send.mock.calls[0]?.[0];
+    expect(sentInput?.locale).toBe('bg');
+    expect(sentInput?.subject).toBe('Кредитно известие № 0000000008');
+
+    await flags.setEnabled('EN_LOCALE', true);
   });
 });

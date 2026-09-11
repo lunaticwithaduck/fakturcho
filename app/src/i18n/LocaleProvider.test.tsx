@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { FeatureFlagsProvider } from '@app/feature-flags';
 import bgMessages from '@messages/bg.json';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { NextIntlClientProvider, useTranslations } from 'next-intl';
@@ -11,11 +12,13 @@ function EmailLabelProbe() {
   return <span>{t('emailLabel')}</span>;
 }
 
-function renderProbe(children: ReactNode = <EmailLabelProbe />) {
+function renderProbe(children: ReactNode = <EmailLabelProbe />, enLocale = true) {
   return render(
-    <NextIntlClientProvider locale="bg" messages={bgMessages}>
-      <LocaleProvider>{children}</LocaleProvider>
-    </NextIntlClientProvider>,
+    <FeatureFlagsProvider flags={{ EN_LOCALE: enLocale, EINVOICE: false, PEPPOL: false }}>
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <LocaleProvider>{children}</LocaleProvider>
+      </NextIntlClientProvider>
+    </FeatureFlagsProvider>,
   );
 }
 
@@ -117,5 +120,15 @@ describe('LocaleProvider', () => {
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
     expect(document.documentElement.lang).toBe('bg');
+  });
+
+  it('EN_LOCALE off: never calls /api/me and stays on Bulgarian', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderProbe(<EmailLabelProbe />, false);
+
+    expect(screen.getByText('Имейл')).toBeTruthy();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
