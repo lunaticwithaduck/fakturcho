@@ -274,3 +274,36 @@ alert — nothing 500s, so this ships before Umami is provisioned.
 `UmamiClient` logs into `POST {UMAMI_API_URL}/api/auth/login` and caches the
 bearer token in memory, re-logging in once on a 401. Redeploy the API and
 rebuild the app; the Трафик page then shows real numbers.
+
+## 8. Poland (KSeF)
+
+`KsefTransport` (`server/src/einvoice-adapters/pl/ksef-transport.ts`) sends
+FA(3) invoices straight to the Ministry of Finance's KSeF 2.0 API — no
+intermediary. Full endpoint documentation, with citations, is in
+`server/src/einvoice-adapters/pl/KSEF.md`.
+
+Runtime vars (`server/.env.example`):
+
+| Variable | Value |
+| --- | --- |
+| `KSEF_ENVIRONMENT` | `test`, `demo`, or `prod` |
+| `KSEF_NIP` | the 10-digit NIP authenticating to KSeF |
+| `KSEF_TOKEN` | a KSeF token generated for that NIP |
+
+### Getting a KSeF token
+
+1. Log into the KSeF web app for the target environment — TEST:
+   `https://ksef-test.mf.gov.pl`, DEMO: `https://ksef-demo.mf.gov.pl`, PROD:
+   `https://ksef.mf.gov.pl` — with a Trusted Profile (Profil Zaufany),
+   qualified signature, or qualified seal for the NIP in question.
+2. **Uwierzytelnianie i uprawnienia → Generuj token KSeF** (the exact path
+   the Ministry documents at
+   [ksef.podatki.gov.pl](https://ksef.podatki.gov.pl)). Pick a permission
+   scope that at minimum allows invoice sending (`Faktura – wystawianie`);
+   the token is shown once — copy it straight into `KSEF_TOKEN`.
+3. TEST accepts self-generated, non-real NIPs (data there isn't isolated
+   between integrators, so a made-up 10-digit NIP works for `KSEF_NIP` and
+   for the issuer's NIP on the invoice) — point the dev stack at
+   `KSEF_ENVIRONMENT=test` and there is no need to touch a real company's
+   KSeF account to develop against it. DEMO and PROD require a real NIP with
+   a real token generated as above.
