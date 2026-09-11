@@ -1,5 +1,5 @@
 import { eurCentsToBgnCents, roundHalfUp, type VatCategory } from '@fakturcho/shared-types';
-import type { Document, LineItem } from '@prisma/client';
+import type { Discount, Document, LineItem } from '@prisma/client';
 import { amountInWords } from '../../../money/amount-in-words';
 import { formatCentsForLocale, formatMoneyForLocale } from '../../../money/format';
 import type { VatPresentation } from '../../../money/vat';
@@ -28,6 +28,25 @@ export function discountAdjustedVatGroups(document: Document, lineItems: readonl
     vatCategory: line.vatCategory as VatCategory,
   }));
   return computeVatSubtotals(lines);
+}
+
+function discountRows(
+  document: Document,
+  discounts: readonly Discount[],
+  labels: ClassicLabels,
+  language: ClassicLanguage,
+): string {
+  if (document.discountTotal <= 0) return '';
+  const single = discounts.length === 1 ? discounts[0] : null;
+  const percent = single?.percentBp != null ? single.percentBp / 100 : null;
+  const customLabel = single?.label || null;
+  return (
+    totalsRow(labels.subtotalLabel, formatMoneyForLocale(document.subtotal, language)) +
+    totalsRow(
+      labels.discountRowLabel(percent, customLabel),
+      formatMoneyForLocale(-document.discountTotal, language),
+    )
+  );
 }
 
 function mixedVatBlock(
@@ -60,6 +79,7 @@ export function buildTotalsBlock(
   presentation: VatPresentation,
   showBgnSuffix: boolean,
   locale: ClassicLocaleContext,
+  discounts: readonly Discount[] = [],
 ): string {
   const { labels, language } = locale;
   const isMixed =
@@ -88,7 +108,7 @@ export function buildTotalsBlock(
     : '';
   const dueValue = `${formatMoneyForLocale(document.amount, language)}${bgnSuffix}`;
   const totals = `<div class="totals">
-    ${vatRows}
+    ${discountRows(document, discounts, labels, language) + vatRows}
     ${totalsRow(labels.totalLabel, formatMoneyForLocale(document.amount, language), 'totals-row total')}
     ${totalsRow(labels.dueLabel, dueValue, 'totals-row due')}
   </div>`;

@@ -1,4 +1,4 @@
-import type { Document, LineItem } from '@prisma/client';
+import type { Discount, Document, LineItem } from '@prisma/client';
 import type { VatPresentation } from '../../../money/vat';
 import { toSharedDocumentType } from '../../prisma-mappers';
 import { buildIssuerBlock, buildSignatureRow } from './footer-blocks';
@@ -18,10 +18,19 @@ export interface ClassicTemplateInput {
   dualDisplayActive: boolean;
   isDraft: boolean;
   language: ClassicLanguage;
+  discounts?: readonly Discount[];
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
-  const { document, lineItems, presentation, dualDisplayActive, isDraft, language } = input;
+  const {
+    document,
+    lineItems,
+    presentation,
+    dualDisplayActive,
+    isDraft,
+    language,
+    discounts = [],
+  } = input;
   const locale = resolveClassicLocale(language);
   const documentType = toSharedDocumentType(document.documentType);
   const isQuote = documentType === 'quote';
@@ -43,7 +52,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
   ${buildLineItemsTable(lineItems, locale)}
   ${buildAmountWordsBlock(document, locale)}
-  ${buildTotalsBlock(document, lineItems, presentation, showBgnSuffix, locale)}
+  ${buildTotalsBlock(document, lineItems, presentation, showBgnSuffix, locale, discounts)}
   ${buildIssuerBlock(document, locale)}
   ${locale.showSignatureRow ? buildSignatureRow(document, locale) : ''}
 </body>

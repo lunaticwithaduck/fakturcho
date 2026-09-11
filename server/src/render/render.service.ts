@@ -33,7 +33,10 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
   async renderPdf(documentId: string, accountId: string): Promise<RenderedPdf> {
     const document = await this.prisma.document.findFirst({
       where: { id: documentId, accountId },
-      include: { lineItems: { orderBy: { sortOrder: 'asc' } } },
+      include: {
+        lineItems: { orderBy: { sortOrder: 'asc' } },
+        discounts: { orderBy: { sortOrder: 'asc' } },
+      },
     });
     if (!document) {
       throw new DomainError('NOT_FOUND', 'Document not found.');
@@ -53,6 +56,7 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
     const html = renderClassicTemplateHtml({
       document,
       lineItems: document.lineItems,
+      discounts: document.discounts,
       presentation,
       dualDisplayActive: isDualDisplayActive(),
       isDraft,

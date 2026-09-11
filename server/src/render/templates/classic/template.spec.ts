@@ -3,6 +3,7 @@ import type { VatPresentation } from '../../../money/vat';
 import { resolveVatPresentation } from '../../../money/vat';
 import { renderClassicTemplateHtml } from './template';
 import {
+  buildFakeDiscounts,
   buildFakeDocument,
   buildFakeLineItems,
   buildFakeMixedLineItems,
@@ -204,5 +205,182 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).not.toContain('VAT (0%):');
     expect((html.match(/Taxable amount:/g) ?? []).length).toBe(1);
     expect(html).toContain('1,100.00 €');
+  });
+
+  it('renders identical output when discountTotal is zero regardless of stored discounts', () => {
+    const withoutDiscounts = renderClassicTemplateHtml({
+      document: buildFakeDocument(),
+      lineItems: buildFakeLineItems(),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: true,
+      isDraft: false,
+      language: 'bg',
+    });
+    const withStoredDiscounts = renderClassicTemplateHtml({
+      document: buildFakeDocument(),
+      lineItems: buildFakeLineItems(),
+      discounts: buildFakeDiscounts(),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: true,
+      isDraft: false,
+      language: 'bg',
+    });
+
+    expect(withStoredDiscounts).toBe(withoutDiscounts);
+    expect(withoutDiscounts).not.toContain('Отстъпка');
+    expect(withoutDiscounts).not.toContain('Междинна сума');
+  });
+
+  it('prints a subtotal and a percentage+label discount row before the taxable base (bg)', () => {
+    const document = buildFakeDocument({
+      subtotal: 1000000,
+      discountTotal: 100000,
+      amount: 1080000,
+      vatRateBp: 2000,
+      vatAmount: 180000,
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeLineItems(),
+      discounts: buildFakeDiscounts({ percentBp: 1000, label: 'Лоялен клиент' }),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'bg',
+    });
+
+    expect(html).toContain('Междинна сума:');
+    expect(html).toContain('10 000,00 €');
+    expect(html).toContain('Отстъпка (10%) – Лоялен клиент:');
+    expect(html).toContain('-1 000,00 €');
+    expect(html).toContain('Данъчна основа:');
+    expect(html).toContain('9 000,00 €');
+    expect(html).toContain('ДДС (20%):');
+    expect(html).toContain('1 800,00 €');
+    expect(html).toContain('10 800,00 €');
+  });
+
+  it('prints a subtotal and a percentage discount row before the taxable base (en)', () => {
+    const document = buildFakeDocument({
+      subtotal: 500000,
+      discountTotal: 50000,
+      amount: 540000,
+      vatRateBp: 2000,
+      vatAmount: 90000,
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeLineItems(),
+      discounts: buildFakeDiscounts({ percentBp: 1000, label: '' }),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'en',
+    });
+
+    expect(html).toContain('Subtotal:');
+    expect(html).toContain('5,000.00 €');
+    expect(html).toContain('Discount (10%):');
+    expect(html).toContain('-500.00 €');
+    expect(html).toContain('Taxable amount:');
+    expect(html).toContain('4,500.00 €');
+    expect(html).toContain('VAT (20%):');
+    expect(html).toContain('900.00 €');
+    expect(html).toContain('5,400.00 €');
+  });
+
+  it('prints a flat-amount discount with a custom label and no percentage (bg)', () => {
+    const document = buildFakeDocument({
+      subtotal: 200000,
+      discountTotal: 15000,
+      amount: 222000,
+      vatRateBp: 2000,
+      vatAmount: 37000,
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeLineItems(),
+      discounts: buildFakeDiscounts({ percentBp: null, amount: 15000, label: 'Промо код ХХ' }),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'bg',
+    });
+
+    expect(html).toContain('2 000,00 €');
+    expect(html).toContain('Отстъпка – Промо код ХХ:');
+    expect(html).not.toContain('Отстъпка (');
+    expect(html).toContain('-150,00 €');
+    expect(html).toContain('1 850,00 €');
+    expect(html).toContain('370,00 €');
+    expect(html).toContain('2 220,00 €');
+  });
+
+  it('falls back to a plain discount label when several discounts make up the total', () => {
+    const document = buildFakeDocument({
+      subtotal: 100000,
+      discountTotal: 20000,
+      amount: 96000,
+      vatRateBp: 2000,
+      vatAmount: 16000,
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeLineItems(),
+      discounts: [
+        ...buildFakeDiscounts({ id: 'disc_1', percentBp: 500, label: 'Ранно плащане' }),
+        ...buildFakeDiscounts({ id: 'disc_2', percentBp: 1500, label: 'Обем' }),
+      ],
+      presentation: vatChargedPresentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'bg',
+    });
+
+    expect(html).toContain('Отстъпка:');
+    expect(html).toContain('-200,00 €');
+  });
+
+  it('prints the subtotal and discount rows once above the mixed-VAT group rows (bg)', () => {
+    const document = buildFakeDocument({
+      subtotal: 100000,
+      discountTotal: 10000,
+      amount: 99000,
+      vatRateBp: 2000,
+      vatAmount: 9000,
+      vatExemptionGround: 'чл.21 от ЗДДС',
+    });
+    const presentation = resolveVatPresentation({
+      vatRegistered: true,
+      vatRateBp: document.vatRateBp,
+      vatExemptionGround: document.vatExemptionGround,
+      documentType: 'invoice',
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeMixedLineItems(),
+      presentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'bg',
+    });
+
+    expect(html).toContain('Междинна сума:');
+    expect(html).toContain('1 000,00 €');
+    expect(html).toContain('Отстъпка:');
+    expect(html).toContain('-100,00 €');
+    expect(html).toContain('Данъчна основа:');
+    expect(html).toContain('450,00 €');
+    expect(html).toContain('ДДС (20%):');
+    expect(html).toContain('90,00 €');
+    expect(html).toContain('Основание за неначисляване на ДДС: чл.21 от ЗДДС');
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect((html.match(/Междинна сума:/g) ?? []).length).toBe(1);
+    expect(html).toContain('990,00 €');
   });
 });
