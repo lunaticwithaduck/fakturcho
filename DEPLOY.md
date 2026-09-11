@@ -112,6 +112,37 @@ subscription needs a plan created once, up front:
 2. Create an API key → `RESEND_API_KEY`.
 3. `EMAIL_FROM` must use the verified domain.
 
+### Romania (ANAF e-Factura)
+
+| Variable | Example | Where it comes from |
+| --- | --- | --- |
+| `ANAF_ENVIRONMENT` | `test` | `test` talks to `api.anaf.ro/test`, `prod` to `api.anaf.ro/prod` — `test` is safe to point the dev stack at, it never reaches a real taxpayer's SPV |
+| `ANAF_CLIENT_ID` | — | ANAF OAuth app registration (below) |
+| `ANAF_CLIENT_SECRET` | — | same registration |
+| `ANAF_REFRESH_TOKEN` | — | one-time authorization-code exchange (below) |
+
+ANAF has no service-account flow: every credential traces back to a person's
+qualified digital certificate with an SPV PJ role (legal representative,
+delegate, or proxy) for the issuing company. jojo has to do the following by
+hand, once per CIF:
+
+1. Register the app once at https://www.anaf.ro/InregOauth ("Editare profil
+   Oauth" → "Generare Client ID", service `E-Factura`, any callback URL —
+   Postman's `https://oauth.pstmn.io/v1/callback` works if there's no public
+   redirect URI yet). This yields `ANAF_CLIENT_ID` / `ANAF_CLIENT_SECRET`.
+2. Run the OAuth2 authorization-code flow once, in a browser that has the
+   certificate installed: authorize at
+   `https://logincert.anaf.ro/anaf-oauth2/v1/authorize` with that client id,
+   pick the certificate when prompted, then exchange the returned code at
+   `https://logincert.anaf.ro/anaf-oauth2/v1/token` (client id/secret as HTTP
+   Basic auth) for an access token and a refresh token. Postman's built-in
+   OAuth2 helper does both steps; see
+   `server/src/einvoice-adapters/ro/ANAF.md` for the exact request shapes.
+3. `ANAF_REFRESH_TOKEN` is that refresh token — valid 365 days, and each use
+   returns a new one, so it needs rotating (by hand, same flow) before it
+   expires. The access token this adapter uses day-to-day is derived from it
+   automatically and cached in memory.
+
 ## 3. App service (`fakturcho-app`)
 
 1. **Create → GitHub Repo** → same repository, second service.
