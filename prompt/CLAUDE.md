@@ -125,8 +125,6 @@ design/components/Button/
 
 ## Language
 
-## Language
-
 - Bulgarian stays the default and is byte-identical to before this rule
   changed: `country: 'BG'` renders Bulgarian UI, PDF and emails exactly as
   always. Every other country renders English first. The active locale is

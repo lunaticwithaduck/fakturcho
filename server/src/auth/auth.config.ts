@@ -1,4 +1,4 @@
-import { getCountryConfig } from '@fakturcho/shared-types';
+import { getCountryConfig, SUPPORTED_LOCALES } from '@fakturcho/shared-types';
 import type { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -24,6 +24,10 @@ async function provisionTenant(prisma: PrismaClient): Promise<string> {
     return created;
   });
   return account.id;
+}
+
+function isSupportedLocale(value: unknown): value is (typeof SUPPORTED_LOCALES)[number] {
+  return typeof value === 'string' && (SUPPORTED_LOCALES as readonly string[]).includes(value);
 }
 
 export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
@@ -76,7 +80,9 @@ export function createAuth(prisma: PrismaClient, options: AuthConfigOptions) {
             const locale =
               typeof user.country === 'string' && user.country.length > 0
                 ? getCountryConfig(user.country).locale
-                : user.locale;
+                : isSupportedLocale(user.locale)
+                  ? user.locale
+                  : 'bg';
             return { data: { ...user, accountId, locale } };
           },
         },

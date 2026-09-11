@@ -64,7 +64,7 @@ export function buildFakeDocument(overrides: Record<string, unknown> = {}): Docu
   } as unknown as Document;
 }
 
-export function buildFakeLineItems(): readonly LineItem[] {
+export function buildFakeLineItems(overrides: Record<string, unknown> = {}): readonly LineItem[] {
   return [
     {
       id: 'li_1',
@@ -77,6 +77,7 @@ export function buildFakeLineItems(): readonly LineItem[] {
       vatRateBp: 2000,
       vatCategory: 'S',
       unitCode: null,
+      ...overrides,
     },
   ] as unknown as LineItem[];
 }

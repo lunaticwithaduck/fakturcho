@@ -94,6 +94,28 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('NOT LEGALLY VALID');
   });
 
+  it('formats a fractional quantity with the locale decimal separator', () => {
+    const bgHtml = renderClassicTemplateHtml({
+      document: buildFakeDocument(),
+      lineItems: buildFakeLineItems({ quantity: '2.5' }),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'bg',
+    });
+    expect(bgHtml).toContain('<td>2,5</td>');
+
+    const enHtml = renderClassicTemplateHtml({
+      document: buildFakeDocument(),
+      lineItems: buildFakeLineItems({ quantity: '2.5' }),
+      presentation: vatChargedPresentation,
+      dualDisplayActive: false,
+      isDraft: false,
+      language: 'en',
+    });
+    expect(enHtml).toContain('<td>2.5</td>');
+  });
+
   it('marks a quote as Валидно до in Bulgarian and without a tax event line', () => {
     const html = renderClassicTemplateHtml({
       document: buildFakeDocument({ documentType: 'QUOTE' }),

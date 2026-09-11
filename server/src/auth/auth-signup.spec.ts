@@ -105,6 +105,38 @@ describe('signup provisions a tenant', () => {
     expect(user.locale).toBe('en');
   });
 
+  it('rejects an unsupported locale value with no country, falling back to bg', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Garbage Locale User',
+        email: 'garbage-locale@example.com',
+        password: 'correct-horse-battery',
+        locale: 'fr',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('bg');
+  });
+
+  it('accepts an explicit supported locale with no country', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Explicit En User',
+        email: 'explicit-en@example.com',
+        password: 'correct-horse-battery',
+        locale: 'en',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('en');
+  });
+
   it('defaults to bg when no country is provided, unchanged from before', async () => {
     const auth = createAuth(db.prisma, AUTH_OPTIONS);
 
