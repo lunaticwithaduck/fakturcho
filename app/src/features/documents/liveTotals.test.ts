@@ -108,6 +108,7 @@ describe('resolveVatTreatment', () => {
         vatRegistered: true,
         chargeVat: true,
         vatRateBp: 2000,
+        groundRequired: true,
       }),
     ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
     expect(
@@ -116,19 +117,33 @@ describe('resolveVatTreatment', () => {
         vatRegistered: true,
         chargeVat: true,
         vatRateBp: 2000,
+        groundRequired: true,
       }),
     ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
   });
 
-  it('never offers a ground select for a non-registered issuer', () => {
+  it('does not offer a ground select for a non-registered issuer with a country default', () => {
     expect(
       resolveVatTreatment({
         documentType: 'invoice',
         vatRegistered: false,
         chargeVat: false,
         vatRateBp: 2000,
+        groundRequired: false,
       }),
     ).toEqual({ isTaxDocument: true, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+  });
+
+  it('offers a ground select for a non-registered issuer with no country default (ES)', () => {
+    expect(
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: false,
+        chargeVat: false,
+        vatRateBp: 2000,
+        groundRequired: true,
+      }),
+    ).toEqual({ isTaxDocument: true, vatCharged: false, vatRateBp: 0, groundSelectable: true });
   });
 
   it('charges the standard 20% for a registered issuer that charges VAT', () => {
@@ -138,6 +153,7 @@ describe('resolveVatTreatment', () => {
         vatRegistered: true,
         chargeVat: true,
         vatRateBp: 2000,
+        groundRequired: true,
       }),
     ).toEqual({ isTaxDocument: true, vatCharged: true, vatRateBp: 2000, groundSelectable: false });
   });
@@ -149,6 +165,7 @@ describe('resolveVatTreatment', () => {
         vatRegistered: true,
         chargeVat: false,
         vatRateBp: 2000,
+        groundRequired: true,
       }),
     ).toEqual({ isTaxDocument: true, vatCharged: false, vatRateBp: 0, groundSelectable: true });
   });

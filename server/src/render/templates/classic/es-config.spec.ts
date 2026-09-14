@@ -30,14 +30,21 @@ describe('ES_CONFIG', () => {
     expect(config.vatNumberPattern?.test('DE123456789')).toBe(false);
   });
 
-  it('defaults a non-registered issuer to the article 20 ground', () => {
-    expect(config.defaultExemptionGround).toBe('artículo 20 de la Ley 37/1992 del IVA');
-    expect(config.exemptionGrounds).toContain(config.defaultExemptionGround);
+  it('has no default ground, so a non-registered issuer must pick an apartado', () => {
+    expect(config.defaultExemptionGround).toBeNull();
+    expect(config.exemptionGrounds).toContain('artículo 20.Uno.9º de la Ley 37/1992 del IVA');
   });
 
   it('offers the export, assimilated-export, intra-EU and reverse-charge grounds', () => {
     expect(config.exemptionGrounds).toEqual([
-      'artículo 20 de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.2º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.3º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.4º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.5º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.16º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.18º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.26º de la Ley 37/1992 del IVA',
       'artículo 21 de la Ley 37/1992 del IVA',
       'artículo 22 de la Ley 37/1992 del IVA',
       'artículo 25 de la Ley 37/1992 del IVA',

@@ -59,6 +59,7 @@ export const plDomesticStandardInvoice: DocumentDto = {
     street: 'ul. Nowy Świat 5',
     postcode: '00-029',
     countyRegion: null,
+    city: 'Warszawa',
     country: 'PL',
     email: 'biuro@klient.pl',
     mol: null,

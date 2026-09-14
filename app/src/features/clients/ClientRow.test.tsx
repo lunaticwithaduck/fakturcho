@@ -15,6 +15,7 @@ const client = {
   street: null,
   postcode: null,
   countyRegion: null,
+  city: null,
   country: 'BG',
   documentLanguage: null,
   email: 'office@acme.bg',

@@ -25,6 +25,7 @@ export const createClientSchema = z.object({
   street: streetSchema.nullable().optional(),
   postcode: postcodeSchema.nullable().optional(),
   countyRegion: countyRegionSchema.nullable().optional(),
+  city: z.string().nullable().optional(),
   country: countryCodeSchema.optional(),
   documentLanguage: z.enum(DOCUMENT_LANGUAGES).nullable().optional(),
   email: z.string().nullable().optional(),

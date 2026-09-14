@@ -37,6 +37,23 @@ describe('toFa3Xml — PL domestic, standard 23% rate', () => {
     expect(xml).toContain('<Nazwa>Klient Testowy Sp. z o.o.</Nazwa>');
   });
 
+  it('carries the buyer street as AdresL1 and postcode/city as AdresL2', () => {
+    expect(xml).toContain('<AdresL1>ul. Nowy Świat 5</AdresL1><AdresL2>00-029 Warszawa</AdresL2>');
+  });
+
+  it('falls back to the free-text address for AdresL2 when postcode and city are missing', () => {
+    const legacy: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      recipient: {
+        ...plDomesticStandardInvoice.recipient,
+        postcode: null,
+        city: null,
+        address: 'ul. Nowy Świat 5, 00-029 Warszawa',
+      },
+    };
+    expect(toFa3Xml(legacy)).toContain('<AdresL2>ul. Nowy Świat 5, 00-029 Warszawa</AdresL2>');
+  });
+
   it('carries the standard-rate line at P_12 code 23', () => {
     expect(xml).toContain('<P_12>23</P_12>');
   });

@@ -34,6 +34,12 @@ describe('toUblXml — BG domestic, standard rate', () => {
     expect(countOccurrences(xml, '<cbc:IdentificationCode>BG</cbc:IdentificationCode>')).toBe(2);
   });
 
+  it('carries the recipient city as cbc:CityName', () => {
+    expect(xml).toContain(
+      `<cbc:CityName>${bgDomesticStandardInvoice.recipient.city}</cbc:CityName>`,
+    );
+  });
+
   it('carries the line VAT category code', () => {
     expect(xml).toContain('<cac:ClassifiedTaxCategory><cbc:ID>S</cbc:ID>');
   });

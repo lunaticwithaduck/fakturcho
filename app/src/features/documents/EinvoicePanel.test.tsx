@@ -16,6 +16,7 @@ const client: ClientDto = {
   street: null,
   postcode: null,
   countyRegion: null,
+  city: null,
   country: 'DE',
   documentLanguage: null,
   email: null,

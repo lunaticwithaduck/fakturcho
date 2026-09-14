@@ -59,6 +59,7 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
     street: 'Musterstraße 10',
     postcode: '10115',
     countyRegion: null,
+    city: 'Berlin',
     country: 'DE',
     email: 'buchhaltung@muster.de',
     mol: null,

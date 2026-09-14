@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 
 interface ComposerVatSectionProps {
   chargeVat: boolean;
+  showChargeToggle: boolean;
   vatExemptionGround: string | null;
   grounds: readonly string[];
   ratePercent: number;
@@ -15,6 +16,7 @@ interface ComposerVatSectionProps {
 
 export function ComposerVatSection({
   chargeVat,
+  showChargeToggle,
   vatExemptionGround,
   grounds,
   ratePercent,
@@ -27,11 +29,13 @@ export function ComposerVatSection({
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold text-text">{t('composer.vat.heading')}</h2>
-      <Switch
-        label={t('composer.vat.chargeLabel', { rate: ratePercent })}
-        checked={chargeVat}
-        onCheckedChange={onChangeChargeVat}
-      />
+      {showChargeToggle ? (
+        <Switch
+          label={t('composer.vat.chargeLabel', { rate: ratePercent })}
+          checked={chargeVat}
+          onCheckedChange={onChangeChargeVat}
+        />
+      ) : null}
       {!chargeVat ? (
         <Select
           label={t('composer.vat.groundLabel')}

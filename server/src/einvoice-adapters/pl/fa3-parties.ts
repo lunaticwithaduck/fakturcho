@@ -49,7 +49,8 @@ function buyerIdentityBlock(recipient: RecipientSnapshotDto): string {
 }
 
 export function buyerParty(recipient: RecipientSnapshotDto): string {
-  const cityLine = recipient.address ?? null;
+  const cityLine =
+    [recipient.postcode, recipient.city].filter(Boolean).join(' ') || recipient.address;
   return (
     '<Podmiot2>' +
     '<DaneIdentyfikacyjne>' +

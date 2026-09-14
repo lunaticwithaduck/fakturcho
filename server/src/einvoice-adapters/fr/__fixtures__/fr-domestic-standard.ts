@@ -59,6 +59,7 @@ export const frDomesticStandardInvoice: DocumentDto = {
     street: '5 avenue des Champs-Élysées',
     postcode: '75008',
     countyRegion: null,
+    city: 'Paris',
     country: 'FR',
     email: 'contact@client-exemple.fr',
     mol: null,

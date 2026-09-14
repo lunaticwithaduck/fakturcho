@@ -51,6 +51,7 @@ describe('ClientFormDialog', () => {
     expect(screen.getByLabelText('ЕИК / Булстат')).toBeTruthy();
     expect(screen.getByLabelText('ДДС номер')).toBeTruthy();
     expect(screen.getByLabelText('Адрес')).toBeTruthy();
+    expect(screen.getByLabelText('Град')).toBeTruthy();
     expect(screen.getByLabelText('Държава')).toBeTruthy();
     expect(screen.getByLabelText('Език на документите')).toBeTruthy();
     expect(screen.getByLabelText('Имейл')).toBeTruthy();
@@ -68,6 +69,7 @@ describe('ClientFormDialog', () => {
 
     expect(screen.getByText('New client')).toBeTruthy();
     expect(screen.getByLabelText('Company name')).toBeTruthy();
+    expect(screen.getByLabelText('City')).toBeTruthy();
     expect(screen.getByLabelText('Country')).toBeTruthy();
     expect(screen.getByLabelText('Document language')).toBeTruthy();
     expect(screen.getByLabelText('Peppol endpoint ID')).toBeTruthy();
@@ -112,6 +114,65 @@ describe('ClientFormDialog', () => {
     const body = await request.json();
     expect(body.country).toBe('DE');
     expect(body.documentLanguage).toBe('en');
+  });
+
+  it('switches to structured street/postcode fields for a country that requires them', async () => {
+    renderDialog('bg', bgMessages);
+
+    expect(screen.getByLabelText('Адрес')).toBeTruthy();
+    expect(screen.queryByLabelText('Улица и номер')).toBeNull();
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Германия'));
+
+    expect(screen.queryByLabelText('Адрес')).toBeNull();
+    expect(screen.getByLabelText('Улица и номер')).toBeTruthy();
+    expect(screen.getByLabelText('Пощенски код')).toBeTruthy();
+    expect(screen.getByLabelText('Град')).toBeTruthy();
+  });
+
+  it('joins street and postcode into address for backward compatibility on a structured country', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'Beispiel GmbH' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'Beispiel GmbH' } });
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Германия'));
+
+    fireEvent.change(screen.getByLabelText('Улица и номер'), {
+      target: { value: 'Musterstraße 10' },
+    });
+    fireEvent.change(screen.getByLabelText('Пощенски код'), { target: { value: '10115' } });
+    fireEvent.change(screen.getByLabelText('Град'), { target: { value: 'Berlin' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.street).toBe('Musterstraße 10');
+    expect(body.postcode).toBe('10115');
+    expect(body.city).toBe('Berlin');
+    expect(body.address).toBe('Musterstraße 10, 10115');
+  });
+
+  it('keeps the free-text address for BG and sends city separately', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'ACME' } });
+    fireEvent.change(screen.getByLabelText('Адрес'), { target: { value: 'ул. Витоша 15' } });
+    fireEvent.change(screen.getByLabelText('Град'), { target: { value: 'София' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.address).toBe('ул. Витоша 15');
+    expect(body.city).toBe('София');
+    expect(body.street).toBeNull();
   });
 
   it('round-trips the Peppol endpoint id and scheme through the request body', async () => {

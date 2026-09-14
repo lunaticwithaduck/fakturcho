@@ -1,7 +1,7 @@
 import { Input, Select, SelectItem } from '@design/components';
 import { DOCUMENT_LANGUAGES, type DocumentLanguage, EU_VAT_AREA_COUNTRIES } from '@shared/types';
 import { useTranslations } from 'next-intl';
-import type { ClientFormValues } from './clientForm';
+import { type ClientFormValues, usesStructuredClientAddress } from './clientForm';
 
 interface ClientFormFieldsProps {
   values: ClientFormValues;
@@ -14,6 +14,7 @@ const SAME_AS_ISSUER = 'same';
 
 export function ClientFormFields({ values, onChange }: ClientFormFieldsProps) {
   const t = useTranslations('clients');
+  const structuredAddress = usesStructuredClientAddress(values.country);
 
   return (
     <div className="flex flex-col gap-4">
@@ -33,10 +34,30 @@ export function ClientFormFields({ values, onChange }: ClientFormFieldsProps) {
         value={values.vatNumber}
         onChange={(event) => onChange('vatNumber', event.target.value)}
       />
+      {structuredAddress ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Input
+            label={t('streetLabel')}
+            value={values.street}
+            onChange={(event) => onChange('street', event.target.value)}
+          />
+          <Input
+            label={t('postcodeLabel')}
+            value={values.postcode}
+            onChange={(event) => onChange('postcode', event.target.value)}
+          />
+        </div>
+      ) : (
+        <Input
+          label={t('addressLabel')}
+          value={values.address}
+          onChange={(event) => onChange('address', event.target.value)}
+        />
+      )}
       <Input
-        label={t('addressLabel')}
-        value={values.address}
-        onChange={(event) => onChange('address', event.target.value)}
+        label={t('cityLabel')}
+        value={values.city}
+        onChange={(event) => onChange('city', event.target.value)}
       />
       <Select
         label={t('countryLabel')}

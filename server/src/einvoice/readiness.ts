@@ -19,6 +19,7 @@ export const EINVOICE_MISSING_FIELD_CODES = {
   issuerCountry: 'issuer.country',
   issuerStreet: 'issuer.street',
   issuerPostcode: 'issuer.postcode',
+  issuerCity: 'issuer.city',
   issuerVatNumber: 'issuer.vatNumber',
   issuerPhone: 'issuer.phone',
   issuerIban: 'issuer.iban',
@@ -43,6 +44,7 @@ export const EINVOICE_MISSING_FIELD_CODES = {
   recipientCountry: 'recipient.country',
   recipientStreet: 'recipient.street',
   recipientPostcode: 'recipient.postcode',
+  recipientCity: 'recipient.city',
   recipientVatNumberReverseCharge: 'recipient.vatNumberReverseCharge',
   recipientCui: 'recipient.cui',
   recipientCuiChecksum: 'recipient.cuiChecksum',
@@ -86,6 +88,7 @@ export function checkEinvoiceReadiness(document: DocumentDto): EinvoiceReadiness
   if (!document.issuer.country) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCountry);
   if (!document.issuer.street) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
   if (!document.issuer.postcode) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
+  if (!document.issuer.city) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCity);
   if (document.issuer.vatRegistered && !document.issuer.vatNumber) {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerVatNumber);
   }
@@ -97,6 +100,7 @@ export function checkEinvoiceReadiness(document: DocumentDto): EinvoiceReadiness
   if (!document.recipient.street) missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientStreet);
   if (!document.recipient.postcode)
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientPostcode);
+  if (!document.recipient.city) missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCity);
 
   const hasReverseCharge = document.lineItems.some((line) => line.vatCategory === 'AE');
   if (hasReverseCharge && !document.recipient.vatNumber) {

@@ -1,6 +1,12 @@
 import { useCreateClientMutation, useUpdateClientMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
-import type { ClientDto, CreateClientRequest, DocumentLanguage, Locale } from '@shared/types';
+import {
+  type ClientDto,
+  type CreateClientRequest,
+  type DocumentLanguage,
+  getCountryConfig,
+  type Locale,
+} from '@shared/types';
 import { useLocale } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
@@ -9,6 +15,9 @@ export interface ClientFormValues {
   eik: string;
   vatNumber: string;
   address: string;
+  street: string;
+  postcode: string;
+  city: string;
   email: string;
   mol: string;
   country: string;
@@ -17,12 +26,19 @@ export interface ClientFormValues {
   peppolScheme: string;
 }
 
+export function usesStructuredClientAddress(country: string): boolean {
+  return getCountryConfig(country).requiredIssuerFields.includes('street');
+}
+
 export function clientToFormValues(client: ClientDto | null): ClientFormValues {
   return {
     companyName: client?.companyName ?? '',
     eik: client?.eik ?? '',
     vatNumber: client?.vatNumber ?? '',
     address: client?.address ?? '',
+    street: client?.street ?? '',
+    postcode: client?.postcode ?? '',
+    city: client?.city ?? '',
     email: client?.email ?? '',
     mol: client?.mol ?? '',
     country: client?.country ?? 'BG',
@@ -33,11 +49,20 @@ export function clientToFormValues(client: ClientDto | null): ClientFormValues {
 }
 
 function toRequestBody(values: ClientFormValues): CreateClientRequest {
+  const street = values.street.trim() || null;
+  const postcode = values.postcode.trim() || null;
+  const address = usesStructuredClientAddress(values.country)
+    ? [street, postcode].filter(Boolean).join(', ') || null
+    : values.address.trim() || null;
+
   return {
     companyName: values.companyName.trim(),
     eik: values.eik.trim() || null,
     vatNumber: values.vatNumber.trim() || null,
-    address: values.address.trim() || null,
+    address,
+    street,
+    postcode,
+    city: values.city.trim() || null,
     email: values.email.trim() || null,
     mol: values.mol.trim() || null,
     country: values.country,

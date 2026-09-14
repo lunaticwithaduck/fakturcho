@@ -77,6 +77,7 @@ const document: DocumentDto = {
     street: null,
     postcode: null,
     countyRegion: null,
+    city: null,
     country: null,
     email: null,
     mol: null,

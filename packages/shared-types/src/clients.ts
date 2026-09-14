@@ -9,6 +9,7 @@ export interface ClientDto {
   street: string | null;
   postcode: string | null;
   countyRegion: string | null;
+  city: string | null;
   country: string;
   documentLanguage: DocumentLanguage | null;
   email: string | null;
@@ -27,6 +28,7 @@ export interface CreateClientRequest {
   street?: string | null;
   postcode?: string | null;
   countyRegion?: string | null;
+  city?: string | null;
   country?: string;
   documentLanguage?: DocumentLanguage | null;
   email?: string | null;

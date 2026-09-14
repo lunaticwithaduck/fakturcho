@@ -59,6 +59,7 @@ export const deDomesticStandardInvoice: DocumentDto = {
     street: 'Beispielweg 3',
     postcode: '80331',
     countyRegion: null,
+    city: 'München',
     country: 'DE',
     email: 'buchhaltung@beispiel.de',
     mol: null,

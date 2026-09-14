@@ -42,6 +42,18 @@ describe('toFatturaPaXml — IT domestic, standard 22% rate', () => {
     expect(xml).toContain('<CodiceFiscale>98765432103</CodiceFiscale>');
   });
 
+  it('carries the recipient Comune from the structured city, not the free-text address', () => {
+    expect(xml).toContain('<Comune>Torino</Comune>');
+  });
+
+  it('falls back to the last comma segment of the address when city is missing', () => {
+    const legacy: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      recipient: { ...itDomesticStandardInvoice.recipient, city: null },
+    };
+    expect(toFatturaPaXml(legacy)).toContain('<Comune>10121 Torino</Comune>');
+  });
+
   it('carries the standard 22.00 VAT rate with no Natura code', () => {
     expect(xml).toContain('<AliquotaIVA>22.00</AliquotaIVA>');
     expect(xml).not.toContain('<Natura>');

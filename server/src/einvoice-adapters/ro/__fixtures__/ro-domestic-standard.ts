@@ -59,6 +59,7 @@ export const roDomesticStandardInvoice: DocumentDto = {
     street: 'Str. Republicii 5',
     postcode: '400015',
     countyRegion: null,
+    city: 'Cluj-Napoca',
     country: 'RO',
     email: 'contabilitate@client-exemplu.ro',
     mol: null,

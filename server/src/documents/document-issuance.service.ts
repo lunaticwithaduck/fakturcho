@@ -88,6 +88,7 @@ export class DocumentIssuanceService {
             recipientStreet: client?.street ?? null,
             recipientPostcode: client?.postcode ?? null,
             recipientCountyRegion: client?.countyRegion ?? null,
+            recipientCity: client?.city ?? null,
             recipientCountry: client?.country ?? null,
             recipientEmail: client?.email ?? null,
             recipientMol: client?.mol ?? null,

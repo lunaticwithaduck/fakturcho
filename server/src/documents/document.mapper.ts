@@ -76,6 +76,7 @@ export function toDocumentDto(
       street: document.recipientStreet,
       postcode: document.recipientPostcode,
       countyRegion: document.recipientCountyRegion,
+      city: document.recipientCity,
       country: document.recipientCountry,
       email: document.recipientEmail,
       mol: document.recipientMol,

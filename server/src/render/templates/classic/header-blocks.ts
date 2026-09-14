@@ -4,13 +4,28 @@ import { escapeHtml, line } from './html-utils';
 import type { ClassicLabels } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
+// Mirrors formatIssuerAddress in footer-blocks.ts: a legacy client row stores the
+// whole address in recipientAddress (with city, if any, folded into that text); a
+// client with structured fields keeps recipientAddress as the line before the city
+// and prints street, then postcode/city on the same line.
+function formatRecipientAddress(document: Document): string {
+  if (document.recipientStreet) {
+    const postcodeCity = [document.recipientPostcode, document.recipientCity]
+      .filter(Boolean)
+      .join(' ');
+    return [document.recipientStreet, postcodeCity].filter(Boolean).join(', ');
+  }
+  return [document.recipientAddress, document.recipientCity].filter(Boolean).join(', ');
+}
+
 export function buildRecipientBlock(document: Document, locale: ClassicLocaleContext): string {
   const { labels } = locale;
+  const recipientAddress = formatRecipientAddress(document);
   const rows = [
     document.recipientCompanyName
       ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
       : '',
-    document.recipientAddress ? `<div>${escapeHtml(document.recipientAddress)}</div>` : '',
+    recipientAddress ? `<div>${escapeHtml(recipientAddress)}</div>` : '',
     line(`${labels.companyIdLabel}: `, document.recipientEik),
     line(labels.vatNumberPrefix, document.recipientVatNumber),
     locale.showMol ? line(labels.molPrefix, document.recipientMol) : '',

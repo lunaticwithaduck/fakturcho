@@ -52,6 +52,16 @@ describe('checkFacturaeReadiness — issuance and party fields', () => {
     );
   });
 
+  it('flags a missing recipient city', () => {
+    const incomplete: DocumentDto = {
+      ...esDomesticStandardInvoice,
+      recipient: { ...esDomesticStandardInvoice.recipient, city: null },
+    };
+    expect(checkFacturaeReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.recipientCity,
+    );
+  });
+
   it('flags a missing tax identifier on both parties', () => {
     const incomplete: DocumentDto = {
       ...esDomesticStandardInvoice,

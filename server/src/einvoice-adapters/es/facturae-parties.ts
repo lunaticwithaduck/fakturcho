@@ -14,10 +14,11 @@ function addressBlock(
   street: string | null,
   postcode: string | null,
   city: string | null,
+  countyRegion: string | null,
   country: string | null,
 ): string {
   const tag = isSpain ? 'AddressInSpain' : 'OverseasAddress';
-  const provinceOrRegion = isSpain ? optionalTextEl('Province', city) : '';
+  const provinceOrRegion = isSpain ? optionalTextEl('Province', countyRegion) : '';
   return (
     `<${tag}>` +
     optionalTextEl('Address', street) +
@@ -35,6 +36,7 @@ interface PartyFields {
   street: string | null;
   postcode: string | null;
   city: string | null;
+  countyRegion: string | null;
   country: string | null;
 }
 
@@ -53,7 +55,14 @@ function partyBlock(
   const legalEntity =
     '<LegalEntity>' +
     optionalTextEl('CorporateName', fields.companyName) +
-    addressBlock(isSpain, fields.street, fields.postcode, fields.city, fields.country) +
+    addressBlock(
+      isSpain,
+      fields.street,
+      fields.postcode,
+      fields.city,
+      fields.countyRegion,
+      fields.country,
+    ) +
     '</LegalEntity>';
   return `<${roleTag}>${taxIdentification}${legalEntity}${extra}</${roleTag}>`;
 }
@@ -65,6 +74,7 @@ export function sellerPartyBlock(issuer: IssuerSnapshotDto): string {
     street: issuer.street,
     postcode: issuer.postcode,
     city: issuer.city,
+    countyRegion: issuer.countyRegion,
     country: issuer.country,
   });
 }
@@ -91,7 +101,6 @@ function administrativeCentresBlock(document: DocumentDto): string {
 
 export function buyerPartyBlock(document: DocumentDto): string {
   const recipient: RecipientSnapshotDto = document.recipient;
-  const city = recipient.address ?? null;
   return partyBlock(
     'BuyerParty',
     {
@@ -99,7 +108,8 @@ export function buyerPartyBlock(document: DocumentDto): string {
       taxId: taxIdOf(recipient.eik, recipient.vatNumber),
       street: recipient.street,
       postcode: recipient.postcode,
-      city,
+      city: recipient.city ?? recipient.address,
+      countyRegion: recipient.countyRegion,
       country: recipient.country,
     },
     administrativeCentresBlock(document),

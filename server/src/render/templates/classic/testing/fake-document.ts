@@ -54,6 +54,7 @@ export function buildFakeDocument(overrides: Record<string, unknown> = {}): Docu
     recipientAddress: 'гр. Пловдив, бул. Свобода 5',
     recipientStreet: null,
     recipientPostcode: null,
+    recipientCity: null,
     recipientCountry: null,
     recipientEmail: null,
     recipientMol: 'Петър Георгиев',

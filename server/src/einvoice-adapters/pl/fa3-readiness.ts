@@ -26,6 +26,7 @@ export function checkFa3Readiness(document: DocumentDto): Fa3Readiness {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCompanyName);
   if (!document.issuer.street) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
   if (!document.issuer.postcode) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
+  if (!document.issuer.city) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCity);
 
   const issuerNip = document.issuer.eik ?? document.issuer.vatNumber;
   if (!issuerNip) {

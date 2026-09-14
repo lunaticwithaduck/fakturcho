@@ -43,3 +43,28 @@ describe('sellerPartyBlock', () => {
     expect(xml).not.toContain('AdministrativeCentres');
   });
 });
+
+describe('buyerPartyBlock — AddressInSpain', () => {
+  it('uses the structured city for Town and countyRegion for Province', () => {
+    const xml = buyerPartyBlock({
+      ...esDomesticStandardInvoice,
+      recipient: {
+        ...esDomesticStandardInvoice.recipient,
+        address: 'Some legacy free-text line',
+        city: 'Bilbao',
+        countyRegion: 'Vizcaya',
+      },
+    });
+    expect(xml).toContain('<Town>Bilbao</Town>');
+    expect(xml).toContain('<Province>Vizcaya</Province>');
+    expect(xml).not.toContain('Some legacy free-text line');
+  });
+
+  it('falls back to the free-text address for Town when city is missing', () => {
+    const xml = buyerPartyBlock({
+      ...esDomesticStandardInvoice,
+      recipient: { ...esDomesticStandardInvoice.recipient, address: 'Valencia', city: null },
+    });
+    expect(xml).toContain('<Town>Valencia</Town>');
+  });
+});

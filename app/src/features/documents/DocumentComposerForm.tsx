@@ -60,6 +60,8 @@ export function DocumentComposerForm({
     vatRegistered: issuerProfile.vatRegistered,
     chargeVat: state.chargeVat,
     vatRateBp: countryConfig.defaultVatRateBp,
+    groundRequired:
+      countryConfig.defaultExemptionGround === null && countryConfig.exemptionGrounds.length > 0,
   });
   const totals = computeLiveTotals({
     lineItems: state.lineItems.map((line) => ({
@@ -164,10 +166,11 @@ export function DocumentComposerForm({
         onRemove={controller.removeDiscount}
       />
 
-      {vat.isTaxDocument && issuerProfile.vatRegistered ? (
+      {vat.isTaxDocument && (issuerProfile.vatRegistered || vat.groundSelectable) ? (
         <Card>
           <ComposerVatSection
-            chargeVat={state.chargeVat}
+            chargeVat={issuerProfile.vatRegistered && state.chargeVat}
+            showChargeToggle={issuerProfile.vatRegistered}
             vatExemptionGround={state.vatExemptionGround}
             grounds={countryConfig.exemptionGrounds}
             ratePercent={countryConfig.defaultVatRateBp / 100}

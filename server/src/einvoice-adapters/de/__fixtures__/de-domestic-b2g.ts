@@ -59,6 +59,7 @@ export const deDomesticB2GInvoice: DocumentDto = {
     street: 'Rathausplatz 1',
     postcode: '12345',
     countyRegion: null,
+    city: 'Musterstadt',
     country: 'DE',
     email: 'rechnungseingang@musterstadt.de',
     mol: null,

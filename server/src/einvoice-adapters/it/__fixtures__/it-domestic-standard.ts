@@ -59,6 +59,7 @@ export const itDomesticStandardInvoice: DocumentDto = {
     street: 'Via Torino 5',
     postcode: '10121',
     countyRegion: null,
+    city: 'Torino',
     country: 'IT',
     email: 'ufficio@bianchi.it',
     mol: null,

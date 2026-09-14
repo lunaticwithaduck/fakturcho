@@ -32,6 +32,7 @@ export function customerParty(recipient: RecipientSnapshotDto): string {
     : '';
   const address =
     optionalTextEl('cbc:StreetName', recipient.street) +
+    optionalTextEl('cbc:CityName', recipient.city) +
     optionalTextEl('cbc:PostalZone', recipient.postcode) +
     addressLine +
     (recipient.country

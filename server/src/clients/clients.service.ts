@@ -13,6 +13,7 @@ export interface CreateClientInput {
   street?: string | null | undefined;
   postcode?: string | null | undefined;
   countyRegion?: string | null | undefined;
+  city?: string | null | undefined;
   country?: string | undefined;
   documentLanguage?: ClientDto['documentLanguage'] | undefined;
   email?: string | null | undefined;
@@ -31,6 +32,7 @@ export interface UpdateClientInput {
   street?: string | null | undefined;
   postcode?: string | null | undefined;
   countyRegion?: string | null | undefined;
+  city?: string | null | undefined;
   country?: string | undefined;
   documentLanguage?: ClientDto['documentLanguage'] | undefined;
   email?: string | null | undefined;
@@ -51,6 +53,7 @@ function toDto(client: Client): ClientDto {
     street: client.street,
     postcode: client.postcode,
     countyRegion: client.countyRegion,
+    city: client.city,
     country: client.country,
     documentLanguage: client.documentLanguage as ClientDto['documentLanguage'],
     email: client.email,
@@ -104,6 +107,7 @@ export class ClientsService {
           street: input.street ?? null,
           postcode: input.postcode ?? null,
           countyRegion: input.countyRegion ?? null,
+          city: input.city ?? null,
           country: input.country ?? 'BG',
           documentLanguage: input.documentLanguage ?? null,
           email: input.email ?? null,
@@ -139,6 +143,7 @@ export class ClientsService {
           ...(input.street !== undefined ? { street: input.street } : {}),
           ...(input.postcode !== undefined ? { postcode: input.postcode } : {}),
           ...(input.countyRegion !== undefined ? { countyRegion: input.countyRegion } : {}),
+          ...(input.city !== undefined ? { city: input.city } : {}),
           ...(input.country !== undefined ? { country: input.country } : {}),
           ...(input.documentLanguage !== undefined
             ? { documentLanguage: input.documentLanguage }

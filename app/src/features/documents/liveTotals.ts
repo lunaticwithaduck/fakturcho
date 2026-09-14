@@ -71,6 +71,7 @@ export interface VatTreatmentInput {
   vatRegistered: boolean;
   chargeVat: boolean;
   vatRateBp: number;
+  groundRequired: boolean;
 }
 
 export interface VatTreatment {
@@ -82,8 +83,16 @@ export interface VatTreatment {
 
 export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
   const isTaxDocument = TAX_DOCUMENT_TYPES[input.documentType];
-  if (!isTaxDocument || !input.vatRegistered) {
+  if (!isTaxDocument) {
     return { isTaxDocument, vatCharged: false, vatRateBp: 0, groundSelectable: false };
+  }
+  if (!input.vatRegistered) {
+    return {
+      isTaxDocument,
+      vatCharged: false,
+      vatRateBp: 0,
+      groundSelectable: input.groundRequired,
+    };
   }
   if (input.chargeVat) {
     return {

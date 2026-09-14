@@ -59,6 +59,7 @@ export const esDomesticStandardInvoice: DocumentDto = {
     street: 'Avenida del Puerto 22',
     postcode: '46023',
     countyRegion: null,
+    city: 'Valencia',
     country: 'ES',
     email: 'administracion@comerciallevante.es',
     mol: null,

@@ -59,6 +59,7 @@ export const bgDomesticStandardInvoice: DocumentDto = {
     street: 'бул. Свобода 5',
     postcode: '4000',
     countyRegion: null,
+    city: 'Пловдив',
     country: 'BG',
     email: 'office@client.bg',
     mol: 'Петър Георгиев',

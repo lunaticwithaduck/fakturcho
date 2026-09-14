@@ -51,6 +51,7 @@ export interface RecipientSnapshotDto {
   street: string | null;
   postcode: string | null;
   countyRegion: string | null;
+  city: string | null;
   country: string | null;
   email: string | null;
   mol: string | null;

@@ -173,6 +173,7 @@ model Client {
   street           String?
   postcode         String?
   countyRegion     String?
+  city             String?
   country          String   @default("BG")
   documentLanguage String?
   email            String?
@@ -288,6 +289,7 @@ model Document {
   recipientStreet           String?
   recipientPostcode         String?
   recipientCountyRegion     String?
+  recipientCity             String?
   recipientCountry          String?
   recipientEmail            String?
   recipientMol              String?

@@ -18,6 +18,7 @@ interface PartyFieldCodes {
   companyName: string;
   street: string;
   postcode: string;
+  city: string;
   country: string;
   taxId: string;
   taxIdInvalid: string;
@@ -28,6 +29,7 @@ const FIELD_CODES_BY_ROLE: Record<'issuer' | 'recipient', PartyFieldCodes> = {
     companyName: EINVOICE_MISSING_FIELD_CODES.issuerCompanyName,
     street: EINVOICE_MISSING_FIELD_CODES.issuerStreet,
     postcode: EINVOICE_MISSING_FIELD_CODES.issuerPostcode,
+    city: EINVOICE_MISSING_FIELD_CODES.issuerCity,
     country: EINVOICE_MISSING_FIELD_CODES.issuerCountry,
     taxId: EINVOICE_MISSING_FIELD_CODES.issuerEsTaxId,
     taxIdInvalid: EINVOICE_MISSING_FIELD_CODES.issuerEsTaxIdInvalid,
@@ -36,6 +38,7 @@ const FIELD_CODES_BY_ROLE: Record<'issuer' | 'recipient', PartyFieldCodes> = {
     companyName: EINVOICE_MISSING_FIELD_CODES.recipientCompanyName,
     street: EINVOICE_MISSING_FIELD_CODES.recipientStreet,
     postcode: EINVOICE_MISSING_FIELD_CODES.recipientPostcode,
+    city: EINVOICE_MISSING_FIELD_CODES.recipientCity,
     country: EINVOICE_MISSING_FIELD_CODES.recipientCountry,
     taxId: EINVOICE_MISSING_FIELD_CODES.recipientEsTaxId,
     taxIdInvalid: EINVOICE_MISSING_FIELD_CODES.recipientEsTaxIdInvalid,
@@ -58,6 +61,7 @@ function checkParty(
     companyName: string | null;
     street: string | null;
     postcode: string | null;
+    city: string | null;
     country: string | null;
     eik: string | null;
     vatNumber: string | null;
@@ -68,6 +72,7 @@ function checkParty(
   if (!party.companyName) missingFields.push(codes.companyName);
   if (!party.street) missingFields.push(codes.street);
   if (!party.postcode) missingFields.push(codes.postcode);
+  if (!party.city) missingFields.push(codes.city);
   if (!party.country) missingFields.push(codes.country);
 
   const taxId = partyTaxId(party);

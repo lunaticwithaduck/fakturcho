@@ -72,6 +72,26 @@ describe('checkEinvoiceReadiness — issuance and party fields', () => {
     );
   });
 
+  it('flags a missing issuer city', () => {
+    const incomplete: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      issuer: { ...bgDomesticStandardInvoice.issuer, city: null },
+    };
+    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerCity,
+    );
+  });
+
+  it('flags a missing recipient city', () => {
+    const incomplete: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      recipient: { ...bgDomesticStandardInvoice.recipient, city: null },
+    };
+    expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.recipientCity,
+    );
+  });
+
   it('flags a VAT-registered issuer with no VAT number', () => {
     const incomplete: DocumentDto = {
       ...bgDomesticStandardInvoice,

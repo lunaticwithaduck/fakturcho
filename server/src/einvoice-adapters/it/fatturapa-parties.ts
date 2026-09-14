@@ -81,7 +81,7 @@ export function cessionarioCommittenteBlock(recipient: RecipientSnapshotDto): st
     '<Sede>' +
     optionalEl('Indirizzo', recipient.street) +
     optionalEl('CAP', recipient.postcode) +
-    optionalEl('Comune', cityFromAddressLine(recipient.address)) +
+    optionalEl('Comune', recipient.city ?? cityFromAddressLine(recipient.address)) +
     optionalEl('Nazione', recipient.country) +
     '</Sede>';
   return `<CessionarioCommittente>${datiAnagrafici}${sede}</CessionarioCommittente>`;

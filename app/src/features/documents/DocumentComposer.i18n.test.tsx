@@ -73,6 +73,7 @@ const RECIPIENT_SNAPSHOT: RecipientSnapshotDto = {
   street: null,
   postcode: null,
   countyRegion: null,
+  city: null,
   country: null,
   email: null,
   mol: null,
@@ -157,6 +158,7 @@ const CLIENTS: ClientDto[] = [
     street: null,
     postcode: null,
     countyRegion: null,
+    city: null,
     country: 'BG',
     documentLanguage: null,
     email: null,
@@ -511,6 +513,7 @@ describe('ComposerVatSection', () => {
       'bg',
       <ComposerVatSection
         chargeVat={false}
+        showChargeToggle
         vatExemptionGround={null}
         grounds={[]}
         ratePercent={20}
@@ -532,6 +535,7 @@ describe('ComposerVatSection', () => {
       'en',
       <ComposerVatSection
         chargeVat={false}
+        showChargeToggle
         vatExemptionGround={null}
         grounds={[]}
         ratePercent={20}
