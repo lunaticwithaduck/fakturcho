@@ -135,7 +135,7 @@
       },
       "vat": {
         "heading": "VAT",
-        "chargeLabel": "Charge VAT (20%)",
+        "chargeLabel": "Charge VAT ({rate}%)",
         "groundLabel": "Reason for not charging VAT",
         "groundPlaceholder": "Select reason"
       },
@@ -339,8 +339,6 @@
     "countryLabel": "Country",
     "documentLanguageLabel": "Document language",
     "documentLanguageOptionSame": "Same as issuer",
-    "documentLanguageOptionBg": "Bulgarian",
-    "documentLanguageOptionEn": "English",
     "countries": {
       "AT": "Austria",
       "BE": "Belgium",
@@ -370,6 +368,16 @@
       "SI": "Slovenia",
       "SK": "Slovakia",
       "OTHER": "Other country"
+    },
+    "documentLanguageOptions": {
+      "bg": "Bulgarian",
+      "en": "English",
+      "de": "German",
+      "fr": "French",
+      "it": "Italian",
+      "pl": "Polish",
+      "ro": "Romanian",
+      "es": "Spanish"
     }
   },
   "issuer": {
@@ -753,17 +761,50 @@
       "signup": "Create account"
     },
     "hero": {
-      "title": "Invoices that meet Bulgarian requirements",
-      "subtitle": "A web app for a Bulgarian company or a self-insured sole trader. You compose the document in the browser, and Fakturcho takes care of numbering, VAT treatment and layout."
+      "title": "Compliant invoices for any EU business",
+      "subtitle": "A web app for companies and sole traders across the EU. You compose the document in the browser, and Fakturcho takes care of numbering, VAT treatment, layout and the e-invoice."
+    },
+    "countries": {
+      "heading": "Where is your business based?",
+      "items": {
+        "BG": {
+          "name": "Bulgaria",
+          "line": "20% VAT, invoices in Bulgarian, e-invoices ready for the Peppol network."
+        },
+        "DE": {
+          "name": "Germany",
+          "line": "19% VAT, invoices in German, e-invoices in XRechnung format."
+        },
+        "FR": {
+          "name": "France",
+          "line": "20% VAT, invoices in French, e-invoices in the Chorus Pro format."
+        },
+        "IT": {
+          "name": "Italy",
+          "line": "22% VAT, invoices in Italian, e-invoices in FatturaPA format for the SDI exchange system."
+        },
+        "PL": {
+          "name": "Poland",
+          "line": "23% VAT, invoices in Polish, e-invoices in the KSeF FA(3) format."
+        },
+        "RO": {
+          "name": "Romania",
+          "line": "21% VAT, invoices in Romanian, e-invoices in the RO CIUS-RO format for ANAF's SPV."
+        },
+        "ES": {
+          "name": "Spain",
+          "line": "21% VAT, invoices in Spanish, e-invoices in Facturae format for the FACe platform."
+        }
+      }
     },
     "capabilities": {
       "heading": "What you can issue",
       "items": [
         "Invoices, proformas, credit and debit notes, quotes and delivery notes.",
-        "Sequential numbering — ten-digit numbers, no gaps, no repeats.",
-        "VAT under the Bulgarian VAT Act, including the exemption ground for a non-VAT-registered issuer.",
-        "Amounts in euro and in lev at the fixed exchange rate, with the amount spelled out in words.",
-        "A ready PDF with Cyrillic support, downloadable or sent by email."
+        "Sequential numbering — no gaps, no repeats.",
+        "VAT by country: local rates, exemptions, and reverse charge for cross-border B2B with a live VIES check of the customer's VAT ID.",
+        "EN 16931 e-invoices in your country's format — XRechnung, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) or to send over Peppol.",
+        "A ready PDF in your country's language, downloadable or sent by email."
       ]
     },
     "pricing": {
@@ -786,7 +827,7 @@
       "items": [
         {
           "question": "What is Fakturcho?",
-          "answer": "A web app for issuing Bulgarian-compliant invoices, proformas, credit/debit notes, quotes and delivery notes — no installation required."
+          "answer": "A web app for issuing EU-compliant invoices, proformas, credit/debit notes, quotes and delivery notes, with structured e-invoicing built in — no installation required."
         },
         {
           "question": "How much does it cost?",
@@ -797,12 +838,16 @@
           "answer": "Yes, a new account gets 1 € credit (10 documents) with no card required."
         },
         {
-          "question": "Does it work with euro and lev?",
-          "answer": "Amounts are shown in euro and in lev at the fixed rate of 1.95583, and the amount is also spelled out in words."
+          "question": "Which countries are supported?",
+          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland, Romania, Spain and Bulgaria, ready to upload to the national platform or send over Peppol."
+        },
+        {
+          "question": "How is VAT handled for a customer in another EU country?",
+          "answer": "Enter the customer's VAT ID; Fakturcho verifies it against VIES and, for a valid B2B customer abroad, applies the reverse charge and prints the required note on the document."
         },
         {
           "question": "Can I issue invoices without VAT registration?",
-          "answer": "Yes; for non-VAT-registered issuers the document carries the exemption ground under Art. 113(9) of the Bulgarian VAT Act."
+          "answer": "Yes; a non-VAT-registered issuer's documents carry the applicable exemption ground for their country."
         },
         {
           "question": "What is the difference between a proforma and an invoice?",
@@ -813,8 +858,8 @@
           "answer": "Issued documents are immutable; corrections are made with a credit or debit note against the original."
         },
         {
-          "question": "How do I get the PDF?",
-          "answer": "It's generated server-side with Cyrillic support; download it or send it to the client by email."
+          "question": "How do I get the PDF and the e-invoice XML?",
+          "answer": "Both are generated server-side; download them, email them to the customer, or upload the e-invoice yourself to your national platform or send it over Peppol."
         }
       ]
     }

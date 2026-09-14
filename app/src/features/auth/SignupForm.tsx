@@ -1,34 +1,48 @@
 'use client';
 
 import { mapAuthErrorMessage, signUp } from '@app/auth';
+import { TARGET_COUNTRIES } from '@app/features/marketing/targetCountries';
 import { trackEvent } from '@app/features/shared/analytics';
 import { formatMoney } from '@app/features/shared/format';
 import { Button, Card, Input, Select, SelectItem } from '@design/components';
 import type { Locale } from '@shared/types';
-import { EU_VAT_AREA_COUNTRIES, SIGNUP_GRANT_CENTS } from '@shared/types';
+import { EU_VAT_AREA_COUNTRIES, isEuVatAreaCountry, SIGNUP_GRANT_CENTS } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
-const SIGNUP_COUNTRIES = [
+const BG_SIGNUP_COUNTRIES = [
   'BG',
   ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG'),
 ] as const;
 
+const EN_SIGNUP_COUNTRIES = [
+  ...TARGET_COUNTRIES,
+  ...EU_VAT_AREA_COUNTRIES.filter(
+    (country) => !(TARGET_COUNTRIES as readonly string[]).includes(country),
+  ),
+] as const;
+
 interface SignupFormProps {
   locale?: Locale;
+  initialCountry?: string | undefined;
 }
 
-export function SignupForm({ locale = 'bg' }: SignupFormProps) {
+export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
   const t = useTranslations('auth');
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [country, setCountry] = useState<string>(locale === 'bg' ? 'BG' : '');
+  const [country, setCountry] = useState<string>(() => {
+    if (locale === 'bg') return 'BG';
+    const upper = initialCountry?.toUpperCase();
+    return upper && isEuVatAreaCountry(upper) ? upper : '';
+  });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const loginHref = locale === 'bg' ? '/login' : '/en/login';
+  const signupCountries = locale === 'en' ? EN_SIGNUP_COUNTRIES : BG_SIGNUP_COUNTRIES;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -91,7 +105,7 @@ export function SignupForm({ locale = 'bg' }: SignupFormProps) {
           value={country}
           onValueChange={setCountry}
         >
-          {SIGNUP_COUNTRIES.map((code) => (
+          {signupCountries.map((code) => (
             <SelectItem key={code} value={code}>
               {t(`countries.${code}`)}
             </SelectItem>

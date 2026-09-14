@@ -16,9 +16,7 @@ export const VAT_EXEMPTION_GROUNDS = [
   'чл.86 ал.1 ППЗДДС',
 ] as const;
 
-export type VatExemptionGround =
-  | typeof DEFAULT_EXEMPTION_GROUND
-  | (typeof VAT_EXEMPTION_GROUNDS)[number];
+export type VatExemptionGround = string;
 
 export const VAT_CATEGORIES = ['S', 'Z', 'E', 'AE', 'K', 'G', 'O'] as const;
 export type VatCategory = (typeof VAT_CATEGORIES)[number];

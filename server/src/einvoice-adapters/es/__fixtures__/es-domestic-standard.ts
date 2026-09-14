@@ -49,6 +49,7 @@ export const esDomesticStandardInvoice: DocumentDto = {
     iban: 'ES9121000418450200051332',
     bic: 'BSCHESMM',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Comercial Levante S.L.',

@@ -1,4 +1,4 @@
-import type { Locale } from './countries';
+import type { DocumentLanguage } from './countries';
 
 export interface ClientDto {
   id: string;
@@ -10,7 +10,7 @@ export interface ClientDto {
   postcode: string | null;
   countyRegion: string | null;
   country: string;
-  documentLanguage: Locale | null;
+  documentLanguage: DocumentLanguage | null;
   email: string | null;
   mol: string | null;
   peppolEndpointId: string | null;
@@ -28,7 +28,7 @@ export interface CreateClientRequest {
   postcode?: string | null;
   countyRegion?: string | null;
   country?: string;
-  documentLanguage?: Locale | null;
+  documentLanguage?: DocumentLanguage | null;
   email?: string | null;
   mol?: string | null;
   peppolEndpointId?: string | null;

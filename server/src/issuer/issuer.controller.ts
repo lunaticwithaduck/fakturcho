@@ -31,6 +31,7 @@ export const updateIssuerProfileSchema = z.object({
   iban: z.string().nullable().optional(),
   bic: z.string().nullable().optional(),
   altIban: z.string().nullable().optional(),
+  identifiers: z.record(z.string(), z.string()).optional(),
   peppolEndpointId: peppolEndpointIdSchema.nullable().optional(),
   peppolScheme: peppolSchemeSchema.nullable().optional(),
 });

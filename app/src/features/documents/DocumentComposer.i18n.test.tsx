@@ -62,6 +62,7 @@ const ISSUER_SNAPSHOT: IssuerSnapshotDto = {
   iban: null,
   bic: null,
   altIban: null,
+  identifiers: {},
 };
 
 const RECIPIENT_SNAPSHOT: RecipientSnapshotDto = {
@@ -139,6 +140,7 @@ const ISSUER_PROFILE: IssuerProfileDto = {
   altIban: null,
   peppolEndpointId: null,
   peppolScheme: null,
+  identifiers: {},
 };
 
 const CATALOGUE_ITEMS: CatalogueItemDto[] = [
@@ -510,6 +512,8 @@ describe('ComposerVatSection', () => {
       <ComposerVatSection
         chargeVat={false}
         vatExemptionGround={null}
+        grounds={[]}
+        ratePercent={20}
         hasGroundError
         onChangeChargeVat={() => {}}
         onChangeGround={() => {}}
@@ -529,6 +533,8 @@ describe('ComposerVatSection', () => {
       <ComposerVatSection
         chargeVat={false}
         vatExemptionGround={null}
+        grounds={[]}
+        ratePercent={20}
         hasGroundError
         onChangeChargeVat={() => {}}
         onChangeGround={() => {}}

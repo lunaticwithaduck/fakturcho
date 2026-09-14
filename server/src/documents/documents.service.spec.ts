@@ -353,7 +353,7 @@ describe('DocumentsService', () => {
   it('reverse-charge: a cross-border EU client with a badly formatted VAT number stays S at the issuer standard rate', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {
-      country: 'DE',
+      country: 'NL',
       vatRegistered: true,
     });
     const client = await createTestClient(prisma, accountId, {

@@ -1,5 +1,6 @@
 import type { IssuerProfileDto } from '@fakturcho/shared-types';
 import type { IssuerProfile as PrismaIssuerProfile } from '@prisma/client';
+import { readIdentifiers } from '../issuer/identifiers';
 
 export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerProfileDto | null {
   if (!profile) return null;
@@ -23,5 +24,6 @@ export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerP
     altIban: profile.altIban,
     peppolEndpointId: profile.peppolEndpointId,
     peppolScheme: profile.peppolScheme,
+    identifiers: readIdentifiers(profile.identifiers),
   };
 }

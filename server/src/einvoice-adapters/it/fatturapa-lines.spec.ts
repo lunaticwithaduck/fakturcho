@@ -67,6 +67,7 @@ function document(lineItems: LineItemDto[]): DocumentDto {
       iban: null,
       bic: null,
       altIban: null,
+      identifiers: {},
     },
     recipient: {
       companyName: null,

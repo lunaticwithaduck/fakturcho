@@ -1,7 +1,7 @@
 import {
+  DOCUMENT_LANGUAGES,
   DOCUMENT_STATUSES,
   DOCUMENT_TYPES,
-  SUPPORTED_LOCALES,
   VAT_CATEGORIES,
 } from '@fakturcho/shared-types';
 import { z } from 'zod';
@@ -42,7 +42,7 @@ export const saveDraftRequestSchema = z.object({
   notes: z.string().nullish(),
   emailText: z.string().nullish(),
   templateId: z.string().optional(),
-  documentLanguage: z.enum(SUPPORTED_LOCALES).nullish(),
+  documentLanguage: z.enum(DOCUMENT_LANGUAGES).nullish(),
   lineItems: z.array(lineItemInputSchema),
   discounts: z.array(discountInputSchema).optional(),
 });

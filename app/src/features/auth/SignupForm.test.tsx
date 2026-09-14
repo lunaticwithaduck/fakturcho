@@ -4,6 +4,7 @@ import enMessages from '@messages/en.json';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { EnSignupForm } from './EnSignupForm';
 import { SignupForm } from './SignupForm';
 
 const signUpMock = vi.fn().mockResolvedValue({ error: null });
@@ -13,13 +14,25 @@ vi.mock('@app/auth', () => ({
   mapAuthErrorMessage: vi.fn(),
 }));
 
+const { getSearchParams, setSearchParams } = vi.hoisted(() => {
+  let params = new URLSearchParams();
+  return {
+    getSearchParams: () => params,
+    setSearchParams: (next: URLSearchParams) => {
+      params = next;
+    },
+  };
+});
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+  useSearchParams: () => getSearchParams(),
 }));
 
 afterEach(() => {
   cleanup();
   signUpMock.mockClear();
+  setSearchParams(new URLSearchParams());
 });
 
 describe('SignupForm', () => {
@@ -96,6 +109,37 @@ describe('SignupForm', () => {
     );
 
     expect(screen.getByLabelText('Country').textContent).not.toContain('Bulgaria');
+  });
+
+  it('preselects the country from a valid initialCountry prop', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <SignupForm locale="en" initialCountry="de" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Country').textContent).toContain('Germany');
+  });
+
+  it('ignores an invalid initialCountry prop', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <SignupForm locale="en" initialCountry="zz" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Country').textContent).not.toContain('Bulgaria');
+  });
+
+  it('EnSignupForm preselects the country from the country search param', () => {
+    setSearchParams(new URLSearchParams('country=de'));
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <EnSignupForm />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Country').textContent).toContain('Germany');
   });
 
   it('links to the English login page when rendered for the en route', () => {

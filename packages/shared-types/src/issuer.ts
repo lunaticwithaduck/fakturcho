@@ -20,6 +20,7 @@ export interface IssuerProfileDto {
   altIban: string | null;
   peppolEndpointId: string | null;
   peppolScheme: string | null;
+  identifiers: Record<string, string>;
 }
 
 export interface UpdateIssuerProfileRequest {
@@ -41,6 +42,7 @@ export interface UpdateIssuerProfileRequest {
   altIban?: string | null;
   peppolEndpointId?: string | null;
   peppolScheme?: string | null;
+  identifiers?: Record<string, string>;
 }
 
 export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boolean {
@@ -53,8 +55,11 @@ export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boole
     postcode: profile.postcode,
     city: profile.city,
   };
-  const { requiredIssuerFields } = getCountryConfig(profile.country);
+  const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const required = requiredIssuerFields.map((field) => fieldValues[field] ?? null);
+  for (const field of identifiers) {
+    if (field.required) required.push(profile.identifiers[field.key] ?? null);
+  }
   if (profile.vatRegistered) required.push(profile.vatNumber);
   return required.every((value) => value !== null && value.trim() !== '');
 }

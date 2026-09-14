@@ -49,6 +49,7 @@ export const itDomesticStandardInvoice: DocumentDto = {
     iban: 'IT60X0542811101000000123456',
     bic: 'BCITITMM',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Bianchi S.p.A.',

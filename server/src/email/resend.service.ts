@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Resend } from 'resend';
 import type { EmailSender, SendEmailInput } from './ports';
 
@@ -35,11 +35,12 @@ function addressFromEnv(fromEnv: string): string {
 export class ResendService implements EmailSender {
   private readonly client: Resend;
   private readonly senderAddress: string;
+  private readonly logger = new Logger(ResendService.name);
 
   constructor() {
     this.client = new Resend(process.env.RESEND_API_KEY ?? '');
     this.senderAddress = addressFromEnv(
-      process.env.EMAIL_FROM ?? 'Fakturcho <invoices@fakturcho.bg>',
+      process.env.EMAIL_FROM ?? 'Fakturcho <invoices@fakturcho.com>',
     );
   }
 
@@ -51,10 +52,16 @@ export class ResendService implements EmailSender {
       subject: input.subject,
       text: input.text,
       ...(input.replyTo ? { replyTo: input.replyTo } : {}),
-      attachments: [{ filename: input.attachment.filename, content: input.attachment.content }],
+      attachments: [
+        {
+          filename: input.attachment.filename,
+          content: input.attachment.content.toString('base64'),
+        },
+      ],
     });
     if (result.error) {
       throw new Error(`Resend failed to send email: ${result.error.message}`);
     }
+    this.logger.log(`sent via Resend, message id ${result.data?.id}`);
   }
 }

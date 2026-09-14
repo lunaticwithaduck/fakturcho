@@ -135,7 +135,7 @@
       },
       "vat": {
         "heading": "ДДС",
-        "chargeLabel": "Начисли ДДС (20%)",
+        "chargeLabel": "Начисли ДДС ({rate}%)",
         "groundLabel": "Основание за неначисляване на ДДС",
         "groundPlaceholder": "Изберете основание"
       },
@@ -339,8 +339,6 @@
     "countryLabel": "Държава",
     "documentLanguageLabel": "Език на документите",
     "documentLanguageOptionSame": "Както при издателя",
-    "documentLanguageOptionBg": "Български",
-    "documentLanguageOptionEn": "Английски",
     "countries": {
       "AT": "Австрия",
       "BE": "Белгия",
@@ -370,6 +368,16 @@
       "SI": "Словения",
       "SK": "Словакия",
       "OTHER": "Друга държава"
+    },
+    "documentLanguageOptions": {
+      "bg": "Български",
+      "en": "Английски",
+      "de": "Немски",
+      "fr": "Френски",
+      "it": "Италиански",
+      "pl": "Полски",
+      "ro": "Румънски",
+      "es": "Испански"
     }
   },
   "issuer": {

@@ -4,6 +4,7 @@ import type {
   Document as PrismaDocument,
   LineItem as PrismaLineItem,
 } from '@prisma/client';
+import { readIdentifiers } from '../issuer/identifiers';
 import { fromPrismaDocumentType } from '../numbering/document-type.mapper';
 import { toDisplayStatus } from './document-status.mapper';
 
@@ -65,6 +66,7 @@ export function toDocumentDto(
       iban: document.issuerIban,
       bic: document.issuerBic,
       altIban: document.issuerAltIban,
+      identifiers: readIdentifiers(document.issuerIdentifiers),
     },
     recipient: {
       companyName: document.recipientCompanyName,

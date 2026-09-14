@@ -62,6 +62,7 @@ const document: DocumentDto = {
     iban: null,
     bic: null,
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'ACME EOOD',

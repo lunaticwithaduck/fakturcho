@@ -5,9 +5,10 @@ import { getLegalFooterLinks } from './legalContent';
 
 interface LegalFooterProps {
   locale?: Locale;
+  entity?: boolean;
 }
 
-export function LegalFooter({ locale = 'bg' }: LegalFooterProps) {
+export function LegalFooter({ locale = 'bg', entity = true }: LegalFooterProps) {
   const links = getLegalFooterLinks(locale);
   const prefix = locale === 'bg' ? '' : '/en';
 
@@ -27,7 +28,9 @@ export function LegalFooter({ locale = 'bg' }: LegalFooterProps) {
           {links.contact}
         </a>
       </nav>
-      <p className="text-xs text-text-subtle">{describeEntityForLocale(locale)}</p>
+      {entity ? (
+        <p className="text-xs text-text-subtle">{describeEntityForLocale(locale)}</p>
+      ) : null}
     </footer>
   );
 }

@@ -24,13 +24,41 @@ function cityFromAddressLine(address: string | null): string | null {
   return last && last.length > 0 ? last : null;
 }
 
+const REA_PATTERN = /^([A-Z]{2})-(\d{1,7})$/;
+
+function parseItalianAmount(value: string): string | null {
+  const match = value.match(/[\d.,]+/);
+  if (!match) return null;
+  const normalized = match[0].replace(/\./g, '').replace(',', '.');
+  const amount = Number(normalized);
+  return Number.isFinite(amount) ? amount.toFixed(2) : null;
+}
+
+function iscrizioneReaBlock(identifiers: Record<string, string>): string {
+  const rea = identifiers.rea?.match(REA_PATTERN);
+  const ufficio = rea?.[1];
+  const numeroRea = rea?.[2];
+  if (!ufficio || !numeroRea) return '';
+  const capitaleSociale = identifiers.shareCapital
+    ? parseItalianAmount(identifiers.shareCapital)
+    : null;
+  return (
+    '<IscrizioneREA>' +
+    el('Ufficio', ufficio) +
+    el('NumeroREA', numeroRea) +
+    (capitaleSociale ? el('CapitaleSociale', capitaleSociale) : '') +
+    el('StatoLiquidazione', 'LN') +
+    '</IscrizioneREA>'
+  );
+}
+
 export function cedentePrestatoreBlock(issuer: IssuerSnapshotDto): string {
   const datiAnagrafici =
     '<DatiAnagrafici>' +
     idFiscaleIvaBlock(issuer.vatNumber) +
     optionalEl('CodiceFiscale', issuer.eik) +
     `<Anagrafica>${optionalEl('Denominazione', issuer.companyName)}</Anagrafica>` +
-    el('RegimeFiscale', 'RF01') +
+    el('RegimeFiscale', issuer.vatRegistered === false ? 'RF19' : 'RF01') +
     '</DatiAnagrafici>';
   const sede =
     '<Sede>' +
@@ -39,7 +67,7 @@ export function cedentePrestatoreBlock(issuer: IssuerSnapshotDto): string {
     optionalEl('Comune', issuer.city) +
     optionalEl('Nazione', issuer.country) +
     '</Sede>';
-  return `<CedentePrestatore>${datiAnagrafici}${sede}</CedentePrestatore>`;
+  return `<CedentePrestatore>${datiAnagrafici}${sede}${iscrizioneReaBlock(issuer.identifiers)}</CedentePrestatore>`;
 }
 
 export function cessionarioCommittenteBlock(recipient: RecipientSnapshotDto): string {

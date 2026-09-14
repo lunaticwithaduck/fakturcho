@@ -103,28 +103,53 @@ describe('computeLiveTotals', () => {
 describe('resolveVatTreatment', () => {
   it('never charges VAT for non-tax documents', () => {
     expect(
-      resolveVatTreatment({ documentType: 'quote', vatRegistered: true, chargeVat: true }),
+      resolveVatTreatment({
+        documentType: 'quote',
+        vatRegistered: true,
+        chargeVat: true,
+        vatRateBp: 2000,
+      }),
     ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
     expect(
-      resolveVatTreatment({ documentType: 'proforma', vatRegistered: true, chargeVat: true }),
+      resolveVatTreatment({
+        documentType: 'proforma',
+        vatRegistered: true,
+        chargeVat: true,
+        vatRateBp: 2000,
+      }),
     ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
   });
 
   it('never offers a ground select for a non-registered issuer', () => {
     expect(
-      resolveVatTreatment({ documentType: 'invoice', vatRegistered: false, chargeVat: false }),
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: false,
+        chargeVat: false,
+        vatRateBp: 2000,
+      }),
     ).toEqual({ isTaxDocument: true, vatCharged: false, vatRateBp: 0, groundSelectable: false });
   });
 
   it('charges the standard 20% for a registered issuer that charges VAT', () => {
     expect(
-      resolveVatTreatment({ documentType: 'invoice', vatRegistered: true, chargeVat: true }),
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: true,
+        chargeVat: true,
+        vatRateBp: 2000,
+      }),
     ).toEqual({ isTaxDocument: true, vatCharged: true, vatRateBp: 2000, groundSelectable: false });
   });
 
   it('offers a ground select only for a registered issuer at 0%', () => {
     expect(
-      resolveVatTreatment({ documentType: 'credit_note', vatRegistered: true, chargeVat: false }),
+      resolveVatTreatment({
+        documentType: 'credit_note',
+        vatRegistered: true,
+        chargeVat: false,
+        vatRateBp: 2000,
+      }),
     ).toEqual({ isTaxDocument: true, vatCharged: false, vatRateBp: 0, groundSelectable: true });
   });
 });

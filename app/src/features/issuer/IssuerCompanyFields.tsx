@@ -14,7 +14,7 @@ interface IssuerCompanyFieldsProps {
 
 export function IssuerCompanyFields({ values, onChange }: IssuerCompanyFieldsProps) {
   const t = useTranslations('issuer');
-  const { requiredIssuerFields } = getCountryConfig(values.country);
+  const { requiredIssuerFields, identifiers, companyIdLabel } = getCountryConfig(values.country);
   const isRequired = (field: string) => requiredIssuerFields.includes(field);
 
   return (
@@ -39,12 +39,27 @@ export function IssuerCompanyFields({ values, onChange }: IssuerCompanyFieldsPro
           ))}
         </Select>
         <Input
-          label={t('companyFields.eik')}
+          label={values.country === 'BG' ? t('companyFields.eik') : companyIdLabel}
           required={isRequired('eik')}
           value={values.eik}
           onChange={(event) => onChange('eik', event.target.value)}
         />
       </div>
+      {identifiers.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {identifiers.map((field) => (
+            <Input
+              key={field.key}
+              label={field.label}
+              required={field.required}
+              value={values.identifiers[field.key] ?? ''}
+              onChange={(event) =>
+                onChange('identifiers', { ...values.identifiers, [field.key]: event.target.value })
+              }
+            />
+          ))}
+        </div>
+      ) : null}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input
           label={t('companyFields.mol')}

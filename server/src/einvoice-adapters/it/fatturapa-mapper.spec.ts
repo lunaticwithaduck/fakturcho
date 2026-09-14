@@ -143,6 +143,40 @@ describe('toFatturaPaXml — document type codes', () => {
   });
 });
 
+describe('toFatturaPaXml — RegimeFiscale and IscrizioneREA', () => {
+  it('uses RF01 for a VAT-registered issuer', () => {
+    expect(toFatturaPaXml(itDomesticStandardInvoice)).toContain(
+      '<RegimeFiscale>RF01</RegimeFiscale>',
+    );
+  });
+
+  it('uses RF19 for a forfettario (non VAT-registered) issuer', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      issuer: { ...itDomesticStandardInvoice.issuer, vatRegistered: false },
+    };
+    expect(toFatturaPaXml(document)).toContain('<RegimeFiscale>RF19</RegimeFiscale>');
+  });
+
+  it('omits IscrizioneREA when no REA identifier is set', () => {
+    expect(toFatturaPaXml(itDomesticStandardInvoice)).not.toContain('<IscrizioneREA>');
+  });
+
+  it('emits IscrizioneREA with office, number and share capital when set', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      issuer: {
+        ...itDomesticStandardInvoice.issuer,
+        identifiers: { rea: 'MI-1234567', shareCapital: '€ 10.000,00 i.v.' },
+      },
+    };
+    const xml = toFatturaPaXml(document);
+    expect(xml).toContain(
+      '<IscrizioneREA><Ufficio>MI</Ufficio><NumeroREA>1234567</NumeroREA><CapitaleSociale>10000.00</CapitaleSociale><StatoLiquidazione>LN</StatoLiquidazione></IscrizioneREA>',
+    );
+  });
+});
+
 describe('toFatturaPaXml — a document discount is reflected in DatiRiepilogo', () => {
   it('keeps DatiRiepilogo consistent with the discounted taxable base', () => {
     const discounted: DocumentDto = {

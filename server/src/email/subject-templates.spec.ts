@@ -30,4 +30,15 @@ describe('buildDocumentSubject', () => {
     expect(buildDocumentSubject('bg', 'invoice', null)).toBe('Фактура');
     expect(buildDocumentSubject('en', 'invoice', null)).toBe('Invoice');
   });
+
+  it('builds the German equivalent', () => {
+    expect(buildDocumentSubject('de', 'invoice', '0000000016')).toBe('Rechnung Nr. 0000000016');
+    expect(buildDocumentSubject('de', 'credit_note', '0000000002')).toBe(
+      'Rechnungskorrektur Nr. 0000000002',
+    );
+    expect(buildDocumentSubject('de', 'debit_note', '0000000003')).toBe(
+      'Belastungsanzeige Nr. 0000000003',
+    );
+    expect(buildDocumentSubject('de', 'invoice', null)).toBe('Rechnung');
+  });
 });

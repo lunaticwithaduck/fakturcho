@@ -133,12 +133,12 @@ describe('DocumentIssuanceService', () => {
   it('issuance snapshot copies issuer and recipient country, street and postcode', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {
-      country: 'DE',
+      country: 'NL',
       street: 'Musterstrasse 1',
       postcode: '10115',
     });
     const client = await createTestClient(prisma, accountId, {
-      country: 'DE',
+      country: 'NL',
       street: 'Kundenweg 2',
       postcode: '10117',
     });
@@ -150,10 +150,10 @@ describe('DocumentIssuanceService', () => {
     );
     const issued = await issuanceService.issue(accountId, draft.id, {});
 
-    expect(issued.issuer.country).toBe('DE');
+    expect(issued.issuer.country).toBe('NL');
     expect(issued.issuer.street).toBe('Musterstrasse 1');
     expect(issued.issuer.postcode).toBe('10115');
-    expect(issued.recipient.country).toBe('DE');
+    expect(issued.recipient.country).toBe('NL');
     expect(issued.recipient.street).toBe('Kundenweg 2');
     expect(issued.recipient.postcode).toBe('10117');
   });

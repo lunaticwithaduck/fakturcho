@@ -255,7 +255,7 @@ describe('render pipeline', () => {
       accountId,
       documentType: 'INVOICE',
       number: 21,
-      overrides: { issuerCountry: 'DE' },
+      overrides: { issuerCountry: 'NL' },
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);

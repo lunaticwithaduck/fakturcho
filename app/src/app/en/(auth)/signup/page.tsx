@@ -1,5 +1,6 @@
-import { SignupForm } from '@app/features/auth/SignupForm';
+import { EnSignupForm } from '@app/features/auth/EnSignupForm';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: { absolute: 'Sign up' },
@@ -15,5 +16,9 @@ export const metadata: Metadata = {
 };
 
 export default function EnglishSignupPage() {
-  return <SignupForm locale="en" />;
+  return (
+    <Suspense fallback={null}>
+      <EnSignupForm />
+    </Suspense>
+  );
 }

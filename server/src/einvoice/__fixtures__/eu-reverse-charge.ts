@@ -49,6 +49,7 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
     iban: 'BG80BNBG96611020345678',
     bic: 'BNBGBGSD',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Muster GmbH',

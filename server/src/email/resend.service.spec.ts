@@ -40,7 +40,7 @@ describe('ResendService', () => {
 
     expect(sendMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        from: 'Fakturcho <invoices@fakturcho.bg>',
+        from: 'Fakturcho <invoices@fakturcho.com>',
         replyTo: 'owner@example.com',
       }),
     );
@@ -61,7 +61,7 @@ describe('ResendService', () => {
     });
 
     expect(sendMock).toHaveBeenCalledWith(
-      expect.objectContaining({ from: 'Acme Ltd via Fakturcho <invoices@fakturcho.bg>' }),
+      expect.objectContaining({ from: 'Acme Ltd via Fakturcho <invoices@fakturcho.com>' }),
     );
   });
 
@@ -100,7 +100,7 @@ describe('ResendService', () => {
 
     expect(sendMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        from: '"Smith, Jones & Co via Fakturcho" <invoices@fakturcho.bg>',
+        from: '"Smith, Jones & Co via Fakturcho" <invoices@fakturcho.com>',
       }),
     );
   });
@@ -121,7 +121,7 @@ describe('ResendService', () => {
 
     expect(sendMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        from: '"The \\"Best\\" Bakery via Fakturcho" <invoices@fakturcho.bg>',
+        from: '"The \\"Best\\" Bakery via Fakturcho" <invoices@fakturcho.com>',
       }),
     );
   });
@@ -142,7 +142,7 @@ describe('ResendService', () => {
 
     const expectedName = `=?UTF-8?B?${Buffer.from('Иванов ЕООД via Fakturcho', 'utf8').toString('base64')}?=`;
     expect(sendMock).toHaveBeenCalledWith(
-      expect.objectContaining({ from: `${expectedName} <invoices@fakturcho.bg>` }),
+      expect.objectContaining({ from: `${expectedName} <invoices@fakturcho.com>` }),
     );
   });
 
@@ -161,5 +161,26 @@ describe('ResendService', () => {
         replyTo: 'owner@example.com',
       }),
     ).rejects.toThrow('bad request');
+  });
+
+  it('base64-encodes the attachment content instead of forwarding the raw Buffer', async () => {
+    delete process.env.EMAIL_FROM;
+    const service = new ResendService();
+
+    await service.send({
+      to: 'client@example.com',
+      subject: 's',
+      text: 't',
+      attachment: { filename: 'f.pdf', content: Buffer.from('%PDF-1.4') },
+      locale: 'bg',
+      issuerName: null,
+      replyTo: 'owner@example.com',
+    });
+
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        attachments: [{ filename: 'f.pdf', content: Buffer.from('%PDF-1.4').toString('base64') }],
+      }),
+    );
   });
 });

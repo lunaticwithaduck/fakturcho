@@ -19,7 +19,7 @@ describe('getLegalDoc', () => {
     expect(doc.title).toBe('Terms of Service');
     expect(doc.intro).toContain(COMPANY.legalName);
     expect(doc.intro).toContain('Fakturcho');
-    expect(doc.sections[0]?.paragraphs[0]).toContain('EIK 208697044');
+    expect(doc.sections[0]?.paragraphs[0]).toContain('Pacheliev Consulting EOOD, UIC 208697044');
     expect(doc.lastUpdatedLabel).toBe(`Last updated: ${COMPANY.lastUpdated}`);
   });
 

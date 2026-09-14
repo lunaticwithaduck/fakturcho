@@ -2,6 +2,7 @@ import type { IssuerProfileDto } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import type { IssuerProfile } from '@prisma/client';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
+import { readIdentifiers } from './identifiers';
 
 export interface UpdateIssuerProfileInput {
   companyName?: string | null | undefined;
@@ -22,6 +23,7 @@ export interface UpdateIssuerProfileInput {
   altIban?: string | null | undefined;
   peppolEndpointId?: string | null | undefined;
   peppolScheme?: string | null | undefined;
+  identifiers?: Record<string, string> | undefined;
 }
 
 function toDto(profile: IssuerProfile): IssuerProfileDto {
@@ -45,6 +47,7 @@ function toDto(profile: IssuerProfile): IssuerProfileDto {
     altIban: profile.altIban,
     peppolEndpointId: profile.peppolEndpointId,
     peppolScheme: profile.peppolScheme,
+    identifiers: readIdentifiers(profile.identifiers),
   };
 }
 
@@ -78,6 +81,7 @@ export class IssuerService {
       ...(input.phone !== undefined ? { phone: input.phone } : {}),
       ...(input.vatRegistered !== undefined ? { vatRegistered: input.vatRegistered } : {}),
       ...(input.vatNumber !== undefined ? { vatNumber: input.vatNumber } : {}),
+      ...(input.identifiers !== undefined ? { identifiers: input.identifiers } : {}),
       ...(input.bankName !== undefined ? { bankName: input.bankName } : {}),
       ...(input.iban !== undefined ? { iban: input.iban } : {}),
       ...(input.bic !== undefined ? { bic: input.bic } : {}),

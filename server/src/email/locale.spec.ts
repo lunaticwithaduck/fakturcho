@@ -13,15 +13,15 @@ describe('resolveEmailLocale', () => {
 
   it('falls back to the issuer country when documentLanguage is unset', () => {
     expect(resolveEmailLocale(null, 'BG', 'DE')).toBe('bg');
-    expect(resolveEmailLocale(null, 'DE', 'BG')).toBe('en');
+    expect(resolveEmailLocale(null, 'DE', 'BG')).toBe('de');
   });
 
   it('falls back to the recipient country when issuer country is unset', () => {
     expect(resolveEmailLocale(null, null, 'BG')).toBe('bg');
-    expect(resolveEmailLocale(null, null, 'DE')).toBe('en');
+    expect(resolveEmailLocale(null, null, 'DE')).toBe('de');
   });
 
   it('ignores an unrecognised documentLanguage value', () => {
-    expect(resolveEmailLocale('fr', 'DE', null)).toBe('en');
+    expect(resolveEmailLocale('xx', 'DE', null)).toBe('de');
   });
 });

@@ -21,7 +21,7 @@ describe('createClientSchema', () => {
 
   it('rejects a documentLanguage outside the supported locales', () => {
     expect(() =>
-      createClientSchema.parse({ companyName: 'Acme', documentLanguage: 'fr' }),
+      createClientSchema.parse({ companyName: 'Acme', documentLanguage: 'xx' }),
     ).toThrow();
   });
 });

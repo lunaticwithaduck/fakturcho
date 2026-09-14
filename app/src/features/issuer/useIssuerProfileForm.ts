@@ -20,6 +20,7 @@ export interface IssuerProfileFormValues {
   iban: string;
   bic: string;
   altIban: string;
+  identifiers: Record<string, string>;
 }
 
 function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
@@ -39,6 +40,7 @@ function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
     iban: profile.iban ?? '',
     bic: profile.bic ?? '',
     altIban: profile.altIban ?? '',
+    identifiers: { ...profile.identifiers },
   };
 }
 
@@ -59,6 +61,11 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
     iban: values.iban.trim() || null,
     bic: values.bic.trim() || null,
     altIban: values.altIban.trim() || null,
+    identifiers: Object.fromEntries(
+      Object.entries(values.identifiers)
+        .map(([key, value]) => [key, value.trim()])
+        .filter(([, value]) => value !== ''),
+    ),
   };
 }
 

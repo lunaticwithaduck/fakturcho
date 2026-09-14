@@ -6,9 +6,9 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const TITLE = 'Fakturcho — invoicing for Bulgarian businesses';
+const TITLE = 'Fakturcho — invoicing and e-invoicing for EU businesses';
 const DESCRIPTION =
-  'Issue invoices, proformas, credit and debit notes and quotes under Bulgarian requirements. Pay 0.10 € per issued document.';
+  'Issue invoices, proformas, credit and debit notes and quotes that meet EU requirements, with EN 16931 e-invoicing and Peppol. Pay 0.10 € per issued document.';
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },

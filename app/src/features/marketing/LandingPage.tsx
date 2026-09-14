@@ -14,8 +14,9 @@ import {
 } from '@shared/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getMarketingContent } from './content';
+import { getCountriesContent, getMarketingContent } from './content';
 import { LandingFaq } from './LandingFaq';
+import { TARGET_COUNTRIES } from './targetCountries';
 
 const tierPerDocumentCents = SUBSCRIPTION_TIER_IDS.map((id) =>
   perDocumentCents(SUBSCRIPTION_TIERS[id].priceCents, SUBSCRIPTION_TIERS[id].grantCents),
@@ -30,6 +31,7 @@ interface LandingPageProps {
 
 export function LandingPage({ locale = 'bg' }: LandingPageProps) {
   const content = getMarketingContent(locale);
+  const countries = getCountriesContent();
   const pricing = pricingForLocale(locale);
   const homeHref = locale === 'bg' ? '/' : '/en';
   const loginHref = locale === 'bg' ? '/login' : '/en/login';
@@ -57,6 +59,31 @@ export function LandingPage({ locale = 'bg' }: LandingPageProps) {
           <h1 className="text-3xl font-bold text-text">{content.hero.title}</h1>
           <p className="text-lg leading-relaxed text-text-muted">{content.hero.subtitle}</p>
         </section>
+
+        {locale === 'en' ? (
+          <section className="flex flex-col gap-4">
+            <h2 className="text-xl font-semibold text-text">{countries.heading}</h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {TARGET_COUNTRIES.map((code) => {
+                const country = countries.items[code];
+                return (
+                  <Card key={code} className="flex flex-col gap-2 p-5">
+                    <h3 className="text-base font-semibold text-text">{country.name}</h3>
+                    <p className="text-sm leading-relaxed text-text-muted">{country.line}</p>
+                    <Button variant="secondary" size="sm" asChild className="self-start">
+                      <Link
+                        href={`/en/signup?country=${code}`}
+                        aria-label={`${content.nav.signup} — ${country.name}`}
+                      >
+                        {content.nav.signup}
+                      </Link>
+                    </Button>
+                  </Card>
+                );
+              })}
+            </div>
+          </section>
+        ) : null}
 
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-text">{content.capabilities.heading}</h2>
@@ -121,7 +148,7 @@ export function LandingPage({ locale = 'bg' }: LandingPageProps) {
         <LandingFaq locale={locale} />
       </main>
 
-      <LegalFooter locale={locale} />
+      <LegalFooter locale={locale} entity={locale === 'bg'} />
     </div>
   );
 }

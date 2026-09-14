@@ -52,7 +52,7 @@ describe('checkFa3Readiness — NIP validation', () => {
   it('flags a missing issuer NIP', () => {
     const incomplete: DocumentDto = {
       ...plDomesticStandardInvoice,
-      issuer: { ...plDomesticStandardInvoice.issuer, vatNumber: null },
+      issuer: { ...plDomesticStandardInvoice.issuer, eik: null, vatNumber: null },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
       EINVOICE_MISSING_FIELD_CODES.issuerNip,
@@ -62,17 +62,27 @@ describe('checkFa3Readiness — NIP validation', () => {
   it('flags an issuer NIP that fails the checksum', () => {
     const incomplete: DocumentDto = {
       ...plDomesticStandardInvoice,
-      issuer: { ...plDomesticStandardInvoice.issuer, vatNumber: 'PL1234563219' },
+      issuer: { ...plDomesticStandardInvoice.issuer, eik: '1234563219', vatNumber: null },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
       EINVOICE_MISSING_FIELD_CODES.issuerNipChecksum,
     );
   });
 
+  it('falls back to vatNumber when eik carries no NIP', () => {
+    const withoutEik: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      issuer: { ...plDomesticStandardInvoice.issuer, eik: null, vatNumber: 'PL1234563218' },
+    };
+    expect(checkFa3Readiness(withoutEik).missingFields).not.toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerNip,
+    );
+  });
+
   it('flags a missing recipient NIP for a domestic Polish buyer', () => {
     const incomplete: DocumentDto = {
       ...plDomesticStandardInvoice,
-      recipient: { ...plDomesticStandardInvoice.recipient, vatNumber: null },
+      recipient: { ...plDomesticStandardInvoice.recipient, eik: null, vatNumber: null },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
       EINVOICE_MISSING_FIELD_CODES.recipientNip,
@@ -82,7 +92,7 @@ describe('checkFa3Readiness — NIP validation', () => {
   it('flags a recipient NIP that fails the checksum', () => {
     const incomplete: DocumentDto = {
       ...plDomesticStandardInvoice,
-      recipient: { ...plDomesticStandardInvoice.recipient, vatNumber: 'PL1234563219' },
+      recipient: { ...plDomesticStandardInvoice.recipient, eik: '1234563219', vatNumber: null },
     };
     expect(checkFa3Readiness(incomplete).missingFields).toContain(
       EINVOICE_MISSING_FIELD_CODES.recipientNipChecksum,
@@ -95,6 +105,7 @@ describe('checkFa3Readiness — NIP validation', () => {
       recipient: {
         ...plDomesticStandardInvoice.recipient,
         country: 'DE',
+        eik: null,
         vatNumber: 'DE123456789',
       },
     };

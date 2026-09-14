@@ -25,11 +25,12 @@ const BG_VALUES: IssuerProfileFormValues = {
   iban: '',
   bic: '',
   altIban: '',
+  identifiers: {},
 };
 
 const DE_VALUES: IssuerProfileFormValues = {
   ...BG_VALUES,
-  country: 'DE',
+  country: 'NL',
   addressLine: '',
   street: 'Hauptstraße 1',
   postcode: '10115',
@@ -93,7 +94,9 @@ describe('IssuerCompanyFields', () => {
       </NextIntlClientProvider>,
     );
 
-    expect((screen.getByLabelText('ЕИК / Булстат') as HTMLInputElement).required).toBe(false);
+    expect((screen.getByLabelText('Company registration no.') as HTMLInputElement).required).toBe(
+      false,
+    );
   });
 
   it('marks the company ID as required for BG', () => {

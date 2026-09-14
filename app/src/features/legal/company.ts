@@ -4,8 +4,10 @@ export const COMPANY_PLACEHOLDER_MARKER = 'ДЕМО';
 
 interface CompanyDetails {
   legalName: string;
+  legalNameLatin: string;
   eik: string | null;
   address: string;
+  addressLatin: string;
   vatNumber: string | null;
   supportEmail: string;
   productName: string;
@@ -15,8 +17,10 @@ interface CompanyDetails {
 
 export const COMPANY: CompanyDetails = {
   legalName: '„Пачелиев Консултинг“ ЕООД',
+  legalNameLatin: 'Pacheliev Consulting EOOD',
   eik: '208697044',
   address: 'гр. София 1324, р-н Люлин, жк. Люлин, бл. 715, вх. Б, ет. 1, ап. 21',
+  addressLatin: 'Sofia 1324, Lyulin district, bl. 715, entr. B, fl. 1, apt. 21, Bulgaria',
   vatNumber: null,
   supportEmail: 'support@fakturcho.com',
   productName: 'Фактурчо',
@@ -31,8 +35,8 @@ export function describeEntity(): string {
 
 export function describeEntityForLocale(locale: Locale): string {
   if (locale === 'bg') return describeEntity();
-  const identifier = COMPANY.eik === null ? '' : `, EIK ${COMPANY.eik}`;
-  return `${COMPANY.legalName}${identifier}, ${COMPANY.address}`;
+  const identifier = COMPANY.eik === null ? '' : `, UIC ${COMPANY.eik}`;
+  return `${COMPANY.legalNameLatin}${identifier}, ${COMPANY.addressLatin}`;
 }
 
 export function productNameForLocale(locale: Locale): string {

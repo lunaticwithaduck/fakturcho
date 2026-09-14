@@ -1,4 +1,4 @@
-import type { Locale } from './countries';
+import type { DocumentLanguage } from './countries';
 import type { DocumentStatus, DocumentType } from './enums';
 import type { Cents, CurrencyCode } from './money';
 import type { VatCategory } from './vat';
@@ -40,6 +40,7 @@ export interface IssuerSnapshotDto {
   iban: string | null;
   bic: string | null;
   altIban: string | null;
+  identifiers: Record<string, string>;
 }
 
 export interface RecipientSnapshotDto {
@@ -88,7 +89,7 @@ export interface DocumentDto {
   emailText: string | null;
   emailedAt: string | null;
   templateId: string;
-  documentLanguage: Locale | null;
+  documentLanguage: DocumentLanguage | null;
   issuer: IssuerSnapshotDto;
   recipient: RecipientSnapshotDto;
   lineItems: LineItemDto[];
@@ -147,7 +148,7 @@ export interface SaveDraftRequest {
   notes?: string | null;
   emailText?: string | null;
   templateId?: string;
-  documentLanguage?: Locale | null;
+  documentLanguage?: DocumentLanguage | null;
   lineItems: LineItemInput[];
   discounts?: DiscountInput[];
 }

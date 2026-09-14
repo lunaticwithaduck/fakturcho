@@ -1,5 +1,5 @@
 import { Input, Select, SelectItem } from '@design/components';
-import { EU_VAT_AREA_COUNTRIES, type Locale } from '@shared/types';
+import { DOCUMENT_LANGUAGES, type DocumentLanguage, EU_VAT_AREA_COUNTRIES } from '@shared/types';
 import { useTranslations } from 'next-intl';
 import type { ClientFormValues } from './clientForm';
 
@@ -53,12 +53,18 @@ export function ClientFormFields({ values, onChange }: ClientFormFieldsProps) {
         label={t('documentLanguageLabel')}
         value={values.documentLanguage ?? SAME_AS_ISSUER}
         onValueChange={(value) =>
-          onChange('documentLanguage', value === SAME_AS_ISSUER ? null : (value as Locale))
+          onChange(
+            'documentLanguage',
+            value === SAME_AS_ISSUER ? null : (value as DocumentLanguage),
+          )
         }
       >
         <SelectItem value={SAME_AS_ISSUER}>{t('documentLanguageOptionSame')}</SelectItem>
-        <SelectItem value="bg">{t('documentLanguageOptionBg')}</SelectItem>
-        <SelectItem value="en">{t('documentLanguageOptionEn')}</SelectItem>
+        {DOCUMENT_LANGUAGES.map((language) => (
+          <SelectItem key={language} value={language}>
+            {t(`documentLanguageOptions.${language}`)}
+          </SelectItem>
+        ))}
       </Select>
       <Input
         label={t('emailLabel')}

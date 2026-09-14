@@ -6,6 +6,7 @@ import { buildDatesBlock, buildRecipientBlock } from './header-blocks';
 import type { ClassicLanguage } from './labels';
 import { buildLineItemsTable } from './line-items';
 import { resolveClassicLocale } from './locale';
+import { buildMentionsBlock } from './mentions-block';
 import { buildStyles } from './styles';
 import { buildTitle } from './title';
 import { buildAmountWordsBlock, buildTotalsBlock } from './totals-block';
@@ -31,7 +32,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     language,
     discounts = [],
   } = input;
-  const locale = resolveClassicLocale(language);
+  const locale = resolveClassicLocale(language, document.issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
   const isQuote = documentType === 'quote';
   const number = document.number === null ? null : Number(document.number);
@@ -53,6 +54,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   ${buildLineItemsTable(lineItems, locale)}
   ${buildAmountWordsBlock(document, locale)}
   ${buildTotalsBlock(document, lineItems, presentation, showBgnSuffix, locale, discounts)}
+  ${buildMentionsBlock({ document, lineItems, locale })}
   ${buildIssuerBlock(document, locale)}
   ${locale.showSignatureRow ? buildSignatureRow(document, locale) : ''}
 </body>

@@ -1,7 +1,14 @@
-import type { VatExemptionGround } from './vat';
+import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
+import { DE_CONFIG } from './countries/de';
+import { ES_CONFIG } from './countries/es';
+import { FR_CONFIG } from './countries/fr';
+import { IT_CONFIG } from './countries/it';
+import { PL_CONFIG } from './countries/pl';
+import { RO_CONFIG } from './countries/ro';
+import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
-export const SUPPORTED_LOCALES = ['bg', 'en'] as const;
-export type Locale = (typeof SUPPORTED_LOCALES)[number];
+export * from './countries/base';
+export * from './languages';
 
 export const EU_VAT_AREA_COUNTRIES = [
   'AT',
@@ -38,30 +45,10 @@ export function isEuVatAreaCountry(country: string): country is EuVatAreaCountry
   return (EU_VAT_AREA_COUNTRIES as readonly string[]).includes(country);
 }
 
-export interface VatRateOption {
-  rateBp: number;
-  label: string;
-}
-
-export interface CountryConfig {
-  country: string;
-  locale: Locale;
-  vatRates: VatRateOption[];
-  defaultVatRateBp: number;
-  companyIdLabel: string;
-  vatNumberPattern: RegExp | null;
-  exemptionGrounds: readonly VatExemptionGround[];
-  numberingUsesFixedWidth: boolean;
-  requiredIssuerFields: readonly string[];
-  showMol: boolean;
-  showSignatureRow: boolean;
-  showDualDisplay: boolean;
-  showOriginalStamp: boolean;
-}
-
 const BG_CONFIG: CountryConfig = {
   country: 'BG',
   locale: 'bg',
+  language: 'bg',
   vatRates: [
     { rateBp: 2000, label: '20%' },
     { rateBp: 900, label: '9%' },
@@ -70,7 +57,9 @@ const BG_CONFIG: CountryConfig = {
   defaultVatRateBp: 2000,
   companyIdLabel: 'ЕИК',
   vatNumberPattern: /^BG\d{9,10}$/,
-  exemptionGrounds: [],
+  exemptionGrounds: VAT_EXEMPTION_GROUNDS,
+  defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,
+  identifiers: [],
   numberingUsesFixedWidth: true,
   requiredIssuerFields: ['companyName', 'eik', 'addressLine', 'city'],
   showMol: true,
@@ -79,32 +68,19 @@ const BG_CONFIG: CountryConfig = {
   showOriginalStamp: true,
 };
 
-const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
-  locale: 'en',
-  vatRates: [
-    { rateBp: 2000, label: '20%' },
-    { rateBp: 0, label: '0%' },
-  ],
-  defaultVatRateBp: 2000,
-  companyIdLabel: 'Company registration no.',
-  vatNumberPattern: null,
-  exemptionGrounds: [],
-  numberingUsesFixedWidth: false,
-  requiredIssuerFields: ['companyName', 'street', 'city', 'postcode'],
-  showMol: false,
-  showSignatureRow: false,
-  showDualDisplay: false,
-  showOriginalStamp: false,
-};
-
-const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {
-  ...GENERIC_EU_CONFIG,
-  vatRates: [{ rateBp: 0, label: '0%' }],
-  defaultVatRateBp: 0,
+const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
+  BG: BG_CONFIG,
+  DE: DE_CONFIG,
+  FR: FR_CONFIG,
+  IT: IT_CONFIG,
+  PL: PL_CONFIG,
+  RO: RO_CONFIG,
+  ES: ES_CONFIG,
 };
 
 export function getCountryConfig(country: string): CountryConfig {
-  if (country === 'BG') return BG_CONFIG;
+  const configured = COUNTRY_CONFIGS[country];
+  if (configured) return configured;
   if (isEuVatAreaCountry(country)) return { ...GENERIC_EU_CONFIG, country };
   return { ...GENERIC_NON_EU_CONFIG, country };
 }

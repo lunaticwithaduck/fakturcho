@@ -14,6 +14,7 @@ const registered = resolveVatTreatment({
   documentType: 'invoice',
   vatRegistered: true,
   requestedGround: null,
+  issuerCountry: 'BG',
 });
 
 describe('buildDraftData — grouped totals', () => {

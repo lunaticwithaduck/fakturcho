@@ -48,11 +48,11 @@ describe('saveDraftRequestSchema — format validation', () => {
     expect(parsed.documentLanguage).toBe('en');
   });
 
-  it('rejects a documentLanguage outside the supported locales', () => {
+  it('rejects a documentLanguage outside the document languages', () => {
     expect(() =>
       saveDraftRequestSchema.parse({
         documentType: 'invoice',
-        documentLanguage: 'fr',
+        documentLanguage: 'xx',
         lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
       }),
     ).toThrow();

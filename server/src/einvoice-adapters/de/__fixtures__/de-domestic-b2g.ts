@@ -49,6 +49,7 @@ export const deDomesticB2GInvoice: DocumentDto = {
     iban: 'DE89370400440532013000',
     bic: 'COBADEFFXXX',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Stadtverwaltung Musterstadt',

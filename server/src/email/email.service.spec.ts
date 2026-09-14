@@ -110,7 +110,7 @@ describe('EmailService', () => {
         documentType: 'INVOICE',
         status: 'SENT',
         number: 9n,
-        issuerCountry: 'DE',
+        issuerCountry: 'NL',
       },
     });
 

@@ -27,9 +27,10 @@ export function checkFa3Readiness(document: DocumentDto): Fa3Readiness {
   if (!document.issuer.street) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerStreet);
   if (!document.issuer.postcode) missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerPostcode);
 
-  if (!document.issuer.vatNumber) {
+  const issuerNip = document.issuer.eik ?? document.issuer.vatNumber;
+  if (!issuerNip) {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerNip);
-  } else if (!isValidNip(document.issuer.vatNumber)) {
+  } else if (!isValidNip(issuerNip)) {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerNipChecksum);
   }
 
@@ -40,9 +41,10 @@ export function checkFa3Readiness(document: DocumentDto): Fa3Readiness {
 
   const isDomesticBuyer = document.recipient.country === 'PL';
   if (isDomesticBuyer) {
-    if (!document.recipient.vatNumber) {
+    const recipientNip = document.recipient.eik ?? document.recipient.vatNumber;
+    if (!recipientNip) {
       missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientNip);
-    } else if (!isValidNip(document.recipient.vatNumber)) {
+    } else if (!isValidNip(recipientNip)) {
       missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientNipChecksum);
     }
   }

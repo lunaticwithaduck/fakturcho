@@ -1,6 +1,6 @@
 import { useCreateClientMutation, useUpdateClientMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
-import type { ClientDto, CreateClientRequest, Locale } from '@shared/types';
+import type { ClientDto, CreateClientRequest, DocumentLanguage, Locale } from '@shared/types';
 import { useLocale } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
@@ -12,7 +12,7 @@ export interface ClientFormValues {
   email: string;
   mol: string;
   country: string;
-  documentLanguage: Locale | null;
+  documentLanguage: DocumentLanguage | null;
   peppolEndpointId: string;
   peppolScheme: string;
 }

@@ -1,6 +1,23 @@
-import type { Cents, Locale } from '@fakturcho/shared-types';
+import type { Cents, DocumentLanguage } from '@fakturcho/shared-types';
 
 const EN_LOCALE_TAG = 'en-IE';
+
+interface NumberConvention {
+  thousands: string;
+  decimal: string;
+  dateSeparator: string;
+}
+
+const CONVENTIONS: Record<DocumentLanguage, NumberConvention> = {
+  bg: { thousands: ' ', decimal: ',', dateSeparator: '.' },
+  en: { thousands: ',', decimal: '.', dateSeparator: '/' },
+  de: { thousands: '.', decimal: ',', dateSeparator: '.' },
+  fr: { thousands: ' ', decimal: ',', dateSeparator: '/' },
+  it: { thousands: '.', decimal: ',', dateSeparator: '/' },
+  pl: { thousands: ' ', decimal: ',', dateSeparator: '.' },
+  ro: { thousands: '.', decimal: ',', dateSeparator: '.' },
+  es: { thousands: '.', decimal: ',', dateSeparator: '/' },
+};
 
 function groupThousands(value: number): string {
   const digits = String(value);
@@ -55,21 +72,24 @@ function formatCentsEn(cents: Cents): string {
   return `${sign}${new Intl.NumberFormat(EN_LOCALE_TAG).format(wholePart)}.${String(fractionPart).padStart(2, '0')}`;
 }
 
-export function formatCentsForLocale(cents: Cents, locale: Locale): string {
-  return locale === 'bg' ? formatCents(cents) : formatCentsEn(cents);
+export function formatCentsForLocale(cents: Cents, language: DocumentLanguage): string {
+  if (language === 'bg') return formatCents(cents);
+  if (language === 'en') return formatCentsEn(cents);
+  const { sign, wholePart, fractionPart } = splitCentsForLocale(cents);
+  const { thousands, decimal } = CONVENTIONS[language];
+  const grouped = groupThousands(wholePart).replace(/ /g, thousands);
+  return `${sign}${grouped}${decimal}${String(fractionPart).padStart(2, '0')}`;
 }
 
-export function formatMoneyForLocale(cents: Cents, locale: Locale): string {
-  return locale === 'bg' ? formatEur(cents) : `${formatCentsEn(cents)} €`;
+export function formatMoneyForLocale(cents: Cents, language: DocumentLanguage): string {
+  return `${formatCentsForLocale(cents, language)} €`;
 }
 
-export function formatDateForLocale(value: Date | string, locale: Locale): string {
-  if (locale === 'bg') return formatDate(value);
+export function formatDateForLocale(value: Date | string, language: DocumentLanguage): string {
   const date = typeof value === 'string' ? new Date(value) : value;
-  return new Intl.DateTimeFormat(EN_LOCALE_TAG, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(date);
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const year = date.getUTCFullYear();
+  const separator = CONVENTIONS[language].dateSeparator;
+  return [day, month, year].join(separator);
 }

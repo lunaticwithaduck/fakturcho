@@ -49,6 +49,7 @@ export const deDomesticStandardInvoice: DocumentDto = {
     iban: 'DE89370400440532013000',
     bic: 'COBADEFFXXX',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Beispiel AG',

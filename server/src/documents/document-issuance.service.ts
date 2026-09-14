@@ -80,6 +80,7 @@ export class DocumentIssuanceService {
             issuerIban: issuerProfile?.iban ?? null,
             issuerBic: issuerProfile?.bic ?? null,
             issuerAltIban: issuerProfile?.altIban ?? null,
+            ...(issuerProfile?.identifiers ? { issuerIdentifiers: issuerProfile.identifiers } : {}),
             recipientCompanyName: client?.companyName ?? null,
             recipientEik: client?.eik ?? null,
             recipientVatNumber: client?.vatNumber ?? null,

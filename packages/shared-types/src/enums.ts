@@ -1,4 +1,4 @@
-import type { Locale } from './countries';
+import type { DocumentLanguage, Locale } from './countries';
 
 export const DOCUMENT_TYPES = [
   'invoice',
@@ -25,8 +25,8 @@ export const DOCUMENT_TYPE_LABELS_EN: Record<DocumentType, string> = {
   quote: 'Quote',
 };
 
-export function getDocumentTypeLabel(type: DocumentType, locale: Locale): string {
-  return locale === 'en' ? DOCUMENT_TYPE_LABELS_EN[type] : DOCUMENT_TYPE_LABELS[type];
+export function getDocumentTypeLabel(type: DocumentType, language: DocumentLanguage): string {
+  return language === 'bg' ? DOCUMENT_TYPE_LABELS[type] : DOCUMENT_TYPE_LABELS_EN[type];
 }
 
 export const TAX_DOCUMENT_TYPES: Record<DocumentType, boolean> = {

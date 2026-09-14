@@ -9,3 +9,7 @@ function messagesFor(locale: Locale) {
 export function getMarketingContent(locale: Locale) {
   return messagesFor(locale).marketing;
 }
+
+export function getCountriesContent() {
+  return enMessages.marketing.countries;
+}

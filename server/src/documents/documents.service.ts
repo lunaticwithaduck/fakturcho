@@ -4,7 +4,7 @@ import type {
   DocumentListQuery,
   SaveDraftRequest,
 } from '@fakturcho/shared-types';
-import { CORRECTION_DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import { CORRECTION_DOCUMENT_TYPES, getCountryConfig } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
@@ -63,6 +63,7 @@ export class DocumentsService {
       documentType: request.documentType,
       vatRegistered: issuerVatRegistered,
       requestedGround: request.vatExemptionGround ?? null,
+      issuerCountry,
     });
 
     const resolvedLineItems = request.lineItems.map((line) => {
@@ -83,7 +84,7 @@ export class DocumentsService {
           ? line.vatRateBp
           : vatCategory === 'AE' || vatCategory === 'O'
             ? 0
-            : 2000;
+            : getCountryConfig(issuerCountry).defaultVatRateBp;
 
       return { ...line, vatCategory, vatRateBp };
     });

@@ -155,6 +155,7 @@ model IssuerProfile {
   altIban          String?
   peppolEndpointId String?
   peppolScheme     String?
+  identifiers      Json?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -278,6 +279,7 @@ model Document {
   issuerIban          String?
   issuerBic           String?
   issuerAltIban       String?
+  issuerIdentifiers   Json?
 
   recipientCompanyName      String?
   recipientEik              String?

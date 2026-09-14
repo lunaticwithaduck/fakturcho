@@ -56,8 +56,20 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
 
     const isDraft = document.status === 'DRAFT' || document.number === null;
     const enLocale = await this.flags.isEnabled('EN_LOCALE');
+    // A draft has no issuer snapshot yet (§4: snapshots are taken at issuance), so
+    // document.issuerCountry is still null — fall back to the account's own issuer
+    // profile so a draft preview renders in the account's language, not always BG.
+    const issuerCountry =
+      document.issuerCountry ??
+      (
+        await this.prisma.issuerProfile.findUnique({
+          where: { accountId },
+          select: { country: true },
+        })
+      )?.country ??
+      null;
     const language = enLocale
-      ? resolveDocumentLanguage(document.documentLanguage, document.issuerCountry)
+      ? resolveDocumentLanguage(document.documentLanguage, issuerCountry)
       : 'bg';
 
     const html = renderClassicTemplateHtml({

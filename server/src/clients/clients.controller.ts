@@ -1,5 +1,5 @@
 import type { ClientDto } from '@fakturcho/shared-types';
-import { SUPPORTED_LOCALES } from '@fakturcho/shared-types';
+import { DOCUMENT_LANGUAGES } from '@fakturcho/shared-types';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
@@ -26,7 +26,7 @@ export const createClientSchema = z.object({
   postcode: postcodeSchema.nullable().optional(),
   countyRegion: countyRegionSchema.nullable().optional(),
   country: countryCodeSchema.optional(),
-  documentLanguage: z.enum(SUPPORTED_LOCALES).nullable().optional(),
+  documentLanguage: z.enum(DOCUMENT_LANGUAGES).nullable().optional(),
   email: z.string().nullable().optional(),
   mol: z.string().nullable().optional(),
   peppolEndpointId: peppolEndpointIdSchema.nullable().optional(),

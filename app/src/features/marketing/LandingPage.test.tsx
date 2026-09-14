@@ -30,13 +30,14 @@ describe('LandingPage', () => {
       '/signup',
     );
     expect(screen.getByText('Общи условия')).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Where is your business based?' })).toBeNull();
   });
 
   it('renders the English copy for locale="en" with English legal links', () => {
     render(<LandingPage locale="en" />);
 
     expect(
-      screen.getByRole('heading', { name: 'Invoices that meet Bulgarian requirements' }),
+      screen.getByRole('heading', { name: 'Compliant invoices for any EU business' }),
     ).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'What you can issue' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Pricing' })).toBeTruthy();
@@ -49,5 +50,22 @@ describe('LandingPage', () => {
     expect(screen.getByRole('link', { name: 'Create account' }).getAttribute('href')).toBe(
       '/en/signup',
     );
+
+    expect(screen.getByRole('heading', { name: 'Where is your business based?' })).toBeTruthy();
+    const countries = [
+      ['BG', 'Bulgaria'],
+      ['DE', 'Germany'],
+      ['FR', 'France'],
+      ['IT', 'Italy'],
+      ['PL', 'Poland'],
+      ['RO', 'Romania'],
+      ['ES', 'Spain'],
+    ] as const;
+    for (const [code, name] of countries) {
+      expect(screen.getByRole('heading', { name })).toBeTruthy();
+      expect(
+        screen.getByRole('link', { name: `Create account — ${name}` }).getAttribute('href'),
+      ).toBe(`/en/signup?country=${code}`);
+    }
   });
 });

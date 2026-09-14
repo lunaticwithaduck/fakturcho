@@ -49,6 +49,7 @@ export const frDomesticStandardInvoice: DocumentDto = {
     iban: 'FR7630006000011234567890189',
     bic: 'BNPAFRPPXXX',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Client Exemple SAS',

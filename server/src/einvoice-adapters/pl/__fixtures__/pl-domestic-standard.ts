@@ -34,7 +34,7 @@ export const plDomesticStandardInvoice: DocumentDto = {
   documentLanguage: 'en',
   issuer: {
     companyName: 'Testowa Spółka z o.o.',
-    eik: 'KRS 0000123456',
+    eik: '1234563218',
     mol: null,
     addressLine: 'ul. Marszałkowska 10, 00-590 Warszawa',
     street: 'ul. Marszałkowska 10',
@@ -49,10 +49,11 @@ export const plDomesticStandardInvoice: DocumentDto = {
     iban: 'PL61109010140000071219812874',
     bic: 'WBKPPLPP',
     altIban: null,
+    identifiers: { krs: '0000123456' },
   },
   recipient: {
     companyName: 'Klient Testowy Sp. z o.o.',
-    eik: 'KRS 0000654321',
+    eik: '5260001246',
     vatNumber: 'PL5260001246',
     address: 'ul. Nowy Świat 5, 00-029 Warszawa',
     street: 'ul. Nowy Świat 5',

@@ -3,7 +3,7 @@
 import { useSaveDraftMutation, useUpdateDraftMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Card, toast } from '@design/components';
-import { CORRECTION_DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import { CORRECTION_DOCUMENT_TYPES, getCountryConfig } from '@fakturcho/shared-types';
 import type {
   CatalogueItemDto,
   ClientDto,
@@ -54,10 +54,12 @@ export function DocumentComposerForm({
   const [error, setError] = useState<string | null>(null);
   const isSubmitting = saveDraftState.isLoading || updateDraftState.isLoading;
 
+  const countryConfig = getCountryConfig(issuerProfile.country);
   const vat = resolveVatTreatment({
     documentType: state.documentType,
     vatRegistered: issuerProfile.vatRegistered,
     chargeVat: state.chargeVat,
+    vatRateBp: countryConfig.defaultVatRateBp,
   });
   const totals = computeLiveTotals({
     lineItems: state.lineItems.map((line) => ({
@@ -167,6 +169,8 @@ export function DocumentComposerForm({
           <ComposerVatSection
             chargeVat={state.chargeVat}
             vatExemptionGround={state.vatExemptionGround}
+            grounds={countryConfig.exemptionGrounds}
+            ratePercent={countryConfig.defaultVatRateBp / 100}
             hasGroundError={!!error && vat.groundSelectable && !state.vatExemptionGround}
             onChangeChargeVat={(chargeVat) => setField('chargeVat', chargeVat)}
             onChangeGround={(ground) => setField('vatExemptionGround', ground)}

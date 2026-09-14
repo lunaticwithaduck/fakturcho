@@ -22,11 +22,11 @@ const peg = String(EUR_BGN_PEG);
 
 const CONTENT = `# Fakturcho
 
-> A web app for issuing Bulgarian-compliant invoices, proformas, credit and debit notes, quotes and delivery notes; pay per issued document, no installation required.
+> A web app for issuing EU-compliant invoices, proformas, credit and debit notes, quotes and delivery notes, with structured e-invoicing built in; pay per issued document, no installation required.
 
-Fakturcho is for a Bulgarian company or a self-insured sole trader. Price: ${eur(ISSUANCE_COST_CENTS)} per issued document; drafts, clients and catalogue items are free; credit tops up in packs of ${packs} (${eur(ISSUANCE_COST_CENTS)} per document). A new account gets ${eur(SIGNUP_GRANT_CENTS)} starting credit with no card. Subscription, per month: ${tierLines}; credit carries over.
+Fakturcho is for a company or sole trader established anywhere in the EU. Price: ${eur(ISSUANCE_COST_CENTS)} per issued document; drafts, clients and catalogue items are free; credit tops up in packs of ${packs} (${eur(ISSUANCE_COST_CENTS)} per document). A new account gets ${eur(SIGNUP_GRANT_CENTS)} starting credit with no card. Subscription, per month: ${tierLines}; credit carries over.
 
-The product supports gap-free sequential numbering, VAT under the Bulgarian VAT Act including the exemption ground (Art. 113(9)) for non-VAT-registered issuers, amounts in euro and lev at the fixed rate ${peg}, PDF with Cyrillic support and sending by email.
+The product supports gap-free sequential numbering and VAT by country, including local rates, exemptions and cross-border reverse charge with a VIES check. For Germany, France, Italy, Poland, Romania, Spain and Bulgaria it also generates the national e-invoice XML (XRechnung, Chorus Pro, FatturaPA, KSeF FA(3), RO CIUS-RO, Facturae) or Peppol BIS 3.0, ready to upload to the national platform or send over Peppol, plus a PDF in the country's language sent by email. Bulgaria additionally shows amounts in euro and lev at the fixed rate ${peg}.
 
 ## Pages
 

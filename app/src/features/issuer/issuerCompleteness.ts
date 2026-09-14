@@ -8,7 +8,8 @@ export type MissingIssuerField =
   | 'street'
   | 'postcode'
   | 'city'
-  | 'vatNumber';
+  | 'vatNumber'
+  | `identifier:${string}`;
 
 function isBlank(value: string | null | undefined): boolean {
   return !value || value.trim() === '';
@@ -23,10 +24,15 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
     postcode: profile.postcode,
     city: profile.city,
   };
-  const { requiredIssuerFields } = getCountryConfig(profile.country);
+  const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const missing = requiredIssuerFields
     .filter((field) => isBlank(fieldValues[field] ?? null))
     .map((field) => field as MissingIssuerField);
+  for (const field of identifiers) {
+    if (field.required && isBlank(profile.identifiers[field.key])) {
+      missing.push(`identifier:${field.key}`);
+    }
+  }
   if (profile.vatRegistered && isBlank(profile.vatNumber)) missing.push('vatNumber');
   return missing;
 }

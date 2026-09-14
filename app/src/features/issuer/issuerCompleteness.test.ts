@@ -22,6 +22,7 @@ const BASE: IssuerProfileDto = {
   altIban: null,
   peppolEndpointId: null,
   peppolScheme: null,
+  identifiers: {},
 };
 
 describe('getMissingIssuerFields', () => {
@@ -49,7 +50,7 @@ describe('getMissingIssuerFields', () => {
   it('requires street and postcode instead of addressLine for a non-BG country', () => {
     const deProfile: IssuerProfileDto = {
       ...BASE,
-      country: 'DE',
+      country: 'NL',
       addressLine: null,
       street: null,
       postcode: null,
@@ -60,7 +61,7 @@ describe('getMissingIssuerFields', () => {
   it('does not require eik for a non-BG country', () => {
     const deProfile: IssuerProfileDto = {
       ...BASE,
-      country: 'DE',
+      country: 'NL',
       eik: null,
       street: 'Hauptstr. 1',
       postcode: '10115',

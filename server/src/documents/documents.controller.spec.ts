@@ -50,7 +50,7 @@ describe('DocumentsController — HTTP body round-trip', () => {
       postcode: '10115',
       countyRegion: 'BE',
       city: 'Berlin',
-      country: 'DE',
+      country: 'NL',
       vatRegistered: true,
       vatNumber: 'DE123456789',
       peppolEndpointId: '0088:1234567890123',
@@ -61,7 +61,7 @@ describe('DocumentsController — HTTP body round-trip', () => {
       street: 'Musterstrasse 1',
       postcode: '10115',
       countyRegion: 'BE',
-      country: 'DE',
+      country: 'NL',
       peppolEndpointId: '0088:1234567890123',
       peppolScheme: '0088',
     });
@@ -123,7 +123,7 @@ describe('DocumentsController — HTTP body round-trip', () => {
         unitCode: 'HUR',
       });
       expect(document.issuer).toMatchObject({
-        country: 'DE',
+        country: 'NL',
         street: 'Musterstrasse 1',
         postcode: '10115',
         countyRegion: 'BE',

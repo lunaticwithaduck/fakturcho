@@ -49,6 +49,7 @@ export const roDomesticStandardInvoice: DocumentDto = {
     iban: 'RO49AAAA1B31007593840000',
     bic: 'BTRLRO22',
     altIban: null,
+    identifiers: {},
   },
   recipient: {
     companyName: 'Client Exemplu SA',

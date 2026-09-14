@@ -21,7 +21,7 @@ export function isValidSiret(value: string): boolean {
 }
 
 export function isValidFrenchVatNumber(value: string): boolean {
-  return /^FR[0-9A-Z]{11}$/.test(value);
+  return /^FR[0-9A-Z]{2}\d{9}$/.test(value);
 }
 
 export type FrenchIdentifierScheme = 'SIREN' | 'SIRET';

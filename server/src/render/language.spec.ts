@@ -15,13 +15,15 @@ describe('resolveDocumentLanguage', () => {
     expect(resolveDocumentLanguage(null, 'BG')).toBe('bg');
   });
 
-  it('derives English from any non-Bulgarian issuer country', () => {
-    expect(resolveDocumentLanguage(null, 'DE')).toBe('en');
+  it('derives the language from the issuer country', () => {
+    expect(resolveDocumentLanguage(null, 'DE')).toBe('de');
+    expect(resolveDocumentLanguage(null, 'FR')).toBe('fr');
+    expect(resolveDocumentLanguage(null, 'NL')).toBe('en');
     expect(resolveDocumentLanguage(null, 'US')).toBe('en');
   });
 
   it('ignores an unrecognised documentLanguage value and falls back to the country', () => {
-    expect(resolveDocumentLanguage('fr', 'BG')).toBe('bg');
-    expect(resolveDocumentLanguage('fr', 'DE')).toBe('en');
+    expect(resolveDocumentLanguage('xx', 'BG')).toBe('bg');
+    expect(resolveDocumentLanguage('xx', 'DE')).toBe('de');
   });
 });

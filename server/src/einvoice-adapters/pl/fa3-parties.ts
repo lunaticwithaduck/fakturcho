@@ -17,7 +17,8 @@ function addressBlock(
 }
 
 export function sellerParty(issuer: IssuerSnapshotDto): string {
-  const nip = issuer.vatNumber ? normalizeNip(issuer.vatNumber) : '';
+  const rawNip = issuer.eik ?? issuer.vatNumber;
+  const nip = rawNip ? normalizeNip(rawNip) : '';
   const cityLine = [issuer.postcode, issuer.city].filter(Boolean).join(' ') || null;
   return (
     '<Podmiot1>' +
@@ -33,8 +34,9 @@ export function sellerParty(issuer: IssuerSnapshotDto): string {
 
 function buyerIdentityBlock(recipient: RecipientSnapshotDto): string {
   const rawVat = recipient.vatNumber;
-  if (recipient.country === 'PL' && rawVat) {
-    return textEl('NIP', normalizeNip(rawVat));
+  const domesticNip = recipient.eik ?? rawVat;
+  if (recipient.country === 'PL' && domesticNip) {
+    return textEl('NIP', normalizeNip(domesticNip));
   }
   if (recipient.country && recipient.country !== 'PL' && rawVat) {
     return textEl('KodUE', recipient.country) + textEl('NrVatUE', rawVat);

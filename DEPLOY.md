@@ -47,7 +47,7 @@ paths, so local artifacts (`node_modules`, `.next`, `.env`) never enter an image
 | `REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID` | `pv_…` | Merchant API subscription plan variation id for the 5 €/month plan (see below) |
 | `REVOLUT_WEBHOOK_SECRET` | `wsk_…` | signing secret returned when the webhook destination is created (step below) |
 | `RESEND_API_KEY` | `re_…` | Resend → API Keys |
-| `EMAIL_FROM` | `Fakturcho <invoices@fakturcho.bg>` | address on a Resend-verified domain |
+| `EMAIL_FROM` | `Fakturcho <invoices@fakturcho.com>` | address on a Resend-verified domain |
 
 On boot the container runs `prisma migrate deploy` and then starts the API, so
 the first successful deploy creates the schema. The image is large (Chromium
