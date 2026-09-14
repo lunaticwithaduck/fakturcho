@@ -1,16 +1,13 @@
+import { headers } from 'next/headers';
 import { getRequestConfig } from 'next-intl/server';
-import { DEFAULT_LOCALE, loadMessages } from './locale';
+import { DEFAULT_LOCALE, isLocale, LOCALE_HEADER, loadMessages } from './locale';
 
-/**
- * Stays static: any dynamic API here (cookies/headers) forces the whole app
- * dynamic, since this is the single root layout for marketing, legal and app
- * routes alike. Real per-user locale is resolved client-side in
- * `LocaleProvider`, which overrides this default after mount.
- */
 export async function buildRequestConfig() {
+  const headerLocale = (await headers()).get(LOCALE_HEADER);
+  const locale = isLocale(headerLocale) ? headerLocale : DEFAULT_LOCALE;
   return {
-    locale: DEFAULT_LOCALE,
-    messages: await loadMessages(DEFAULT_LOCALE),
+    locale,
+    messages: await loadMessages(locale),
   };
 }
 

@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { FeatureFlagsProvider, getFeatureFlags } from '../feature-flags';
-import { LocaleProvider } from '../i18n/LocaleProvider';
 import { Providers } from '../store/providers';
 import { uiFont } from './fonts';
 import './globals.css';
@@ -38,16 +38,14 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const flags = await getFeatureFlags();
+  const [flags, locale] = await Promise.all([getFeatureFlags(), getLocale()]);
 
   return (
-    <html lang="bg" className={uiFont.variable}>
+    <html lang={locale} className={uiFont.variable}>
       <body className="bg-surface font-sans text-text antialiased">
         <FeatureFlagsProvider flags={flags}>
           <NextIntlClientProvider>
-            <LocaleProvider>
-              <Providers>{children}</Providers>
-            </LocaleProvider>
+            <Providers>{children}</Providers>
           </NextIntlClientProvider>
         </FeatureFlagsProvider>
         {umamiSrc && umamiWebsiteId ? (

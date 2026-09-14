@@ -19,7 +19,7 @@ function messagesFor(locale: Locale) {
 function templateVars(locale: Locale) {
   const pricing = pricingForLocale(locale);
   return {
-    legalName: COMPANY.legalName,
+    legalName: locale === 'bg' ? COMPANY.legalName : COMPANY.legalNameLatin,
     entityLine: describeEntityForLocale(locale),
     supportEmail: COMPANY.supportEmail,
     productName: productNameForLocale(locale),

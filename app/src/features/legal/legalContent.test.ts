@@ -14,10 +14,11 @@ describe('getLegalDoc', () => {
     expect(doc.lastUpdatedLabel).toBe(`Последна актуализация: ${COMPANY.lastUpdated}`);
   });
 
-  it('renders English terms with the Bulgarian legal entity facts kept intact', () => {
+  it('renders English terms with the Latin legal entity facts, no Cyrillic', () => {
     const doc = getLegalDoc('terms', 'en');
     expect(doc.title).toBe('Terms of Service');
-    expect(doc.intro).toContain(COMPANY.legalName);
+    expect(doc.intro).toContain(COMPANY.legalNameLatin);
+    expect(doc.intro).not.toContain(COMPANY.legalName);
     expect(doc.intro).toContain('Fakturcho');
     expect(doc.sections[0]?.paragraphs[0]).toContain('Pacheliev Consulting EOOD, UIC 208697044');
     expect(doc.lastUpdatedLabel).toBe(`Last updated: ${COMPANY.lastUpdated}`);
