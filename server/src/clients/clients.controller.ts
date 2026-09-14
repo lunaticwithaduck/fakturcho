@@ -3,6 +3,7 @@ import { DOCUMENT_LANGUAGES } from '@fakturcho/shared-types';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
+import { withCountryFieldPatterns } from '../common/country-field-patterns';
 import { DomainError } from '../common/domain-error';
 import {
   countryCodeSchema,
@@ -17,7 +18,7 @@ import {
 import type { CreateClientInput, UpdateClientInput } from './clients.service';
 import { ClientsService } from './clients.service';
 
-export const createClientSchema = z.object({
+const baseClientSchema = z.object({
   companyName: z.string().min(1),
   eik: z.string().nullable().optional(),
   vatNumber: z.string().nullable().optional(),
@@ -36,7 +37,9 @@ export const createClientSchema = z.object({
   pec: pecSchema.nullable().optional(),
 });
 
-const updateClientSchema = createClientSchema.partial();
+export const createClientSchema = withCountryFieldPatterns(baseClientSchema, 'BG');
+
+const baseUpdateClientSchema = baseClientSchema.partial();
 
 function parseBody<T>(schema: z.ZodType<T>, data: unknown): T {
   const result = schema.safeParse(data);
@@ -72,12 +75,21 @@ export class ClientsController {
   }
 
   @Put(':id')
-  update(
+  async update(
     @AccountId() accountId: string,
     @Param('id') id: string,
     @Body() body: unknown,
   ): Promise<ClientDto> {
-    const input: UpdateClientInput = parseBody(updateClientSchema, body);
+    const bodyCountry =
+      typeof body === 'object' && body !== null && 'country' in body
+        ? (body as { country?: unknown }).country
+        : undefined;
+    const fallbackCountry =
+      typeof bodyCountry === 'string'
+        ? undefined
+        : (await this.clientsService.findOne(accountId, id)).country;
+    const schema = withCountryFieldPatterns(baseUpdateClientSchema, fallbackCountry);
+    const input: UpdateClientInput = parseBody(schema, body);
     return this.clientsService.update(accountId, id, input);
   }
 

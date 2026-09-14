@@ -13,6 +13,12 @@ export interface IssuerIdentifierField {
   required: boolean;
 }
 
+export interface CountyRegionField {
+  label: string;
+  required: boolean;
+  pattern: RegExp | null;
+}
+
 export interface CountryConfig {
   country: string;
   locale: Locale;
@@ -26,11 +32,23 @@ export interface CountryConfig {
   identifiers: readonly IssuerIdentifierField[];
   numberingUsesFixedWidth: boolean;
   requiredIssuerFields: readonly string[];
+  countyRegion?: CountyRegionField;
   showMol: boolean;
   showSignatureRow: boolean;
   showDualDisplay: boolean;
   showOriginalStamp: boolean;
 }
+
+const EU_DIRECTIVE_SME_EXEMPTION_GROUND =
+  'VAT exemption for small enterprises, Article 284 of Council Directive 2006/112/EC';
+
+const EU_DIRECTIVE_EXEMPTION_GROUNDS = [
+  EU_DIRECTIVE_SME_EXEMPTION_GROUND,
+  'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+  'Intra-Community supply, Article 138 of Council Directive 2006/112/EC',
+  'Export, Article 146 of Council Directive 2006/112/EC',
+  'Exempt supply, Article 132 or 135 of Council Directive 2006/112/EC',
+] as const;
 
 export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   locale: 'en',
@@ -42,8 +60,8 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   defaultVatRateBp: 2000,
   companyIdLabel: 'Company registration no.',
   vatNumberPattern: null,
-  exemptionGrounds: [],
-  defaultExemptionGround: null,
+  exemptionGrounds: EU_DIRECTIVE_EXEMPTION_GROUNDS,
+  defaultExemptionGround: EU_DIRECTIVE_SME_EXEMPTION_GROUND,
   identifiers: [],
   numberingUsesFixedWidth: false,
   requiredIssuerFields: ['companyName', 'street', 'city', 'postcode'],
@@ -57,4 +75,6 @@ export const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   ...GENERIC_EU_CONFIG,
   vatRates: [{ rateBp: 0, label: '0%' }],
   defaultVatRateBp: 0,
+  exemptionGrounds: [],
+  defaultExemptionGround: null,
 };

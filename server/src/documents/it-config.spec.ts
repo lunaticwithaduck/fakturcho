@@ -74,7 +74,16 @@ describe('IT_CONFIG', () => {
       'street',
       'postcode',
       'city',
+      'countyRegion',
     ]);
+  });
+
+  it('requires a 2-letter provincia', () => {
+    expect(IT_CONFIG.countyRegion).toEqual({
+      label: 'Provincia',
+      required: true,
+      pattern: /^[A-Z]{2}$/,
+    });
   });
 
   it('does not show the MOL row, signature row, dual display or original stamp', () => {

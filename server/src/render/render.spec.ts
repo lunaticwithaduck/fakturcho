@@ -246,7 +246,9 @@ describe('render pipeline', () => {
     expect(text).not.toContain('МОЛ');
     expect(text).not.toContain('Съставил');
     expect(text).not.toContain('(Оригинал)');
-    expect(text).not.toContain('лв.');
+    // A bg-resolved issuer (no explicit country snapshot) still carries the
+    // mandatory BGN dual-display line regardless of the rendered language.
+    expect(text).toContain('лв.');
     expect(filename).toBe('Invoice_0000000020.pdf');
   });
 
@@ -261,6 +263,35 @@ describe('render pipeline', () => {
     const text = await extractPdfText(buffer);
     expect(text).toContain('Amount due:');
     expect(text).not.toContain('Сума за плащане');
+  });
+
+  it('an issued document with a null issuerCountry predates the EU scope and never joins the live issuer profile', async () => {
+    const legacyAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({ data: { accountId: legacyAccount.id, country: 'DE' } });
+    const document = await seedDocument(db.prisma, {
+      accountId: legacyAccount.id,
+      documentType: 'INVOICE',
+      number: 1,
+    });
+    const { buffer } = await service.renderPdf(document.id, legacyAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Получател:');
+    expect(text).not.toContain('Recipient:');
+  });
+
+  it('a draft with a null issuerCountry still resolves from the live issuer profile (no snapshot yet)', async () => {
+    const draftAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({ data: { accountId: draftAccount.id, country: 'DE' } });
+    const document = await seedDocument(db.prisma, {
+      accountId: draftAccount.id,
+      documentType: 'INVOICE',
+      status: 'DRAFT',
+      number: null,
+    });
+    const { buffer } = await service.renderPdf(document.id, draftAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Rechnungsempfänger:');
+    expect(text).not.toContain('Получател:');
   });
 
   it('EN_LOCALE off: renders Bulgarian even for a document tagged documentLanguage=en', async () => {

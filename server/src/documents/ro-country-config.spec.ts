@@ -79,8 +79,19 @@ describe('RO country config — identifiers', () => {
 });
 
 describe('RO country config — issuer fields and layout switches', () => {
-  it('requires the core seller block fields', () => {
-    expect(ro.requiredIssuerFields).toEqual(['companyName', 'eik', 'addressLine', 'city']);
+  it('requires the core seller block fields, structured, with the județ', () => {
+    expect(ro.requiredIssuerFields).toEqual([
+      'companyName',
+      'eik',
+      'street',
+      'postcode',
+      'city',
+      'countyRegion',
+    ]);
+  });
+
+  it('requires a județ, in free text', () => {
+    expect(ro.countyRegion).toEqual({ label: 'Județ', required: true, pattern: null });
   });
 
   it('prints no MOL row, no signature row, no dual currency, no original stamp', () => {

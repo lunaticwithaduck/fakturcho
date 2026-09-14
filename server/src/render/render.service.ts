@@ -6,7 +6,7 @@ import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
 import { isDualDisplayActive } from './dual-display';
-import { resolveDocumentLanguage } from './language';
+import { resolveDocumentIssuerCountry, resolveDocumentLanguage } from './language';
 import { toSharedDocumentType } from './prisma-mappers';
 import { renderClassicTemplateHtml } from './templates/classic/template';
 
@@ -59,15 +59,17 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
     // A draft has no issuer snapshot yet (§4: snapshots are taken at issuance), so
     // document.issuerCountry is still null — fall back to the account's own issuer
     // profile so a draft preview renders in the account's language, not always BG.
-    const issuerCountry =
-      document.issuerCountry ??
-      (
-        await this.prisma.issuerProfile.findUnique({
-          where: { accountId },
-          select: { country: true },
-        })
-      )?.country ??
-      null;
+    // An issued document with a null issuerCountry predates the EU scope and must
+    // never join back to the live profile; it resolves to BG.
+    const liveIssuerCountry = isDraft
+      ? ((
+          await this.prisma.issuerProfile.findUnique({
+            where: { accountId },
+            select: { country: true },
+          })
+        )?.country ?? null)
+      : null;
+    const issuerCountry = resolveDocumentIssuerCountry(document, liveIssuerCountry);
     const language = enLocale
       ? resolveDocumentLanguage(document.documentLanguage, issuerCountry)
       : 'bg';
@@ -80,6 +82,7 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       dualDisplayActive: isDualDisplayActive(),
       isDraft,
       language,
+      issuerCountry,
     });
 
     const buffer = await this.renderHtmlToPdf(html);

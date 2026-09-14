@@ -178,11 +178,12 @@ describe('DocumentsService', () => {
       vatRegistered: true,
     });
 
+    const deReverseChargeGround = 'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG';
     const draft = await documentsService.saveDraft(
       accountId,
       null,
       draftRequest({
-        vatExemptionGround: 'чл.21 от ЗДДС',
+        vatExemptionGround: deReverseChargeGround,
         lineItems: [
           {
             name: 'Консултация',
@@ -204,7 +205,7 @@ describe('DocumentsService', () => {
       }),
     );
 
-    expect(draft.vatExemptionGround).toBe('чл.21 от ЗДДС');
+    expect(draft.vatExemptionGround).toBe(deReverseChargeGround);
     expect(draft.vatRateBp).toBeGreaterThan(0);
     expect(draft.subtotal).toBe(100000);
     expect(draft.vatAmount).toBe(10000);

@@ -65,6 +65,7 @@ export function cedentePrestatoreBlock(issuer: IssuerSnapshotDto): string {
     optionalEl('Indirizzo', issuer.street) +
     optionalEl('CAP', issuer.postcode) +
     optionalEl('Comune', issuer.city) +
+    optionalEl('Provincia', issuer.country?.toUpperCase() === 'IT' ? issuer.countyRegion : null) +
     optionalEl('Nazione', issuer.country) +
     '</Sede>';
   return `<CedentePrestatore>${datiAnagrafici}${sede}${iscrizioneReaBlock(issuer.identifiers)}</CedentePrestatore>`;
@@ -82,6 +83,10 @@ export function cessionarioCommittenteBlock(recipient: RecipientSnapshotDto): st
     optionalEl('Indirizzo', recipient.street) +
     optionalEl('CAP', recipient.postcode) +
     optionalEl('Comune', recipient.city ?? cityFromAddressLine(recipient.address)) +
+    optionalEl(
+      'Provincia',
+      recipient.country?.toUpperCase() === 'IT' ? recipient.countyRegion : null,
+    ) +
     optionalEl('Nazione', recipient.country) +
     '</Sede>';
   return `<CessionarioCommittente>${datiAnagrafici}${sede}</CessionarioCommittente>`;

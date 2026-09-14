@@ -54,6 +54,33 @@ describe('toFatturaPaXml — IT domestic, standard 22% rate', () => {
     expect(toFatturaPaXml(legacy)).toContain('<Comune>10121 Torino</Comune>');
   });
 
+  it('carries the Provincia for both parties when set on an IT address', () => {
+    const withProvincia: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      issuer: { ...itDomesticStandardInvoice.issuer, countyRegion: 'MI' },
+      recipient: { ...itDomesticStandardInvoice.recipient, countyRegion: 'TO' },
+    };
+    const withProvinciaXml = toFatturaPaXml(withProvincia);
+    expect(withProvinciaXml).toContain('<Comune>Milano</Comune><Provincia>MI</Provincia>');
+    expect(withProvinciaXml).toContain('<Comune>Torino</Comune><Provincia>TO</Provincia>');
+  });
+
+  it('omits Provincia when the party address is outside Italy', () => {
+    const foreignRecipient: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      recipient: {
+        ...itDomesticStandardInvoice.recipient,
+        country: 'FR',
+        countyRegion: '75',
+      },
+    };
+    expect(toFatturaPaXml(foreignRecipient)).not.toContain('<Provincia>75</Provincia>');
+  });
+
+  it('omits Provincia when unset', () => {
+    expect(xml).not.toContain('<Provincia>');
+  });
+
   it('carries the standard 22.00 VAT rate with no Natura code', () => {
     expect(xml).toContain('<AliquotaIVA>22.00</AliquotaIVA>');
     expect(xml).not.toContain('<Natura>');

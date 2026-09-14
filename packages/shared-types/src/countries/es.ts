@@ -47,6 +47,7 @@ export const ES_CONFIG: CountryConfig = {
     },
   ],
   requiredIssuerFields: ['companyName', 'eik', 'street', 'postcode', 'city'],
+  countyRegion: { label: 'Provincia', required: false, pattern: null },
   showMol: false,
   showSignatureRow: false,
   showDualDisplay: false,

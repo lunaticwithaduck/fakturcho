@@ -13,12 +13,13 @@ export function IssuerProfileCompletenessHint({ profile }: IssuerProfileComplete
   const missing = getMissingIssuerFields(profile);
   if (missing.length === 0) return null;
 
-  const { identifiers } = getCountryConfig(profile.country);
+  const { identifiers, countyRegion } = getCountryConfig(profile.country);
   const missingLabels = missing.map((field) => {
     if (field.startsWith('identifier:')) {
       const key = field.slice('identifier:'.length);
       return identifiers.find((entry) => entry.key === key)?.label ?? key;
     }
+    if (field === 'countyRegion' && countyRegion) return countyRegion.label;
     return t(`completenessHint.fields.${field}`);
   });
 

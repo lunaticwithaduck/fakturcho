@@ -2,7 +2,7 @@ import { Input, Select, SelectItem } from '@design/components';
 import { getCountryConfig } from '@fakturcho/shared-types';
 import { useTranslations } from 'next-intl';
 import { ISSUER_COUNTRY_CODES } from './issuerCountries';
-import type { IssuerProfileFormValues } from './useIssuerProfileForm';
+import type { IssuerProfileFieldErrors, IssuerProfileFormValues } from './useIssuerProfileForm';
 
 interface IssuerCompanyFieldsProps {
   values: IssuerProfileFormValues;
@@ -10,12 +10,20 @@ interface IssuerCompanyFieldsProps {
     key: K,
     value: IssuerProfileFormValues[K],
   ) => void;
+  fieldErrors?: IssuerProfileFieldErrors;
 }
 
-export function IssuerCompanyFields({ values, onChange }: IssuerCompanyFieldsProps) {
+export function IssuerCompanyFields({
+  values,
+  onChange,
+  fieldErrors = { identifiers: {} },
+}: IssuerCompanyFieldsProps) {
   const t = useTranslations('issuer');
-  const { requiredIssuerFields, identifiers, companyIdLabel } = getCountryConfig(values.country);
+  const { requiredIssuerFields, identifiers, companyIdLabel, countyRegion } = getCountryConfig(
+    values.country,
+  );
   const isRequired = (field: string) => requiredIssuerFields.includes(field);
+  const invalidFormat = t('companyFields.invalidFormat');
 
   return (
     <div className="flex flex-col gap-4">
@@ -56,6 +64,7 @@ export function IssuerCompanyFields({ values, onChange }: IssuerCompanyFieldsPro
               onChange={(event) =>
                 onChange('identifiers', { ...values.identifiers, [field.key]: event.target.value })
               }
+              {...(fieldErrors.identifiers[field.key] ? { error: invalidFormat } : {})}
             />
           ))}
         </div>
@@ -100,6 +109,15 @@ export function IssuerCompanyFields({ values, onChange }: IssuerCompanyFieldsPro
             />
           ) : null}
         </div>
+      ) : null}
+      {countyRegion ? (
+        <Input
+          label={countyRegion.label}
+          required={countyRegion.required}
+          value={values.countyRegion}
+          onChange={(event) => onChange('countyRegion', event.target.value)}
+          {...(fieldErrors.countyRegion ? { error: invalidFormat } : {})}
+        />
       ) : null}
       <Input
         label={t('companyFields.phone')}

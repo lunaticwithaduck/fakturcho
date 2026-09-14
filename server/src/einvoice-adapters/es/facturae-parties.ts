@@ -1,4 +1,5 @@
 import type { DocumentDto, IssuerSnapshotDto, RecipientSnapshotDto } from '@fakturcho/shared-types';
+import { deriveTownFromAddress } from '../../einvoice/address';
 import { parseDir3BuyerReference } from './face-dir3';
 import { residenceTypeCode, toAlpha3CountryCode } from './facturae-countries';
 import { optionalTextEl, textEl } from './xml';
@@ -108,7 +109,7 @@ export function buyerPartyBlock(document: DocumentDto): string {
       taxId: taxIdOf(recipient.eik, recipient.vatNumber),
       street: recipient.street,
       postcode: recipient.postcode,
-      city: recipient.city ?? recipient.address,
+      city: recipient.city ?? deriveTownFromAddress(recipient.address),
       countyRegion: recipient.countyRegion,
       country: recipient.country,
     },

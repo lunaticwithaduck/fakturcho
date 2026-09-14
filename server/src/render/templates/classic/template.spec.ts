@@ -100,6 +100,37 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('NOT LEGALLY VALID');
   });
 
+  it('threads a resolved (not-yet-snapshotted) issuer country into a draft: DE Steuernummer row and §19 line', () => {
+    const document = buildFakeDocument({
+      status: 'DRAFT',
+      number: null,
+      issuerCountry: null,
+      issuerVatRegistered: false,
+      issuerVatNumber: null,
+      issuerIdentifiers: { steuernummer: '21/815/08150' },
+      vatExemptionGround: 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.',
+    });
+    const presentation = resolveVatPresentation({
+      vatRegistered: false,
+      vatRateBp: 0,
+      vatExemptionGround: document.vatExemptionGround,
+      documentType: 'invoice',
+    });
+
+    const html = renderClassicTemplateHtml({
+      document,
+      lineItems: buildFakeLineItems(),
+      presentation,
+      dualDisplayActive: false,
+      isDraft: true,
+      language: 'de',
+      issuerCountry: 'DE',
+    });
+
+    expect(html).toContain('Steuernummer: 21/815/08150');
+    expect(html).toContain('Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.');
+  });
+
   it('formats a fractional quantity with the locale decimal separator', () => {
     const bgHtml = renderClassicTemplateHtml({
       document: buildFakeDocument(),

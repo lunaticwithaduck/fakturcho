@@ -25,7 +25,11 @@ export function IssuerProfileForm({ profile }: IssuerProfileFormProps) {
       <IssuerProfileCompletenessHint profile={profile} />
       <form className="flex flex-col gap-6" onSubmit={form.handleSubmit} noValidate>
         <Card>
-          <IssuerCompanyFields values={form.values} onChange={form.setField} />
+          <IssuerCompanyFields
+            values={form.values}
+            onChange={form.setField}
+            fieldErrors={form.fieldErrors}
+          />
         </Card>
         <Card>
           <IssuerVatFields values={form.values} onChange={form.setField} />

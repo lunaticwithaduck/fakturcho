@@ -68,6 +68,10 @@ describe('ES_CONFIG', () => {
     ]);
   });
 
+  it('offers Provincia as an optional field', () => {
+    expect(config.countyRegion).toEqual({ label: 'Provincia', required: false, pattern: null });
+  });
+
   it('shows none of the Bulgarian-specific extras', () => {
     expect(config.showMol).toBe(false);
     expect(config.showSignatureRow).toBe(false);

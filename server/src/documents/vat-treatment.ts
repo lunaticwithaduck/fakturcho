@@ -1,6 +1,15 @@
-import type { DocumentType, VatCategory } from '@fakturcho/shared-types';
+import type { CountryConfig, DocumentType, VatCategory } from '@fakturcho/shared-types';
 import { getCountryConfig, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { DomainError } from '../common/domain-error';
+
+function assertKnownGround(country: CountryConfig, ground: string): void {
+  if (country.exemptionGrounds.length === 0) return;
+  if ((country.exemptionGrounds as readonly string[]).includes(ground)) return;
+  throw new DomainError(
+    'VAT_GROUND_NOT_ALLOWED',
+    `"${ground}" is not a statutory VAT exemption ground for ${country.country}.`,
+  );
+}
 
 export interface VatTreatmentInput {
   documentType: DocumentType;
@@ -28,9 +37,13 @@ export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
         `${country.country} has no default VAT exemption ground; a non-VAT-registered issuer must select one.`,
       );
     }
+    if (vatExemptionGround && vatExemptionGround === input.requestedGround) {
+      assertKnownGround(country, vatExemptionGround);
+    }
     return { vatCharged: false, vatRateBp: 0, vatExemptionGround };
   }
   if (input.requestedGround) {
+    assertKnownGround(country, input.requestedGround);
     return { vatCharged: false, vatRateBp: 0, vatExemptionGround: input.requestedGround };
   }
   return { vatCharged: true, vatRateBp: country.defaultVatRateBp, vatExemptionGround: null };

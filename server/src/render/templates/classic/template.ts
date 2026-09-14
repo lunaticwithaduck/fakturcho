@@ -19,6 +19,7 @@ export interface ClassicTemplateInput {
   dualDisplayActive: boolean;
   isDraft: boolean;
   language: ClassicLanguage;
+  issuerCountry?: string | null;
   discounts?: readonly Discount[];
 }
 
@@ -30,9 +31,10 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     dualDisplayActive,
     isDraft,
     language,
+    issuerCountry = document.issuerCountry,
     discounts = [],
   } = input;
-  const locale = resolveClassicLocale(language, document.issuerCountry);
+  const locale = resolveClassicLocale(language, issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
   const isQuote = documentType === 'quote';
   const number = document.number === null ? null : Number(document.number);

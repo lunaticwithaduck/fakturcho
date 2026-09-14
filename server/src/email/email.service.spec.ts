@@ -135,6 +135,38 @@ describe('EmailService', () => {
     expect(sentInput?.locale).toBe('en');
   });
 
+  it('legacy: an issued document with a null issuerCountry emails in bg regardless of the recipient country', async () => {
+    const { account } = await createAccountWithUser('legacy');
+    const document = await db.prisma.document.create({
+      data: {
+        accountId: account.id,
+        documentType: 'INVOICE',
+        status: 'SENT',
+        number: 24n,
+        recipientCountry: 'FR',
+      },
+    });
+
+    const renderPdf = vi.fn(async () => ({
+      buffer: Buffer.from('%PDF-1.4 fake'),
+      filename: 'Invoice_0000000024.pdf',
+    }));
+    const renderer: DocumentRenderer = { renderPdf };
+    const send = vi.fn(async (_input: SendEmailInput): Promise<void> => {});
+    const sender: EmailSender = { send };
+
+    const service = new EmailService(db.prisma as unknown as PrismaService, renderer, sender);
+
+    await service.sendDocumentEmail(account.id, document.id, {
+      to: 'client@example.com',
+      emailText: 'x',
+    });
+
+    const sentInput = send.mock.calls[0]?.[0];
+    expect(sentInput?.locale).toBe('bg');
+    expect(sentInput?.subject).toBe('Фактура № 0000000024');
+  });
+
   it('passes the issuer company name and the account user email as reply-to', async () => {
     const { account, userEmail } = await createAccountWithUser('boyko');
     const document = await db.prisma.document.create({

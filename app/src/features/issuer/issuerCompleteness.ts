@@ -8,6 +8,7 @@ export type MissingIssuerField =
   | 'street'
   | 'postcode'
   | 'city'
+  | 'countyRegion'
   | 'vatNumber'
   | `identifier:${string}`;
 
@@ -23,6 +24,7 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
     street: profile.street,
     postcode: profile.postcode,
     city: profile.city,
+    countyRegion: profile.countyRegion,
   };
   const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const missing = requiredIssuerFields

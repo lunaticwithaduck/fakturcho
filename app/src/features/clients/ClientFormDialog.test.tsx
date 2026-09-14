@@ -194,6 +194,115 @@ describe('ClientFormDialog', () => {
     expect(body.peppolScheme).toBe('0088');
   });
 
+  it('drops stale structured-address fields when switching from a structured to a free-text country', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'ACME' } });
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Германия'));
+
+    fireEvent.change(screen.getByLabelText('Улица и номер'), {
+      target: { value: 'Musterstraße 10' },
+    });
+    fireEvent.change(screen.getByLabelText('Пощенски код'), { target: { value: '10115' } });
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('България'));
+
+    expect(screen.queryByLabelText('Улица и номер')).toBeNull();
+    fireEvent.change(screen.getByLabelText('Адрес'), { target: { value: 'ул. Витоша 15' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.country).toBe('BG');
+    expect(body.address).toBe('ул. Витоша 15');
+    expect(body.street).toBeNull();
+    expect(body.postcode).toBeNull();
+  });
+
+  it('shows Județ for a RO client and sends it on the request body', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME SRL' }));
+    renderDialog('bg', bgMessages);
+
+    expect(screen.queryByLabelText('Județ')).toBeNull();
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'ACME SRL' } });
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Румъния'));
+
+    fireEvent.change(screen.getByLabelText('Județ'), { target: { value: 'Cluj' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.country).toBe('RO');
+    expect(body.countyRegion).toBe('Cluj');
+  });
+
+  it('drops a stale județ when switching away from RO to a country without a county field', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME SRL' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'ACME SRL' } });
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Румъния'));
+    fireEvent.change(screen.getByLabelText('Județ'), { target: { value: 'Cluj' } });
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Германия'));
+
+    expect(screen.queryByLabelText('Județ')).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.country).toBe('DE');
+    expect(body.countyRegion).toBeNull();
+  });
+
+  it('blocks submit and shows an error for a malformed Provincia instead of sending it', async () => {
+    fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'Cliente SRL' }));
+    renderDialog('bg', bgMessages);
+
+    fireEvent.change(screen.getByLabelText('Фирма'), { target: { value: 'Cliente SRL' } });
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Италия'));
+    fireEvent.change(screen.getByLabelText('Provincia'), { target: { value: 'Roma' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(screen.getAllByText('Невалиден формат').length).toBeGreaterThan(0);
+
+    fireEvent.change(screen.getByLabelText('Provincia'), { target: { value: 'RM' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    const [request] = fetchMock.mock.calls[0] as [Request];
+    const body = await request.json();
+    expect(body.countyRegion).toBe('RM');
+  });
+
+  it('does not show Provincia/Județ for a country without a county field', async () => {
+    renderDialog('bg', bgMessages);
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Германия'));
+
+    expect(screen.queryByLabelText('Provincia')).toBeNull();
+    expect(screen.queryByLabelText('Județ')).toBeNull();
+  });
+
   it('sends null for blank Peppol fields', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME' }));
     renderDialog('bg', bgMessages);

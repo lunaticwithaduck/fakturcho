@@ -4,7 +4,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
 import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
-import { type Locale, resolveEmailLocale } from './locale';
+import { resolveEffectiveDocumentLanguage } from '../render/language';
+import type { Locale } from './locale';
 import { type DocumentRenderer, EMAIL_SENDER, type EmailSender, RENDER_SERVICE } from './ports';
 import { buildDocumentSubject } from './subject-templates';
 
@@ -55,13 +56,10 @@ export class EmailService {
 
     const rendered = await this.renderer.renderPdf(documentId, accountId);
     const enLocale = await this.flags.isEnabled('EN_LOCALE');
-    const locale = enLocale
-      ? resolveEmailLocale(
-          document.documentLanguage,
-          document.issuerCountry,
-          document.recipientCountry,
-        )
-      : 'bg';
+    // Emailing is guarded above to issued documents only, so this is never a draft and
+    // the live issuer profile is never consulted (rule: an issued document with no
+    // country snapshot predates the EU scope and resolves to bg, not the recipient).
+    const locale: Locale = enLocale ? resolveEffectiveDocumentLanguage(document, null) : 'bg';
     const subject = buildSubject(
       locale,
       document.documentType,

@@ -1,20 +1,31 @@
 import { Input, Select, SelectItem } from '@design/components';
-import { DOCUMENT_LANGUAGES, type DocumentLanguage, EU_VAT_AREA_COUNTRIES } from '@shared/types';
+import {
+  DOCUMENT_LANGUAGES,
+  type DocumentLanguage,
+  EU_VAT_AREA_COUNTRIES,
+  getCountryConfig,
+} from '@shared/types';
 import { useTranslations } from 'next-intl';
-import { type ClientFormValues, usesStructuredClientAddress } from './clientForm';
+import {
+  type ClientFieldErrors,
+  type ClientFormValues,
+  usesStructuredClientAddress,
+} from './clientForm';
 
 interface ClientFormFieldsProps {
   values: ClientFormValues;
   onChange: <K extends keyof ClientFormValues>(key: K, value: ClientFormValues[K]) => void;
+  fieldErrors?: ClientFieldErrors;
 }
 
 const OTHER_COUNTRY = 'OTHER';
 const COUNTRY_OPTIONS = [...EU_VAT_AREA_COUNTRIES, OTHER_COUNTRY];
 const SAME_AS_ISSUER = 'same';
 
-export function ClientFormFields({ values, onChange }: ClientFormFieldsProps) {
+export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientFormFieldsProps) {
   const t = useTranslations('clients');
   const structuredAddress = usesStructuredClientAddress(values.country);
+  const { countyRegion } = getCountryConfig(values.country);
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,6 +70,15 @@ export function ClientFormFields({ values, onChange }: ClientFormFieldsProps) {
         value={values.city}
         onChange={(event) => onChange('city', event.target.value)}
       />
+      {countyRegion ? (
+        <Input
+          label={countyRegion.label}
+          required={countyRegion.required}
+          value={values.countyRegion}
+          onChange={(event) => onChange('countyRegion', event.target.value)}
+          {...(fieldErrors.countyRegion ? { error: t('invalidFormat') } : {})}
+        />
+      ) : null}
       <Select
         label={t('countryLabel')}
         value={values.country}

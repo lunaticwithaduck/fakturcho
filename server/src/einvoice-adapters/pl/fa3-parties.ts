@@ -1,4 +1,5 @@
 import type { IssuerSnapshotDto, RecipientSnapshotDto } from '@fakturcho/shared-types';
+import { deriveTownFromAddress } from '../../einvoice/address';
 import { normalizeNip } from './nip';
 import { optionalTextEl, textEl } from './xml-escape';
 
@@ -50,7 +51,8 @@ function buyerIdentityBlock(recipient: RecipientSnapshotDto): string {
 
 export function buyerParty(recipient: RecipientSnapshotDto): string {
   const cityLine =
-    [recipient.postcode, recipient.city].filter(Boolean).join(' ') || recipient.address;
+    [recipient.postcode, recipient.city].filter(Boolean).join(' ') ||
+    deriveTownFromAddress(recipient.address);
   return (
     '<Podmiot2>' +
     '<DaneIdentyfikacyjne>' +

@@ -67,4 +67,18 @@ describe('buyerPartyBlock — AddressInSpain', () => {
     });
     expect(xml).toContain('<Town>Valencia</Town>');
   });
+
+  it('derives the town from the last comma segment, postcode stripped, when city is missing', () => {
+    const xml = buyerPartyBlock({
+      ...esDomesticStandardInvoice,
+      recipient: {
+        ...esDomesticStandardInvoice.recipient,
+        address: 'Calle Mayor 5, 28013 Madrid',
+        city: null,
+      },
+    });
+    expect(xml).toContain('<Town>Madrid</Town>');
+    expect(xml).not.toContain('Calle Mayor 5');
+    expect(xml).not.toContain('28013');
+  });
 });

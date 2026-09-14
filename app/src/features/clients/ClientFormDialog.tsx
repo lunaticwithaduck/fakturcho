@@ -24,7 +24,11 @@ export function ClientFormDialog({ client, onOpenChange, onSaved }: ClientFormDi
       <DialogContent>
         <DialogTitle>{client ? t('dialogEditTitle') : t('dialogNewTitle')}</DialogTitle>
         <form className="flex flex-col gap-4" onSubmit={form.handleSubmit} noValidate>
-          <ClientFormFields values={form.values} onChange={form.setField} />
+          <ClientFormFields
+            values={form.values}
+            onChange={form.setField}
+            fieldErrors={form.fieldErrors}
+          />
           {form.error ? <p className="text-sm font-medium text-danger">{form.error}</p> : null}
           <div className="flex justify-end gap-2">
             <DialogClose asChild>

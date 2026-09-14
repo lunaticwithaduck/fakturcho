@@ -2,6 +2,7 @@ import type { IssuerProfileDto } from '@fakturcho/shared-types';
 import { Body, Controller, Get, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
+import { withCountryFieldPatterns } from '../common/country-field-patterns';
 import { DomainError } from '../common/domain-error';
 import {
   countryCodeSchema,
@@ -14,7 +15,7 @@ import {
 import type { UpdateIssuerProfileInput } from './issuer.service';
 import { IssuerService } from './issuer.service';
 
-export const updateIssuerProfileSchema = z.object({
+const baseUpdateIssuerProfileSchema = z.object({
   companyName: z.string().nullable().optional(),
   eik: z.string().nullable().optional(),
   mol: z.string().nullable().optional(),
@@ -35,6 +36,8 @@ export const updateIssuerProfileSchema = z.object({
   peppolEndpointId: peppolEndpointIdSchema.nullable().optional(),
   peppolScheme: peppolSchemeSchema.nullable().optional(),
 });
+
+export const updateIssuerProfileSchema = withCountryFieldPatterns(baseUpdateIssuerProfileSchema);
 
 function parseBody<T>(schema: z.ZodType<T>, data: unknown): T {
   const result = schema.safeParse(data);
@@ -59,8 +62,20 @@ export class IssuerController {
   }
 
   @Put()
-  updateProfile(@AccountId() accountId: string, @Body() body: unknown): Promise<IssuerProfileDto> {
-    const input: UpdateIssuerProfileInput = parseBody(updateIssuerProfileSchema, body);
+  async updateProfile(
+    @AccountId() accountId: string,
+    @Body() body: unknown,
+  ): Promise<IssuerProfileDto> {
+    const bodyCountry =
+      typeof body === 'object' && body !== null && 'country' in body
+        ? (body as { country?: unknown }).country
+        : undefined;
+    const fallbackCountry =
+      typeof bodyCountry === 'string'
+        ? undefined
+        : (await this.issuerService.getProfile(accountId)).country;
+    const schema = withCountryFieldPatterns(baseUpdateIssuerProfileSchema, fallbackCountry);
+    const input: UpdateIssuerProfileInput = parseBody(schema, body);
     return this.issuerService.updateProfile(accountId, input);
   }
 }

@@ -59,6 +59,84 @@ describe('resolveVatTreatment', () => {
     });
     expect(treatment).toEqual({ vatCharged: false, vatRateBp: 0, vatExemptionGround: null });
   });
+
+  it('rejects an apartado outside the ES statutory list', () => {
+    expect(() =>
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: false,
+        requestedGround: 'foo',
+        issuerCountry: 'ES',
+      }),
+    ).toThrow(DomainError);
+  });
+
+  it('rejects a made-up ground for a VAT-registered issuer at 0%', () => {
+    expect(() =>
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: true,
+        requestedGround: 'foo',
+        issuerCountry: 'BG',
+      }),
+    ).toThrow(DomainError);
+  });
+
+  it("rejects another country's ground for a VAT-registered issuer at 0%", () => {
+    expect(() =>
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: true,
+        requestedGround: 'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
+        issuerCountry: 'BG',
+      }),
+    ).toThrow(DomainError);
+  });
+
+  it('accepts the BG default ground when explicitly re-requested by a non-registered issuer', () => {
+    const treatment = resolveVatTreatment({
+      documentType: 'invoice',
+      vatRegistered: false,
+      requestedGround: 'чл.113, ал.9 от ЗДДС',
+      issuerCountry: 'BG',
+    });
+    expect(treatment.vatExemptionGround).toBe('чл.113, ал.9 от ЗДДС');
+  });
+
+  it('no longer dead-ends a non-registered generic-EU issuer: the SME ground applies automatically', () => {
+    const treatment = resolveVatTreatment({
+      documentType: 'invoice',
+      vatRegistered: false,
+      requestedGround: null,
+      issuerCountry: 'NL',
+    });
+    expect(treatment.vatExemptionGround).toBe(
+      'VAT exemption for small enterprises, Article 284 of Council Directive 2006/112/EC',
+    );
+  });
+
+  it('rejects a made-up ground for a VAT-registered generic-EU issuer at 0%', () => {
+    expect(() =>
+      resolveVatTreatment({
+        documentType: 'invoice',
+        vatRegistered: true,
+        requestedGround: 'foo',
+        issuerCountry: 'NL',
+      }),
+    ).toThrow(DomainError);
+  });
+
+  it('accepts a statutory ground for a VAT-registered generic-EU issuer at 0%', () => {
+    const treatment = resolveVatTreatment({
+      documentType: 'invoice',
+      vatRegistered: true,
+      requestedGround: 'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+      issuerCountry: 'NL',
+    });
+    expect(treatment.vatExemptionGround).toBe(
+      'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+    );
+  });
 });
 
 describe('applyLineVatGroups', () => {

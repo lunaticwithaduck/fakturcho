@@ -47,3 +47,29 @@ describe('createClientSchema — format validation', () => {
     expect(() => createClientSchema.parse({ companyName: 'X', pec: 'not-an-email' })).toThrow();
   });
 });
+
+describe('createClientSchema — country-driven region pattern', () => {
+  it('rejects a Provincia that is not two uppercase letters for an IT client', () => {
+    expect(() =>
+      createClientSchema.parse({ companyName: 'X', country: 'IT', countyRegion: 'Roma' }),
+    ).toThrow();
+  });
+
+  it('accepts a two-letter uppercase Provincia for an IT client', () => {
+    expect(() =>
+      createClientSchema.parse({ companyName: 'X', country: 'IT', countyRegion: 'RM' }),
+    ).not.toThrow();
+  });
+
+  it('does not enforce a pattern for a RO client (județ is free text)', () => {
+    expect(() =>
+      createClientSchema.parse({ companyName: 'X', country: 'RO', countyRegion: 'Cluj' }),
+    ).not.toThrow();
+  });
+
+  it('defaults to BG when no country is given, where countyRegion has no pattern', () => {
+    expect(() =>
+      createClientSchema.parse({ companyName: 'X', countyRegion: 'anything' }),
+    ).not.toThrow();
+  });
+});

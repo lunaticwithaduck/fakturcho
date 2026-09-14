@@ -144,7 +144,7 @@ describe('DocumentsController — HTTP body round-trip', () => {
 
     let issuerError: unknown;
     try {
-      issuerController.updateProfile(account.id, { country: 'germany' });
+      await issuerController.updateProfile(account.id, { country: 'germany' });
     } catch (error) {
       issuerError = error;
     }

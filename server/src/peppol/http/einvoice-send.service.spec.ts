@@ -368,6 +368,7 @@ describe('EinvoiceSendService', () => {
         country: 'RO',
         street: 'Bulevardul Unirii 1',
         postcode: '030167',
+        countyRegion: 'B',
       });
       const client = await prisma.client.create({
         data: { accountId, companyName: 'Client SRL', vatNumber: 'RO18547290', countyRegion: 'B' },
@@ -411,6 +412,7 @@ describe('EinvoiceSendService', () => {
         country: 'IT',
         street: 'Via Roma 1',
         postcode: '00100',
+        countyRegion: 'RM',
       });
       const client = await prisma.client.create({
         data: { accountId, companyName: 'Cliente SRL' },
@@ -447,6 +449,7 @@ describe('EinvoiceSendService', () => {
         country: 'RO',
         street: 'Bulevardul Unirii 1',
         postcode: '030167',
+        countyRegion: 'B',
       });
       const client = await prisma.client.create({
         data: { accountId, companyName: 'Client SRL' },
@@ -496,6 +499,7 @@ describe('EinvoiceSendService', () => {
         country: 'RO',
         street: 'Bulevardul Unirii 1',
         postcode: '030167',
+        countyRegion: 'B',
       });
       const client = await prisma.client.create({
         data: { accountId, companyName: 'Client SRL' },
