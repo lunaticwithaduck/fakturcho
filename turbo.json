@@ -1,7 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env", "**/.env.*"],
-  "globalEnv": ["DUAL_DISPLAY_UNTIL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

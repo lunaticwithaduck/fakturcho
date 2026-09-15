@@ -1,7 +1,6 @@
-import { eurCentsToBgnCents } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { amountInWords } from '../../../money/amount-in-words';
-import { formatBgn, formatEur } from '../../../money/format';
+import { formatEur } from '../../../money/format';
 import type { VatPresentation } from '../../../money/vat';
 import { escapeHtml } from './html-utils';
 
@@ -13,18 +12,13 @@ function totalsRow(label: string, value: string, className = 'totals-row'): stri
   return `<div class="${className}"><span>${escapeHtml(label)}</span><span>${value}</span></div>`;
 }
 
-export function buildTotalsBlock(
-  document: Document,
-  presentation: VatPresentation,
-  dualDisplayActive: boolean,
-): string {
+export function buildTotalsBlock(document: Document, presentation: VatPresentation): string {
   const base = document.subtotal - document.discountTotal;
   const vatRows = presentation.vatCharged
     ? totalsRow('Данъчна основа:', formatEur(base)) +
       totalsRow(`ДДС (${document.vatRateBp / 100}%):`, formatEur(document.vatAmount))
     : '';
-  const bgnSuffix = dualDisplayActive ? ` / ${formatBgn(eurCentsToBgnCents(document.amount))}` : '';
-  const dueValue = `${formatEur(document.amount)}${bgnSuffix}`;
+  const dueValue = formatEur(document.amount);
   const totals = `<div class="totals">
     ${vatRows}
     ${totalsRow('Общо:', formatEur(document.amount), 'totals-row total')}

@@ -4,7 +4,6 @@ import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
-import { isDualDisplayActive } from './dual-display';
 import { toSharedDocumentType } from './prisma-mappers';
 import { renderClassicTemplateHtml } from './templates/classic/template';
 
@@ -52,7 +51,6 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       document,
       lineItems: document.lineItems,
       presentation,
-      dualDisplayActive: isDualDisplayActive(),
       isDraft,
     });
 

@@ -179,7 +179,7 @@ export default function PrimitivesPage() {
 
       <Card className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold text-text">Обобщение</h2>
-        <p className="text-sm text-text-muted">Дължима сума: 5 500,00 € / 10 757,07 лв.</p>
+        <p className="text-sm text-text-muted">Дължима сума: 5 500,00 €</p>
       </Card>
 
       <EmptyState

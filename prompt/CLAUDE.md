@@ -79,10 +79,6 @@ design/components/Button/
   render boundary.
 - Formatting to Bulgarian display form (`1 600,00`) happens in exactly one
   module, at the edge. Parsing happens in exactly one module.
-- BGN is derived, never stored: `bgn = roundHalfUp(eur * 1.95583, 2)` at the peg.
-  The peg lives in one constant.
-- The dual EUR/BGN display sits behind a dated config flag; past the date the
-  `лв.` line disappears. The date is config, not code.
 
 ## Data and state
 
