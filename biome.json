@@ -68,6 +68,9 @@
           "suspicious": {
             "noExplicitAny": "off",
             "noShadowRestrictedNames": "off"
+          },
+          "performance": {
+            "noImgElement": "off"
           }
         }
       }
