@@ -1,3 +1,4 @@
+import { getFeatureFlags } from '@app/feature-flags';
 import { COMPANY } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
 import { getLandingFaq } from '@app/features/marketing/landingFaq';
@@ -57,10 +58,11 @@ export default async function HomePage() {
   if (store.getAll().some((entry) => entry.name.endsWith('session_token'))) {
     redirect('/documents');
   }
+  const flags = await getFeatureFlags();
   return (
     <>
       <script type="application/ld+json">{buildJsonLd()}</script>
-      <LandingPage />
+      <LandingPage enEnabled={flags.EN_LOCALE} />
     </>
   );
 }

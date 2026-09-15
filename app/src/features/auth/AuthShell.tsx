@@ -2,19 +2,23 @@
 
 import { LegalFooter } from '@app/features/legal/LegalFooter';
 import brandIcon from '@app/features/shell/brand-icon.png';
+import { LanguageSwitcher } from '@app/i18n/LanguageSwitcher';
 import type { Locale } from '@shared/types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 
 interface AuthShellProps {
   locale?: Locale;
+  enEnabled?: boolean;
   children: ReactNode;
 }
 
-export function AuthShell({ locale = 'bg', children }: AuthShellProps) {
+export function AuthShell({ locale = 'bg', enEnabled = false, children }: AuthShellProps) {
   const t = useTranslations('auth');
+  const pathname = usePathname();
   const homeHref = locale === 'bg' ? '/' : '/en';
 
   return (
@@ -24,6 +28,7 @@ export function AuthShell({ locale = 'bg', children }: AuthShellProps) {
           <Image src={brandIcon} alt="" className="h-12 w-12" priority />
           <span className="text-xl font-bold text-text">{t('brandName')}</span>
         </Link>
+        <LanguageSwitcher locale={locale} currentPath={pathname} enabled={enEnabled} />
         <div className="w-full">{children}</div>
       </main>
       <LegalFooter locale={locale} />

@@ -86,7 +86,7 @@ export default async function EnglishHomePage() {
   return (
     <>
       <script type="application/ld+json">{buildJsonLd()}</script>
-      <LandingPage locale="en" />
+      <LandingPage locale="en" enEnabled />
     </>
   );
 }

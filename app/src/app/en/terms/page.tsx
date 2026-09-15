@@ -24,6 +24,9 @@ export default function EnglishTermsPage() {
       intro={doc.intro}
       sections={doc.sections}
       lastUpdatedLabel={doc.lastUpdatedLabel}
+      locale="en"
+      currentPath="/en/terms"
+      enEnabled
     />
   );
 }

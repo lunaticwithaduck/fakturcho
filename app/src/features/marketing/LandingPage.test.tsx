@@ -68,4 +68,23 @@ describe('LandingPage', () => {
       ).toBe(`/en/signup?country=${code}`);
     }
   });
+
+  it('hides the language switcher when EN_LOCALE is off', () => {
+    render(<LandingPage />);
+    expect(screen.queryByRole('navigation', { name: 'Избор на език' })).toBeNull();
+  });
+
+  it('shows the switcher linking off the bg homepage when enabled', () => {
+    render(<LandingPage enEnabled />);
+    expect(screen.getByRole('link', { name: 'Български' }).getAttribute('href')).toBe('/?lang=bg');
+    expect(screen.getByRole('link', { name: 'Английски' }).getAttribute('href')).toBe('/?lang=en');
+  });
+
+  it('shows the switcher linking off the en homepage when enabled', () => {
+    render(<LandingPage locale="en" enEnabled />);
+    expect(screen.getByRole('link', { name: 'Bulgarian' }).getAttribute('href')).toBe(
+      '/en?lang=bg',
+    );
+    expect(screen.getByRole('link', { name: 'English' }).getAttribute('href')).toBe('/en?lang=en');
+  });
 });

@@ -24,6 +24,9 @@ export default function EnglishRefundsPage() {
       intro={doc.intro}
       sections={doc.sections}
       lastUpdatedLabel={doc.lastUpdatedLabel}
+      locale="en"
+      currentPath="/en/refunds"
+      enEnabled
     />
   );
 }

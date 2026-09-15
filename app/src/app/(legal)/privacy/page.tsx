@@ -1,3 +1,4 @@
+import { getFeatureFlags } from '@app/feature-flags';
 import { LegalDocument } from '@app/features/legal/LegalDocument';
 import { PRIVACY_INTRO, PRIVACY_SECTIONS } from '@app/features/legal/privacySections';
 import type { Metadata } from 'next';
@@ -15,12 +16,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const flags = await getFeatureFlags();
   return (
     <LegalDocument
       title="Политика за поверителност"
       intro={PRIVACY_INTRO}
       sections={PRIVACY_SECTIONS}
+      currentPath="/privacy"
+      enEnabled={flags.EN_LOCALE}
     />
   );
 }

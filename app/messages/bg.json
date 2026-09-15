@@ -834,5 +834,10 @@
         }
       ]
     }
+  },
+  "languageSwitcher": {
+    "navLabel": "Избор на език",
+    "bgFull": "Български",
+    "enFull": "Английски"
   }
 }
