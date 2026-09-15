@@ -4,6 +4,7 @@ import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { TARGET_COUNTRIES } from '@app/features/marketing/targetCountries';
 import { trackEvent } from '@app/features/shared/analytics';
 import { formatMoneyForLocale } from '@app/features/shared/format';
+import { firstSearchParam } from '@app/features/shared/searchParams';
 import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card, Input, Select, SelectItem } from '@design/components';
 import type { Locale } from '@shared/types';
@@ -26,7 +27,7 @@ const NON_BG_SIGNUP_COUNTRIES = [
 
 interface SignupFormProps {
   locale?: Locale;
-  initialCountry?: string | undefined;
+  initialCountry?: string | string[] | undefined;
 }
 
 export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
@@ -37,7 +38,7 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
   const [password, setPassword] = useState('');
   const [country, setCountry] = useState<string>(() => {
     if (locale === 'bg') return 'BG';
-    const upper = initialCountry?.toUpperCase();
+    const upper = firstSearchParam(initialCountry)?.toUpperCase();
     return upper && isEuVatAreaCountry(upper) ? upper : '';
   });
   const [error, setError] = useState<string | null>(null);

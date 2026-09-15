@@ -23,6 +23,10 @@ export interface CountryConfig {
   country: string;
   locale: Locale;
   language: DocumentLanguage;
+  // IANA zone for the issuer's own wall clock — legal document timestamps
+  // (e.g. delivery_note.transportedAt) are always the issuer's local time,
+  // never the server's or the viewer's.
+  timeZone: string;
   vatRates: VatRateOption[];
   defaultVatRateBp: number;
   companyIdLabel: string;
@@ -56,6 +60,9 @@ const EU_DIRECTIVE_EXEMPTION_GROUNDS = [
 export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   locale: 'en',
   language: 'en',
+  // No dedicated config for this country yet, so no verified capital zone —
+  // most unconfigured EU_VAT_AREA_COUNTRIES sit in CET/CEST.
+  timeZone: 'Europe/Brussels',
   vatRates: [
     { rateBp: 2000, label: '20%' },
     { rateBp: 0, label: '0%' },
@@ -81,4 +88,6 @@ export const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   defaultVatRateBp: 0,
   exemptionGrounds: [],
   defaultExemptionGround: null,
+  // Outside the EU there is no capital-zone shortlist to fall back on.
+  timeZone: 'UTC',
 };

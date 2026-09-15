@@ -10,7 +10,7 @@ export function buildTransportBlock(document: Document, locale: ClassicLocaleCon
   const rows = [
     line(labels.transportReasonPrefix, document.transportReason),
     document.transportedAt
-      ? `<div>${labels.transportedAtPrefix}${formatDateTimeForLocale(document.transportedAt, locale.language)}</div>`
+      ? `<div>${labels.transportedAtPrefix}${formatDateTimeForLocale(document.transportedAt, locale.language, locale.timeZone)}</div>`
       : '',
     line(labels.carrierNamePrefix, document.carrierName),
     line(labels.transportNotePrefix, document.transportNote),

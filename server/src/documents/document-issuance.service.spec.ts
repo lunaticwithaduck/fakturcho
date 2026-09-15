@@ -287,7 +287,7 @@ describe('DocumentIssuanceService', () => {
       draftRequest({
         documentType: 'delivery_note',
         transportReason: 'Vendita',
-        transportedAt: '2026-09-15T09:30:00.000Z',
+        transportedAt: '2026-09-15T09:30',
       }),
     );
 
@@ -346,7 +346,7 @@ describe('DocumentIssuanceService', () => {
       draftRequest({
         documentType: 'delivery_note',
         carrierName: 'Ion Popescu, CI seria RD nr. 123456',
-        transportedAt: '2026-09-15T09:30:00.000Z',
+        transportedAt: '2026-09-15T09:30',
       }),
     );
 

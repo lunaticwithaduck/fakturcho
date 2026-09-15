@@ -81,7 +81,10 @@ export function blankComposerState(): ComposerFormState {
   };
 }
 
-export function composerStateFromDocument(document: DocumentDto): ComposerFormState {
+export function composerStateFromDocument(
+  document: DocumentDto,
+  timeZone: string,
+): ComposerFormState {
   return {
     documentType: document.documentType,
     clientId: document.clientId,
@@ -90,7 +93,7 @@ export function composerStateFromDocument(document: DocumentDto): ComposerFormSt
     taxEventAt: document.taxEventAt ?? '',
     dueAt: document.dueAt ?? '',
     validUntil: document.validUntil ?? '',
-    ...deliveryStateFromDocument(document),
+    ...deliveryStateFromDocument(document, timeZone),
     chargeVat: document.vatExemptionGround === null,
     vatExemptionGround: document.vatExemptionGround,
     notes: document.notes ?? '',

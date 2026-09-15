@@ -112,7 +112,8 @@ describe('delivery_note rendering', () => {
         documentLanguage: 'it',
         issuerCountry: 'IT',
         transportReason: 'Vendita',
-        transportedAt: new Date('2026-09-15T09:30:00.000Z'),
+        // Rome runs CEST (UTC+2) in September, so 07:30 UTC is 09:30 local.
+        transportedAt: new Date('2026-09-15T07:30:00.000Z'),
         carrierName: 'Bartolini SpA',
         transportNote: '3 colli, 12 kg',
         vatRateBp: 0,

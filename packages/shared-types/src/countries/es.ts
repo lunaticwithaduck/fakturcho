@@ -14,6 +14,9 @@ export const ES_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'ES',
   language: 'es',
+  // The Canary Islands run on Atlantic/Canary (WET/WEST, one hour behind the
+  // mainland), but Europe/Madrid is the country default.
+  timeZone: 'Europe/Madrid',
   vatRates: [
     { rateBp: 2100, label: '21%' },
     { rateBp: 1000, label: '10%' },

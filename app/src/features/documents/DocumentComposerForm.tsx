@@ -43,10 +43,9 @@ export function DocumentComposerForm({
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
-  const controller = useComposerState(existing);
-  const { state, setField, patchState } = controller;
-
   const countryConfig = getCountryConfig(issuerProfile.country);
+  const controller = useComposerState(existing, countryConfig.timeZone);
+  const { state, setField, patchState } = controller;
   const vat = resolveVatTreatment({
     documentType: state.documentType,
     vatRegistered: issuerProfile.vatRegistered,

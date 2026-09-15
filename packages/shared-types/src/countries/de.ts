@@ -12,6 +12,7 @@ export const DE_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'DE',
   language: 'de',
+  timeZone: 'Europe/Berlin',
   vatRates: [
     { rateBp: 1900, label: '19%' },
     { rateBp: 700, label: '7%' },

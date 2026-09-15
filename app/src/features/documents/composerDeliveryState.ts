@@ -1,3 +1,4 @@
+import { isoInstantToZonedInputValue } from '@app/features/shared/timezone';
 import type { DocumentDto } from '@shared/types';
 
 export interface ComposerDeliveryFormState {
@@ -16,10 +17,11 @@ export interface DeliveryRequestFields {
   transportNote: string | null;
 }
 
-// <input type="datetime-local"> wants "YYYY-MM-DDTHH:mm" with no timezone.
-function toDateTimeLocalValue(iso: string | null): string {
+// <input type="datetime-local"> wants "YYYY-MM-DDTHH:mm" with no timezone —
+// the issuer's own, since that is the clock the stored instant was read from.
+function toDateTimeLocalValue(iso: string | null, timeZone: string): string {
   if (!iso) return '';
-  return iso.slice(0, 16);
+  return isoInstantToZonedInputValue(iso, timeZone);
 }
 
 export function blankDeliveryState(): ComposerDeliveryFormState {
@@ -32,11 +34,14 @@ export function blankDeliveryState(): ComposerDeliveryFormState {
   };
 }
 
-export function deliveryStateFromDocument(document: DocumentDto): ComposerDeliveryFormState {
+export function deliveryStateFromDocument(
+  document: DocumentDto,
+  timeZone: string,
+): ComposerDeliveryFormState {
   return {
     deliveryDate: document.deliveryDate ?? '',
     transportReason: document.transportReason ?? '',
-    transportedAt: toDateTimeLocalValue(document.transportedAt),
+    transportedAt: toDateTimeLocalValue(document.transportedAt, timeZone),
     carrierName: document.carrierName ?? '',
     transportNote: document.transportNote ?? '',
   };

@@ -84,6 +84,59 @@ describe('parseMoneyInputForLocale — en', () => {
   });
 });
 
+describe('parseMoneyInputForLocale — table-driven, all published locales', () => {
+  const cases: Array<
+    [string, 'bg' | 'en' | 'de' | 'fr' | 'it' | 'pl' | 'ro' | 'es', number | null]
+  > = [
+    ['12,50', 'bg', 1250],
+    ['1 600,00', 'bg', 160000],
+    ['1600', 'bg', 160000],
+    ['1600.00', 'en', 160000],
+    ['1,600.00', 'en', 160000],
+    ['1600', 'en', 160000],
+    ['12,50', 'de', 1250],
+    ['12.50', 'de', 1250],
+    ['1.234,50', 'de', 123450],
+    ['1234,50', 'de', 123450],
+    ['1234', 'de', 123400],
+    ['1.234', 'de', 123400],
+    ['12,50', 'fr', 1250],
+    ['1 234,50', 'fr', 123450],
+    ['1 234,50', 'fr', 123450],
+    ['1 234,50', 'fr', 123450],
+    ['1234', 'fr', 123400],
+    ['12,50', 'it', 1250],
+    ['12.50', 'it', 1250],
+    ['1.234,50', 'it', 123450],
+    ['1234,50', 'it', 123450],
+    ['1234', 'it', 123400],
+    ['123.456', 'it', 12345600],
+    ['12,50', 'pl', 1250],
+    ['1 234,50', 'pl', 123450],
+    ['1234,5', 'pl', 123450],
+    ['1234', 'pl', 123400],
+    ['12,50', 'ro', 1250],
+    ['1.234,50', 'ro', 123450],
+    ['1234', 'ro', 123400],
+    ['12,50', 'es', 1250],
+    ['12.50', 'es', 1250],
+    ['1.234,50', 'es', 123450],
+    ['1234', 'es', 123400],
+    ['-12,50', 'de', -1250],
+    ['-1.234,50', 'it', -123450],
+    ['', 'de', null],
+    ['abc', 'it', null],
+    ['12,345', 'it', null],
+    ['1,234,50', 'it', null],
+    ['1.234.567,89', 'de', 123456789],
+    ['1234.5678', 'de', null],
+  ];
+
+  it.each(cases)('parses %s (%s) as %s', (raw, locale, expected) => {
+    expect(parseMoneyInputForLocale(raw, locale)).toBe(expected);
+  });
+});
+
 describe('formatDateForLocale — bg parity', () => {
   it('is byte-identical to the existing BG-only formatDate', () => {
     expect(formatDateForLocale('2026-08-02', 'bg')).toBe(formatDate('2026-08-02'));

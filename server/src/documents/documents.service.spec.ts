@@ -463,7 +463,7 @@ describe('DocumentsService', () => {
         documentType: 'delivery_note',
         deliveryDate: '2026-09-15',
         transportReason: 'Vendita',
-        transportedAt: '2026-09-15T09:30:00.000Z',
+        transportedAt: '2026-09-15T09:30',
         carrierName: 'Bartolini SpA',
         transportNote: '3 colli, 12 kg',
       }),
@@ -471,12 +471,13 @@ describe('DocumentsService', () => {
 
     expect(draft.deliveryDate).toBe('2026-09-15');
     expect(draft.transportReason).toBe('Vendita');
-    expect(draft.transportedAt).toBe('2026-09-15T09:30:00.000Z');
+    // 09:30 Rome time (CEST, UTC+2 in September) is stored as the 07:30 UTC instant.
+    expect(draft.transportedAt).toBe('2026-09-15T07:30:00.000Z');
     expect(draft.carrierName).toBe('Bartolini SpA');
     expect(draft.transportNote).toBe('3 colli, 12 kg');
 
     const refetched = await documentsService.get(accountId, draft.id);
     expect(refetched.transportReason).toBe('Vendita');
-    expect(refetched.transportedAt).toBe('2026-09-15T09:30:00.000Z');
+    expect(refetched.transportedAt).toBe('2026-09-15T07:30:00.000Z');
   });
 });

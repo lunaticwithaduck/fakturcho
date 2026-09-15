@@ -108,6 +108,16 @@ describe('SignupForm', () => {
     expect(screen.getByLabelText('Country').textContent).toContain('Germany');
   });
 
+  it('preselects the country from a repeated initialCountry query param', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <SignupForm locale="en" initialCountry={['de', 'fr']} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Country').textContent).toContain('Germany');
+  });
+
   it('ignores an invalid initialCountry prop', () => {
     render(
       <NextIntlClientProvider locale="en" messages={enMessages}>

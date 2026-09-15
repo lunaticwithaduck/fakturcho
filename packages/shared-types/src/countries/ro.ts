@@ -30,6 +30,7 @@ export const RO_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'RO',
   language: 'ro',
+  timeZone: 'Europe/Bucharest',
   vatRates: [
     { rateBp: 2100, label: '21%' },
     { rateBp: 1100, label: '11%' },

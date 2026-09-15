@@ -3,7 +3,7 @@ import { LandingPage } from '@app/features/marketing/LandingPage';
 import { getLandingFaq } from '@app/features/marketing/landingFaq';
 import { loadMessages } from '@app/i18n/locale';
 import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
-import { ogLocaleTag } from '@app/i18n/ogLocale';
+import { ogLocaleAlternates, ogLocaleTag } from '@app/i18n/ogLocale';
 import type { Locale } from '@shared/types';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
     openGraph: {
       type: 'website',
       locale: ogLocaleTag(locale as Locale),
+      alternateLocale: ogLocaleAlternates(locale as Locale),
       siteName: 'Fakturcho',
       title: seo.title,
       description: seo.description,

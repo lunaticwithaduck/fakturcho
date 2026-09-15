@@ -1,4 +1,5 @@
 import type { Cents, Locale } from '@shared/types';
+import { decimalSeparator, parseMoneyInputForTag } from './money-parse';
 
 const EN_LOCALE_TAG = 'en-IE';
 
@@ -13,16 +14,6 @@ const INTL_TAGS: Partial<Record<Locale, string>> = {
   ro: 'ro-RO',
   es: 'es-ES',
 };
-
-function decimalSeparator(tag: string): string {
-  const part = new Intl.NumberFormat(tag).formatToParts(1.1).find((p) => p.type === 'decimal');
-  return part?.value ?? '.';
-}
-
-function groupSeparator(tag: string): string {
-  const part = new Intl.NumberFormat(tag).formatToParts(1234).find((p) => p.type === 'group');
-  return part?.value ?? ',';
-}
 
 function groupThousands(value: number): string {
   const digits = String(value);
@@ -117,21 +108,6 @@ function parseMoneyInputEn(raw: string): Cents | null {
   const withoutThousands = withoutSign.replace(/,/g, '');
   if (!/^\d+(\.\d{1,2})?$/.test(withoutThousands)) return null;
   const [wholePart = '0', fractionPart = ''] = withoutThousands.split('.');
-  const cents = Number(wholePart) * 100 + Number(fractionPart.padEnd(2, '0'));
-  return negative ? -cents : cents;
-}
-
-function parseMoneyInputForTag(raw: string, tag: string): Cents | null {
-  const trimmed = raw.trim();
-  if (trimmed === '') return null;
-  const negative = trimmed.startsWith('-');
-  const withoutSign = negative ? trimmed.slice(1) : trimmed;
-  const group = groupSeparator(tag);
-  const decimal = decimalSeparator(tag);
-  const withoutGroups = withoutSign.split(group).join('');
-  const normalized = decimal === '.' ? withoutGroups : withoutGroups.replace(decimal, '.');
-  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return null;
-  const [wholePart = '0', fractionPart = ''] = normalized.split('.');
   const cents = Number(wholePart) * 100 + Number(fractionPart.padEnd(2, '0'));
   return negative ? -cents : cents;
 }

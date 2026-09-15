@@ -50,6 +50,7 @@ const BG_CONFIG: CountryConfig = {
   country: 'BG',
   locale: 'bg',
   language: 'bg',
+  timeZone: 'Europe/Sofia',
   vatRates: [
     { rateBp: 2000, label: '20%' },
     { rateBp: 900, label: '9%' },

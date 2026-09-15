@@ -77,4 +77,57 @@ describe('saveDraftRequestSchema — format validation', () => {
       }),
     ).toThrow();
   });
+
+  it('accepts a well-formed transportedAt wall-clock reading', () => {
+    const parsed = saveDraftRequestSchema.parse({
+      documentType: 'delivery_note',
+      transportedAt: '2026-09-15T09:30',
+      lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+    });
+    expect(parsed.transportedAt).toBe('2026-09-15T09:30');
+  });
+
+  it('accepts a null transportedAt', () => {
+    const parsed = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      transportedAt: null,
+      lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+    });
+    expect(parsed.transportedAt).toBeNull();
+  });
+
+  it.each([
+    ['2026-09-15T09:30:00.000Z', 'carries seconds/ms and a Z suffix'],
+    ['2026-09-15 09:30', 'uses a space instead of T'],
+    ['2026-02-30T09:30', 'is not a real calendar date'],
+    ['2026-04-31T09:30', 'April has only 30 days'],
+    ['2026-09-15T24:00', 'hour is out of range'],
+    ['2026-09-15T09:60', 'minute is out of range'],
+    ['not-a-date', 'is garbage'],
+  ])('rejects a transportedAt that %s (%s)', (value) => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'delivery_note',
+        transportedAt: value,
+        lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+      }),
+    ).toThrow();
+  });
+
+  it('accepts 2028-02-29 for the leap year but rejects it for 2029', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'delivery_note',
+        transportedAt: '2028-02-29T09:30',
+        lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+      }),
+    ).not.toThrow();
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'delivery_note',
+        transportedAt: '2029-02-29T09:30',
+        lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+      }),
+    ).toThrow();
+  });
 });

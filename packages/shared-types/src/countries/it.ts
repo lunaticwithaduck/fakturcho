@@ -22,6 +22,7 @@ export const IT_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'IT',
   language: 'it',
+  timeZone: 'Europe/Rome',
   vatRates: [
     { rateBp: 2200, label: '22%' },
     { rateBp: 1000, label: '10%' },

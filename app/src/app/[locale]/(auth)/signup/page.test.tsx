@@ -1,6 +1,26 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { generateMetadata } from './page';
+import LocaleSignupPage, { generateMetadata } from './page';
+
+describe('LocaleSignupPage', () => {
+  it('picks the first value when country is repeated in the query string', async () => {
+    const element = await LocaleSignupPage({
+      params: Promise.resolve({ locale: 'en' }),
+      searchParams: Promise.resolve({ country: ['DE', 'FR'] }),
+    });
+
+    expect(element.props.initialCountry).toBe('DE');
+  });
+
+  it('passes a plain string country through unchanged', async () => {
+    const element = await LocaleSignupPage({
+      params: Promise.resolve({ locale: 'en' }),
+      searchParams: Promise.resolve({ country: 'DE' }),
+    });
+
+    expect(element.props.initialCountry).toBe('DE');
+  });
+});
 
 describe('LocaleSignupPage metadata', () => {
   it('carries an English-only title and the full hreflang set for en', async () => {
