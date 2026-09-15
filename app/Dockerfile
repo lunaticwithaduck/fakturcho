@@ -20,6 +20,7 @@ COPY design/lib design/lib
 COPY design/components design/components
 COPY app/next.config.ts app/tsconfig.json app/postcss.config.mjs app/next-env.d.ts app/
 COPY app/src app/src
+COPY app/theme-colors.ts app/
 COPY app/opengraph app/opengraph
 COPY app/messages app/messages
 # The /api/* rewrite bakes SERVER_URL into the build output; Railway must supply
