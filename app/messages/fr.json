@@ -274,7 +274,7 @@
       "nextGrant": "Prochaine recharge : {grant} de crédit",
       "switchTo": "Changer de formule",
       "statusLine": "Abonnement : {status}",
-      "pendingUpgrade": "Changement de formule en attente de paiement : {title}"
+      "pendingUpgrade": "Changement de formule en attente de paiement : {title}"
     },
     "subscriptionStatus": {
       "trialing": "En attente de paiement",
@@ -752,7 +752,7 @@
           "heading": "3. Used credit",
           "paragraphs": [
             "Credit spent to issue a document is not refundable. Issuing claims a number from the numbering series and creates a commercial document — the service has been performed at that moment. The price for issuing a single document is {perDocument}. Composing drafts does not spend credit and is not charged.",
-            "Where the user is a consumer, issuing a document is an express request that this part of the service be performed immediately; by doing so, the consumer acknowledges that they lose the right of withdrawal for the credit spent on it, in accordance with Article 16(m) of Directive 2011/83/EU on consumer rights."
+            "Where the user is a consumer, issuing a document is an express request that this part of the service be performed immediately; by doing so, the consumer acknowledges that they lose the right of withdrawal for the credit spent on it, in accordance with Article 16(a) of Directive 2011/83/EU on consumer rights."
           ]
         },
         {
@@ -871,11 +871,11 @@
           "answer": "Saisissez le numéro de TVA du client ; Fakturcho le vérifie via VIES et, pour un client professionnel à l'étranger dont le numéro est valide, applique l'autoliquidation et fait figurer la mention obligatoire sur le document."
         },
         {
-          "question": "Puis-je émettre des factures sans être assujetti à la TVA ?",
-          "answer": "Cela dépend de votre pays. La Bulgarie, l'Allemagne (§ 19 UStG), la France (franchise en base), l'Italie (regime forfettario), la Pologne (art. 113) et la Roumanie (art. 310) prévoient chacune un régime de franchise pour les petites entreprises, et Fakturcho imprime automatiquement le motif d'exonération applicable. L'Espagne n'a pas de régime général de franchise : un émetteur espagnol non assujetti à la TVA doit choisir lui-même, pour chaque document, l'activité exonérée applicable au titre de l'article 20 de la loi espagnole sur la TVA."
+          "question": "Puis-je émettre des factures sans être assujetti à la TVA ?",
+          "answer": "Cela dépend de votre pays. La Bulgarie, l'Allemagne (§ 19 UStG), la France (franchise en base), l'Italie (regime forfettario), la Pologne (art. 113) et la Roumanie (art. 310) prévoient chacune un régime de franchise pour les petites entreprises, et Fakturcho imprime automatiquement le motif d'exonération applicable. L'Espagne n'a pas de régime général de franchise : un émetteur espagnol non assujetti à la TVA doit choisir lui-même, pour chaque document, l'activité exonérée applicable au titre de l'article 20 de la loi espagnole sur la TVA."
         },
         {
-          "question": "Quelle est la différence entre une facture pro forma et une facture ?",
+          "question": "Quelle est la différence entre une facture pro forma et une facture ?",
           "answer": "La facture pro forma se présente comme une facture et reprend les mêmes informations, mais elle ne crée aucune obligation fiscale et ne reçoit pas de numéro — elle sert par exemple à demander un paiement anticipé ou à accompagner une déclaration en douane. La facture est le document fiscal officiel, avec un numéro et un fait générateur."
         },
         {

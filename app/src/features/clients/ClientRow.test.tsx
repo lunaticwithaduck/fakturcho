@@ -37,9 +37,19 @@ describe('ClientRow', () => {
     );
 
     expect(screen.getByText('ACME EOOD')).toBeTruthy();
-    expect(screen.getByText('ЕИК: 123456789 · office@acme.bg')).toBeTruthy();
+    expect(screen.getByText('ЕИК / Булстат: 123456789 · office@acme.bg')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Редактирай' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Изтрий' })).toBeTruthy();
+  });
+
+  it("labels a foreign client's ID by the client's country, not the viewer's", () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <ClientRow client={{ ...client, country: 'FR' }} onEdit={vi.fn()} onDelete={vi.fn()} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByText('SIREN: 123456789 · office@acme.bg')).toBeTruthy();
   });
 
   it('resolves the English messages for the same keys without missing-key warnings', () => {
