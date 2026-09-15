@@ -47,10 +47,9 @@ describe('DE country config', () => {
     expect(config.requiredIssuerFields).toEqual(['companyName', 'street', 'postcode', 'city']);
   });
 
-  it('prints no representative, signature row, dual-currency or original stamp', () => {
+  it('prints no representative, signature row or original stamp', () => {
     expect(config.showMol).toBe(false);
     expect(config.showSignatureRow).toBe(false);
-    expect(config.showDualDisplay).toBe(false);
     expect(config.showOriginalStamp).toBe(false);
   });
 });

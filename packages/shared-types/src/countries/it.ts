@@ -34,6 +34,5 @@ export const IT_CONFIG: CountryConfig = {
   countyRegion: { label: 'Provincia', required: true, pattern: /^[A-Z]{2}$/ },
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };

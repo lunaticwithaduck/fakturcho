@@ -34,6 +34,5 @@ export const FR_CONFIG: CountryConfig = {
   requiredIssuerFields: ['companyName', 'eik', 'street', 'postcode', 'city'],
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };

@@ -48,6 +48,5 @@ export const RO_CONFIG: CountryConfig = {
   countyRegion: { label: 'Județ', required: true, pattern: null },
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };

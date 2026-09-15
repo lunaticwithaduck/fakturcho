@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatBgn, formatCents, formatDate, formatEur } from './format';
+import { formatCents, formatDate, formatEur } from './format';
 
 describe('formatCents', () => {
   it('renders Bulgarian display form: comma decimal, space thousands', () => {
@@ -24,10 +24,9 @@ describe('formatCents', () => {
   });
 });
 
-describe('formatEur / formatBgn', () => {
+describe('formatEur', () => {
   it('appends the currency suffix', () => {
     expect(formatEur(550000)).toBe('5 500,00 €');
-    expect(formatBgn(1075707)).toBe('10 757,07 лв.');
   });
 });
 

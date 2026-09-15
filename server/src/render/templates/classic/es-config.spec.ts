@@ -75,7 +75,6 @@ describe('ES_CONFIG', () => {
   it('shows none of the Bulgarian-specific extras', () => {
     expect(config.showMol).toBe(false);
     expect(config.showSignatureRow).toBe(false);
-    expect(config.showDualDisplay).toBe(false);
     expect(config.showOriginalStamp).toBe(false);
   });
 });

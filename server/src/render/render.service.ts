@@ -5,7 +5,6 @@ import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
-import { isDualDisplayActive } from './dual-display';
 import { resolveDocumentIssuerCountry, resolveDocumentLanguage } from './language';
 import { toSharedDocumentType } from './prisma-mappers';
 import { renderClassicTemplateHtml } from './templates/classic/template';
@@ -79,7 +78,6 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       lineItems: document.lineItems,
       discounts: document.discounts,
       presentation,
-      dualDisplayActive: isDualDisplayActive(),
       isDraft,
       language,
       issuerCountry,

@@ -10,7 +10,6 @@ const locale: ClassicLocaleContext = {
   issuerCountry: 'IT',
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };
 

@@ -1,6 +1,5 @@
 import {
   CREDIT_PACKS,
-  EUR_BGN_PEG,
   ISSUANCE_COST_CENTS,
   perDocumentCents,
   SIGNUP_GRANT_CENTS,
@@ -18,7 +17,6 @@ const tierLines = SUBSCRIPTION_TIER_IDS.map(
   (id) =>
     `${eur(SUBSCRIPTION_TIERS[id].priceCents)} per month grants ${eur(SUBSCRIPTION_TIERS[id].grantCents)} credit (${eur(perDocumentCents(SUBSCRIPTION_TIERS[id].priceCents, SUBSCRIPTION_TIERS[id].grantCents))} per document)`,
 ).join('; ');
-const peg = String(EUR_BGN_PEG);
 
 const CONTENT = `# Fakturcho
 
@@ -26,7 +24,7 @@ const CONTENT = `# Fakturcho
 
 Fakturcho is for a company or sole trader established anywhere in the EU. Price: ${eur(ISSUANCE_COST_CENTS)} per issued document; drafts, clients and catalogue items are free; credit tops up in packs of ${packs} (${eur(ISSUANCE_COST_CENTS)} per document). A new account gets ${eur(SIGNUP_GRANT_CENTS)} starting credit with no card. Subscription, per month: ${tierLines}; credit carries over.
 
-The product supports gap-free sequential numbering and VAT by country, including local rates, exemptions and cross-border reverse charge with a VIES check. For Germany, France, Italy, Poland, Romania, Spain and Bulgaria it also generates the national e-invoice XML (XRechnung, Chorus Pro, FatturaPA, KSeF FA(3), RO CIUS-RO, Facturae) or Peppol BIS 3.0, ready to upload to the national platform or send over Peppol, plus a PDF in the country's language sent by email. Bulgaria additionally shows amounts in euro and lev at the fixed rate ${peg}.
+The product supports gap-free sequential numbering and VAT by country, including local rates, exemptions and cross-border reverse charge with a VIES check. For Germany, France, Italy, Poland, Romania, Spain and Bulgaria it also generates the national e-invoice XML (XRechnung, Chorus Pro, FatturaPA, KSeF FA(3), RO CIUS-RO, Facturae) or Peppol BIS 3.0, ready to upload to the national platform or send over Peppol, plus a PDF in the country's language sent by email.
 
 ## Pages
 

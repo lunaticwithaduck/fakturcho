@@ -41,10 +41,6 @@ export function formatEur(cents: Cents): string {
   return `${formatCents(cents)} €`;
 }
 
-export function formatBgn(bgnCents: Cents): string {
-  return `${formatCents(bgnCents)} лв.`;
-}
-
 export function formatDate(value: Date | string): string {
   const date = typeof value === 'string' ? new Date(value) : value;
   const day = String(date.getUTCDate()).padStart(2, '0');

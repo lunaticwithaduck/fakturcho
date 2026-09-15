@@ -7,7 +7,6 @@ export interface ClassicLocaleContext {
   issuerCountry: string;
   showMol: boolean;
   showSignatureRow: boolean;
-  showDualDisplay: boolean;
   showOriginalStamp: boolean;
 }
 
@@ -22,7 +21,6 @@ export function resolveClassicLocale(
     issuerCountry: country.country,
     showMol: country.showMol,
     showSignatureRow: country.showSignatureRow,
-    showDualDisplay: country.showDualDisplay,
     showOriginalStamp: country.showOriginalStamp,
   };
 }

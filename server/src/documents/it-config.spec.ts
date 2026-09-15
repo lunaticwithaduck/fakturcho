@@ -86,10 +86,9 @@ describe('IT_CONFIG', () => {
     });
   });
 
-  it('does not show the MOL row, signature row, dual display or original stamp', () => {
+  it('does not show the MOL row, signature row or original stamp', () => {
     expect(IT_CONFIG.showMol).toBe(false);
     expect(IT_CONFIG.showSignatureRow).toBe(false);
-    expect(IT_CONFIG.showDualDisplay).toBe(false);
     expect(IT_CONFIG.showOriginalStamp).toBe(false);
   });
 

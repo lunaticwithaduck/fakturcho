@@ -21,7 +21,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument(),
       lineItems: buildFakeLineItems(),
       presentation: vatChargedPresentation,
-      dualDisplayActive: true,
       isDraft: false,
       language: 'bg',
     });
@@ -43,7 +42,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('Общо:');
     expect(html).toContain('Сума за плащане:');
-    expect(html).toContain('лв.');
+    expect(html).not.toContain('лв.');
     expect(html).toContain('ЕИК: 123456789');
     expect(html).toContain('МОЛ: Мария Петрова');
     expect(html).toContain('Телефон: +359 888 123 456');
@@ -57,7 +56,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument(),
       lineItems: buildFakeLineItems(),
       presentation: vatChargedPresentation,
-      dualDisplayActive: true,
       isDraft: false,
       language: 'en',
     });
@@ -90,7 +88,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument({ number: null }),
       lineItems: buildFakeLineItems(),
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: true,
       language: 'en',
     });
@@ -121,7 +118,6 @@ describe('renderClassicTemplateHtml', () => {
       document,
       lineItems: buildFakeLineItems(),
       presentation,
-      dualDisplayActive: false,
       isDraft: true,
       language: 'de',
       issuerCountry: 'DE',
@@ -136,7 +132,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument(),
       lineItems: buildFakeLineItems({ quantity: '2.5' }),
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });
@@ -146,7 +141,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument(),
       lineItems: buildFakeLineItems({ quantity: '2.5' }),
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'en',
     });
@@ -158,7 +152,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument({ documentType: 'QUOTE' }),
       lineItems: buildFakeLineItems(),
       presentation: { vatCharged: true, showExemptionLine: false, exemptionGround: null },
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });
@@ -188,7 +181,6 @@ describe('renderClassicTemplateHtml', () => {
       document,
       lineItems: buildFakeMixedLineItems(),
       presentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });
@@ -223,7 +215,6 @@ describe('renderClassicTemplateHtml', () => {
       document,
       lineItems: buildFakeMixedLineItems(),
       presentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'en',
     });
@@ -243,7 +234,6 @@ describe('renderClassicTemplateHtml', () => {
       document: buildFakeDocument(),
       lineItems: buildFakeLineItems(),
       presentation: vatChargedPresentation,
-      dualDisplayActive: true,
       isDraft: false,
       language: 'bg',
     });
@@ -252,7 +242,6 @@ describe('renderClassicTemplateHtml', () => {
       lineItems: buildFakeLineItems(),
       discounts: buildFakeDiscounts(),
       presentation: vatChargedPresentation,
-      dualDisplayActive: true,
       isDraft: false,
       language: 'bg',
     });
@@ -276,7 +265,6 @@ describe('renderClassicTemplateHtml', () => {
       lineItems: buildFakeLineItems(),
       discounts: buildFakeDiscounts({ percentBp: 1000, label: 'Лоялен клиент' }),
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });
@@ -306,7 +294,6 @@ describe('renderClassicTemplateHtml', () => {
       lineItems: buildFakeLineItems(),
       discounts: buildFakeDiscounts({ percentBp: 1000, label: '' }),
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'en',
     });
@@ -336,7 +323,6 @@ describe('renderClassicTemplateHtml', () => {
       lineItems: buildFakeLineItems(),
       discounts: buildFakeDiscounts({ percentBp: null, amount: 15000, label: 'Промо код ХХ' }),
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });
@@ -367,7 +353,6 @@ describe('renderClassicTemplateHtml', () => {
         ...buildFakeDiscounts({ id: 'disc_2', percentBp: 1500, label: 'Обем' }),
       ],
       presentation: vatChargedPresentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });
@@ -396,7 +381,6 @@ describe('renderClassicTemplateHtml', () => {
       document,
       lineItems: buildFakeMixedLineItems(),
       presentation,
-      dualDisplayActive: false,
       isDraft: false,
       language: 'bg',
     });

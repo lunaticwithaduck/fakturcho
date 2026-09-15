@@ -1,4 +1,4 @@
-import { EUR_BGN_PEG, eurCentsToBgnCents, roundHalfUp } from '@fakturcho/shared-types';
+import { roundHalfUp } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 
 describe('roundHalfUp', () => {
@@ -17,28 +17,5 @@ describe('roundHalfUp', () => {
 
   it.each(cases)('roundHalfUp(%p, %p) === %p', (value, decimals, expected) => {
     expect(roundHalfUp(value, decimals)).toBeCloseTo(expected, 9);
-  });
-});
-
-describe('eurCentsToBgnCents (peg = 1.95583)', () => {
-  it('applies the fixed peg with half-up rounding', () => {
-    const table: Array<[number, number]> = [
-      [0, 0],
-      [100, 196],
-      [1_000_00, 195_583],
-      [5_500_00, 1_075_707],
-      [1, 2],
-      [50, 98],
-    ];
-    for (const [eurCents, expectedBgnCents] of table) {
-      expect(eurCentsToBgnCents(eurCents)).toBe(expectedBgnCents);
-    }
-  });
-
-  it('matches manual half-up rounding for half-cent boundary cases', () => {
-    for (let eurCents = 1; eurCents <= 500; eurCents++) {
-      const expected = Math.floor(eurCents * EUR_BGN_PEG + 0.5);
-      expect(eurCentsToBgnCents(eurCents)).toBe(expected);
-    }
   });
 });

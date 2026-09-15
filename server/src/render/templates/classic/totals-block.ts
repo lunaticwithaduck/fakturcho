@@ -1,7 +1,7 @@
-import { eurCentsToBgnCents, roundHalfUp, type VatCategory } from '@fakturcho/shared-types';
+import { roundHalfUp, type VatCategory } from '@fakturcho/shared-types';
 import type { Discount, Document, LineItem } from '@prisma/client';
 import { amountInWords } from '../../../money/amount-in-words';
-import { formatCentsForLocale, formatMoneyForLocale } from '../../../money/format';
+import { formatMoneyForLocale } from '../../../money/format';
 import type { VatPresentation } from '../../../money/vat';
 import { computeVatSubtotals } from '../../../vat-eu/subtotals';
 import { escapeHtml } from './html-utils';
@@ -77,7 +77,6 @@ export function buildTotalsBlock(
   document: Document,
   lineItems: readonly LineItem[],
   presentation: VatPresentation,
-  showBgnSuffix: boolean,
   locale: ClassicLocaleContext,
   discounts: readonly Discount[] = [],
 ): string {
@@ -103,10 +102,7 @@ export function buildTotalsBlock(
     exemptionGround = presentation.showExemptionLine ? presentation.exemptionGround : null;
   }
 
-  const bgnSuffix = showBgnSuffix
-    ? ` / ${formatCentsForLocale(eurCentsToBgnCents(document.amount), language)} лв.`
-    : '';
-  const dueValue = `${formatMoneyForLocale(document.amount, language)}${bgnSuffix}`;
+  const dueValue = formatMoneyForLocale(document.amount, language);
   const totals = `<div class="totals">
     ${discountRows(document, discounts, labels, language) + vatRows}
     ${totalsRow(labels.totalLabel, formatMoneyForLocale(document.amount, language), 'totals-row total')}

@@ -16,7 +16,6 @@ export interface ClassicTemplateInput {
   document: Document;
   lineItems: readonly LineItem[];
   presentation: VatPresentation;
-  dualDisplayActive: boolean;
   isDraft: boolean;
   language: ClassicLanguage;
   issuerCountry?: string | null;
@@ -28,7 +27,6 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     document,
     lineItems,
     presentation,
-    dualDisplayActive,
     isDraft,
     language,
     issuerCountry = document.issuerCountry,
@@ -38,7 +36,6 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   const documentType = toSharedDocumentType(document.documentType);
   const isQuote = documentType === 'quote';
   const number = document.number === null ? null : Number(document.number);
-  const showBgnSuffix = dualDisplayActive && locale.showDualDisplay;
 
   return `<!doctype html>
 <html lang="${language}">
@@ -55,7 +52,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
   ${buildLineItemsTable(lineItems, locale)}
   ${buildAmountWordsBlock(document, locale)}
-  ${buildTotalsBlock(document, lineItems, presentation, showBgnSuffix, locale, discounts)}
+  ${buildTotalsBlock(document, lineItems, presentation, locale, discounts)}
   ${buildMentionsBlock({ document, lineItems, locale })}
   ${buildIssuerBlock(document, locale)}
   ${locale.showSignatureRow ? buildSignatureRow(document, locale) : ''}

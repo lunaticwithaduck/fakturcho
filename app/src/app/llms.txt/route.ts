@@ -1,7 +1,6 @@
 import {
   CREDIT_PACKS,
   DEFAULT_EXEMPTION_GROUND,
-  EUR_BGN_PEG,
   ISSUANCE_COST_CENTS,
   perDocumentCents,
   SIGNUP_GRANT_CENTS,
@@ -19,7 +18,6 @@ const tierLines = SUBSCRIPTION_TIER_IDS.map(
   (id) =>
     `${eur(SUBSCRIPTION_TIERS[id].priceCents)} на месец дава ${eur(SUBSCRIPTION_TIERS[id].grantCents)} кредит (${eur(perDocumentCents(SUBSCRIPTION_TIERS[id].priceCents, SUBSCRIPTION_TIERS[id].grantCents))} на документ)`,
 ).join('; ');
-const peg = String(EUR_BGN_PEG).replace('.', ',');
 
 const CONTENT = `# Фактурчо
 
@@ -27,7 +25,7 @@ const CONTENT = `# Фактурчо
 
 Фактурчо е за българско дружество или самоосигуряващо се лице. Цена: ${eur(ISSUANCE_COST_CENTS)} на издаден документ; чернови, клиенти и артикули са безплатни; кредит се зарежда с пакети от ${packs} (${eur(ISSUANCE_COST_CENTS)} на документ). Нов акаунт получава ${eur(SIGNUP_GRANT_CENTS)} начален кредит без карта. Абонамент, всеки месец: ${tierLines}; кредитът се запазва.
 
-Продуктът поддържа номерация по редици без пропуски, ДДС по ЗДДС включително основанието ${DEFAULT_EXEMPTION_GROUND} за нерегистрирани издатели, суми в евро и лева по фиксирания курс ${peg}, PDF с кирилица и изпращане по имейл.
+Продуктът поддържа номерация по редици без пропуски, ДДС по ЗДДС включително основанието ${DEFAULT_EXEMPTION_GROUND} за нерегистрирани издатели, суми в евро, PDF с кирилица и изпращане по имейл.
 
 ## Страници
 

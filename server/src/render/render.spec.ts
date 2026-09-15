@@ -52,7 +52,7 @@ describe('render pipeline', () => {
     await db.stop();
   });
 
-  it('invariant 17: full Cyrillic + € + лв. round-trips with no missing glyphs', async () => {
+  it('invariant 17: full Cyrillic + € round-trips with no missing glyphs', async () => {
     const document = await seedDocument(db.prisma, { accountId, number: 1 });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
@@ -61,7 +61,7 @@ describe('render pipeline', () => {
     expect(text).toContain('Мария Петрова');
     expect(text).toContain('Петър Георгиев');
     expect(text).toContain('€');
-    expect(text).toContain('лв.');
+    expect(text).not.toContain('лв.');
     expect(text).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН EUR И 00 ЦЕНТА');
   });
 
@@ -246,9 +246,7 @@ describe('render pipeline', () => {
     expect(text).not.toContain('МОЛ');
     expect(text).not.toContain('Съставил');
     expect(text).not.toContain('(Оригинал)');
-    // A bg-resolved issuer (no explicit country snapshot) still carries the
-    // mandatory BGN dual-display line regardless of the rendered language.
-    expect(text).toContain('лв.');
+    expect(text).not.toContain('лв.');
     expect(filename).toBe('Invoice_0000000020.pdf');
   });
 

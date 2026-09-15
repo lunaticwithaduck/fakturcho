@@ -94,10 +94,9 @@ describe('RO country config — issuer fields and layout switches', () => {
     expect(ro.countyRegion).toEqual({ label: 'Județ', required: true, pattern: null });
   });
 
-  it('prints no MOL row, no signature row, no dual currency, no original stamp', () => {
+  it('prints no MOL row, no signature row, no original stamp', () => {
     expect(ro.showMol).toBe(false);
     expect(ro.showSignatureRow).toBe(false);
-    expect(ro.showDualDisplay).toBe(false);
     expect(ro.showOriginalStamp).toBe(false);
   });
 

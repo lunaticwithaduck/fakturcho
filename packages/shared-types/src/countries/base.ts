@@ -35,7 +35,6 @@ export interface CountryConfig {
   countyRegion?: CountyRegionField;
   showMol: boolean;
   showSignatureRow: boolean;
-  showDualDisplay: boolean;
   showOriginalStamp: boolean;
 }
 
@@ -67,7 +66,6 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   requiredIssuerFields: ['companyName', 'street', 'city', 'postcode'],
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };
 

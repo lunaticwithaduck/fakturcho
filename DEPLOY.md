@@ -37,7 +37,6 @@ paths, so local artifacts (`node_modules`, `.next`, `.env`) never enter an image
 | --- | --- | --- |
 | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` | Railway reference to the Postgres service |
 | `PORT` | — | injected by Railway automatically; do not set (the server listens on it) |
-| `DUAL_DISPLAY_UNTIL` | `2026-12-31` | date the dual EUR/BGN display ends (config, not code) |
 | `BETTER_AUTH_SECRET` | output of `openssl rand -base64 32` | generate once, keep secret |
 | `BETTER_AUTH_URL` | `https://api.fakturcho.bg` | the API service's public URL |
 | `APP_ORIGINS` | `https://app.fakturcho.bg` | the app's public URL, exactly (scheme + host, no trailing slash); comma-separate if several |

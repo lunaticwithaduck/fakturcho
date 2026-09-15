@@ -26,6 +26,5 @@ export const DE_CONFIG: CountryConfig = {
   requiredIssuerFields: ['companyName', 'street', 'postcode', 'city'],
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };

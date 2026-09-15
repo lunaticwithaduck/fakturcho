@@ -50,6 +50,5 @@ export const ES_CONFIG: CountryConfig = {
   countyRegion: { label: 'Provincia', required: false, pattern: null },
   showMol: false,
   showSignatureRow: false,
-  showDualDisplay: false,
   showOriginalStamp: false,
 };

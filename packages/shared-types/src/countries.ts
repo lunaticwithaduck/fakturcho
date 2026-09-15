@@ -64,7 +64,6 @@ const BG_CONFIG: CountryConfig = {
   requiredIssuerFields: ['companyName', 'eik', 'addressLine', 'city'],
   showMol: true,
   showSignatureRow: true,
-  showDualDisplay: true,
   showOriginalStamp: true,
 };
 

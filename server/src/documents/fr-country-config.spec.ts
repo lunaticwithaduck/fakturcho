@@ -93,7 +93,6 @@ describe('FR country config — no representative/signature/dual-display/origina
   it('has every show* switch off', () => {
     expect(FR.showMol).toBe(false);
     expect(FR.showSignatureRow).toBe(false);
-    expect(FR.showDualDisplay).toBe(false);
     expect(FR.showOriginalStamp).toBe(false);
   });
 });
