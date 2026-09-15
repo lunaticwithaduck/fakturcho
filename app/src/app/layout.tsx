@@ -55,7 +55,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </NextIntlClientProvider>
         </FeatureFlagsProvider>
         {umamiSrc && umamiWebsiteId ? (
-          <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
+          <>
+            <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
+            <Script
+              src={new URL('recorder.js', umamiSrc).href}
+              data-website-id={umamiWebsiteId}
+              strategy="afterInteractive"
+            />
+          </>
         ) : null}
       </body>
     </html>
