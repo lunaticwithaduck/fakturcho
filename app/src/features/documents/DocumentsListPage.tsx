@@ -1,11 +1,12 @@
 'use client';
 
-import { useListDocumentsQuery } from '@app/api';
+import { useGetIssuerProfileQuery, useListDocumentsQuery } from '@app/api';
 import { Button, EmptyState, Input, Skeleton } from '@design/components';
 import type { DocumentType } from '@shared/types';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
+import { IssuerProfileCompletenessHint } from '../issuer/IssuerProfileCompletenessHint';
 import { DocumentListItemCard } from './DocumentListItemCard';
 import { DocumentStatusTabs, type StatusFilter } from './DocumentStatusTabs';
 import { DocumentTypeFilterSelect } from './DocumentTypeFilterSelect';
@@ -22,6 +23,7 @@ export function DocumentsListPage() {
     ...(search.trim() ? { search: search.trim() } : {}),
     pageSize: 50,
   });
+  const { data: issuerProfile, isLoading: isIssuerProfileLoading } = useGetIssuerProfileQuery();
 
   const items = useMemo(() => data?.items ?? [], [data]);
   const hasFilters = status !== 'all' || documentType !== 'all' || search.trim() !== '';
@@ -34,6 +36,10 @@ export function DocumentsListPage() {
           <Link href="/documents/new">{t('newDocument')}</Link>
         </Button>
       </div>
+
+      {!isIssuerProfileLoading && issuerProfile ? (
+        <IssuerProfileCompletenessHint profile={issuerProfile} showProfileLink />
+      ) : null}
 
       <DocumentStatusTabs value={status} onChange={setStatus} />
 
