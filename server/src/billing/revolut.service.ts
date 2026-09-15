@@ -3,6 +3,7 @@ import { DomainError } from '../common/domain-error';
 import { cancelRevolutSubscription } from './revolut-cancel';
 import { inspectRevolutConfig, type RevolutConfigReport } from './revolut-config';
 import { describeRevolutFailure, RevolutApiError, toDomainError } from './revolut-errors';
+import { getRevolutSubscriptionOrNull } from './revolut-get-subscription';
 import type {
   CreateCustomerInput,
   CreateOrderInput,
@@ -111,27 +112,28 @@ export class RevolutService {
   }
 
   async getSubscription(subscriptionId: string): Promise<RevolutSubscription> {
-    const subscription = await this.request<{
-      id: string;
-      state: string;
-      setup_order_id?: string;
-      customer_id: string;
-    }>('GET', `/subscriptions/${subscriptionId}`);
-    return {
-      id: subscription.id,
-      state: subscription.state,
-      setupOrderId: subscription.setup_order_id ?? null,
-      customerId: subscription.customer_id,
-    };
+    const subscription = await this.getSubscriptionOrNull(subscriptionId);
+    if (!subscription) {
+      throw new DomainError(
+        'CHECKOUT_NOT_CONFIGURED',
+        'The payment provider has no record of this subscription.',
+        { provider: ['not_found', `subscription ${subscriptionId}`] },
+      );
+    }
+    return subscription;
   }
 
   cancelSubscription(subscriptionId: string): Promise<void> {
+    return cancelRevolutSubscription(this.rawClientConfig(), subscriptionId, this.logger);
+  }
+
+  getSubscriptionOrNull(subscriptionId: string): Promise<RevolutSubscription | null> {
+    return getRevolutSubscriptionOrNull(this.rawClientConfig(), subscriptionId, this.logger);
+  }
+
+  private rawClientConfig() {
     const { baseUrl, blocking, environment } = this.config;
-    return cancelRevolutSubscription(
-      { baseUrl, apiKey: this.apiKey, blocking, environment },
-      subscriptionId,
-      this.logger,
-    );
+    return { baseUrl, apiKey: this.apiKey, blocking, environment };
   }
 
   verifyWebhookSignature(rawBody: string, timestamp: string, signatureHeader: string): boolean {

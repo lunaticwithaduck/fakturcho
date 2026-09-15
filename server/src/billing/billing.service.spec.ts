@@ -181,12 +181,18 @@ describe('BillingService', () => {
     const service = serviceWith(revolut);
 
     await service.createCheckout(account.id, 'sub5');
+    const afterFirst = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    const beforeSwitch = new Date();
     await service.createCheckout(account.id, 'sub10');
 
     const stored = await db.prisma.subscription.findUniqueOrThrow({
       where: { accountId: account.id },
     });
     expect(stored.planId).toBe('plan_var_test_10');
+    expect(afterFirst.checkoutStartedAt).not.toBeNull();
+    expect(stored.checkoutStartedAt?.getTime()).toBeGreaterThanOrEqual(beforeSwitch.getTime());
     expect(stored.revolutSubscriptionId).toBe('sub_switch_new');
     expect(createCustomer).toHaveBeenCalledTimes(1);
     expect(cancelSubscription).toHaveBeenCalledTimes(1);
@@ -228,6 +234,9 @@ describe('BillingService', () => {
     const service = serviceWith(revolut);
 
     const first = await service.createCheckout(account.id, 'sub5');
+    const afterFirst = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
     const second = await service.createCheckout(account.id, 'sub5');
 
     expect(first.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
@@ -241,6 +250,8 @@ describe('BillingService', () => {
     expect(rows[0]?.planId).toBe('plan_var_test');
     expect(rows[0]?.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_resume');
     expect(rows[0]?.revolutSetupOrderId).toBe('ord_resume');
+    expect(afterFirst.checkoutStartedAt).not.toBeNull();
+    expect(rows[0]?.checkoutStartedAt?.getTime()).toBe(afterFirst.checkoutStartedAt?.getTime());
   });
 
   it('falls back to retrieving the setup order when a pending subscription has no stored checkout url', async () => {
