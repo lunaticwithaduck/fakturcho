@@ -145,16 +145,11 @@ Two mutually exclusive presentations.
 
 ## 6. Money and currency [MVP]
 
-- Denominated in **EUR**, with **BGN alongside** on the amount due:
-  `Сума за плащане: 5 500,00 € / 10 757,07 лв.`
-- Conversion uses the fixed peg **1.95583**. Arithmetic, never a live FX lookup.
-  Half-up rounding to two decimals.
+- Denominated in **EUR** only.
 - Bulgarian formatting throughout: comma decimal separator, space thousands
   separator — `1 600,00`, `10 757,07`.
 - The total is rendered in words, in Bulgarian, uppercased:
   `ПЕТ ХИЛЯДИ И ПЕТСТОТИН EUR И 00 ЦЕНТА`.
-- Dual BGN display is behind a config flag with an end date, not hardcoded —
-  the transitional display obligation expires.
 
 ---
 
@@ -183,7 +178,7 @@ tax event. Format `DD.MM.YYYY` throughout.
 <amount in words>
 
                                         Общо: 5 500,00 €
-                     Сума за плащане: 5 500,00 € / 10 757,07 лв.
+                              Сума за плащане: 5 500,00 €
 
 Основание за неначисляване на ДДС: …
 
@@ -203,7 +198,7 @@ Properties that hold:
   generated artifact. In-app viewing is the generated PDF in a viewer. No
   separate on-screen HTML layout of the same document.
 - Documents render **on demand** from current row state, never stored as blobs.
-- The full Cyrillic glyph set embeds, including `€` and `лв.`
+- The full Cyrillic glyph set embeds, including `€`.
 - Long values (IBANs, company names) are never hyphenated.
 - Download filenames are Bulgarian (`Фактура_0000000016.pdf`). Transported as an
   ASCII fallback plus an RFC 5987 `filename*` parameter — a raw Cyrillic
@@ -315,7 +310,7 @@ These are the acceptance tests. Each is written before its implementation.
 15. Quote renders `Валидно до` and no `Данъчно събитие`.
 16. `Content-Disposition` for `Фактура_0000000016.pdf` contains an ASCII fallback
     and a correctly percent-encoded UTF-8 `filename*`.
-17. A rendered PDF for a document with Cyrillic issuer, client, `€` and `лв.`
+17. A rendered PDF for a document with Cyrillic issuer, client and `€`
     contains no missing-glyph boxes. Assert by text extraction round-trip.
 18. An IBAN in a narrow column is not hyphenated or broken mid-string.
 19. Issuing any document on an account whose issuer profile is missing or

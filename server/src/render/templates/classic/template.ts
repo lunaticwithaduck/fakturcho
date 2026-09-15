@@ -13,12 +13,11 @@ export interface ClassicTemplateInput {
   document: Document;
   lineItems: readonly LineItem[];
   presentation: VatPresentation;
-  dualDisplayActive: boolean;
   isDraft: boolean;
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
-  const { document, lineItems, presentation, dualDisplayActive, isDraft } = input;
+  const { document, lineItems, presentation, isDraft } = input;
   const documentType = toSharedDocumentType(document.documentType);
   const isQuote = documentType === 'quote';
   const number = document.number === null ? null : Number(document.number);
@@ -38,7 +37,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix)}</div>
   ${buildLineItemsTable(lineItems)}
   ${buildAmountWordsBlock(document)}
-  ${buildTotalsBlock(document, presentation, dualDisplayActive)}
+  ${buildTotalsBlock(document, presentation)}
   ${buildIssuerBlock(document)}
   ${buildSignatureRow(document)}
 </body>

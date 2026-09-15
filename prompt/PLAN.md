@@ -21,7 +21,6 @@ Spec rulings, closed at the same time:
 - **Empty seller block:** issuance requires a complete issuer profile. Without
   one, documents are saveable only as `draft`; issuing returns a domain error.
   No document ever issues with an empty seller block. (SPEC §4, invariant 19.)
-- **Dual EUR/BGN:** behind a dated config flag, per SPEC §6.
 - **Number override:** honoured only on a series with no issued documents —
   the migration case. Once a series has any, the override is rejected. (SPEC §3.)
 - **On-screen viewing** is the generated PDF in a viewer, never a parallel
