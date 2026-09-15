@@ -31,7 +31,7 @@ export const COMPANY: CompanyDetails = {
   supportEmail: 'support@fakturcho.com',
   productName: 'Фактурчо',
   website: 'https://www.fakturcho.com',
-  lastUpdated: '14.08.2026',
+  lastUpdated: '15.09.2026',
 };
 
 export function describeEntity(): string {

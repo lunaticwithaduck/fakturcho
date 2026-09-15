@@ -560,59 +560,60 @@
       "metaTitle": "Terms of Service",
       "metaDescription": "The terms of service for using Fakturcho.",
       "title": "Terms of Service",
-      "intro": "These terms of service govern the relationship between {legalName} and any person who uses the {productName} web application at {website}. By registering an account, the user accepts the terms in this document.",
+      "intro": "These terms of service govern the relationship between {legalName} and any business or sole trader that uses the {productName} web application at {website} to compose and issue commercial documents. By registering an account, the user accepts the terms in this document.",
       "sections": [
         {
           "heading": "1. Service provider",
           "paragraphs": [
-            "The service is provided by {entityLine}.",
+            "The service is provided by {entityLine}, a company registered under Bulgarian law.",
             "Contact us at {supportEmail}. We reply to inquiries within five business days."
           ]
         },
         {
           "heading": "2. What the service is",
           "paragraphs": [
-            "{productName} is a web application through which a Bulgarian company or a self-insured sole trader composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file.",
-            "The application prepares documents from the data entered by the user. It is not an accounting service, does not file documents with the Bulgarian tax authority (NAP), and does not replace accounting or tax advice.",
+            "{productName} is a web application through which a business or sole trader established in the European Union composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file, together with a structured e-invoice file where the document type and the issuer's country call for one.",
+            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves, or to send over the Peppol network.",
             "Each account represents a single issuer with its own list of clients, catalogue and numbering series."
           ]
         },
         {
           "heading": "3. Registration and account",
           "paragraphs": [
-            "Using the service requires registration with a valid email address and password. The user is responsible for safeguarding their access credentials and for all actions taken through their account.",
-            "The user represents that the data entered for the issuer and for clients is accurate and that they are entitled to process it. The content of issued documents is the user's sole responsibility."
+            "Using the service requires registration with a valid email address, a password, and the country in which the issuer is established. The user is responsible for safeguarding their access credentials and for all actions taken through their account.",
+            "The service is intended for businesses and sole traders (B2B) issuing commercial documents in the course of their trade or profession. Where a natural person registers for purposes outside any trade or profession, the consumer-protection provisions referenced in this document and in the Refund Policy apply to them.",
+            "The user represents that the data entered for the issuer and for clients is accurate and that they are entitled to process it. The content of issued documents, and its correctness under the tax law that applies to the issuer, is the user's sole responsibility."
           ]
         },
         {
           "heading": "4. Prices and payment",
           "paragraphs": [
-            "Issuing each document costs {perDocument}. The amount is deducted from the account's credit balance the moment the document is assigned a number. Composing and saving drafts, clients and catalogue items is free.",
-            "Credit is topped up through one-off packs priced at {packs}. Alternatively, a subscription of {subscription} allows issuing without deducting credit while it is active.",
+            "Issuing each document costs {perDocument}, deducted from the account's credit balance the moment the document is assigned a number. Composing and saving drafts, clients and catalogue items is free.",
+            "Credit is topped up through one-off packs priced at {packs}. A subscription of {subscription} grants double that amount in credit every billing period. A subscription grants credit; it does not exempt any document from the {perDocument} issuance charge.",
             "A new account receives a one-off credit of {signupGrant} on registration.",
-            "Payments are processed by {entityLine} through Revolut Payments UAB as the payment service provider. Stated prices include tax where applicable."
+            "Payments are processed by {entityLine} through Revolut as the payment service provider. Prices are stated in euro. {legalName} is not currently VAT-registered, so no VAT is added to these amounts; if that changes, the applicable rate will be shown before payment."
           ]
         },
         {
           "heading": "5. Credit",
           "paragraphs": [
             "Credit is a prepaid value in euro cents that is used only to issue documents in the application. Credit has no expiry date and does not accrue interest.",
-            "Credit cannot be transferred between accounts and is not paid out in cash, except in the cases covered by the refund policy."
+            "Credit cannot be transferred between accounts and is not paid out in cash, except in the cases covered by the Refund Policy."
           ]
         },
         {
           "heading": "6. User obligations",
           "paragraphs": [
-            "The user undertakes to use the service in accordance with the legislation of the Republic of Bulgaria, including the Accountancy Act and the Value Added Tax Act.",
+            "The user is solely responsible for complying with the accounting, tax and invoicing legislation that applies to their business in their own country, including any obligation to submit, declare or report issued documents to their national tax authority or e-invoicing platform. Fakturcho prepares the document and, where applicable, the e-invoice file ready for that step; it does not perform the submission itself.",
             "It is prohibited to use the service to issue documents with untrue content, to circumvent tax obligations, or to take actions that infringe the rights of third parties.",
             "Attempts at automated load, intrusion, or disruption of the service's operation result in immediate termination of access."
           ]
         },
         {
-          "heading": "7. Liability",
+          "heading": "7. Liability and availability",
           "paragraphs": [
-            "The service is provided as is. We make reasonable efforts to ensure its continuity and accuracy, but we do not guarantee uninterrupted operation.",
-            "The provider is not liable for the accuracy of data entered by the user, nor for the tax or accounting consequences of documents issued through the application.",
+            "The service is provided as is. We make reasonable efforts to keep it available and accurate, but we do not guarantee uninterrupted or error-free operation.",
+            "The provider is not liable for the accuracy of data entered by the user, nor for the tax or accounting consequences, in any country, of documents issued through the application.",
             "The provider's liability for proven damages is limited to the amount paid by the user over the preceding twelve months."
           ]
         },
@@ -621,7 +622,7 @@
           "paragraphs": [
             "The user may stop using the service at any time by discontinuing access to their account and requesting its deletion at the email address given above.",
             "The provider may terminate access in the event of a breach of these terms, notifying the user at their registered email address.",
-            "Issued documents remain the user's obligation under applicable accounting legislation even after access is terminated."
+            "Issued documents remain the user's obligation under the accounting and tax legislation that applies to them, even after access is terminated."
           ]
         },
         {
@@ -631,10 +632,10 @@
           ]
         },
         {
-          "heading": "10. Governing law",
+          "heading": "10. Governing law and jurisdiction",
           "paragraphs": [
-            "Bulgarian law applies to matters not covered here. Disputes are resolved by agreement, and failing that, by the competent Bulgarian court.",
-            "A consumer within the meaning of the Bulgarian Consumer Protection Act may file a complaint with the Consumer Protection Commission or use the European online dispute resolution platform."
+            "Bulgarian law governs these terms and any matter not covered here. For a business (B2B) user, a dispute is resolved by agreement and, failing that, by the competent court in Sofia, Bulgaria.",
+            "Where the user is a consumer within the meaning of applicable EU law, this choice of law does not deprive them of the mandatory consumer-protection provisions of the country in which they are habitually resident, and they may bring proceedings before the courts of that country or of Bulgaria. Every consumer may use the European Commission's online dispute resolution platform at ec.europa.eu/consumers/odr, or complain to the consumer protection authority of their own country — for a Bulgarian consumer, the Commission for Consumer Protection."
           ]
         }
       ]
@@ -643,7 +644,7 @@
       "metaTitle": "Privacy Policy",
       "metaDescription": "How Fakturcho processes personal data.",
       "title": "Privacy Policy",
-      "intro": "This document explains what personal data {productName} processes, on what grounds, to whom it discloses it, and what rights each data subject has. The policy applies to the web application at {website}.",
+      "intro": "This document explains what personal data {productName} processes, on what grounds, to whom it discloses it, and what rights each data subject has under the GDPR. The policy applies to the web application at {website} and to the businesses and individuals across the European Union who use it.",
       "sections": [
         {
           "heading": "1. Data controller",
@@ -655,10 +656,11 @@
         {
           "heading": "2. What data we process",
           "paragraphs": [
-            "Account data: email address, name, and a cryptographically hashed record of the password.",
-            "Issuer data: company name, EIK (Bulgarian unified identification code), VAT number, address, authorized representative, bank account, and the person who drew up the document. This data is printed on issued documents.",
+            "Account data: email address, name, a cryptographically hashed record of the password, and the country of establishment given at signup.",
+            "Issuer data: company name, national company or VAT identifier, address, authorized representative, bank account, and the person who drew up the document. This data is printed on issued documents.",
             "Client and document data: the recipient's name and identifiers, addresses, catalogue items, amounts and dates, as entered by the user.",
             "Technical data: access logs, request time, request address and response code, kept for security and troubleshooting purposes.",
+            "Analytics data: anonymized, cookieless product-usage events (pages viewed, features used), collected through our self-hosted Umami analytics instance. This data cannot be linked back to an identified visitor and is never shared with any advertising network.",
             "We do not process special categories of personal data and we do not carry out automated decision-making or profiling."
           ]
         },
@@ -668,16 +670,17 @@
             "Providing the service and maintaining the account — processing is necessary for performance of the contract with the user.",
             "Processing payments and keeping the credit balance — performance of a contract and compliance with legal obligations.",
             "Service security, abuse prevention and technical support — the controller's legitimate interest.",
-            "Compliance with accounting and tax obligations — a legal obligation."
+            "Understanding and improving the service through anonymized product analytics — the controller's legitimate interest, balanced by the fact that the data cannot identify a visitor.",
+            "Compliance with the accounting and tax obligations that apply to us as controller — a legal obligation."
           ]
         },
         {
           "heading": "4. Recipients and processors",
           "paragraphs": [
-            "Revolut Payments UAB — processes payments as the payment service provider. Receives the email address and payment data. {productName} does not store bank card data.",
-            "Railway Corporation — hosting of the application and the database.",
+            "Revolut — processes payments as the payment service provider. Receives the email address and payment data. {productName} does not store bank card data.",
+            "Railway Corporation — hosting of the application, the database, and our self-hosted analytics instance.",
             "Resend, Inc. — sending transactional emails when the user chooses to send a document by email.",
-            "Where a recipient processes data outside the European Economic Area, the transfer is based on standard contractual clauses adopted by the European Commission.",
+            "Where a recipient processes data outside the European Economic Area, the transfer is based on the standard contractual clauses adopted by the European Commission or another safeguard recognized by the GDPR.",
             "We do not sell personal data and do not provide it for advertising purposes."
           ]
         },
@@ -694,14 +697,14 @@
           "paragraphs": [
             "Every natural person has the right to access, rectification, erasure, restriction of processing, data portability, and objection to processing based on legitimate interest.",
             "These rights are exercised by a request to {supportEmail}. We reply within one month.",
-            "In case of a suspected violation, any person may file a complaint with the Bulgarian Commission for Personal Data Protection, Sofia, 2 Prof. Tsvetan Lazarov Blvd."
+            "You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (CPDP), 2 Prof. Tsvetan Lazarov Blvd., Sofia 1592, www.cpdp.bg — or, under Article 77 of the GDPR, with the data protection supervisory authority of the EU member state of your habitual residence, your place of work, or the place of the alleged infringement."
           ]
         },
         {
           "heading": "7. Cookies",
           "paragraphs": [
-            "We use only strictly necessary cookies — a session cookie that keeps the account signed in. It is required for the service to work and does not require consent.",
-            "We do not use advertising or tracking cookies and do not embed third-party analytics scripts."
+            "We use only one strictly necessary cookie — a session cookie that keeps the account signed in. It is required for the service to work and does not require consent.",
+            "Our self-hosted product analytics (Umami) does not use cookies and does not track visitors across other sites. We do not use advertising or tracking cookies and do not embed third-party analytics scripts."
           ]
         },
         {
@@ -722,22 +725,22 @@
         {
           "heading": "1. Who processes payments",
           "paragraphs": [
-            "Payments are processed through Revolut Payments UAB as the payment service provider. Refunds are ordered by us to the same card or account used for the purchase.",
+            "Payments are processed through Revolut as the payment service provider. Refunds are ordered by us to the same card or account used for the purchase.",
             "A request is submitted to {supportEmail} with the order number from the payment confirmation."
           ]
         },
         {
           "heading": "2. Unused credit",
           "paragraphs": [
-            "Unused credit is refunded in full on request within fourteen days of purchasing the pack.",
-            "If part of the pack has been spent, the remainder corresponding to the unused credit is refunded."
+            "Unused credit is refunded in full on request within fourteen days of purchasing the pack, or of the payment that started a subscription period.",
+            "If part of a pack, or of a subscription period's credit, has been spent, the remainder corresponding to the unused amount is refunded."
           ]
         },
         {
           "heading": "3. Used credit",
           "paragraphs": [
-            "Credit spent to issue a document is not refundable. Issuing claims a number from the numbering series and creates an accounting document — the service has been performed at that moment.",
-            "The price for issuing a single document is {perDocument}. Composing drafts does not spend credit and is not charged."
+            "Credit spent to issue a document is not refundable. Issuing claims a number from the numbering series and creates a commercial document — the service has been performed at that moment. The price for issuing a single document is {perDocument}. Composing drafts does not spend credit and is not charged.",
+            "Where the user is a consumer, issuing a document is an express request that this part of the service be performed immediately; by doing so, the consumer acknowledges that they lose the right of withdrawal for the credit spent on it, in accordance with Article 16(m) of Directive 2011/83/EU on consumer rights."
           ]
         },
         {
@@ -750,8 +753,8 @@
         {
           "heading": "5. Right of withdrawal for consumers",
           "paragraphs": [
-            "A consumer within the meaning of the Bulgarian Consumer Protection Act has the right to withdraw from the contract within fourteen days, without stating a reason.",
-            "Where the user has expressly agreed for the service to begin immediately, the right of withdrawal lapses for the portion already used, under Art. 57 of the Consumer Protection Act."
+            "A consumer within the meaning of Directive 2011/83/EU on consumer rights, as implemented in the applicable national law, has the right to withdraw from a purchase of credit or a subscription within fourteen days of the purchase, without stating a reason, to the extent that the credit has not yet been spent to issue a document.",
+            "Where the consumer has expressly requested that the service begin immediately, as described in Section 3, the right of withdrawal is lost for the part already performed — the credit already spent."
           ]
         },
         {
@@ -787,7 +790,7 @@
         },
         "FR": {
           "name": "France",
-          "line": "20% VAT, invoices in French, e-invoices in the Chorus Pro format."
+          "line": "20% VAT, invoices in French, e-invoices in UBL format for the Chorus Pro platform."
         },
         "IT": {
           "name": "Italy",
@@ -813,7 +816,7 @@
         "Invoices, proformas, credit and debit notes, quotes and delivery notes.",
         "Sequential numbering — no gaps, no repeats.",
         "VAT by country: local rates, exemptions, and reverse charge for cross-border B2B with a live VIES check of the customer's VAT ID.",
-        "EN 16931 e-invoices in your country's format — XRechnung, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) or to send over Peppol.",
+        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) or to send over Peppol.",
         "A ready PDF in your country's language, downloadable or sent by email."
       ]
     },
@@ -857,11 +860,11 @@
         },
         {
           "question": "Can I issue invoices without VAT registration?",
-          "answer": "Yes; a non-VAT-registered issuer's documents carry the applicable exemption ground for their country."
+          "answer": "It depends on your country. Bulgaria, Germany (§ 19 UStG), France (franchise en base), Italy (regime forfettario), Poland (art. 113) and Romania (art. 310) all have a small-business VAT exemption, and Fakturcho prints the correct legal ground automatically. Spain has no general small-business exemption — a non-VAT-registered Spanish issuer selects the specific exempt activity under art. 20 of the VAT law for each document."
         },
         {
           "question": "What is the difference between a proforma and an invoice?",
-          "answer": "A proforma is a preliminary quote and not a tax document; an invoice is the official tax document with a number and a tax event."
+          "answer": "A proforma looks like an invoice and states the same details, but it creates no tax obligation and is not assigned a document number — it's commonly used to request payment in advance or for a customs declaration. An invoice is the official tax document, with a number and a tax event."
         },
         {
           "question": "How is an issued invoice corrected?",

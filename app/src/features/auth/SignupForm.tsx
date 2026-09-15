@@ -3,7 +3,7 @@
 import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { TARGET_COUNTRIES } from '@app/features/marketing/targetCountries';
 import { trackEvent } from '@app/features/shared/analytics';
-import { formatMoney, formatMoneyForLocale } from '@app/features/shared/format';
+import { formatMoneyForLocale } from '@app/features/shared/format';
 import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card, Input, Select, SelectItem } from '@design/components';
 import type { Locale } from '@shared/types';
@@ -69,10 +69,7 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
         <h1 className="text-xl font-semibold text-text">{t('signupTitle')}</h1>
         <p className="text-sm text-text-muted">
           {t('signupSubtitle', {
-            amount:
-              locale === 'bg' || locale === 'en'
-                ? formatMoney(SIGNUP_GRANT_CENTS)
-                : formatMoneyForLocale(SIGNUP_GRANT_CENTS, locale),
+            amount: formatMoneyForLocale(SIGNUP_GRANT_CENTS, locale),
           })}
         </p>
       </div>

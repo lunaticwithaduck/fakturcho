@@ -1,11 +1,10 @@
-import { COMPANY } from '@app/features/legal/company';
+import { COMPANY, productNameForLocale } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
 import { getLandingFaq } from '@app/features/marketing/landingFaq';
 import { loadMessages } from '@app/i18n/locale';
 import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
 import { ogLocaleTag } from '@app/i18n/ogLocale';
 import type { Locale } from '@shared/types';
-import { SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@shared/types';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -35,36 +34,23 @@ export async function generateMetadata({ params }: LocalePageProps): Promise<Met
   };
 }
 
-function buildJsonLd(locale: Locale, title: string, description: string) {
+function buildJsonLd(locale: Locale) {
   const path = toLocalePath('/', locale);
-  const softwareApplication = {
-    '@type': 'SoftwareApplication',
-    name: 'Fakturcho',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    inLanguage: locale,
-    url: `${COMPANY.website}${path}`,
-    description,
-    offers: [
-      {
-        '@type': 'Offer',
-        price: '0.10',
-        priceCurrency: 'EUR',
-        description: 'per issued document',
-      },
-      ...SUBSCRIPTION_TIER_IDS.map((id) => ({
-        '@type': 'Offer',
-        price: (SUBSCRIPTION_TIERS[id].priceCents / 100).toFixed(2),
-        priceCurrency: 'EUR',
-        description: `monthly subscription, grants ${(SUBSCRIPTION_TIERS[id].grantCents / 100).toFixed(2)} € credit`,
-      })),
-    ],
-  };
+  const url = `${COMPANY.website}${path}`;
   const organization = {
     '@type': 'Organization',
-    name: title,
-    url: `${COMPANY.website}${path}`,
-    logo: `${COMPANY.website}${path}/opengraph-image`,
+    '@id': `${COMPANY.website}/#organization`,
+    name: productNameForLocale(locale),
+    url: COMPANY.website,
+    logo: `${COMPANY.website}/icon.png`,
+  };
+  const website = {
+    '@type': 'WebSite',
+    '@id': `${COMPANY.website}/#website`,
+    name: productNameForLocale(locale),
+    url,
+    inLanguage: locale,
+    publisher: { '@id': `${COMPANY.website}/#organization` },
   };
   const faqPage = {
     '@type': 'FAQPage',
@@ -79,21 +65,19 @@ function buildJsonLd(locale: Locale, title: string, description: string) {
   };
   return JSON.stringify({
     '@context': 'https://schema.org',
-    '@graph': [softwareApplication, organization, faqPage],
+    '@graph': [organization, website, faqPage],
   }).replace(/</g, '\\u003c');
 }
 
 export default async function LocaleHomePage({ params }: LocalePageProps) {
   const { locale } = await params;
-  const [store, messages] = await Promise.all([cookies(), loadMessages(locale as Locale)]);
+  const store = await cookies();
   if (store.getAll().some((entry) => entry.name.endsWith('session_token'))) {
     redirect('/documents');
   }
   return (
     <>
-      <script type="application/ld+json">
-        {buildJsonLd(locale as Locale, messages.seo.home.title, messages.seo.home.description)}
-      </script>
+      <script type="application/ld+json">{buildJsonLd(locale as Locale)}</script>
       <LandingPage locale={locale as Locale} enEnabled />
     </>
   );

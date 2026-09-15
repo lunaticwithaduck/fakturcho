@@ -76,7 +76,7 @@ describe('SignupForm', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Sign up for Fakturcho' })).toBeTruthy();
-    expect(screen.getByText('Create a free account. You get 1,00 € starting credit.')).toBeTruthy();
+    expect(screen.getByText('Create a free account. You get 1.00 € starting credit.')).toBeTruthy();
     expect(screen.getByLabelText('Name')).toBeTruthy();
     expect(screen.getByLabelText('Email')).toBeTruthy();
     expect(screen.getByLabelText('Password')).toBeTruthy();
