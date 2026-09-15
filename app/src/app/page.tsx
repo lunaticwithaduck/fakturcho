@@ -1,7 +1,6 @@
 import { COMPANY } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
 import { LANDING_FAQ } from '@app/features/marketing/landingFaq';
-import { SUBSCRIPTION_TIER_IDS, SUBSCRIPTION_TIERS } from '@shared/types';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -13,34 +12,20 @@ export const metadata: Metadata = {
 };
 
 function buildJsonLd() {
-  const softwareApplication = {
-    '@type': 'SoftwareApplication',
-    name: COMPANY.productName,
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    inLanguage: 'bg',
-    url: COMPANY.website,
-    description: metadata.description,
-    offers: [
-      {
-        '@type': 'Offer',
-        price: '0.10',
-        priceCurrency: 'EUR',
-        description: 'на издаден документ',
-      },
-      ...SUBSCRIPTION_TIER_IDS.map((id) => ({
-        '@type': 'Offer',
-        price: (SUBSCRIPTION_TIERS[id].priceCents / 100).toFixed(2),
-        priceCurrency: 'EUR',
-        description: `абонамент на месец, зарежда ${(SUBSCRIPTION_TIERS[id].grantCents / 100).toFixed(2)} € кредит`,
-      })),
-    ],
-  };
   const organization = {
     '@type': 'Organization',
+    '@id': `${COMPANY.website}/#organization`,
     name: COMPANY.productName,
     url: COMPANY.website,
-    logo: `${COMPANY.website}/opengraph-image`,
+    logo: `${COMPANY.website}/icon.png`,
+  };
+  const website = {
+    '@type': 'WebSite',
+    '@id': `${COMPANY.website}/#website`,
+    name: COMPANY.productName,
+    url: COMPANY.website,
+    inLanguage: 'bg',
+    publisher: { '@id': `${COMPANY.website}/#organization` },
   };
   const faqPage = {
     '@type': 'FAQPage',
@@ -55,7 +40,7 @@ function buildJsonLd() {
   };
   return JSON.stringify({
     '@context': 'https://schema.org',
-    '@graph': [softwareApplication, organization, faqPage],
+    '@graph': [organization, website, faqPage],
   }).replace(/</g, '\\u003c');
 }
 
