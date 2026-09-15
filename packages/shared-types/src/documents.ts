@@ -59,6 +59,14 @@ export interface RecipientSnapshotDto {
   pec: string | null;
 }
 
+export interface OriginalDocumentReferenceDto {
+  number: number | null;
+  numberPrefix: string | null;
+  numberSuffix: string | null;
+  issuedAt: string | null;
+  ksefNumber: string | null;
+}
+
 export interface DocumentDto {
   id: string;
   documentType: DocumentType;
@@ -68,6 +76,7 @@ export interface DocumentDto {
   numberSuffix: string | null;
   referenceNumber: string | null;
   originalDocumentId: string | null;
+  originalDocument?: OriginalDocumentReferenceDto | null;
   issuedAt: string | null;
   taxEventAt: string | null;
   dueAt: string | null;
@@ -76,6 +85,10 @@ export interface DocumentDto {
   buyerReference: string | null;
   paymentMeansCode: string | null;
   paymentTermsNote: string | null;
+  transportReason: string | null;
+  transportedAt: string | null;
+  carrierName: string | null;
+  transportNote: string | null;
   subtotal: Cents;
   discountTotal: Cents;
   amount: Cents;
@@ -142,6 +155,10 @@ export interface SaveDraftRequest {
   buyerReference?: string | null;
   paymentMeansCode?: string | null;
   paymentTermsNote?: string | null;
+  transportReason?: string | null;
+  transportedAt?: string | null;
+  carrierName?: string | null;
+  transportNote?: string | null;
   vatIncluded?: boolean;
   vatExemptionGround?: string | null;
   clientId?: string | null;

@@ -1,4 +1,4 @@
-import { getCountryConfig } from '@fakturcho/shared-types';
+import { type DocumentType, getCountryConfig } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { readIdentifiers } from '../../../issuer/identifiers';
 import { escapeHtml, line } from './html-utils';
@@ -46,10 +46,14 @@ export function buildIssuerBlock(document: Document, locale: ClassicLocaleContex
   </div>`;
 }
 
-export function buildSignatureRow(document: Document, locale: ClassicLocaleContext): string {
+export function buildSignatureRow(
+  document: Document,
+  documentType: DocumentType,
+  locale: ClassicLocaleContext,
+): string {
   const { labels } = locale;
   return `<div class="signature-row">
-    <div>${labels.preparedByPrefix}${escapeHtml(document.preparedBy ?? '')}</div>
-    <div>${labels.recipientSignaturePrefix}${escapeHtml(document.recipientMol ?? '')}</div>
+    <div>${labels.preparedByPrefix(documentType)}${escapeHtml(document.preparedBy ?? '')}</div>
+    <div>${labels.recipientSignaturePrefix(documentType)}${escapeHtml(document.recipientMol ?? '')}</div>
   </div>`;
 }

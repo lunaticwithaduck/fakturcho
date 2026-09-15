@@ -25,7 +25,7 @@ const SAME_AS_ISSUER = 'same';
 export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientFormFieldsProps) {
   const t = useTranslations('clients');
   const structuredAddress = usesStructuredClientAddress(values.country);
-  const { countyRegion } = getCountryConfig(values.country);
+  const { countyRegion, companyIdLabel } = getCountryConfig(values.country);
 
   return (
     <div className="flex flex-col gap-4">
@@ -36,7 +36,7 @@ export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientF
         onChange={(event) => onChange('companyName', event.target.value)}
       />
       <Input
-        label={t('eikOrBulstatLabel')}
+        label={companyIdLabel}
         value={values.eik}
         onChange={(event) => onChange('eik', event.target.value)}
       />

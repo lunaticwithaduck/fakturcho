@@ -41,6 +41,17 @@ describe('checkEinvoiceReadiness — out-of-scope document types', () => {
     const quote: DocumentDto = { ...bgDomesticStandardInvoice, documentType: 'quote' };
     expect(checkEinvoiceReadiness(quote).ready).toBe(false);
   });
+
+  it('flags delivery_note as not exportable — it is never an e-invoice', () => {
+    const deliveryNote: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      documentType: 'delivery_note',
+    };
+    expect(checkEinvoiceReadiness(deliveryNote)).toEqual({
+      ready: false,
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
+    });
+  });
 });
 
 describe('checkEinvoiceReadiness — issuance and party fields', () => {

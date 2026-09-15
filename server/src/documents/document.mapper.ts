@@ -1,7 +1,14 @@
-import type { CurrencyCode, DiscountDto, DocumentDto, LineItemDto } from '@fakturcho/shared-types';
+import type {
+  CurrencyCode,
+  DiscountDto,
+  DocumentDto,
+  LineItemDto,
+  OriginalDocumentReferenceDto,
+} from '@fakturcho/shared-types';
 import type {
   Discount as PrismaDiscount,
   Document as PrismaDocument,
+  EinvoiceTransmission as PrismaEinvoiceTransmission,
   LineItem as PrismaLineItem,
 } from '@prisma/client';
 import { readIdentifiers } from '../issuer/identifiers';
@@ -11,6 +18,9 @@ import { toDisplayStatus } from './document-status.mapper';
 type DocumentWithRelations = PrismaDocument & {
   lineItems: PrismaLineItem[];
   discounts: PrismaDiscount[];
+  originalDocument:
+    | (PrismaDocument & { einvoiceTransmission: PrismaEinvoiceTransmission | null })
+    | null;
 };
 
 export function toDocumentDto(
@@ -26,6 +36,7 @@ export function toDocumentDto(
     numberSuffix: document.numberSuffix,
     referenceNumber: document.referenceNumber,
     originalDocumentId: document.originalDocumentId,
+    originalDocument: toOriginalDocumentReferenceDto(document.originalDocument),
     issuedAt: toIsoDate(document.issuedAt),
     taxEventAt: toIsoDate(document.taxEventAt),
     dueAt: toIsoDate(document.dueAt),
@@ -34,6 +45,10 @@ export function toDocumentDto(
     buyerReference: document.buyerReference,
     paymentMeansCode: document.paymentMeansCode,
     paymentTermsNote: document.paymentTermsNote,
+    transportReason: document.transportReason,
+    transportedAt: document.transportedAt ? document.transportedAt.toISOString() : null,
+    carrierName: document.carrierName,
+    transportNote: document.transportNote,
     subtotal: document.subtotal,
     discountTotal: document.discountTotal,
     amount: document.amount,
@@ -92,6 +107,29 @@ export function toDocumentDto(
 
 function toIsoDate(value: Date | null): string | null {
   return value ? value.toISOString().slice(0, 10) : null;
+}
+
+function toOriginalDocumentReferenceDto(
+  original: (PrismaDocument & { einvoiceTransmission: PrismaEinvoiceTransmission | null }) | null,
+): OriginalDocumentReferenceDto | null {
+  if (!original) return null;
+  return {
+    number: original.number !== null ? Number(original.number) : null,
+    numberPrefix: original.numberPrefix,
+    numberSuffix: original.numberSuffix,
+    issuedAt: toIsoDate(original.issuedAt),
+    ksefNumber: readKsefNumber(original.einvoiceTransmission),
+  };
+}
+
+function readKsefNumber(transmission: PrismaEinvoiceTransmission | null): string | null {
+  if (transmission?.provider !== 'ksef' || !transmission.receipt) return null;
+  try {
+    const receipt = JSON.parse(transmission.receipt) as { ksefNumber?: string | null };
+    return receipt.ksefNumber ?? null;
+  } catch {
+    return null;
+  }
 }
 
 function toLineItemDto(item: PrismaLineItem): LineItemDto {

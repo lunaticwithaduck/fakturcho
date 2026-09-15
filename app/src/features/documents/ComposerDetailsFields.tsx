@@ -28,6 +28,7 @@ export function ComposerDetailsFields({
 }: ComposerDetailsFieldsProps) {
   const t = useTranslations('documents');
   const isQuote = documentType === 'quote';
+  const isDeliveryNote = documentType === 'delivery_note';
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -43,7 +44,7 @@ export function ComposerDetailsFields({
           value={validUntil}
           onChange={(event) => onChange({ validUntil: event.target.value })}
         />
-      ) : (
+      ) : isDeliveryNote ? null : (
         <>
           <Input
             label={t('composer.details.taxEventAt')}

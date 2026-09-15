@@ -58,11 +58,13 @@ export async function getRevolutSubscriptionOrNull(
     state: string;
     setup_order_id?: string;
     customer_id: string;
+    current_cycle_id?: string;
   };
   return {
     id: subscription.id,
     state: subscription.state,
     setupOrderId: subscription.setup_order_id ?? null,
     customerId: subscription.customer_id,
+    currentCycleId: subscription.current_cycle_id ?? null,
   };
 }

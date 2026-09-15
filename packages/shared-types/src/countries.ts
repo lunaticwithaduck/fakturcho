@@ -5,6 +5,7 @@ import { FR_CONFIG } from './countries/fr';
 import { IT_CONFIG } from './countries/it';
 import { PL_CONFIG } from './countries/pl';
 import { RO_CONFIG } from './countries/ro';
+import { PUBLISHED_LOCALES } from './languages';
 import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
 export * from './countries/base';
@@ -49,13 +50,14 @@ const BG_CONFIG: CountryConfig = {
   country: 'BG',
   locale: 'bg',
   language: 'bg',
+  timeZone: 'Europe/Sofia',
   vatRates: [
     { rateBp: 2000, label: '20%' },
     { rateBp: 900, label: '9%' },
     { rateBp: 0, label: '0%' },
   ],
   defaultVatRateBp: 2000,
-  companyIdLabel: 'ЕИК',
+  companyIdLabel: 'ЕИК / Булстат',
   vatNumberPattern: /^BG\d{9,10}$/,
   exemptionGrounds: [...VAT_EXEMPTION_GROUNDS, DEFAULT_EXEMPTION_GROUND],
   defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,
@@ -65,6 +67,8 @@ const BG_CONFIG: CountryConfig = {
   showMol: true,
   showSignatureRow: true,
   showOriginalStamp: true,
+  deliveryNotePricesShown: true,
+  deliveryNoteTransportReasons: [],
 };
 
 const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
@@ -77,11 +81,19 @@ const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
   ES: ES_CONFIG,
 };
 
+// A country's own language is its UI locale, but only once translators have
+// published it — never land a signup on a locale with no messages file.
+function resolveLocale(config: CountryConfig): CountryConfig {
+  const language = config.language;
+  const locale = (PUBLISHED_LOCALES as readonly string[]).includes(language) ? language : 'en';
+  return { ...config, locale };
+}
+
 export function getCountryConfig(country: string): CountryConfig {
   const configured = COUNTRY_CONFIGS[country];
-  if (configured) return configured;
-  if (isEuVatAreaCountry(country)) return { ...GENERIC_EU_CONFIG, country };
-  return { ...GENERIC_NON_EU_CONFIG, country };
+  if (configured) return resolveLocale(configured);
+  if (isEuVatAreaCountry(country)) return resolveLocale({ ...GENERIC_EU_CONFIG, country });
+  return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country });
 }
 
 export function isReverseCharge(issuerCountry: string, clientCountry: string | null): boolean {

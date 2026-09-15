@@ -1,4 +1,5 @@
 import { SignupForm } from '@app/features/auth/SignupForm';
+import { hreflangAlternates } from '@app/i18n/localeRedirect';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,10 +8,7 @@ export const metadata: Metadata = {
     'Създайте безплатен акаунт и издайте първата си фактура за минути. 1,00 € начален кредит, без абонамент.',
   alternates: {
     canonical: '/signup',
-    languages: {
-      bg: '/signup',
-      en: '/en/signup',
-    },
+    languages: hreflangAlternates('/signup'),
   },
 };
 

@@ -18,13 +18,14 @@ export function IssuerProfileCompletenessHint({
   const missing = getMissingIssuerFields(profile);
   if (missing.length === 0) return null;
 
-  const { identifiers, countyRegion } = getCountryConfig(profile.country);
+  const { identifiers, countyRegion, companyIdLabel } = getCountryConfig(profile.country);
   const missingLabels = missing.map((field) => {
     if (field.startsWith('identifier:')) {
       const key = field.slice('identifier:'.length);
       return identifiers.find((entry) => entry.key === key)?.label ?? key;
     }
     if (field === 'countyRegion' && countyRegion) return countyRegion.label;
+    if (field === 'eik') return companyIdLabel;
     return t(`completenessHint.fields.${field}`);
   });
 

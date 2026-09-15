@@ -89,3 +89,24 @@ export function formatDateForLocale(value: Date | string, language: DocumentLang
   const separator = CONVENTIONS[language].dateSeparator;
   return [day, month, year].join(separator);
 }
+
+export function formatDateTimeForLocale(
+  value: Date | string,
+  language: DocumentLanguage,
+  timeZone: string,
+): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  const separator = CONVENTIONS[language].dateSeparator;
+  const datePart = [get('day'), get('month'), get('year')].join(separator);
+  return `${datePart}, ${get('hour')}:${get('minute')}`;
+}

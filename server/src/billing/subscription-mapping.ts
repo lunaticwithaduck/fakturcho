@@ -38,5 +38,12 @@ export function toSubscriptionDto(subscription: Subscription): SubscriptionDto {
     currentPeriodEnd: subscription.currentPeriodEnd
       ? subscription.currentPeriodEnd.toISOString()
       : null,
+    pendingUpgrade:
+      subscription.pendingRevolutSubscriptionId && subscription.pendingCheckoutUrl
+        ? {
+            tier: tierForVariationId(subscription.pendingPlanId),
+            checkoutUrl: subscription.pendingCheckoutUrl,
+          }
+        : null,
   };
 }

@@ -51,10 +51,19 @@ afterEach(() => {
   flagsResult = { EN_LOCALE: true, EINVOICE: true, PEPPOL: true };
 });
 
-function renderPanel(status: 'draft' | 'sent' | 'cancelled', clientDto: ClientDto | undefined) {
+function renderPanel(
+  status: 'draft' | 'sent' | 'cancelled',
+  clientDto: ClientDto | undefined,
+  documentType: 'invoice' | 'delivery_note' = 'invoice',
+) {
   return render(
     <NextIntlClientProvider locale="bg" messages={bgMessages}>
-      <EinvoicePanel documentId="doc-1" status={status} client={clientDto} />
+      <EinvoicePanel
+        documentId="doc-1"
+        documentType={documentType}
+        status={status}
+        client={clientDto}
+      />
     </NextIntlClientProvider>,
   );
 }
@@ -123,7 +132,7 @@ describe('EinvoicePanel', () => {
     };
     render(
       <NextIntlClientProvider locale="en" messages={enMessages}>
-        <EinvoicePanel documentId="doc-1" status="sent" client={client} />
+        <EinvoicePanel documentId="doc-1" documentType="invoice" status="sent" client={client} />
       </NextIntlClientProvider>,
     );
 
@@ -187,7 +196,7 @@ describe('EinvoicePanel', () => {
 
     render(
       <NextIntlClientProvider locale="en" messages={enMessages}>
-        <EinvoicePanel documentId="doc-1" status="sent" client={client} />
+        <EinvoicePanel documentId="doc-1" documentType="invoice" status="sent" client={client} />
       </NextIntlClientProvider>,
     );
 
@@ -201,6 +210,13 @@ describe('EinvoicePanel', () => {
   it('EINVOICE off: renders nothing at all for an issued document', () => {
     flagsResult = { EN_LOCALE: true, EINVOICE: false, PEPPOL: true };
     renderPanel('sent', client);
+
+    expect(screen.queryByRole('link', { name: 'Изтегли е-фактура (XML)' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();
+  });
+
+  it('renders nothing at all for a delivery note, even when issued', () => {
+    renderPanel('sent', client, 'delivery_note');
 
     expect(screen.queryByRole('link', { name: 'Изтегли е-фактура (XML)' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'Изпрати през Peppol' })).toBeNull();

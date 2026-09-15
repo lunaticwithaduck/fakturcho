@@ -87,7 +87,7 @@ describe('signup provisions a tenant', () => {
     });
 
     const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
-    expect(user.locale).toBe('en');
+    expect(user.locale).toBe('de');
   });
 
   it('ignores a client-supplied locale and derives it from country instead', async () => {
@@ -104,7 +104,7 @@ describe('signup provisions a tenant', () => {
     });
 
     const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
-    expect(user.locale).toBe('en');
+    expect(user.locale).toBe('de');
   });
 
   it('rejects an unsupported locale value with no country, falling back to bg', async () => {
@@ -115,7 +115,7 @@ describe('signup provisions a tenant', () => {
         name: 'Garbage Locale User',
         email: 'garbage-locale@example.com',
         password: 'correct-horse-battery',
-        locale: 'fr',
+        locale: 'xx',
       },
     });
 

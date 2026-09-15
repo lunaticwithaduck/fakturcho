@@ -57,12 +57,18 @@ export interface CreditLedgerEntryDto {
   createdAt: string;
 }
 
+export interface PendingUpgradeDto {
+  tier: SubscriptionTierId | null;
+  checkoutUrl: string;
+}
+
 export interface SubscriptionDto {
   id: string;
   status: SubscriptionStatus;
   planId: string | null;
   tier: SubscriptionTierId | null;
   currentPeriodEnd: string | null;
+  pendingUpgrade?: PendingUpgradeDto | null;
 }
 
 export interface CheckoutSessionDto {

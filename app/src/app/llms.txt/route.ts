@@ -38,7 +38,7 @@ const CONTENT = `# Фактурчо
 
 English version: [https://www.fakturcho.com/en/llms.txt](https://www.fakturcho.com/en/llms.txt).
 
-Fakturcho is a web app for issuing Bulgarian-compliant invoices, proformas, credit/debit notes and quotes, billed per document.
+Fakturcho is a web app for issuing Bulgarian-compliant invoices, proformas, credit/debit notes, quotes and delivery notes, billed per document.
 `;
 
 export function GET(): Response {

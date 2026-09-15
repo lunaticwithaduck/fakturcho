@@ -77,12 +77,12 @@ describe('LandingPage', () => {
   it('shows the switcher linking off the bg homepage when enabled', () => {
     render(<LandingPage enEnabled />);
     expect(screen.getByRole('link', { name: 'Български' }).getAttribute('href')).toBe('/?lang=bg');
-    expect(screen.getByRole('link', { name: 'Английски' }).getAttribute('href')).toBe('/?lang=en');
+    expect(screen.getByRole('link', { name: 'English' }).getAttribute('href')).toBe('/?lang=en');
   });
 
   it('shows the switcher linking off the en homepage when enabled', () => {
     render(<LandingPage locale="en" enEnabled />);
-    expect(screen.getByRole('link', { name: 'Bulgarian' }).getAttribute('href')).toBe(
+    expect(screen.getByRole('link', { name: 'Български' }).getAttribute('href')).toBe(
       '/en?lang=bg',
     );
     expect(screen.getByRole('link', { name: 'English' }).getAttribute('href')).toBe('/en?lang=en');

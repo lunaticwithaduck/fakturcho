@@ -36,6 +36,7 @@ describe('buildDraftData — grouped totals', () => {
       request(lineItems, { discounts: [{ label: 'promo', percentBp: 100 }] }),
       registered,
       resolved,
+      'BG',
     );
 
     expect(data.subtotal).toBe(1000);
@@ -63,6 +64,7 @@ describe('buildDraftData — grouped totals', () => {
       request(lineItems, { discounts: [{ label: 'promo', percentBp: 733 }] }),
       registered,
       resolved,
+      'BG',
     );
 
     expect(data.amount).toBe(

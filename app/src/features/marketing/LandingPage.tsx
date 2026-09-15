@@ -6,6 +6,7 @@ import { LegalFooter } from '@app/features/legal/LegalFooter';
 import { formatMoneyForLocale } from '@app/features/shared/format';
 import brandIcon from '@app/features/shell/brand-icon.png';
 import { LanguageSwitcher } from '@app/i18n/LanguageSwitcher';
+import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card } from '@design/components';
 import {
   type Locale,
@@ -33,11 +34,11 @@ interface LandingPageProps {
 
 export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPageProps) {
   const content = getMarketingContent(locale);
-  const countries = getCountriesContent();
+  const countries = getCountriesContent(locale);
   const pricing = pricingForLocale(locale);
-  const homeHref = locale === 'bg' ? '/' : '/en';
-  const loginHref = locale === 'bg' ? '/login' : '/en/login';
-  const signupHref = locale === 'bg' ? '/signup' : '/en/signup';
+  const homeHref = toLocalePath('/', locale);
+  const loginHref = toLocalePath('/login', locale);
+  const signupHref = toLocalePath('/signup', locale);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-3xl flex-col gap-12 px-4 py-10">
@@ -65,7 +66,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
           <p className="text-lg leading-relaxed text-text-muted">{content.hero.subtitle}</p>
         </section>
 
-        {locale === 'en' ? (
+        {locale !== 'bg' ? (
           <section className="flex flex-col gap-4">
             <h2 className="text-xl font-semibold text-text">{countries.heading}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -77,7 +78,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
                     <p className="text-sm leading-relaxed text-text-muted">{country.line}</p>
                     <Button variant="secondary" size="sm" asChild className="self-start">
                       <Link
-                        href={`/en/signup?country=${code}`}
+                        href={`${signupHref}?country=${code}`}
                         aria-label={`${content.nav.signup} — ${country.name}`}
                       >
                         {content.nav.signup}

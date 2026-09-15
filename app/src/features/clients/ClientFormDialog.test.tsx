@@ -246,6 +246,23 @@ describe('ClientFormDialog', () => {
     expect(body.countyRegion).toBe('Cluj');
   });
 
+  it('labels the identifier field with the client country acronym, not a generic term', async () => {
+    renderDialog('bg', bgMessages);
+
+    expect(screen.getByLabelText('ЕИК / Булстат')).toBeTruthy();
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Франция'));
+
+    expect(screen.queryByLabelText('ЕИК / Булстат')).toBeNull();
+    expect(screen.getByLabelText('SIREN')).toBeTruthy();
+
+    fireEvent.click(screen.getByLabelText('Държава'));
+    fireEvent.click(within(await screen.findByRole('listbox')).getByText('Полша'));
+
+    expect(screen.getByLabelText('NIP')).toBeTruthy();
+  });
+
   it('drops a stale județ when switching away from RO to a country without a county field', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ id: 'c1', companyName: 'ACME SRL' }));
     renderDialog('bg', bgMessages);

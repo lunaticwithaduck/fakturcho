@@ -3,7 +3,9 @@
 import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { TARGET_COUNTRIES } from '@app/features/marketing/targetCountries';
 import { trackEvent } from '@app/features/shared/analytics';
-import { formatMoney } from '@app/features/shared/format';
+import { formatMoneyForLocale } from '@app/features/shared/format';
+import { firstSearchParam } from '@app/features/shared/searchParams';
+import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card, Input, Select, SelectItem } from '@design/components';
 import type { Locale } from '@shared/types';
 import { EU_VAT_AREA_COUNTRIES, isEuVatAreaCountry, SIGNUP_GRANT_CENTS } from '@shared/types';
@@ -16,7 +18,7 @@ const BG_SIGNUP_COUNTRIES = [
   ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG'),
 ] as const;
 
-const EN_SIGNUP_COUNTRIES = [
+const NON_BG_SIGNUP_COUNTRIES = [
   ...TARGET_COUNTRIES,
   ...EU_VAT_AREA_COUNTRIES.filter(
     (country) => !(TARGET_COUNTRIES as readonly string[]).includes(country),
@@ -25,7 +27,7 @@ const EN_SIGNUP_COUNTRIES = [
 
 interface SignupFormProps {
   locale?: Locale;
-  initialCountry?: string | undefined;
+  initialCountry?: string | string[] | undefined;
 }
 
 export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
@@ -36,13 +38,13 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
   const [password, setPassword] = useState('');
   const [country, setCountry] = useState<string>(() => {
     if (locale === 'bg') return 'BG';
-    const upper = initialCountry?.toUpperCase();
+    const upper = firstSearchParam(initialCountry)?.toUpperCase();
     return upper && isEuVatAreaCountry(upper) ? upper : '';
   });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const loginHref = locale === 'bg' ? '/login' : '/en/login';
-  const signupCountries = locale === 'en' ? EN_SIGNUP_COUNTRIES : BG_SIGNUP_COUNTRIES;
+  const loginHref = toLocalePath('/login', locale);
+  const signupCountries = locale === 'bg' ? BG_SIGNUP_COUNTRIES : NON_BG_SIGNUP_COUNTRIES;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -67,7 +69,9 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-semibold text-text">{t('signupTitle')}</h1>
         <p className="text-sm text-text-muted">
-          {t('signupSubtitle', { amount: formatMoney(SIGNUP_GRANT_CENTS) })}
+          {t('signupSubtitle', {
+            amount: formatMoneyForLocale(SIGNUP_GRANT_CENTS, locale),
+          })}
         </p>
       </div>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>

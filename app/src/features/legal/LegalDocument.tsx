@@ -15,6 +15,7 @@ interface LegalDocumentProps {
   locale?: Locale;
   currentPath?: string;
   enEnabled?: boolean;
+  note?: string | undefined;
 }
 
 export function LegalDocument({
@@ -25,6 +26,7 @@ export function LegalDocument({
   locale = 'bg',
   currentPath,
   enEnabled = false,
+  note,
 }: LegalDocumentProps) {
   const updatedLabel = lastUpdatedLabel ?? `Последна актуализация: ${COMPANY.lastUpdated}`;
   return (
@@ -37,6 +39,7 @@ export function LegalDocument({
         ) : null}
         <h1 className="text-3xl font-bold text-text">{title}</h1>
         <p className="text-sm text-text-subtle">{updatedLabel}</p>
+        {note ? <p className="text-sm text-text-subtle italic">{note}</p> : null}
         <p className="text-base leading-relaxed text-text-muted">{intro}</p>
       </header>
 

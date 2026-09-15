@@ -1,7 +1,9 @@
+import type { DocumentDto } from '@shared/types';
 import { describe, expect, it } from 'vitest';
 import {
   blankComposerState,
   type ComposerFormState,
+  composerStateFromDocument,
   createDiscount,
   createLineItem,
   toSaveDraftRequest,
@@ -29,6 +31,85 @@ const VAT_GROUND: VatTreatment = {
   vatRateBp: 0,
   groundSelectable: true,
 };
+
+function fakeDocument(overrides: Partial<DocumentDto>): DocumentDto {
+  return {
+    id: 'doc-1',
+    documentType: 'delivery_note',
+    status: 'draft',
+    number: null,
+    numberPrefix: null,
+    numberSuffix: null,
+    referenceNumber: null,
+    originalDocumentId: null,
+    issuedAt: null,
+    taxEventAt: null,
+    dueAt: null,
+    validUntil: null,
+    deliveryDate: null,
+    buyerReference: null,
+    paymentMeansCode: null,
+    paymentTermsNote: null,
+    transportReason: null,
+    transportedAt: null,
+    carrierName: null,
+    transportNote: null,
+    subtotal: 0,
+    discountTotal: 0,
+    amount: 0,
+    vatIncluded: true,
+    vatRateBp: 0,
+    vatAmount: 0,
+    vatExemptionGround: null,
+    currency: 'EUR',
+    clientId: null,
+    preparedBy: null,
+    notes: null,
+    emailText: null,
+    emailedAt: null,
+    templateId: 'default',
+    documentLanguage: null,
+    issuer: {
+      companyName: null,
+      eik: null,
+      mol: null,
+      addressLine: null,
+      street: null,
+      postcode: null,
+      countyRegion: null,
+      city: null,
+      country: null,
+      phone: null,
+      vatRegistered: false,
+      vatNumber: null,
+      bankName: null,
+      iban: null,
+      bic: null,
+      altIban: null,
+      identifiers: {},
+    },
+    recipient: {
+      companyName: null,
+      eik: null,
+      vatNumber: null,
+      address: null,
+      street: null,
+      postcode: null,
+      countyRegion: null,
+      city: null,
+      country: null,
+      email: null,
+      mol: null,
+      sdiRecipientCode: null,
+      pec: null,
+    },
+    lineItems: [],
+    discounts: [],
+    createdAt: '2026-09-15T00:00:00.000Z',
+    updatedAt: '2026-09-15T00:00:00.000Z',
+    ...overrides,
+  };
+}
 
 function withOneCompleteLine(state: ComposerFormState): ComposerFormState {
   return {
@@ -77,6 +158,14 @@ describe('toSaveDraftRequest', () => {
     expect(toSaveDraftRequest(state, VAT_20).vatExemptionGround).toBeNull();
     expect(toSaveDraftRequest(state, NO_VAT).vatExemptionGround).toBeNull();
     expect(toSaveDraftRequest(state, VAT_GROUND).vatExemptionGround).toBe('чл.21 от ЗДДС');
+  });
+});
+
+describe('composerStateFromDocument', () => {
+  it('localizes transportedAt into the issuer country timezone for editing', () => {
+    const document = fakeDocument({ transportedAt: '2026-09-15T07:30:00.000Z' });
+    const state = composerStateFromDocument(document, 'Europe/Rome');
+    expect(state.transportedAt).toBe('2026-09-15T09:30');
   });
 });
 

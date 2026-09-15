@@ -13,6 +13,7 @@ enum DocumentType {
   CREDIT_NOTE
   DEBIT_NOTE
   QUOTE
+  DELIVERY_NOTE
 }
 
 enum DocumentStatus {
@@ -246,6 +247,14 @@ model Document {
   paymentMeansCode String?
   paymentTermsNote String?
 
+  // delivery_note only: IT DDT causale del trasporto / RO aviz scop, and its
+  // date+time of dispatch (DPR 472/1996 art.1 requires date AND time, unlike
+  // every other document's date-only fields).
+  transportReason String?
+  transportedAt   DateTime?
+  carrierName     String?
+  transportNote   String?
+
   subtotal           Int     @default(0)
   discountTotal      Int     @default(0)
   amount             Int     @default(0)
@@ -354,6 +363,13 @@ model Subscription {
   checkoutStartedAt     DateTime?
   planId                String?
   currentPeriodEnd      DateTime?
+  // a paid plan being upgraded keeps running until the new tier is actually paid;
+  // these track that in-flight Revolut subscription without touching the fields above
+  pendingPlanId                String?
+  pendingRevolutSubscriptionId String?   @unique
+  pendingRevolutSetupOrderId   String?
+  pendingCheckoutUrl           String?
+  pendingCheckoutStartedAt     DateTime?
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
 

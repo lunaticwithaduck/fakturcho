@@ -1,0 +1,907 @@
+{
+  "login": {
+    "title": "Zaloguj się do Fakturcho",
+    "subtitle": "Podaj e-mail i hasło, aby kontynuować.",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Hasło",
+    "submitting": "Logowanie...",
+    "submit": "Zaloguj się",
+    "noAccount": "Nie masz konta?",
+    "signupLink": "Zarejestruj się"
+  },
+  "documents": {
+    "list": {
+      "pageTitle": "Dokumenty",
+      "newDocument": "Nowy dokument",
+      "searchLabel": "Szukaj",
+      "searchPlaceholder": "Szukaj po kliencie lub numerze referencyjnym",
+      "typeFilterLabel": "Rodzaj dokumentu",
+      "allTypes": "Wszystkie rodzaje",
+      "noClient": "Brak klienta",
+      "emptyTitle": "Brak dokumentów",
+      "emptyFilteredDescription": "Żaden dokument nie pasuje do filtrów.",
+      "emptyDescription": "Utwórz pierwszy dokument, a pojawi się tutaj."
+    },
+    "statusTabs": {
+      "all": "Wszystkie"
+    },
+    "title": {
+      "draft": "{label} — wersja robocza",
+      "numbered": "{label} nr {number}",
+      "originalMarker": " (oryginał)"
+    },
+    "actions": {
+      "edit": "Edytuj",
+      "issue": "Wystaw",
+      "markPaid": "Oznacz jako opłacony",
+      "markingPaid": "Oznaczanie...",
+      "email": "Wyślij e-mailem",
+      "cancel": "Anuluj dokument"
+    },
+    "dialogs": {
+      "email": {
+        "title": "Wysyłka e-mailem",
+        "recipientLabel": "E-mail odbiorcy",
+        "messageLabel": "Wiadomość",
+        "cancel": "Anuluj",
+        "sending": "Wysyłanie...",
+        "send": "Wyślij"
+      },
+      "issue": {
+        "title": "Wystawianie dokumentu",
+        "nextNumber": "Kolejny numer w serii: {number}",
+        "loadingSeries": "Wczytywanie serii...",
+        "issuedAtLabel": "Data wystawienia",
+        "overrideNumberLabel": "Zmień kolejny numer (opcjonalnie)",
+        "overrideNumberHint": "Możliwe tylko, dopóki w serii nie ma wystawionych dokumentów.",
+        "profileLink": "Przejdź do profilu wystawcy",
+        "creditsLink": "Doładuj konto",
+        "cancel": "Anuluj",
+        "issuing": "Wystawianie...",
+        "confirm": "Wystaw"
+      },
+      "cancel": {
+        "title": "Anulowanie dokumentu",
+        "description": "Czy na pewno chcesz anulować dokument? Numer pozostanie zarezerwowany i nie zostanie użyty ponownie.",
+        "confirm": "Anuluj dokument"
+      }
+    },
+    "view": {
+      "notFound": "Nie znaleziono dokumentu",
+      "downloadPdf": "Pobierz PDF",
+      "draftPreviewNotice": "Wersja robocza jest widoczna wyłącznie jako podgląd ze znakiem wodnym. Wystaw dokument, aby go pobrać lub wysłać.",
+      "markedPaidToast": "Dokument oznaczony jako opłacony",
+      "errorToastTitle": "Błąd",
+      "cancelledToast": "Dokument anulowany",
+      "issuedToast": "Dokument wystawiony",
+      "emailSentToast": "E-mail wysłany"
+    },
+    "composer": {
+      "titleNew": "Nowy dokument",
+      "titleEdit": "Edytuj dokument",
+      "draftSaved": "Zapisano wersję roboczą",
+      "requiredField": "Pole wymagane",
+      "notFound": {
+        "title": "Nie znaleziono dokumentu",
+        "action": "Przejdź do dokumentów"
+      },
+      "notDraft": {
+        "title": "Edytować można tylko wersje robocze",
+        "description": "Ten dokument został już wystawiony i nie można go zmienić. Wystawiony dokument koryguje się fakturą korygującą (in minus lub in plus) do dokumentu pierwotnego.",
+        "action": "Przejdź do dokumentu"
+      },
+      "errors": {
+        "missingOriginalDocument": "Wybierz dokument pierwotny, aby kontynuować.",
+        "missingLineItems": "Dodaj co najmniej jedną pozycję z nazwą, ilością i ceną.",
+        "missingVatGround": "Wybierz podstawę zwolnienia z VAT."
+      },
+      "documentType": {
+        "label": "Rodzaj dokumentu"
+      },
+      "client": {
+        "label": "Klient",
+        "none": "Brak klienta",
+        "addNew": "+ Nowy klient"
+      },
+      "details": {
+        "referenceNumber": "Numer referencyjny",
+        "validUntil": "Ważna do",
+        "taxEventAt": "Data sprzedaży",
+        "dueAt": "Termin płatności"
+      },
+      "delivery": {
+        "heading": "Szczegóły dostawy",
+        "deliveryDateLabel": "Data dostawy",
+        "transportedAtLabel": "Data i godzina transportu",
+        "transportReasonLabel": "Powód transportu",
+        "transportReasonPlaceholder": "Wybierz powód",
+        "carrierNameLabel": "Przewoźnik",
+        "transportNoteLabel": "Szczegóły transportu"
+      },
+      "originalDocument": {
+        "label": "Dokument pierwotny",
+        "placeholder": "Wybierz dokument",
+        "noClient": "Brak klienta"
+      },
+      "deliveryReference": {
+        "label": "Powiązana faktura",
+        "placeholder": "Wybierz fakturę"
+      },
+      "lineItems": {
+        "heading": "Pozycje",
+        "nameLabel": "Nazwa",
+        "quantityLabel": "Ilość",
+        "priceLabel": "Cena",
+        "totalLabel": "Wartość",
+        "removeButton": "Usuń",
+        "addButton": "Dodaj pozycję"
+      },
+      "discounts": {
+        "heading": "Rabaty",
+        "reasonLabel": "Powód rabatu",
+        "modePercent": "Procent",
+        "modeAmount": "Kwota",
+        "percentLabel": "Procent %",
+        "amountLabel": "Kwota",
+        "removeButton": "Usuń",
+        "addButton": "Dodaj rabat"
+      },
+      "vat": {
+        "heading": "VAT",
+        "chargeLabel": "Nalicz VAT ({rate}%)",
+        "groundLabel": "Podstawa zwolnienia z VAT",
+        "groundPlaceholder": "Wybierz podstawę"
+      },
+      "totals": {
+        "subtotal": "Suma częściowa",
+        "discount": "Rabat",
+        "taxBase": "Wartość netto",
+        "vat": "VAT ({rate}%)",
+        "vatGeneric": "VAT",
+        "total": "Razem"
+      },
+      "notes": {
+        "notesLabel": "Uwagi",
+        "preparedByLabel": "Wystawił"
+      },
+      "actions": {
+        "saveDraft": "Zapisz roboczo",
+        "saving": "Zapisywanie...",
+        "saveAndIssue": "Zapisz i wystaw",
+        "cancel": "Anuluj"
+      }
+    },
+    "peppol": {
+      "downloadXml": "Pobierz e-fakturę (XML)",
+      "notReadyHint": "Brak danych do e-faktury: {fields}",
+      "missingFieldFallback": "Brak danych do e-faktury.",
+      "missingFields": {
+        "document": {
+          "type": "Tego rodzaju dokumentu nie można wyeksportować jako e-faktury.",
+          "number": "Dokument musi być wystawiony (brak numeru dokumentu).",
+          "issuedAt": "Brak daty wystawienia.",
+          "vatExemptionGround": "Brak podstawy zwolnienia z VAT dla wybranej kategorii VAT.",
+          "lineItems": "Dokument musi zawierać co najmniej jedną pozycję.",
+          "buyerReference": "Brak numeru referencyjnego nabywcy, wymaganego dla wybranej formy płatności.",
+          "buyerReferenceOrLeitwegId": "Brak numeru referencyjnego nabywcy lub Leitweg-ID (wymagane przez XRechnung).",
+          "leitwegIdFormat": "Format Leitweg-ID jest nieprawidłowy."
+        },
+        "line": {
+          "unitCode": "W co najmniej jednej pozycji brakuje kodu jednostki miary."
+        },
+        "issuer": {
+          "companyName": "Brak nazwy firmy wystawcy.",
+          "country": "Brak kraju wystawcy.",
+          "street": "Brak ulicy i numeru w adresie wystawcy.",
+          "postcode": "Brak kodu pocztowego wystawcy.",
+          "city": "Brak miejscowości wystawcy.",
+          "vatNumber": "Brak numeru VAT wystawcy.",
+          "phone": "Brak numeru telefonu wystawcy, wymaganego przez XRechnung.",
+          "iban": "Brak numeru IBAN wystawcy, wymaganego dla wybranej formy płatności.",
+          "vatNumberOrRegistrationId": "Brak numeru VAT lub numeru rejestrowego wystawcy.",
+          "cui": "Brak numeru CUI wystawcy (rumuński numer rejestracji podatkowej).",
+          "cuiChecksum": "Numer CUI wystawcy ma nieprawidłową sumę kontrolną.",
+          "vatNumberRoPrefix": "Brak numeru VAT wystawcy z prefiksem RO.",
+          "vatNumberRoFormat": "Numer VAT wystawcy nie jest prawidłowym numerem CUI z prefiksem RO.",
+          "countyRegion": "Brak okręgu (județ) wystawcy.",
+          "sirenOrSiret": "Brak numeru SIREN lub SIRET wystawcy.",
+          "vatNumberFrFormat": "Numer VAT wystawcy musi być w formacie francuskim.",
+          "esTaxId": "Brak identyfikatora podatkowego wystawcy (NIF/CIF/NIE).",
+          "esTaxIdInvalid": "Identyfikator podatkowy wystawcy nie jest prawidłowym hiszpańskim numerem NIF, NIE ani CIF.",
+          "partitaIva": "Brak numeru Partita IVA wystawcy.",
+          "partitaIvaInvalid": "Numer Partita IVA wystawcy nie jest prawidłowym włoskim numerem VAT.",
+          "codiceFiscale": "Brak numeru Codice Fiscale wystawcy.",
+          "codiceFiscaleInvalid": "Numer Codice Fiscale wystawcy ma nieprawidłowy format.",
+          "nip": "Brak numeru NIP wystawcy, wymaganego do przesłania do KSeF.",
+          "nipChecksum": "Numer NIP wystawcy ma nieprawidłową sumę kontrolną."
+        },
+        "recipient": {
+          "companyName": "Brak nazwy firmy nabywcy.",
+          "country": "Brak kraju nabywcy.",
+          "street": "Brak ulicy i numeru w adresie nabywcy.",
+          "postcode": "Brak kodu pocztowego nabywcy.",
+          "city": "Brak miejscowości nabywcy.",
+          "vatNumberReverseCharge": "Brak numeru VAT nabywcy, wymaganego przy odwrotnym obciążeniu w transakcjach wewnątrzunijnych.",
+          "cui": "Brak numeru CUI nabywcy (rumuński numer rejestracji podatkowej).",
+          "cuiChecksum": "Numer CUI nabywcy ma nieprawidłową sumę kontrolną.",
+          "vatNumberRoFormat": "Numer VAT nabywcy nie jest prawidłowym numerem CUI z prefiksem RO.",
+          "countyRegion": "Brak okręgu (județ) nabywcy.",
+          "sirenOrSiret": "Brak numeru SIREN lub SIRET nabywcy.",
+          "vatNumberFrFormat": "Numer VAT nabywcy musi być w formacie francuskim.",
+          "esTaxId": "Brak identyfikatora podatkowego nabywcy (NIF/CIF/NIE).",
+          "esTaxIdInvalid": "Identyfikator podatkowy nabywcy nie jest prawidłowym hiszpańskim numerem NIF, NIE ani CIF.",
+          "partitaIvaOrCodiceFiscale": "Brak numeru Partita IVA lub Codice Fiscale nabywcy.",
+          "partitaIvaInvalid": "Numer Partita IVA nabywcy nie jest prawidłowym włoskim numerem VAT.",
+          "codiceFiscaleInvalid": "Numer Codice Fiscale nabywcy ma nieprawidłowy format.",
+          "sdiCodeOrPec": "Brak kodu odbiorcy SDI lub adresu e-mail PEC.",
+          "nip": "Brak numeru NIP nabywcy, wymaganego w przypadku nabywcy krajowego.",
+          "nipChecksum": "Numer NIP nabywcy ma nieprawidłową sumę kontrolną."
+        }
+      },
+      "send": "Wyślij przez Peppol",
+      "sending": "Wysyłanie...",
+      "statusQueued": "W kolejce",
+      "statusSent": "Wysłano",
+      "statusDelivered": "Dostarczono",
+      "statusRejected": "Odrzucono"
+    }
+  },
+  "billing": {
+    "pageTitle": "Płatności",
+    "balance": {
+      "label": "Saldo",
+      "remaining": "{count, plural, one {Pozostał 1 dokument} few {Pozostały # dokumenty} many {Pozostało # dokumentów} other {Pozostało # dokumentu}}"
+    },
+    "ledgerReasons": {
+      "signupGrant": "Bonus powitalny",
+      "purchase": "Zakup środków",
+      "issuance": "Wystawienie dokumentu",
+      "adjustment": "Korekta",
+      "subscriptionGrant": "Doładowanie z abonamentu"
+    },
+    "packs": {
+      "heading": "Pakiety doładowań",
+      "documents": "{count} dokumentów"
+    },
+    "perDocument": "{price} za dokument",
+    "tiers": {
+      "title": "{documents} dokumentów miesięcznie za {price}",
+      "body": "Co miesiąc doładowuje konto kwotą {grant}; niewykorzystane środki przechodzą na kolejny miesiąc."
+    },
+    "subscription": {
+      "label": "Abonament",
+      "periodEnds": "Bieżący okres kończy się {date}",
+      "nextGrant": "Następne doładowanie: {grant}",
+      "switchTo": "Zmień na",
+      "statusLine": "Abonament: {status}",
+      "pendingUpgrade": "Zmiana planu czeka na płatność: {title}"
+    },
+    "subscriptionStatus": {
+      "trialing": "Oczekuje na płatność",
+      "active": "Aktywny",
+      "pastDue": "Zaległa płatność",
+      "canceled": "Anulowany"
+    },
+    "actions": {
+      "buy": "Kup",
+      "activate": "Aktywuj",
+      "switch": "Zmień",
+      "continueToPayment": "Przejdź do płatności",
+      "redirecting": "Przekierowywanie..."
+    },
+    "ledger": {
+      "heading": "Ostatnia aktywność",
+      "emptyTitle": "Brak aktywności",
+      "emptyDescription": "Tutaj pojawi się każda zmiana salda — bonusy, zakupy i wystawione dokumenty."
+    },
+    "checkoutError": {
+      "title": "Błąd przekierowania",
+      "description": "Nie udało się rozpocząć płatności. Spróbuj ponownie."
+    }
+  },
+  "catalogue": {
+    "pageTitle": "Katalog",
+    "newItem": "Nowy produkt",
+    "searchLabel": "Szukaj",
+    "searchPlaceholder": "Szukaj po nazwie",
+    "emptyTitle": "Brak produktów",
+    "emptyDescription": "Dodaj produkt lub usługę, aby szybko dodawać je do dokumentów.",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "deleteToastTitle": "Produkt usunięty",
+    "deleteErrorTitle": "Nie udało się usunąć",
+    "saveToastTitle": "Produkt zapisany",
+    "deleteDialogTitle": "Usuń produkt",
+    "deleteDialogDescription": "Czy na pewno chcesz usunąć „{name}”? Tej operacji nie można cofnąć.",
+    "dialogEditTitle": "Edytuj produkt",
+    "dialogNewTitle": "Nowy produkt",
+    "cancel": "Anuluj",
+    "saving": "Zapisywanie...",
+    "save": "Zapisz",
+    "nameLabel": "Nazwa",
+    "unitLabel": "Jednostka",
+    "unitPlaceholder": "szt., godz., kg...",
+    "priceLabel": "Cena domyślna",
+    "defaultUnit": "szt.",
+    "validationError": "Uzupełnij nazwę, jednostkę i cenę."
+  },
+  "clients": {
+    "pageTitle": "Klienci",
+    "newClient": "Nowy klient",
+    "searchLabel": "Szukaj",
+    "searchPlaceholder": "Szukaj po nazwie lub numerze identyfikacyjnym",
+    "emptyTitle": "Brak klientów",
+    "emptyDescription": "Dodaj pierwszego klienta, aby móc go wybierać podczas tworzenia dokumentów.",
+    "edit": "Edytuj",
+    "delete": "Usuń",
+    "eikPrefix": "{label}: {eik}",
+    "deleteToastTitle": "Klient usunięty",
+    "deleteErrorTitle": "Nie udało się usunąć",
+    "saveToastTitle": "Klient zapisany",
+    "deleteDialogTitle": "Usuń klienta",
+    "deleteDialogDescription": "Czy na pewno chcesz usunąć „{name}”? Tej operacji nie można cofnąć.",
+    "dialogEditTitle": "Edytuj klienta",
+    "dialogNewTitle": "Nowy klient",
+    "cancel": "Anuluj",
+    "saving": "Zapisywanie...",
+    "save": "Zapisz",
+    "companyNameLabel": "Nazwa firmy",
+    "vatNumberLabel": "Numer VAT",
+    "addressLabel": "Adres",
+    "streetLabel": "Ulica i numer",
+    "postcodeLabel": "Kod pocztowy",
+    "cityLabel": "Miejscowość",
+    "emailLabel": "E-mail",
+    "molLabel": "Reprezentant",
+    "peppolEndpointIdLabel": "Identyfikator Peppol (Endpoint ID)",
+    "peppolSchemeLabel": "Schemat Peppol",
+    "invalidFormat": "Nieprawidłowy format",
+    "countryLabel": "Kraj",
+    "documentLanguageLabel": "Język dokumentów",
+    "documentLanguageOptionSame": "Jak u wystawcy",
+    "countries": {
+      "AT": "Austria",
+      "BE": "Belgia",
+      "BG": "Bułgaria",
+      "CY": "Cypr",
+      "CZ": "Czechy",
+      "DE": "Niemcy",
+      "DK": "Dania",
+      "EE": "Estonia",
+      "ES": "Hiszpania",
+      "FI": "Finlandia",
+      "FR": "Francja",
+      "GR": "Grecja",
+      "HR": "Chorwacja",
+      "HU": "Węgry",
+      "IE": "Irlandia",
+      "IT": "Włochy",
+      "LT": "Litwa",
+      "LU": "Luksemburg",
+      "LV": "Łotwa",
+      "MT": "Malta",
+      "NL": "Niderlandy",
+      "PL": "Polska",
+      "PT": "Portugalia",
+      "RO": "Rumunia",
+      "SE": "Szwecja",
+      "SI": "Słowenia",
+      "SK": "Słowacja",
+      "OTHER": "Inny kraj"
+    },
+    "documentLanguageOptions": {
+      "bg": "Bułgarski",
+      "en": "Angielski",
+      "de": "Niemiecki",
+      "fr": "Francuski",
+      "it": "Włoski",
+      "pl": "Polski",
+      "ro": "Rumuński",
+      "es": "Hiszpański"
+    }
+  },
+  "issuer": {
+    "title": "Profil wystawcy",
+    "savedToast": "Profil zapisany",
+    "saving": "Zapisywanie...",
+    "save": "Zapisz profil",
+    "companyFields": {
+      "heading": "Dane firmy",
+      "companyName": "Firma",
+      "mol": "Upoważniony reprezentant",
+      "country": "Kraj",
+      "addressLine": "Adres",
+      "street": "Ulica i numer",
+      "postcode": "Kod pocztowy",
+      "city": "Miejscowość",
+      "phone": "Telefon",
+      "invalidFormat": "Nieprawidłowy format"
+    },
+    "vatFields": {
+      "heading": "Rejestracja VAT",
+      "vatRegistered": "Czynny podatnik VAT",
+      "vatNumber": "Numer VAT"
+    },
+    "bankFields": {
+      "heading": "Rachunek bankowy",
+      "bankName": "Bank",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "altIban": "Dodatkowy rachunek"
+    },
+    "completenessHint": {
+      "title": "Profil nie jest gotowy do wystawiania dokumentów",
+      "body": "Uzupełnij następujące pola, aby móc wystawiać dokumenty: {fields}.",
+      "profileLink": "Przejdź do profilu wystawcy",
+      "fields": {
+        "companyName": "Firma",
+        "addressLine": "Adres",
+        "street": "Ulica i numer",
+        "postcode": "Kod pocztowy",
+        "city": "Miejscowość",
+        "vatNumber": "Numer VAT"
+      }
+    },
+    "countries": {
+      "AT": "Austria",
+      "BE": "Belgia",
+      "BG": "Bułgaria",
+      "CH": "Szwajcaria",
+      "CY": "Cypr",
+      "CZ": "Czechy",
+      "DE": "Niemcy",
+      "DK": "Dania",
+      "EE": "Estonia",
+      "ES": "Hiszpania",
+      "FI": "Finlandia",
+      "FR": "Francja",
+      "GB": "Wielka Brytania",
+      "GR": "Grecja",
+      "HR": "Chorwacja",
+      "HU": "Węgry",
+      "IE": "Irlandia",
+      "IT": "Włochy",
+      "LT": "Litwa",
+      "LU": "Luksemburg",
+      "LV": "Łotwa",
+      "MT": "Malta",
+      "NL": "Niderlandy",
+      "NO": "Norwegia",
+      "PL": "Polska",
+      "PT": "Portugalia",
+      "RO": "Rumunia",
+      "SE": "Szwecja",
+      "SI": "Słowenia",
+      "SK": "Słowacja",
+      "US": "Stany Zjednoczone"
+    }
+  },
+  "shell": {
+    "brandName": "Fakturcho",
+    "signOut": "Wyloguj się",
+    "navItems": {
+      "documents": "Dokumenty",
+      "clients": "Klienci",
+      "catalogue": "Katalog",
+      "billing": "Płatności",
+      "profile": "Profil"
+    },
+    "confirmDialog": {
+      "cancel": "Anuluj",
+      "confirming": "Proszę czekać..."
+    },
+    "apiErrorFallback": "Wystąpił błąd. Spróbuj ponownie.",
+    "apiErrors": {
+      "NUMBER_COLLISION": "Ten numer jest już zajęty. Spróbuj ponownie.",
+      "SERIES_OVERRIDE_LOCKED": "Seria zawiera już wystawione dokumenty — nie można zmienić kolejnego numeru.",
+      "DOCUMENT_IMMUTABLE": "Wystawionego dokumentu nie można zmienić.",
+      "DOCUMENT_NOT_ISSUED": "Wersji roboczej nie można wysłać. Najpierw wystaw dokument.",
+      "ORIGINAL_DOCUMENT_REQUIRED": "Wybierz dokument pierwotny, aby kontynuować.",
+      "ISSUER_PROFILE_INCOMPLETE": "Profil wystawcy jest niekompletny. Uzupełnij dane firmy, aby wystawiać dokumenty.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Dowód dostawy dla tego kraju wymaga uzupełnienia danych transportu przed wystawieniem.",
+      "VAT_GROUND_NOT_ALLOWED": "Ta podstawa zwolnienia z VAT jest niedozwolona.",
+      "CLIENT_EIK_DUPLICATE": "Klient z tym numerem identyfikacyjnym już istnieje.",
+      "SUBSCRIPTION_REQUIRED": "Wymagany jest aktywny abonament.",
+      "INSUFFICIENT_CREDITS": "Niewystarczające środki na koncie. Wystawienie dokumentu kosztuje 0,10 €.",
+      "VALIDATION_FAILED": "Sprawdź wprowadzone dane.",
+      "NOT_FOUND": "Nie znaleziono rekordu.",
+      "UNAUTHORIZED": "Nie masz dostępu.",
+      "FORBIDDEN": "Nie masz dostępu.",
+      "CHECKOUT_NOT_CONFIGURED": "Płatności nie są w pełni skonfigurowane. Skontaktuj się z nami — nie musisz próbować ponownie.",
+      "PAYMENT_PROVIDER_ERROR": "Operator płatności odrzucił żądanie. Spróbuj ponownie później.",
+      "PAYMENT_PROVIDER_UNREACHABLE": "Operator płatności nie odpowiada. Spróbuj ponownie za kilka minut.",
+      "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Dostawca e-faktur nie jest skonfigurowany.",
+      "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ten dostawca nie obsługuje sprawdzania statusu.",
+      "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
+    }
+  },
+  "auth": {
+    "brandName": "Fakturcho",
+    "signupTitle": "Załóż konto w Fakturcho",
+    "signupSubtitle": "Załóż bezpłatne konto. Na start otrzymasz {amount} środków.",
+    "nameLabel": "Imię i nazwisko",
+    "emailLabel": "E-mail",
+    "passwordLabel": "Hasło",
+    "countryLabel": "Kraj",
+    "countryPlaceholder": "Wybierz kraj",
+    "countryRequired": "Wybierz kraj.",
+    "signupSubmitting": "Rejestracja...",
+    "signupSubmit": "Zarejestruj się",
+    "haveAccount": "Masz już konto?",
+    "loginLink": "Zaloguj się",
+    "countries": {
+      "BG": "Bułgaria",
+      "AT": "Austria",
+      "BE": "Belgia",
+      "CY": "Cypr",
+      "CZ": "Czechy",
+      "DE": "Niemcy",
+      "DK": "Dania",
+      "EE": "Estonia",
+      "ES": "Hiszpania",
+      "FI": "Finlandia",
+      "FR": "Francja",
+      "GR": "Grecja",
+      "HR": "Chorwacja",
+      "HU": "Węgry",
+      "IE": "Irlandia",
+      "IT": "Włochy",
+      "LT": "Litwa",
+      "LU": "Luksemburg",
+      "LV": "Łotwa",
+      "MT": "Malta",
+      "NL": "Niderlandy",
+      "PL": "Polska",
+      "PT": "Portugalia",
+      "RO": "Rumunia",
+      "SE": "Szwecja",
+      "SI": "Słowenia",
+      "SK": "Słowacja"
+    }
+  },
+  "legal": {
+    "footerLinks": {
+      "terms": "Regulamin",
+      "privacy": "Polityka prywatności",
+      "refunds": "Zwroty",
+      "contact": "Kontakt"
+    },
+    "lastUpdatedLabel": "Last updated: {date}",
+    "providedInEnglishNote": "Ten dokument jest dostępny wyłącznie w języku angielskim.",
+    "terms": {
+      "metaTitle": "Terms of Service",
+      "metaDescription": "The terms of service for using Fakturcho.",
+      "title": "Terms of Service",
+      "intro": "These terms of service govern the relationship between {legalName} and any business or sole trader that uses the {productName} web application at {website} to compose and issue commercial documents. By registering an account, the user accepts the terms in this document.",
+      "sections": [
+        {
+          "heading": "1. Service provider",
+          "paragraphs": [
+            "The service is provided by {entityLine}, a company registered under Bulgarian law.",
+            "Contact us at {supportEmail}. We reply to inquiries within five business days."
+          ]
+        },
+        {
+          "heading": "2. What the service is",
+          "paragraphs": [
+            "{productName} is a web application through which a business or sole trader established in the European Union composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file, together with a structured e-invoice file where the document type and the issuer's country call for one.",
+            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves, or to send over the Peppol network.",
+            "Each account represents a single issuer with its own list of clients, catalogue and numbering series."
+          ]
+        },
+        {
+          "heading": "3. Registration and account",
+          "paragraphs": [
+            "Using the service requires registration with a valid email address, a password, and the country in which the issuer is established. The user is responsible for safeguarding their access credentials and for all actions taken through their account.",
+            "The service is intended for businesses and sole traders (B2B) issuing commercial documents in the course of their trade or profession. Where a natural person registers for purposes outside any trade or profession, the consumer-protection provisions referenced in this document and in the Refund Policy apply to them.",
+            "The user represents that the data entered for the issuer and for clients is accurate and that they are entitled to process it. The content of issued documents, and its correctness under the tax law that applies to the issuer, is the user's sole responsibility."
+          ]
+        },
+        {
+          "heading": "4. Prices and payment",
+          "paragraphs": [
+            "Issuing each document costs {perDocument}, deducted from the account's credit balance the moment the document is assigned a number. Composing and saving drafts, clients and catalogue items is free.",
+            "Credit is topped up through one-off packs priced at {packs}. A subscription of {subscription} grants double that amount in credit every billing period. A subscription grants credit; it does not exempt any document from the {perDocument} issuance charge.",
+            "A new account receives a one-off credit of {signupGrant} on registration.",
+            "Payments are processed by {entityLine} through Revolut as the payment service provider. Prices are stated in euro. {legalName} is not currently VAT-registered, so no VAT is added to these amounts; if that changes, the applicable rate will be shown before payment."
+          ]
+        },
+        {
+          "heading": "5. Credit",
+          "paragraphs": [
+            "Credit is a prepaid value in euro cents that is used only to issue documents in the application. Credit has no expiry date and does not accrue interest.",
+            "Credit cannot be transferred between accounts and is not paid out in cash, except in the cases covered by the Refund Policy."
+          ]
+        },
+        {
+          "heading": "6. User obligations",
+          "paragraphs": [
+            "The user is solely responsible for complying with the accounting, tax and invoicing legislation that applies to their business in their own country, including any obligation to submit, declare or report issued documents to their national tax authority or e-invoicing platform. Fakturcho prepares the document and, where applicable, the e-invoice file ready for that step; it does not perform the submission itself.",
+            "It is prohibited to use the service to issue documents with untrue content, to circumvent tax obligations, or to take actions that infringe the rights of third parties.",
+            "Attempts at automated load, intrusion, or disruption of the service's operation result in immediate termination of access."
+          ]
+        },
+        {
+          "heading": "7. Liability and availability",
+          "paragraphs": [
+            "The service is provided as is. We make reasonable efforts to keep it available and accurate, but we do not guarantee uninterrupted or error-free operation.",
+            "The provider is not liable for the accuracy of data entered by the user, nor for the tax or accounting consequences, in any country, of documents issued through the application.",
+            "The provider's liability for proven damages is limited to the amount paid by the user over the preceding twelve months."
+          ]
+        },
+        {
+          "heading": "8. Termination",
+          "paragraphs": [
+            "The user may stop using the service at any time by discontinuing access to their account and requesting its deletion at the email address given above.",
+            "The provider may terminate access in the event of a breach of these terms, notifying the user at their registered email address.",
+            "Issued documents remain the user's obligation under the accounting and tax legislation that applies to them, even after access is terminated."
+          ]
+        },
+        {
+          "heading": "9. Changes",
+          "paragraphs": [
+            "These terms may be amended. The current version is always available at this address, with the date of the last update. Material changes are communicated to the registered email address no later than fourteen days before they take effect."
+          ]
+        },
+        {
+          "heading": "10. Governing law and jurisdiction",
+          "paragraphs": [
+            "Bulgarian law governs these terms and any matter not covered here. For a business (B2B) user, a dispute is resolved by agreement and, failing that, by the competent court in Sofia, Bulgaria.",
+            "Where the user is a consumer within the meaning of applicable EU law, this choice of law does not deprive them of the mandatory consumer-protection provisions of the country in which they are habitually resident, and they may bring proceedings before the courts of that country or of Bulgaria. Every consumer may use the European Commission's online dispute resolution platform at ec.europa.eu/consumers/odr, or complain to the consumer protection authority of their own country — for a Bulgarian consumer, the Commission for Consumer Protection."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "How Fakturcho processes personal data.",
+      "title": "Privacy Policy",
+      "intro": "This document explains what personal data {productName} processes, on what grounds, to whom it discloses it, and what rights each data subject has under the GDPR. The policy applies to the web application at {website} and to the businesses and individuals across the European Union who use it.",
+      "sections": [
+        {
+          "heading": "1. Data controller",
+          "paragraphs": [
+            "The controller is {entityLine}, email {supportEmail}.",
+            "For data the user enters about their own clients, the user is the controller and Fakturcho acts as a data processor on the user's instructions."
+          ]
+        },
+        {
+          "heading": "2. What data we process",
+          "paragraphs": [
+            "Account data: email address, name, a cryptographically hashed record of the password, and the country of establishment given at signup.",
+            "Issuer data: company name, national company or VAT identifier, address, authorized representative, bank account, and the person who drew up the document. This data is printed on issued documents.",
+            "Client and document data: the recipient's name and identifiers, addresses, catalogue items, amounts and dates, as entered by the user.",
+            "Technical data: access logs, request time, request address and response code, kept for security and troubleshooting purposes.",
+            "Analytics data: anonymized, cookieless product-usage events (pages viewed, features used), collected through our self-hosted Umami analytics instance. This data cannot be linked back to an identified visitor and is never shared with any advertising network.",
+            "We do not process special categories of personal data and we do not carry out automated decision-making or profiling."
+          ]
+        },
+        {
+          "heading": "3. Purposes and legal grounds",
+          "paragraphs": [
+            "Providing the service and maintaining the account — processing is necessary for performance of the contract with the user.",
+            "Processing payments and keeping the credit balance — performance of a contract and compliance with legal obligations.",
+            "Service security, abuse prevention and technical support — the controller's legitimate interest.",
+            "Understanding and improving the service through anonymized product analytics — the controller's legitimate interest, balanced by the fact that the data cannot identify a visitor.",
+            "Compliance with the accounting and tax obligations that apply to us as controller — a legal obligation."
+          ]
+        },
+        {
+          "heading": "4. Recipients and processors",
+          "paragraphs": [
+            "Revolut — processes payments as the payment service provider. Receives the email address and payment data. {productName} does not store bank card data.",
+            "Railway Corporation — hosting of the application, the database, and our self-hosted analytics instance.",
+            "Resend, Inc. — sending transactional emails when the user chooses to send a document by email.",
+            "Where a recipient processes data outside the European Economic Area, the transfer is based on the standard contractual clauses adopted by the European Commission or another safeguard recognized by the GDPR.",
+            "We do not sell personal data and do not provide it for advertising purposes."
+          ]
+        },
+        {
+          "heading": "5. Retention periods",
+          "paragraphs": [
+            "Account data and content entered by the user is retained for as long as the account exists.",
+            "After a deletion request, data is removed within thirty days, except for records we are legally required to keep.",
+            "Technical access logs are retained for up to twelve months."
+          ]
+        },
+        {
+          "heading": "6. Data subject rights",
+          "paragraphs": [
+            "Every natural person has the right to access, rectification, erasure, restriction of processing, data portability, and objection to processing based on legitimate interest.",
+            "These rights are exercised by a request to {supportEmail}. We reply within one month.",
+            "You may lodge a complaint with the Bulgarian Commission for Personal Data Protection (CPDP), 2 Prof. Tsvetan Lazarov Blvd., Sofia 1592, www.cpdp.bg — or, under Article 77 of the GDPR, with the data protection supervisory authority of the EU member state of your habitual residence, your place of work, or the place of the alleged infringement."
+          ]
+        },
+        {
+          "heading": "7. Cookies",
+          "paragraphs": [
+            "We use only one strictly necessary cookie — a session cookie that keeps the account signed in. It is required for the service to work and does not require consent.",
+            "Our self-hosted product analytics (Umami) does not use cookies and does not track visitors across other sites. We do not use advertising or tracking cookies and do not embed third-party analytics scripts."
+          ]
+        },
+        {
+          "heading": "8. Security",
+          "paragraphs": [
+            "Access to the application is password-protected and the connection is encrypted. Every account sees only its own data; separation is enforced at the database query level.",
+            "In the event of a security breach that creates a high risk to the rights of affected persons, we notify the Commission for Personal Data Protection and the affected persons within the applicable deadlines."
+          ]
+        }
+      ]
+    },
+    "refunds": {
+      "metaTitle": "Refunds",
+      "metaDescription": "When and how Fakturcho refunds amounts paid.",
+      "title": "Refund Policy",
+      "intro": "This policy describes when and how amounts paid for credit and subscriptions in {productName} are refunded.",
+      "sections": [
+        {
+          "heading": "1. Who processes payments",
+          "paragraphs": [
+            "Payments are processed through Revolut as the payment service provider. Refunds are ordered by us to the same card or account used for the purchase.",
+            "A request is submitted to {supportEmail} with the order number from the payment confirmation."
+          ]
+        },
+        {
+          "heading": "2. Unused credit",
+          "paragraphs": [
+            "Unused credit is refunded in full on request within fourteen days of purchasing the pack, or of the payment that started a subscription period.",
+            "If part of a pack, or of a subscription period's credit, has been spent, the remainder corresponding to the unused amount is refunded."
+          ]
+        },
+        {
+          "heading": "3. Used credit",
+          "paragraphs": [
+            "Credit spent to issue a document is not refundable. Issuing claims a number from the numbering series and creates a commercial document — the service has been performed at that moment. The price for issuing a single document is {perDocument}. Composing drafts does not spend credit and is not charged.",
+            "Where the user is a consumer, issuing a document is an express request that this part of the service be performed immediately; by doing so, the consumer acknowledges that they lose the right of withdrawal for the credit spent on it, in accordance with Article 16(a) of Directive 2011/83/EU on consumer rights."
+          ]
+        },
+        {
+          "heading": "4. Subscription",
+          "paragraphs": [
+            "A subscription of {subscription} can be cancelled at any time. Access remains until the end of the paid period, after which it is not renewed.",
+            "The fee paid for the current period is not partially refunded, unless the service was unavailable through our fault for more than three consecutive days."
+          ]
+        },
+        {
+          "heading": "5. Right of withdrawal for consumers",
+          "paragraphs": [
+            "A consumer within the meaning of Directive 2011/83/EU on consumer rights, as implemented in the applicable national law, has the right to withdraw from a purchase of credit or a subscription within fourteen days of the purchase, without stating a reason, to the extent that the credit has not yet been spent to issue a document.",
+            "Where the consumer has expressly requested that the service begin immediately, as described in Section 3, the right of withdrawal is lost for the part already performed — the credit already spent."
+          ]
+        },
+        {
+          "heading": "6. Processing time",
+          "paragraphs": [
+            "Approved refunds are ordered within five business days. The time it takes for the amount to reach the payer's account depends on their bank or card issuer and is usually three to ten business days.",
+            "If a request is declined, you receive a reasoned reply at the email address it was submitted from."
+          ]
+        }
+      ]
+    }
+  },
+  "marketing": {
+    "brand": "Fakturcho",
+    "nav": {
+      "login": "Zaloguj się",
+      "signup": "Załóż konto"
+    },
+    "hero": {
+      "title": "Faktury zgodne z przepisami dla każdej firmy w UE",
+      "subtitle": "Aplikacja internetowa dla firm i jednoosobowych działalności gospodarczych w całej UE. Tworzysz dokument w przeglądarce, a Fakturcho dba o numerację, właściwe zasady VAT, układ dokumentu i e-fakturę."
+    },
+    "countries": {
+      "heading": "Gdzie prowadzisz działalność?",
+      "items": {
+        "BG": {
+          "name": "Bułgaria",
+          "line": "VAT 20%, faktury w języku bułgarskim, e-faktury gotowe do wysyłki przez sieć Peppol."
+        },
+        "DE": {
+          "name": "Niemcy",
+          "line": "VAT 19%, faktury w języku niemieckim, e-faktury w formacie XRechnung."
+        },
+        "FR": {
+          "name": "Francja",
+          "line": "VAT 20%, faktury w języku francuskim, e-faktury w formacie UBL na platformę Chorus Pro."
+        },
+        "IT": {
+          "name": "Włochy",
+          "line": "VAT 22%, faktury w języku włoskim, e-faktury w formacie FatturaPA do systemu wymiany SDI."
+        },
+        "PL": {
+          "name": "Polska",
+          "line": "VAT 23%, faktury w języku polskim, e-faktury w formacie KSeF FA(3)."
+        },
+        "RO": {
+          "name": "Rumunia",
+          "line": "VAT 21%, faktury w języku rumuńskim, e-faktury w formacie RO CIUS-RO do systemu SPV ANAF."
+        },
+        "ES": {
+          "name": "Hiszpania",
+          "line": "VAT 21%, faktury w języku hiszpańskim, e-faktury w formacie Facturae na platformę FACe."
+        }
+      }
+    },
+    "capabilities": {
+      "heading": "Co możesz wystawiać",
+      "items": [
+        "Faktury, faktury pro forma, faktury korygujące, oferty oraz dowody dostawy.",
+        "Ciągła numeracja — bez luk i powtórzeń.",
+        "VAT zależny od kraju: lokalne stawki, zwolnienia i odwrotne obciążenie w transgranicznych transakcjach B2B, z weryfikacją numeru VAT klienta w systemie VIES na bieżąco.",
+        "E-faktury zgodne z EN 16931 w formacie Twojego kraju — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gotowe do przesłania na krajową platformę (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) lub do wysyłki przez Peppol.",
+        "Gotowy plik PDF w języku Twojego kraju, do pobrania lub wysyłki e-mailem."
+      ]
+    },
+    "pricing": {
+      "heading": "Cennik",
+      "payAsYouGo": {
+        "title": "Płatność za dokument",
+        "body": "Za każdy wystawiony dokument. Wersje robocze, klienci i produkty w katalogu są bezpłatne. Konto doładowuje się pakietami po {packs}."
+      },
+      "subscription": {
+        "title": "Abonament",
+        "tierLine": "{price} → {credit} środków miesięcznie",
+        "tierLineSuffix": " ({perDoc} za dokument)",
+        "perDocumentOnlyLine": "{perDoc} za dokument",
+        "footnote": "Niewykorzystane środki przechodzą na kolejny miesiąc. Rezygnacja w dowolnym momencie."
+      },
+      "footnote": "Nowe konto otrzymuje {signupGrant} środków na start. Płatności obsługuje Revolut."
+    },
+    "faq": {
+      "heading": "Najczęściej zadawane pytania",
+      "items": [
+        {
+          "question": "Czym jest Fakturcho?",
+          "answer": "Aplikacja internetowa do wystawiania zgodnych z wymogami UE faktur, faktur pro forma, faktur korygujących, ofert i dowodów dostawy, z wbudowaną obsługą ustrukturyzowanych e-faktur — bez instalacji."
+        },
+        {
+          "question": "Ile to kosztuje?",
+          "answer": "0,10 € za wystawiony dokument; wersje robocze, klienci i produkty w katalogu są bezpłatne; konto doładowuje się pakietami po 5 €, 10 € i 25 €; abonamenty za 5, 10 i 25 € miesięcznie dają dwa razy więcej środków, które przechodzą na kolejny miesiąc; w abonamencie dokument kosztuje 0,05 €."
+        },
+        {
+          "question": "Czy można zacząć za darmo?",
+          "answer": "Tak, nowe konto otrzymuje 1 € środków (10 dokumentów) bez podawania karty."
+        },
+        {
+          "question": "Które kraje są obsługiwane?",
+          "answer": "Dokumenty może wystawiać każda firma zarejestrowana w obszarze VAT UE. Ustrukturyzowane e-faktury w formacie krajowym są generowane dla Niemiec, Francji, Włoch, Polski, Rumunii, Hiszpanii i Bułgarii — gotowe do przesłania na krajową platformę lub wysyłki przez Peppol."
+        },
+        {
+          "question": "Jak obsługiwany jest VAT w przypadku klienta z innego kraju UE?",
+          "answer": "Wystarczy podać numer VAT klienta; Fakturcho weryfikuje go w systemie VIES i w przypadku zagranicznego klienta B2B z ważnym numerem stosuje odwrotne obciążenie oraz umieszcza na dokumencie wymaganą adnotację."
+        },
+        {
+          "question": "Czy można wystawiać faktury bez rejestracji do VAT?",
+          "answer": "To zależy od kraju. Bułgaria, Niemcy (§ 19 UStG), Francja (franchise en base), Włochy (regime forfettario), Polska (art. 113) i Rumunia (art. 310) mają zwolnienie podmiotowe dla małych podmiotów, a Fakturcho automatycznie drukuje właściwą podstawę zwolnienia. Hiszpania nie ma ogólnego zwolnienia dla małych firm — niezarejestrowany do VAT wystawca z Hiszpanii sam wybiera dla każdego dokumentu właściwą zwolnioną czynność na podstawie art. 20 hiszpańskiej ustawy o VAT."
+        },
+        {
+          "question": "Czym różni się faktura pro forma od faktury?",
+          "answer": "Faktura pro forma wygląda jak faktura i zawiera te same dane, ale nie powoduje obowiązku podatkowego i nie otrzymuje numeru — służy na przykład do żądania zapłaty z góry albo do zgłoszenia celnego. Faktura to oficjalny dokument podatkowy z numerem i datą sprzedaży."
+        },
+        {
+          "question": "Jak koryguje się wystawioną fakturę?",
+          "answer": "Wystawione dokumenty są niezmienne; korekty wprowadza się fakturą korygującą (in minus lub in plus) do dokumentu pierwotnego."
+        },
+        {
+          "question": "Jak otrzymać plik PDF i e-fakturę XML?",
+          "answer": "Oba pliki generowane są po stronie serwera; można je pobrać, wysłać e-mailem do klienta lub samodzielnie przesłać e-fakturę na krajową platformę albo wysłać ją przez Peppol."
+        }
+      ]
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "Fakturcho — faktury i e-faktury online dla firm z UE",
+      "description": "Wystawiaj faktury, faktury pro forma, faktury korygujące, oferty i dowody dostawy zgodne z wymogami UE. E-faktury EN 16931 i Peppol. 0,10 € za dokument.",
+      "ogTagline": "Faktury i e-faktury dla firm z UE"
+    },
+    "login": {
+      "title": "Logowanie",
+      "description": "Zaloguj się do konta Fakturcho, aby wystawiać dokumenty i nimi zarządzać."
+    },
+    "signup": {
+      "title": "Rejestracja",
+      "description": "Załóż bezpłatne konto i wystaw pierwszą fakturę w kilka minut. 1,00 € środków na start, bez abonamentu."
+    }
+  }
+}

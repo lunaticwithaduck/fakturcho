@@ -50,6 +50,26 @@ describe('expireStalePendingSubscriptions', () => {
     return row.id;
   }
 
+  async function createUpgradingSubscription(overrides: {
+    pendingCheckoutStartedAt: Date;
+    status?: SubscriptionStatus;
+  }): Promise<{ id: string; accountId: string }> {
+    const account = await db.prisma.account.create({ data: {} });
+    const row = await db.prisma.subscription.create({
+      data: {
+        accountId: account.id,
+        status: overrides.status ?? SubscriptionStatus.ACTIVE,
+        planId: 'plan_active',
+        revolutSubscriptionId: 'sub_active',
+        pendingPlanId: 'plan_upgrade',
+        pendingRevolutSubscriptionId: 'sub_pending_upgrade',
+        pendingCheckoutUrl: 'https://checkout.revolut.com/pay/ord_upgrade',
+        pendingCheckoutStartedAt: overrides.pendingCheckoutStartedAt,
+      },
+    });
+    return { id: row.id, accountId: account.id };
+  }
+
   it('cancels a stale pending subscription at Revolut and marks the row CANCELED', async () => {
     const now = new Date('2026-09-15T12:00:00.000Z');
     const staleSince = new Date(now.getTime() - PENDING_CHECKOUT_TTL_MS - HOUR);
@@ -246,5 +266,73 @@ describe('expireStalePendingSubscriptions', () => {
     expect(active.status).toBe(SubscriptionStatus.ACTIVE);
     expect(pastDue.status).toBe(SubscriptionStatus.PAST_DUE);
     expect(canceled.status).toBe(SubscriptionStatus.CANCELED);
+  });
+
+  it('cancels a stale pending upgrade at Revolut without touching the active plan underneath', async () => {
+    const now = new Date('2026-09-15T12:00:00.000Z');
+    const staleSince = new Date(now.getTime() - PENDING_CHECKOUT_TTL_MS - HOUR);
+    const { id, accountId } = await createUpgradingSubscription({
+      pendingCheckoutStartedAt: staleSince,
+    });
+
+    const getSubscriptionOrNull = vi.fn().mockResolvedValue({
+      id: 'sub_pending_upgrade',
+      state: 'pending',
+      setupOrderId: null,
+      customerId: 'c',
+    });
+    const cancelSubscription = vi.fn().mockResolvedValue(undefined);
+    const revolut = { getSubscriptionOrNull, cancelSubscription } as unknown as RevolutService;
+
+    await expireStalePendingSubscriptions(prisma(), revolut, now);
+
+    expect(getSubscriptionOrNull).toHaveBeenCalledWith('sub_pending_upgrade');
+    expect(cancelSubscription).toHaveBeenCalledWith('sub_pending_upgrade');
+    const row = await db.prisma.subscription.findUniqueOrThrow({ where: { id } });
+    expect(row.status).toBe(SubscriptionStatus.ACTIVE);
+    expect(row.planId).toBe('plan_active');
+    expect(row.revolutSubscriptionId).toBe('sub_active');
+    expect(row.pendingRevolutSubscriptionId).toBeNull();
+    expect(row.pendingPlanId).toBeNull();
+    expect(row.pendingCheckoutUrl).toBeNull();
+    const account = await db.prisma.account.findUniqueOrThrow({ where: { id: accountId } });
+    expect(account).toBeTruthy();
+  });
+
+  it('leaves a fresh pending upgrade untouched', async () => {
+    const now = new Date('2026-09-15T12:00:00.000Z');
+    const fresh = new Date(now.getTime() - HOUR);
+    const { id } = await createUpgradingSubscription({ pendingCheckoutStartedAt: fresh });
+
+    const getSubscriptionOrNull = vi.fn();
+    const cancelSubscription = vi.fn();
+    const revolut = { getSubscriptionOrNull, cancelSubscription } as unknown as RevolutService;
+
+    await expireStalePendingSubscriptions(prisma(), revolut, now);
+
+    expect(getSubscriptionOrNull).not.toHaveBeenCalled();
+    const row = await db.prisma.subscription.findUniqueOrThrow({ where: { id } });
+    expect(row.pendingRevolutSubscriptionId).toBe('sub_pending_upgrade');
+  });
+
+  it('does not cancel a stale pending upgrade that already went active at Revolut', async () => {
+    const now = new Date('2026-09-15T12:00:00.000Z');
+    const staleSince = new Date(now.getTime() - PENDING_CHECKOUT_TTL_MS - HOUR);
+    const { id } = await createUpgradingSubscription({ pendingCheckoutStartedAt: staleSince });
+
+    const getSubscriptionOrNull = vi.fn().mockResolvedValue({
+      id: 'sub_pending_upgrade',
+      state: 'active',
+      setupOrderId: null,
+      customerId: 'c',
+    });
+    const cancelSubscription = vi.fn();
+    const revolut = { getSubscriptionOrNull, cancelSubscription } as unknown as RevolutService;
+
+    await expireStalePendingSubscriptions(prisma(), revolut, now);
+
+    expect(cancelSubscription).not.toHaveBeenCalled();
+    const row = await db.prisma.subscription.findUniqueOrThrow({ where: { id } });
+    expect(row.pendingRevolutSubscriptionId).toBe('sub_pending_upgrade');
   });
 });

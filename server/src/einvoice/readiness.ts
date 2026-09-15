@@ -13,6 +13,8 @@ export const EINVOICE_MISSING_FIELD_CODES = {
   documentBuyerReference: 'document.buyerReference',
   documentBuyerReferenceOrLeitwegId: 'document.buyerReferenceOrLeitwegId',
   documentLeitwegIdFormat: 'document.leitwegIdFormat',
+  documentOriginalDocumentId: 'document.originalDocumentId',
+  documentOriginalDocumentUnresolved: 'document.originalDocumentUnresolved',
   lineUnitCode: 'line.unitCode',
 
   issuerCompanyName: 'issuer.companyName',

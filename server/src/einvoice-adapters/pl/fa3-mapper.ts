@@ -8,10 +8,12 @@ import { dateOnly, optionalTextEl, textEl, toDecimalString } from './xml-escape'
 
 type Fa3DocumentType = 'invoice' | 'credit_note' | 'debit_note';
 
+// debit_note is a faktura korygująca in plus (art. 106j ustawy o VAT), the
+// same RodzajFaktury as a credit_note — not a fresh VAT invoice.
 const RODZAJ_FAKTURY: Record<Fa3DocumentType, string> = {
   invoice: 'VAT',
   credit_note: 'KOR',
-  debit_note: 'VAT',
+  debit_note: 'KOR',
 };
 
 const FA3_NAMESPACE = 'http://crd.gov.pl/wzor/2025/06/25/13775/';
@@ -55,6 +57,32 @@ function amountsBlock(document: DocumentDto): string {
   return amountTags + textEl('P_15', toDecimalString(document.amount));
 }
 
+// DaneFaKorygowanej is required for RodzajFaktury=KOR (art. 106j ustawy o VAT):
+// the corrected invoice's date, number, and either its KSeF number or a
+// marker that it was issued outside KSeF.
+function correctionBlock(document: DocumentDto): string {
+  const original = document.originalDocument;
+  if (!original || original.number === null || !original.issuedAt) {
+    throw new Error(
+      'toFa3Xml: a KOR invoice requires a resolvable original document (DaneFaKorygowanej).',
+    );
+  }
+  const originalNumber =
+    (original.numberPrefix ?? '') +
+    formatDocumentNumber(original.number) +
+    (original.numberSuffix ?? '');
+  const ksefBlock = original.ksefNumber
+    ? textEl('NrKSeF', '1') + textEl('NrKSeFFaKorygowanej', original.ksefNumber)
+    : textEl('NrKSeFN', '1');
+  return (
+    '<DaneFaKorygowanej>' +
+    textEl('DataWystFaKorygowanej', original.issuedAt) +
+    textEl('NrFaKorygowanej', originalNumber) +
+    ksefBlock +
+    '</DaneFaKorygowanej>'
+  );
+}
+
 function annotationsBlock(document: DocumentDto): string {
   const hasReverseCharge = document.lineItems.some((line) => line.vatCategory === 'AE');
   const hasExempt = document.lineItems.some((line) => line.vatCategory === 'E');
@@ -68,6 +96,7 @@ function annotationsBlock(document: DocumentDto): string {
     textEl('P_18', hasReverseCharge ? '1' : '2') +
     textEl('P_18A', '2') +
     exemption +
+    `<NoweSrodkiTransportu>${textEl('P_22N', '1')}</NoweSrodkiTransportu>` +
     textEl('P_23', '2') +
     `<PMarzy>${textEl('P_PMarzyN', '1')}</PMarzy>` +
     '</Adnotacje>'
@@ -85,10 +114,11 @@ export function toFa3Xml(document: DocumentDto): string {
     textEl('P_1', document.issuedAt ? dateOnly(document.issuedAt) : '') +
     textEl('P_2', idWithAffixes) +
     (document.deliveryDate ? textEl('P_6', dateOnly(document.deliveryDate)) : '') +
-    textEl('RodzajFaktury', RODZAJ_FAKTURY[kind]) +
-    document.lineItems.map((line, index) => lineBlock(line, index)).join('') +
     amountsBlock(document) +
-    annotationsBlock(document);
+    annotationsBlock(document) +
+    textEl('RodzajFaktury', RODZAJ_FAKTURY[kind]) +
+    (kind === 'invoice' ? '' : correctionBlock(document)) +
+    document.lineItems.map((line, index) => lineBlock(line, index)).join('');
 
   return (
     '<?xml version="1.0" encoding="UTF-8"?>' +

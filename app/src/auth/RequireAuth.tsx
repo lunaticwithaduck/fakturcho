@@ -1,5 +1,7 @@
 'use client';
 
+import { localeForPathname } from '@app/i18n/locale';
+import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Skeleton } from '@design/components';
 import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -13,7 +15,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isPending && !session) {
-      router.replace(pathname?.startsWith('/en') ? '/en/login' : '/login');
+      router.replace(toLocalePath('/login', localeForPathname(pathname ?? '/')));
     }
   }, [isPending, session, router, pathname]);
 

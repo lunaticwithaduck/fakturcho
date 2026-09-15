@@ -3,6 +3,7 @@
 import { LegalFooter } from '@app/features/legal/LegalFooter';
 import brandIcon from '@app/features/shell/brand-icon.png';
 import { LanguageSwitcher } from '@app/i18n/LanguageSwitcher';
+import { toLocalePath } from '@app/i18n/localeRedirect';
 import type { Locale } from '@shared/types';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,7 +20,7 @@ interface AuthShellProps {
 export function AuthShell({ locale = 'bg', enEnabled = false, children }: AuthShellProps) {
   const t = useTranslations('auth');
   const pathname = usePathname();
-  const homeHref = locale === 'bg' ? '/' : '/en';
+  const homeHref = toLocalePath('/', locale);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center gap-8 px-4 py-10">

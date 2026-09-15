@@ -46,10 +46,15 @@ afterEach(() => {
   listResult = { data: { items: [draftDocument, numberedDocument], total: 2 } };
 });
 
-function renderField(locale: 'bg' | 'en', messages: typeof bgMessages) {
+function renderField(
+  locale: 'bg' | 'en',
+  messages: typeof bgMessages,
+  documentType: 'credit_note' | 'delivery_note' = 'credit_note',
+) {
   return render(
     <NextIntlClientProvider locale={locale} messages={messages}>
       <ComposerOriginalDocumentField
+        documentType={documentType}
         value={null}
         currentDocumentId={null}
         hasError={false}
@@ -81,5 +86,11 @@ describe('ComposerOriginalDocumentField', () => {
 
     expect(within(listbox).getByText('Invoice — draft — ACME EOOD')).toBeTruthy();
     expect(within(listbox).getByText('Invoice No. 0000000042 (Original) — Beta OOD')).toBeTruthy();
+  });
+
+  it('shows the delivery-note reference label instead of "Original document"', async () => {
+    renderField('en', enMessages, 'delivery_note');
+
+    expect(screen.getByLabelText('Related invoice')).toBeTruthy();
   });
 });

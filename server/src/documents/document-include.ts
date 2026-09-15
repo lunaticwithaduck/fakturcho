@@ -1,1 +1,5 @@
-export const DOCUMENT_INCLUDE = { lineItems: true, discounts: true } as const;
+export const DOCUMENT_INCLUDE = {
+  lineItems: true,
+  discounts: true,
+  originalDocument: { include: { einvoiceTransmission: true } },
+} as const;

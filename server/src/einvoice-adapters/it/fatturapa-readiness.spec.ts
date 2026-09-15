@@ -82,6 +82,19 @@ describe('checkFatturaPaReadiness — out-of-scope document types', () => {
     const quote: DocumentDto = { ...itDomesticStandardInvoice, documentType: 'quote' };
     expect(checkFatturaPaReadiness(quote).ready).toBe(false);
   });
+
+  it('flags delivery_note as not exportable, even with transport fields set', () => {
+    const deliveryNote: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      documentType: 'delivery_note',
+      transportReason: 'Vendita',
+      transportedAt: '2026-09-15T09:00:00.000Z',
+    };
+    expect(checkFatturaPaReadiness(deliveryNote)).toEqual({
+      ready: false,
+      missingFields: [EINVOICE_MISSING_FIELD_CODES.documentType],
+    });
+  });
 });
 
 describe('checkFatturaPaReadiness — Partita IVA and Codice Fiscale checks', () => {

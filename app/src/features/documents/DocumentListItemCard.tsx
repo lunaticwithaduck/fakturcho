@@ -20,7 +20,7 @@ export function DocumentListItemCard({ document }: DocumentListItemCardProps) {
       <Card className="flex flex-col gap-2 transition-colors duration-(--duration-fast) hover:bg-surface-sunken">
         <div className="flex items-start justify-between gap-3">
           <p className="text-sm font-semibold text-text">{title}</p>
-          <DocumentStatusBadge status={document.status} />
+          <DocumentStatusBadge status={document.status} documentType={document.documentType} />
         </div>
         <p className="text-sm text-text-muted">
           {document.recipientCompanyName ?? t('list.noClient')}

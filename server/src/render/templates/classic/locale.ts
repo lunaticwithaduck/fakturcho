@@ -5,9 +5,11 @@ export interface ClassicLocaleContext {
   language: ClassicLanguage;
   labels: ClassicLabels;
   issuerCountry: string;
+  timeZone: string;
   showMol: boolean;
   showSignatureRow: boolean;
   showOriginalStamp: boolean;
+  showDeliveryNotePrices: boolean;
 }
 
 export function resolveClassicLocale(
@@ -19,8 +21,10 @@ export function resolveClassicLocale(
     language,
     labels: CLASSIC_LABELS[language],
     issuerCountry: country.country,
+    timeZone: country.timeZone,
     showMol: country.showMol,
     showSignatureRow: country.showSignatureRow,
     showOriginalStamp: country.showOriginalStamp,
+    showDeliveryNotePrices: country.deliveryNotePricesShown,
   };
 }

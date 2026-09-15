@@ -2,7 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
 import { cancelRevolutSubscription } from './revolut-cancel';
 import { inspectRevolutConfig, type RevolutConfigReport } from './revolut-config';
-import { describeRevolutFailure, RevolutApiError, toDomainError } from './revolut-errors';
+import {
+  describeRevolutFailure,
+  RevolutApiError,
+  requireRevolutCheckoutUrl,
+  toDomainError,
+} from './revolut-errors';
+import { getRevolutCurrentPeriodEnd } from './revolut-get-current-period-end';
 import { getRevolutSubscriptionOrNull } from './revolut-get-subscription';
 import type {
   CreateCustomerInput,
@@ -58,7 +64,7 @@ export class RevolutService {
       metadata: input.metadata,
       ...(input.redirectUrl ? { redirect_url: input.redirectUrl } : {}),
     });
-    return this.requireCheckoutUrl(order.id, order.checkout_url);
+    return requireRevolutCheckoutUrl(this.logger, order.id, order.checkout_url);
   }
 
   async getOrder(orderId: string): Promise<RevolutOrder> {
@@ -97,6 +103,7 @@ export class RevolutService {
       state: string;
       setup_order_id?: string;
       customer_id: string;
+      current_cycle_id?: string;
     }>('POST', '/subscriptions', {
       plan_variation_id: input.planVariationId,
       customer_id: input.customerId,
@@ -108,6 +115,7 @@ export class RevolutService {
       state: subscription.state,
       setupOrderId: subscription.setup_order_id ?? null,
       customerId: subscription.customer_id,
+      currentCycleId: subscription.current_cycle_id ?? null,
     };
   }
 
@@ -131,6 +139,10 @@ export class RevolutService {
     return getRevolutSubscriptionOrNull(this.rawClientConfig(), subscriptionId, this.logger);
   }
 
+  getCurrentPeriodEnd(subscriptionId: string): Promise<Date | null> {
+    return getRevolutCurrentPeriodEnd(this.rawClientConfig(), subscriptionId, this.logger);
+  }
+
   private rawClientConfig() {
     const { baseUrl, blocking, environment } = this.config;
     return { baseUrl, apiKey: this.apiKey, blocking, environment };
@@ -142,21 +154,6 @@ export class RevolutService {
 
   parseWebhookPayload(rawBody: string): RevolutWebhookPayload {
     return parseRevolutWebhookPayload(rawBody);
-  }
-
-  private requireCheckoutUrl(
-    orderId: string,
-    checkoutUrl: string | undefined,
-  ): { id: string; checkoutUrl: string } {
-    if (!checkoutUrl) {
-      this.logger.error(`Revolut returned order ${orderId} without a checkout_url`);
-      throw new DomainError(
-        'CHECKOUT_NOT_CONFIGURED',
-        'The payment provider returned no checkout url.',
-        { provider: ['no_checkout_url', `order ${orderId}`] },
-      );
-    }
-    return { id: orderId, checkoutUrl };
   }
 
   private async request<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {

@@ -1,4 +1,10 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
+
+// factură/factură proformă/notă/ofertă are feminine; the neuter "aviz" of a
+// delivery note takes the masculine singular form.
+const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
+  documentType === 'delivery_note' ? masculine : feminine;
 
 export const ro: ClassicLabels = {
   companyIdLabel: 'CUI',
@@ -7,13 +13,18 @@ export const ro: ClassicLabels = {
   molPrefix: 'Reprezentant legal: ',
   issuedAtPrefix: 'Data emiterii: ',
   taxEventPrefix: 'Data livrării/prestării: ',
-  validUntilPrefix: 'Valabilă până la: ',
-  statusPaid: 'Status: PLĂTITĂ',
-  statusCancelled: 'Status: ANULATĂ',
+  validUntilPrefix: () => 'Valabilă până la: ',
+  deliveryDatePrefix: 'Data livrării: ',
+  transportReasonPrefix: 'Scopul transportului: ',
+  transportedAtPrefix: 'Data și ora transportului: ',
+  carrierNamePrefix: 'Transportator: ',
+  transportNotePrefix: 'Detalii transport: ',
+  statusPaid: (documentType) => agree(documentType, 'Status: PLĂTITĂ', 'Status: PLĂTIT'),
+  statusCancelled: (documentType) => agree(documentType, 'Status: ANULATĂ', 'Status: ANULAT'),
   phonePrefix: 'Telefon: ',
   bicPrefix: 'BIC: ',
-  preparedByPrefix: 'Întocmit de: ',
-  recipientSignaturePrefix: 'Semnătură de primire: ',
+  preparedByPrefix: (documentType) => agree(documentType, 'Întocmită de: ', 'Întocmit de: '),
+  recipientSignaturePrefix: () => 'Semnătură de primire: ',
   colName: 'Denumire produse sau servicii',
   colQuantity: 'Cantitate',
   colPrice: 'Preț unitar',
@@ -34,6 +45,7 @@ export const ro: ClassicLabels = {
     credit_note: 'Notă de credit',
     debit_note: 'Notă de debit',
     quote: 'Ofertă',
+    delivery_note: 'Aviz de însoțire a mărfii',
   },
   watermarkMain: 'CIORNĂ',
   watermarkSub: 'FĂRĂ VALOARE LEGALĂ',

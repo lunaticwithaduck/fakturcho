@@ -76,17 +76,107 @@ describe('toFa3Xml — PL domestic, standard 23% rate', () => {
   it('marks the reverse-charge annotation as not applicable', () => {
     expect(xml).toContain('<P_18>2</P_18>');
   });
+
+  it('marks the buyer as not a JST sub-unit and not a VAT group member', () => {
+    expect(xml).toContain('<JST>2</JST>');
+    expect(xml).toContain('<GV>2</GV>');
+  });
+
+  it('marks the annotation block as not concerning new means of transport', () => {
+    expect(xml).toContain('<NoweSrodkiTransportu><P_22N>1</P_22N></NoweSrodkiTransportu>');
+  });
 });
 
 describe('toFa3Xml — credit note type', () => {
+  const creditNote: DocumentDto = {
+    ...plDomesticStandardInvoice,
+    documentType: 'credit_note',
+    originalDocumentId: 'doc-pl-domestic-1',
+    originalDocument: {
+      number: 7,
+      numberPrefix: null,
+      numberSuffix: null,
+      issuedAt: '2026-08-01',
+      ksefNumber: '1234567890-20260801-EF0123456789-AB',
+    },
+  };
+  const xml = toFa3Xml(creditNote);
+
   it('emits RodzajFaktury KOR for a credit_note', () => {
-    const creditNote: DocumentDto = {
-      ...plDomesticStandardInvoice,
-      documentType: 'credit_note',
-      originalDocumentId: 'doc-pl-domestic-1',
-    };
-    const xml = toFa3Xml(creditNote);
     expect(xml).toContain('<RodzajFaktury>KOR</RodzajFaktury>');
+  });
+
+  it('carries DaneFaKorygowanej with the KSeF number when the original went through KSeF', () => {
+    expect(xml).toContain(
+      '<DaneFaKorygowanej>' +
+        '<DataWystFaKorygowanej>2026-08-01</DataWystFaKorygowanej>' +
+        '<NrFaKorygowanej>0000000007</NrFaKorygowanej>' +
+        '<NrKSeF>1</NrKSeF>' +
+        '<NrKSeFFaKorygowanej>1234567890-20260801-EF0123456789-AB</NrKSeFFaKorygowanej>' +
+        '</DaneFaKorygowanej>',
+    );
+    expect(xml).not.toContain('NrKSeFN');
+  });
+
+  it('places DaneFaKorygowanej after RodzajFaktury and before the FaWiersz line items, per the FA(3) schema', () => {
+    const rodzajIndex = xml.indexOf('<RodzajFaktury>');
+    const korygowanejIndex = xml.indexOf('<DaneFaKorygowanej>');
+    const wierszIndex = xml.indexOf('<FaWiersz>');
+    expect(rodzajIndex).toBeGreaterThan(-1);
+    expect(korygowanejIndex).toBeGreaterThan(rodzajIndex);
+    expect(wierszIndex).toBeGreaterThan(korygowanejIndex);
+  });
+
+  it('throws when the correction has no resolvable original document', () => {
+    const unresolved: DocumentDto = {
+      ...creditNote,
+      originalDocument: null,
+    };
+    expect(() => toFa3Xml(unresolved)).toThrow();
+  });
+});
+
+describe('toFa3Xml — debit note type', () => {
+  const debitNote: DocumentDto = {
+    ...plDomesticStandardInvoice,
+    documentType: 'debit_note',
+    originalDocumentId: 'doc-pl-domestic-1',
+    originalDocument: {
+      number: 7,
+      numberPrefix: null,
+      numberSuffix: null,
+      issuedAt: '2026-08-01',
+      ksefNumber: null,
+    },
+  };
+  const xml = toFa3Xml(debitNote);
+
+  it('emits RodzajFaktury KOR for a debit_note — art. 106j makes it a correction, not a fresh VAT invoice', () => {
+    expect(xml).toContain('<RodzajFaktury>KOR</RodzajFaktury>');
+  });
+
+  it('carries DaneFaKorygowanej with NrKSeFN when the original was issued outside KSeF', () => {
+    expect(xml).toContain(
+      '<DaneFaKorygowanej>' +
+        '<DataWystFaKorygowanej>2026-08-01</DataWystFaKorygowanej>' +
+        '<NrFaKorygowanej>0000000007</NrFaKorygowanej>' +
+        '<NrKSeFN>1</NrKSeFN>' +
+        '</DaneFaKorygowanej>',
+    );
+    expect(xml).not.toContain('NrKSeFFaKorygowanej');
+  });
+});
+
+describe('toFa3Xml — standard invoice type', () => {
+  it('never emits DaneFaKorygowanej for a plain VAT invoice', () => {
+    const xml = toFa3Xml(plDomesticStandardInvoice);
+    expect(xml).not.toContain('DaneFaKorygowanej');
+  });
+
+  it('wraps line items in FaWiersz, matching the FA(3) schema element name', () => {
+    const xml = toFa3Xml(plDomesticStandardInvoice);
+    expect(xml).toContain('<FaWiersz>');
+    expect(xml).not.toContain('DaneFaWiersz');
   });
 });
 

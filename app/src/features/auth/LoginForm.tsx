@@ -1,6 +1,7 @@
 'use client';
 
 import { mapAuthErrorMessage, signIn } from '@app/auth';
+import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card, Input } from '@design/components';
 import type { Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
@@ -18,7 +19,7 @@ export function LoginForm({ locale = 'bg' }: LoginFormProps) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const signupHref = locale === 'bg' ? '/signup' : '/en/signup';
+  const signupHref = toLocalePath('/signup', locale);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

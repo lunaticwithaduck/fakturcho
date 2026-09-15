@@ -98,6 +98,10 @@ const BASE_DOCUMENT: DocumentDto = {
   buyerReference: null,
   paymentMeansCode: null,
   paymentTermsNote: null,
+  transportReason: null,
+  transportedAt: null,
+  carrierName: null,
+  transportNote: null,
   subtotal: 0,
   discountTotal: 0,
   amount: 0,
@@ -565,6 +569,7 @@ describe('ComposerOriginalDocumentField', () => {
     renderWithLocale(
       'bg',
       <ComposerOriginalDocumentField
+        documentType="credit_note"
         value={null}
         currentDocumentId={null}
         hasError
@@ -581,6 +586,7 @@ describe('ComposerOriginalDocumentField', () => {
     renderWithLocale(
       'en',
       <ComposerOriginalDocumentField
+        documentType="credit_note"
         value={null}
         currentDocumentId={null}
         hasError

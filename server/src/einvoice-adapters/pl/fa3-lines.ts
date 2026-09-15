@@ -5,7 +5,7 @@ import { textEl, toDecimalString } from './xml-escape';
 export function lineBlock(line: LineItemDto, index: number): string {
   const unit = line.unitCode ?? 'szt.';
   return (
-    '<DaneFaWiersz>' +
+    '<FaWiersz>' +
     textEl('NrWierszaFa', String(index + 1)) +
     textEl('P_7', line.name) +
     textEl('P_8A', unit) +
@@ -13,6 +13,6 @@ export function lineBlock(line: LineItemDto, index: number): string {
     textEl('P_9A', toDecimalString(line.unitPrice)) +
     textEl('P_11', toDecimalString(line.lineTotal)) +
     textEl('P_12', vatRateCode(line.vatCategory, line.vatRateBp)) +
-    '</DaneFaWiersz>'
+    '</FaWiersz>'
   );
 }

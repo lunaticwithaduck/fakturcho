@@ -1,5 +1,6 @@
 import {
   type Cents,
+  getCountryConfig,
   roundHalfUp,
   type SaveDraftRequest,
   type VatCategory,
@@ -9,6 +10,7 @@ import { computeDocumentTotals, computeLineTotal, type DocumentTotals } from '..
 import { toPrismaDocumentType } from '../numbering/document-type.mapper';
 import { computeVatSubtotals } from '../vat-eu/subtotals';
 import { parseDateOnly } from './date.util';
+import { parseTransportedAt } from './timezone.util';
 import type { VatTreatment } from './vat-treatment';
 
 export interface ResolvedDraftLineItem {
@@ -85,6 +87,7 @@ export function buildDraftData(
   request: SaveDraftRequest,
   vat: VatTreatment,
   resolvedLineItems: readonly ResolvedDraftLineItem[],
+  issuerCountry: string,
 ): Prisma.DocumentUncheckedCreateInput {
   const discounts = (request.discounts ?? []).map((discount) => ({
     percentBp: discount.percentBp ?? null,
@@ -119,6 +122,13 @@ export function buildDraftData(
     buyerReference: request.buyerReference ?? null,
     paymentMeansCode: request.paymentMeansCode ?? null,
     paymentTermsNote: request.paymentTermsNote ?? null,
+    transportReason: request.transportReason ?? null,
+    transportedAt: parseTransportedAt(
+      request.transportedAt,
+      getCountryConfig(issuerCountry).timeZone,
+    ),
+    carrierName: request.carrierName ?? null,
+    transportNote: request.transportNote ?? null,
     vatIncluded: request.vatIncluded ?? false,
     vatRateBp: vat.vatRateBp,
     vatExemptionGround: vat.vatExemptionGround,

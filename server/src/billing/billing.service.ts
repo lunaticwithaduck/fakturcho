@@ -18,6 +18,12 @@ import type { RevolutWebhookPayload } from './revolut-webhook';
 import { createSubscriptionCheckout } from './subscription-checkout';
 import { REVOLUT_STATE_TO_PRISMA, toSubscriptionDto } from './subscription-mapping';
 import { tierForVariationId } from './subscription-tiers';
+import {
+  activatePendingUpgrade,
+  fetchCurrentPeriodEnd,
+  findSubscriptionByRevolutId,
+  syncPendingUpgrade,
+} from './subscription-upgrade';
 
 function isSubscriptionTier(product: CheckoutProduct): product is SubscriptionTierId {
   return (SUBSCRIPTION_TIER_IDS as readonly string[]).includes(product);
@@ -106,11 +112,16 @@ export class BillingService {
     subscriptionId: string,
     orderAmountCents: number,
   ): Promise<void> {
-    const subscription = await this.prisma.subscription.findUnique({
-      where: { revolutSubscriptionId: subscriptionId },
-    });
+    const subscription = await findSubscriptionByRevolutId(this.prisma, subscriptionId);
     if (!subscription) return;
-    const tier = tierForVariationId(subscription.planId);
+
+    const isUpgradeActivation = subscription.pendingRevolutSubscriptionId === subscriptionId;
+    if (isUpgradeActivation) {
+      await activatePendingUpgrade(this.prisma, this.revolut, subscription, subscriptionId);
+    }
+
+    const planId = isUpgradeActivation ? subscription.pendingPlanId : subscription.planId;
+    const tier = tierForVariationId(planId);
     const grantCents = tier ? SUBSCRIPTION_TIERS[tier].grantCents : orderAmountCents * 2;
     await this.creditAccount(
       subscription.accountId,
@@ -144,16 +155,29 @@ export class BillingService {
   }
 
   private async syncSubscription(subscriptionId: string): Promise<void> {
-    const existing = await this.prisma.subscription.findUnique({
-      where: { revolutSubscriptionId: subscriptionId },
-    });
+    const existing = await findSubscriptionByRevolutId(this.prisma, subscriptionId);
     if (!existing) return;
+
+    if (existing.pendingRevolutSubscriptionId === subscriptionId) {
+      await syncPendingUpgrade(this.prisma, this.revolut, existing, subscriptionId);
+      return;
+    }
+
     const subscription = await this.revolut.getSubscription(subscriptionId);
     const status = REVOLUT_STATE_TO_PRISMA[subscription.state];
     if (!status) return;
+    const usable =
+      status === PrismaSubscriptionStatus.ACTIVE || status === PrismaSubscriptionStatus.PAST_DUE;
+    const currentPeriodEnd = usable
+      ? await fetchCurrentPeriodEnd(this.revolut, subscriptionId)
+      : undefined;
     await this.prisma.subscription.update({
       where: { revolutSubscriptionId: subscriptionId },
-      data: status === PrismaSubscriptionStatus.ACTIVE ? { status, checkoutUrl: null } : { status },
+      data: {
+        status,
+        ...(status === PrismaSubscriptionStatus.ACTIVE ? { checkoutUrl: null } : {}),
+        ...(currentPeriodEnd !== undefined ? { currentPeriodEnd } : {}),
+      },
     });
   }
 }

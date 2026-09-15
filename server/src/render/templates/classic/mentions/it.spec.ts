@@ -8,9 +8,11 @@ const locale: ClassicLocaleContext = {
   language: 'it',
   labels: CLASSIC_LABELS.it,
   issuerCountry: 'IT',
+  timeZone: 'Europe/Rome',
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  showDeliveryNotePrices: false,
 };
 
 function buildInput(

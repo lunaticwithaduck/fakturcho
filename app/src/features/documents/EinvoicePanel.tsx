@@ -9,7 +9,7 @@ import {
 import { useFeatureFlags } from '@app/feature-flags';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Badge, Button } from '@design/components';
-import type { ClientDto, DocumentStatus, Locale } from '@shared/types';
+import type { ClientDto, DocumentStatus, DocumentType, Locale } from '@shared/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { canDownloadDocument } from './documentDownload';
@@ -77,11 +77,12 @@ function getMissingFieldMessageKey(code: string): string {
 
 interface EinvoicePanelProps {
   documentId: string;
+  documentType: DocumentType;
   status: DocumentStatus;
   client: ClientDto | undefined;
 }
 
-export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps) {
+export function EinvoicePanel({ documentId, documentType, status, client }: EinvoicePanelProps) {
   const t = useTranslations('documents.peppol');
   const locale = useLocale() as Locale;
   const { EINVOICE, PEPPOL } = useFeatureFlags();
@@ -95,6 +96,8 @@ export function EinvoicePanel({ documentId, status, client }: EinvoicePanelProps
   const [sendPeppol, { isLoading: isSending }] = useSendEinvoicePeppolMutation();
   const [sendError, setSendError] = useState<string | null>(null);
 
+  // A delivery note is never e-invoiced or Peppol-sent (no country accepts one).
+  if (documentType === 'delivery_note') return null;
   if (!isIssued || !EINVOICE) return null;
 
   async function handleSend() {

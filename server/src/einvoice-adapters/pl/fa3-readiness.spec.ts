@@ -123,3 +123,53 @@ describe('checkFa3Readiness — line items', () => {
     );
   });
 });
+
+describe('checkFa3Readiness — KOR correction reference', () => {
+  const resolvedOriginal = {
+    number: 7,
+    numberPrefix: null,
+    numberSuffix: null,
+    issuedAt: '2026-08-01',
+    ksefNumber: null,
+  };
+
+  it('flags a credit_note with no originalDocumentId', () => {
+    const creditNote: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      documentType: 'credit_note',
+      originalDocumentId: null,
+      originalDocument: null,
+    };
+    expect(checkFa3Readiness(creditNote).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentOriginalDocumentId,
+    );
+  });
+
+  it('flags a debit_note whose originalDocumentId could not be resolved', () => {
+    const debitNote: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      documentType: 'debit_note',
+      originalDocumentId: 'doc-pl-domestic-1',
+      originalDocument: null,
+    };
+    expect(checkFa3Readiness(debitNote).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentOriginalDocumentUnresolved,
+    );
+  });
+
+  it('is ready for a credit_note with a resolved original document', () => {
+    const creditNote: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      documentType: 'credit_note',
+      originalDocumentId: 'doc-pl-domestic-1',
+      originalDocument: resolvedOriginal,
+    };
+    expect(checkFa3Readiness(creditNote)).toEqual({ ready: true, missingFields: [] });
+  });
+
+  it('does not require an originalDocumentId for a plain invoice', () => {
+    expect(checkFa3Readiness(plDomesticStandardInvoice).missingFields).not.toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentOriginalDocumentId,
+    );
+  });
+});

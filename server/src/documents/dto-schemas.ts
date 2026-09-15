@@ -5,7 +5,11 @@ import {
   VAT_CATEGORIES,
 } from '@fakturcho/shared-types';
 import { z } from 'zod';
-import { isoDateSchema, paymentMeansCodeSchema } from '../common/eu-field-schemas';
+import {
+  isoDateSchema,
+  paymentMeansCodeSchema,
+  wallClockDateTimeSchema,
+} from '../common/eu-field-schemas';
 
 const lineItemInputSchema = z.object({
   name: z.string().min(1),
@@ -35,6 +39,10 @@ export const saveDraftRequestSchema = z.object({
   buyerReference: z.string().nullish(),
   paymentMeansCode: paymentMeansCodeSchema.nullish(),
   paymentTermsNote: z.string().nullish(),
+  transportReason: z.string().nullish(),
+  transportedAt: wallClockDateTimeSchema.nullish(),
+  carrierName: z.string().nullish(),
+  transportNote: z.string().nullish(),
   vatIncluded: z.boolean().optional(),
   vatExemptionGround: z.string().nullish(),
   clientId: z.string().nullish(),

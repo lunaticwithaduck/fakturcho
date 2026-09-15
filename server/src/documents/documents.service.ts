@@ -92,7 +92,7 @@ export class DocumentsService {
     const documentVat = applyLineVatGroups(vat, resolvedLineItems);
 
     const data = {
-      ...buildDraftData(accountId, request, documentVat, resolvedLineItems),
+      ...buildDraftData(accountId, request, documentVat, resolvedLineItems, issuerCountry),
       documentLanguage:
         request.documentLanguage !== undefined
           ? request.documentLanguage

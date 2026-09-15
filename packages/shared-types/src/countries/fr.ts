@@ -13,6 +13,7 @@ export const FR_CONFIG: CountryConfig = {
   country: 'FR',
   locale: 'en',
   language: 'fr',
+  timeZone: 'Europe/Paris',
   vatRates: [
     { rateBp: 2000, label: '20%' },
     { rateBp: 1000, label: '10%' },

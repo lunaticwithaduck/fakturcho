@@ -1,3 +1,4 @@
+import { ogLocaleAlternates } from '@app/i18n/ogLocale';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'bg_BG',
-    alternateLocale: ['en_US'],
+    alternateLocale: ogLocaleAlternates('bg'),
     siteName: 'Фактурчо',
   },
   twitter: {

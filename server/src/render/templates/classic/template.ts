@@ -10,6 +10,7 @@ import { buildMentionsBlock } from './mentions-block';
 import { buildStyles } from './styles';
 import { buildTitle } from './title';
 import { buildAmountWordsBlock, buildTotalsBlock } from './totals-block';
+import { buildTransportBlock } from './transport-block';
 import { buildWatermark } from './watermark';
 
 export interface ClassicTemplateInput {
@@ -34,7 +35,8 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   } = input;
   const locale = resolveClassicLocale(language, issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
-  const isQuote = documentType === 'quote';
+  const isDeliveryNote = documentType === 'delivery_note';
+  const showPrices = !isDeliveryNote || locale.showDeliveryNotePrices;
   const number = document.number === null ? null : Number(document.number);
 
   return `<!doctype html>
@@ -47,15 +49,19 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   ${buildWatermark(isDraft, locale)}
   <div class="header">
     ${buildRecipientBlock(document, locale)}
-    ${buildDatesBlock(document, isQuote, locale)}
+    ${buildDatesBlock(document, documentType, locale)}
   </div>
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
-  ${buildLineItemsTable(lineItems, locale)}
-  ${buildAmountWordsBlock(document, locale)}
-  ${buildTotalsBlock(document, lineItems, presentation, locale, discounts)}
+  ${buildLineItemsTable(lineItems, locale, showPrices)}
+  ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
+  ${
+    showPrices
+      ? `${buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, discounts)}`
+      : ''
+  }
   ${buildMentionsBlock({ document, lineItems, locale })}
   ${buildIssuerBlock(document, locale)}
-  ${locale.showSignatureRow ? buildSignatureRow(document, locale) : ''}
+  ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, documentType, locale) : ''}
 </body>
 </html>`;
 }

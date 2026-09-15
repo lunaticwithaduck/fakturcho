@@ -17,13 +17,21 @@ export interface ClassicLabels {
   molPrefix: string;
   issuedAtPrefix: string;
   taxEventPrefix: string;
-  validUntilPrefix: string;
-  statusPaid: string;
-  statusCancelled: string;
+  // Functions of the document type: several languages inflect these for the
+  // grammatical gender of the document noun (e.g. IT "il preventivo" is
+  // masculine, everything else in that language is feminine).
+  validUntilPrefix: (documentType: DocumentType) => string;
+  deliveryDatePrefix: string;
+  transportReasonPrefix: string;
+  transportedAtPrefix: string;
+  carrierNamePrefix: string;
+  transportNotePrefix: string;
+  statusPaid: (documentType: DocumentType) => string;
+  statusCancelled: (documentType: DocumentType) => string;
   phonePrefix: string;
   bicPrefix: string;
-  preparedByPrefix: string;
-  recipientSignaturePrefix: string;
+  preparedByPrefix: (documentType: DocumentType) => string;
+  recipientSignaturePrefix: (documentType: DocumentType) => string;
   colName: string;
   colQuantity: string;
   colPrice: string;

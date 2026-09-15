@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 import bgMessages from '@messages/bg.json';
 import enMessages from '@messages/en.json';
+import esMessages from '@messages/es.json';
+import roMessages from '@messages/ro.json';
 import { cleanup, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -55,5 +57,25 @@ describe('BillingPage', () => {
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+
+  it('names the page "Sold și abonament" in Romanian, not the loan-ambiguous "Credite"', () => {
+    render(
+      <NextIntlClientProvider locale="ro" messages={roMessages}>
+        <BillingPage />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Sold și abonament' })).toBeTruthy();
+  });
+
+  it('names the page "Saldo y suscripción" in Spanish, distinct from Facturación', () => {
+    render(
+      <NextIntlClientProvider locale="es" messages={esMessages}>
+        <BillingPage />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Saldo y suscripción' })).toBeTruthy();
   });
 });

@@ -1,4 +1,10 @@
 import type { Locale } from '@shared/types';
+import {
+  CREDIT_PACKS,
+  ISSUANCE_COST_CENTS,
+  SIGNUP_GRANT_CENTS,
+  SUBSCRIPTION_TIERS,
+} from '@shared/types';
 
 export const COMPANY_PLACEHOLDER_MARKER = 'ДЕМО';
 
@@ -25,7 +31,7 @@ export const COMPANY: CompanyDetails = {
   supportEmail: 'support@fakturcho.com',
   productName: 'Фактурчо',
   website: 'https://www.fakturcho.com',
-  lastUpdated: '14.08.2026',
+  lastUpdated: '15.09.2026',
 };
 
 export function describeEntity(): string {
@@ -57,6 +63,59 @@ export const PRICING_EN = {
   signupGrant: '1.00 €',
 } as const;
 
-export function pricingForLocale(locale: Locale): typeof PRICING | typeof PRICING_EN {
-  return locale === 'bg' ? PRICING : PRICING_EN;
+// Same Intl tags format.ts uses for money/date rendering — kept local since
+// this generates sentence-level pricing strings, not formatted amounts.
+const PRICING_INTL_TAGS: Partial<Record<Locale, string>> = {
+  de: 'de-DE',
+  fr: 'fr-FR',
+  it: 'it-IT',
+  pl: 'pl-PL',
+  ro: 'ro-RO',
+  es: 'es-ES',
+};
+
+const SUBSCRIPTION_PERIOD_WORD: Partial<Record<Locale, string>> = {
+  de: 'pro Monat',
+  fr: 'par mois',
+  it: 'al mese',
+  pl: 'miesięcznie',
+  ro: 'pe lună',
+  es: 'al mes',
+};
+
+function eurAmount(tag: string, cents: number, fractionDigits: number): string {
+  return new Intl.NumberFormat(tag, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(cents / 100);
+}
+
+interface PricingStrings {
+  perDocument: string;
+  packs: string;
+  subscription: string;
+  signupGrant: string;
+}
+
+function pricingForTag(locale: Locale, tag: string): PricingStrings {
+  const list = new Intl.ListFormat(tag, { style: 'long', type: 'conjunction' });
+  const packAmounts = Object.values(CREDIT_PACKS).map((pack) => eurAmount(tag, pack.eurCents, 0));
+  const tierAmounts = Object.values(SUBSCRIPTION_TIERS).map((tier) =>
+    eurAmount(tag, tier.priceCents, 0),
+  );
+  const period = SUBSCRIPTION_PERIOD_WORD[locale] ?? '';
+  return {
+    perDocument: eurAmount(tag, ISSUANCE_COST_CENTS, 2),
+    packs: list.format(packAmounts),
+    subscription: `${list.format(tierAmounts)} ${period}`.trim(),
+    signupGrant: eurAmount(tag, SIGNUP_GRANT_CENTS, 2),
+  };
+}
+
+export function pricingForLocale(locale: Locale): PricingStrings {
+  if (locale === 'bg') return PRICING;
+  const tag = PRICING_INTL_TAGS[locale];
+  return tag ? pricingForTag(locale, tag) : PRICING_EN;
 }

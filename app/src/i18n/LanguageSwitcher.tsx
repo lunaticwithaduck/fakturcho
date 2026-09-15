@@ -1,13 +1,31 @@
-import bgMessages from '@messages/bg.json';
-import enMessages from '@messages/en.json';
 import type { Locale } from '@shared/types';
+import { PUBLISHED_LOCALES } from '@shared/types';
 import Link from 'next/link';
 import { LOCALE_QUERY_PARAM } from './localeRedirect';
 
-const CONTENT = { bg: bgMessages.languageSwitcher, en: enMessages.languageSwitcher };
+// Autonyms and the nav's accessible name are UI chrome, not translated
+// content — they live here so a translator never has to touch this file.
+const AUTONYMS: Record<Locale, string> = {
+  bg: 'Български',
+  en: 'English',
+  de: 'Deutsch',
+  fr: 'Français',
+  it: 'Italiano',
+  pl: 'Polski',
+  ro: 'Română',
+  es: 'Español',
+};
 
-const BG_LABEL = 'БГ';
-const EN_LABEL = 'EN';
+const NAV_LABELS: Record<Locale, string> = {
+  bg: 'Избор на език',
+  en: 'Language',
+  de: 'Sprache',
+  fr: 'Langue',
+  it: 'Lingua',
+  pl: 'Język',
+  ro: 'Limbă',
+  es: 'Idioma',
+};
 
 interface LanguageSwitcherProps {
   locale: Locale;
@@ -17,29 +35,22 @@ interface LanguageSwitcherProps {
 
 export function LanguageSwitcher({ locale, currentPath, enabled }: LanguageSwitcherProps) {
   if (!enabled) return null;
-  const t = CONTENT[locale];
 
   return (
-    <nav aria-label={t.navLabel} className="flex items-center gap-2 text-sm">
-      <Link
-        href={`${currentPath}?${LOCALE_QUERY_PARAM}=bg`}
-        aria-label={t.bgFull}
-        aria-current={locale === 'bg' ? 'true' : undefined}
-        className={locale === 'bg' ? 'font-semibold text-text' : 'text-text-muted underline'}
-      >
-        {BG_LABEL}
-      </Link>
-      <span aria-hidden="true" className="text-text-subtle">
-        /
-      </span>
-      <Link
-        href={`${currentPath}?${LOCALE_QUERY_PARAM}=en`}
-        aria-label={t.enFull}
-        aria-current={locale === 'en' ? 'true' : undefined}
-        className={locale === 'en' ? 'font-semibold text-text' : 'text-text-muted underline'}
-      >
-        {EN_LABEL}
-      </Link>
+    <nav
+      aria-label={NAV_LABELS[locale]}
+      className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm"
+    >
+      {PUBLISHED_LOCALES.map((code) => (
+        <Link
+          key={code}
+          href={`${currentPath}?${LOCALE_QUERY_PARAM}=${code}`}
+          aria-current={locale === code ? 'true' : undefined}
+          className={locale === code ? 'font-semibold text-text' : 'text-text-muted underline'}
+        >
+          {AUTONYMS[code]}
+        </Link>
+      ))}
     </nav>
   );
 }

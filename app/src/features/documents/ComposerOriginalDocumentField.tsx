@@ -2,11 +2,12 @@
 
 import { useListDocumentsQuery } from '@app/api';
 import { Select, SelectItem } from '@design/components';
-import type { Locale } from '@shared/types';
+import type { DocumentType, Locale } from '@shared/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { formatDocumentTitle } from './documentTitle';
 
 interface ComposerOriginalDocumentFieldProps {
+  documentType: DocumentType;
   value: string | null;
   currentDocumentId: string | null;
   hasError: boolean;
@@ -14,6 +15,7 @@ interface ComposerOriginalDocumentFieldProps {
 }
 
 export function ComposerOriginalDocumentField({
+  documentType,
   value,
   currentDocumentId,
   hasError,
@@ -25,11 +27,12 @@ export function ComposerOriginalDocumentField({
   const options = (data?.items ?? []).filter(
     (document) => document.status !== 'draft' && document.id !== currentDocumentId,
   );
+  const namespace = documentType === 'delivery_note' ? 'deliveryReference' : 'originalDocument';
 
   return (
     <Select
-      label={t('composer.originalDocument.label')}
-      placeholder={t('composer.originalDocument.placeholder')}
+      label={t(`composer.${namespace}.label`)}
+      placeholder={t(`composer.${namespace}.placeholder`)}
       value={value ?? ''}
       onValueChange={onChange}
       {...(hasError ? { error: t('composer.requiredField') } : {})}

@@ -8,11 +8,21 @@ import type { LiveTotals } from './liveTotals';
 interface ComposerTotalsPanelProps {
   totals: LiveTotals;
   vatCharged: boolean;
+  // null when the document has no single rate to show (mixed rates, or none).
+  vatRatePercent: number | null;
 }
 
-export function ComposerTotalsPanel({ totals, vatCharged }: ComposerTotalsPanelProps) {
+export function ComposerTotalsPanel({
+  totals,
+  vatCharged,
+  vatRatePercent,
+}: ComposerTotalsPanelProps) {
   const t = useTranslations('documents');
   const base = totals.subtotal - totals.discountTotal;
+  const vatLabel =
+    vatRatePercent === null
+      ? t('composer.totals.vatGeneric')
+      : t('composer.totals.vat', { rate: vatRatePercent });
 
   return (
     <Card className="flex flex-col gap-2">
@@ -33,7 +43,7 @@ export function ComposerTotalsPanel({ totals, vatCharged }: ComposerTotalsPanelP
             <span>{formatMoney(base)}</span>
           </div>
           <div className="flex items-center justify-between text-sm text-text-muted">
-            <span>{t('composer.totals.vat')}</span>
+            <span>{vatLabel}</span>
             <span>{formatMoney(totals.vatAmount)}</span>
           </div>
         </>
