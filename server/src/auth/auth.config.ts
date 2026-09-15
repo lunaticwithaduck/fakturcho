@@ -47,6 +47,13 @@ export function createAuth(
     baseURL: options.baseURL,
     trustedOrigins: options.trustedOrigins,
     basePath: '/api/auth',
+    // Railway's edge overwrites X-Real-IP with the connecting address; the app
+    // reaches the api over the private network so the visitor's value survives.
+    advanced: {
+      ipAddress: {
+        ipAddressHeaders: ['x-real-ip'],
+      },
+    },
     database: prismaAdapter(prisma, { provider: 'postgresql' }),
     emailAndPassword: {
       enabled: true,
