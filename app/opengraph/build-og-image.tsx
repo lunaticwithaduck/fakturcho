@@ -39,6 +39,7 @@ export async function renderOgImage(): Promise<ImageResponse> {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        {/* biome-ignore lint/performance/noImgElement: satori/next-og only renders plain img, not next/image */}
         <img src={brandIconSrc} alt="" width={96} height={96} style={{ borderRadius: 24 }} />
         <span style={{ fontSize: 56, fontWeight: 700, color: ACCENT }}>Фактурчо</span>
       </div>
