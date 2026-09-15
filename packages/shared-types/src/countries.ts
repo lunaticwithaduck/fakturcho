@@ -66,6 +66,8 @@ const BG_CONFIG: CountryConfig = {
   showMol: true,
   showSignatureRow: true,
   showOriginalStamp: true,
+  deliveryNotePricesShown: true,
+  deliveryNoteTransportReasons: [],
 };
 
 const COUNTRY_CONFIGS: Record<string, CountryConfig> = {

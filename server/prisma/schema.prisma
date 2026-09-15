@@ -13,6 +13,7 @@ enum DocumentType {
   CREDIT_NOTE
   DEBIT_NOTE
   QUOTE
+  DELIVERY_NOTE
 }
 
 enum DocumentStatus {
@@ -245,6 +246,14 @@ model Document {
   buyerReference   String?
   paymentMeansCode String?
   paymentTermsNote String?
+
+  // delivery_note only: IT DDT causale del trasporto / RO aviz scop, and its
+  // date+time of dispatch (DPR 472/1996 art.1 requires date AND time, unlike
+  // every other document's date-only fields).
+  transportReason String?
+  transportedAt   DateTime?
+  carrierName     String?
+  transportNote   String?
 
   subtotal           Int     @default(0)
   discountTotal      Int     @default(0)

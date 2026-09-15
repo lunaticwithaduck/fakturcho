@@ -8,6 +8,7 @@ export interface ClassicLocaleContext {
   showMol: boolean;
   showSignatureRow: boolean;
   showOriginalStamp: boolean;
+  showDeliveryNotePrices: boolean;
 }
 
 export function resolveClassicLocale(
@@ -22,5 +23,6 @@ export function resolveClassicLocale(
     showMol: country.showMol,
     showSignatureRow: country.showSignatureRow,
     showOriginalStamp: country.showOriginalStamp,
+    showDeliveryNotePrices: country.deliveryNotePricesShown,
   };
 }

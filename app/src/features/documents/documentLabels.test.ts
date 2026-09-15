@@ -14,6 +14,7 @@ describe('getDocumentTypeLabel', () => {
       credit_note: 'Кредитно известие',
       debit_note: 'Дебитно известие',
       quote: 'Ценова оферта',
+      delivery_note: 'Стокова разписка',
     };
     expect(getDocumentTypeLabel(type, 'bg')).toBe(expected[type]);
   });
@@ -25,6 +26,7 @@ describe('getDocumentTypeLabel', () => {
       credit_note: 'Credit note',
       debit_note: 'Debit note',
       quote: 'Quote',
+      delivery_note: 'Delivery note',
     };
     expect(getDocumentTypeLabel(type, 'en')).toBe(expected[type]);
   });
@@ -36,6 +38,7 @@ describe('getDocumentTypeLabel', () => {
       credit_note: 'Rechnungskorrektur',
       debit_note: 'Belastungsanzeige',
       quote: 'Angebot',
+      delivery_note: 'Lieferschein',
     };
     expect(getDocumentTypeLabel(type, 'de')).toBe(expected[type]);
   });

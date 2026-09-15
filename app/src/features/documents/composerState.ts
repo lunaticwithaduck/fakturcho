@@ -6,6 +6,12 @@ import type {
   LineItemInput,
   SaveDraftRequest,
 } from '@shared/types';
+import {
+  blankDeliveryState,
+  type ComposerDeliveryFormState,
+  deliveryRequestFields,
+  deliveryStateFromDocument,
+} from './composerDeliveryState';
 import { normalizeQuantity, type VatTreatment } from './liveTotals';
 
 export interface LineItemFormState {
@@ -23,7 +29,7 @@ export interface DiscountFormState {
   amount: number | null;
 }
 
-export interface ComposerFormState {
+export interface ComposerFormState extends ComposerDeliveryFormState {
   documentType: DocumentType;
   clientId: string | null;
   originalDocumentId: string | null;
@@ -65,6 +71,7 @@ export function blankComposerState(): ComposerFormState {
     taxEventAt: '',
     dueAt: '',
     validUntil: '',
+    ...blankDeliveryState(),
     chargeVat: true,
     vatExemptionGround: null,
     notes: '',
@@ -83,6 +90,7 @@ export function composerStateFromDocument(document: DocumentDto): ComposerFormSt
     taxEventAt: document.taxEventAt ?? '',
     dueAt: document.dueAt ?? '',
     validUntil: document.validUntil ?? '',
+    ...deliveryStateFromDocument(document),
     chargeVat: document.vatExemptionGround === null,
     vatExemptionGround: document.vatExemptionGround,
     notes: document.notes ?? '',
@@ -139,14 +147,16 @@ export function toSaveDraftRequest(state: ComposerFormState, vat: VatTreatment):
   const isCorrection = (CORRECTION_DOCUMENT_TYPES as readonly DocumentType[]).includes(
     state.documentType,
   );
+  const isDeliveryNote = state.documentType === 'delivery_note';
 
   return {
     documentType: state.documentType,
     referenceNumber: state.referenceNumber.trim() || null,
-    originalDocumentId: isCorrection ? state.originalDocumentId : null,
+    originalDocumentId: isCorrection || isDeliveryNote ? state.originalDocumentId : null,
     taxEventAt: state.taxEventAt || null,
     dueAt: state.dueAt || null,
     validUntil: state.validUntil || null,
+    ...deliveryRequestFields(state, isDeliveryNote),
     vatIncluded: false,
     vatExemptionGround: vat.groundSelectable ? state.vatExemptionGround : null,
     clientId: state.clientId,

@@ -109,10 +109,23 @@
         "taxEventAt": "Data sprzedaży",
         "dueAt": "Termin płatności"
       },
+      "delivery": {
+        "heading": "Szczegóły dostawy",
+        "deliveryDateLabel": "Data dostawy",
+        "transportedAtLabel": "Data i godzina transportu",
+        "transportReasonLabel": "Powód transportu",
+        "transportReasonPlaceholder": "Wybierz powód",
+        "carrierNameLabel": "Przewoźnik",
+        "transportNoteLabel": "Szczegóły transportu"
+      },
       "originalDocument": {
         "label": "Dokument pierwotny",
         "placeholder": "Wybierz dokument",
         "noClient": "Brak klienta"
+      },
+      "deliveryReference": {
+        "label": "Powiązana faktura",
+        "placeholder": "Wybierz fakturę"
       },
       "lineItems": {
         "heading": "Pozycje",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "Wersji roboczej nie można wysłać. Najpierw wystaw dokument.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Wybierz dokument pierwotny, aby kontynuować.",
       "ISSUER_PROFILE_INCOMPLETE": "Profil wystawcy jest niekompletny. Uzupełnij dane firmy, aby wystawiać dokumenty.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Dowód dostawy dla tego kraju wymaga uzupełnienia danych transportu przed wystawieniem.",
       "VAT_GROUND_NOT_ALLOWED": "Ta podstawa zwolnienia z VAT jest niedozwolona.",
       "CLIENT_EIK_DUPLICATE": "Klient z tym numerem identyfikacyjnym już istnieje.",
       "SUBSCRIPTION_REQUIRED": "Wymagany jest aktywny abonament.",

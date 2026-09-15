@@ -102,7 +102,12 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         onEmail={() => setDialog('email')}
       />
 
-      <EinvoicePanel documentId={documentId} status={document.status} client={client} />
+      <EinvoicePanel
+        documentId={documentId}
+        documentType={document.documentType}
+        status={document.status}
+        client={client}
+      />
 
       <DocumentPdfViewer
         documentId={documentId}

@@ -76,6 +76,10 @@ export interface DocumentDto {
   buyerReference: string | null;
   paymentMeansCode: string | null;
   paymentTermsNote: string | null;
+  transportReason: string | null;
+  transportedAt: string | null;
+  carrierName: string | null;
+  transportNote: string | null;
   subtotal: Cents;
   discountTotal: Cents;
   amount: Cents;
@@ -142,6 +146,10 @@ export interface SaveDraftRequest {
   buyerReference?: string | null;
   paymentMeansCode?: string | null;
   paymentTermsNote?: string | null;
+  transportReason?: string | null;
+  transportedAt?: string | null;
+  carrierName?: string | null;
+  transportNote?: string | null;
   vatIncluded?: boolean;
   vatExemptionGround?: string | null;
   clientId?: string | null;

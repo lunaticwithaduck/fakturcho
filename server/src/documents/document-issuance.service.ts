@@ -48,6 +48,28 @@ export class DocumentIssuanceService {
     const issuedAt = parseDateOnly(request.issuedAt) ?? startOfTodayUtc();
     const documentType = fromPrismaDocumentType(existing.documentType);
 
+    if (documentType === 'delivery_note') {
+      // DPR 472/1996 art. 1: an Italian DDT is not valid without its causale del
+      // trasporto and the date/time transport started.
+      if (
+        issuerProfile?.country === 'IT' &&
+        (!existing.transportReason || !existing.transportedAt)
+      ) {
+        throw new DomainError(
+          'DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED',
+          'An Italian delivery note requires a transport reason and transport date/time before issuing.',
+        );
+      }
+      // OMFP 2634/2015, model 14-3-6A: an aviz de însoțire a mărfii is not valid
+      // without the carrier/delegate and the date the transport started.
+      if (issuerProfile?.country === 'RO' && (!existing.carrierName || !existing.transportedAt)) {
+        throw new DomainError(
+          'DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED',
+          'A Romanian delivery note requires a carrier/delegate and transport date/time before issuing.',
+        );
+      }
+    }
+
     const record = await this.prisma.$transaction(
       async (tx) => {
         // SPEC §11 invariant 20: the charge precedes the claim, so a rejected charge never claims a number

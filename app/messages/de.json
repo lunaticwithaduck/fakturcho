@@ -109,10 +109,23 @@
         "taxEventAt": "Leistungsdatum",
         "dueAt": "Fälligkeitsdatum"
       },
+      "delivery": {
+        "heading": "Lieferdetails",
+        "deliveryDateLabel": "Lieferdatum",
+        "transportedAtLabel": "Datum/Uhrzeit des Transports",
+        "transportReasonLabel": "Transportgrund",
+        "transportReasonPlaceholder": "Grund auswählen",
+        "carrierNameLabel": "Spediteur",
+        "transportNoteLabel": "Transporthinweise"
+      },
       "originalDocument": {
         "label": "Originaldokument",
         "placeholder": "Dokument auswählen",
         "noClient": "Kein Kunde"
+      },
+      "deliveryReference": {
+        "label": "Zugehörige Rechnung",
+        "placeholder": "Rechnung auswählen"
       },
       "lineItems": {
         "heading": "Positionen",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "Der Entwurf kann nicht gesendet werden. Stellen Sie das Dokument zuerst aus.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Wählen Sie das Originaldokument aus, um fortzufahren.",
       "ISSUER_PROFILE_INCOMPLETE": "Das Ausstellerprofil ist unvollständig. Geben Sie die Firmendaten ein, um Dokumente ausstellen zu können.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Ein Lieferschein für dieses Land benötigt ausgefüllte Transportangaben, bevor er ausgestellt werden kann.",
       "VAT_GROUND_NOT_ALLOWED": "Dieser Befreiungsgrund ist nicht zulässig.",
       "CLIENT_EIK_DUPLICATE": "Es existiert bereits ein Kunde mit dieser Registernummer.",
       "SUBSCRIPTION_REQUIRED": "Ein aktives Abonnement ist erforderlich.",

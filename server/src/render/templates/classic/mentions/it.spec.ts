@@ -11,6 +11,7 @@ const locale: ClassicLocaleContext = {
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  showDeliveryNotePrices: false,
 };
 
 function buildInput(

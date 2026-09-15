@@ -14,25 +14,33 @@ function formatQuantity(raw: unknown, language: ClassicLanguage): string {
 export function buildLineItemsTable(
   lineItems: readonly LineItem[],
   locale: ClassicLocaleContext,
+  showPrices = true,
 ): string {
   const { labels, language } = locale;
+  const priceCells = (item: LineItem) =>
+    showPrices
+      ? `<td>${formatCentsForLocale(item.unitPrice, language)}</td>
+        <td>${formatCentsForLocale(item.lineTotal, language)}</td>`
+      : '';
   const rows = lineItems
     .map(
       (item) => `<tr>
         <td>${escapeHtml(item.name)}</td>
         <td>${formatQuantity(item.quantity, language)}</td>
-        <td>${formatCentsForLocale(item.unitPrice, language)}</td>
-        <td>${formatCentsForLocale(item.lineTotal, language)}</td>
+        ${priceCells(item)}
       </tr>`,
     )
     .join('');
+  const priceHeaders = showPrices
+    ? `<th>${labels.colPrice}</th>
+        <th>${labels.colTotal}</th>`
+    : '';
   return `<table class="line-items">
     <thead>
       <tr>
         <th>${labels.colName}</th>
         <th>${labels.colQuantity}</th>
-        <th>${labels.colPrice}</th>
-        <th>${labels.colTotal}</th>
+        ${priceHeaders}
       </tr>
     </thead>
     <tbody>${rows}</tbody>

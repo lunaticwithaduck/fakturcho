@@ -89,3 +89,10 @@ export function formatDateForLocale(value: Date | string, language: DocumentLang
   const separator = CONVENTIONS[language].dateSeparator;
   return [day, month, year].join(separator);
 }
+
+export function formatDateTimeForLocale(value: Date | string, language: DocumentLanguage): string {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  return `${formatDateForLocale(date, language)}, ${hours}:${minutes}`;
+}

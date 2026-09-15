@@ -1,5 +1,20 @@
 import { type CountryConfig, GENERIC_EU_CONFIG } from './base';
 
+// Standard causale del trasporto values (DPR 472/1996 art. 1): mandatory whenever
+// the transport is not a sale, since the reason is what justifies the missing invoice.
+const IT_TRANSPORT_REASONS = [
+  'Vendita',
+  'Conto lavorazione',
+  'Reso',
+  'Conto visione',
+  'Conto deposito',
+  'Comodato',
+  'Omaggio',
+  'Riparazione',
+  'Conto campionatura',
+  'Altro',
+] as const;
+
 const FORFETTARIO_GROUND =
   "Operazione senza applicazione dell'IVA ai sensi dell'art. 1, commi da 54 a 89, L. 190/2014";
 
@@ -35,4 +50,5 @@ export const IT_CONFIG: CountryConfig = {
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  deliveryNoteTransportReasons: IT_TRANSPORT_REASONS,
 };

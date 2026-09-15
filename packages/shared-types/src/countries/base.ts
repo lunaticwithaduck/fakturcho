@@ -36,6 +36,10 @@ export interface CountryConfig {
   showMol: boolean;
   showSignatureRow: boolean;
   showOriginalStamp: boolean;
+  // delivery_note only. Most researched countries print it without prices (it
+  // records goods movement, not a sale); BG and RO commonly carry a value column.
+  deliveryNotePricesShown: boolean;
+  deliveryNoteTransportReasons: readonly string[];
 }
 
 const EU_DIRECTIVE_SME_EXEMPTION_GROUND =
@@ -67,6 +71,8 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  deliveryNotePricesShown: false,
+  deliveryNoteTransportReasons: [],
 };
 
 export const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {

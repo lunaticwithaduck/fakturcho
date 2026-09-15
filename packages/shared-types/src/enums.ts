@@ -6,6 +6,7 @@ export const DOCUMENT_TYPES = [
   'credit_note',
   'debit_note',
   'quote',
+  'delivery_note',
 ] as const;
 export type DocumentType = (typeof DOCUMENT_TYPES)[number];
 
@@ -15,6 +16,7 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   credit_note: 'Кредитно известие',
   debit_note: 'Дебитно известие',
   quote: 'Ценова оферта',
+  delivery_note: 'Стокова разписка',
 };
 
 export const DOCUMENT_TYPE_LABELS_EN: Record<DocumentType, string> = {
@@ -23,6 +25,7 @@ export const DOCUMENT_TYPE_LABELS_EN: Record<DocumentType, string> = {
   credit_note: 'Credit note',
   debit_note: 'Debit note',
   quote: 'Quote',
+  delivery_note: 'Delivery note',
 };
 
 export const DOCUMENT_TYPE_LABELS_DE: Record<DocumentType, string> = {
@@ -31,6 +34,7 @@ export const DOCUMENT_TYPE_LABELS_DE: Record<DocumentType, string> = {
   credit_note: 'Rechnungskorrektur',
   debit_note: 'Belastungsanzeige',
   quote: 'Angebot',
+  delivery_note: 'Lieferschein',
 };
 
 export const DOCUMENT_TYPE_LABELS_FR: Record<DocumentType, string> = {
@@ -39,6 +43,7 @@ export const DOCUMENT_TYPE_LABELS_FR: Record<DocumentType, string> = {
   credit_note: 'Avoir',
   debit_note: 'Note de débit',
   quote: 'Devis',
+  delivery_note: 'Bon de livraison',
 };
 
 export const DOCUMENT_TYPE_LABELS_IT: Record<DocumentType, string> = {
@@ -47,6 +52,7 @@ export const DOCUMENT_TYPE_LABELS_IT: Record<DocumentType, string> = {
   credit_note: 'Nota di credito',
   debit_note: 'Nota di debito',
   quote: 'Preventivo',
+  delivery_note: 'Documento di trasporto (DDT)',
 };
 
 export const DOCUMENT_TYPE_LABELS_PL: Record<DocumentType, string> = {
@@ -55,6 +61,7 @@ export const DOCUMENT_TYPE_LABELS_PL: Record<DocumentType, string> = {
   credit_note: 'Faktura korygująca',
   debit_note: 'Nota debetowa',
   quote: 'Oferta',
+  delivery_note: 'Dowód dostawy',
 };
 
 export const DOCUMENT_TYPE_LABELS_RO: Record<DocumentType, string> = {
@@ -63,6 +70,7 @@ export const DOCUMENT_TYPE_LABELS_RO: Record<DocumentType, string> = {
   credit_note: 'Notă de credit',
   debit_note: 'Notă de debit',
   quote: 'Ofertă',
+  delivery_note: 'Aviz de însoțire a mărfii',
 };
 
 export const DOCUMENT_TYPE_LABELS_ES: Record<DocumentType, string> = {
@@ -71,6 +79,7 @@ export const DOCUMENT_TYPE_LABELS_ES: Record<DocumentType, string> = {
   credit_note: 'Factura rectificativa (abono)',
   debit_note: 'Factura rectificativa (cargo)',
   quote: 'Presupuesto',
+  delivery_note: 'Albarán',
 };
 
 const DOCUMENT_TYPE_LABELS_BY_LANGUAGE: Record<DocumentLanguage, Record<DocumentType, string>> = {
@@ -96,6 +105,7 @@ export const TAX_DOCUMENT_TYPES: Record<DocumentType, boolean> = {
   credit_note: true,
   debit_note: true,
   quote: false,
+  delivery_note: false,
 };
 
 export const CORRECTION_DOCUMENT_TYPES: readonly DocumentType[] = ['credit_note', 'debit_note'];

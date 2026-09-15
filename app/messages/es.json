@@ -109,10 +109,23 @@
         "taxEventAt": "Fecha de la operación",
         "dueAt": "Fecha de vencimiento"
       },
+      "delivery": {
+        "heading": "Datos de entrega",
+        "deliveryDateLabel": "Fecha de entrega",
+        "transportedAtLabel": "Fecha y hora del transporte",
+        "transportReasonLabel": "Motivo del transporte",
+        "transportReasonPlaceholder": "Seleccionar motivo",
+        "carrierNameLabel": "Transportista",
+        "transportNoteLabel": "Detalles del transporte"
+      },
       "originalDocument": {
         "label": "Documento original",
         "placeholder": "Seleccionar documento",
         "noClient": "Sin cliente"
+      },
+      "deliveryReference": {
+        "label": "Factura relacionada",
+        "placeholder": "Seleccionar factura"
       },
       "lineItems": {
         "heading": "Conceptos",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "El borrador no se puede enviar. Emita el documento primero.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Seleccione el documento original para continuar.",
       "ISSUER_PROFILE_INCOMPLETE": "El perfil del emisor está incompleto. Complete los datos de la empresa para poder emitir documentos.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un albarán para este país necesita que se completen los datos de transporte antes de poder emitirse.",
       "VAT_GROUND_NOT_ALLOWED": "Este motivo de exención de IVA no está permitido.",
       "CLIENT_EIK_DUPLICATE": "Ya existe un cliente con este identificador fiscal.",
       "SUBSCRIPTION_REQUIRED": "Se requiere una suscripción activa.",

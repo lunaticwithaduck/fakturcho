@@ -13,6 +13,7 @@ import type {
 import { useLocale, useTranslations } from 'next-intl';
 import { ComposerActions } from './ComposerActions';
 import { ComposerClientField } from './ComposerClientField';
+import { ComposerDeliveryFields } from './ComposerDeliveryFields';
 import { ComposerDetailsFields } from './ComposerDetailsFields';
 import { ComposerDiscountsList } from './ComposerDiscountsList';
 import { ComposerDocumentTypeField } from './ComposerDocumentTypeField';
@@ -69,6 +70,7 @@ export function DocumentComposerForm({
   const isCorrection = (CORRECTION_DOCUMENT_TYPES as readonly DocumentType[]).includes(
     state.documentType,
   );
+  const isDeliveryNote = state.documentType === 'delivery_note';
   const { error, isSubmitting, handleSaveDraft, handleSaveAndIssue } = useComposerSubmit(
     documentId,
     state,
@@ -98,11 +100,12 @@ export function DocumentComposerForm({
             onChange={(value) => setField('clientId', value)}
           />
         </div>
-        {isCorrection ? (
+        {isCorrection || isDeliveryNote ? (
           <ComposerOriginalDocumentField
+            documentType={state.documentType}
             value={state.originalDocumentId}
             currentDocumentId={documentId}
-            hasError={!!error && !state.originalDocumentId}
+            hasError={isCorrection && !!error && !state.originalDocumentId}
             onChange={(value) => setField('originalDocumentId', value)}
           />
         ) : null}
@@ -115,6 +118,20 @@ export function DocumentComposerForm({
           onChange={patchState}
         />
       </Card>
+
+      {isDeliveryNote ? (
+        <Card>
+          <ComposerDeliveryFields
+            deliveryDate={state.deliveryDate}
+            transportReason={state.transportReason}
+            transportedAt={state.transportedAt}
+            carrierName={state.carrierName}
+            transportNote={state.transportNote}
+            transportReasonOptions={countryConfig.deliveryNoteTransportReasons}
+            onChange={patchState}
+          />
+        </Card>
+      ) : null}
 
       <ComposerLineItemsTable
         lineItems={state.lineItems}

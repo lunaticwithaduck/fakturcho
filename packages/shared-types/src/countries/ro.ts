@@ -1,5 +1,16 @@
 import { type CountryConfig, GENERIC_EU_CONFIG } from './base';
 
+// OMFP 2634/2015 model 14-3-6A "Aviz de însoțire a mărfii": the scop the goods
+// travel under, since it is what lets the aviz stand in for an invoice not yet issued.
+const RO_TRANSPORT_REASONS = [
+  'Vânzare - urmează factura',
+  'Consignație',
+  'Transfer între gestiuni proprii',
+  'Prelucrare',
+  'Retur',
+  'Eșantioane',
+] as const;
+
 const RO_DEFAULT_EXEMPTION_GROUND = 'Scutit de TVA conform art. 310 din Codul fiscal';
 
 const RO_VAT_EXEMPTION_GROUNDS = [
@@ -49,4 +60,6 @@ export const RO_CONFIG: CountryConfig = {
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  deliveryNotePricesShown: true,
+  deliveryNoteTransportReasons: RO_TRANSPORT_REASONS,
 };

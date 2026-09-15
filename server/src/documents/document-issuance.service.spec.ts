@@ -250,4 +250,108 @@ describe('DocumentIssuanceService', () => {
     const refetched = await documentsService.get(accountId, issued.id);
     expect(refetched.documentLanguage).toBe('en');
   });
+
+  it('an Italian delivery note cannot be issued without a transport reason and transport date/time', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'IT',
+      street: 'Via Roma 1',
+      postcode: '00100',
+      countyRegion: 'RM',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'delivery_note' }),
+    );
+
+    await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+      code: 'DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED',
+    });
+
+    const stillDraft = await documentsService.get(accountId, draft.id);
+    expect(stillDraft.status).toBe('draft');
+  });
+
+  it('an Italian delivery note issues once the transport reason and date/time are set', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'IT',
+      street: 'Via Roma 1',
+      postcode: '00100',
+      countyRegion: 'RM',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'delivery_note',
+        transportReason: 'Vendita',
+        transportedAt: '2026-09-15T09:30:00.000Z',
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+    expect(issued.number).not.toBeNull();
+  });
+
+  it('a non-Italian delivery note issues without any transport data, credit charged the same as any other type', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'delivery_note' }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+    expect(issued.number).not.toBeNull();
+  });
+
+  it('a Romanian delivery note cannot be issued without a carrier and transport date/time', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'RO',
+      street: 'Str. Victoriei 1',
+      postcode: '010071',
+      countyRegion: 'București',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'delivery_note' }),
+    );
+
+    await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+      code: 'DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED',
+    });
+
+    const stillDraft = await documentsService.get(accountId, draft.id);
+    expect(stillDraft.status).toBe('draft');
+  });
+
+  it('a Romanian delivery note issues once the carrier and transport date/time are set', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'RO',
+      street: 'Str. Victoriei 1',
+      postcode: '010071',
+      countyRegion: 'București',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'delivery_note',
+        carrierName: 'Ion Popescu, CI seria RD nr. 123456',
+        transportedAt: '2026-09-15T09:30:00.000Z',
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+    expect(issued.number).not.toBeNull();
+  });
 });

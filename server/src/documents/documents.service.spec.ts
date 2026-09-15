@@ -416,4 +416,67 @@ describe('DocumentsService', () => {
 
     expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
   });
+
+  it('delivery_note is not a tax document: no VAT charged and no exemption ground, regardless of issuer VAT registration', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { vatRegistered: true });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'delivery_note' }),
+    );
+
+    expect(draft.vatAmount).toBe(0);
+    expect(draft.vatExemptionGround).toBeNull();
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+  });
+
+  it('delivery_note may optionally reference an invoice, unlike credit/debit note it is not required', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+
+    const withoutReference = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'delivery_note' }),
+    );
+    expect(withoutReference.originalDocumentId).toBeNull();
+
+    const invoice = await documentsService.saveDraft(accountId, null, draftRequest());
+    const withReference = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'delivery_note', originalDocumentId: invoice.id }),
+    );
+    expect(withReference.originalDocumentId).toBe(invoice.id);
+  });
+
+  it('delivery_note transport fields round-trip through a save', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'IT' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'delivery_note',
+        deliveryDate: '2026-09-15',
+        transportReason: 'Vendita',
+        transportedAt: '2026-09-15T09:30:00.000Z',
+        carrierName: 'Bartolini SpA',
+        transportNote: '3 colli, 12 kg',
+      }),
+    );
+
+    expect(draft.deliveryDate).toBe('2026-09-15');
+    expect(draft.transportReason).toBe('Vendita');
+    expect(draft.transportedAt).toBe('2026-09-15T09:30:00.000Z');
+    expect(draft.carrierName).toBe('Bartolini SpA');
+    expect(draft.transportNote).toBe('3 colli, 12 kg');
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.transportReason).toBe('Vendita');
+    expect(refetched.transportedAt).toBe('2026-09-15T09:30:00.000Z');
+  });
 });

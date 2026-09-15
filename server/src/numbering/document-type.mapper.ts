@@ -7,6 +7,7 @@ const TO_PRISMA: Record<DocumentType, PrismaDocumentType> = {
   credit_note: PrismaDocumentType.CREDIT_NOTE,
   debit_note: PrismaDocumentType.DEBIT_NOTE,
   quote: PrismaDocumentType.QUOTE,
+  delivery_note: PrismaDocumentType.DELIVERY_NOTE,
 };
 
 const FROM_PRISMA: Record<PrismaDocumentType, DocumentType> = {
@@ -15,6 +16,7 @@ const FROM_PRISMA: Record<PrismaDocumentType, DocumentType> = {
   CREDIT_NOTE: 'credit_note',
   DEBIT_NOTE: 'debit_note',
   QUOTE: 'quote',
+  DELIVERY_NOTE: 'delivery_note',
 };
 
 export function toPrismaDocumentType(value: DocumentType): PrismaDocumentType {

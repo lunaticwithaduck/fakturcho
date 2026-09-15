@@ -109,10 +109,23 @@
         "taxEventAt": "Tax event date",
         "dueAt": "Due date"
       },
+      "delivery": {
+        "heading": "Delivery details",
+        "deliveryDateLabel": "Delivery date",
+        "transportedAtLabel": "Transport date and time",
+        "transportReasonLabel": "Transport reason",
+        "transportReasonPlaceholder": "Select reason",
+        "carrierNameLabel": "Carrier",
+        "transportNoteLabel": "Transport details"
+      },
       "originalDocument": {
         "label": "Original document",
         "placeholder": "Select document",
         "noClient": "No client"
+      },
+      "deliveryReference": {
+        "label": "Related invoice",
+        "placeholder": "Select invoice"
       },
       "lineItems": {
         "heading": "Line items",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "The draft cannot be sent. Issue the document first.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Select the original document to continue.",
       "ISSUER_PROFILE_INCOMPLETE": "The issuer profile is incomplete. Fill in the company details to issue documents.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "A delivery note in this country needs its transport details filled in before it can be issued.",
       "VAT_GROUND_NOT_ALLOWED": "This VAT exemption ground is not allowed.",
       "CLIENT_EIK_DUPLICATE": "A client with this company ID already exists.",
       "SUBSCRIPTION_REQUIRED": "An active subscription is required.",

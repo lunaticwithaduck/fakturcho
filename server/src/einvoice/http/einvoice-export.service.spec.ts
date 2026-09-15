@@ -94,6 +94,19 @@ describe('EinvoiceExportService', () => {
       code: 'VALIDATION_FAILED',
     });
   });
+
+  it('rejects exporting a delivery_note document with a clean VALIDATION_FAILED domain error', async () => {
+    const deliveryNote: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      documentType: 'delivery_note',
+    };
+    const service = new EinvoiceExportService(stubDocumentsService(deliveryNote));
+
+    await expect(service.getXml('acc-1', deliveryNote.id)).rejects.toBeInstanceOf(DomainError);
+    await expect(service.getXml('acc-1', deliveryNote.id)).rejects.toMatchObject({
+      code: 'VALIDATION_FAILED',
+    });
+  });
 });
 
 describe('EinvoiceExportService — account scoping and lifecycle (real database)', () => {

@@ -109,10 +109,23 @@
         "taxEventAt": "Данъчно събитие",
         "dueAt": "Падеж"
       },
+      "delivery": {
+        "heading": "Данни за доставката",
+        "deliveryDateLabel": "Дата на доставка",
+        "transportedAtLabel": "Дата и час на транспорта",
+        "transportReasonLabel": "Основание за транспорта",
+        "transportReasonPlaceholder": "Изберете основание",
+        "carrierNameLabel": "Превозвач",
+        "transportNoteLabel": "Данни за транспорта"
+      },
       "originalDocument": {
         "label": "Оригинален документ",
         "placeholder": "Изберете документ",
         "noClient": "Без клиент"
+      },
+      "deliveryReference": {
+        "label": "Свързана фактура",
+        "placeholder": "Изберете фактура"
       },
       "lineItems": {
         "heading": "Артикули",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "Черновата не може да бъде изпратена. Издайте документа.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Изберете оригиналния документ, за да продължите.",
       "ISSUER_PROFILE_INCOMPLETE": "Профилът на издателя не е попълнен. Допълнете фирмените данни, за да издавате документи.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Стоковата разписка за тази държава изисква попълнени данни за транспорта, преди да бъде издадена.",
       "VAT_GROUND_NOT_ALLOWED": "Този избор на основание за неначисляване на ДДС не е разрешен.",
       "CLIENT_EIK_DUPLICATE": "Вече има клиент с този ЕИК.",
       "SUBSCRIPTION_REQUIRED": "Нужен е активен абонамент.",

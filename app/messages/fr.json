@@ -109,10 +109,23 @@
         "taxEventAt": "Date de livraison / prestation",
         "dueAt": "Date d'échéance"
       },
+      "delivery": {
+        "heading": "Détails de la livraison",
+        "deliveryDateLabel": "Date de livraison",
+        "transportedAtLabel": "Date et heure du transport",
+        "transportReasonLabel": "Motif du transport",
+        "transportReasonPlaceholder": "Sélectionner un motif",
+        "carrierNameLabel": "Transporteur",
+        "transportNoteLabel": "Détails du transport"
+      },
       "originalDocument": {
         "label": "Document d'origine",
         "placeholder": "Sélectionner un document",
         "noClient": "Aucun client"
+      },
+      "deliveryReference": {
+        "label": "Facture liée",
+        "placeholder": "Sélectionner une facture"
       },
       "lineItems": {
         "heading": "Lignes du document",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "Le brouillon ne peut pas être envoyé. Émettez d'abord le document.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Sélectionnez le document d'origine pour continuer.",
       "ISSUER_PROFILE_INCOMPLETE": "Le profil de l'émetteur est incomplet. Renseignez les informations de l'entreprise pour émettre des documents.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un bon de livraison pour ce pays nécessite que les informations de transport soient renseignées avant de pouvoir être émis.",
       "VAT_GROUND_NOT_ALLOWED": "Ce motif d'exonération de TVA n'est pas autorisé.",
       "CLIENT_EIK_DUPLICATE": "Un client avec ce numéro d'identification existe déjà.",
       "SUBSCRIPTION_REQUIRED": "Un abonnement actif est requis.",

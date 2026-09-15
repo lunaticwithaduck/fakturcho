@@ -1,3 +1,4 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
 import { escapeHtml, line } from './html-utils';
@@ -37,7 +38,7 @@ export function buildRecipientBlock(document: Document, locale: ClassicLocaleCon
 
 export function buildDatesBlock(
   document: Document,
-  isQuote: boolean,
+  documentType: DocumentType,
   locale: ClassicLocaleContext,
 ): string {
   const { labels } = locale;
@@ -45,11 +46,16 @@ export function buildDatesBlock(
     ? formatDateForLocale(document.issuedAt, locale.language)
     : '—';
   const rows = [`<div>${labels.issuedAtPrefix}${issuedAt}</div>`];
-  if (isQuote) {
+  if (documentType === 'quote') {
     const validUntil = document.validUntil
       ? formatDateForLocale(document.validUntil, locale.language)
       : '—';
     rows.push(`<div>${labels.validUntilPrefix}${validUntil}</div>`);
+  } else if (documentType === 'delivery_note') {
+    const deliveryDate = document.deliveryDate
+      ? formatDateForLocale(document.deliveryDate, locale.language)
+      : '—';
+    rows.push(`<div>${labels.deliveryDatePrefix}${deliveryDate}</div>`);
   } else {
     const taxEventAt = document.taxEventAt
       ? formatDateForLocale(document.taxEventAt, locale.language)

@@ -18,6 +18,11 @@ export interface ClassicLabels {
   issuedAtPrefix: string;
   taxEventPrefix: string;
   validUntilPrefix: string;
+  deliveryDatePrefix: string;
+  transportReasonPrefix: string;
+  transportedAtPrefix: string;
+  carrierNamePrefix: string;
+  transportNotePrefix: string;
   statusPaid: string;
   statusCancelled: string;
   phonePrefix: string;

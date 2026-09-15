@@ -109,10 +109,23 @@
         "taxEventAt": "Data di effettuazione",
         "dueAt": "Scadenza"
       },
+      "delivery": {
+        "heading": "Dati di consegna",
+        "deliveryDateLabel": "Data di consegna",
+        "transportedAtLabel": "Data e ora di inizio del trasporto",
+        "transportReasonLabel": "Causale del trasporto",
+        "transportReasonPlaceholder": "Seleziona la causale",
+        "carrierNameLabel": "Vettore",
+        "transportNoteLabel": "Dati del trasporto"
+      },
       "originalDocument": {
         "label": "Documento originale",
         "placeholder": "Seleziona documento",
         "noClient": "Nessun cliente"
+      },
+      "deliveryReference": {
+        "label": "Fattura collegata",
+        "placeholder": "Seleziona fattura"
       },
       "lineItems": {
         "heading": "Voci",
@@ -487,6 +500,7 @@
       "DOCUMENT_NOT_ISSUED": "La bozza non può essere inviata. Emettere prima il documento.",
       "ORIGINAL_DOCUMENT_REQUIRED": "Selezionare il documento originale per continuare.",
       "ISSUER_PROFILE_INCOMPLETE": "Il profilo azienda è incompleto. Completare i dati aziendali per emettere documenti.",
+      "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un documento di trasporto per questo paese richiede che i dati del trasporto siano compilati prima dell'emissione.",
       "VAT_GROUND_NOT_ALLOWED": "Questo motivo di esenzione IVA non è consentito.",
       "CLIENT_EIK_DUPLICATE": "Esiste già un cliente con questo codice fiscale.",
       "SUBSCRIPTION_REQUIRED": "È necessario un abbonamento attivo.",
