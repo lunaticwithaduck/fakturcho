@@ -89,7 +89,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-text">{title}</h1>
-        <DocumentStatusBadge status={document.status} />
+        <DocumentStatusBadge status={document.status} documentType={document.documentType} />
       </div>
 
       <DocumentActionBar

@@ -84,4 +84,21 @@ describe('IssuerProfileCompletenessHint', () => {
     );
     expect(screen.getByText(/Provincia/)).toBeTruthy();
   });
+
+  it('names the missing identifier field with the issuer country acronym', () => {
+    const plProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'PL',
+      addressLine: null,
+      street: 'ul. Testowa 1',
+      postcode: '00-001',
+      eik: null,
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerProfileCompletenessHint profile={plProfile} />
+      </NextIntlClientProvider>,
+    );
+    expect(screen.getByText(/NIP/)).toBeTruthy();
+  });
 });

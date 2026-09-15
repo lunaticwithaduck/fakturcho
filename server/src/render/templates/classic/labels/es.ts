@@ -1,4 +1,11 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
+
+// factura/factura proforma/factura rectificativa are feminine; "el
+// presupuesto" and "el albarán" are masculine.
+const ES_MASCULINE_TYPES = new Set<DocumentType>(['quote', 'delivery_note']);
+const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
+  ES_MASCULINE_TYPES.has(documentType) ? masculine : feminine;
 
 export const es: ClassicLabels = {
   companyIdLabel: 'NIF',
@@ -7,18 +14,18 @@ export const es: ClassicLabels = {
   molPrefix: 'Representante: ',
   issuedAtPrefix: 'Fecha de expedición: ',
   taxEventPrefix: 'Fecha de la operación: ',
-  validUntilPrefix: 'Válido hasta: ',
+  validUntilPrefix: () => 'Válido hasta: ', // only printed for quote (el presupuesto)
   deliveryDatePrefix: 'Fecha de entrega: ',
   transportReasonPrefix: 'Motivo del transporte: ',
   transportedAtPrefix: 'Fecha y hora del transporte: ',
   carrierNamePrefix: 'Transportista: ',
   transportNotePrefix: 'Detalles del transporte: ',
-  statusPaid: 'Estado: PAGADA',
-  statusCancelled: 'Estado: ANULADA',
+  statusPaid: (documentType) => agree(documentType, 'Estado: PAGADA', 'Estado: PAGADO'),
+  statusCancelled: (documentType) => agree(documentType, 'Estado: ANULADA', 'Estado: ANULADO'),
   phonePrefix: 'Teléfono: ',
   bicPrefix: 'BIC: ',
-  preparedByPrefix: 'Emitido por: ',
-  recipientSignaturePrefix: 'Recibí: ',
+  preparedByPrefix: (documentType) => agree(documentType, 'Emitida por: ', 'Emitido por: '),
+  recipientSignaturePrefix: () => 'Recibí: ', // fixed verb form, invariable
   colName: 'Descripción',
   colQuantity: 'Cantidad',
   colPrice: 'Precio',

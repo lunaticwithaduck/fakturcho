@@ -55,11 +55,15 @@ export const DOCUMENT_TYPE_LABELS_IT: Record<DocumentType, string> = {
   delivery_note: 'Documento di trasporto (DDT)',
 };
 
+// Both corrections print as "Faktura korygująca" on the document (art. 106j
+// ustawy o VAT — a nota debetowa is not a VAT document); the in-app label
+// carries the in plus/in minus qualifier so lists and the composer stay
+// distinguishable.
 export const DOCUMENT_TYPE_LABELS_PL: Record<DocumentType, string> = {
   invoice: 'Faktura',
   proforma: 'Faktura pro forma',
-  credit_note: 'Faktura korygująca',
-  debit_note: 'Nota debetowa',
+  credit_note: 'Faktura korygująca (in minus)',
+  debit_note: 'Faktura korygująca (in plus)',
   quote: 'Oferta',
   delivery_note: 'Dowód dostawy',
 };
@@ -191,11 +195,76 @@ const DOCUMENT_STATUS_LABELS_BY_LOCALE: Record<Locale, Record<DocumentStatus, st
   es: DOCUMENT_STATUS_LABELS_ES,
 };
 
-// paid/overdue/cancelled agree with the feminine document nouns (Rechnung,
-// facture, fattura, faktura, factură, factura are all feminine) except
-// German, whose predicate adjectives don't inflect for gender.
-export function getDocumentStatusLabel(status: DocumentStatus, locale: Locale): string {
-  return DOCUMENT_STATUS_LABELS_BY_LOCALE[locale][status];
+// The maps above agree with the feminine document nouns (Rechnung, facture,
+// fattura, faktura, factură, factura are all feminine) except German, whose
+// predicate adjectives don't inflect for gender. "un devis" (FR), "un
+// preventivo" (IT) and "el presupuesto" (ES) are masculine, and FR's "un
+// avoir" (credit_note) is too. The delivery note is masculine in FR, IT, ES and
+// PL, and RO's neuter "aviz" takes the masculine singular form — these override
+// maps supply that form when a documentType is given.
+const MASCULINE_DOCUMENT_TYPES_BY_LOCALE: Partial<Record<Locale, ReadonlySet<DocumentType>>> = {
+  fr: new Set(['credit_note', 'quote', 'delivery_note']),
+  it: new Set(['quote', 'delivery_note']),
+  es: new Set(['quote', 'delivery_note']),
+  pl: new Set(['delivery_note']),
+  ro: new Set(['delivery_note']),
+};
+
+const DOCUMENT_STATUS_LABELS_FR_MASCULINE: Partial<Record<DocumentStatus, string>> = {
+  sent: 'Émis',
+  paid: 'PAYÉ',
+  cancelled: 'ANNULÉ',
+};
+
+const DOCUMENT_STATUS_LABELS_IT_MASCULINE: Partial<Record<DocumentStatus, string>> = {
+  sent: 'Emesso',
+  paid: 'PAGATO',
+  overdue: 'SCADUTO',
+  cancelled: 'ANNULLATO',
+};
+
+const DOCUMENT_STATUS_LABELS_ES_MASCULINE: Partial<Record<DocumentStatus, string>> = {
+  sent: 'Emitido',
+  paid: 'PAGADO',
+  overdue: 'VENCIDO',
+  cancelled: 'ANULADO',
+};
+
+const DOCUMENT_STATUS_LABELS_PL_MASCULINE: Partial<Record<DocumentStatus, string>> = {
+  sent: 'Wystawiony',
+  overdue: 'ZALEGŁY',
+  cancelled: 'ANULOWANY',
+};
+
+const DOCUMENT_STATUS_LABELS_RO_MASCULINE: Partial<Record<DocumentStatus, string>> = {
+  sent: 'Emis',
+  paid: 'PLĂTIT',
+  overdue: 'RESTANT',
+  cancelled: 'ANULAT',
+};
+
+const MASCULINE_STATUS_LABELS_BY_LOCALE: Partial<
+  Record<Locale, Partial<Record<DocumentStatus, string>>>
+> = {
+  fr: DOCUMENT_STATUS_LABELS_FR_MASCULINE,
+  it: DOCUMENT_STATUS_LABELS_IT_MASCULINE,
+  es: DOCUMENT_STATUS_LABELS_ES_MASCULINE,
+  pl: DOCUMENT_STATUS_LABELS_PL_MASCULINE,
+  ro: DOCUMENT_STATUS_LABELS_RO_MASCULINE,
+};
+
+// documentType is optional because a generic context (e.g. a status filter
+// tab covering every type at once) has none to agree with — it falls back to
+// the locale's default (feminine, or German/Bulgarian's invariant) form.
+export function getDocumentStatusLabel(
+  status: DocumentStatus,
+  locale: Locale,
+  documentType?: DocumentType,
+): string {
+  const base = DOCUMENT_STATUS_LABELS_BY_LOCALE[locale][status];
+  if (!documentType) return base;
+  if (!MASCULINE_DOCUMENT_TYPES_BY_LOCALE[locale]?.has(documentType)) return base;
+  return MASCULINE_STATUS_LABELS_BY_LOCALE[locale]?.[status] ?? base;
 }
 
 export const SUBSCRIPTION_STATUSES = ['trialing', 'active', 'past_due', 'canceled'] as const;

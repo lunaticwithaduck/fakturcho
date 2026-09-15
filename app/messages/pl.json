@@ -87,7 +87,7 @@
       },
       "notDraft": {
         "title": "Edytować można tylko wersje robocze",
-        "description": "Ten dokument został już wystawiony i nie można go zmienić. Wystawiony dokument koryguje się fakturą korygującą lub notą debetową.",
+        "description": "Ten dokument został już wystawiony i nie można go zmienić. Wystawiony dokument koryguje się fakturą korygującą (in minus lub in plus) do dokumentu pierwotnego.",
         "action": "Przejdź do dokumentu"
       },
       "errors": {
@@ -333,7 +333,7 @@
     "emptyDescription": "Dodaj pierwszego klienta, aby móc go wybierać podczas tworzenia dokumentów.",
     "edit": "Edytuj",
     "delete": "Usuń",
-    "eikPrefix": "ID: {eik}",
+    "eikPrefix": "{label}: {eik}",
     "deleteToastTitle": "Klient usunięty",
     "deleteErrorTitle": "Nie udało się usunąć",
     "saveToastTitle": "Klient zapisany",
@@ -345,7 +345,6 @@
     "saving": "Zapisywanie...",
     "save": "Zapisz",
     "companyNameLabel": "Nazwa firmy",
-    "eikOrBulstatLabel": "Numer identyfikacyjny firmy",
     "vatNumberLabel": "Numer VAT",
     "addressLabel": "Adres",
     "streetLabel": "Ulica i numer",
@@ -408,7 +407,6 @@
     "companyFields": {
       "heading": "Dane firmy",
       "companyName": "Firma",
-      "eik": "Numer identyfikacyjny firmy / numer VAT",
       "mol": "Upoważniony reprezentant",
       "country": "Kraj",
       "addressLine": "Adres",
@@ -436,7 +434,6 @@
       "profileLink": "Przejdź do profilu wystawcy",
       "fields": {
         "companyName": "Firma",
-        "eik": "Numer identyfikacyjny firmy / numer VAT",
         "addressLine": "Adres",
         "street": "Ulica i numer",
         "postcode": "Kod pocztowy",
@@ -827,7 +824,7 @@
     "capabilities": {
       "heading": "Co możesz wystawiać",
       "items": [
-        "Faktury, faktury pro forma, faktury korygujące i noty debetowe, oferty oraz dowody dostawy.",
+        "Faktury, faktury pro forma, faktury korygujące, oferty oraz dowody dostawy.",
         "Ciągła numeracja — bez luk i powtórzeń.",
         "VAT zależny od kraju: lokalne stawki, zwolnienia i odwrotne obciążenie w transgranicznych transakcjach B2B, z weryfikacją numeru VAT klienta w systemie VIES na bieżąco.",
         "E-faktury zgodne z EN 16931 w formacie Twojego kraju — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gotowe do przesłania na krajową platformę (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) lub do wysyłki przez Peppol.",
@@ -854,7 +851,7 @@
       "items": [
         {
           "question": "Czym jest Fakturcho?",
-          "answer": "Aplikacja internetowa do wystawiania zgodnych z wymogami UE faktur, faktur pro forma, faktur korygujących, not debetowych, ofert i dowodów dostawy, z wbudowaną obsługą ustrukturyzowanych e-faktur — bez instalacji."
+          "answer": "Aplikacja internetowa do wystawiania zgodnych z wymogami UE faktur, faktur pro forma, faktur korygujących, ofert i dowodów dostawy, z wbudowaną obsługą ustrukturyzowanych e-faktur — bez instalacji."
         },
         {
           "question": "Ile to kosztuje?",
@@ -882,7 +879,7 @@
         },
         {
           "question": "Jak koryguje się wystawioną fakturę?",
-          "answer": "Wystawione dokumenty są niezmienne; korekty wprowadza się fakturą korygującą lub notą debetową do dokumentu pierwotnego."
+          "answer": "Wystawione dokumenty są niezmienne; korekty wprowadza się fakturą korygującą (in minus lub in plus) do dokumentu pierwotnego."
         },
         {
           "question": "Jak otrzymać plik PDF i e-fakturę XML?",
@@ -894,7 +891,7 @@
   "seo": {
     "home": {
       "title": "Fakturcho — faktury i e-faktury online dla firm z UE",
-      "description": "Wystawiaj faktury, faktury pro forma, faktury korygujące, noty debetowe i oferty zgodne z wymogami UE, z e-fakturami EN 16931 i Peppol. 0,10 € za dokument.",
+      "description": "Wystawiaj faktury, faktury pro forma, faktury korygujące, oferty i dowody dostawy zgodne z wymogami UE. E-faktury EN 16931 i Peppol. 0,10 € za dokument.",
       "ogTagline": "Faktury i e-faktury dla firm z UE"
     },
     "login": {

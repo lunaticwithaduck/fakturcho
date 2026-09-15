@@ -100,8 +100,8 @@ describe('RO country config — issuer fields and layout switches', () => {
     expect(ro.showOriginalStamp).toBe(false);
   });
 
-  it('uses CUI as the company id label and ro as the document language', () => {
-    expect(ro.companyIdLabel).toBe('CUI');
+  it('uses CUI/CIF as the company id label and ro as the document language', () => {
+    expect(ro.companyIdLabel).toBe('CUI/CIF');
     expect(ro.language).toBe('ro');
   });
 });

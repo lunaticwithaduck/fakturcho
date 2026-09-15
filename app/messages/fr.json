@@ -333,7 +333,7 @@
     "emptyDescription": "Ajoutez votre premier client pour pouvoir l'utiliser lors de la création de documents.",
     "edit": "Modifier",
     "delete": "Supprimer",
-    "eikPrefix": "N° d'identification : {eik}",
+    "eikPrefix": "{label} : {eik}",
     "deleteToastTitle": "Client supprimé",
     "deleteErrorTitle": "Échec de la suppression",
     "saveToastTitle": "Client enregistré",
@@ -345,7 +345,6 @@
     "saving": "Enregistrement...",
     "save": "Enregistrer",
     "companyNameLabel": "Raison sociale",
-    "eikOrBulstatLabel": "Numéro d'identification",
     "vatNumberLabel": "Numéro de TVA",
     "addressLabel": "Adresse",
     "streetLabel": "Rue et numéro",
@@ -408,7 +407,6 @@
     "companyFields": {
       "heading": "Informations de l'entreprise",
       "companyName": "Raison sociale",
-      "eik": "Numéro d'identification / numéro de TVA",
       "mol": "Représentant légal",
       "country": "Pays",
       "addressLine": "Adresse",
@@ -436,7 +434,6 @@
       "profileLink": "Aller au profil de l'émetteur",
       "fields": {
         "companyName": "Raison sociale",
-        "eik": "Numéro d'identification / numéro de TVA",
         "addressLine": "Adresse",
         "street": "Rue et numéro",
         "postcode": "Code postal",

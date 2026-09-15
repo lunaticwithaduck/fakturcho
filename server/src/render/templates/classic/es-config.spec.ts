@@ -14,8 +14,8 @@ describe('ES_CONFIG', () => {
     expect(config.defaultVatRateBp).toBe(2100);
   });
 
-  it('labels the primary identifier NIF', () => {
-    expect(config.companyIdLabel).toBe('NIF');
+  it('labels the primary identifier NIF/CIF', () => {
+    expect(config.companyIdLabel).toBe('NIF/CIF');
   });
 
   it('accepts official-shape VAT numbers for individuals, foreign residents and entities', () => {

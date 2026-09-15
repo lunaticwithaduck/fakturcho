@@ -150,6 +150,23 @@ describe('IssuerCompanyFields', () => {
     expect((screen.getByLabelText('Provincia') as HTMLInputElement).required).toBe(false);
   });
 
+  it('labels the identifier field NIF/CIF for an ES issuer and CUI/CIF for a RO issuer', () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <IssuerCompanyFields values={ES_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+    expect(screen.getByLabelText('NIF/CIF')).toBeTruthy();
+    cleanup();
+
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <IssuerCompanyFields values={RO_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+    expect(screen.getByLabelText('CUI/CIF')).toBeTruthy();
+  });
+
   it('calls onChange with the county/region key when the field is edited', () => {
     const onChange = vi.fn();
     render(

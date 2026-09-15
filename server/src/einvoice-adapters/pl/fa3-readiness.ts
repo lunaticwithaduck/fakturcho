@@ -59,5 +59,19 @@ export function checkFa3Readiness(document: DocumentDto): Fa3Readiness {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentLineItems);
   }
 
+  const isCorrection =
+    document.documentType === 'credit_note' || document.documentType === 'debit_note';
+  if (isCorrection) {
+    if (!document.originalDocumentId) {
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentOriginalDocumentId);
+    } else if (
+      !document.originalDocument ||
+      document.originalDocument.number === null ||
+      !document.originalDocument.issuedAt
+    ) {
+      missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentOriginalDocumentUnresolved);
+    }
+  }
+
   return { ready: missingFields.length === 0, missingFields };
 }

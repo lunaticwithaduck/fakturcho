@@ -21,7 +21,7 @@ export const ES_CONFIG: CountryConfig = {
     { rateBp: 0, label: '0%' },
   ],
   defaultVatRateBp: 2100,
-  companyIdLabel: 'NIF',
+  companyIdLabel: 'NIF/CIF',
   vatNumberPattern: ES_VAT_NUMBER_PATTERN,
   exemptionGrounds: [
     'artículo 20.Uno.2º de la Ley 37/1992 del IVA',

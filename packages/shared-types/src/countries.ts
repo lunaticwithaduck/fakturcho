@@ -56,7 +56,7 @@ const BG_CONFIG: CountryConfig = {
     { rateBp: 0, label: '0%' },
   ],
   defaultVatRateBp: 2000,
-  companyIdLabel: 'ЕИК',
+  companyIdLabel: 'ЕИК / Булстат',
   vatNumberPattern: /^BG\d{9,10}$/,
   exemptionGrounds: [...VAT_EXEMPTION_GROUNDS, DEFAULT_EXEMPTION_GROUND],
   defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,

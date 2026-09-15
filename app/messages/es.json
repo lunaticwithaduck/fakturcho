@@ -247,7 +247,7 @@
     }
   },
   "billing": {
-    "pageTitle": "Saldo",
+    "pageTitle": "Saldo y suscripción",
     "balance": {
       "label": "Saldo disponible",
       "remaining": "{count, plural, one {Queda 1 documento} other {Quedan # documentos}}"
@@ -333,7 +333,7 @@
     "emptyDescription": "Añada su primer cliente para usarlo al crear documentos.",
     "edit": "Editar",
     "delete": "Eliminar",
-    "eikPrefix": "ID fiscal: {eik}",
+    "eikPrefix": "{label}: {eik}",
     "deleteToastTitle": "Cliente eliminado",
     "deleteErrorTitle": "Error al eliminar",
     "saveToastTitle": "Cliente guardado",
@@ -345,7 +345,6 @@
     "saving": "Guardando...",
     "save": "Guardar",
     "companyNameLabel": "Nombre de la empresa",
-    "eikOrBulstatLabel": "Identificador fiscal",
     "vatNumberLabel": "NIF-IVA",
     "addressLabel": "Dirección",
     "streetLabel": "Calle y número",
@@ -408,7 +407,6 @@
     "companyFields": {
       "heading": "Datos de la empresa",
       "companyName": "Empresa",
-      "eik": "Identificador fiscal / NIF-IVA",
       "mol": "Representante legal",
       "country": "País",
       "addressLine": "Dirección",
@@ -436,7 +434,6 @@
       "profileLink": "Ir al perfil del emisor",
       "fields": {
         "companyName": "Empresa",
-        "eik": "Identificador fiscal / NIF-IVA",
         "addressLine": "Dirección",
         "street": "Calle y número",
         "postcode": "Código postal",

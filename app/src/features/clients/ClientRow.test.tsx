@@ -51,11 +51,25 @@ describe('ClientRow', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByText('EIK: 123456789 · office@acme.bg')).toBeTruthy();
+    expect(screen.getByText('ЕИК / Булстат: 123456789 · office@acme.bg')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Edit' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeTruthy();
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+
+  it('shows the client-country identifier acronym rather than the viewer-locale generic label', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <ClientRow
+          client={{ ...client, country: 'FR', eik: '552100554' }}
+          onEdit={vi.fn()}
+          onDelete={vi.fn()}
+        />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByText('SIREN: 552100554 · office@acme.bg')).toBeTruthy();
   });
 });

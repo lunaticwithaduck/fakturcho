@@ -41,4 +41,13 @@ describe('buildDocumentSubject', () => {
     );
     expect(buildDocumentSubject('de', 'invoice', null)).toBe('Rechnung');
   });
+
+  it('distinguishes the Polish correction types with an in minus/in plus qualifier — both are legally faktura korygująca', () => {
+    expect(buildDocumentSubject('pl', 'credit_note', '0000000002')).toBe(
+      'Faktura korygująca (in minus) nr 0000000002',
+    );
+    expect(buildDocumentSubject('pl', 'debit_note', '0000000003')).toBe(
+      'Faktura korygująca (in plus) nr 0000000003',
+    );
+  });
 });

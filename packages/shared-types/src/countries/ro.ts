@@ -36,14 +36,14 @@ export const RO_CONFIG: CountryConfig = {
     { rateBp: 0, label: '0%' },
   ],
   defaultVatRateBp: 2100,
-  companyIdLabel: 'CUI',
+  companyIdLabel: 'CUI/CIF',
   vatNumberPattern: /^RO\d{2,10}$/i,
   exemptionGrounds: RO_VAT_EXEMPTION_GROUNDS,
   defaultExemptionGround: RO_DEFAULT_EXEMPTION_GROUND,
   identifiers: [
     {
       key: 'regCom',
-      label: 'Nr. de ordine în Registrul Comerțului',
+      label: 'Nr. Reg. Com.',
       pattern: /^[JFC](\d{13}|\d{1,2}\/\d{1,6}\/\d{4})$/,
       required: false,
     },

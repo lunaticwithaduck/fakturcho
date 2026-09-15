@@ -50,7 +50,7 @@ export function buildDatesBlock(
     const validUntil = document.validUntil
       ? formatDateForLocale(document.validUntil, locale.language)
       : '—';
-    rows.push(`<div>${labels.validUntilPrefix}${validUntil}</div>`);
+    rows.push(`<div>${labels.validUntilPrefix(documentType)}${validUntil}</div>`);
   } else if (documentType === 'delivery_note') {
     const deliveryDate = document.deliveryDate
       ? formatDateForLocale(document.deliveryDate, locale.language)
@@ -62,12 +62,17 @@ export function buildDatesBlock(
       : '—';
     rows.push(`<div>${labels.taxEventPrefix}${taxEventAt}</div>`);
   }
-  rows.push(buildStatusMarker(document.status, labels));
+  rows.push(buildStatusMarker(document.status, documentType, labels));
   return `<div class="dates">${rows.join('')}</div>`;
 }
 
-function buildStatusMarker(status: string, labels: ClassicLabels): string {
-  if (status === 'PAID') return `<div class="status">${labels.statusPaid}</div>`;
-  if (status === 'CANCELLED') return `<div class="status">${labels.statusCancelled}</div>`;
+function buildStatusMarker(
+  status: string,
+  documentType: DocumentType,
+  labels: ClassicLabels,
+): string {
+  if (status === 'PAID') return `<div class="status">${labels.statusPaid(documentType)}</div>`;
+  if (status === 'CANCELLED')
+    return `<div class="status">${labels.statusCancelled(documentType)}</div>`;
   return '';
 }

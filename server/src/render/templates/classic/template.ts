@@ -61,7 +61,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   }
   ${buildMentionsBlock({ document, lineItems, locale })}
   ${buildIssuerBlock(document, locale)}
-  ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, locale) : ''}
+  ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, documentType, locale) : ''}
 </body>
 </html>`;
 }

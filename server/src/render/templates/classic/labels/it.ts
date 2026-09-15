@@ -1,4 +1,11 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
+
+// Every document noun is feminine (fattura, nota di credito/debito) except
+// "il preventivo" and "il documento di trasporto".
+const IT_MASCULINE_TYPES = new Set<DocumentType>(['quote', 'delivery_note']);
+const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
+  IT_MASCULINE_TYPES.has(documentType) ? masculine : feminine;
 
 export const it: ClassicLabels = {
   companyIdLabel: 'Codice fiscale',
@@ -7,18 +14,18 @@ export const it: ClassicLabels = {
   molPrefix: 'Rappresentante: ',
   issuedAtPrefix: 'Data di emissione: ',
   taxEventPrefix: 'Data di effettuazione: ',
-  validUntilPrefix: 'Valida fino al: ',
+  validUntilPrefix: (documentType) => agree(documentType, 'Valida fino al: ', 'Valido fino al: '),
   deliveryDatePrefix: 'Data di consegna: ',
   transportReasonPrefix: 'Causale del trasporto: ',
   transportedAtPrefix: 'Data e ora di inizio del trasporto: ',
   carrierNamePrefix: 'Vettore: ',
   transportNotePrefix: 'Dati del trasporto: ',
-  statusPaid: 'Stato: PAGATA',
-  statusCancelled: 'Stato: ANNULLATA',
+  statusPaid: (documentType) => agree(documentType, 'Stato: PAGATA', 'Stato: PAGATO'),
+  statusCancelled: (documentType) => agree(documentType, 'Stato: ANNULLATA', 'Stato: ANNULLATO'),
   phonePrefix: 'Tel.: ',
   bicPrefix: 'BIC: ',
-  preparedByPrefix: 'Emessa da: ',
-  recipientSignaturePrefix: 'Ricevuta da: ',
+  preparedByPrefix: (documentType) => agree(documentType, 'Emessa da: ', 'Emesso da: '),
+  recipientSignaturePrefix: (documentType) => agree(documentType, 'Ricevuta da: ', 'Ricevuto da: '),
   colName: 'Descrizione',
   colQuantity: 'Quantità',
   colPrice: 'Prezzo',

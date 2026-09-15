@@ -345,7 +345,6 @@
     "saving": "Запазване...",
     "save": "Запази",
     "companyNameLabel": "Фирма",
-    "eikOrBulstatLabel": "ЕИК / Булстат",
     "vatNumberLabel": "ДДС номер",
     "addressLabel": "Адрес",
     "streetLabel": "Улица и номер",
@@ -408,7 +407,6 @@
     "companyFields": {
       "heading": "Фирмени данни",
       "companyName": "Фирма",
-      "eik": "ЕИК / Булстат",
       "mol": "МОЛ",
       "country": "Държава",
       "addressLine": "Адрес",
@@ -436,7 +434,6 @@
       "profileLink": "Към профила на издателя",
       "fields": {
         "companyName": "Фирма",
-        "eik": "ЕИК / Булстат",
         "addressLine": "Адрес",
         "street": "Улица и номер",
         "postcode": "Пощенски код",

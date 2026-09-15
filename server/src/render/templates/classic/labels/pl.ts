@@ -1,4 +1,9 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
+
+// faktura/oferta/nota are feminine; the delivery note's "dowód" is masculine.
+const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
+  documentType === 'delivery_note' ? masculine : feminine;
 
 export const pl: ClassicLabels = {
   companyIdLabel: 'NIP',
@@ -7,18 +12,18 @@ export const pl: ClassicLabels = {
   molPrefix: 'Reprezentant: ',
   issuedAtPrefix: 'Data wystawienia: ',
   taxEventPrefix: 'Data sprzedaży: ',
-  validUntilPrefix: 'Ważna do: ',
+  validUntilPrefix: () => 'Ważna do: ',
   deliveryDatePrefix: 'Data dostawy: ',
   transportReasonPrefix: 'Powód transportu: ',
   transportedAtPrefix: 'Data i godzina transportu: ',
   carrierNamePrefix: 'Przewoźnik: ',
   transportNotePrefix: 'Szczegóły transportu: ',
-  statusPaid: 'Status: ZAPŁACONO',
-  statusCancelled: 'Status: ANULOWANA',
+  statusPaid: () => 'Status: ZAPŁACONO',
+  statusCancelled: (documentType) => agree(documentType, 'Status: ANULOWANA', 'Status: ANULOWANY'),
   phonePrefix: 'Telefon: ',
   bicPrefix: 'BIC: ',
-  preparedByPrefix: 'Wystawił: ',
-  recipientSignaturePrefix: 'Odebrał: ',
+  preparedByPrefix: () => 'Wystawił: ',
+  recipientSignaturePrefix: () => 'Odebrał: ',
   colName: 'Nazwa',
   colQuantity: 'Ilość',
   colPrice: 'Cena',
@@ -33,11 +38,13 @@ export const pl: ClassicLabels = {
   exemptionPrefix: 'Podstawa zwolnienia: ',
   originalMarker: '',
   draftLabel: 'Wersja robocza',
+  // art. 106j ustawy o VAT: any correction of an invoiced amount, up or down, is
+  // a faktura korygująca — a nota debetowa is not a VAT document.
   documentType: {
     invoice: 'Faktura',
     proforma: 'Faktura pro forma',
     credit_note: 'Faktura korygująca',
-    debit_note: 'Nota debetowa',
+    debit_note: 'Faktura korygująca',
     quote: 'Oferta',
     delivery_note: 'Dowód dostawy',
   },

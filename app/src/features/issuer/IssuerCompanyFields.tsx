@@ -47,7 +47,7 @@ export function IssuerCompanyFields({
           ))}
         </Select>
         <Input
-          label={values.country === 'BG' ? t('companyFields.eik') : companyIdLabel}
+          label={companyIdLabel}
           required={isRequired('eik')}
           value={values.eik}
           onChange={(event) => onChange('eik', event.target.value)}

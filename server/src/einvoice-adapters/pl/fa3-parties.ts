@@ -63,6 +63,8 @@ export function buyerParty(recipient: RecipientSnapshotDto): string {
     (recipient.email
       ? `<DaneKontaktowe>${textEl('Email', recipient.email)}</DaneKontaktowe>`
       : '') +
+    textEl('JST', '2') +
+    textEl('GV', '2') +
     '</Podmiot2>'
   );
 }

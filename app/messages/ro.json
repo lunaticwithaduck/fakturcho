@@ -247,7 +247,7 @@
     }
   },
   "billing": {
-    "pageTitle": "Credite",
+    "pageTitle": "Sold și abonament",
     "balance": {
       "label": "Sold",
       "remaining": "{count, plural, one {1 document rămas} few {# documente rămase} other {# de documente rămase}}"
@@ -328,12 +328,12 @@
     "pageTitle": "Clienți",
     "newClient": "Client nou",
     "searchLabel": "Căutare",
-    "searchPlaceholder": "Căutare după firmă sau cod fiscal",
+    "searchPlaceholder": "Căutare după firmă sau cod de identificare",
     "emptyTitle": "Încă nu aveți clienți",
     "emptyDescription": "Adăugați primul client pentru a-l folosi la întocmirea documentelor.",
     "edit": "Editează",
     "delete": "Șterge",
-    "eikPrefix": "Cod fiscal: {eik}",
+    "eikPrefix": "{label}: {eik}",
     "deleteToastTitle": "Clientul a fost șters",
     "deleteErrorTitle": "Ștergerea a eșuat",
     "saveToastTitle": "Clientul a fost salvat",
@@ -345,7 +345,6 @@
     "saving": "Se salvează...",
     "save": "Salvează",
     "companyNameLabel": "Denumire firmă",
-    "eikOrBulstatLabel": "Cod de identificare fiscală",
     "vatNumberLabel": "Cod TVA",
     "addressLabel": "Adresă",
     "streetLabel": "Stradă și număr",
@@ -408,7 +407,6 @@
     "companyFields": {
       "heading": "Date firmă",
       "companyName": "Firmă",
-      "eik": "Cod de identificare fiscală / Cod TVA",
       "mol": "Reprezentant legal",
       "country": "Țară",
       "addressLine": "Adresă",
@@ -436,7 +434,6 @@
       "profileLink": "Mergi la profilul emitentului",
       "fields": {
         "companyName": "Firmă",
-        "eik": "Cod de identificare fiscală / Cod TVA",
         "addressLine": "Adresă",
         "street": "Stradă și număr",
         "postcode": "Cod poștal",
@@ -485,7 +482,7 @@
       "documents": "Documente",
       "clients": "Clienți",
       "catalogue": "Catalog",
-      "billing": "Credite",
+      "billing": "Sold",
       "profile": "Profil"
     },
     "confirmDialog": {

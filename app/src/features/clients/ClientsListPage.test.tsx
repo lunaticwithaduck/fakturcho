@@ -42,7 +42,7 @@ describe('ClientsListPage', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Clients' })).toBeTruthy();
-    expect(screen.getByPlaceholderText('Search by company or EIK')).toBeTruthy();
+    expect(screen.getByPlaceholderText('Search by company or ID')).toBeTruthy();
     expect(screen.getByText('No clients yet')).toBeTruthy();
     expect(consoleError).not.toHaveBeenCalled();
 

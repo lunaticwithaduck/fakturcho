@@ -45,8 +45,8 @@ const DOCUMENT_LABELS: Record<Locale, Record<DocumentType, string>> = {
   pl: {
     invoice: 'Faktura',
     proforma: 'Faktura pro forma',
-    credit_note: 'Faktura korygująca',
-    debit_note: 'Nota debetowa',
+    credit_note: 'Faktura korygująca (in minus)',
+    debit_note: 'Faktura korygująca (in plus)',
     quote: 'Oferta',
     delivery_note: 'Dowód dostawy',
   },
