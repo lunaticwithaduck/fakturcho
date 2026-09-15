@@ -5,6 +5,7 @@ import { interpolate } from '@app/features/legal/interpolate';
 import { LegalFooter } from '@app/features/legal/LegalFooter';
 import { formatMoneyForLocale } from '@app/features/shared/format';
 import brandIcon from '@app/features/shell/brand-icon.png';
+import { LanguageSwitcher } from '@app/i18n/LanguageSwitcher';
 import { Button, Card } from '@design/components';
 import {
   type Locale,
@@ -27,9 +28,10 @@ const sameTierPerDocument = tierPerDocumentCents.every(
 
 interface LandingPageProps {
   locale?: Locale;
+  enEnabled?: boolean;
 }
 
-export function LandingPage({ locale = 'bg' }: LandingPageProps) {
+export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPageProps) {
   const content = getMarketingContent(locale);
   const countries = getCountriesContent();
   const pricing = pricingForLocale(locale);
@@ -44,13 +46,16 @@ export function LandingPage({ locale = 'bg' }: LandingPageProps) {
           <Image src={brandIcon} alt="" className="h-9 w-9" priority />
           <span className="text-lg font-bold text-text">{content.brand}</span>
         </Link>
-        <div className="flex items-center gap-3">
-          <Button variant="secondary" size="sm" asChild>
-            <Link href={loginHref}>{content.nav.login}</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href={signupHref}>{content.nav.signup}</Link>
-          </Button>
+        <div className="flex flex-wrap items-center gap-4">
+          <LanguageSwitcher locale={locale} currentPath={homeHref} enabled={enEnabled} />
+          <div className="flex items-center gap-3">
+            <Button variant="secondary" size="sm" asChild>
+              <Link href={loginHref}>{content.nav.login}</Link>
+            </Button>
+            <Button size="sm" asChild>
+              <Link href={signupHref}>{content.nav.signup}</Link>
+            </Button>
+          </div>
         </div>
       </header>
 

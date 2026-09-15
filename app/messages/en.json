@@ -870,5 +870,10 @@
         }
       ]
     }
+  },
+  "languageSwitcher": {
+    "navLabel": "Language",
+    "bgFull": "Bulgarian",
+    "enFull": "English"
   }
 }

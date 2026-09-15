@@ -24,6 +24,9 @@ export default function EnglishPrivacyPage() {
       intro={doc.intro}
       sections={doc.sections}
       lastUpdatedLabel={doc.lastUpdatedLabel}
+      locale="en"
+      currentPath="/en/privacy"
+      enEnabled
     />
   );
 }
