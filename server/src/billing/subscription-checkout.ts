@@ -72,6 +72,7 @@ export async function createSubscriptionCheckout(
     revolutCustomerId: customerId,
     revolutSetupOrderId: subscription.setupOrderId,
     checkoutUrl: setupOrder.checkoutUrl,
+    checkoutStartedAt: new Date(),
     planId: planVariationId,
     currentPeriodEnd: null,
   };

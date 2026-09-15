@@ -351,6 +351,7 @@ model Subscription {
   revolutCustomerId     String?
   revolutSetupOrderId   String?
   checkoutUrl           String?
+  checkoutStartedAt     DateTime?
   planId                String?
   currentPeriodEnd      DateTime?
   createdAt             DateTime           @default(now())
