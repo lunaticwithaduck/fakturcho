@@ -1,13 +1,12 @@
 import type { Logger } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
 import { describeRevolutFailure, RevolutApiError, toDomainError } from './revolut-errors';
-import type { RevolutSubscription } from './revolut-types';
+import { getRevolutSubscriptionOrNull } from './revolut-get-subscription';
 
 const API_VERSION = '2024-09-01';
 
-// distinct from RevolutService.getSubscription: callers here need to tell "gone" apart
-// from other failures, so a 404 comes back as null instead of a thrown error.
-export async function getRevolutSubscriptionOrNull(
+// the renewal date lives on the subscription's current cycle, not the subscription itself
+export async function getRevolutCurrentPeriodEnd(
   input: {
     baseUrl: string;
     apiKey: string;
@@ -16,7 +15,10 @@ export async function getRevolutSubscriptionOrNull(
   },
   subscriptionId: string,
   logger: Logger,
-): Promise<RevolutSubscription | null> {
+): Promise<Date | null> {
+  const subscription = await getRevolutSubscriptionOrNull(input, subscriptionId, logger);
+  if (!subscription?.currentCycleId) return null;
+
   const [blocker] = input.blocking;
   if (blocker !== undefined) {
     throw new DomainError('CHECKOUT_NOT_CONFIGURED', blocker, {
@@ -24,9 +26,10 @@ export async function getRevolutSubscriptionOrNull(
     });
   }
 
+  const path = `/subscriptions/${subscriptionId}/cycles/${subscription.currentCycleId}`;
   let response: Response;
   try {
-    response = await fetch(`${input.baseUrl}/subscriptions/${subscriptionId}`, {
+    response = await fetch(`${input.baseUrl}${path}`, {
       headers: {
         Authorization: `Bearer ${input.apiKey}`,
         'Revolut-Api-Version': API_VERSION,
@@ -35,12 +38,10 @@ export async function getRevolutSubscriptionOrNull(
   } catch (error) {
     const failure = describeRevolutFailure(error);
     logger.error(
-      `Revolut request to fetch subscription ${subscriptionId} failed: ${failure.providerDetail}`,
+      `Revolut request to fetch subscription cycle ${path} failed: ${failure.providerDetail}`,
     );
     throw toDomainError(failure);
   }
-
-  if (response.status === 404) return null;
 
   if (!response.ok) {
     const detail = await response.text();
@@ -48,23 +49,11 @@ export async function getRevolutSubscriptionOrNull(
       new RevolutApiError(response.status, response.statusText, detail),
     );
     logger.error(
-      `Revolut rejected fetch subscription ${subscriptionId}: ${response.status} — ${detail}`,
+      `Revolut rejected fetch subscription cycle ${path}: ${response.status} — ${detail}`,
     );
     throw toDomainError(failure);
   }
 
-  const subscription = (await response.json()) as {
-    id: string;
-    state: string;
-    setup_order_id?: string;
-    customer_id: string;
-    current_cycle_id?: string;
-  };
-  return {
-    id: subscription.id,
-    state: subscription.state,
-    setupOrderId: subscription.setup_order_id ?? null,
-    customerId: subscription.customer_id,
-    currentCycleId: subscription.current_cycle_id ?? null,
-  };
+  const cycle = (await response.json()) as { id: string; state: string; end_date?: string };
+  return cycle.end_date ? new Date(cycle.end_date) : null;
 }

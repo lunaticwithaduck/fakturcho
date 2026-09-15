@@ -11,6 +11,7 @@ describe('BillingService', () => {
     db = await startTestDatabase();
     process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'plan_var_test';
     process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_10 = 'plan_var_test_10';
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25 = 'plan_var_test_25';
   }, 120_000);
 
   afterAll(async () => {
@@ -127,6 +128,7 @@ describe('BillingService', () => {
       code: 'CHECKOUT_NOT_CONFIGURED',
       message: expect.stringContaining('REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25'),
     });
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_25 = 'plan_var_test_25';
   });
 
   it('checking out a different tier replaces the plan id and cancels the previous Revolut subscription', async () => {
@@ -293,5 +295,145 @@ describe('BillingService', () => {
     });
     expect(stored.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_legacy');
     expect(stored.revolutSetupOrderId).toBe('ord_legacy');
+  });
+
+  it('upgrading an ACTIVE subscription opens a separate pending checkout and leaves the active plan untouched', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: {
+        accountId: account.id,
+        status: 'ACTIVE',
+        planId: 'plan_var_test',
+        revolutSubscriptionId: 'sub_active',
+        revolutCustomerId: 'cus_active',
+        currentPeriodEnd: new Date('2026-10-01T00:00:00.000Z'),
+      },
+    });
+
+    const createSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_upgrade',
+      state: 'pending',
+      setupOrderId: 'ord_upgrade',
+      customerId: 'cus_active',
+    });
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_upgrade',
+      state: 'pending',
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: 'https://checkout.revolut.com/pay/ord_upgrade',
+    });
+    const cancelSubscription = vi.fn();
+    const createCustomer = vi.fn();
+    const revolut = {
+      createSubscription,
+      getOrder,
+      cancelSubscription,
+      createCustomer,
+    } as unknown as RevolutService;
+
+    const result = await serviceWith(revolut).createCheckout(account.id, 'sub10');
+    expect(result.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_upgrade');
+    expect(cancelSubscription).not.toHaveBeenCalled();
+    expect(createCustomer).not.toHaveBeenCalled();
+    expect(createSubscription).toHaveBeenCalledWith(
+      expect.objectContaining({ planVariationId: 'plan_var_test_10', customerId: 'cus_active' }),
+    );
+
+    const stored = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(stored.status).toBe('ACTIVE');
+    expect(stored.planId).toBe('plan_var_test');
+    expect(stored.revolutSubscriptionId).toBe('sub_active');
+    expect(stored.currentPeriodEnd).toEqual(new Date('2026-10-01T00:00:00.000Z'));
+    expect(stored.pendingPlanId).toBe('plan_var_test_10');
+    expect(stored.pendingRevolutSubscriptionId).toBe('sub_upgrade');
+    expect(stored.pendingCheckoutUrl).toBe('https://checkout.revolut.com/pay/ord_upgrade');
+  });
+
+  it('reopening the same pending upgrade resumes it without creating another Revolut subscription', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: {
+        accountId: account.id,
+        status: 'PAST_DUE',
+        planId: 'plan_var_test',
+        revolutSubscriptionId: 'sub_pastdue',
+        revolutCustomerId: 'cus_pastdue',
+        pendingPlanId: 'plan_var_test_10',
+        pendingRevolutSubscriptionId: 'sub_upgrade_2',
+        pendingRevolutSetupOrderId: 'ord_upgrade_2',
+        pendingCheckoutUrl: 'https://checkout.revolut.com/pay/ord_upgrade_2',
+        pendingCheckoutStartedAt: new Date(),
+      },
+    });
+
+    const createSubscription = vi.fn();
+    const cancelSubscription = vi.fn();
+    const revolut = { createSubscription, cancelSubscription } as unknown as RevolutService;
+
+    const result = await serviceWith(revolut).createCheckout(account.id, 'sub10');
+    expect(result.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_upgrade_2');
+    expect(createSubscription).not.toHaveBeenCalled();
+    expect(cancelSubscription).not.toHaveBeenCalled();
+  });
+
+  it('choosing another tier while an upgrade is pending cancels only the abandoned pending choice', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.user.create({
+      data: {
+        id: `usr_reup_${account.id}`,
+        name: 'Тест Тестов',
+        email: `reup_${account.id}@example.com`,
+        accountId: account.id,
+      },
+    });
+    await db.prisma.subscription.create({
+      data: {
+        accountId: account.id,
+        status: 'ACTIVE',
+        planId: 'plan_var_test',
+        revolutSubscriptionId: 'sub_active_2',
+        revolutCustomerId: 'cus_active_2',
+        pendingPlanId: 'plan_var_test_10',
+        pendingRevolutSubscriptionId: 'sub_upgrade_old',
+        pendingRevolutSetupOrderId: 'ord_upgrade_old',
+        pendingCheckoutUrl: 'https://checkout.revolut.com/pay/ord_upgrade_old',
+        pendingCheckoutStartedAt: new Date(),
+      },
+    });
+
+    const createSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_upgrade_25',
+      state: 'pending',
+      setupOrderId: 'ord_upgrade_25',
+      customerId: 'cus_active_2',
+    });
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_upgrade_25',
+      state: 'pending',
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: 'https://checkout.revolut.com/pay/ord_upgrade_25',
+    });
+    const cancelSubscription = vi.fn().mockResolvedValue(undefined);
+    const revolut = {
+      createSubscription,
+      getOrder,
+      cancelSubscription,
+    } as unknown as RevolutService;
+
+    const result = await serviceWith(revolut).createCheckout(account.id, 'sub25');
+    expect(result.checkoutUrl).toBe('https://checkout.revolut.com/pay/ord_upgrade_25');
+    expect(cancelSubscription).toHaveBeenCalledTimes(1);
+    expect(cancelSubscription).toHaveBeenCalledWith('sub_upgrade_old');
+
+    const stored = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(stored.revolutSubscriptionId).toBe('sub_active_2');
+    expect(stored.pendingPlanId).toBe('plan_var_test_25');
+    expect(stored.pendingRevolutSubscriptionId).toBe('sub_upgrade_25');
   });
 });

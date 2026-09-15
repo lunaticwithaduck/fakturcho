@@ -165,4 +165,171 @@ describe('subscription webhook status mapping', () => {
     });
     expect(getSubscription).not.toHaveBeenCalled();
   });
+
+  it('SUBSCRIPTION_INITIATED also stores the current cycle end date', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: { accountId: account.id, status: 'TRIALING', revolutSubscriptionId: 'sub_period' },
+    });
+
+    const getSubscription = vi.fn().mockResolvedValue({
+      id: 'sub_period',
+      state: 'active',
+      setupOrderId: null,
+      customerId: 'c',
+    });
+    const getCurrentPeriodEnd = vi.fn().mockResolvedValue(new Date('2026-10-15T00:00:00.000Z'));
+    const revolut = { getSubscription, getCurrentPeriodEnd } as unknown as RevolutService;
+
+    await new BillingService(db.prisma as unknown as PrismaService, revolut).handleWebhookEvent({
+      event: 'SUBSCRIPTION_INITIATED',
+      orderId: null,
+      subscriptionId: 'sub_period',
+    });
+
+    const updated = await db.prisma.subscription.findUniqueOrThrow({
+      where: { accountId: account.id },
+    });
+    expect(updated.status).toBe(SubscriptionStatus.ACTIVE);
+    expect(updated.currentPeriodEnd).toEqual(new Date('2026-10-15T00:00:00.000Z'));
+    expect(getCurrentPeriodEnd).toHaveBeenCalledWith('sub_period');
+  });
+});
+
+describe('pending upgrade activation', () => {
+  let db: TestDatabase;
+
+  beforeAll(async () => {
+    db = await startTestDatabase();
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID = 'activation-sub5';
+    process.env.REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID_10 = 'activation-sub10';
+  }, 120_000);
+
+  afterAll(async () => {
+    await db.stop();
+  });
+
+  async function createUpgradingAccount(suffix: string) {
+    const account = await db.prisma.account.create({ data: {} });
+    await db.prisma.subscription.create({
+      data: {
+        accountId: account.id,
+        status: 'ACTIVE',
+        planId: 'activation-sub5',
+        revolutSubscriptionId: `sub_old_active_${suffix}`,
+        revolutCustomerId: 'cus_1',
+        pendingPlanId: 'activation-sub10',
+        pendingRevolutSubscriptionId: `sub_new_pending_${suffix}`,
+        pendingRevolutSetupOrderId: `ord_setup_pending_${suffix}`,
+        pendingCheckoutUrl: `https://checkout.revolut.com/pay/ord_setup_pending_${suffix}`,
+        pendingCheckoutStartedAt: new Date(),
+      },
+    });
+    return account.id;
+  }
+
+  it('ORDER_COMPLETED for the pending upgrade cancels the old plan, promotes the new one and grants once', async () => {
+    const accountId = await createUpgradingAccount('a');
+    const cancelSubscription = vi.fn().mockResolvedValue(undefined);
+    const getCurrentPeriodEnd = vi.fn().mockResolvedValue(new Date('2026-11-01T00:00:00.000Z'));
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_upgrade_paid',
+      state: 'completed',
+      amount: 1000,
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: null,
+      subscriptionId: 'sub_new_pending_a',
+    });
+    const revolut = {
+      getOrder,
+      cancelSubscription,
+      getCurrentPeriodEnd,
+    } as unknown as RevolutService;
+    const billing = new BillingService(db.prisma as unknown as PrismaService, revolut);
+
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_upgrade_paid',
+      subscriptionId: null,
+    });
+
+    expect(cancelSubscription).toHaveBeenCalledWith('sub_old_active_a');
+    const stored = await db.prisma.subscription.findUniqueOrThrow({ where: { accountId } });
+    expect(stored.status).toBe(SubscriptionStatus.ACTIVE);
+    expect(stored.planId).toBe('activation-sub10');
+    expect(stored.revolutSubscriptionId).toBe('sub_new_pending_a');
+    expect(stored.currentPeriodEnd).toEqual(new Date('2026-11-01T00:00:00.000Z'));
+    expect(stored.pendingPlanId).toBeNull();
+    expect(stored.pendingRevolutSubscriptionId).toBeNull();
+
+    const account = await db.prisma.account.findUniqueOrThrow({ where: { id: accountId } });
+    expect(account.creditBalanceCents).toBe(2000);
+    const entries = await db.prisma.creditLedgerEntry.count({ where: { accountId } });
+    expect(entries).toBe(1);
+  });
+
+  it('a replayed ORDER_COMPLETED for the same upgrade never grants twice', async () => {
+    const accountId = await createUpgradingAccount('b');
+    const cancelSubscription = vi.fn().mockResolvedValue(undefined);
+    const getCurrentPeriodEnd = vi.fn().mockResolvedValue(null);
+    const getOrder = vi.fn().mockResolvedValue({
+      id: 'ord_upgrade_replay',
+      state: 'completed',
+      amount: 1000,
+      merchantOrderExtRef: null,
+      metadata: {},
+      checkoutUrl: null,
+      subscriptionId: 'sub_new_pending_b',
+    });
+    const revolut = {
+      getOrder,
+      cancelSubscription,
+      getCurrentPeriodEnd,
+    } as unknown as RevolutService;
+    const billing = new BillingService(db.prisma as unknown as PrismaService, revolut);
+
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_upgrade_replay',
+      subscriptionId: null,
+    });
+    await billing.handleWebhookEvent({
+      event: 'ORDER_COMPLETED',
+      orderId: 'ord_upgrade_replay',
+      subscriptionId: null,
+    });
+
+    const account = await db.prisma.account.findUniqueOrThrow({ where: { id: accountId } });
+    expect(account.creditBalanceCents).toBe(2000);
+    const entries = await db.prisma.creditLedgerEntry.count({ where: { accountId } });
+    expect(entries).toBe(1);
+    // the second delivery re-runs activation on an already-promoted row: cancel is idempotent too
+    expect(cancelSubscription).toHaveBeenCalledTimes(1);
+  });
+
+  it('SUBSCRIPTION_CANCELLED for the pending upgrade clears it without touching the active plan', async () => {
+    const accountId = await createUpgradingAccount('c');
+    const getSubscriptionOrNull = vi.fn().mockResolvedValue({
+      id: 'sub_new_pending_c',
+      state: 'cancelled',
+      setupOrderId: null,
+      customerId: 'cus_1',
+    });
+    const revolut = { getSubscriptionOrNull } as unknown as RevolutService;
+    const billing = new BillingService(db.prisma as unknown as PrismaService, revolut);
+
+    await billing.handleWebhookEvent({
+      event: 'SUBSCRIPTION_CANCELLED',
+      orderId: null,
+      subscriptionId: 'sub_new_pending_c',
+    });
+
+    const stored = await db.prisma.subscription.findUniqueOrThrow({ where: { accountId } });
+    expect(stored.status).toBe(SubscriptionStatus.ACTIVE);
+    expect(stored.planId).toBe('activation-sub5');
+    expect(stored.revolutSubscriptionId).toBe('sub_old_active_c');
+    expect(stored.pendingRevolutSubscriptionId).toBeNull();
+    expect(stored.pendingPlanId).toBeNull();
+  });
 });

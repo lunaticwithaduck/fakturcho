@@ -363,6 +363,13 @@ model Subscription {
   checkoutStartedAt     DateTime?
   planId                String?
   currentPeriodEnd      DateTime?
+  // a paid plan being upgraded keeps running until the new tier is actually paid;
+  // these track that in-flight Revolut subscription without touching the fields above
+  pendingPlanId                String?
+  pendingRevolutSubscriptionId String?   @unique
+  pendingRevolutSetupOrderId   String?
+  pendingCheckoutUrl           String?
+  pendingCheckoutStartedAt     DateTime?
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
 

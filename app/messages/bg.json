@@ -273,7 +273,8 @@
       "periodEnds": "Текущият период изтича на {date}",
       "nextGrant": "Следващото зареждане: {grant} кредит",
       "switchTo": "Смени на",
-      "statusLine": "Абонамент: {status}"
+      "statusLine": "Абонамент: {status}",
+      "pendingUpgrade": "Предстояща смяна, чака плащане: {title}"
     },
     "subscriptionStatus": {
       "trialing": "Чака плащане",

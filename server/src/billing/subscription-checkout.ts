@@ -17,6 +17,22 @@ export async function createSubscriptionCheckout(
 
   const existing = await prisma.subscription.findUnique({ where: { accountId } });
 
+  // an upgrade checkout for this same tier is already in flight: resume it
+  if (existing?.pendingPlanId === planVariationId && existing.pendingRevolutSubscriptionId) {
+    if (existing.pendingCheckoutUrl) return { checkoutUrl: existing.pendingCheckoutUrl };
+    const resumed = await resumePendingCheckout(revolut, existing.pendingRevolutSubscriptionId);
+    if (resumed) {
+      await prisma.subscription.update({
+        where: { accountId },
+        data: {
+          pendingCheckoutUrl: resumed.checkoutUrl,
+          pendingRevolutSetupOrderId: resumed.setupOrderId,
+        },
+      });
+      return { checkoutUrl: resumed.checkoutUrl };
+    }
+  }
+
   if (
     existing?.status === PrismaSubscriptionStatus.TRIALING &&
     existing.planId === planVariationId &&
@@ -36,6 +52,42 @@ export async function createSubscriptionCheckout(
     }
   }
 
+  // an ACTIVE/PAST_DUE plan is paid for and stays untouched until the new tier is paid too;
+  // the switch happens on activation (see billing.service#activatePendingUpgrade), not here
+  if (
+    existing &&
+    (existing.status === PrismaSubscriptionStatus.ACTIVE ||
+      existing.status === PrismaSubscriptionStatus.PAST_DUE)
+  ) {
+    // replacing one not-yet-paid upgrade choice with another: drop the one being abandoned
+    if (existing.pendingRevolutSubscriptionId) {
+      await revolut.cancelSubscription(existing.pendingRevolutSubscriptionId);
+    }
+
+    const customerId =
+      existing.revolutCustomerId ?? (await createCustomer(prisma, revolut, accountId));
+    const { subscription, checkoutUrl } = await createRevolutCheckout(
+      revolut,
+      planVariationId,
+      customerId,
+      accountId,
+      returnUrl,
+    );
+
+    await prisma.subscription.update({
+      where: { accountId },
+      data: {
+        pendingPlanId: planVariationId,
+        pendingRevolutSubscriptionId: subscription.id,
+        pendingRevolutSetupOrderId: subscription.setupOrderId,
+        pendingCheckoutUrl: checkoutUrl,
+        pendingCheckoutStartedAt: new Date(),
+      },
+    });
+
+    return { checkoutUrl };
+  }
+
   if (existing?.revolutSubscriptionId) {
     await revolut.cancelSubscription(existing.revolutSubscriptionId);
   }
@@ -43,6 +95,40 @@ export async function createSubscriptionCheckout(
   const customerId =
     existing?.revolutCustomerId ?? (await createCustomer(prisma, revolut, accountId));
 
+  const { subscription, checkoutUrl } = await createRevolutCheckout(
+    revolut,
+    planVariationId,
+    customerId,
+    accountId,
+    returnUrl,
+  );
+
+  const subscriptionData = {
+    status: REVOLUT_STATE_TO_PRISMA[subscription.state] ?? PrismaSubscriptionStatus.TRIALING,
+    revolutSubscriptionId: subscription.id,
+    revolutCustomerId: customerId,
+    revolutSetupOrderId: subscription.setupOrderId,
+    checkoutUrl,
+    checkoutStartedAt: new Date(),
+    planId: planVariationId,
+    currentPeriodEnd: null,
+  };
+  await prisma.subscription.upsert({
+    where: { accountId },
+    create: { accountId, ...subscriptionData },
+    update: subscriptionData,
+  });
+
+  return { checkoutUrl };
+}
+
+async function createRevolutCheckout(
+  revolut: RevolutService,
+  planVariationId: string,
+  customerId: string,
+  accountId: string,
+  returnUrl: string,
+) {
   const subscription = await revolut.createSubscription({
     planVariationId,
     customerId,
@@ -58,31 +144,15 @@ export async function createSubscriptionCheckout(
     );
   }
   const setupOrder = await revolut.getOrder(subscription.setupOrderId);
-  if (!setupOrder.checkoutUrl) {
+  const checkoutUrl = setupOrder.checkoutUrl;
+  if (!checkoutUrl) {
     throw new DomainError(
       'CHECKOUT_NOT_CONFIGURED',
       'Revolut returned no checkout url for the subscription setup order.',
       { provider: ['no_checkout_url', `order ${setupOrder.id}`] },
     );
   }
-
-  const subscriptionData = {
-    status: REVOLUT_STATE_TO_PRISMA[subscription.state] ?? PrismaSubscriptionStatus.TRIALING,
-    revolutSubscriptionId: subscription.id,
-    revolutCustomerId: customerId,
-    revolutSetupOrderId: subscription.setupOrderId,
-    checkoutUrl: setupOrder.checkoutUrl,
-    checkoutStartedAt: new Date(),
-    planId: planVariationId,
-    currentPeriodEnd: null,
-  };
-  await prisma.subscription.upsert({
-    where: { accountId },
-    create: { accountId, ...subscriptionData },
-    update: subscriptionData,
-  });
-
-  return { checkoutUrl: setupOrder.checkoutUrl };
+  return { subscription, checkoutUrl };
 }
 
 async function resumePendingCheckout(

@@ -273,7 +273,8 @@
       "periodEnds": "Perioada curentă se încheie pe {date}",
       "nextGrant": "Următoarea reîncărcare: credit de {grant}",
       "switchTo": "Treceți la",
-      "statusLine": "Abonament: {status}"
+      "statusLine": "Abonament: {status}",
+      "pendingUpgrade": "Schimbare de plan în așteptarea plății: {title}"
     },
     "subscriptionStatus": {
       "trialing": "În așteptarea plății",

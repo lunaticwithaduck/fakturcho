@@ -273,7 +273,8 @@
       "periodEnds": "La période en cours se termine le {date}",
       "nextGrant": "Prochaine recharge : {grant} de crédit",
       "switchTo": "Changer de formule",
-      "statusLine": "Abonnement : {status}"
+      "statusLine": "Abonnement : {status}",
+      "pendingUpgrade": "Changement de formule en attente de paiement : {title}"
     },
     "subscriptionStatus": {
       "trialing": "En attente de paiement",

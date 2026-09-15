@@ -1,4 +1,5 @@
 import type { DomainErrorCode } from '@fakturcho/shared-types';
+import type { Logger } from '@nestjs/common';
 import { DomainError } from '../common/domain-error';
 
 export class RevolutApiError extends Error {
@@ -57,4 +58,22 @@ export function toDomainError(failure: RevolutFailure): DomainError {
   return new DomainError(failure.code, failure.message, {
     provider: [failure.providerCode, failure.providerDetail],
   });
+}
+
+export function requireRevolutCheckoutUrl(
+  logger: Logger,
+  orderId: string,
+  checkoutUrl: string | undefined,
+): { id: string; checkoutUrl: string } {
+  if (!checkoutUrl) {
+    logger.error(`Revolut returned order ${orderId} without a checkout_url`);
+    throw new DomainError(
+      'CHECKOUT_NOT_CONFIGURED',
+      'The payment provider returned no checkout url.',
+      {
+        provider: ['no_checkout_url', `order ${orderId}`],
+      },
+    );
+  }
+  return { id: orderId, checkoutUrl };
 }

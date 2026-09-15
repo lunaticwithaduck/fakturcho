@@ -273,7 +273,8 @@
       "periodEnds": "Der aktuelle Abrechnungszeitraum endet am {date}",
       "nextGrant": "Nächste Aufladung: {grant} Guthaben",
       "switchTo": "Wechseln zu",
-      "statusLine": "Abonnement: {status}"
+      "statusLine": "Abonnement: {status}",
+      "pendingUpgrade": "Tarifwechsel wartet auf Zahlung: {title}"
     },
     "subscriptionStatus": {
       "trialing": "Zahlung ausstehend",

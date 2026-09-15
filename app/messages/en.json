@@ -273,7 +273,8 @@
       "periodEnds": "Current period ends on {date}",
       "nextGrant": "Next top-up: {grant} credit",
       "switchTo": "Switch to",
-      "statusLine": "Subscription: {status}"
+      "statusLine": "Subscription: {status}",
+      "pendingUpgrade": "Upgrade pending payment: {title}"
     },
     "subscriptionStatus": {
       "trialing": "Awaiting payment",

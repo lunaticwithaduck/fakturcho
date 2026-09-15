@@ -273,7 +273,8 @@
       "periodEnds": "El periodo actual finaliza el {date}",
       "nextGrant": "Próxima recarga: {grant} de crédito",
       "switchTo": "Cambiar a",
-      "statusLine": "Suscripción: {status}"
+      "statusLine": "Suscripción: {status}",
+      "pendingUpgrade": "Cambio de plan pendiente de pago: {title}"
     },
     "subscriptionStatus": {
       "trialing": "Pendiente de pago",

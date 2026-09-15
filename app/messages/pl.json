@@ -273,7 +273,8 @@
       "periodEnds": "Bieżący okres kończy się {date}",
       "nextGrant": "Następne doładowanie: {grant}",
       "switchTo": "Zmień na",
-      "statusLine": "Abonament: {status}"
+      "statusLine": "Abonament: {status}",
+      "pendingUpgrade": "Zmiana planu czeka na płatność: {title}"
     },
     "subscriptionStatus": {
       "trialing": "Oczekuje na płatność",

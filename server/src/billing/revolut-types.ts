@@ -33,4 +33,11 @@ export interface RevolutSubscription {
   state: string;
   setupOrderId: string | null;
   customerId: string;
+  currentCycleId: string | null;
+}
+
+export interface RevolutSubscriptionCycle {
+  id: string;
+  state: string;
+  endDate: string | null;
 }

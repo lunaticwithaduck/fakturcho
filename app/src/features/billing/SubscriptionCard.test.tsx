@@ -2,7 +2,7 @@
 import bgMessages from '@messages/bg.json';
 import enMessages from '@messages/en.json';
 import type { SubscriptionDto } from '@shared/types';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SubscriptionCard } from './SubscriptionCard';
@@ -25,6 +25,11 @@ const pastDueSubscription: SubscriptionDto = {
   currentPeriodEnd: null,
 };
 
+const activeWithPendingUpgrade: SubscriptionDto = {
+  ...activeSubscription,
+  pendingUpgrade: { tier: 'sub10', checkoutUrl: 'https://checkout.revolut.com/pay/ord_upgrade' },
+};
+
 describe('SubscriptionCard', () => {
   it('renders an active subscription with switch options in Bulgarian', () => {
     render(
@@ -43,6 +48,29 @@ describe('SubscriptionCard', () => {
     expect(screen.getByText('Следващото зареждане: 10,00 € кредит')).toBeTruthy();
     expect(screen.getByText('Смени на')).toBeTruthy();
     expect(screen.getAllByRole('button', { name: 'Смени' })).toHaveLength(2);
+  });
+
+  it('shows a pending upgrade with a continue-to-payment action and hides it from the switch grid', () => {
+    const onSelectTier = vi.fn();
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <SubscriptionCard
+          subscription={activeWithPendingUpgrade}
+          pendingProduct={null}
+          onSelectTier={onSelectTier}
+        />
+      </NextIntlClientProvider>,
+    );
+
+    expect(
+      screen.getByText('Предстояща смяна, чака плащане: 200 документа на месец за 10,00 €'),
+    ).toBeTruthy();
+    expect(screen.getAllByRole('button', { name: 'Продължи към плащане' })).toHaveLength(1);
+    // sub10 is the pending upgrade, so it must not also show up as a plain "switch to" option
+    expect(screen.getAllByRole('button', { name: 'Смени' })).toHaveLength(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Продължи към плащане' }));
+    expect(onSelectTier).toHaveBeenCalledWith('sub10');
   });
 
   it('renders the status line for a non-usable subscription in Bulgarian', () => {

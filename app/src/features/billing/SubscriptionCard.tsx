@@ -22,7 +22,12 @@ export function SubscriptionCard({
 
   if (subscription && isSubscriptionUsable(subscription.status) && subscription.tier) {
     const active = tierOptions.find((option) => option.id === subscription.tier);
-    const otherTiers = tierOptions.filter((option) => option.id !== subscription.tier);
+    const pendingUpgradeTier = subscription.pendingUpgrade?.tier
+      ? tierOptions.find((option) => option.id === subscription.pendingUpgrade?.tier)
+      : null;
+    const otherTiers = tierOptions.filter(
+      (option) => option.id !== subscription.tier && option.id !== pendingUpgradeTier?.id,
+    );
     return (
       <Card className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
@@ -42,6 +47,22 @@ export function SubscriptionCard({
           ) : null}
           {active ? <p className="text-xs text-text-muted">{active.perDocumentLabel}</p> : null}
         </div>
+        {pendingUpgradeTier ? (
+          <div className="flex flex-col items-start gap-2 border-t border-border pt-3">
+            <p className="text-sm text-text-muted">
+              {t('subscription.pendingUpgrade', { title: pendingUpgradeTier.title })}
+            </p>
+            <Button
+              size="sm"
+              disabled={pendingProduct !== null}
+              onClick={() => onSelectTier(pendingUpgradeTier.id)}
+            >
+              {pendingProduct === pendingUpgradeTier.id
+                ? t('actions.redirecting')
+                : t('actions.continueToPayment')}
+            </Button>
+          </div>
+        ) : null}
         {otherTiers.length > 0 ? (
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium text-text-muted">{t('subscription.switchTo')}</p>
