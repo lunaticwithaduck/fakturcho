@@ -419,6 +419,7 @@
     "completenessHint": {
       "title": "Profile is not ready for issuing",
       "body": "Complete the following fields to be able to issue documents: {fields}.",
+      "profileLink": "Go to issuer profile",
       "fields": {
         "companyName": "Company",
         "eik": "Company ID / VAT ID",

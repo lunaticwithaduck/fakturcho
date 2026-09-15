@@ -1,14 +1,19 @@
 import { Card } from '@design/components';
 import { getCountryConfig } from '@fakturcho/shared-types';
 import type { IssuerProfileDto } from '@shared/types';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { getMissingIssuerFields } from './issuerCompleteness';
 
 interface IssuerProfileCompletenessHintProps {
   profile: IssuerProfileDto;
+  showProfileLink?: boolean;
 }
 
-export function IssuerProfileCompletenessHint({ profile }: IssuerProfileCompletenessHintProps) {
+export function IssuerProfileCompletenessHint({
+  profile,
+  showProfileLink,
+}: IssuerProfileCompletenessHintProps) {
   const t = useTranslations('issuer');
   const missing = getMissingIssuerFields(profile);
   if (missing.length === 0) return null;
@@ -29,6 +34,11 @@ export function IssuerProfileCompletenessHint({ profile }: IssuerProfileComplete
       <p className="text-sm text-text-muted">
         {t('completenessHint.body', { fields: missingLabels.join(', ') })}
       </p>
+      {showProfileLink ? (
+        <Link href="/profile" className="text-sm font-medium text-warning underline">
+          {t('completenessHint.profileLink')}
+        </Link>
+      ) : null}
     </Card>
   );
 }
