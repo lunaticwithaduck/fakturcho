@@ -1,10 +1,15 @@
-import type { Document } from '@prisma/client';
+import { roundHalfUp, type VatCategory } from '@fakturcho/shared-types';
+import type { Discount, Document, LineItem } from '@prisma/client';
 import { amountInWords } from '../../../money/amount-in-words';
-import { formatEur } from '../../../money/format';
+import { formatMoneyForLocale } from '../../../money/format';
 import type { VatPresentation } from '../../../money/vat';
+import { computeVatSubtotals } from '../../../vat-eu/subtotals';
 import { escapeHtml } from './html-utils';
+import type { ClassicLabels, ClassicLanguage } from './labels';
+import type { ClassicLocaleContext } from './locale';
 
-export function buildAmountWordsBlock(document: Document): string {
+export function buildAmountWordsBlock(document: Document, locale: ClassicLocaleContext): string {
+  if (locale.language !== 'bg') return '';
   return `<div class="amount-words">${escapeHtml(amountInWords(document.amount))}</div>`;
 }
 
@@ -12,21 +17,99 @@ function totalsRow(label: string, value: string, className = 'totals-row'): stri
   return `<div class="${className}"><span>${escapeHtml(label)}</span><span>${value}</span></div>`;
 }
 
-export function buildTotalsBlock(document: Document, presentation: VatPresentation): string {
-  const base = document.subtotal - document.discountTotal;
-  const vatRows = presentation.vatCharged
-    ? totalsRow('Данъчна основа:', formatEur(base)) +
-      totalsRow(`ДДС (${document.vatRateBp / 100}%):`, formatEur(document.vatAmount))
-    : '';
-  const dueValue = formatEur(document.amount);
-  const totals = `<div class="totals">
-    ${vatRows}
-    ${totalsRow('Общо:', formatEur(document.amount), 'totals-row total')}
-    ${totalsRow('Сума за плащане:', dueValue, 'totals-row due')}
-  </div>`;
-  const exemption =
-    presentation.showExemptionLine && presentation.exemptionGround
-      ? `<div class="exemption">Основание за неначисляване на ДДС: ${escapeHtml(presentation.exemptionGround)}</div>`
+export function discountAdjustedVatGroups(document: Document, lineItems: readonly LineItem[]) {
+  const { subtotal, discountTotal } = document;
+  const lines = lineItems.map((line) => ({
+    lineTotal:
+      discountTotal === 0 || subtotal === 0
+        ? line.lineTotal
+        : line.lineTotal - roundHalfUp((line.lineTotal * discountTotal) / subtotal, 0),
+    vatRateBp: line.vatRateBp,
+    vatCategory: line.vatCategory as VatCategory,
+  }));
+  return computeVatSubtotals(lines);
+}
+
+function discountRows(
+  document: Document,
+  discounts: readonly Discount[],
+  labels: ClassicLabels,
+  language: ClassicLanguage,
+): string {
+  if (document.discountTotal <= 0) return '';
+  const single = discounts.length === 1 ? discounts[0] : null;
+  const percent = single?.percentBp != null ? single.percentBp / 100 : null;
+  const customLabel = single?.label || null;
+  return (
+    totalsRow(labels.subtotalLabel, formatMoneyForLocale(document.subtotal, language)) +
+    totalsRow(
+      labels.discountRowLabel(percent, customLabel),
+      formatMoneyForLocale(-document.discountTotal, language),
+    )
+  );
+}
+
+function mixedVatBlock(
+  document: Document,
+  lineItems: readonly LineItem[],
+  labels: ClassicLabels,
+  language: ClassicLanguage,
+): { rows: string; exemptionGround: string | null } {
+  const groups = discountAdjustedVatGroups(document, lineItems);
+  const rows = groups
+    .filter((group) => group.rateBp > 0)
+    .map(
+      (group) =>
+        totalsRow(labels.vatBasePrefix, formatMoneyForLocale(group.taxableAmount, language)) +
+        totalsRow(
+          labels.vatRatePrefix(group.rateBp / 100),
+          formatMoneyForLocale(group.vatAmount, language),
+        ),
+    )
+    .join('');
+  const exemptionGround = groups.some((group) => group.rateBp === 0)
+    ? document.vatExemptionGround
+    : null;
+  return { rows, exemptionGround };
+}
+
+export function buildTotalsBlock(
+  document: Document,
+  lineItems: readonly LineItem[],
+  presentation: VatPresentation,
+  locale: ClassicLocaleContext,
+  discounts: readonly Discount[] = [],
+): string {
+  const { labels, language } = locale;
+  const isMixed =
+    new Set(lineItems.map((line) => `${line.vatCategory}:${line.vatRateBp}`)).size > 1;
+
+  let vatRows: string;
+  let exemptionGround: string | null;
+  if (isMixed) {
+    const mixed = mixedVatBlock(document, lineItems, labels, language);
+    vatRows = mixed.rows;
+    exemptionGround = mixed.exemptionGround;
+  } else {
+    const base = document.subtotal - document.discountTotal;
+    vatRows = presentation.vatCharged
+      ? totalsRow(labels.vatBasePrefix, formatMoneyForLocale(base, language)) +
+        totalsRow(
+          labels.vatRatePrefix(document.vatRateBp / 100),
+          formatMoneyForLocale(document.vatAmount, language),
+        )
       : '';
+    exemptionGround = presentation.showExemptionLine ? presentation.exemptionGround : null;
+  }
+
+  const dueValue = formatMoneyForLocale(document.amount, language);
+  const totals = `<div class="totals">
+    ${discountRows(document, discounts, labels, language) + vatRows}
+    ${totalsRow(labels.totalLabel, formatMoneyForLocale(document.amount, language), 'totals-row total')}
+    ${totalsRow(labels.dueLabel, dueValue, 'totals-row due')}
+  </div>`;
+  const exemption = exemptionGround
+    ? `<div class="exemption">${labels.exemptionPrefix}${escapeHtml(exemptionGround)}</div>`
+    : '';
   return `${totals}${exemption}`;
 }

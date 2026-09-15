@@ -94,6 +94,10 @@ export function buildStyles(): string {
     .exemption {
       margin-bottom: 16px;
     }
+    .mentions {
+      margin-bottom: 16px;
+      font-size: 10px;
+    }
     .issuer-block {
       display: grid;
       grid-template-columns: repeat(3, 1fr);

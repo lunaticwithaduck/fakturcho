@@ -4,17 +4,19 @@ import type {
   DocumentListQuery,
   SaveDraftRequest,
 } from '@fakturcho/shared-types';
-import { CORRECTION_DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import { CORRECTION_DOCUMENT_TYPES, getCountryConfig } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { computeLineTotal } from '../money/totals';
+import { hasValidVatNumberFormat, resolveLineVatCategory } from '../vat-eu/reverse-charge';
 import { toDocumentDto } from './document.mapper';
 import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
 import { buildDocumentListWhere } from './document-list-query';
 import { buildDraftData } from './draft-data.builder';
+import { applyLineVatGroups, resolveVatTreatment } from './vat-treatment';
 
 @Injectable()
 export class DocumentsService {
@@ -47,7 +49,55 @@ export class DocumentsService {
     }
 
     const issuerProfile = await this.prisma.issuerProfile.findUnique({ where: { accountId } });
-    const data = buildDraftData(accountId, request, issuerProfile?.vatRegistered ?? false);
+    const client = request.clientId
+      ? await this.prisma.client.findFirst({ where: { id: request.clientId, accountId } })
+      : null;
+
+    const issuerCountry = issuerProfile?.country ?? 'BG';
+    const issuerVatRegistered = issuerProfile?.vatRegistered ?? false;
+    const clientHasValidVatNumber = client
+      ? hasValidVatNumberFormat(client.vatNumber, client.country)
+      : false;
+
+    const vat = resolveVatTreatment({
+      documentType: request.documentType,
+      vatRegistered: issuerVatRegistered,
+      requestedGround: request.vatExemptionGround ?? null,
+      issuerCountry,
+    });
+
+    const resolvedLineItems = request.lineItems.map((line) => {
+      const vatCategory =
+        line.vatCategory !== undefined
+          ? line.vatCategory
+          : !vat.vatCharged
+            ? 'O'
+            : resolveLineVatCategory(
+                issuerCountry,
+                client?.country ?? null,
+                undefined,
+                clientHasValidVatNumber,
+                issuerVatRegistered,
+              );
+      const vatRateBp =
+        line.vatRateBp !== undefined
+          ? line.vatRateBp
+          : vatCategory === 'AE' || vatCategory === 'O'
+            ? 0
+            : getCountryConfig(issuerCountry).defaultVatRateBp;
+
+      return { ...line, vatCategory, vatRateBp };
+    });
+
+    const documentVat = applyLineVatGroups(vat, resolvedLineItems);
+
+    const data = {
+      ...buildDraftData(accountId, request, documentVat, resolvedLineItems),
+      documentLanguage:
+        request.documentLanguage !== undefined
+          ? request.documentLanguage
+          : (client?.documentLanguage ?? null),
+    };
 
     const record = await this.prisma.$transaction(async (tx) => {
       const document = existingId
@@ -57,15 +107,18 @@ export class DocumentsService {
       await tx.lineItem.deleteMany({ where: { documentId: document.id } });
       await tx.discount.deleteMany({ where: { documentId: document.id } });
 
-      if (request.lineItems.length > 0) {
+      if (resolvedLineItems.length > 0) {
         await tx.lineItem.createMany({
-          data: request.lineItems.map((line, index) => ({
+          data: resolvedLineItems.map((line, index) => ({
             documentId: document.id,
             name: line.name,
             quantity: line.quantity,
             unitPrice: line.unitPrice,
             lineTotal: computeLineTotal(line.quantity, line.unitPrice),
             sortOrder: line.sortOrder ?? index,
+            vatRateBp: line.vatRateBp,
+            vatCategory: line.vatCategory,
+            unitCode: line.unitCode ?? null,
           })),
         });
       }

@@ -1,5 +1,7 @@
 import { SIGNUP_GRANT_CENTS } from '@fakturcho/shared-types';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
+import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { createAuth } from './auth.config';
 
@@ -36,6 +38,7 @@ describe('signup provisions a tenant', () => {
 
     const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
     expect(user.accountId).toBe(accountId);
+    expect(user.locale).toBe('bg');
 
     const account = await db.prisma.account.findUnique({ where: { id: accountId } });
     expect(account).not.toBeNull();
@@ -69,5 +72,106 @@ describe('signup provisions a tenant', () => {
     });
 
     expect(first.user.accountId).not.toBe(second.user.accountId);
+  });
+
+  it('derives locale from a non-BG country at signup', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Hans Muller',
+        email: 'hans@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('en');
+  });
+
+  it('ignores a client-supplied locale and derives it from country instead', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Spoofed User',
+        email: 'spoofed@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+        locale: 'bg',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('en');
+  });
+
+  it('rejects an unsupported locale value with no country, falling back to bg', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Garbage Locale User',
+        email: 'garbage-locale@example.com',
+        password: 'correct-horse-battery',
+        locale: 'fr',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('bg');
+  });
+
+  it('accepts an explicit supported locale with no country', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Explicit En User',
+        email: 'explicit-en@example.com',
+        password: 'correct-horse-battery',
+        locale: 'en',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('en');
+  });
+
+  it('defaults to bg when no country is provided, unchanged from before', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'No Country User',
+        email: 'no-country@example.com',
+        password: 'correct-horse-battery',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.locale).toBe('bg');
+  });
+
+  it('EN_LOCALE off: still stores the country, but derives locale bg', async () => {
+    const flags = new FeatureFlagsService(db.prisma as unknown as PrismaService);
+    await flags.setEnabled('EN_LOCALE', false);
+    const auth = createAuth(db.prisma, AUTH_OPTIONS, flags);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Off Flag User',
+        email: 'off-flag@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+      },
+    });
+
+    const user = await db.prisma.user.findUniqueOrThrow({ where: { id: result.user.id } });
+    expect(user.country).toBe('DE');
+    expect(user.locale).toBe('bg');
+
+    await flags.setEnabled('EN_LOCALE', true);
   });
 });

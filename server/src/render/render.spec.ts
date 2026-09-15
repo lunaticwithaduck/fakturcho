@@ -2,6 +2,7 @@ import { DEFAULT_EXEMPTION_GROUND } from '@fakturcho/shared-types';
 import type { Response } from 'express';
 import { extractText, getDocumentProxy } from 'unpdf';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { startTestDatabase, type TestDatabase } from '../testing/test-database';
 import { RenderController } from './render.controller';
@@ -30,13 +31,16 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
 
 describe('render pipeline', () => {
   let db: TestDatabase;
+  let flags: FeatureFlagsService;
   let service: RenderService;
   let controller: RenderController;
   let accountId: string;
 
   beforeAll(async () => {
     db = await startTestDatabase();
-    service = new RenderService(db.prisma as unknown as PrismaService);
+    flags = new FeatureFlagsService(db.prisma as unknown as PrismaService);
+    await flags.setEnabled('EN_LOCALE', true);
+    service = new RenderService(db.prisma as unknown as PrismaService, flags);
     await service.onModuleInit();
     controller = new RenderController(service);
     const account = await db.prisma.account.create({ data: {} });
@@ -226,5 +230,84 @@ describe('render pipeline', () => {
     });
     const { filename } = await service.renderPdf(document.id, accountId);
     expect(filename).toBe('Фактура_Чернова.pdf');
+  });
+
+  it('renders English labels and omits the Bulgarian-only blocks when documentLanguage is en', async () => {
+    const document = await seedDocument(db.prisma, {
+      accountId,
+      documentType: 'INVOICE',
+      number: 20,
+      overrides: { documentLanguage: 'en' },
+    });
+    const { buffer, filename } = await service.renderPdf(document.id, accountId);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Recipient:');
+    expect(text).toContain('Company registration no.: 987654321');
+    expect(text).not.toContain('МОЛ');
+    expect(text).not.toContain('Съставил');
+    expect(text).not.toContain('(Оригинал)');
+    expect(text).not.toContain('лв.');
+    expect(filename).toBe('Invoice_0000000020.pdf');
+  });
+
+  it('derives English from a non-Bulgarian issuer country when documentLanguage is unset', async () => {
+    const document = await seedDocument(db.prisma, {
+      accountId,
+      documentType: 'INVOICE',
+      number: 21,
+      overrides: { issuerCountry: 'NL' },
+    });
+    const { buffer } = await service.renderPdf(document.id, accountId);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Amount due:');
+    expect(text).not.toContain('Сума за плащане');
+  });
+
+  it('an issued document with a null issuerCountry predates the EU scope and never joins the live issuer profile', async () => {
+    const legacyAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({ data: { accountId: legacyAccount.id, country: 'DE' } });
+    const document = await seedDocument(db.prisma, {
+      accountId: legacyAccount.id,
+      documentType: 'INVOICE',
+      number: 1,
+    });
+    const { buffer } = await service.renderPdf(document.id, legacyAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Получател:');
+    expect(text).not.toContain('Recipient:');
+  });
+
+  it('a draft with a null issuerCountry still resolves from the live issuer profile (no snapshot yet)', async () => {
+    const draftAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({ data: { accountId: draftAccount.id, country: 'DE' } });
+    const document = await seedDocument(db.prisma, {
+      accountId: draftAccount.id,
+      documentType: 'INVOICE',
+      status: 'DRAFT',
+      number: null,
+    });
+    const { buffer } = await service.renderPdf(document.id, draftAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Rechnungsempfänger:');
+    expect(text).not.toContain('Получател:');
+  });
+
+  it('EN_LOCALE off: renders Bulgarian even for a document tagged documentLanguage=en', async () => {
+    await flags.setEnabled('EN_LOCALE', false);
+    try {
+      const document = await seedDocument(db.prisma, {
+        accountId,
+        documentType: 'INVOICE',
+        number: 22,
+        overrides: { documentLanguage: 'en' },
+      });
+      const { buffer, filename } = await service.renderPdf(document.id, accountId);
+      const text = await extractPdfText(buffer);
+      expect(text).not.toContain('Recipient:');
+      expect(text).toContain('Получател:');
+      expect(filename).toBe('Фактура_0000000022.pdf');
+    } finally {
+      await flags.setEnabled('EN_LOCALE', true);
+    }
   });
 });

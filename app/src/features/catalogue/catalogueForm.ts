@@ -1,6 +1,7 @@
 import { useCreateCatalogueItemMutation, useUpdateCatalogueItemMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
-import type { CatalogueItemDto, Cents, CreateCatalogueItemRequest } from '@shared/types';
+import type { CatalogueItemDto, Cents, CreateCatalogueItemRequest, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 
 export interface CatalogueFormValues {
@@ -9,10 +10,13 @@ export interface CatalogueFormValues {
   defaultUnitPrice: Cents | null;
 }
 
-export function catalogueItemToFormValues(item: CatalogueItemDto | null): CatalogueFormValues {
+export function catalogueItemToFormValues(
+  item: CatalogueItemDto | null,
+  defaultUnit: string,
+): CatalogueFormValues {
   return {
     name: item?.name ?? '',
-    unit: item?.unit ?? 'бр.',
+    unit: item?.unit ?? defaultUnit,
     defaultUnitPrice: item?.defaultUnitPrice ?? null,
   };
 }
@@ -33,7 +37,11 @@ export function useCatalogueForm(
   item: CatalogueItemDto | null,
   onSaved: (item: CatalogueItemDto) => void,
 ) {
-  const [values, setValues] = useState<CatalogueFormValues>(() => catalogueItemToFormValues(item));
+  const t = useTranslations('catalogue');
+  const locale = useLocale() as Locale;
+  const [values, setValues] = useState<CatalogueFormValues>(() =>
+    catalogueItemToFormValues(item, t('defaultUnit')),
+  );
   const [error, setError] = useState<string | null>(null);
   const [createItem, createState] = useCreateCatalogueItemMutation();
   const [updateItem, updateState] = useUpdateCatalogueItemMutation();
@@ -46,7 +54,7 @@ export function useCatalogueForm(
     event.preventDefault();
     setError(null);
     if (!isValid(values)) {
-      setError('Попълнете наименование, мярка и цена.');
+      setError(t('validationError'));
       return;
     }
     const body = toRequestBody(values);
@@ -56,7 +64,7 @@ export function useCatalogueForm(
         : await createItem(body).unwrap();
       onSaved(result);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
     }
   }
 

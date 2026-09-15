@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { isNavItemActive, NAV_ITEMS } from './navItems';
 
 export function BottomNav() {
+  const t = useTranslations('shell');
   const pathname = usePathname();
 
   return (
@@ -22,7 +24,7 @@ export function BottomNav() {
                 : 'flex flex-1 items-center justify-center border-t-2 border-transparent py-3 text-sm font-medium text-text-muted'
             }
           >
-            {item.label}
+            {t(`navItems.${item.labelKey}`)}
           </Link>
         );
       })}

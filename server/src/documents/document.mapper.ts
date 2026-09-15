@@ -4,6 +4,7 @@ import type {
   Document as PrismaDocument,
   LineItem as PrismaLineItem,
 } from '@prisma/client';
+import { readIdentifiers } from '../issuer/identifiers';
 import { fromPrismaDocumentType } from '../numbering/document-type.mapper';
 import { toDisplayStatus } from './document-status.mapper';
 
@@ -29,6 +30,10 @@ export function toDocumentDto(
     taxEventAt: toIsoDate(document.taxEventAt),
     dueAt: toIsoDate(document.dueAt),
     validUntil: toIsoDate(document.validUntil),
+    deliveryDate: toIsoDate(document.deliveryDate),
+    buyerReference: document.buyerReference,
+    paymentMeansCode: document.paymentMeansCode,
+    paymentTermsNote: document.paymentTermsNote,
     subtotal: document.subtotal,
     discountTotal: document.discountTotal,
     amount: document.amount,
@@ -43,12 +48,17 @@ export function toDocumentDto(
     emailText: document.emailText,
     emailedAt: document.emailedAt ? document.emailedAt.toISOString() : null,
     templateId: document.templateId,
+    documentLanguage: document.documentLanguage as DocumentDto['documentLanguage'],
     issuer: {
       companyName: document.issuerCompanyName,
       eik: document.issuerEik,
       mol: document.issuerMol,
       addressLine: document.issuerAddressLine,
+      street: document.issuerStreet,
+      postcode: document.issuerPostcode,
+      countyRegion: document.issuerCountyRegion,
       city: document.issuerCity,
+      country: document.issuerCountry,
       phone: document.issuerPhone,
       vatRegistered: document.issuerVatRegistered,
       vatNumber: document.issuerVatNumber,
@@ -56,14 +66,22 @@ export function toDocumentDto(
       iban: document.issuerIban,
       bic: document.issuerBic,
       altIban: document.issuerAltIban,
+      identifiers: readIdentifiers(document.issuerIdentifiers),
     },
     recipient: {
       companyName: document.recipientCompanyName,
       eik: document.recipientEik,
       vatNumber: document.recipientVatNumber,
       address: document.recipientAddress,
+      street: document.recipientStreet,
+      postcode: document.recipientPostcode,
+      countyRegion: document.recipientCountyRegion,
+      city: document.recipientCity,
+      country: document.recipientCountry,
       email: document.recipientEmail,
       mol: document.recipientMol,
+      sdiRecipientCode: document.recipientSdiRecipientCode,
+      pec: document.recipientPec,
     },
     lineItems: document.lineItems.map(toLineItemDto).sort((a, b) => a.sortOrder - b.sortOrder),
     discounts: document.discounts.map(toDiscountDto).sort((a, b) => a.sortOrder - b.sortOrder),
@@ -84,6 +102,9 @@ function toLineItemDto(item: PrismaLineItem): LineItemDto {
     unitPrice: item.unitPrice,
     lineTotal: item.lineTotal,
     sortOrder: item.sortOrder,
+    vatRateBp: item.vatRateBp,
+    vatCategory: item.vatCategory as LineItemDto['vatCategory'],
+    unitCode: item.unitCode,
   };
 }
 

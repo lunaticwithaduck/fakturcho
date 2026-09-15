@@ -5,6 +5,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Възстановяване на суми',
   description: 'Кога и как Фактурчо възстановява платени суми.',
+  alternates: {
+    canonical: '/refunds',
+    languages: {
+      bg: '/refunds',
+      en: '/en/refunds',
+      'x-default': '/refunds',
+    },
+  },
 };
 
 export default function RefundsPage() {

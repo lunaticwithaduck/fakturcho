@@ -129,4 +129,125 @@ describe('DocumentIssuanceService', () => {
     expect(refetched.issuer.mol).toBeNull();
     expect(refetched.issuer.companyName).toBe('Тест ЕООД');
   });
+
+  it('issuance snapshot copies issuer and recipient country, street and postcode', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'NL',
+      street: 'Musterstrasse 1',
+      postcode: '10115',
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'NL',
+      street: 'Kundenweg 2',
+      postcode: '10117',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+
+    expect(issued.issuer.country).toBe('NL');
+    expect(issued.issuer.street).toBe('Musterstrasse 1');
+    expect(issued.issuer.postcode).toBe('10115');
+    expect(issued.recipient.country).toBe('NL');
+    expect(issued.recipient.street).toBe('Kundenweg 2');
+    expect(issued.recipient.postcode).toBe('10117');
+  });
+
+  it('issuance persists every draft field: document metadata, per-line VAT fields, and both party snapshots', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'IT',
+      street: 'Via Roma 1',
+      postcode: '00100',
+      countyRegion: 'RM',
+      vatRegistered: true,
+      vatNumber: 'IT12345678901',
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'IT',
+      street: 'Via Napoli 2',
+      postcode: '80100',
+      countyRegion: 'NA',
+      documentLanguage: 'en',
+      sdiRecipientCode: 'ABCDEFG',
+      pec: 'client@pec.it',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        buyerReference: 'PO-9001',
+        paymentMeansCode: '30',
+        paymentTermsNote: 'Net 30',
+        deliveryDate: '2026-09-20',
+        lineItems: [
+          {
+            name: 'Consulenza',
+            quantity: '2',
+            unitPrice: 5000,
+            sortOrder: 0,
+            vatRateBp: 900,
+            vatCategory: 'Z',
+            unitCode: 'HUR',
+          },
+        ],
+      }),
+    );
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    const refetched = await documentsService.get(accountId, issued.id);
+
+    for (const document of [issued, refetched]) {
+      expect(document.buyerReference).toBe('PO-9001');
+      expect(document.paymentMeansCode).toBe('30');
+      expect(document.paymentTermsNote).toBe('Net 30');
+      expect(document.deliveryDate).toBe('2026-09-20');
+      expect(document.documentLanguage).toBe('en');
+      expect(document.lineItems[0]).toMatchObject({
+        vatRateBp: 900,
+        vatCategory: 'Z',
+        unitCode: 'HUR',
+      });
+      expect(document.issuer).toMatchObject({
+        country: 'IT',
+        street: 'Via Roma 1',
+        postcode: '00100',
+        countyRegion: 'RM',
+      });
+      expect(document.recipient).toMatchObject({
+        country: 'IT',
+        street: 'Via Napoli 2',
+        postcode: '80100',
+        countyRegion: 'NA',
+        sdiRecipientCode: 'ABCDEFG',
+        pec: 'client@pec.it',
+      });
+    }
+  });
+
+  it('documentLanguage is set from the client at draft save and survives issuance unchanged', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const client = await createTestClient(prisma, accountId, { documentLanguage: 'en' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    expect(draft.documentLanguage).toBe('en');
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.documentLanguage).toBe('en');
+
+    await prisma.client.update({ where: { id: client.id }, data: { documentLanguage: 'bg' } });
+    const refetched = await documentsService.get(accountId, issued.id);
+    expect(refetched.documentLanguage).toBe('en');
+  });
 });

@@ -11,6 +11,7 @@ const ITEMS: MenuItem[] = [
   { key: '/usage', label: 'Използване' },
   { key: '/reports', label: 'Справки' },
   { key: '/traffic', label: 'Трафик' },
+  { key: '/features', label: 'Функции' },
 ];
 
 export function SideMenu() {

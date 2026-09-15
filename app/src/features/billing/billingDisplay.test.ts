@@ -1,14 +1,23 @@
+import bgMessages from '@messages/bg.json';
+import { createTranslator } from 'next-intl';
 import { describe, expect, it } from 'vitest';
 import {
   balanceCaption,
-  CREDIT_LEDGER_REASON_LABELS,
+  getCreditLedgerReasonLabels,
   getPackOptions,
   getSubscriptionTierOptions,
+  type Translate,
 } from './billingDisplay';
 
-describe('CREDIT_LEDGER_REASON_LABELS', () => {
+const t = createTranslator({
+  locale: 'bg',
+  messages: bgMessages,
+  namespace: 'billing',
+}) as unknown as Translate;
+
+describe('getCreditLedgerReasonLabels', () => {
   it('labels every ledger reason in Bulgarian', () => {
-    expect(CREDIT_LEDGER_REASON_LABELS).toEqual({
+    expect(getCreditLedgerReasonLabels(t)).toEqual({
       signup_grant: 'Начален бонус',
       purchase: 'Покупка на кредити',
       issuance: 'Издаден документ',
@@ -20,21 +29,23 @@ describe('CREDIT_LEDGER_REASON_LABELS', () => {
 
 describe('balanceCaption', () => {
   it('counts the remaining documents', () => {
-    expect(balanceCaption({ balanceCents: 100, documentsRemaining: 10 })).toBe('още 10 документа');
+    expect(balanceCaption({ balanceCents: 100, documentsRemaining: 10 }, t)).toBe(
+      'още 10 документа',
+    );
   });
 
   it('uses the singular form for one remaining document', () => {
-    expect(balanceCaption({ balanceCents: 10, documentsRemaining: 1 })).toBe('още 1 документ');
+    expect(balanceCaption({ balanceCents: 10, documentsRemaining: 1 }, t)).toBe('още 1 документ');
   });
 
   it('handles an empty balance', () => {
-    expect(balanceCaption({ balanceCents: 0, documentsRemaining: 0 })).toBe('още 0 документа');
+    expect(balanceCaption({ balanceCents: 0, documentsRemaining: 0 }, t)).toBe('още 0 документа');
   });
 });
 
 describe('getPackOptions', () => {
   it('derives price and document count for every pack', () => {
-    expect(getPackOptions()).toEqual([
+    expect(getPackOptions(t)).toEqual([
       {
         id: 'pack5',
         priceLabel: '5,00 €',
@@ -59,7 +70,7 @@ describe('getPackOptions', () => {
 
 describe('getSubscriptionTierOptions', () => {
   it('derives title, body and grant label for every tier', () => {
-    expect(getSubscriptionTierOptions()).toEqual([
+    expect(getSubscriptionTierOptions(t)).toEqual([
       {
         id: 'sub5',
         title: '100 документа на месец за 5,00 €',

@@ -9,6 +9,7 @@ import {
 import { Button, EmptyState, Skeleton } from '@design/components';
 import { skipToken } from '@reduxjs/toolkit/query/react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { DocumentComposerForm } from './DocumentComposerForm';
 
 interface DocumentComposerPageProps {
@@ -16,6 +17,7 @@ interface DocumentComposerPageProps {
 }
 
 export function DocumentComposerPage({ documentId }: DocumentComposerPageProps) {
+  const t = useTranslations('documents');
   const documentQuery = useGetDocumentQuery(documentId ?? skipToken);
   const { data: clients, isLoading: isLoadingClients } = useListClientsQuery();
   const { data: catalogueItems, isLoading: isLoadingCatalogue } = useListCatalogueItemsQuery();
@@ -40,10 +42,10 @@ export function DocumentComposerPage({ documentId }: DocumentComposerPageProps) 
   if (documentId && !documentQuery.data) {
     return (
       <EmptyState
-        title="Документът не е намерен"
+        title={t('composer.notFound.title')}
         action={
           <Button size="sm" asChild>
-            <Link href="/documents">Към документите</Link>
+            <Link href="/documents">{t('composer.notFound.action')}</Link>
           </Button>
         }
       />
@@ -53,11 +55,11 @@ export function DocumentComposerPage({ documentId }: DocumentComposerPageProps) 
   if (documentId && documentQuery.data && documentQuery.data.status !== 'draft') {
     return (
       <EmptyState
-        title="Само чернови могат да се редактират"
-        description="Този документ вече е издаден и е неизменяем. Издаден документ се коригира с кредитно или дебитно известие."
+        title={t('composer.notDraft.title')}
+        description={t('composer.notDraft.description')}
         action={
           <Button size="sm" asChild>
-            <Link href={`/documents/${documentId}`}>Към документа</Link>
+            <Link href={`/documents/${documentId}`}>{t('composer.notDraft.action')}</Link>
           </Button>
         }
       />

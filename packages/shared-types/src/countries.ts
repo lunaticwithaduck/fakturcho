@@ -1,0 +1,91 @@
+import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
+import { DE_CONFIG } from './countries/de';
+import { ES_CONFIG } from './countries/es';
+import { FR_CONFIG } from './countries/fr';
+import { IT_CONFIG } from './countries/it';
+import { PL_CONFIG } from './countries/pl';
+import { RO_CONFIG } from './countries/ro';
+import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
+
+export * from './countries/base';
+export * from './languages';
+
+export const EU_VAT_AREA_COUNTRIES = [
+  'AT',
+  'BE',
+  'BG',
+  'CY',
+  'CZ',
+  'DE',
+  'DK',
+  'EE',
+  'ES',
+  'FI',
+  'FR',
+  'GR',
+  'HR',
+  'HU',
+  'IE',
+  'IT',
+  'LT',
+  'LU',
+  'LV',
+  'MT',
+  'NL',
+  'PL',
+  'PT',
+  'RO',
+  'SE',
+  'SI',
+  'SK',
+] as const;
+export type EuVatAreaCountry = (typeof EU_VAT_AREA_COUNTRIES)[number];
+
+export function isEuVatAreaCountry(country: string): country is EuVatAreaCountry {
+  return (EU_VAT_AREA_COUNTRIES as readonly string[]).includes(country);
+}
+
+const BG_CONFIG: CountryConfig = {
+  country: 'BG',
+  locale: 'bg',
+  language: 'bg',
+  vatRates: [
+    { rateBp: 2000, label: '20%' },
+    { rateBp: 900, label: '9%' },
+    { rateBp: 0, label: '0%' },
+  ],
+  defaultVatRateBp: 2000,
+  companyIdLabel: 'ЕИК',
+  vatNumberPattern: /^BG\d{9,10}$/,
+  exemptionGrounds: [...VAT_EXEMPTION_GROUNDS, DEFAULT_EXEMPTION_GROUND],
+  defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,
+  identifiers: [],
+  numberingUsesFixedWidth: true,
+  requiredIssuerFields: ['companyName', 'eik', 'addressLine', 'city'],
+  showMol: true,
+  showSignatureRow: true,
+  showOriginalStamp: true,
+};
+
+const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
+  BG: BG_CONFIG,
+  DE: DE_CONFIG,
+  FR: FR_CONFIG,
+  IT: IT_CONFIG,
+  PL: PL_CONFIG,
+  RO: RO_CONFIG,
+  ES: ES_CONFIG,
+};
+
+export function getCountryConfig(country: string): CountryConfig {
+  const configured = COUNTRY_CONFIGS[country];
+  if (configured) return configured;
+  if (isEuVatAreaCountry(country)) return { ...GENERIC_EU_CONFIG, country };
+  return { ...GENERIC_NON_EU_CONFIG, country };
+}
+
+export function isReverseCharge(issuerCountry: string, clientCountry: string | null): boolean {
+  if (!clientCountry) return false;
+  if (issuerCountry === clientCountry) return false;
+  return isEuVatAreaCountry(issuerCountry) && isEuVatAreaCountry(clientCountry);
+}

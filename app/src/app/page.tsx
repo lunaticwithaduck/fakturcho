@@ -1,6 +1,6 @@
 import { COMPANY } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
-import { LANDING_FAQ } from '@app/features/marketing/landingFaq';
+import { getLandingFaq } from '@app/features/marketing/landingFaq';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   title: { absolute: 'Фактурчо — фактури за българския бизнес' },
   description:
     'Издавайте фактури, проформи, кредитни и дебитни известия и оферти по българските изисквания. Плащате 0,10 € на издаден документ.',
+  alternates: {
+    canonical: '/',
+    languages: {
+      bg: '/',
+      en: '/en',
+      'x-default': '/',
+    },
+  },
 };
 
 function buildJsonLd() {
@@ -29,7 +37,7 @@ function buildJsonLd() {
   };
   const faqPage = {
     '@type': 'FAQPage',
-    mainEntity: LANDING_FAQ.map((item) => ({
+    mainEntity: getLandingFaq('bg').map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {

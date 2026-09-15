@@ -16,6 +16,24 @@ export const VAT_EXEMPTION_GROUNDS = [
   'чл.86 ал.1 ППЗДДС',
 ] as const;
 
-export type VatExemptionGround =
-  | typeof DEFAULT_EXEMPTION_GROUND
-  | (typeof VAT_EXEMPTION_GROUNDS)[number];
+export type VatExemptionGround = string;
+
+export const VAT_CATEGORIES = ['S', 'Z', 'E', 'AE', 'K', 'G', 'O'] as const;
+export type VatCategory = (typeof VAT_CATEGORIES)[number];
+
+export const VAT_CATEGORY_LABELS: Record<VatCategory, string> = {
+  S: 'Standard rate',
+  Z: 'Zero rated',
+  E: 'Exempt',
+  AE: 'Reverse charge',
+  K: 'Intra-community supply',
+  G: 'Export outside the EU',
+  O: 'Outside scope of VAT',
+};
+
+export interface VatSubtotal {
+  vatCategory: VatCategory;
+  rateBp: number;
+  taxableAmount: number;
+  vatAmount: number;
+}

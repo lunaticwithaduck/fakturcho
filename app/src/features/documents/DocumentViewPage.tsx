@@ -2,13 +2,17 @@
 
 import {
   useCancelDocumentMutation,
+  useGetClientQuery,
   useGetDocumentQuery,
   useMarkDocumentPaidMutation,
 } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { EmptyState, Skeleton, toast } from '@design/components';
+import { skipToken } from '@reduxjs/toolkit/query/react';
+import type { Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { DocumentActionBar } from './DocumentActionBar';
 import { DocumentEmailDialog } from './DocumentEmailDialog';
@@ -16,6 +20,7 @@ import { DocumentIssueDialog } from './DocumentIssueDialog';
 import { DocumentPdfViewer } from './DocumentPdfViewer';
 import { DocumentStatusBadge } from './DocumentStatusBadge';
 import { formatDocumentTitle } from './documentTitle';
+import { EinvoicePanel } from './EinvoicePanel';
 
 type DialogKind = 'issue' | 'email' | 'cancel' | null;
 
@@ -25,8 +30,11 @@ interface DocumentViewPageProps {
 }
 
 export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPageProps) {
+  const t = useTranslations('documents');
+  const locale = useLocale() as Locale;
   const router = useRouter();
   const { data: document, isLoading } = useGetDocumentQuery(documentId);
+  const { data: client } = useGetClientQuery(document?.clientId ?? skipToken);
   const [cancelDocument, { isLoading: isCancelling }] = useCancelDocumentMutation();
   const [markPaid, { isLoading: isMarkingPaid }] = useMarkDocumentPaidMutation();
   const [dialog, setDialog] = useState<DialogKind>(autoOpenIssue ? 'issue' : null);
@@ -45,27 +53,35 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
   }
 
   if (!document) {
-    return <EmptyState title="Документът не е намерен" />;
+    return <EmptyState title={t('view.notFound')} />;
   }
 
-  const title = formatDocumentTitle(document);
+  const title = formatDocumentTitle(document, (key, values) => t(`title.${key}`, values), locale);
 
   async function handleMarkPaid() {
     try {
       await markPaid(documentId).unwrap();
-      toast({ title: 'Документът е отбелязан като платен' });
+      toast({ title: t('view.markedPaidToast') });
     } catch (err) {
-      toast({ title: 'Грешка', description: getApiErrorMessage(err), variant: 'danger' });
+      toast({
+        title: t('view.errorToastTitle'),
+        description: getApiErrorMessage(err, locale),
+        variant: 'danger',
+      });
     }
   }
 
   async function handleCancelConfirm() {
     try {
       await cancelDocument(documentId).unwrap();
-      toast({ title: 'Документът е анулиран' });
+      toast({ title: t('view.cancelledToast') });
       setDialog(null);
     } catch (err) {
-      toast({ title: 'Грешка', description: getApiErrorMessage(err), variant: 'danger' });
+      toast({
+        title: t('view.errorToastTitle'),
+        description: getApiErrorMessage(err, locale),
+        variant: 'danger',
+      });
     }
   }
 
@@ -86,6 +102,8 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         onEmail={() => setDialog('email')}
       />
 
+      <EinvoicePanel documentId={documentId} status={document.status} client={client} />
+
       <DocumentPdfViewer
         documentId={documentId}
         title={title}
@@ -100,7 +118,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
             if (!open) setDialog(null);
           }}
           onIssued={() => {
-            toast({ title: 'Документът е издаден' });
+            toast({ title: t('view.issuedToast') });
             setDialog(null);
           }}
         />
@@ -113,7 +131,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
             if (!open) setDialog(null);
           }}
           onSent={() => {
-            toast({ title: 'Имейлът е изпратен' });
+            toast({ title: t('view.emailSentToast') });
             setDialog(null);
           }}
         />
@@ -121,9 +139,9 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
 
       {dialog === 'cancel' ? (
         <ConfirmDialog
-          title="Анулиране на документ"
-          description="Сигурни ли сте, че искате да анулирате документа? Номерът остава запазен и не се преизползва."
-          confirmLabel="Анулирай"
+          title={t('dialogs.cancel.title')}
+          description={t('dialogs.cancel.description')}
+          confirmLabel={t('dialogs.cancel.confirm')}
           isConfirming={isCancelling}
           onOpenChange={(open) => {
             if (!open) setDialog(null);

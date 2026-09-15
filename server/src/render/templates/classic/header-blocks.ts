@@ -1,38 +1,67 @@
 import type { Document } from '@prisma/client';
-import { formatDate } from '../../../money/format';
+import { formatDateForLocale } from '../../../money/format';
 import { escapeHtml, line } from './html-utils';
+import type { ClassicLabels } from './labels';
+import type { ClassicLocaleContext } from './locale';
 
-export function buildRecipientBlock(document: Document): string {
+// Mirrors formatIssuerAddress in footer-blocks.ts: a legacy client row stores the
+// whole address in recipientAddress (with city, if any, folded into that text); a
+// client with structured fields keeps recipientAddress as the line before the city
+// and prints street, then postcode/city on the same line.
+function formatRecipientAddress(document: Document): string {
+  if (document.recipientStreet) {
+    const postcodeCity = [document.recipientPostcode, document.recipientCity]
+      .filter(Boolean)
+      .join(' ');
+    return [document.recipientStreet, postcodeCity].filter(Boolean).join(', ');
+  }
+  return [document.recipientAddress, document.recipientCity].filter(Boolean).join(', ');
+}
+
+export function buildRecipientBlock(document: Document, locale: ClassicLocaleContext): string {
+  const { labels } = locale;
+  const recipientAddress = formatRecipientAddress(document);
   const rows = [
     document.recipientCompanyName
       ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
       : '',
-    document.recipientAddress ? `<div>${escapeHtml(document.recipientAddress)}</div>` : '',
-    line('ЕИК: ', document.recipientEik),
-    line('ДДС №: ', document.recipientVatNumber),
-    line('МОЛ: ', document.recipientMol),
+    recipientAddress ? `<div>${escapeHtml(recipientAddress)}</div>` : '',
+    line(`${labels.companyIdLabel}: `, document.recipientEik),
+    line(labels.vatNumberPrefix, document.recipientVatNumber),
+    locale.showMol ? line(labels.molPrefix, document.recipientMol) : '',
   ]
     .filter(Boolean)
     .join('');
-  return `<div class="recipient"><div class="block-title">Получател:</div>${rows}</div>`;
+  return `<div class="recipient"><div class="block-title">${labels.recipientTitle}</div>${rows}</div>`;
 }
 
-export function buildDatesBlock(document: Document, isQuote: boolean): string {
-  const issuedAt = document.issuedAt ? formatDate(document.issuedAt) : '—';
-  const rows = [`<div>Дата на издаване: ${issuedAt}</div>`];
+export function buildDatesBlock(
+  document: Document,
+  isQuote: boolean,
+  locale: ClassicLocaleContext,
+): string {
+  const { labels } = locale;
+  const issuedAt = document.issuedAt
+    ? formatDateForLocale(document.issuedAt, locale.language)
+    : '—';
+  const rows = [`<div>${labels.issuedAtPrefix}${issuedAt}</div>`];
   if (isQuote) {
-    const validUntil = document.validUntil ? formatDate(document.validUntil) : '—';
-    rows.push(`<div>Валидно до: ${validUntil}</div>`);
+    const validUntil = document.validUntil
+      ? formatDateForLocale(document.validUntil, locale.language)
+      : '—';
+    rows.push(`<div>${labels.validUntilPrefix}${validUntil}</div>`);
   } else {
-    const taxEventAt = document.taxEventAt ? formatDate(document.taxEventAt) : '—';
-    rows.push(`<div>Данъчно събитие: ${taxEventAt}</div>`);
+    const taxEventAt = document.taxEventAt
+      ? formatDateForLocale(document.taxEventAt, locale.language)
+      : '—';
+    rows.push(`<div>${labels.taxEventPrefix}${taxEventAt}</div>`);
   }
-  rows.push(buildStatusMarker(document.status));
+  rows.push(buildStatusMarker(document.status, labels));
   return `<div class="dates">${rows.join('')}</div>`;
 }
 
-function buildStatusMarker(status: string): string {
-  if (status === 'PAID') return '<div class="status">Статус: ПЛАТЕНО</div>';
-  if (status === 'CANCELLED') return '<div class="status">Статус: АНУЛИРАНА</div>';
+function buildStatusMarker(status: string, labels: ClassicLabels): string {
+  if (status === 'PAID') return `<div class="status">${labels.statusPaid}</div>`;
+  if (status === 'CANCELLED') return `<div class="status">${labels.statusCancelled}</div>`;
   return '';
 }

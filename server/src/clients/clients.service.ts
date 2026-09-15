@@ -10,8 +10,18 @@ export interface CreateClientInput {
   eik?: string | null | undefined;
   vatNumber?: string | null | undefined;
   address?: string | null | undefined;
+  street?: string | null | undefined;
+  postcode?: string | null | undefined;
+  countyRegion?: string | null | undefined;
+  city?: string | null | undefined;
+  country?: string | undefined;
+  documentLanguage?: ClientDto['documentLanguage'] | undefined;
   email?: string | null | undefined;
   mol?: string | null | undefined;
+  peppolEndpointId?: string | null | undefined;
+  peppolScheme?: string | null | undefined;
+  sdiRecipientCode?: string | null | undefined;
+  pec?: string | null | undefined;
 }
 
 export interface UpdateClientInput {
@@ -19,8 +29,18 @@ export interface UpdateClientInput {
   eik?: string | null | undefined;
   vatNumber?: string | null | undefined;
   address?: string | null | undefined;
+  street?: string | null | undefined;
+  postcode?: string | null | undefined;
+  countyRegion?: string | null | undefined;
+  city?: string | null | undefined;
+  country?: string | undefined;
+  documentLanguage?: ClientDto['documentLanguage'] | undefined;
   email?: string | null | undefined;
   mol?: string | null | undefined;
+  peppolEndpointId?: string | null | undefined;
+  peppolScheme?: string | null | undefined;
+  sdiRecipientCode?: string | null | undefined;
+  pec?: string | null | undefined;
 }
 
 function toDto(client: Client): ClientDto {
@@ -30,8 +50,18 @@ function toDto(client: Client): ClientDto {
     eik: client.eik,
     vatNumber: client.vatNumber,
     address: client.address,
+    street: client.street,
+    postcode: client.postcode,
+    countyRegion: client.countyRegion,
+    city: client.city,
+    country: client.country,
+    documentLanguage: client.documentLanguage as ClientDto['documentLanguage'],
     email: client.email,
     mol: client.mol,
+    peppolEndpointId: client.peppolEndpointId,
+    peppolScheme: client.peppolScheme,
+    sdiRecipientCode: client.sdiRecipientCode,
+    pec: client.pec,
   };
 }
 
@@ -74,8 +104,18 @@ export class ClientsService {
           eik,
           vatNumber: input.vatNumber ?? null,
           address: input.address ?? null,
+          street: input.street ?? null,
+          postcode: input.postcode ?? null,
+          countyRegion: input.countyRegion ?? null,
+          city: input.city ?? null,
+          country: input.country ?? 'BG',
+          documentLanguage: input.documentLanguage ?? null,
           email: input.email ?? null,
           mol: input.mol ?? null,
+          peppolEndpointId: input.peppolEndpointId ?? null,
+          peppolScheme: input.peppolScheme ?? null,
+          sdiRecipientCode: input.sdiRecipientCode ?? null,
+          pec: input.pec ?? null,
         },
       });
       return toDto(client);
@@ -100,8 +140,24 @@ export class ClientsService {
           ...(eik !== undefined ? { eik } : {}),
           ...(input.vatNumber !== undefined ? { vatNumber: input.vatNumber } : {}),
           ...(input.address !== undefined ? { address: input.address } : {}),
+          ...(input.street !== undefined ? { street: input.street } : {}),
+          ...(input.postcode !== undefined ? { postcode: input.postcode } : {}),
+          ...(input.countyRegion !== undefined ? { countyRegion: input.countyRegion } : {}),
+          ...(input.city !== undefined ? { city: input.city } : {}),
+          ...(input.country !== undefined ? { country: input.country } : {}),
+          ...(input.documentLanguage !== undefined
+            ? { documentLanguage: input.documentLanguage }
+            : {}),
           ...(input.email !== undefined ? { email: input.email } : {}),
           ...(input.mol !== undefined ? { mol: input.mol } : {}),
+          ...(input.peppolEndpointId !== undefined
+            ? { peppolEndpointId: input.peppolEndpointId }
+            : {}),
+          ...(input.peppolScheme !== undefined ? { peppolScheme: input.peppolScheme } : {}),
+          ...(input.sdiRecipientCode !== undefined
+            ? { sdiRecipientCode: input.sdiRecipientCode }
+            : {}),
+          ...(input.pec !== undefined ? { pec: input.pec } : {}),
         },
       });
       return toDto(client);

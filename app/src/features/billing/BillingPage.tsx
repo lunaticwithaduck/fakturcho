@@ -6,6 +6,7 @@ import {
   useGetSubscriptionQuery,
 } from '@app/api';
 import { Skeleton } from '@design/components';
+import { useTranslations } from 'next-intl';
 import { BalanceCard } from './BalanceCard';
 import { CreditPacksSection } from './CreditPacksSection';
 import { LedgerSection } from './LedgerSection';
@@ -13,6 +14,7 @@ import { SubscriptionCard } from './SubscriptionCard';
 import { useCheckoutRedirect } from './useCheckoutRedirect';
 
 export function BillingPage() {
+  const t = useTranslations('billing');
   const { data: balance, isLoading: isLoadingBalance } = useGetCreditBalanceQuery();
   const { data: ledger, isLoading: isLoadingLedger } = useGetCreditLedgerQuery();
   const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscriptionQuery();
@@ -33,7 +35,7 @@ export function BillingPage() {
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
-      <h1 className="text-2xl font-bold text-text">Билинг</h1>
+      <h1 className="text-2xl font-bold text-text">{t('pageTitle')}</h1>
       <BalanceCard balance={balance} />
       <CreditPacksSection pendingProduct={pendingProduct} onBuy={startCheckout} />
       <SubscriptionCard

@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { THEME_COLOR } from '../../theme-colors';
+import { FeatureFlagsProvider, getFeatureFlags } from '../feature-flags';
 import { Providers } from '../store/providers';
 import { uiFont } from './fonts';
 import './globals.css';
@@ -20,6 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'bg_BG',
+    alternateLocale: ['en_US'],
     siteName: 'Фактурчо',
   },
   twitter: {
@@ -39,11 +43,17 @@ export const viewport: Viewport = {
   colorScheme: 'light',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const [flags, locale] = await Promise.all([getFeatureFlags(), getLocale()]);
+
   return (
-    <html lang="bg" className={uiFont.variable}>
+    <html lang={locale} className={uiFont.variable}>
       <body className="bg-surface font-sans text-text antialiased">
-        <Providers>{children}</Providers>
+        <FeatureFlagsProvider flags={flags}>
+          <NextIntlClientProvider>
+            <Providers>{children}</Providers>
+          </NextIntlClientProvider>
+        </FeatureFlagsProvider>
         {umamiSrc && umamiWebsiteId ? (
           <Script src={umamiSrc} data-website-id={umamiWebsiteId} strategy="afterInteractive" />
         ) : null}

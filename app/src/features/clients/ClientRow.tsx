@@ -1,5 +1,6 @@
 import { Button, Card } from '@design/components';
 import type { ClientDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 
 interface ClientRowProps {
   client: ClientDto;
@@ -8,21 +9,24 @@ interface ClientRowProps {
 }
 
 export function ClientRow({ client, onEdit, onDelete }: ClientRowProps) {
+  const t = useTranslations('clients');
+
   return (
     <Card className="flex items-center justify-between gap-4">
       <div className="flex min-w-0 flex-col gap-0.5">
         <p className="truncate text-sm font-semibold text-text">{client.companyName}</p>
         <p className="truncate text-sm text-text-muted">
-          {[client.eik ? `ЕИК: ${client.eik}` : null, client.email].filter(Boolean).join(' · ') ||
-            '—'}
+          {[client.eik ? t('eikPrefix', { eik: client.eik }) : null, client.email]
+            .filter(Boolean)
+            .join(' · ') || '—'}
         </p>
       </div>
       <div className="flex shrink-0 gap-1">
         <Button variant="ghost" size="sm" onClick={() => onEdit(client)}>
-          Редактирай
+          {t('edit')}
         </Button>
         <Button variant="ghost" size="sm" onClick={() => onDelete(client)}>
-          Изтрий
+          {t('delete')}
         </Button>
       </div>
     </Card>

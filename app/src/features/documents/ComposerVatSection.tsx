@@ -1,9 +1,14 @@
+'use client';
+
 import { Select, SelectItem, Switch } from '@design/components';
-import { VAT_EXEMPTION_GROUNDS } from '@fakturcho/shared-types';
+import { useTranslations } from 'next-intl';
 
 interface ComposerVatSectionProps {
   chargeVat: boolean;
+  showChargeToggle: boolean;
   vatExemptionGround: string | null;
+  grounds: readonly string[];
+  ratePercent: number;
   hasGroundError: boolean;
   onChangeChargeVat: (chargeVat: boolean) => void;
   onChangeGround: (ground: string) => void;
@@ -11,24 +16,35 @@ interface ComposerVatSectionProps {
 
 export function ComposerVatSection({
   chargeVat,
+  showChargeToggle,
   vatExemptionGround,
+  grounds,
+  ratePercent,
   hasGroundError,
   onChangeChargeVat,
   onChangeGround,
 }: ComposerVatSectionProps) {
+  const t = useTranslations('documents');
+
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold text-text">ДДС</h2>
-      <Switch label="Начисли ДДС (20%)" checked={chargeVat} onCheckedChange={onChangeChargeVat} />
+      <h2 className="text-lg font-semibold text-text">{t('composer.vat.heading')}</h2>
+      {showChargeToggle ? (
+        <Switch
+          label={t('composer.vat.chargeLabel', { rate: ratePercent })}
+          checked={chargeVat}
+          onCheckedChange={onChangeChargeVat}
+        />
+      ) : null}
       {!chargeVat ? (
         <Select
-          label="Основание за неначисляване на ДДС"
-          placeholder="Изберете основание"
+          label={t('composer.vat.groundLabel')}
+          placeholder={t('composer.vat.groundPlaceholder')}
           value={vatExemptionGround ?? ''}
           onValueChange={onChangeGround}
-          {...(hasGroundError ? { error: 'Задължително поле' } : {})}
+          {...(hasGroundError ? { error: t('composer.requiredField') } : {})}
         >
-          {VAT_EXEMPTION_GROUNDS.map((ground) => (
+          {grounds.map((ground) => (
             <SelectItem key={ground} value={ground}>
               {ground}
             </SelectItem>

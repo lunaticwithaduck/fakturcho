@@ -5,6 +5,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Политика за поверителност',
   description: 'Как Фактурчо обработва лични данни.',
+  alternates: {
+    canonical: '/privacy',
+    languages: {
+      bg: '/privacy',
+      en: '/en/privacy',
+      'x-default': '/privacy',
+    },
+  },
 };
 
 export default function PrivacyPage() {

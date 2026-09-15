@@ -1,0 +1,127 @@
+import type { DocumentDto } from '@fakturcho/shared-types';
+import { describe, expect, it } from 'vitest';
+import { EINVOICE_MISSING_FIELD_CODES } from '../../einvoice/readiness';
+import { roDomesticStandardInvoice } from './__fixtures__/ro-domestic-standard';
+import { checkCiusRoReadiness } from './cius-ro-readiness';
+
+describe('checkCiusRoReadiness — fully populated RO fixture', () => {
+  it('flags both counties as missing when no options are supplied', () => {
+    expect(checkCiusRoReadiness(roDomesticStandardInvoice)).toEqual({
+      ready: false,
+      missingFields: [
+        EINVOICE_MISSING_FIELD_CODES.issuerCountyRegion,
+        EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion,
+      ],
+    });
+  });
+
+  it('is ready once both counties are supplied via options', () => {
+    expect(
+      checkCiusRoReadiness(roDomesticStandardInvoice, {
+        issuerCountyRegion: 'București',
+        recipientCountyRegion: 'Cluj',
+      }),
+    ).toEqual({
+      ready: true,
+      missingFields: [],
+    });
+  });
+
+  it('still flags the recipient county when only the issuer county is supplied', () => {
+    const result = checkCiusRoReadiness(roDomesticStandardInvoice, {
+      issuerCountyRegion: 'București',
+    });
+    expect(result.missingFields).toEqual([EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion]);
+  });
+});
+
+describe('checkCiusRoReadiness — inherits core EN 16931 checks', () => {
+  it('flags an unissued document', () => {
+    const draft: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      number: null,
+      issuedAt: null,
+    };
+    expect(checkCiusRoReadiness(draft).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentNumber,
+    );
+  });
+});
+
+describe('checkCiusRoReadiness — Romanian CUI checks', () => {
+  it('flags a missing issuer CUI', () => {
+    const incomplete: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, eik: null },
+    };
+    expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerCui,
+    );
+  });
+
+  it('flags an issuer CUI that fails the checksum', () => {
+    const incomplete: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, eik: '18547291' },
+    };
+    expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerCuiChecksum,
+    );
+  });
+
+  it('flags a missing issuer VAT number when VAT-registered', () => {
+    const incomplete: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, vatNumber: null },
+    };
+    expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerVatNumberRoPrefix,
+    );
+  });
+
+  it('flags an issuer VAT number missing the RO prefix', () => {
+    const incomplete: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, vatNumber: '18547290' },
+    };
+    expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerVatNumberRoFormat,
+    );
+  });
+
+  it('flags a missing recipient CUI', () => {
+    const incomplete: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: { ...roDomesticStandardInvoice.recipient, eik: null },
+    };
+    expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.recipientCui,
+    );
+  });
+
+  it('flags a recipient VAT number that fails the checksum', () => {
+    const incomplete: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: { ...roDomesticStandardInvoice.recipient, vatNumber: 'RO14399841' },
+    };
+    expect(checkCiusRoReadiness(incomplete).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.recipientVatNumberRoFormat,
+    );
+  });
+
+  it('does not apply Romanian CUI checks to a non-Romanian party', () => {
+    const notRomanian: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: {
+        ...roDomesticStandardInvoice.recipient,
+        country: 'DE',
+        vatNumber: 'DE123456789',
+        eik: 'HRB 654321',
+      },
+    };
+    const result = checkCiusRoReadiness(notRomanian, { issuerCountyRegion: 'București' });
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCui);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCuiChecksum);
+    expect(result.missingFields).not.toContain(EINVOICE_MISSING_FIELD_CODES.recipientCountyRegion);
+  });
+});

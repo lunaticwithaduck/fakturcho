@@ -10,16 +10,20 @@ import { ClientsModule } from './clients/clients.module';
 import { AppExceptionFilter } from './common/app-exception.filter';
 import { DocumentsModule } from './documents/documents.module';
 import { EmailModule } from './email/email.module';
+import { FeatureFlagsModule } from './feature-flags/feature-flags.module';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { IssuerModule } from './issuer/issuer.module';
 import { NumberingModule } from './numbering/numbering.module';
+import { PeppolHttpModule } from './peppol/http/peppol-http.module';
+import { PeppolModule } from './peppol/peppol.module';
 import { RenderModule } from './render/render.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    FeatureFlagsModule,
     AuthModule,
     IssuerModule,
     ClientsModule,
@@ -31,6 +35,8 @@ import { RenderModule } from './render/render.module';
     EmailModule,
     HealthModule,
     AdminModule,
+    PeppolModule,
+    PeppolHttpModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },

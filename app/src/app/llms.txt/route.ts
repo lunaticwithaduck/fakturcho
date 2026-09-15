@@ -36,6 +36,8 @@ const CONTENT = `# Фактурчо
 - [Политика за поверителност](https://www.fakturcho.com/privacy): обработка на лични данни.
 - [Възстановяване на суми](https://www.fakturcho.com/refunds): политика за възстановяване на плащания.
 
+English version: [https://www.fakturcho.com/en/llms.txt](https://www.fakturcho.com/en/llms.txt).
+
 Fakturcho is a web app for issuing Bulgarian-compliant invoices, proformas, credit/debit notes and quotes, billed per document.
 `;
 

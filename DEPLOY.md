@@ -46,7 +46,7 @@ paths, so local artifacts (`node_modules`, `.next`, `.env`) never enter an image
 | `REVOLUT_SUBSCRIPTION_PLAN_VARIATION_ID` | `pv_…` | Merchant API subscription plan variation id for the 5 €/month plan (see below) |
 | `REVOLUT_WEBHOOK_SECRET` | `wsk_…` | signing secret returned when the webhook destination is created (step below) |
 | `RESEND_API_KEY` | `re_…` | Resend → API Keys |
-| `EMAIL_FROM` | `Fakturcho <invoices@fakturcho.bg>` | address on a Resend-verified domain |
+| `EMAIL_FROM` | `Fakturcho <invoices@fakturcho.com>` | address on a Resend-verified domain |
 
 On boot the container runs `prisma migrate deploy` and then starts the API, so
 the first successful deploy creates the schema. The image is large (Chromium
@@ -110,6 +110,143 @@ subscription needs a plan created once, up front:
    asks for; wait until verified.
 2. Create an API key → `RESEND_API_KEY`.
 3. `EMAIL_FROM` must use the verified domain.
+
+### Romania (ANAF e-Factura)
+
+| Variable | Example | Where it comes from |
+| --- | --- | --- |
+| `ANAF_ENVIRONMENT` | `test` | `test` talks to `api.anaf.ro/test`, `prod` to `api.anaf.ro/prod` — `test` is safe to point the dev stack at, it never reaches a real taxpayer's SPV |
+| `ANAF_CLIENT_ID` | — | ANAF OAuth app registration (below) |
+| `ANAF_CLIENT_SECRET` | — | same registration |
+| `ANAF_REFRESH_TOKEN` | — | one-time authorization-code exchange (below) |
+
+ANAF has no service-account flow: every credential traces back to a person's
+qualified digital certificate with an SPV PJ role (legal representative,
+delegate, or proxy) for the issuing company. jojo has to do the following by
+hand, once per CIF:
+
+1. Register the app once at https://www.anaf.ro/InregOauth ("Editare profil
+   Oauth" → "Generare Client ID", service `E-Factura`, any callback URL —
+   Postman's `https://oauth.pstmn.io/v1/callback` works if there's no public
+   redirect URI yet). This yields `ANAF_CLIENT_ID` / `ANAF_CLIENT_SECRET`.
+2. Run the OAuth2 authorization-code flow once, in a browser that has the
+   certificate installed: authorize at
+   `https://logincert.anaf.ro/anaf-oauth2/v1/authorize` with that client id,
+   pick the certificate when prompted, then exchange the returned code at
+   `https://logincert.anaf.ro/anaf-oauth2/v1/token` (client id/secret as HTTP
+   Basic auth) for an access token and a refresh token. Postman's built-in
+   OAuth2 helper does both steps; see
+   `server/src/einvoice-adapters/ro/ANAF.md` for the exact request shapes.
+3. `ANAF_REFRESH_TOKEN` is that refresh token — valid 365 days, and each use
+   returns a new one, so it needs rotating (by hand, same flow) before it
+   expires. The access token this adapter uses day-to-day is derived from it
+   automatically and cached in memory.
+### Italy (SDI)
+
+FatturaPA has no PEPPOL path — every invoice to an Italian counterparty goes
+through the Sistema di Interscambio (SdI) over the SDICoop channel, and
+direct accreditation to SDICoop is the only official transmission route (no
+private intermediary bypasses it; an "intermediario" is just another
+accredited transmitter). Full protocol detail and citations:
+`server/src/einvoice-adapters/it/SDI.md`.
+
+1. Accreditation is done on **https://www.fatturapa.gov.it**, under the
+   channel-accreditation procedure ("Fatture e Corrispettivi" → accreditation
+   for SDICoop). It requires: a PEC (or equivalent certified-mail) address, a
+   subscribed "accordo di servizio", and the endpoints of your own
+   `TrasmissioneFatture` callback service (where SdI pushes delivery/rejection
+   notifications back). After submission SdI runs interoperability
+   ("qualificazione") tests against your system, then issues the **client
+   certificate** used to authenticate every subsequent call.
+2. **The test endpoint (`testservizi.fatturapa.it`) is not a public sandbox**
+   — it only accepts calls from parties who completed the accreditation above
+   and hold test credentials for it. There is no anonymous way to try
+   SDICoop before accrediting.
+3. Once accredited, put the certificate material in the API service's env
+   (see `server/.env.example`): `SDI_ENVIRONMENT`, `SDI_CLIENT_CERT_PEM`,
+   `SDI_CLIENT_KEY_PEM`, `SDI_CA_PEM` (each PEM, literal or base64), and
+   `SDI_SENDER_VAT`, the accredited sender's own VAT/fiscal identifier used to
+   build the `RiceviFile` filename.
+4. `SdiTransport.checkStatus` is intentionally unimplemented — SdI has no
+   status-query operation, it pushes outcomes to the `TrasmissioneFatture`
+   callback endpoint declared during accreditation. Building that receiver
+   and wiring RC/NS/MC/NE/DT/AT notifications into document status is a
+   follow-up, not part of this adapter.
+### France (Chorus Pro)
+
+Chorus Pro is B2G only — French public-sector recipients. There is no PDP
+wired up for French B2B (see `server/src/einvoice-adapters/fr/CHORUSPRO.md`);
+`CHORUSPRO_*` vars are optional and the transport is simply unconfigured
+until they're set.
+
+1. Create a PISTE account at https://developer.aife.economie.gouv.fr,
+   choosing the **"Universal"** organization so the Chorus Pro APIs show up
+   in the catalog.
+2. Declare an **application** in the PISTE portal to get an OAuth2
+   `client_id` / `client_secret` pair for the sandbox (qualification)
+   environment → `CHORUSPRO_CLIENT_ID` / `CHORUSPRO_CLIENT_SECRET`. A second
+   pair is issued once qualification tests pass and you request production
+   access.
+3. Inside Chorus Pro itself (portail.chorus-pro.gouv.fr, not PISTE), create
+   a **technical account** ("compte technique") for your structure with API
+   rights enabled → `CHORUSPRO_TECH_LOGIN` / `CHORUSPRO_TECH_PASSWORD`. This
+   account authenticates the `cpro-account` header and is unrelated to the
+   PISTE login.
+4. `CHORUSPRO_ENVIRONMENT=sandbox` targets
+   `sandbox-oauth.piste.gouv.fr` / `sandbox-api.piste.gouv.fr` (qualification
+   data, safe to test against); `prod` targets `oauth.piste.gouv.fr` /
+   `api.piste.gouv.fr` and files real B2G invoices.
+### Spain (AEAT Verifactu + FACe)
+
+Every ES invoice is reported to AEAT via Verifactu; a public-body recipient
+additionally goes to FACe. Full protocol detail and citations:
+`server/src/einvoice-adapters/es/AEAT.md`.
+
+| Variable | Example | Where it comes from |
+| --- | --- | --- |
+| `AEAT_ENVIRONMENT` | `test` | `test` talks to AEAT's "pruebas" (external test) environment (`prewww1.aeat.es`), `prod` to the real one (`www1.agenciatributaria.gob.es`) |
+| `AEAT_CLIENT_CERT_PEM` | — | the certificate below, PEM |
+| `AEAT_CLIENT_KEY_PEM` | — | its private key, PEM |
+| `AEAT_CA_PEM` | — | optional: an extra CA to trust when verifying AEAT's own TLS certificate |
+| `AEAT_ISSUER_NIF` | `B12345674` | the tenant's own NIF/CIF — Verifactu keeps one hash chain per issuer |
+| `AEAT_SOFTWARE_NIF` | — | the *software producer's* own NIF (fakturcho's, not the tenant's) |
+| `AEAT_SOFTWARE_NAME` | `Fakturcho` | optional, defaults to `Fakturcho` |
+| `AEAT_SOFTWARE_VERSION` | `1.0` | optional, defaults to `1.0` |
+| `AEAT_SOFTWARE_APP_ID` | `01` | optional 2-character id fakturcho assigns itself, defaults to `01` |
+| `FACE_ENVIRONMENT` | `test` | `test` talks to FACe's staging portal (`se-face-webservice.redsara.es`), `prod` to `webservice.face.gob.es` |
+| `FACE_SIGNING_CERT_PEM` | — | certificate used to WS-Security-sign every FACe request, PEM |
+| `FACE_SIGNING_KEY_PEM` | — | its private key, PEM |
+
+1. **Certificate requirements.** Both Verifactu (TLS client certificate) and
+   FACe (WS-Security XML signature) require a *qualified* electronic
+   certificate recognised by AEAT/@firma — a personal FNMT "Certificado de
+   Representante" for the company, an "apoderado" certificate, or a company
+   seal ("sello electrónico") certificate. A self-signed or ordinary TLS
+   certificate will not authenticate against either service. The same
+   certificate can usually serve both `AEAT_CLIENT_CERT_PEM`/`_KEY_PEM` and
+   `FACE_SIGNING_CERT_PEM`/`_KEY_PEM`, but they are separate variables so a
+   different certificate can be used per service if AEAT and the FACe
+   integration end up under different legal representatives.
+2. **The pruebas (test) environment.** AEAT's `AEAT_ENVIRONMENT=test`
+   endpoint (`prewww1.aeat.es`) is AEAT's own "Portal de Pruebas Externas" —
+   it still requires a real qualified certificate to connect (there is no
+   anonymous sandbox), but records submitted there never reach the
+   production ledger. FACe's `FACE_ENVIRONMENT=test`
+   (`se-face-webservice.redsara.es`) is a separate staging deployment of the
+   whole platform with its own DIR3 directory — a public-body recipient must
+   be registered there too before a test submission will route anywhere.
+3. **DIR3 data a public-body client must supply.** Before invoicing a public
+   body, get its three DIR3 codes (each 9 characters — a letter followed by
+   8 digits, e.g. `L01280796`) from the client itself or from FACe's own
+   directory search: órgano gestor (the contracting/receiving body), unidad
+   tramitadora (the unit that processes it) and oficina contable (the
+   accounting office that pays it). This adapter has no dedicated field for
+   them — set the document's buyer reference to
+   `DIR3:<organoGestor>:<unidadTramitadora>:<oficinaContable>` and both the
+   Facturae `AdministrativeCentres` block and the FACe routing decision pick
+   it up automatically (see `face-dir3.ts`). Getting any of the three codes
+   wrong routes the invoice to the wrong desk inside that public body, not a
+   rejection FACe can detect on its own.
 
 ## 3. App service (`fakturcho-app`)
 
@@ -273,3 +410,68 @@ alert — nothing 500s, so this ships before Umami is provisioned.
 `UmamiClient` logs into `POST {UMAMI_API_URL}/api/auth/login` and caches the
 bearer token in memory, re-logging in once on a 401. Redeploy the API and
 rebuild the app; the Трафик page then shows real numbers.
+
+## 8. E-invoice transports
+
+Each issuer country routes to at most one real transport, picked by
+`document.issuer.country` in `EinvoiceTransportRegistry.forCountry`
+(`server/src/einvoice/transport/transport-registry.ts`). A country with no
+registered transport falls back to the Peppol network via `PeppolService`.
+Production binds `PEPPOL_TRANSPORT` to `NotConfiguredPeppolTransport`
+until a real access-point client is wired up — sending for a Peppol-routed
+country then fails honestly with `EINVOICE_TRANSPORT_NOT_CONFIGURED`
+instead of pretending to deliver.
+
+Country transports register themselves in
+`server/src/einvoice/transport/einvoice-transport.module.ts` — import the
+country's module and add its transport class to the token list; the registry
+picks it up from `document.issuer.country` automatically. Each transport's
+own `isConfigured()` decides whether `/send` proceeds or throws
+`EINVOICE_TRANSPORT_NOT_CONFIGURED` naming that provider — no transmission
+row is written when a provider is unconfigured. `POST
+/api/documents/:id/einvoice/refresh` polls `checkStatus` on providers that
+implement it and returns 409 for the ones that don't (Peppol, or any
+transport without status polling).
+
+Per-country credentials (API keys, certificates, SFTP/webservice
+endpoints) are documented by each country's own worker alongside its
+transport implementation.
+### Poland (KSeF)
+
+`KsefTransport` (`server/src/einvoice-adapters/pl/ksef-transport.ts`) sends
+FA(3) invoices straight to the Ministry of Finance's KSeF 2.0 API — no
+intermediary. Full endpoint documentation, with citations, is in
+`server/src/einvoice-adapters/pl/KSEF.md`.
+
+Runtime vars (`server/.env.example`):
+
+| Variable | Value |
+| --- | --- |
+| `KSEF_ENVIRONMENT` | `test`, `demo`, or `prod` |
+| `KSEF_NIP` | the 10-digit NIP authenticating to KSeF |
+| `KSEF_TOKEN` | a KSeF token generated for that NIP |
+
+### Getting a KSeF token
+
+1. Log into the KSeF web app for the target environment — TEST:
+   `https://ksef-test.mf.gov.pl`, DEMO: `https://ksef-demo.mf.gov.pl`, PROD:
+   `https://ksef.mf.gov.pl` — with a Trusted Profile (Profil Zaufany),
+   qualified signature, or qualified seal for the NIP in question.
+2. **Uwierzytelnianie i uprawnienia → Generuj token KSeF** (the exact path
+   the Ministry documents at
+   [ksef.podatki.gov.pl](https://ksef.podatki.gov.pl)). Pick a permission
+   scope that at minimum allows invoice sending (`Faktura – wystawianie`);
+   the token is shown once — copy it straight into `KSEF_TOKEN`.
+3. TEST accepts self-generated, non-real NIPs (data there isn't isolated
+   between integrators, so a made-up 10-digit NIP works for `KSEF_NIP` and
+   for the issuer's NIP on the invoice) — point the dev stack at
+   `KSEF_ENVIRONMENT=test` and there is no need to touch a real company's
+   KSeF account to develop against it. DEMO and PROD require a real NIP with
+   a real token generated as above.
+## 9. Feature flags
+
+`EN_LOCALE`, `EINVOICE` and `PEPPOL` are not environment variables — they live
+in the `feature_flag` table (seeded off by the first migration that creates
+it) and are read through `FeatureFlagsService`, cached in memory for a few
+seconds. Toggle them at **backoffice → Функции**; a change takes effect
+across the API and the app within that cache window, no redeploy needed.

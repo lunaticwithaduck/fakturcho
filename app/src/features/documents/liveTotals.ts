@@ -1,4 +1,4 @@
-import { DEFAULT_VAT_RATE_BP, roundHalfUp, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import { roundHalfUp, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { Cents, DocumentType } from '@shared/types';
 
 export function normalizeQuantity(raw: string): string | null {
@@ -70,6 +70,8 @@ export interface VatTreatmentInput {
   documentType: DocumentType;
   vatRegistered: boolean;
   chargeVat: boolean;
+  vatRateBp: number;
+  groundRequired: boolean;
 }
 
 export interface VatTreatment {
@@ -81,14 +83,22 @@ export interface VatTreatment {
 
 export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
   const isTaxDocument = TAX_DOCUMENT_TYPES[input.documentType];
-  if (!isTaxDocument || !input.vatRegistered) {
+  if (!isTaxDocument) {
     return { isTaxDocument, vatCharged: false, vatRateBp: 0, groundSelectable: false };
+  }
+  if (!input.vatRegistered) {
+    return {
+      isTaxDocument,
+      vatCharged: false,
+      vatRateBp: 0,
+      groundSelectable: input.groundRequired,
+    };
   }
   if (input.chargeVat) {
     return {
       isTaxDocument,
       vatCharged: true,
-      vatRateBp: DEFAULT_VAT_RATE_BP,
+      vatRateBp: input.vatRateBp,
       groundSelectable: false,
     };
   }

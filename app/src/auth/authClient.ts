@@ -1,3 +1,4 @@
+import { inferAdditionalFields } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/react';
 
 /**
@@ -7,6 +8,15 @@ import { createAuthClient } from 'better-auth/react';
  * browser (same origin, so the Next.js /api/* rewrite still applies) and a
  * safe unvalidated fallback during SSR module evaluation.
  */
-export const authClient = createAuthClient();
+export const authClient = createAuthClient({
+  plugins: [
+    inferAdditionalFields({
+      user: {
+        locale: { type: 'string', required: false, input: true },
+        country: { type: 'string', required: false, input: true },
+      },
+    }),
+  ],
+});
 
 export const { useSession, signIn, signUp, signOut } = authClient;

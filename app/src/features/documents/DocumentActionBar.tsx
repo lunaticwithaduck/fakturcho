@@ -1,6 +1,7 @@
 import { Button } from '@design/components';
 import type { DocumentStatus } from '@shared/types';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 interface DocumentActionBarProps {
   documentId: string;
@@ -21,28 +22,30 @@ export function DocumentActionBar({
   onCancel,
   onEmail,
 }: DocumentActionBarProps) {
+  const t = useTranslations('documents.actions');
+
   return (
     <div className="flex flex-wrap gap-3">
       {status === 'draft' ? (
         <>
           <Button variant="secondary" asChild>
-            <Link href={`/documents/${documentId}/edit`}>Редактирай</Link>
+            <Link href={`/documents/${documentId}/edit`}>{t('edit')}</Link>
           </Button>
-          <Button onClick={onIssue}>Издай</Button>
+          <Button onClick={onIssue}>{t('issue')}</Button>
         </>
       ) : null}
       {status === 'sent' || status === 'overdue' ? (
         <Button onClick={onMarkPaid} disabled={isMarkingPaid}>
-          {isMarkingPaid ? 'Отбелязване...' : 'Отбележи като платена'}
+          {isMarkingPaid ? t('markingPaid') : t('markPaid')}
         </Button>
       ) : null}
       {status === 'sent' || status === 'overdue' || status === 'paid' ? (
         <>
           <Button variant="secondary" onClick={onEmail}>
-            Изпрати по имейл
+            {t('email')}
           </Button>
           <Button variant="danger" onClick={onCancel}>
-            Анулирай
+            {t('cancel')}
           </Button>
         </>
       ) : null}

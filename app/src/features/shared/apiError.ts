@@ -1,4 +1,6 @@
-import type { DomainErrorCode } from '@shared/types';
+import bgMessages from '@messages/bg.json';
+import enMessages from '@messages/en.json';
+import type { DomainErrorCode, Locale } from '@shared/types';
 
 interface ApiErrorBody {
   code?: string;
@@ -21,43 +23,28 @@ function extractBody(error: unknown): ApiErrorBody | null {
   return data as ApiErrorBody;
 }
 
-const MESSAGES_BY_CODE: Record<DomainErrorCode, string> = {
-  NUMBER_COLLISION: 'Номерът вече се използва. Опитайте отново.',
-  SERIES_OVERRIDE_LOCKED: 'Поредицата вече има издадени документи — следващият номер е фиксиран.',
-  DOCUMENT_IMMUTABLE: 'Издаден документ не може да бъде променян.',
-  DOCUMENT_NOT_ISSUED: 'Черновата не може да бъде изпратена. Издайте документа.',
-  ORIGINAL_DOCUMENT_REQUIRED: 'Изберете оригиналния документ, за да продължите.',
-  ISSUER_PROFILE_INCOMPLETE:
-    'Профилът на издателя не е попълнен. Допълнете фирмените данни, за да издавате документи.',
-  VAT_GROUND_NOT_ALLOWED: 'Този избор на основание за неначисляване на ДДС не е разрешен.',
-  CLIENT_EIK_DUPLICATE: 'Вече има клиент с този ЕИК.',
-  SUBSCRIPTION_REQUIRED: 'Нужен е активен абонамент.',
-  INSUFFICIENT_CREDITS: 'Нямате достатъчно кредити. Издаването на документ струва 0,10 €.',
-  VALIDATION_FAILED: 'Проверете въведените данни.',
-  NOT_FOUND: 'Записът не е намерен.',
-  UNAUTHORIZED: 'Нямате достъп.',
-  FORBIDDEN: 'Нямате достъп.',
-  CHECKOUT_NOT_CONFIGURED:
-    'Плащанията не са настроени докрай. Свържете се с нас — не е нужно да опитвате отново.',
-  PAYMENT_PROVIDER_ERROR: 'Доставчикът на плащания отказа заявката. Опитайте отново по-късно.',
-  PAYMENT_PROVIDER_UNREACHABLE:
-    'Доставчикът на плащания не отговаря. Опитайте отново след няколко минути.',
-  INTERNAL_ERROR: 'Възникна неочаквана грешка. Опитайте отново.',
-};
-
-const DEFAULT_MESSAGE = 'Възникна грешка. Опитайте отново.';
-
-function isKnownCode(code: string): code is DomainErrorCode {
-  return code in MESSAGES_BY_CODE;
+interface ShellMessages {
+  apiErrors: Record<DomainErrorCode, string>;
+  apiErrorFallback: string;
 }
 
-export function getApiErrorCode(error: unknown): DomainErrorCode | null {
+const MESSAGES_BY_LOCALE: Record<Locale, ShellMessages> = {
+  bg: bgMessages.shell as ShellMessages,
+  en: enMessages.shell as ShellMessages,
+};
+
+function isKnownCode(code: string, locale: Locale): code is DomainErrorCode {
+  return code in MESSAGES_BY_LOCALE[locale].apiErrors;
+}
+
+export function getApiErrorCode(error: unknown, locale: Locale): DomainErrorCode | null {
   const body = extractBody(error);
-  if (!body || typeof body.code !== 'string' || !isKnownCode(body.code)) return null;
+  if (!body || typeof body.code !== 'string' || !isKnownCode(body.code, locale)) return null;
   return body.code;
 }
 
-export function getApiErrorMessage(error: unknown): string {
-  const code = getApiErrorCode(error);
-  return code ? MESSAGES_BY_CODE[code] : DEFAULT_MESSAGE;
+export function getApiErrorMessage(error: unknown, locale: Locale): string {
+  const code = getApiErrorCode(error, locale);
+  const messages = MESSAGES_BY_LOCALE[locale];
+  return code ? messages.apiErrors[code] : messages.apiErrorFallback;
 }

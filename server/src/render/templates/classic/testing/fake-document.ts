@@ -1,0 +1,127 @@
+import type { Discount, Document, LineItem } from '@prisma/client';
+
+export function buildFakeDocument(overrides: Record<string, unknown> = {}): Document {
+  return {
+    id: 'doc_1',
+    accountId: 'acc_1',
+    documentType: 'INVOICE',
+    status: 'SENT',
+    number: 1,
+    numberPrefix: null,
+    numberSuffix: null,
+    referenceNumber: null,
+    originalDocumentId: null,
+    issuedAt: new Date('2026-08-02'),
+    taxEventAt: new Date('2026-08-02'),
+    dueAt: null,
+    validUntil: new Date('2026-09-02'),
+    deliveryDate: null,
+    buyerReference: null,
+    paymentMeansCode: null,
+    paymentTermsNote: null,
+    subtotal: 458333,
+    discountTotal: 0,
+    amount: 550000,
+    vatIncluded: false,
+    vatRateBp: 2000,
+    vatAmount: 91667,
+    vatExemptionGround: null,
+    currency: 'EUR',
+    clientId: null,
+    preparedBy: 'Иван Иванов',
+    notes: null,
+    emailText: null,
+    emailedAt: null,
+    templateId: 'classic',
+    issuerCompanyName: '"Тестова Компания" ЕООД',
+    issuerEik: '123456789',
+    issuerMol: 'Мария Петрова',
+    issuerAddressLine: 'ул. Витоша 15',
+    issuerStreet: null,
+    issuerPostcode: null,
+    issuerCity: 'гр. София',
+    issuerCountry: null,
+    issuerPhone: '+359 888 123 456',
+    issuerVatRegistered: true,
+    issuerVatNumber: 'BG123456789',
+    issuerBankName: 'Банка ДСК АД',
+    issuerIban: 'BG80BNBG96611020345678',
+    issuerBic: 'BNBGBGSD',
+    issuerAltIban: null,
+    recipientCompanyName: '"Клиентска Фирма" ООД',
+    recipientEik: '987654321',
+    recipientVatNumber: 'BG987654321',
+    recipientAddress: 'гр. Пловдив, бул. Свобода 5',
+    recipientStreet: null,
+    recipientPostcode: null,
+    recipientCity: null,
+    recipientCountry: null,
+    recipientEmail: null,
+    recipientMol: 'Петър Георгиев',
+    documentLanguage: null,
+    createdAt: new Date('2026-08-02'),
+    updatedAt: new Date('2026-08-02'),
+    ...overrides,
+  } as unknown as Document;
+}
+
+export function buildFakeLineItems(overrides: Record<string, unknown> = {}): readonly LineItem[] {
+  return [
+    {
+      id: 'li_1',
+      documentId: 'doc_1',
+      name: 'Консултантска услуга',
+      quantity: '220',
+      unitPrice: 2500,
+      lineTotal: 550000,
+      sortOrder: 0,
+      vatRateBp: 2000,
+      vatCategory: 'S',
+      unitCode: null,
+      ...overrides,
+    },
+  ] as unknown as LineItem[];
+}
+
+export function buildFakeDiscounts(overrides: Record<string, unknown> = {}): readonly Discount[] {
+  return [
+    {
+      id: 'disc_1',
+      documentId: 'doc_1',
+      label: 'Лоялен клиент',
+      percentBp: 1000,
+      amount: null,
+      sortOrder: 0,
+      ...overrides,
+    },
+  ] as unknown as Discount[];
+}
+
+export function buildFakeMixedLineItems(): readonly LineItem[] {
+  return [
+    {
+      id: 'li_1',
+      documentId: 'doc_1',
+      name: 'Консултация (обратно начисляване)',
+      quantity: '1',
+      unitPrice: 50000,
+      lineTotal: 50000,
+      sortOrder: 0,
+      vatRateBp: 0,
+      vatCategory: 'AE',
+      unitCode: null,
+    },
+    {
+      id: 'li_2',
+      documentId: 'doc_1',
+      name: 'Хостинг',
+      quantity: '1',
+      unitPrice: 50000,
+      lineTotal: 50000,
+      sortOrder: 1,
+      vatRateBp: 2000,
+      vatCategory: 'S',
+      unitCode: null,
+    },
+  ] as unknown as LineItem[];
+}

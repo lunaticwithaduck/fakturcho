@@ -3,15 +3,17 @@
 import { useSaveDraftMutation, useUpdateDraftMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Card, toast } from '@design/components';
-import { CORRECTION_DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import { CORRECTION_DOCUMENT_TYPES, getCountryConfig } from '@fakturcho/shared-types';
 import type {
   CatalogueItemDto,
   ClientDto,
   DocumentDto,
   DocumentType,
   IssuerProfileDto,
+  Locale,
 } from '@shared/types';
 import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 import { ComposerActions } from './ComposerActions';
 import { ComposerClientField } from './ComposerClientField';
@@ -42,6 +44,8 @@ export function DocumentComposerForm({
   catalogueItems,
   issuerProfile,
 }: DocumentComposerFormProps) {
+  const t = useTranslations('documents');
+  const locale = useLocale() as Locale;
   const router = useRouter();
   const controller = useComposerState(existing);
   const { state, setField, patchState } = controller;
@@ -50,10 +54,14 @@ export function DocumentComposerForm({
   const [error, setError] = useState<string | null>(null);
   const isSubmitting = saveDraftState.isLoading || updateDraftState.isLoading;
 
+  const countryConfig = getCountryConfig(issuerProfile.country);
   const vat = resolveVatTreatment({
     documentType: state.documentType,
     vatRegistered: issuerProfile.vatRegistered,
     chargeVat: state.chargeVat,
+    vatRateBp: countryConfig.defaultVatRateBp,
+    groundRequired:
+      countryConfig.defaultExemptionGround === null && countryConfig.exemptionGrounds.length > 0,
   });
   const totals = computeLiveTotals({
     lineItems: state.lineItems.map((line) => ({
@@ -75,7 +83,7 @@ export function DocumentComposerForm({
     setError(null);
     const validationError = validateComposerState(state, vat);
     if (validationError) {
-      setError(validationError);
+      setError(t(`composer.errors.${validationError}`));
       return null;
     }
     const body = toSaveDraftRequest(state, vat);
@@ -84,7 +92,7 @@ export function DocumentComposerForm({
         ? await updateDraft({ id: documentId, body }).unwrap()
         : await saveDraft(body).unwrap();
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setError(getApiErrorMessage(err, locale));
       return null;
     }
   }
@@ -93,7 +101,7 @@ export function DocumentComposerForm({
     event.preventDefault();
     const result = await persist();
     if (result) {
-      toast({ title: 'Черновата е запазена' });
+      toast({ title: t('composer.draftSaved') });
       router.push(`/documents/${result.id}`);
     }
   }
@@ -110,7 +118,7 @@ export function DocumentComposerForm({
       noValidate
     >
       <h1 className="text-2xl font-bold text-text">
-        {documentId ? 'Редактиране на документ' : 'Нов документ'}
+        {documentId ? t('composer.titleEdit') : t('composer.titleNew')}
       </h1>
 
       <Card className="flex flex-col gap-4">
@@ -158,11 +166,14 @@ export function DocumentComposerForm({
         onRemove={controller.removeDiscount}
       />
 
-      {vat.isTaxDocument && issuerProfile.vatRegistered ? (
+      {vat.isTaxDocument && (issuerProfile.vatRegistered || vat.groundSelectable) ? (
         <Card>
           <ComposerVatSection
-            chargeVat={state.chargeVat}
+            chargeVat={issuerProfile.vatRegistered && state.chargeVat}
+            showChargeToggle={issuerProfile.vatRegistered}
             vatExemptionGround={state.vatExemptionGround}
+            grounds={countryConfig.exemptionGrounds}
+            ratePercent={countryConfig.defaultVatRateBp / 100}
             hasGroundError={!!error && vat.groundSelectable && !state.vatExemptionGround}
             onChangeChargeVat={(chargeVat) => setField('chargeVat', chargeVat)}
             onChangeGround={(ground) => setField('vatExemptionGround', ground)}

@@ -5,6 +5,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Общи условия',
   description: 'Общите условия за ползване на Фактурчо.',
+  alternates: {
+    canonical: '/terms',
+    languages: {
+      bg: '/terms',
+      en: '/en/terms',
+      'x-default': '/terms',
+    },
+  },
 };
 
 export default function TermsPage() {

@@ -121,6 +121,21 @@ design/components/Button/
 
 ## Language
 
-- All user-facing copy is Bulgarian. No English strings in the UI.
-- Code, identifiers, commit messages and `app/docs/` are English.
-- Dates render `DD.MM.YYYY`. Numbers render with comma decimal, space thousands.
+- Bulgarian stays the default and is byte-identical to before this rule
+  changed: `country: 'BG'` renders Bulgarian UI, PDF and emails exactly as
+  always. Every other country renders English first. The active locale is
+  `'bg' | 'en'` (`Locale` in `@fakturcho/shared-types`), resolved from the
+  issuer's country at signup, overridable per user and per client document
+  (`Client.documentLanguage`).
+- App screens pick the locale from the user/document setting, never the URL.
+  English marketing/legal pages are the one exception and live under `/en`.
+- Messages go through `next-intl` (`app/messages/{bg,en}.json`) in `app/`;
+  server-rendered surfaces (PDF labels, email subjects) keep a local
+  per-locale map next to the code that renders them, matching the existing
+  pattern in `server/src/render/templates/classic/labels.ts` and
+  `server/src/email/subject-templates.ts` — do not centralize these into
+  shared-types.
+- Code, identifiers, commit messages and `app/docs/` are English, always.
+- Formatting is locale-aware (`*ForLocale` helpers in `server/src/money/` and
+  `app/src/features/shared/format.ts`): Bulgarian keeps comma decimal, space
+  thousands, `DD.MM.YYYY`; English uses `Intl`-driven `en-IE` formatting.

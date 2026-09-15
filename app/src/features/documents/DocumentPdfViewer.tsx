@@ -1,6 +1,7 @@
 import { getDocumentPreviewUrl, getDocumentRenderUrl } from '@app/api';
 import { Button } from '@design/components';
 import type { DocumentStatus } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { canDownloadDocument } from './documentDownload';
 
 interface DocumentPdfViewerProps {
@@ -16,6 +17,7 @@ export function DocumentPdfViewer({
   status,
   updatedAt,
 }: DocumentPdfViewerProps) {
+  const t = useTranslations('documents.view');
   const previewUrl = `${getDocumentPreviewUrl(documentId)}&v=${encodeURIComponent(updatedAt)}`;
   const canDownload = canDownloadDocument(status);
 
@@ -32,14 +34,11 @@ export function DocumentPdfViewer({
       {canDownload ? (
         <Button variant="secondary" size="sm" asChild className="self-start">
           <a href={getDocumentRenderUrl(documentId)} download>
-            Изтегли PDF
+            {t('downloadPdf')}
           </a>
         </Button>
       ) : (
-        <p className="text-sm text-text-muted">
-          Черновата се показва само като преглед с воден знак. Издайте документа, за да го изтеглите
-          или изпратите.
-        </p>
+        <p className="text-sm text-text-muted">{t('draftPreviewNotice')}</p>
       )}
     </div>
   );

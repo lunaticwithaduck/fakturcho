@@ -4,7 +4,8 @@ import { useDeleteCatalogueItemMutation, useListCatalogueItemsQuery } from '@app
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { Button, EmptyState, Input, Plus, Skeleton, toast } from '@design/components';
-import type { CatalogueItemDto } from '@shared/types';
+import type { CatalogueItemDto, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { CatalogueFormDialog } from './CatalogueFormDialog';
 import { CatalogueRow } from './CatalogueRow';
@@ -12,6 +13,8 @@ import { CatalogueRow } from './CatalogueRow';
 type DialogState = { mode: 'create' } | { mode: 'edit'; item: CatalogueItemDto } | null;
 
 export function CatalogueListPage() {
+  const t = useTranslations('catalogue');
+  const locale = useLocale() as Locale;
   const { data, isLoading } = useListCatalogueItemsQuery();
   const [deleteItem, { isLoading: isDeleting }] = useDeleteCatalogueItemMutation();
   const [search, setSearch] = useState('');
@@ -29,12 +32,12 @@ export function CatalogueListPage() {
     if (!pendingDelete) return;
     try {
       await deleteItem(pendingDelete.id).unwrap();
-      toast({ title: 'Артикулът е изтрит' });
+      toast({ title: t('deleteToastTitle') });
       setPendingDelete(null);
     } catch (error) {
       toast({
-        title: 'Неуспешно изтриване',
-        description: getApiErrorMessage(error),
+        title: t('deleteErrorTitle'),
+        description: getApiErrorMessage(error, locale),
         variant: 'danger',
       });
     }
@@ -43,15 +46,15 @@ export function CatalogueListPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-text">Каталог</h1>
+        <h1 className="text-2xl font-bold text-text">{t('pageTitle')}</h1>
         <Button iconLeft={Plus} onClick={() => setDialogState({ mode: 'create' })}>
-          Нов артикул
+          {t('newItem')}
         </Button>
       </div>
 
       <Input
-        label="Търсене"
-        placeholder="Търсене по наименование"
+        label={t('searchLabel')}
+        placeholder={t('searchPlaceholder')}
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />
@@ -64,11 +67,11 @@ export function CatalogueListPage() {
         </div>
       ) : filtered.length === 0 ? (
         <EmptyState
-          title="Нямате артикули"
-          description="Добавете продукт или услуга, за да ги предлагате бързо в документите си."
+          title={t('emptyTitle')}
+          description={t('emptyDescription')}
           action={
             <Button iconLeft={Plus} size="sm" onClick={() => setDialogState({ mode: 'create' })}>
-              Нов артикул
+              {t('newItem')}
             </Button>
           }
         />
@@ -93,7 +96,7 @@ export function CatalogueListPage() {
             if (!open) setDialogState(null);
           }}
           onSaved={() => {
-            toast({ title: 'Артикулът е запазен' });
+            toast({ title: t('saveToastTitle') });
             setDialogState(null);
           }}
         />
@@ -101,9 +104,9 @@ export function CatalogueListPage() {
 
       {pendingDelete ? (
         <ConfirmDialog
-          title="Изтриване на артикул"
-          description={`Сигурни ли сте, че искате да изтриете "${pendingDelete.name}"? Действието е необратимо.`}
-          confirmLabel="Изтрий"
+          title={t('deleteDialogTitle')}
+          description={t('deleteDialogDescription', { name: pendingDelete.name })}
+          confirmLabel={t('delete')}
           isConfirming={isDeleting}
           onOpenChange={(open) => {
             if (!open) setPendingDelete(null);

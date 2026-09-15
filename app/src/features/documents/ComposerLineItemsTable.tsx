@@ -1,5 +1,8 @@
+'use client';
+
 import { Button } from '@design/components';
 import type { CatalogueItemDto } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { ComposerLineItemRow } from './ComposerLineItemRow';
 import type { LineItemFormState } from './composerState';
 
@@ -18,9 +21,11 @@ export function ComposerLineItemsTable({
   onChange,
   onRemove,
 }: ComposerLineItemsTableProps) {
+  const t = useTranslations('documents');
+
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold text-text">Артикули</h2>
+      <h2 className="text-lg font-semibold text-text">{t('composer.lineItems.heading')}</h2>
       {lineItems.map((line) => (
         <ComposerLineItemRow
           key={line.key}
@@ -32,7 +37,7 @@ export function ComposerLineItemsTable({
         />
       ))}
       <Button type="button" variant="secondary" size="sm" onClick={onAdd} className="self-start">
-        Добави артикул
+        {t('composer.lineItems.addButton')}
       </Button>
     </div>
   );
