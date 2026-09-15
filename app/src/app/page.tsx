@@ -2,6 +2,7 @@ import { getFeatureFlags } from '@app/feature-flags';
 import { COMPANY } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
 import { getLandingFaq } from '@app/features/marketing/landingFaq';
+import { hreflangAlternates } from '@app/i18n/localeRedirect';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -12,11 +13,7 @@ export const metadata: Metadata = {
     'Издавайте фактури, проформи, кредитни и дебитни известия и оферти по българските изисквания. Плащате 0,10 € на издаден документ.',
   alternates: {
     canonical: '/',
-    languages: {
-      bg: '/',
-      en: '/en',
-      'x-default': '/',
-    },
+    languages: hreflangAlternates('/'),
   },
 };
 

@@ -554,6 +554,7 @@
       "contact": "Contact"
     },
     "lastUpdatedLabel": "Last updated: {date}",
+    "providedInEnglishNote": "This document is provided in English only.",
     "terms": {
       "metaTitle": "Terms of Service",
       "metaDescription": "The terms of service for using Fakturcho.",
@@ -872,9 +873,19 @@
       ]
     }
   },
-  "languageSwitcher": {
-    "navLabel": "Language",
-    "bgFull": "Bulgarian",
-    "enFull": "English"
+  "seo": {
+    "home": {
+      "title": "Fakturcho — invoicing and e-invoicing for EU businesses",
+      "description": "Issue invoices, proformas, credit and debit notes and quotes that meet EU requirements, with EN 16931 e-invoicing and Peppol. Pay 0.10 € per issued document.",
+      "ogTagline": "Invoicing and e-invoicing for EU businesses"
+    },
+    "login": {
+      "title": "Log in",
+      "description": "Log in to your Fakturcho account to issue and manage documents."
+    },
+    "signup": {
+      "title": "Sign up",
+      "description": "Create a free account and issue your first invoice in minutes. 1.00 € starting credit, no subscription."
+    }
   }
 }

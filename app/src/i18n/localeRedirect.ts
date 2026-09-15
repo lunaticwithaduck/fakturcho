@@ -1,5 +1,6 @@
 import type { Locale } from '@shared/types';
-import { isLocale } from './locale';
+import { PUBLISHED_LOCALES } from '@shared/types';
+import { DEFAULT_LOCALE, isLocale, NON_DEFAULT_PUBLISHED_LOCALES } from './locale';
 
 export const LOCALE_COOKIE_NAME = 'fakturcho_locale';
 export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
@@ -10,14 +11,21 @@ const PUBLIC_BASE_PATHS = ['/', '/login', '/signup', '/privacy', '/terms', '/ref
 const BOT_UA_REGEX = /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|lighthouse/i;
 
 export function toBasePath(pathname: string): string {
-  if (pathname === '/en') return '/';
-  if (pathname.startsWith('/en/')) return pathname.slice(3);
+  for (const locale of NON_DEFAULT_PUBLISHED_LOCALES) {
+    if (pathname === `/${locale}`) return '/';
+    if (pathname.startsWith(`/${locale}/`)) return pathname.slice(locale.length + 1);
+  }
   return pathname;
 }
 
 export function toLocalePath(basePath: string, locale: Locale): string {
-  if (locale === 'bg') return basePath;
-  return basePath === '/' ? '/en' : `/en${basePath}`;
+  if (locale === DEFAULT_LOCALE) return basePath;
+  return basePath === '/' ? `/${locale}` : `/${locale}${basePath}`;
+}
+
+export function hreflangAlternates(basePath: string): Record<string, string> {
+  const entries = PUBLISHED_LOCALES.map((locale) => [locale, toLocalePath(basePath, locale)]);
+  return { ...Object.fromEntries(entries), 'x-default': basePath };
 }
 
 function isPublicPath(pathname: string): boolean {
@@ -75,8 +83,8 @@ export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirect
   if (!isPublicPath(pathname)) return NO_OP;
 
   const langParam = searchParams.get(LOCALE_QUERY_PARAM);
-  if (langParam === 'bg' || (langParam === 'en' && enEnabled)) {
-    const target = langParam as Locale;
+  if (langParam && isLocale(langParam) && (langParam === DEFAULT_LOCALE || enEnabled)) {
+    const target = langParam;
     const newPath = toLocalePath(toBasePath(pathname), target);
     const remaining = new URLSearchParams(searchParams);
     remaining.delete(LOCALE_QUERY_PARAM);
@@ -95,9 +103,12 @@ export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirect
   }
 
   if (isLocale(localeCookie)) {
-    if (localeCookie === 'en') {
+    if (localeCookie !== DEFAULT_LOCALE) {
       return {
-        redirect: { pathname: toLocalePath(pathname, 'en'), search: searchString(searchParams) },
+        redirect: {
+          pathname: toLocalePath(pathname, localeCookie),
+          search: searchString(searchParams),
+        },
         setLocaleCookie: null,
         vary: true,
       };
@@ -106,11 +117,12 @@ export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirect
   }
 
   const topLang = topLanguagePrimarySubtag(acceptLanguage);
-  if (!topLang || topLang === 'bg') {
+  if (!topLang || topLang === DEFAULT_LOCALE) {
     return { redirect: null, setLocaleCookie: null, vary: true };
   }
+  const target = isLocale(topLang) ? topLang : 'en';
   return {
-    redirect: { pathname: toLocalePath(pathname, 'en'), search: searchString(searchParams) },
+    redirect: { pathname: toLocalePath(pathname, target), search: searchString(searchParams) },
     setLocaleCookie: null,
     vary: true,
   };

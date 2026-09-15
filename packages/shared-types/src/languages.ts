@@ -1,5 +1,15 @@
-export const SUPPORTED_LOCALES = ['bg', 'en'] as const;
+export const SUPPORTED_LOCALES = ['bg', 'en', 'de', 'fr', 'it', 'pl', 'ro', 'es'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
+
+// Locales the public site and app UI actually serve. A locale is routable,
+// shows in the switcher and gets a sitemap/hreflang entry only once it is
+// listed here — adding one is a translator's one-line registry change once
+// messages/<locale>.json exists.
+export const PUBLISHED_LOCALES = ['bg', 'en'] as const satisfies readonly Locale[];
+
+export function isPublishedLocale(value: unknown): value is Locale {
+  return typeof value === 'string' && (PUBLISHED_LOCALES as readonly string[]).includes(value);
+}
 
 export const DOCUMENT_LANGUAGES = ['bg', 'en', 'de', 'fr', 'it', 'pl', 'ro', 'es'] as const;
 export type DocumentLanguage = (typeof DOCUMENT_LANGUAGES)[number];

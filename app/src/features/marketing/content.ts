@@ -10,6 +10,6 @@ export function getMarketingContent(locale: Locale) {
   return messagesFor(locale).marketing;
 }
 
-export function getCountriesContent() {
-  return enMessages.marketing.countries;
+export function getCountriesContent(locale: Locale) {
+  return messagesFor(locale).marketing.countries;
 }

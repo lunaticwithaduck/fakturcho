@@ -9,6 +9,7 @@ describe('SignupPage metadata', () => {
     expect(metadata.alternates?.languages).toEqual({
       bg: '/signup',
       en: '/en/signup',
+      'x-default': '/signup',
     });
   });
 });

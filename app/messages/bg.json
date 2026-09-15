@@ -833,11 +833,39 @@
           "answer": "Генерира се на сървъра с кирилица; изтегля се или се изпраща по имейл на клиента."
         }
       ]
+    },
+    "countries": {
+      "heading": "Where is your business based?",
+      "items": {
+        "BG": {
+          "name": "Bulgaria",
+          "line": "20% VAT, invoices in Bulgarian, e-invoices ready for the Peppol network."
+        },
+        "DE": {
+          "name": "Germany",
+          "line": "19% VAT, invoices in German, e-invoices in XRechnung format."
+        },
+        "FR": {
+          "name": "France",
+          "line": "20% VAT, invoices in French, e-invoices in the Chorus Pro format."
+        },
+        "IT": {
+          "name": "Italy",
+          "line": "22% VAT, invoices in Italian, e-invoices in FatturaPA format for the SDI exchange system."
+        },
+        "PL": {
+          "name": "Poland",
+          "line": "23% VAT, invoices in Polish, e-invoices in the KSeF FA(3) format."
+        },
+        "RO": {
+          "name": "Romania",
+          "line": "21% VAT, invoices in Romanian, e-invoices in the RO CIUS-RO format for ANAF's SPV."
+        },
+        "ES": {
+          "name": "Spain",
+          "line": "21% VAT, invoices in Spanish, e-invoices in Facturae format for the FACe platform."
+        }
+      }
     }
-  },
-  "languageSwitcher": {
-    "navLabel": "Избор на език",
-    "bgFull": "Български",
-    "enFull": "Английски"
   }
 }

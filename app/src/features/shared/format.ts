@@ -2,6 +2,28 @@ import type { Cents, Locale } from '@shared/types';
 
 const EN_LOCALE_TAG = 'en-IE';
 
+// bg keeps its own hand-rolled formatter (byte-identical, no ICU dependency);
+// en keeps its existing en-IE formatting untouched. Every other published
+// locale gets real Intl formatting driven by this tag, not a copy of en's.
+const INTL_TAGS: Partial<Record<Locale, string>> = {
+  de: 'de-DE',
+  fr: 'fr-FR',
+  it: 'it-IT',
+  pl: 'pl-PL',
+  ro: 'ro-RO',
+  es: 'es-ES',
+};
+
+function decimalSeparator(tag: string): string {
+  const part = new Intl.NumberFormat(tag).formatToParts(1.1).find((p) => p.type === 'decimal');
+  return part?.value ?? '.';
+}
+
+function groupSeparator(tag: string): string {
+  const part = new Intl.NumberFormat(tag).formatToParts(1234).find((p) => p.type === 'group');
+  return part?.value ?? ',';
+}
+
 function groupThousands(value: number): string {
   const digits = String(value);
   const groups: string[] = [];
@@ -70,12 +92,21 @@ function formatCentsEn(cents: Cents): string {
   return `${sign}${new Intl.NumberFormat(EN_LOCALE_TAG).format(wholePart)}.${String(fractionPart).padStart(2, '0')}`;
 }
 
+function formatCentsForTag(cents: Cents, tag: string): string {
+  const { sign, wholePart, fractionPart } = splitCents(cents);
+  const grouped = new Intl.NumberFormat(tag).format(wholePart);
+  return `${sign}${grouped}${decimalSeparator(tag)}${String(fractionPart).padStart(2, '0')}`;
+}
+
 export function formatCentsForLocale(cents: Cents, locale: Locale): string {
-  return locale === 'bg' ? formatCents(cents) : formatCentsEn(cents);
+  if (locale === 'bg') return formatCents(cents);
+  const tag = INTL_TAGS[locale];
+  return tag ? formatCentsForTag(cents, tag) : formatCentsEn(cents);
 }
 
 export function formatMoneyForLocale(cents: Cents, locale: Locale): string {
-  return locale === 'bg' ? formatMoney(cents) : `${formatCentsEn(cents)} €`;
+  if (locale === 'bg') return formatMoney(cents);
+  return `${formatCentsForLocale(cents, locale)} €`;
 }
 
 function parseMoneyInputEn(raw: string): Cents | null {
@@ -90,20 +121,42 @@ function parseMoneyInputEn(raw: string): Cents | null {
   return negative ? -cents : cents;
 }
 
-export function parseMoneyInputForLocale(raw: string, locale: Locale): Cents | null {
-  return locale === 'bg' ? parseMoneyInput(raw) : parseMoneyInputEn(raw);
+function parseMoneyInputForTag(raw: string, tag: string): Cents | null {
+  const trimmed = raw.trim();
+  if (trimmed === '') return null;
+  const negative = trimmed.startsWith('-');
+  const withoutSign = negative ? trimmed.slice(1) : trimmed;
+  const group = groupSeparator(tag);
+  const decimal = decimalSeparator(tag);
+  const withoutGroups = withoutSign.split(group).join('');
+  const normalized = decimal === '.' ? withoutGroups : withoutGroups.replace(decimal, '.');
+  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return null;
+  const [wholePart = '0', fractionPart = ''] = normalized.split('.');
+  const cents = Number(wholePart) * 100 + Number(fractionPart.padEnd(2, '0'));
+  return negative ? -cents : cents;
 }
 
-export function formatDateForLocale(value: string | null | undefined, locale: Locale): string {
-  if (!value) return '';
-  if (locale === 'bg') return formatDate(value);
+export function parseMoneyInputForLocale(raw: string, locale: Locale): Cents | null {
+  if (locale === 'bg') return parseMoneyInput(raw);
+  const tag = INTL_TAGS[locale];
+  return tag ? parseMoneyInputForTag(raw, tag) : parseMoneyInputEn(raw);
+}
+
+function formatDateForTag(value: string, tag: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
   if (!match) return '';
   const [, year, month, day] = match;
-  return new Intl.DateTimeFormat(EN_LOCALE_TAG, {
+  return new Intl.DateTimeFormat(tag, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     timeZone: 'UTC',
   }).format(new Date(Date.UTC(Number(year), Number(month) - 1, Number(day))));
+}
+
+export function formatDateForLocale(value: string | null | undefined, locale: Locale): string {
+  if (!value) return '';
+  if (locale === 'bg') return formatDate(value);
+  const tag = INTL_TAGS[locale];
+  return formatDateForTag(value, tag ?? EN_LOCALE_TAG);
 }

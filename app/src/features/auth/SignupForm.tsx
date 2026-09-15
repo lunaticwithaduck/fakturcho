@@ -4,6 +4,7 @@ import { mapAuthErrorMessage, signUp } from '@app/auth';
 import { TARGET_COUNTRIES } from '@app/features/marketing/targetCountries';
 import { trackEvent } from '@app/features/shared/analytics';
 import { formatMoney } from '@app/features/shared/format';
+import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card, Input, Select, SelectItem } from '@design/components';
 import type { Locale } from '@shared/types';
 import { EU_VAT_AREA_COUNTRIES, isEuVatAreaCountry, SIGNUP_GRANT_CENTS } from '@shared/types';
@@ -16,7 +17,7 @@ const BG_SIGNUP_COUNTRIES = [
   ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG'),
 ] as const;
 
-const EN_SIGNUP_COUNTRIES = [
+const NON_BG_SIGNUP_COUNTRIES = [
   ...TARGET_COUNTRIES,
   ...EU_VAT_AREA_COUNTRIES.filter(
     (country) => !(TARGET_COUNTRIES as readonly string[]).includes(country),
@@ -41,8 +42,8 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
   });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const loginHref = locale === 'bg' ? '/login' : '/en/login';
-  const signupCountries = locale === 'en' ? EN_SIGNUP_COUNTRIES : BG_SIGNUP_COUNTRIES;
+  const loginHref = toLocalePath('/login', locale);
+  const signupCountries = locale === 'bg' ? BG_SIGNUP_COUNTRIES : NON_BG_SIGNUP_COUNTRIES;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

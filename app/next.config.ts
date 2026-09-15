@@ -9,8 +9,8 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/opengraph-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
     '/twitter-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
-    '/en/opengraph-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
-    '/en/twitter-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
+    '/[locale]/opengraph-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
+    '/[locale]/twitter-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
   },
   async rewrites() {
     const serverUrl = process.env.SERVER_URL ?? 'http://localhost:3001';
