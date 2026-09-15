@@ -258,7 +258,7 @@ additionally goes to FACe. Full protocol detail and citations:
 
 | Variable | Example | Where it comes from |
 | --- | --- | --- |
-| `SERVER_URL` | `https://api.fakturcho.bg` | the API service's public URL |
+| `SERVER_URL` | `http://api.railway.internal:8080` | the API service's private URL |
 | `PORT` | — | injected by Railway automatically; do not set |
 
 **`SERVER_URL` is read at build time.** The `/api/*` rewrite in
@@ -268,9 +268,10 @@ the service variable into the build. Set it **before the first build**, and
 after changing it trigger a **rebuild** (redeploying the old image is not
 enough).
 
-Alternative: keep API traffic inside the project by setting `PORT=3001`
-explicitly on the API service and using
-`SERVER_URL=http://<api-service-name>.railway.internal:3001`.
+Use the private URL, with `PORT` set explicitly on the API service. Railway's
+edge overwrites `X-Real-IP` with the connecting address, so a public
+`SERVER_URL` makes every visitor arrive at the API from the app's egress IP and
+Better Auth's sign-in rate limit becomes one bucket shared by all users.
 
 The app's `/` redirects to `/documents`, and Railway healthchecks require an
 HTTP 200 — hence the healthcheck lives on `/login`.
@@ -281,7 +282,8 @@ HTTP 200 — hence the healthcheck lives on `/login`.
    webhook URL to it.
 2. Attach the app domain. Update `APP_ORIGINS` on the API to exactly that
    origin (otherwise every signup/login fails with an origin error).
-3. Update `SERVER_URL` on the app to the API domain and rebuild the app.
+3. `SERVER_URL` on the app stays the private URL; custom domains do not
+   change it.
 4. Variable changes redeploy the API automatically; only the app needs an
    explicit rebuild when `SERVER_URL` changes.
 
@@ -329,7 +331,7 @@ instance as `fakturcho-api` and reads `/api/admin/*`, guarded server-side by
 
 | Variable | Example | Where it comes from |
 | --- | --- | --- |
-| `API_URL` | `https://api.fakturcho.bg` | the API service's URL (internal `http://<api-service-name>.railway.internal:3001` also works and avoids a network hop) |
+| `API_URL` | `http://api.railway.internal:8080` | the API service's private URL (see `SERVER_URL` above for why not the public one) |
 | `PORT` | — | injected by Railway automatically; do not set |
 
 Leave `VITE_API_URL` **unset** (build arg default `""`). The backoffice never
