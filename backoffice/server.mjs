@@ -68,6 +68,9 @@ async function proxyApi(req, res) {
 
 createServer(async (req, res) => {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   if (req.url === '/robots.txt') {
     res.writeHead(200, { 'content-type': 'text/plain' });
     res.end('User-agent: *\nDisallow: /\n');
