@@ -21,7 +21,15 @@ afterEach(() => {
 
 describe('generateStaticParams', () => {
   it('lists every published locale except bg', () => {
-    expect(generateStaticParams()).toEqual([{ locale: 'en' }]);
+    expect(generateStaticParams()).toEqual([
+      { locale: 'en' },
+      { locale: 'de' },
+      { locale: 'fr' },
+      { locale: 'it' },
+      { locale: 'pl' },
+      { locale: 'ro' },
+      { locale: 'es' },
+    ]);
   });
 });
 

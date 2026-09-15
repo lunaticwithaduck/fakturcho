@@ -1,8 +1,6 @@
 'use client';
 
-import { useSaveDraftMutation, useUpdateDraftMutation } from '@app/api';
-import { getApiErrorMessage } from '@app/features/shared/apiError';
-import { Card, toast } from '@design/components';
+import { Card } from '@design/components';
 import { CORRECTION_DOCUMENT_TYPES, getCountryConfig } from '@fakturcho/shared-types';
 import type {
   CatalogueItemDto,
@@ -12,9 +10,7 @@ import type {
   IssuerProfileDto,
   Locale,
 } from '@shared/types';
-import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { type FormEvent, useState } from 'react';
 import { ComposerActions } from './ComposerActions';
 import { ComposerClientField } from './ComposerClientField';
 import { ComposerDetailsFields } from './ComposerDetailsFields';
@@ -25,9 +21,9 @@ import { ComposerNotesFields } from './ComposerNotesFields';
 import { ComposerOriginalDocumentField } from './ComposerOriginalDocumentField';
 import { ComposerTotalsPanel } from './ComposerTotalsPanel';
 import { ComposerVatSection } from './ComposerVatSection';
-import { toSaveDraftRequest, validateComposerState } from './composerState';
 import { computeLiveTotals, resolveVatTreatment } from './liveTotals';
 import { useComposerState } from './useComposerState';
+import { useComposerSubmit } from './useComposerSubmit';
 
 interface DocumentComposerFormProps {
   documentId: string | null;
@@ -46,13 +42,8 @@ export function DocumentComposerForm({
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
-  const router = useRouter();
   const controller = useComposerState(existing);
   const { state, setField, patchState } = controller;
-  const [saveDraft, saveDraftState] = useSaveDraftMutation();
-  const [updateDraft, updateDraftState] = useUpdateDraftMutation();
-  const [error, setError] = useState<string | null>(null);
-  const isSubmitting = saveDraftState.isLoading || updateDraftState.isLoading;
 
   const countryConfig = getCountryConfig(issuerProfile.country);
   const vat = resolveVatTreatment({
@@ -78,38 +69,12 @@ export function DocumentComposerForm({
   const isCorrection = (CORRECTION_DOCUMENT_TYPES as readonly DocumentType[]).includes(
     state.documentType,
   );
-
-  async function persist(): Promise<DocumentDto | null> {
-    setError(null);
-    const validationError = validateComposerState(state, vat);
-    if (validationError) {
-      setError(t(`composer.errors.${validationError}`));
-      return null;
-    }
-    const body = toSaveDraftRequest(state, vat);
-    try {
-      return documentId
-        ? await updateDraft({ id: documentId, body }).unwrap()
-        : await saveDraft(body).unwrap();
-    } catch (err) {
-      setError(getApiErrorMessage(err, locale));
-      return null;
-    }
-  }
-
-  async function handleSaveDraft(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const result = await persist();
-    if (result) {
-      toast({ title: t('composer.draftSaved') });
-      router.push(`/documents/${result.id}`);
-    }
-  }
-
-  async function handleSaveAndIssue() {
-    const result = await persist();
-    if (result) router.push(`/documents/${result.id}?issue=1`);
-  }
+  const { error, isSubmitting, handleSaveDraft, handleSaveAndIssue } = useComposerSubmit(
+    documentId,
+    state,
+    vat,
+    locale,
+  );
 
   return (
     <form
@@ -181,7 +146,11 @@ export function DocumentComposerForm({
         </Card>
       ) : null}
 
-      <ComposerTotalsPanel totals={totals} vatCharged={vat.vatCharged} />
+      <ComposerTotalsPanel
+        totals={totals}
+        vatCharged={vat.vatCharged}
+        vatRatePercent={vat.vatCharged ? vat.vatRateBp / 100 : null}
+      />
 
       <Card>
         <ComposerNotesFields

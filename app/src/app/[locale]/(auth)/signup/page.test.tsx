@@ -14,6 +14,12 @@ describe('LocaleSignupPage metadata', () => {
     expect(metadata.alternates?.languages).toEqual({
       bg: '/signup',
       en: '/en/signup',
+      de: '/de/signup',
+      fr: '/fr/signup',
+      it: '/it/signup',
+      pl: '/pl/signup',
+      ro: '/ro/signup',
+      es: '/es/signup',
       'x-default': '/signup',
     });
   });

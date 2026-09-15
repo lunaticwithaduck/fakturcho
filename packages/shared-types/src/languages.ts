@@ -5,7 +5,16 @@ export type Locale = (typeof SUPPORTED_LOCALES)[number];
 // shows in the switcher and gets a sitemap/hreflang entry only once it is
 // listed here — adding one is a translator's one-line registry change once
 // messages/<locale>.json exists.
-export const PUBLISHED_LOCALES = ['bg', 'en'] as const satisfies readonly Locale[];
+export const PUBLISHED_LOCALES = [
+  'bg',
+  'en',
+  'de',
+  'fr',
+  'it',
+  'pl',
+  'ro',
+  'es',
+] as const satisfies readonly Locale[];
 
 export function isPublishedLocale(value: unknown): value is Locale {
   return typeof value === 'string' && (PUBLISHED_LOCALES as readonly string[]).includes(value);

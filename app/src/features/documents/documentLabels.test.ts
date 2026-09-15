@@ -28,6 +28,17 @@ describe('getDocumentTypeLabel', () => {
     };
     expect(getDocumentTypeLabel(type, 'en')).toBe(expected[type]);
   });
+
+  it.each(DOCUMENT_TYPES)('renders a non-English, non-Bulgarian label for %s', (type) => {
+    const expected: Record<(typeof DOCUMENT_TYPES)[number], string> = {
+      invoice: 'Rechnung',
+      proforma: 'Proforma-Rechnung',
+      credit_note: 'Rechnungskorrektur',
+      debit_note: 'Belastungsanzeige',
+      quote: 'Angebot',
+    };
+    expect(getDocumentTypeLabel(type, 'de')).toBe(expected[type]);
+  });
 });
 
 describe('getDocumentStatusLabel', () => {
@@ -51,5 +62,16 @@ describe('getDocumentStatusLabel', () => {
       cancelled: 'CANCELLED',
     };
     expect(getDocumentStatusLabel(status, 'en')).toBe(expected[status]);
+  });
+
+  it.each(DOCUMENT_STATUSES)('renders a non-English, non-Bulgarian label for %s', (status) => {
+    const expected: Record<(typeof DOCUMENT_STATUSES)[number], string> = {
+      draft: 'Borrador',
+      sent: 'Emitida',
+      paid: 'PAGADA',
+      overdue: 'VENCIDA',
+      cancelled: 'ANULADA',
+    };
+    expect(getDocumentStatusLabel(status, 'es')).toBe(expected[status]);
   });
 });

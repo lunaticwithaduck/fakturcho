@@ -1,0 +1,892 @@
+{
+  "login": {
+    "title": "Conectare la Fakturcho",
+    "subtitle": "Introduceți adresa de email și parola pentru a continua.",
+    "emailLabel": "Email",
+    "passwordLabel": "Parolă",
+    "submitting": "Se conectează...",
+    "submit": "Conectare",
+    "noAccount": "Nu aveți cont?",
+    "signupLink": "Înregistrare"
+  },
+  "documents": {
+    "list": {
+      "pageTitle": "Documente",
+      "newDocument": "Document nou",
+      "searchLabel": "Căutare",
+      "searchPlaceholder": "Căutare după client sau referință",
+      "typeFilterLabel": "Tip document",
+      "allTypes": "Toate tipurile",
+      "noClient": "Fără client",
+      "emptyTitle": "Nu aveți niciun document",
+      "emptyFilteredDescription": "Niciun document nu corespunde filtrelor.",
+      "emptyDescription": "Creați primul document pentru a-l vedea aici."
+    },
+    "statusTabs": {
+      "all": "Toate"
+    },
+    "title": {
+      "draft": "{label} — ciornă",
+      "numbered": "{label} nr. {number}",
+      "originalMarker": " (Original)"
+    },
+    "actions": {
+      "edit": "Editează",
+      "issue": "Emite",
+      "markPaid": "Marchează ca plătit",
+      "markingPaid": "Se marchează...",
+      "email": "Trimite prin email",
+      "cancel": "Anulează"
+    },
+    "dialogs": {
+      "email": {
+        "title": "Trimitere prin email",
+        "recipientLabel": "Email destinatar",
+        "messageLabel": "Mesaj",
+        "cancel": "Renunță",
+        "sending": "Se trimite...",
+        "send": "Trimite"
+      },
+      "issue": {
+        "title": "Emitere document",
+        "nextNumber": "Următorul număr din serie: {number}",
+        "loadingSeries": "Se încarcă seria...",
+        "issuedAtLabel": "Data emiterii",
+        "overrideNumberLabel": "Modificați numărul următor (opțional)",
+        "overrideNumberHint": "Posibil doar cât timp seria nu are documente emise.",
+        "profileLink": "Mergi la profilul emitentului",
+        "creditsLink": "Cumpără credite",
+        "cancel": "Renunță",
+        "issuing": "Se emite...",
+        "confirm": "Emite"
+      },
+      "cancel": {
+        "title": "Anulare document",
+        "description": "Sigur doriți să anulați documentul? Numărul rămâne rezervat și nu va fi reutilizat.",
+        "confirm": "Anulează"
+      }
+    },
+    "view": {
+      "notFound": "Documentul nu a fost găsit",
+      "downloadPdf": "Descarcă PDF",
+      "draftPreviewNotice": "Ciorna este afișată doar ca previzualizare cu filigran. Emiteți documentul pentru a-l descărca sau trimite.",
+      "markedPaidToast": "Documentul a fost marcat ca plătit",
+      "errorToastTitle": "Eroare",
+      "cancelledToast": "Documentul a fost anulat",
+      "issuedToast": "Documentul a fost emis",
+      "emailSentToast": "Emailul a fost trimis"
+    },
+    "composer": {
+      "titleNew": "Document nou",
+      "titleEdit": "Editare document",
+      "draftSaved": "Ciorna a fost salvată",
+      "requiredField": "Câmp obligatoriu",
+      "notFound": {
+        "title": "Documentul nu a fost găsit",
+        "action": "Mergi la documente"
+      },
+      "notDraft": {
+        "title": "Doar ciornele pot fi editate",
+        "description": "Acest document a fost deja emis și nu mai poate fi modificat. Un document emis se corectează printr-o notă de credit sau de debit.",
+        "action": "Mergi la document"
+      },
+      "errors": {
+        "missingOriginalDocument": "Selectați documentul original pentru a continua.",
+        "missingLineItems": "Adăugați cel puțin un articol cu denumire, cantitate și preț.",
+        "missingVatGround": "Selectați un temei pentru neaplicarea TVA."
+      },
+      "documentType": {
+        "label": "Tip document"
+      },
+      "client": {
+        "label": "Client",
+        "none": "Fără client",
+        "addNew": "+ Client nou"
+      },
+      "details": {
+        "referenceNumber": "Număr de referință",
+        "validUntil": "Valabilă până la",
+        "taxEventAt": "Data livrării/prestării",
+        "dueAt": "Data scadenței"
+      },
+      "originalDocument": {
+        "label": "Document original",
+        "placeholder": "Selectați documentul",
+        "noClient": "Fără client"
+      },
+      "lineItems": {
+        "heading": "Articole",
+        "nameLabel": "Denumire",
+        "quantityLabel": "Cantitate",
+        "priceLabel": "Preț",
+        "totalLabel": "Valoare",
+        "removeButton": "Elimină",
+        "addButton": "Adaugă articol"
+      },
+      "discounts": {
+        "heading": "Reduceri",
+        "reasonLabel": "Motiv reducere",
+        "modePercent": "Procent",
+        "modeAmount": "Sumă",
+        "percentLabel": "Procent %",
+        "amountLabel": "Sumă",
+        "removeButton": "Elimină",
+        "addButton": "Adaugă reducere"
+      },
+      "vat": {
+        "heading": "TVA",
+        "chargeLabel": "Aplică TVA ({rate}%)",
+        "groundLabel": "Temei pentru neaplicarea TVA",
+        "groundPlaceholder": "Selectați temeiul"
+      },
+      "totals": {
+        "subtotal": "Subtotal",
+        "discount": "Reducere",
+        "taxBase": "Bază impozabilă",
+        "vat": "TVA ({rate}%)",
+        "vatGeneric": "TVA",
+        "total": "Total"
+      },
+      "notes": {
+        "notesLabel": "Observații",
+        "preparedByLabel": "Întocmit de"
+      },
+      "actions": {
+        "saveDraft": "Salvează ciorna",
+        "saving": "Se salvează...",
+        "saveAndIssue": "Salvează și emite",
+        "cancel": "Renunță"
+      }
+    },
+    "peppol": {
+      "downloadXml": "Descarcă e-factura (XML)",
+      "notReadyHint": "Lipsesc date pentru e-factură: {fields}",
+      "missingFieldFallback": "Lipsesc date pentru e-factură.",
+      "missingFields": {
+        "document": {
+          "type": "Acest tip de document nu poate fi exportat ca e-factură.",
+          "number": "Documentul trebuie să fie emis (lipsește numărul documentului).",
+          "issuedAt": "Lipsește data emiterii.",
+          "vatExemptionGround": "Lipsește temeiul de scutire de TVA pentru categoria de TVA selectată.",
+          "lineItems": "Documentul trebuie să conțină cel puțin un articol.",
+          "buyerReference": "Lipsește referința cumpărătorului, necesară pentru modalitatea de plată selectată.",
+          "buyerReferenceOrLeitwegId": "Lipsește referința cumpărătorului sau Leitweg-ID-ul (cerință XRechnung).",
+          "leitwegIdFormat": "Formatul Leitweg-ID nu este valid."
+        },
+        "line": {
+          "unitCode": "Unul sau mai multe articole nu au cod de unitate de măsură."
+        },
+        "issuer": {
+          "companyName": "Lipsește denumirea firmei emitente.",
+          "country": "Lipsește țara emitentului.",
+          "street": "Lipsește strada din adresa emitentului.",
+          "postcode": "Lipsește codul poștal al emitentului.",
+          "city": "Lipsește localitatea emitentului.",
+          "vatNumber": "Lipsește codul de TVA al emitentului.",
+          "phone": "Lipsește numărul de telefon al emitentului, necesar pentru XRechnung.",
+          "iban": "Lipsește IBAN-ul emitentului, necesar pentru modalitatea de plată selectată.",
+          "vatNumberOrRegistrationId": "Lipsește codul de TVA sau codul de înregistrare al emitentului.",
+          "cui": "Lipsește CUI-ul emitentului (codul unic de înregistrare din România).",
+          "cuiChecksum": "CUI-ul emitentului nu este valid (cifra de control nu corespunde).",
+          "vatNumberRoPrefix": "Lipsește codul de TVA al emitentului cu prefixul RO.",
+          "vatNumberRoFormat": "Codul de TVA al emitentului nu este un CUI valid cu prefixul RO.",
+          "countyRegion": "Lipsește județul emitentului.",
+          "sirenOrSiret": "Lipsește codul SIREN sau SIRET al emitentului.",
+          "vatNumberFrFormat": "Codul de TVA al emitentului trebuie să fie în formatul francez.",
+          "esTaxId": "Lipsește identificatorul fiscal (NIF/CIF/NIE) al emitentului.",
+          "esTaxIdInvalid": "Identificatorul fiscal al emitentului nu este un NIF, NIE sau CIF spaniol valid.",
+          "partitaIva": "Lipsește Partita IVA a emitentului.",
+          "partitaIvaInvalid": "Partita IVA a emitentului nu este un cod de TVA italian valid.",
+          "codiceFiscale": "Lipsește codul Codice Fiscale al emitentului.",
+          "codiceFiscaleInvalid": "Codul Codice Fiscale al emitentului nu are un format valid.",
+          "nip": "Lipsește NIP-ul emitentului, necesar pentru transmiterea prin KSeF.",
+          "nipChecksum": "NIP-ul emitentului nu este valid (cifra de control nu corespunde)."
+        },
+        "recipient": {
+          "companyName": "Lipsește denumirea firmei destinatarului.",
+          "country": "Lipsește țara destinatarului.",
+          "street": "Lipsește strada din adresa destinatarului.",
+          "postcode": "Lipsește codul poștal al destinatarului.",
+          "city": "Lipsește localitatea destinatarului.",
+          "vatNumberReverseCharge": "Lipsește codul de TVA al destinatarului, necesar pentru taxarea inversă intracomunitară.",
+          "cui": "Lipsește CUI-ul destinatarului (codul unic de înregistrare din România).",
+          "cuiChecksum": "CUI-ul destinatarului nu este valid (cifra de control nu corespunde).",
+          "vatNumberRoFormat": "Codul de TVA al destinatarului nu este un CUI valid cu prefixul RO.",
+          "countyRegion": "Lipsește județul destinatarului.",
+          "sirenOrSiret": "Lipsește codul SIREN sau SIRET al destinatarului.",
+          "vatNumberFrFormat": "Codul de TVA al destinatarului trebuie să fie în formatul francez.",
+          "esTaxId": "Lipsește identificatorul fiscal (NIF/CIF/NIE) al destinatarului.",
+          "esTaxIdInvalid": "Identificatorul fiscal al destinatarului nu este un NIF, NIE sau CIF spaniol valid.",
+          "partitaIvaOrCodiceFiscale": "Lipsește Partita IVA sau codul Codice Fiscale al destinatarului.",
+          "partitaIvaInvalid": "Partita IVA a destinatarului nu este un cod de TVA italian valid.",
+          "codiceFiscaleInvalid": "Codul Codice Fiscale al destinatarului nu are un format valid.",
+          "sdiCodeOrPec": "Lipsește codul SDI al destinatarului sau adresa de email PEC.",
+          "nip": "Lipsește NIP-ul destinatarului, necesar pentru un cumpărător cu sediul în Polonia.",
+          "nipChecksum": "NIP-ul destinatarului nu este valid (cifra de control nu corespunde)."
+        }
+      },
+      "send": "Trimite prin Peppol",
+      "sending": "Se trimite...",
+      "statusQueued": "În coadă",
+      "statusSent": "Trimis",
+      "statusDelivered": "Livrat",
+      "statusRejected": "Respins"
+    }
+  },
+  "billing": {
+    "pageTitle": "Credite",
+    "balance": {
+      "label": "Sold",
+      "remaining": "{count, plural, one {1 document rămas} few {# documente rămase} other {# de documente rămase}}"
+    },
+    "ledgerReasons": {
+      "signupGrant": "Bonus la înregistrare",
+      "purchase": "Achiziție de credit",
+      "issuance": "Document emis",
+      "adjustment": "Ajustare",
+      "subscriptionGrant": "Reîncărcare din abonament"
+    },
+    "packs": {
+      "heading": "Pachete de credit",
+      "documents": "{count} de documente"
+    },
+    "perDocument": "{price} pe document",
+    "tiers": {
+      "title": "{documents} de documente pe lună pentru {price}",
+      "body": "Primiți lunar un credit de {grant}; creditul neutilizat se reportează."
+    },
+    "subscription": {
+      "label": "Abonament",
+      "periodEnds": "Perioada curentă se încheie pe {date}",
+      "nextGrant": "Următoarea reîncărcare: credit de {grant}",
+      "switchTo": "Treceți la",
+      "statusLine": "Abonament: {status}"
+    },
+    "subscriptionStatus": {
+      "trialing": "În așteptarea plății",
+      "active": "Activ",
+      "pastDue": "Plată restantă",
+      "canceled": "Anulat"
+    },
+    "actions": {
+      "buy": "Cumpără",
+      "activate": "Activează",
+      "switch": "Schimbă",
+      "continueToPayment": "Continuă spre plată",
+      "redirecting": "Se redirecționează..."
+    },
+    "ledger": {
+      "heading": "Activitate recentă",
+      "emptyTitle": "Încă nu există activitate",
+      "emptyDescription": "Fiecare modificare a soldului dumneavoastră va apărea aici — bonusuri, achiziții și documente emise."
+    },
+    "checkoutError": {
+      "title": "Eroare de redirecționare",
+      "description": "Plata nu a putut fi inițiată. Încercați din nou."
+    }
+  },
+  "catalogue": {
+    "pageTitle": "Catalog",
+    "newItem": "Articol nou",
+    "searchLabel": "Căutare",
+    "searchPlaceholder": "Căutare după denumire",
+    "emptyTitle": "Încă nu aveți articole",
+    "emptyDescription": "Adăugați un produs sau un serviciu pentru a-l reutiliza rapid în documentele dumneavoastră.",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "deleteToastTitle": "Articolul a fost șters",
+    "deleteErrorTitle": "Ștergerea a eșuat",
+    "saveToastTitle": "Articolul a fost salvat",
+    "deleteDialogTitle": "Ștergere articol",
+    "deleteDialogDescription": "Sigur doriți să ștergeți „{name}”? Această acțiune este ireversibilă.",
+    "dialogEditTitle": "Editare articol",
+    "dialogNewTitle": "Articol nou",
+    "cancel": "Renunță",
+    "saving": "Se salvează...",
+    "save": "Salvează",
+    "nameLabel": "Denumire",
+    "unitLabel": "U.M.",
+    "unitPlaceholder": "buc, oră, kg...",
+    "priceLabel": "Preț implicit",
+    "defaultUnit": "buc",
+    "validationError": "Completați denumirea, unitatea de măsură și prețul."
+  },
+  "clients": {
+    "pageTitle": "Clienți",
+    "newClient": "Client nou",
+    "searchLabel": "Căutare",
+    "searchPlaceholder": "Căutare după firmă sau cod fiscal",
+    "emptyTitle": "Încă nu aveți clienți",
+    "emptyDescription": "Adăugați primul client pentru a-l folosi la întocmirea documentelor.",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "eikPrefix": "Cod fiscal: {eik}",
+    "deleteToastTitle": "Clientul a fost șters",
+    "deleteErrorTitle": "Ștergerea a eșuat",
+    "saveToastTitle": "Clientul a fost salvat",
+    "deleteDialogTitle": "Ștergere client",
+    "deleteDialogDescription": "Sigur doriți să ștergeți „{name}”? Această acțiune este ireversibilă.",
+    "dialogEditTitle": "Editare client",
+    "dialogNewTitle": "Client nou",
+    "cancel": "Renunță",
+    "saving": "Se salvează...",
+    "save": "Salvează",
+    "companyNameLabel": "Denumire firmă",
+    "eikOrBulstatLabel": "Cod de identificare fiscală",
+    "vatNumberLabel": "Cod TVA",
+    "addressLabel": "Adresă",
+    "streetLabel": "Stradă și număr",
+    "postcodeLabel": "Cod poștal",
+    "cityLabel": "Localitate",
+    "emailLabel": "Email",
+    "molLabel": "Reprezentant legal",
+    "peppolEndpointIdLabel": "ID endpoint Peppol",
+    "peppolSchemeLabel": "Schemă Peppol",
+    "invalidFormat": "Format nevalid",
+    "countryLabel": "Țară",
+    "documentLanguageLabel": "Limba documentelor",
+    "documentLanguageOptionSame": "Ca la emitent",
+    "countries": {
+      "AT": "Austria",
+      "BE": "Belgia",
+      "BG": "Bulgaria",
+      "CY": "Cipru",
+      "CZ": "Cehia",
+      "DE": "Germania",
+      "DK": "Danemarca",
+      "EE": "Estonia",
+      "ES": "Spania",
+      "FI": "Finlanda",
+      "FR": "Franța",
+      "GR": "Grecia",
+      "HR": "Croația",
+      "HU": "Ungaria",
+      "IE": "Irlanda",
+      "IT": "Italia",
+      "LT": "Lituania",
+      "LU": "Luxemburg",
+      "LV": "Letonia",
+      "MT": "Malta",
+      "NL": "Țările de Jos",
+      "PL": "Polonia",
+      "PT": "Portugalia",
+      "RO": "România",
+      "SE": "Suedia",
+      "SI": "Slovenia",
+      "SK": "Slovacia",
+      "OTHER": "Altă țară"
+    },
+    "documentLanguageOptions": {
+      "bg": "Bulgară",
+      "en": "Engleză",
+      "de": "Germană",
+      "fr": "Franceză",
+      "it": "Italiană",
+      "pl": "Polonă",
+      "ro": "Română",
+      "es": "Spaniolă"
+    }
+  },
+  "issuer": {
+    "title": "Profilul emitentului",
+    "savedToast": "Profilul a fost salvat",
+    "saving": "Se salvează...",
+    "save": "Salvează profilul",
+    "companyFields": {
+      "heading": "Date firmă",
+      "companyName": "Firmă",
+      "eik": "Cod de identificare fiscală / Cod TVA",
+      "mol": "Reprezentant legal",
+      "country": "Țară",
+      "addressLine": "Adresă",
+      "street": "Stradă și număr",
+      "postcode": "Cod poștal",
+      "city": "Localitate",
+      "phone": "Telefon",
+      "invalidFormat": "Format nevalid"
+    },
+    "vatFields": {
+      "heading": "Înregistrare TVA",
+      "vatRegistered": "Plătitor de TVA",
+      "vatNumber": "Cod TVA"
+    },
+    "bankFields": {
+      "heading": "Cont bancar",
+      "bankName": "Bancă",
+      "iban": "IBAN",
+      "bic": "BIC",
+      "altIban": "Cont alternativ"
+    },
+    "completenessHint": {
+      "title": "Profilul nu este pregătit pentru emitere",
+      "body": "Completați următoarele câmpuri pentru a putea emite documente: {fields}.",
+      "profileLink": "Mergi la profilul emitentului",
+      "fields": {
+        "companyName": "Firmă",
+        "eik": "Cod de identificare fiscală / Cod TVA",
+        "addressLine": "Adresă",
+        "street": "Stradă și număr",
+        "postcode": "Cod poștal",
+        "city": "Localitate",
+        "vatNumber": "Cod TVA"
+      }
+    },
+    "countries": {
+      "AT": "Austria",
+      "BE": "Belgia",
+      "BG": "Bulgaria",
+      "CH": "Elveția",
+      "CY": "Cipru",
+      "CZ": "Cehia",
+      "DE": "Germania",
+      "DK": "Danemarca",
+      "EE": "Estonia",
+      "ES": "Spania",
+      "FI": "Finlanda",
+      "FR": "Franța",
+      "GB": "Regatul Unit",
+      "GR": "Grecia",
+      "HR": "Croația",
+      "HU": "Ungaria",
+      "IE": "Irlanda",
+      "IT": "Italia",
+      "LT": "Lituania",
+      "LU": "Luxemburg",
+      "LV": "Letonia",
+      "MT": "Malta",
+      "NL": "Țările de Jos",
+      "NO": "Norvegia",
+      "PL": "Polonia",
+      "PT": "Portugalia",
+      "RO": "România",
+      "SE": "Suedia",
+      "SI": "Slovenia",
+      "SK": "Slovacia",
+      "US": "Statele Unite ale Americii"
+    }
+  },
+  "shell": {
+    "brandName": "Fakturcho",
+    "signOut": "Deconectare",
+    "navItems": {
+      "documents": "Documente",
+      "clients": "Clienți",
+      "catalogue": "Catalog",
+      "billing": "Credite",
+      "profile": "Profil"
+    },
+    "confirmDialog": {
+      "cancel": "Renunță",
+      "confirming": "Vă rugăm să așteptați..."
+    },
+    "apiErrorFallback": "A apărut o eroare. Încercați din nou.",
+    "apiErrors": {
+      "NUMBER_COLLISION": "Numărul este deja folosit. Încercați din nou.",
+      "SERIES_OVERRIDE_LOCKED": "Seria are deja documente emise — numărul următor nu mai poate fi modificat.",
+      "DOCUMENT_IMMUTABLE": "Un document emis nu poate fi modificat.",
+      "DOCUMENT_NOT_ISSUED": "Ciorna nu poate fi trimisă. Emiteți mai întâi documentul.",
+      "ORIGINAL_DOCUMENT_REQUIRED": "Selectați documentul original pentru a continua.",
+      "ISSUER_PROFILE_INCOMPLETE": "Profilul emitentului este incomplet. Completați datele firmei pentru a putea emite documente.",
+      "VAT_GROUND_NOT_ALLOWED": "Acest temei de scutire de TVA nu este permis.",
+      "CLIENT_EIK_DUPLICATE": "Există deja un client cu acest cod de identificare fiscală.",
+      "SUBSCRIPTION_REQUIRED": "Este necesar un abonament activ.",
+      "INSUFFICIENT_CREDITS": "Credit insuficient. Emiterea unui document costă 0,10 €.",
+      "VALIDATION_FAILED": "Verificați datele introduse.",
+      "NOT_FOUND": "Înregistrarea nu a fost găsită.",
+      "UNAUTHORIZED": "Nu aveți acces.",
+      "FORBIDDEN": "Nu aveți acces.",
+      "CHECKOUT_NOT_CONFIGURED": "Plățile nu sunt configurate complet. Contactați-ne — nu este nevoie să încercați din nou.",
+      "PAYMENT_PROVIDER_ERROR": "Furnizorul de plăți a refuzat cererea. Încercați din nou mai târziu.",
+      "PAYMENT_PROVIDER_UNREACHABLE": "Furnizorul de plăți nu răspunde. Încercați din nou peste câteva minute.",
+      "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Furnizorul de e-factură nu este configurat.",
+      "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Acest furnizor nu permite verificarea statusului.",
+      "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou."
+    }
+  },
+  "auth": {
+    "brandName": "Fakturcho",
+    "signupTitle": "Înregistrare la Fakturcho",
+    "signupSubtitle": "Creați un cont gratuit. Primiți un credit inițial de {amount}.",
+    "nameLabel": "Nume",
+    "emailLabel": "Email",
+    "passwordLabel": "Parolă",
+    "countryLabel": "Țară",
+    "countryPlaceholder": "Selectați țara",
+    "countryRequired": "Selectați o țară.",
+    "signupSubmitting": "Se creează contul...",
+    "signupSubmit": "Înregistrare",
+    "haveAccount": "Aveți deja un cont?",
+    "loginLink": "Conectare",
+    "countries": {
+      "BG": "Bulgaria",
+      "AT": "Austria",
+      "BE": "Belgia",
+      "CY": "Cipru",
+      "CZ": "Cehia",
+      "DE": "Germania",
+      "DK": "Danemarca",
+      "EE": "Estonia",
+      "ES": "Spania",
+      "FI": "Finlanda",
+      "FR": "Franța",
+      "GR": "Grecia",
+      "HR": "Croația",
+      "HU": "Ungaria",
+      "IE": "Irlanda",
+      "IT": "Italia",
+      "LT": "Lituania",
+      "LU": "Luxemburg",
+      "LV": "Letonia",
+      "MT": "Malta",
+      "NL": "Țările de Jos",
+      "PL": "Polonia",
+      "PT": "Portugalia",
+      "RO": "România",
+      "SE": "Suedia",
+      "SI": "Slovenia",
+      "SK": "Slovacia"
+    }
+  },
+  "legal": {
+    "footerLinks": {
+      "terms": "Termeni și condiții",
+      "privacy": "Politica de confidențialitate",
+      "refunds": "Rambursări",
+      "contact": "Contact"
+    },
+    "lastUpdatedLabel": "Last updated: {date}",
+    "providedInEnglishNote": "Acest document este disponibil doar în limba engleză.",
+    "terms": {
+      "metaTitle": "Terms of Service",
+      "metaDescription": "The terms of service for using Fakturcho.",
+      "title": "Terms of Service",
+      "intro": "These terms of service govern the relationship between {legalName} and any person who uses the {productName} web application at {website}. By registering an account, the user accepts the terms in this document.",
+      "sections": [
+        {
+          "heading": "1. Service provider",
+          "paragraphs": [
+            "The service is provided by {entityLine}.",
+            "Contact us at {supportEmail}. We reply to inquiries within five business days."
+          ]
+        },
+        {
+          "heading": "2. What the service is",
+          "paragraphs": [
+            "{productName} is a web application through which a Bulgarian company or a self-insured sole trader composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file.",
+            "The application prepares documents from the data entered by the user. It is not an accounting service, does not file documents with the Bulgarian tax authority (NAP), and does not replace accounting or tax advice.",
+            "Each account represents a single issuer with its own list of clients, catalogue and numbering series."
+          ]
+        },
+        {
+          "heading": "3. Registration and account",
+          "paragraphs": [
+            "Using the service requires registration with a valid email address and password. The user is responsible for safeguarding their access credentials and for all actions taken through their account.",
+            "The user represents that the data entered for the issuer and for clients is accurate and that they are entitled to process it. The content of issued documents is the user's sole responsibility."
+          ]
+        },
+        {
+          "heading": "4. Prices and payment",
+          "paragraphs": [
+            "Issuing each document costs {perDocument}. The amount is deducted from the account's credit balance the moment the document is assigned a number. Composing and saving drafts, clients and catalogue items is free.",
+            "Credit is topped up through one-off packs priced at {packs}. Alternatively, a subscription of {subscription} allows issuing without deducting credit while it is active.",
+            "A new account receives a one-off credit of {signupGrant} on registration.",
+            "Payments are processed by {entityLine} through Revolut Payments UAB as the payment service provider. Stated prices include tax where applicable."
+          ]
+        },
+        {
+          "heading": "5. Credit",
+          "paragraphs": [
+            "Credit is a prepaid value in euro cents that is used only to issue documents in the application. Credit has no expiry date and does not accrue interest.",
+            "Credit cannot be transferred between accounts and is not paid out in cash, except in the cases covered by the refund policy."
+          ]
+        },
+        {
+          "heading": "6. User obligations",
+          "paragraphs": [
+            "The user undertakes to use the service in accordance with the legislation of the Republic of Bulgaria, including the Accountancy Act and the Value Added Tax Act.",
+            "It is prohibited to use the service to issue documents with untrue content, to circumvent tax obligations, or to take actions that infringe the rights of third parties.",
+            "Attempts at automated load, intrusion, or disruption of the service's operation result in immediate termination of access."
+          ]
+        },
+        {
+          "heading": "7. Liability",
+          "paragraphs": [
+            "The service is provided as is. We make reasonable efforts to ensure its continuity and accuracy, but we do not guarantee uninterrupted operation.",
+            "The provider is not liable for the accuracy of data entered by the user, nor for the tax or accounting consequences of documents issued through the application.",
+            "The provider's liability for proven damages is limited to the amount paid by the user over the preceding twelve months."
+          ]
+        },
+        {
+          "heading": "8. Termination",
+          "paragraphs": [
+            "The user may stop using the service at any time by discontinuing access to their account and requesting its deletion at the email address given above.",
+            "The provider may terminate access in the event of a breach of these terms, notifying the user at their registered email address.",
+            "Issued documents remain the user's obligation under applicable accounting legislation even after access is terminated."
+          ]
+        },
+        {
+          "heading": "9. Changes",
+          "paragraphs": [
+            "These terms may be amended. The current version is always available at this address, with the date of the last update. Material changes are communicated to the registered email address no later than fourteen days before they take effect."
+          ]
+        },
+        {
+          "heading": "10. Governing law",
+          "paragraphs": [
+            "Bulgarian law applies to matters not covered here. Disputes are resolved by agreement, and failing that, by the competent Bulgarian court.",
+            "A consumer within the meaning of the Bulgarian Consumer Protection Act may file a complaint with the Consumer Protection Commission or use the European online dispute resolution platform."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "metaDescription": "How Fakturcho processes personal data.",
+      "title": "Privacy Policy",
+      "intro": "This document explains what personal data {productName} processes, on what grounds, to whom it discloses it, and what rights each data subject has. The policy applies to the web application at {website}.",
+      "sections": [
+        {
+          "heading": "1. Data controller",
+          "paragraphs": [
+            "The controller is {entityLine}, email {supportEmail}.",
+            "For data the user enters about their own clients, the user is the controller and Fakturcho acts as a data processor on the user's instructions."
+          ]
+        },
+        {
+          "heading": "2. What data we process",
+          "paragraphs": [
+            "Account data: email address, name, and a cryptographically hashed record of the password.",
+            "Issuer data: company name, EIK (Bulgarian unified identification code), VAT number, address, authorized representative, bank account, and the person who drew up the document. This data is printed on issued documents.",
+            "Client and document data: the recipient's name and identifiers, addresses, catalogue items, amounts and dates, as entered by the user.",
+            "Technical data: access logs, request time, request address and response code, kept for security and troubleshooting purposes.",
+            "We do not process special categories of personal data and we do not carry out automated decision-making or profiling."
+          ]
+        },
+        {
+          "heading": "3. Purposes and legal grounds",
+          "paragraphs": [
+            "Providing the service and maintaining the account — processing is necessary for performance of the contract with the user.",
+            "Processing payments and keeping the credit balance — performance of a contract and compliance with legal obligations.",
+            "Service security, abuse prevention and technical support — the controller's legitimate interest.",
+            "Compliance with accounting and tax obligations — a legal obligation."
+          ]
+        },
+        {
+          "heading": "4. Recipients and processors",
+          "paragraphs": [
+            "Revolut Payments UAB — processes payments as the payment service provider. Receives the email address and payment data. {productName} does not store bank card data.",
+            "Railway Corporation — hosting of the application and the database.",
+            "Resend, Inc. — sending transactional emails when the user chooses to send a document by email.",
+            "Where a recipient processes data outside the European Economic Area, the transfer is based on standard contractual clauses adopted by the European Commission.",
+            "We do not sell personal data and do not provide it for advertising purposes."
+          ]
+        },
+        {
+          "heading": "5. Retention periods",
+          "paragraphs": [
+            "Account data and content entered by the user is retained for as long as the account exists.",
+            "After a deletion request, data is removed within thirty days, except for records we are legally required to keep.",
+            "Technical access logs are retained for up to twelve months."
+          ]
+        },
+        {
+          "heading": "6. Data subject rights",
+          "paragraphs": [
+            "Every natural person has the right to access, rectification, erasure, restriction of processing, data portability, and objection to processing based on legitimate interest.",
+            "These rights are exercised by a request to {supportEmail}. We reply within one month.",
+            "In case of a suspected violation, any person may file a complaint with the Bulgarian Commission for Personal Data Protection, Sofia, 2 Prof. Tsvetan Lazarov Blvd."
+          ]
+        },
+        {
+          "heading": "7. Cookies",
+          "paragraphs": [
+            "We use only strictly necessary cookies — a session cookie that keeps the account signed in. It is required for the service to work and does not require consent.",
+            "We do not use advertising or tracking cookies and do not embed third-party analytics scripts."
+          ]
+        },
+        {
+          "heading": "8. Security",
+          "paragraphs": [
+            "Access to the application is password-protected and the connection is encrypted. Every account sees only its own data; separation is enforced at the database query level.",
+            "In the event of a security breach that creates a high risk to the rights of affected persons, we notify the Commission for Personal Data Protection and the affected persons within the applicable deadlines."
+          ]
+        }
+      ]
+    },
+    "refunds": {
+      "metaTitle": "Refunds",
+      "metaDescription": "When and how Fakturcho refunds amounts paid.",
+      "title": "Refund Policy",
+      "intro": "This policy describes when and how amounts paid for credit and subscriptions in {productName} are refunded.",
+      "sections": [
+        {
+          "heading": "1. Who processes payments",
+          "paragraphs": [
+            "Payments are processed through Revolut Payments UAB as the payment service provider. Refunds are ordered by us to the same card or account used for the purchase.",
+            "A request is submitted to {supportEmail} with the order number from the payment confirmation."
+          ]
+        },
+        {
+          "heading": "2. Unused credit",
+          "paragraphs": [
+            "Unused credit is refunded in full on request within fourteen days of purchasing the pack.",
+            "If part of the pack has been spent, the remainder corresponding to the unused credit is refunded."
+          ]
+        },
+        {
+          "heading": "3. Used credit",
+          "paragraphs": [
+            "Credit spent to issue a document is not refundable. Issuing claims a number from the numbering series and creates an accounting document — the service has been performed at that moment.",
+            "The price for issuing a single document is {perDocument}. Composing drafts does not spend credit and is not charged."
+          ]
+        },
+        {
+          "heading": "4. Subscription",
+          "paragraphs": [
+            "A subscription of {subscription} can be cancelled at any time. Access remains until the end of the paid period, after which it is not renewed.",
+            "The fee paid for the current period is not partially refunded, unless the service was unavailable through our fault for more than three consecutive days."
+          ]
+        },
+        {
+          "heading": "5. Right of withdrawal for consumers",
+          "paragraphs": [
+            "A consumer within the meaning of the Bulgarian Consumer Protection Act has the right to withdraw from the contract within fourteen days, without stating a reason.",
+            "Where the user has expressly agreed for the service to begin immediately, the right of withdrawal lapses for the portion already used, under Art. 57 of the Consumer Protection Act."
+          ]
+        },
+        {
+          "heading": "6. Processing time",
+          "paragraphs": [
+            "Approved refunds are ordered within five business days. The time it takes for the amount to reach the payer's account depends on their bank or card issuer and is usually three to ten business days.",
+            "If a request is declined, you receive a reasoned reply at the email address it was submitted from."
+          ]
+        }
+      ]
+    }
+  },
+  "marketing": {
+    "brand": "Fakturcho",
+    "nav": {
+      "login": "Conectare",
+      "signup": "Creează cont"
+    },
+    "hero": {
+      "title": "Facturi conforme pentru orice afacere din UE",
+      "subtitle": "O aplicație web pentru firme și PFA-uri din întreaga UE. Completați documentul în browser, iar Fakturcho se ocupă de numerotare, regimul de TVA, formatare și e-factură."
+    },
+    "countries": {
+      "heading": "Unde este înregistrată afacerea dumneavoastră?",
+      "items": {
+        "BG": {
+          "name": "Bulgaria",
+          "line": "TVA 20%, facturi în limba bulgară, e-facturi pregătite pentru rețeaua Peppol."
+        },
+        "DE": {
+          "name": "Germania",
+          "line": "TVA 19%, facturi în limba germană, e-facturi în format XRechnung."
+        },
+        "FR": {
+          "name": "Franța",
+          "line": "TVA 20%, facturi în limba franceză, e-facturi în format Chorus Pro."
+        },
+        "IT": {
+          "name": "Italia",
+          "line": "TVA 22%, facturi în limba italiană, e-facturi în format FatturaPA pentru sistemul de schimb SDI."
+        },
+        "PL": {
+          "name": "Polonia",
+          "line": "TVA 23%, facturi în limba polonă, e-facturi în format KSeF FA(3)."
+        },
+        "RO": {
+          "name": "România",
+          "line": "TVA 21%, facturi în limba română, e-facturi în format RO CIUS-RO pentru SPV-ul ANAF."
+        },
+        "ES": {
+          "name": "Spania",
+          "line": "TVA 21%, facturi în limba spaniolă, e-facturi în format Facturae pentru platforma FACe."
+        }
+      }
+    },
+    "capabilities": {
+      "heading": "Ce puteți emite",
+      "items": [
+        "Facturi, facturi proforme, note de credit și de debit, oferte și avize de însoțire a mărfii.",
+        "Numerotare continuă — fără goluri și fără dubluri.",
+        "TVA în funcție de țară: cote locale, scutiri și taxare inversă pentru tranzacții B2B transfrontaliere, cu verificarea în timp real în VIES a codului de TVA al clientului.",
+        "E-facturi EN 16931 în formatul specific țării dumneavoastră — XRechnung, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gata de încărcat pe platforma națională (SPV ANAF, SDI, KSeF, Chorus Pro, FACe) sau de trimis prin Peppol.",
+        "PDF gata făcut, în limba țării dumneavoastră, pe care îl descărcați sau îl trimiteți prin email."
+      ]
+    },
+    "pricing": {
+      "heading": "Prețuri",
+      "payAsYouGo": {
+        "title": "Plată la consum",
+        "body": "Pentru fiecare document emis. Ciornele, clienții și articolele din catalog sunt gratuite. Creditul se reîncarcă în pachete de {packs}."
+      },
+      "subscription": {
+        "title": "Abonament",
+        "tierLine": "{price} → credit de {credit} pe lună",
+        "tierLineSuffix": " ({perDoc} pe document)",
+        "perDocumentOnlyLine": "{perDoc} pe document",
+        "footnote": "Creditul neutilizat se reportează. Puteți anula oricând."
+      },
+      "footnote": "Un cont nou primește un credit de {signupGrant} la înregistrare. Plățile sunt procesate prin Revolut."
+    },
+    "faq": {
+      "heading": "Întrebări frecvente",
+      "items": [
+        {
+          "question": "Ce este Fakturcho?",
+          "answer": "O aplicație web în care emiteți documente conforme cu cerințele UE — facturi, facturi proforme, note de credit și de debit, oferte și avize de însoțire a mărfii — cu e-facturare structurată integrată, fără nicio instalare."
+        },
+        {
+          "question": "Cât costă?",
+          "answer": "0,10 € pe document emis; ciornele, clienții și articolele din catalog sunt gratuite; creditul se reîncarcă în pachete de 5 €, 10 € și 25 €; abonamentele de 5, 10 și 25 € pe lună oferă credit dublu, care se reportează; cu abonament, un document costă 0,05 €."
+        },
+        {
+          "question": "Pot începe gratuit?",
+          "answer": "Da, un cont nou primește un credit de 1 € (10 documente), fără să fie nevoie de card."
+        },
+        {
+          "question": "Pentru ce țări funcționează?",
+          "answer": "Orice firmă cu sediul în spațiul de TVA al UE poate emite documente. E-facturile structurate în formatul național sunt generate pentru Germania, Franța, Italia, Polonia, România, Spania și Bulgaria, gata de încărcat pe platforma națională sau de trimis prin Peppol."
+        },
+        {
+          "question": "Cum se aplică TVA pentru un client din altă țară UE?",
+          "answer": "Introduceți codul de TVA al clientului; Fakturcho îl verifică în VIES și, pentru un client B2B valid din străinătate, aplică taxarea inversă și tipărește mențiunea obligatorie pe document."
+        },
+        {
+          "question": "Pot emite facturi fără înregistrare în scopuri de TVA?",
+          "answer": "Da; documentele unui emitent neînregistrat în scopuri de TVA includ temeiul de scutire aplicabil în țara sa."
+        },
+        {
+          "question": "Care este diferența dintre o factură proformă și o factură?",
+          "answer": "Factura proformă este o ofertă preliminară și nu este document fiscal; factura este documentul fiscal oficial, cu număr și dată a faptului generator."
+        },
+        {
+          "question": "Cum se corectează o factură emisă?",
+          "answer": "Documentele emise nu mai pot fi modificate; corecțiile se fac printr-o notă de credit sau de debit aferentă documentului original."
+        },
+        {
+          "question": "Cum obțin PDF-ul și XML-ul e-facturii?",
+          "answer": "Ambele sunt generate pe server. Le descărcați sau le trimiteți clientului prin email, iar e-factura o încărcați personal pe platforma națională ori o trimiteți prin Peppol."
+        }
+      ]
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "Fakturcho — facturare și e-facturare pentru firme din UE",
+      "description": "Emiteți facturi, proforme, note de credit și de debit și oferte conforme cu cerințele UE, cu e-facturare EN 16931 și Peppol. 0,10 € pe document emis.",
+      "ogTagline": "Facturare și e-facturare pentru firme din UE"
+    },
+    "login": {
+      "title": "Conectare",
+      "description": "Conectați-vă la contul Fakturcho pentru a emite și gestiona documente."
+    },
+    "signup": {
+      "title": "Înregistrare",
+      "description": "Creați un cont gratuit și emiteți prima factură în câteva minute. Credit inițial de 1,00 €, fără abonament."
+    }
+  }
+}

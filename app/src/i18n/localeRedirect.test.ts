@@ -19,7 +19,7 @@ describe('decideLocaleRedirect — auto redirect by Accept-Language', () => {
     ['bg', 'bg', null],
     ['bg-BG', 'bg', null],
     ['en-US', 'en-US', '/en'],
-    ['de', 'de', '/en'],
+    ['de', 'de', '/de'],
     ['bg;q=0.5,en;q=0.9', 'bg;q=0.5,en;q=0.9', '/en'],
   ])('Accept-Language %s redirects to %s', (_label, header, expected) => {
     const decision = decideLocaleRedirect(input({ acceptLanguage: header }));
@@ -46,7 +46,7 @@ describe('decideLocaleRedirect — auto redirect by Accept-Language', () => {
       }),
     );
     expect(decision.redirect).toEqual({
-      pathname: '/en/signup',
+      pathname: '/de/signup',
       search: '?country=DE&utm_source=x',
     });
   });

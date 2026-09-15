@@ -1,5 +1,11 @@
 import bgMessages from '@messages/bg.json';
+import deMessages from '@messages/de.json';
 import enMessages from '@messages/en.json';
+import esMessages from '@messages/es.json';
+import frMessages from '@messages/fr.json';
+import itMessages from '@messages/it.json';
+import plMessages from '@messages/pl.json';
+import roMessages from '@messages/ro.json';
 import type { DomainErrorCode, Locale } from '@shared/types';
 
 interface ApiErrorBody {
@@ -36,6 +42,12 @@ interface ShellMessages {
 const MESSAGES_BY_LOCALE: Partial<Record<Locale, ShellMessages>> = {
   bg: bgMessages.shell as ShellMessages,
   en: enMessages.shell as ShellMessages,
+  de: deMessages.shell as ShellMessages,
+  fr: frMessages.shell as ShellMessages,
+  it: itMessages.shell as ShellMessages,
+  pl: plMessages.shell as ShellMessages,
+  ro: roMessages.shell as ShellMessages,
+  es: esMessages.shell as ShellMessages,
 };
 
 function messagesFor(locale: Locale): ShellMessages {

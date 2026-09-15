@@ -11,6 +11,12 @@ describe('LocaleLoginPage metadata', () => {
     expect(metadata.alternates?.languages).toEqual({
       bg: '/login',
       en: '/en/login',
+      de: '/de/login',
+      fr: '/fr/login',
+      it: '/it/login',
+      pl: '/pl/login',
+      ro: '/ro/login',
+      es: '/es/login',
       'x-default': '/login',
     });
   });

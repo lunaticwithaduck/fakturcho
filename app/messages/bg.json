@@ -143,7 +143,8 @@
         "subtotal": "Междинна сума",
         "discount": "Отстъпка",
         "taxBase": "Данъчна основа",
-        "vat": "ДДС (20%)",
+        "vat": "ДДС ({rate}%)",
+        "vatGeneric": "ДДС",
         "total": "Общо"
       },
       "notes": {

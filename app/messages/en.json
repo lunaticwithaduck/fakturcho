@@ -143,7 +143,8 @@
         "subtotal": "Subtotal",
         "discount": "Discount",
         "taxBase": "Tax base",
-        "vat": "VAT (20%)",
+        "vat": "VAT ({rate}%)",
+        "vatGeneric": "VAT",
         "total": "Total"
       },
       "notes": {

@@ -63,7 +63,7 @@ describe('buildRequestConfig', () => {
   });
 
   it('falls back to Bulgarian for an unrecognized header value', async () => {
-    stubHeader('fr');
+    stubHeader('ja');
     getFeatureFlagsMock.mockResolvedValue({ EN_LOCALE: false, EINVOICE: false, PEPPOL: false });
     stubCookies([]);
 
@@ -161,7 +161,7 @@ describe('buildRequestConfig', () => {
     stubHeader(null);
     getFeatureFlagsMock.mockResolvedValue({ EN_LOCALE: true, EINVOICE: false, PEPPOL: false });
     stubCookies([{ name: 'better-auth.session_token', value: 'abc' }]);
-    stubFetch({ me: { ok: true, body: { locale: 'fr' } } });
+    stubFetch({ me: { ok: true, body: { locale: 'ja' } } });
 
     const config = await buildRequestConfig();
 
