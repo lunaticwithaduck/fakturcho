@@ -1,5 +1,5 @@
 export type { LucideIcon } from 'lucide-react';
-export { FileText, HelpCircle, Plus } from 'lucide-react';
+export { ChevronDown, FileText, Globe, HelpCircle, Plus } from 'lucide-react';
 export type { BadgeStylesProps } from './Badge';
 export { Badge } from './Badge';
 export type { ButtonStylesProps } from './Button';
