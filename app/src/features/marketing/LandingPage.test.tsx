@@ -69,22 +69,20 @@ describe('LandingPage', () => {
     }
   });
 
-  it('hides the language switcher when EN_LOCALE is off', () => {
+  it('hides the language button when EN_LOCALE is off', () => {
     render(<LandingPage />);
-    expect(screen.queryByRole('navigation', { name: 'Избор на език' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Избор на език/ })).toBeNull();
   });
 
-  it('shows the switcher linking off the bg homepage when enabled', () => {
+  it('shows the language button with the current language on the bg homepage', () => {
     render(<LandingPage enEnabled />);
-    expect(screen.getByRole('link', { name: 'Български' }).getAttribute('href')).toBe('/?lang=bg');
-    expect(screen.getByRole('link', { name: 'English' }).getAttribute('href')).toBe('/?lang=en');
+    const button = screen.getByRole('button', { name: 'Избор на език: Български' });
+    expect(button.textContent).toContain('Български');
   });
 
-  it('shows the switcher linking off the en homepage when enabled', () => {
+  it('shows the language button with the current language on the en homepage', () => {
     render(<LandingPage locale="en" enEnabled />);
-    expect(screen.getByRole('link', { name: 'Български' }).getAttribute('href')).toBe(
-      '/en?lang=bg',
-    );
-    expect(screen.getByRole('link', { name: 'English' }).getAttribute('href')).toBe('/en?lang=en');
+    const button = screen.getByRole('button', { name: 'Language: English' });
+    expect(button.textContent).toContain('English');
   });
 });

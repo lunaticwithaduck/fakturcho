@@ -5,7 +5,7 @@ import { interpolate } from '@app/features/legal/interpolate';
 import { LegalFooter } from '@app/features/legal/LegalFooter';
 import { formatMoneyForLocale } from '@app/features/shared/format';
 import brandIcon from '@app/features/shell/brand-icon.png';
-import { LanguageSwitcher } from '@app/i18n/LanguageSwitcher';
+import { LanguageMenu } from '@app/i18n/LanguageMenu';
 import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card } from '@design/components';
 import {
@@ -48,7 +48,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
           <span className="text-lg font-bold text-text">{content.brand}</span>
         </Link>
         <div className="flex flex-wrap items-center gap-4">
-          <LanguageSwitcher locale={locale} currentPath={homeHref} enabled={enEnabled} />
+          <LanguageMenu locale={locale} currentPath={homeHref} enabled={enEnabled} />
           <div className="flex items-center gap-3">
             <Button variant="secondary" size="sm" asChild>
               <Link href={loginHref}>{content.nav.login}</Link>

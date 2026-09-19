@@ -2,7 +2,7 @@ import type { Locale } from '@shared/types';
 import { PUBLISHED_LOCALES } from '@shared/types';
 import { DEFAULT_LOCALE, isLocale, NON_DEFAULT_PUBLISHED_LOCALES } from './locale';
 
-export const LOCALE_COOKIE_NAME = 'fakturcho_locale';
+export const LOCALE_COOKIE_NAME = 'fakturcho_lang';
 export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 export const LOCALE_QUERY_PARAM = 'lang';
 

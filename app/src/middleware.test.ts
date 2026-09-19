@@ -100,6 +100,6 @@ describe('middleware', () => {
 
     expect(response.status).toBe(307);
     expect(response.headers.get('location')).toBe('https://www.fakturcho.com/en/login');
-    expect(response.headers.get('set-cookie')).toContain('fakturcho_locale=en');
+    expect(response.headers.get('set-cookie')).toContain('fakturcho_lang=en');
   });
 });
