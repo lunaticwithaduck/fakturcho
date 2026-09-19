@@ -51,6 +51,26 @@ describe('middleware', () => {
     expect(response.headers.get('Vary')).toBe('Accept-Language, Cookie');
   });
 
+  it('keeps a Bulgarian IP on the bg homepage despite a non-bg browser', async () => {
+    stubFlags(true);
+    const response = await middleware(
+      request('/', { 'accept-language': 'en-US', 'x-real-ip': '2.56.12.1' }),
+    );
+
+    expect(response.status).not.toBe(307);
+    expect(response.headers.get('Vary')).toBe('Accept-Language, Cookie');
+  });
+
+  it('sends a Bulgarian IP from /en back to the bg homepage', async () => {
+    stubFlags(true);
+    const response = await middleware(
+      request('/en', { 'accept-language': 'en-US', 'x-real-ip': '2.56.12.1' }),
+    );
+
+    expect(response.status).toBe(307);
+    expect(response.headers.get('location')).toBe('https://www.fakturcho.com/');
+  });
+
   it('does not redirect when EN is off', async () => {
     stubFlags(false);
     const response = await middleware(request('/', { 'accept-language': 'en-US' }));

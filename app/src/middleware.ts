@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { clientIpFromHeaders, isBulgarianIp } from './i18n/bgIp';
 import { isEnLocaleEnabled } from './i18n/enLocaleCache';
 import { LOCALE_HEADER, localeForPathname } from './i18n/locale';
 import {
@@ -20,6 +21,7 @@ export async function middleware(request: NextRequest) {
     hasSession: request.cookies.getAll().some((cookie) => cookie.name.endsWith('session_token')),
     userAgent: request.headers.get('user-agent'),
     enEnabled: await isEnLocaleEnabled(),
+    clientIsBulgarian: isBulgarianIp(clientIpFromHeaders(request.headers)),
   });
 
   if (decision.redirect) {

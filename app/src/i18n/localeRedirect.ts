@@ -66,6 +66,7 @@ export interface LocaleRedirectInput {
   hasSession: boolean;
   userAgent: string | null;
   enEnabled: boolean;
+  clientIsBulgarian: boolean;
 }
 
 export interface LocaleRedirectDecision {
@@ -77,8 +78,16 @@ export interface LocaleRedirectDecision {
 const NO_OP: LocaleRedirectDecision = { redirect: null, setLocaleCookie: null, vary: false };
 
 export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirectDecision {
-  const { pathname, searchParams, acceptLanguage, localeCookie, hasSession, userAgent, enEnabled } =
-    input;
+  const {
+    pathname,
+    searchParams,
+    acceptLanguage,
+    localeCookie,
+    hasSession,
+    userAgent,
+    enEnabled,
+    clientIsBulgarian,
+  } = input;
 
   if (!isPublicPath(pathname)) return NO_OP;
 
@@ -95,10 +104,21 @@ export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirect
     };
   }
 
-  if (!enEnabled || !isBgEntryPath(pathname) || hasSession) {
+  if (!enEnabled || hasSession) {
     return { redirect: null, setLocaleCookie: null, vary: true };
   }
   if (userAgent && BOT_UA_REGEX.test(userAgent)) {
+    return { redirect: null, setLocaleCookie: null, vary: true };
+  }
+
+  if (!isBgEntryPath(pathname)) {
+    if (clientIsBulgarian && !isLocale(localeCookie)) {
+      return {
+        redirect: { pathname: toBasePath(pathname), search: searchString(searchParams) },
+        setLocaleCookie: null,
+        vary: true,
+      };
+    }
     return { redirect: null, setLocaleCookie: null, vary: true };
   }
 
@@ -113,6 +133,10 @@ export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirect
         vary: true,
       };
     }
+    return { redirect: null, setLocaleCookie: null, vary: true };
+  }
+
+  if (clientIsBulgarian) {
     return { redirect: null, setLocaleCookie: null, vary: true };
   }
 

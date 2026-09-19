@@ -10,6 +10,7 @@ function input(overrides: Partial<LocaleRedirectInput> = {}): LocaleRedirectInpu
     hasSession: false,
     userAgent: 'Mozilla/5.0',
     enEnabled: true,
+    clientIsBulgarian: false,
     ...overrides,
   };
 }
