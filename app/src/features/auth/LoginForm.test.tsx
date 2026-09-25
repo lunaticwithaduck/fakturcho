@@ -1,21 +1,26 @@
 // @vitest-environment jsdom
 import bgMessages from '@messages/bg.json';
 import enMessages from '@messages/en.json';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { LoginForm } from './LoginForm';
 
+const signInMock = vi.fn().mockResolvedValue({ error: null });
+
 vi.mock('@app/auth', () => ({
-  signIn: { email: vi.fn() },
-  mapAuthErrorMessage: vi.fn(),
+  signIn: { email: (...args: unknown[]) => signInMock(...args) },
+  mapAuthErrorMessage: (code?: string | null) => code ?? 'generic',
 }));
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  signInMock.mockClear();
+});
 
 describe('LoginForm', () => {
   it('renders the Bulgarian copy unchanged', () => {
@@ -78,5 +83,35 @@ describe('LoginForm', () => {
       'href',
       'http://localhost:3000/en/signup',
     );
+  });
+
+  it('shows the exact old Bulgarian error message on the bg locale', async () => {
+    signInMock.mockResolvedValueOnce({ error: { code: 'INVALID_EMAIL_OR_PASSWORD' } });
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <LoginForm />
+      </NextIntlClientProvider>,
+    );
+
+    fireEvent.change(screen.getByLabelText('Имейл'), { target: { value: 'a@b.com' } });
+    fireEvent.change(screen.getByLabelText('Парола'), { target: { value: 'wrong-password' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Вход' }));
+
+    expect(await screen.findByText('Грешен имейл или парола.')).toBeTruthy();
+  });
+
+  it('shows the English error message on the en locale', async () => {
+    signInMock.mockResolvedValueOnce({ error: { code: 'INVALID_EMAIL_OR_PASSWORD' } });
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <LoginForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'a@b.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'wrong-password' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Log in' }));
+
+    expect(await screen.findByText('Incorrect email or password.')).toBeTruthy();
   });
 });

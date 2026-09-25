@@ -5,6 +5,7 @@ import { FR_CONFIG } from './countries/fr';
 import { IT_CONFIG } from './countries/it';
 import { PL_CONFIG } from './countries/pl';
 import { RO_CONFIG } from './countries/ro';
+import type { Locale } from './languages';
 import { PUBLISHED_LOCALES } from './languages';
 import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
@@ -94,6 +95,15 @@ export function getCountryConfig(country: string): CountryConfig {
   if (configured) return resolveLocale(configured);
   if (isEuVatAreaCountry(country)) return resolveLocale({ ...GENERIC_EU_CONFIG, country });
   return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country });
+}
+
+// BG_CONFIG.companyIdLabel is Cyrillic, the correct label for Bulgarian UI.
+// A Bulgarian company viewed from a non-bg UI still needs a readable label.
+const BG_COMPANY_ID_LABEL_LATIN = 'UIC / BULSTAT';
+
+export function companyIdLabelFor(country: string, uiLocale: Locale): string {
+  if (country === 'BG' && uiLocale !== 'bg') return BG_COMPANY_ID_LABEL_LATIN;
+  return getCountryConfig(country).companyIdLabel;
 }
 
 export function isReverseCharge(issuerCountry: string, clientCountry: string | null): boolean {

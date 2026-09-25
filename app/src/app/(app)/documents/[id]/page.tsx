@@ -1,7 +1,11 @@
 import { DocumentViewPage } from '@app/features/documents/DocumentViewPage';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = { title: 'Документ' };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('documents.view');
+  return { title: t('pageTitle') };
+}
 
 interface ViewDocumentPageProps {
   params: Promise<{ id: string }>;

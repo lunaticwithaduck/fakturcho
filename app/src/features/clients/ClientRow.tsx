@@ -1,7 +1,7 @@
 import { Button, Card } from '@design/components';
-import { getCountryConfig } from '@fakturcho/shared-types';
-import type { ClientDto } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import { companyIdLabelFor } from '@fakturcho/shared-types';
+import type { ClientDto, Locale } from '@shared/types';
+import { useLocale, useTranslations } from 'next-intl';
 
 interface ClientRowProps {
   client: ClientDto;
@@ -11,7 +11,8 @@ interface ClientRowProps {
 
 export function ClientRow({ client, onEdit, onDelete }: ClientRowProps) {
   const t = useTranslations('clients');
-  const { companyIdLabel } = getCountryConfig(client.country);
+  const locale = useLocale() as Locale;
+  const companyIdLabel = companyIdLabelFor(client.country, locale);
 
   return (
     <Card className="flex items-center justify-between gap-4">

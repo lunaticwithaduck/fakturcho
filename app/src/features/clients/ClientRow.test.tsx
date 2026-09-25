@@ -61,12 +61,21 @@ describe('ClientRow', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByText('ЕИК / Булстат: 123456789 · office@acme.bg')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Edit' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeTruthy();
     expect(consoleError).not.toHaveBeenCalled();
 
     consoleError.mockRestore();
+  });
+
+  it('shows a readable Latin label for a BG client on a non-bg UI', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <ClientRow client={client} onEdit={vi.fn()} onDelete={vi.fn()} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByText('UIC / BULSTAT: 123456789 · office@acme.bg')).toBeTruthy();
   });
 
   it('shows the client-country identifier acronym rather than the viewer-locale generic label', () => {

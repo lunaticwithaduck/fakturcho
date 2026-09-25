@@ -32,6 +32,7 @@ interface SignupFormProps {
 
 export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
   const t = useTranslations('auth');
+  const tErrors = useTranslations('auth.errors');
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -57,7 +58,7 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
     const { error: signUpError } = await signUp.email({ name, email, password, country });
     setIsSubmitting(false);
     if (signUpError) {
-      setError(mapAuthErrorMessage(signUpError.code));
+      setError(tErrors(mapAuthErrorMessage(signUpError.code)));
       return;
     }
     trackEvent('signup');

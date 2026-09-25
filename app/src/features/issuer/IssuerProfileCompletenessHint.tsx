@@ -1,8 +1,8 @@
 import { Card } from '@design/components';
-import { getCountryConfig } from '@fakturcho/shared-types';
+import { companyIdLabelFor, getCountryConfig, type Locale } from '@fakturcho/shared-types';
 import type { IssuerProfileDto } from '@shared/types';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { getMissingIssuerFields } from './issuerCompleteness';
 
 interface IssuerProfileCompletenessHintProps {
@@ -15,10 +15,12 @@ export function IssuerProfileCompletenessHint({
   showProfileLink,
 }: IssuerProfileCompletenessHintProps) {
   const t = useTranslations('issuer');
+  const locale = useLocale() as Locale;
   const missing = getMissingIssuerFields(profile);
   if (missing.length === 0) return null;
 
-  const { identifiers, countyRegion, companyIdLabel } = getCountryConfig(profile.country);
+  const { identifiers, countyRegion } = getCountryConfig(profile.country);
+  const companyIdLabel = companyIdLabelFor(profile.country, locale);
   const missingLabels = missing.map((field) => {
     if (field.startsWith('identifier:')) {
       const key = field.slice('identifier:'.length);

@@ -14,6 +14,7 @@ interface LoginFormProps {
 
 export function LoginForm({ locale = 'bg' }: LoginFormProps) {
   const t = useTranslations('login');
+  const tErrors = useTranslations('auth.errors');
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +29,7 @@ export function LoginForm({ locale = 'bg' }: LoginFormProps) {
     const { error: signInError } = await signIn.email({ email, password });
     setIsSubmitting(false);
     if (signInError) {
-      setError(mapAuthErrorMessage(signInError.code));
+      setError(tErrors(mapAuthErrorMessage(signInError.code)));
       return;
     }
     router.push('/documents');
