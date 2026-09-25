@@ -1,6 +1,7 @@
 import { interpolate } from '@app/features/legal/interpolate';
 import { LegalFooter } from '@app/features/legal/LegalFooter';
 import { formatDateForLocale } from '@app/features/shared/format';
+import { BackToAppLink } from './BackToAppLink';
 import { GuideBreadcrumb } from './GuideBreadcrumb';
 import { GuideCta } from './GuideCta';
 import { GuideFaq } from './GuideFaq';
@@ -16,6 +17,7 @@ export interface GuidePageChrome {
   lastReviewedLabel: string;
   signupLabel: string;
   brand: string;
+  backToAppLabel: string;
 }
 
 interface GuidePageProps {
@@ -34,6 +36,7 @@ export function GuidePage({ guide, chrome }: GuidePageProps) {
       <script type="application/ld+json">
         {buildGuideJsonLd(guide, { homeLabel: chrome.homeLabel, guidesLabel: chrome.guidesLabel })}
       </script>
+      <BackToAppLink label={chrome.backToAppLabel} />
       <GuideBreadcrumb
         locale={locale}
         homeLabel={chrome.homeLabel}

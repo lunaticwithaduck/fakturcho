@@ -22,6 +22,7 @@ export default function BgGuideIndexPage() {
       guides={guides}
       euOverview={eu}
       euOverviewLabel={bgMessages.guides.euOverviewLink}
+      backToAppLabel={bgMessages.guides.backToApp}
     />
   );
 }

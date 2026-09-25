@@ -5,6 +5,7 @@ function blockKey(block: GuideBlockData): string {
   if (block.type === 'p') return `p-${block.inline.map((run) => run.text).join('')}`;
   if (block.type === 'h3') return `h3-${block.text}`;
   if (block.type === 'table') return `table-${block.head.join('|')}`;
+  if (block.type === 'tip') return `tip-${block.inline.map((run) => run.text).join('')}`;
   const firstItem = block.items[0]?.map((run) => run.text).join('') ?? '';
   return `${block.type}-${firstItem}`;
 }

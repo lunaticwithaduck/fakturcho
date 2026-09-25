@@ -14,6 +14,13 @@ export function GuideBlock({ block }: { block: GuideBlockData }) {
   if (block.type === 'h3') {
     return <h3 className="text-lg font-semibold text-text">{block.text}</h3>;
   }
+  if (block.type === 'tip') {
+    return (
+      <p className="rounded-md border border-accent-border bg-accent-subtle px-4 py-3 text-sm leading-relaxed text-text">
+        {renderInline(block.inline)}
+      </p>
+    );
+  }
   if (block.type === 'ul') {
     return (
       <ul className="flex list-disc flex-col gap-1 pl-5 text-base leading-relaxed text-text-muted">

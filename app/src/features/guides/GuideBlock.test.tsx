@@ -48,6 +48,16 @@ describe('GuideBlock', () => {
     expect(container.querySelector('ol')).toBeTruthy();
   });
 
+  it('renders a tip as a subtle callout', () => {
+    const block: GuideBlockData = {
+      type: 'tip',
+      inline: [{ text: 'Save your draft before switching tabs.' }],
+    };
+    const { container } = render(<GuideBlock block={block} />);
+    expect(screen.getByText('Save your draft before switching tabs.')).toBeTruthy();
+    expect(container.querySelector('.bg-accent-subtle')).toBeTruthy();
+  });
+
   it('renders a table with a thead and semantic cells', () => {
     const block: GuideBlockData = {
       type: 'table',

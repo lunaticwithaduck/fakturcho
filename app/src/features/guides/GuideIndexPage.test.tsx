@@ -31,6 +31,7 @@ describe('GuideIndexPage', () => {
         heading="Leitfäden"
         guides={[stubGuide('DE', 'de')]}
         euOverviewLabel="EU-Überblick"
+        backToAppLabel="Back to the app"
       />,
     );
     expect(screen.getByRole('heading', { level: 1, name: 'Leitfäden' })).toBeTruthy();
@@ -46,6 +47,7 @@ describe('GuideIndexPage', () => {
         guides={[]}
         euOverview={stubGuide('EU', 'en')}
         euOverviewLabel="EU-Überblick"
+        backToAppLabel="Back to the app"
       />,
     );
     const link = screen.getByRole('link', { name: 'EU-Überblick' });
@@ -60,6 +62,7 @@ describe('GuideIndexPage', () => {
         guides={[stubGuide('EU', 'en')]}
         euOverview={stubGuide('EU', 'en')}
         euOverviewLabel="EU overview guide"
+        backToAppLabel="Back to the app"
       />,
     );
     expect(screen.queryByRole('link', { name: 'EU overview guide' })).toBeNull();

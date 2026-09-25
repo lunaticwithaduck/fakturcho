@@ -1,0 +1,1187 @@
+{
+  "locale": "es",
+  "title": "Cómo usar Fakturcho",
+  "intro": "Fakturcho es una aplicación web para emitir facturas y otros documentos comerciales conformes con la normativa de la UE. Esta página recorre la aplicación pantalla a pantalla, en el orden en que una cuenta nueva suele necesitarlas.",
+  "sections": [
+    {
+      "heading": "1. Primeros pasos tras el registro",
+      "id": "1-primeros-pasos-tras-el-registro",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Al registrarse recibe un crédito inicial único de "
+            },
+            {
+              "text": "1,00 €",
+              "bold": true
+            },
+            {
+              "text": " — 10 documentos emitidos, sin necesidad de tarjeta. El país que elija al registrarse determina tanto el idioma de la aplicación como las normas legales aplicables (tipos de IVA, campos obligatorios, formato de numeración) a todo lo que emita."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Regístrese con su nombre, correo electrónico, contraseña y país."
+              }
+            ],
+            [
+              {
+                "text": "Accederá a "
+              },
+              {
+                "text": "Documentos",
+                "bold": true
+              },
+              {
+                "text": ". Complete su perfil de emisor antes de emitir nada: Fakturcho bloquea la emisión hasta que dispone de los datos legales mínimos de su empresa (siguiente sección)."
+              }
+            ],
+            [
+              {
+                "text": "Añada al menos un cliente y, opcionalmente, algunos artículos del catálogo para agilizar su primer documento."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Consejo: los borradores, los clientes y los artículos del catálogo nunca consumen crédito. Solo emitir un documento lo hace."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "2. Complete su perfil de emisor",
+      "id": "2-complete-su-perfil-de-emisor",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Para qué sirve: su perfil de emisor es lo que se imprime en cada documento que emita, y la emisión está bloqueada hasta que se rellenan los campos obligatorios para su país."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Abra "
+              },
+              {
+                "text": "Perfil",
+                "bold": true
+              },
+              {
+                "text": " desde el menú."
+              }
+            ],
+            [
+              {
+                "text": "En "
+              },
+              {
+                "text": "Datos de la empresa",
+                "bold": true
+              },
+              {
+                "text": ", rellene "
+              },
+              {
+                "text": "Empresa",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "País",
+                "bold": true
+              },
+              {
+                "text": " y los campos de dirección que exija su país (normalmente "
+              },
+              {
+                "text": "Calle y número",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Código postal",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Ciudad",
+                "bold": true
+              },
+              {
+                "text": "; algunos países añaden una línea de dirección fija o un campo de región/provincia) y su identificador fiscal nacional, con la etiqueta propia de cada país (p. ej. «ЕИК / Булстат» en Bulgaria, «SIREN» en Francia, «NIP» en Polonia)."
+              }
+            ],
+            [
+              {
+                "text": "Si está registrado a efectos de IVA, active "
+              },
+              {
+                "text": "Registrado a efectos de IVA",
+                "bold": true
+              },
+              {
+                "text": " en "
+              },
+              {
+                "text": "Registro de IVA",
+                "bold": true
+              },
+              {
+                "text": " e introduzca su "
+              },
+              {
+                "text": "NIF-IVA",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "En "
+              },
+              {
+                "text": "Cuenta bancaria",
+                "bold": true
+              },
+              {
+                "text": ", añada opcionalmente "
+              },
+              {
+                "text": "Banco",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "IBAN",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "BIC",
+                "bold": true
+              },
+              {
+                "text": " y una "
+              },
+              {
+                "text": "Cuenta alternativa",
+                "bold": true
+              },
+              {
+                "text": " — estos datos aparecen en sus documentos cuando están rellenados."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Guardar perfil",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Mientras falte algún campo obligatorio, Documentos muestra «El perfil no está listo para emitir documentos» con la lista de lo que falta y un enlace "
+            },
+            {
+              "text": "Ir al perfil del emisor",
+              "bold": true
+            },
+            {
+              "text": ". Puede seguir creando y guardando borradores; simplemente no podrá emitir."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "El perfil de emisor no tiene carga de logotipo ni un ajuste de idioma del documento: el idioma del emisor sigue al país del emisor, y cada cliente puede anularlo individualmente (véase «Idioma» más abajo)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "3. Añada sus clientes",
+      "id": "3-anada-sus-clientes",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Para qué sirve: los clientes son los destinatarios que elige al componer un documento, y cada uno lleva su propio país, identificadores fiscales e idioma del documento."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Abra "
+              },
+              {
+                "text": "Clientes",
+                "bold": true
+              },
+              {
+                "text": " y haga clic en "
+              },
+              {
+                "text": "Nuevo cliente",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Rellene "
+              },
+              {
+                "text": "Nombre de la empresa",
+                "bold": true
+              },
+              {
+                "text": ", el campo de identificador nacional y la dirección — los países con dirección estructurada tienen campos separados de "
+              },
+              {
+                "text": "Calle y número",
+                "bold": true
+              },
+              {
+                "text": " y "
+              },
+              {
+                "text": "Código postal",
+                "bold": true
+              },
+              {
+                "text": "; los demás tienen un único campo "
+              },
+              {
+                "text": "Dirección",
+                "bold": true
+              },
+              {
+                "text": ". Añada "
+              },
+              {
+                "text": "Ciudad",
+                "bold": true
+              },
+              {
+                "text": " y, si procede, un campo de región/provincia, y luego elija el "
+              },
+              {
+                "text": "País",
+                "bold": true
+              },
+              {
+                "text": " del cliente."
+              }
+            ],
+            [
+              {
+                "text": "Establezca el "
+              },
+              {
+                "text": "Idioma del documento",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Igual que el emisor",
+                "bold": true
+              },
+              {
+                "text": " usa su propio idioma de emisor, o elija uno específico para los documentos de ese cliente."
+              }
+            ],
+            [
+              {
+                "text": "Añada opcionalmente "
+              },
+              {
+                "text": "Correo electrónico",
+                "bold": true
+              },
+              {
+                "text": " (rellena por defecto el destinatario de «enviar por correo») y "
+              },
+              {
+                "text": "Representante",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Guardar",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Los clientes existentes se pueden editar o eliminar desde la lista (búsqueda por nombre de empresa o identificador); eliminar pide confirmación y no se puede deshacer."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "4. Cree su catálogo",
+      "id": "4-cree-su-catalogo",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Para qué sirve: los artículos del catálogo son productos o servicios reutilizables que puede añadir directamente a las líneas de un documento."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Abra "
+              },
+              {
+                "text": "Catálogo",
+                "bold": true
+              },
+              {
+                "text": " y haga clic en "
+              },
+              {
+                "text": "Nuevo artículo",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Rellene "
+              },
+              {
+                "text": "Nombre",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Unidad",
+                "bold": true
+              },
+              {
+                "text": " (p. ej. «ud., hora, kg...») y "
+              },
+              {
+                "text": "Precio predeterminado",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Guardar",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Un artículo del catálogo solo guarda un nombre, una unidad y un precio predeterminado; no lleva su propio tipo de IVA. El IVA se establece en el propio documento al componerlo (véase la siguiente sección). Al componer un documento, escribir el nombre de un concepto lo autocompleta según su catálogo y rellena el precio por usted."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "5. Cree un documento",
+      "id": "5-cree-un-documento",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Para qué sirve: aquí es donde compone facturas, facturas proforma, facturas rectificativas, presupuestos y albaranes — los únicos tipos de documento que admite Fakturcho."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Desde "
+              },
+              {
+                "text": "Documentos",
+                "bold": true
+              },
+              {
+                "text": ", haga clic en "
+              },
+              {
+                "text": "Nuevo documento",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Elija el "
+              },
+              {
+                "text": "Tipo de documento",
+                "bold": true
+              },
+              {
+                "text": ": Factura, Factura proforma, Factura rectificativa (abono), Factura rectificativa (cargo), Presupuesto o Albarán."
+              }
+            ],
+            [
+              {
+                "text": "Para una "
+              },
+              {
+                "text": "Factura rectificativa (abono)",
+                "bold": true
+              },
+              {
+                "text": " o una "
+              },
+              {
+                "text": "Factura rectificativa (cargo)",
+                "bold": true
+              },
+              {
+                "text": ", elija el "
+              },
+              {
+                "text": "Documento original",
+                "bold": true
+              },
+              {
+                "text": " — solo se pueden seleccionar documentos ya emitidos, ya que una factura rectificativa corrige uno de ellos."
+              }
+            ],
+            [
+              {
+                "text": "Elija un "
+              },
+              {
+                "text": "Cliente",
+                "bold": true
+              },
+              {
+                "text": " de la lista, o déjelo como "
+              },
+              {
+                "text": "Sin cliente",
+                "bold": true
+              },
+              {
+                "text": " (también puede añadir un cliente nuevo directamente con "
+              },
+              {
+                "text": "+ Nuevo cliente",
+                "bold": true
+              },
+              {
+                "text": ")."
+              }
+            ],
+            [
+              {
+                "text": "Rellene el número de referencia, las fechas y, para los albaranes, los campos de entrega que aparecen en "
+              },
+              {
+                "text": "Datos de entrega",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Añada "
+              },
+              {
+                "text": "Conceptos",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Descripción",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Cantidad",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Precio",
+                "bold": true
+              },
+              {
+                "text": "; use "
+              },
+              {
+                "text": "Añadir concepto",
+                "bold": true
+              },
+              {
+                "text": " para más líneas."
+              }
+            ],
+            [
+              {
+                "text": "Añada opcionalmente un descuento en "
+              },
+              {
+                "text": "Descuentos",
+                "bold": true
+              },
+              {
+                "text": ", como "
+              },
+              {
+                "text": "Porcentaje",
+                "bold": true
+              },
+              {
+                "text": " o como "
+              },
+              {
+                "text": "Importe",
+                "bold": true
+              },
+              {
+                "text": " fijo."
+              }
+            ],
+            [
+              {
+                "text": "En "
+              },
+              {
+                "text": "IVA",
+                "bold": true
+              },
+              {
+                "text": ", deje activado "
+              },
+              {
+                "text": "Aplicar IVA (…%)",
+                "bold": true
+              },
+              {
+                "text": ", o desactívelo y seleccione un "
+              },
+              {
+                "text": "Motivo para no aplicar IVA",
+                "bold": true
+              },
+              {
+                "text": " — los motivos disponibles dependen del país de su emisor (exención de pequeño negocio, inversión del sujeto pasivo, entrega intracomunitaria, exportación, etc.)."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Guardar borrador",
+                "bold": true
+              },
+              {
+                "text": " para seguir trabajando en él más tarde, o en "
+              },
+              {
+                "text": "Guardar y emitir",
+                "bold": true
+              },
+              {
+                "text": " para emitirlo de inmediato."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Los documentos están siempre en euros — no hay selector de moneda. La numeración es por tipo de documento: al emitir se muestra "
+            },
+            {
+              "text": "Siguiente número de la serie",
+              "bold": true
+            },
+            {
+              "text": ", que solo puede modificar mientras esa serie no tenga documentos emitidos todavía."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Emitir cuesta "
+            },
+            {
+              "text": "0,10 €",
+              "bold": true
+            },
+            {
+              "text": ", que se descuentan de su saldo de crédito en el momento en que el documento recibe un número. "
+            },
+            {
+              "text": "Una vez emitido, un documento no se puede editar",
+              "bold": true
+            },
+            {
+              "text": " — es inmutable, y solo se puede corregir con una factura rectificativa de abono o de cargo referida a él."
+            }
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Consejo: si intenta emitir sin crédito suficiente o con un perfil de emisor incompleto, el cuadro de diálogo muestra el motivo y un enlace directo a "
+            },
+            {
+              "text": "Recargar saldo",
+              "bold": true
+            },
+            {
+              "text": " o a "
+            },
+            {
+              "text": "Ir al perfil del emisor",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "6. Después de emitir un documento",
+      "id": "6-despues-de-emitir-un-documento",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Para qué sirve: una vez que un documento tiene número, puede descargarlo, enviarlo, obtener su archivo de factura electrónica o seguir su estado de pago."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Abra el documento desde "
+              },
+              {
+                "text": "Documentos",
+                "bold": true
+              },
+              {
+                "text": ". Su estado se muestra como una insignia (Borrador, Emitida, PAGADA, VENCIDA, ANULADA)."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Descargar PDF",
+                "bold": true
+              },
+              {
+                "text": " para obtener el archivo PDF. Un borrador solo muestra una vista previa con marca de agua — debe emitirlo primero para descargarlo o enviarlo."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Enviar por correo",
+                "bold": true
+              },
+              {
+                "text": " para enviarlo por correo electrónico: introduzca el "
+              },
+              {
+                "text": "Correo electrónico del destinatario",
+                "bold": true
+              },
+              {
+                "text": " (rellenado por defecto con el correo del cliente, si lo tiene) y un "
+              },
+              {
+                "text": "Mensaje",
+                "bold": true
+              },
+              {
+                "text": " opcional, y haga clic en "
+              },
+              {
+                "text": "Enviar",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Para facturas, facturas rectificativas de abono y de cargo, haga clic en "
+              },
+              {
+                "text": "Descargar factura electrónica (XML)",
+                "bold": true
+              },
+              {
+                "text": " para obtener el archivo de factura electrónica estructurado: el formato propio de su país — XRechnung (Alemania), UBL (Francia), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (Rumanía), Facturae (España) — o, para un emisor búlgaro y cualquier otro país sin formato propio, un archivo UBL genérico EN 16931/Peppol. Fakturcho solo genera el archivo; usted lo descarga y lo sube usted mismo a su plataforma nacional — nunca presenta nada en su nombre. Los albaranes nunca lo obtienen. Si faltan datos que exige el formato (p. ej. el NIF-IVA del comprador para la inversión del sujeto pasivo, el código de unidad de una línea, su IBAN), un mensaje bajo el botón indica exactamente qué falta."
+              }
+            ],
+            [
+              {
+                "text": "Una vez que esté Emitida o Vencida, haga clic en "
+              },
+              {
+                "text": "Marcar como pagado",
+                "bold": true
+              },
+              {
+                "text": " para registrar el pago."
+              }
+            ],
+            [
+              {
+                "text": "Haga clic en "
+              },
+              {
+                "text": "Anular",
+                "bold": true
+              },
+              {
+                "text": " para anular un documento emitido, vencido o pagado. El número queda reservado y nunca se reutiliza."
+              }
+            ],
+            [
+              {
+                "text": "Para corregir una factura emitida, vaya a "
+              },
+              {
+                "text": "Nuevo documento",
+                "bold": true
+              },
+              {
+                "text": ", elija "
+              },
+              {
+                "text": "Factura rectificativa (abono)",
+                "bold": true
+              },
+              {
+                "text": " o "
+              },
+              {
+                "text": "Factura rectificativa (cargo)",
+                "bold": true
+              },
+              {
+                "text": " y seleccione la factura original — véase el paso 3 anterior."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "7. Crédito y facturación",
+      "id": "7-credito-y-facturacion",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Para qué sirve: "
+            },
+            {
+              "text": "Saldo",
+              "bold": true
+            },
+            {
+              "text": " es donde consulta su saldo, lo recarga y gestiona una suscripción."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Abra "
+              },
+              {
+                "text": "Saldo",
+                "bold": true
+              },
+              {
+                "text": " para ver su "
+              },
+              {
+                "text": "Saldo disponible",
+                "bold": true
+              },
+              {
+                "text": " y a cuántos documentos equivale."
+              }
+            ],
+            [
+              {
+                "text": "Los borradores, los clientes y los artículos del catálogo nunca consumen crédito — solo emitir lo hace, a 0,10 € cada vez."
+              }
+            ],
+            [
+              {
+                "text": "En "
+              },
+              {
+                "text": "Paquetes de crédito",
+                "bold": true
+              },
+              {
+                "text": ", haga clic en "
+              },
+              {
+                "text": "Comprar",
+                "bold": true
+              },
+              {
+                "text": " para una recarga puntual — los paquetes son de 5 €, 10 € y 25 €."
+              }
+            ],
+            [
+              {
+                "text": "En "
+              },
+              {
+                "text": "Suscripción",
+                "bold": true
+              },
+              {
+                "text": ", active un plan mensual (5, 10 o 25 € al mes): otorga el doble de crédito del paquete equivalente en cada periodo, y el crédito no utilizado se acumula — no exime del cargo de emisión de 0,10 €, simplemente hace que cada documento salga más barato sobre el saldo. "
+              },
+              {
+                "text": "Cambiar a",
+                "bold": true
+              },
+              {
+                "text": " otro plan en cualquier momento, o cancelar — el acceso continúa hasta el final del periodo pagado."
+              }
+            ],
+            [
+              {
+                "text": "Actividad reciente",
+                "bold": true
+              },
+              {
+                "text": " enumera cada cambio de saldo: bono de bienvenida, compra de crédito, documento emitido, recarga por suscripción o ajuste."
+              }
+            ],
+            [
+              {
+                "text": "Fakturcho no emite su propia factura por lo que usted le paga — esta lista de actividad es su registro, y Revolut, que procesa el pago, envía su propia confirmación de pago con un número de pedido."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "8. Idioma",
+      "id": "8-idioma",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "El idioma de su cuenta se establece una sola vez, al registrarse, según el país que elija — elija Alemania y la aplicación funciona en alemán, elija un país sin traducción propia y usa el inglés por defecto. Hay un selector de idioma en las páginas públicas de inicio de sesión y registro antes de tener una cuenta, pero una vez ha iniciado sesión no hay ningún selector de idioma dentro de la aplicación."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "El idioma del documento es independiente y se establece por cliente: en el campo "
+            },
+            {
+              "text": "Idioma del documento",
+              "bold": true
+            },
+            {
+              "text": " de un cliente, déjelo como "
+            },
+            {
+              "text": "Igual que el emisor",
+              "bold": true
+            },
+            {
+              "text": " para usar su propio idioma de emisor, o elija un idioma específico para los documentos de ese cliente — esto solo cambia el idioma en el que se redactan los documentos para ese cliente, no el idioma de la interfaz de su aplicación."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "9. Las normas de facturación de su país",
+      "id": "9-las-normas-de-facturacion-de-su-pais",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Esta página enlaza con una guía de facturación específica de su país, que cubre los tipos de IVA locales, la numeración y las normas de facturación electrónica de su país — véase la guía enlazada más abajo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "10. Ayuda y contacto",
+      "id": "10-ayuda-y-contacto",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Si algo no funciona o tiene alguna pregunta, escriba a "
+            },
+            {
+              "text": "support@fakturcho.com",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Preguntas frecuentes",
+  "faq": [
+    {
+      "question": "¿Por qué no puedo emitir un documento?",
+      "answer": [
+        {
+          "text": "O bien su perfil de emisor está incompleto (rellene los campos que falten, indicados en Documentos bajo "
+        },
+        {
+          "text": "Ir al perfil del emisor",
+          "bold": true
+        },
+        {
+          "text": "), o bien su saldo de crédito es demasiado bajo (recárguelo en "
+        },
+        {
+          "text": "Recargar saldo",
+          "bold": true
+        },
+        {
+          "text": ")."
+        }
+      ]
+    },
+    {
+      "question": "Me he equivocado en una factura emitida — ¿cómo lo corrijo?",
+      "answer": [
+        {
+          "text": "No puede editar un documento emitido. Cree una "
+        },
+        {
+          "text": "Factura rectificativa (abono)",
+          "bold": true
+        },
+        {
+          "text": " o "
+        },
+        {
+          "text": "Factura rectificativa (cargo)",
+          "bold": true
+        },
+        {
+          "text": " desde "
+        },
+        {
+          "text": "Nuevo documento",
+          "bold": true
+        },
+        {
+          "text": ", elija la factura original como "
+        },
+        {
+          "text": "Documento original",
+          "bold": true
+        },
+        {
+          "text": " e introduzca la corrección."
+        }
+      ]
+    },
+    {
+      "question": "¿Dónde está el XML de la factura electrónica y lo envía Fakturcho por mí?",
+      "answer": [
+        {
+          "text": "Abra el documento emitido y haga clic en "
+        },
+        {
+          "text": "Descargar factura electrónica (XML)",
+          "bold": true
+        },
+        {
+          "text": ". Fakturcho solo genera el archivo — usted lo sube usted mismo a la plataforma de su país. Disponible para facturas, facturas rectificativas de abono y de cargo: Alemania, Francia, Italia, Polonia, Rumanía y España reciben su formato nacional; Bulgaria y cualquier otro país reciben un archivo UBL genérico EN 16931/Peppol."
+        }
+      ]
+    },
+    {
+      "question": "¿Componer un borrador consume crédito?",
+      "answer": [
+        {
+          "text": "No. Los borradores, los clientes y los artículos del catálogo son gratuitos. Solo emitir — dar un número a un documento — descuenta 0,10 € de su saldo."
+        }
+      ]
+    },
+    {
+      "question": "¿Puedo elegir la moneda de un documento?",
+      "answer": [
+        {
+          "text": "No, todos los documentos están en euros; no hay selector de moneda."
+        }
+      ]
+    },
+    {
+      "question": "¿Puedo cambiar el siguiente número de documento?",
+      "answer": [
+        {
+          "text": "Solo mientras una serie (un tipo de documento) no tenga documentos emitidos todavía, mediante "
+        },
+        {
+          "text": "Modificar el siguiente número (opcional)",
+          "bold": true
+        },
+        {
+          "text": " en el cuadro de diálogo de emisión. Una vez emitido un documento, la numeración continúa automáticamente sin saltos."
+        }
+      ]
+    },
+    {
+      "question": "¿Cuál es la diferencia entre una factura proforma y una factura?",
+      "answer": [
+        {
+          "text": "Una factura proforma tiene el mismo aspecto que una factura y recoge los mismos datos, pero no genera ninguna obligación fiscal; la factura es el documento fiscal. Ambas reciben su propio número, en series de numeración independientes."
+        }
+      ]
+    },
+    {
+      "question": "¿La suscripción hace que los documentos sean gratis?",
+      "answer": [
+        {
+          "text": "No. Recarga su crédito al doble del importe del paquete puntual equivalente y el crédito no utilizado se acumula — pero cada documento emitido sigue costando 0,10 € de ese saldo."
+        }
+      ]
+    }
+  ]
+}

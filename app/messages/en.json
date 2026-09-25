@@ -514,7 +514,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "This provider does not support status checks.",
       "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
     },
-    "guideLink": "Invoicing guide"
+    "guideLink": "Invoicing guide",
+    "helpLink": "How to use"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -912,6 +913,12 @@
     "indexDescription": "Country invoicing guides from Fakturcho.",
     "tableOfContents": "On this page",
     "lastReviewed": "Last reviewed: {date}",
-    "euOverviewLink": "EU overview guide"
+    "euOverviewLink": "EU overview guide",
+    "backToApp": "Back to the app"
+  },
+  "help": {
+    "pageTitle": "How to use",
+    "emptyTitle": "Help isn't available in your language yet",
+    "emptyDescription": "We're still translating this page. Check back soon."
   }
 }

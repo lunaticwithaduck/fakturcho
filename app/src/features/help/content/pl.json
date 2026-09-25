@@ -1,0 +1,1187 @@
+{
+  "locale": "pl",
+  "title": "Jak korzystać z Fakturcho",
+  "intro": "Fakturcho to aplikacja internetowa do wystawiania faktur i innych dokumentów handlowych zgodnych z przepisami UE. Ta strona prowadzi Cię przez aplikację ekran po ekranie, w kolejności, w jakiej nowe konto zwykle ich potrzebuje.",
+  "sections": [
+    {
+      "heading": "1. Pierwsze kroki po rejestracji",
+      "id": "1-pierwsze-kroki-po-rejestracji",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Rejestracja daje Ci jednorazowy startowy kredyt w wysokości "
+            },
+            {
+              "text": "1,00 €",
+              "bold": true
+            },
+            {
+              "text": " — to 10 wystawionych dokumentów, bez podawania karty. Kraj, który wybierzesz przy rejestracji, ustala zarówno język aplikacji, jak i przepisy prawne (stawki VAT, wymagane pola, format numeracji) stosowane do wszystkiego, co wystawiasz."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Zarejestruj się, podając imię i nazwisko, e-mail, hasło i kraj."
+              }
+            ],
+            [
+              {
+                "text": "Trafiasz do sekcji "
+              },
+              {
+                "text": "Dokumenty",
+                "bold": true
+              },
+              {
+                "text": ". Zanim cokolwiek wystawisz, uzupełnij profil wystawcy — Fakturcho blokuje wystawianie, dopóki nie poda mu minimalnych danych prawnych o Twojej firmie (kolejna sekcja)."
+              }
+            ],
+            [
+              {
+                "text": "Dodaj co najmniej jednego klienta i opcjonalnie kilka pozycji katalogowych, aby przyspieszyć wystawienie pierwszego dokumentu."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Wskazówka: wersje robocze, klienci i pozycje katalogowe nigdy nie zużywają kredytu. Zużywa go wyłącznie wystawienie dokumentu."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "2. Uzupełnij profil wystawcy",
+      "id": "2-uzupelnij-profil-wystawcy",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cel: Twój profil wystawcy to dane, które drukowane są na każdym wystawianym dokumencie, a wystawianie jest zablokowane, dopóki nie uzupełnisz wymaganych dla Twojego kraju pól."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Otwórz "
+              },
+              {
+                "text": "Profil",
+                "bold": true
+              },
+              {
+                "text": " z menu."
+              }
+            ],
+            [
+              {
+                "text": "W sekcji "
+              },
+              {
+                "text": "Dane firmy",
+                "bold": true
+              },
+              {
+                "text": " uzupełnij pola "
+              },
+              {
+                "text": "Firma",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Kraj",
+                "bold": true
+              },
+              {
+                "text": " oraz pola adresowe wymagane w Twoim kraju (zwykle "
+              },
+              {
+                "text": "Ulica i numer",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Kod pocztowy",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Miejscowość",
+                "bold": true
+              },
+              {
+                "text": "; w niektórych krajach dochodzi stała linia adresowa lub pole regionu/powiatu) oraz krajowy numer identyfikacyjny firmy, nazwany zależnie od kraju (np. „ЕИК / Булстат” w Bułgarii, „SIREN” we Francji, „NIP” w Polsce)."
+              }
+            ],
+            [
+              {
+                "text": "Jeśli jesteś czynnym podatnikiem VAT, włącz "
+              },
+              {
+                "text": "Czynny podatnik VAT",
+                "bold": true
+              },
+              {
+                "text": " w sekcji "
+              },
+              {
+                "text": "Rejestracja VAT",
+                "bold": true
+              },
+              {
+                "text": " i wpisz swój "
+              },
+              {
+                "text": "Numer VAT",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "W sekcji "
+              },
+              {
+                "text": "Rachunek bankowy",
+                "bold": true
+              },
+              {
+                "text": " możesz opcjonalnie dodać "
+              },
+              {
+                "text": "Bank",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "IBAN",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "BIC",
+                "bold": true
+              },
+              {
+                "text": " i "
+              },
+              {
+                "text": "Dodatkowy rachunek",
+                "bold": true
+              },
+              {
+                "text": " — te dane pojawią się na dokumentach, gdy je uzupełnisz."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Zapisz profil",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dopóki nie uzupełnisz każdego wymaganego pola, sekcja Dokumenty wyświetla komunikat „Profil nie jest gotowy do wystawiania” wraz z listą brakujących danych i linkiem "
+            },
+            {
+              "text": "Przejdź do profilu wystawcy",
+              "bold": true
+            },
+            {
+              "text": ". Wersje robocze możesz nadal tworzyć i zapisywać — po prostu nie możesz wystawiać."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "W profilu wystawcy nie ma możliwości wgrania logo ani ustawienia języka dokumentów: język wystawcy wynika z kraju wystawcy, a każdy klient może go indywidualnie nadpisać (patrz „Język” poniżej)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "3. Dodaj klientów",
+      "id": "3-dodaj-klientow",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cel: klienci to odbiorcy, których wybierasz podczas tworzenia dokumentu, a każdy z nich ma własny kraj, identyfikatory podatkowe i język dokumentów."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Otwórz "
+              },
+              {
+                "text": "Klienci",
+                "bold": true
+              },
+              {
+                "text": " i kliknij "
+              },
+              {
+                "text": "Nowy klient",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Uzupełnij "
+              },
+              {
+                "text": "Nazwa firmy",
+                "bold": true
+              },
+              {
+                "text": ", pole krajowego numeru identyfikacyjnego oraz adres — kraje ze zestrukturyzowanym adresem mają osobne pola "
+              },
+              {
+                "text": "Ulica i numer",
+                "bold": true
+              },
+              {
+                "text": " oraz "
+              },
+              {
+                "text": "Kod pocztowy",
+                "bold": true
+              },
+              {
+                "text": "; pozostałe mają jedno pole "
+              },
+              {
+                "text": "Adres",
+                "bold": true
+              },
+              {
+                "text": ". Dodaj "
+              },
+              {
+                "text": "Miejscowość",
+                "bold": true
+              },
+              {
+                "text": " oraz, jeśli dotyczy, pole regionu/powiatu, a następnie wybierz "
+              },
+              {
+                "text": "Kraj",
+                "bold": true
+              },
+              {
+                "text": " klienta."
+              }
+            ],
+            [
+              {
+                "text": "Ustaw "
+              },
+              {
+                "text": "Język dokumentów",
+                "bold": true
+              },
+              {
+                "text": ": opcja "
+              },
+              {
+                "text": "Jak u wystawcy",
+                "bold": true
+              },
+              {
+                "text": " używa Twojego własnego języka wystawcy, albo wybierz konkretny język dla dokumentów tego klienta."
+              }
+            ],
+            [
+              {
+                "text": "Opcjonalnie dodaj "
+              },
+              {
+                "text": "E-mail",
+                "bold": true
+              },
+              {
+                "text": " (wypełnia domyślnie odbiorcę przy wysyłce e-mailem) i "
+              },
+              {
+                "text": "Reprezentant",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Zapisz",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Istniejących klientów możesz edytować lub usuwać z listy (szukaj po nazwie firmy lub numerze ID); usunięcie wymaga potwierdzenia i jest nieodwracalne."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "4. Zbuduj katalog",
+      "id": "4-zbuduj-katalog",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cel: pozycje katalogowe to produkty lub usługi wielokrotnego użytku, które możesz od razu wstawić jako pozycje dokumentu."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Otwórz "
+              },
+              {
+                "text": "Katalog",
+                "bold": true
+              },
+              {
+                "text": " i kliknij "
+              },
+              {
+                "text": "Nowy produkt",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Uzupełnij "
+              },
+              {
+                "text": "Nazwa",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Jednostka",
+                "bold": true
+              },
+              {
+                "text": " (np. „szt., godz., kg...”) i "
+              },
+              {
+                "text": "Cena domyślna",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Zapisz",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pozycja katalogowa przechowuje wyłącznie nazwę, jednostkę i cenę domyślną — nie ma własnej stawki VAT. VAT ustala się na samym dokumencie podczas jego tworzenia (patrz kolejna sekcja). Podczas tworzenia dokumentu wpisanie nazwy pozycji uruchamia podpowiedzi z katalogu i automatycznie uzupełnia cenę."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "5. Utwórz dokument",
+      "id": "5-utworz-dokument",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cel: tutaj tworzysz faktury, faktury pro forma, faktury korygujące, oferty i dowody dostawy — jedyne typy dokumentów obsługiwane przez Fakturcho."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "W sekcji "
+              },
+              {
+                "text": "Dokumenty",
+                "bold": true
+              },
+              {
+                "text": " kliknij "
+              },
+              {
+                "text": "Nowy dokument",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Wybierz "
+              },
+              {
+                "text": "Rodzaj dokumentu",
+                "bold": true
+              },
+              {
+                "text": ": Faktura, Faktura pro forma, Faktura korygująca (in minus), Faktura korygująca (in plus), Oferta lub Dowód dostawy."
+              }
+            ],
+            [
+              {
+                "text": "Dla "
+              },
+              {
+                "text": "Faktury korygującej (in minus)",
+                "bold": true
+              },
+              {
+                "text": " lub "
+              },
+              {
+                "text": "Faktury korygującej (in plus)",
+                "bold": true
+              },
+              {
+                "text": " wybierz "
+              },
+              {
+                "text": "Dokument pierwotny",
+                "bold": true
+              },
+              {
+                "text": " — do wyboru są tylko już wystawione dokumenty, ponieważ faktura korygująca koryguje konkretny dokument."
+              }
+            ],
+            [
+              {
+                "text": "Wybierz "
+              },
+              {
+                "text": "Klienta",
+                "bold": true
+              },
+              {
+                "text": " z listy albo pozostaw "
+              },
+              {
+                "text": "Brak klienta",
+                "bold": true
+              },
+              {
+                "text": " (możesz też dodać nowego klienta od razu przez "
+              },
+              {
+                "text": "+ Nowy klient",
+                "bold": true
+              },
+              {
+                "text": ")."
+              }
+            ],
+            [
+              {
+                "text": "Uzupełnij numer referencyjny, daty oraz — dla dowodów dostawy — pola dostawy widoczne w sekcji "
+              },
+              {
+                "text": "Szczegóły dostawy",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Dodaj "
+              },
+              {
+                "text": "Pozycje",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Nazwa",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Ilość",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Cena",
+                "bold": true
+              },
+              {
+                "text": "; użyj "
+              },
+              {
+                "text": "Dodaj pozycję",
+                "bold": true
+              },
+              {
+                "text": ", aby dodać kolejne wiersze."
+              }
+            ],
+            [
+              {
+                "text": "Opcjonalnie dodaj rabat w sekcji "
+              },
+              {
+                "text": "Rabaty",
+                "bold": true
+              },
+              {
+                "text": ", jako "
+              },
+              {
+                "text": "Procent",
+                "bold": true
+              },
+              {
+                "text": " albo stałą "
+              },
+              {
+                "text": "Kwotę",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "W sekcji "
+              },
+              {
+                "text": "VAT",
+                "bold": true
+              },
+              {
+                "text": " zostaw włączoną opcję "
+              },
+              {
+                "text": "Nalicz VAT (…%)",
+                "bold": true
+              },
+              {
+                "text": " albo wyłącz ją i wybierz "
+              },
+              {
+                "text": "Podstawę zwolnienia z VAT",
+                "bold": true
+              },
+              {
+                "text": " — dostępne podstawy zależą od kraju wystawcy (zwolnienie dla małych podatników, odwrotne obciążenie, dostawa wewnątrzunijna, eksport itd.)."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Zapisz roboczo",
+                "bold": true
+              },
+              {
+                "text": ", aby wrócić do pracy nad dokumentem później, albo "
+              },
+              {
+                "text": "Zapisz i wystaw",
+                "bold": true
+              },
+              {
+                "text": ", aby wystawić go od razu."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dokumenty są zawsze w euro — nie ma wyboru waluty. Numeracja jest osobna dla każdego rodzaju dokumentu: przy wystawianiu widoczny jest "
+            },
+            {
+              "text": "Kolejny numer w serii",
+              "bold": true
+            },
+            {
+              "text": ", który możesz nadpisać tylko wtedy, gdy w danej serii nie ma jeszcze żadnego wystawionego dokumentu."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Wystawienie kosztuje "
+            },
+            {
+              "text": "0,10 €",
+              "bold": true
+            },
+            {
+              "text": ", potrącane z Twojego salda kredytu w momencie nadania dokumentowi numeru. "
+            },
+            {
+              "text": "Wystawionego dokumentu nie można edytować",
+              "bold": true
+            },
+            {
+              "text": " — jest niezmienny i można go skorygować wyłącznie fakturą korygującą wystawioną do niego."
+            }
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Wskazówka: jeśli spróbujesz wystawić dokument bez wystarczającego kredytu lub z niekompletnym profilem wystawcy, okno dialogowe pokaże powód oraz link prosto do "
+            },
+            {
+              "text": "Doładuj konto",
+              "bold": true
+            },
+            {
+              "text": " lub "
+            },
+            {
+              "text": "Przejdź do profilu wystawcy",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "6. Po wystawieniu dokumentu",
+      "id": "6-po-wystawieniu-dokumentu",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cel: gdy dokument ma już numer, możesz go pobrać, wysłać, pobrać jego plik e-faktury albo śledzić status płatności."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Otwórz dokument z listy "
+              },
+              {
+                "text": "Dokumenty",
+                "bold": true
+              },
+              {
+                "text": ". Jego status jest pokazany jako znacznik (Wersja robocza, Wystawiona, ZAPŁACONO, ZALEGŁA, ANULOWANA)."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Pobierz PDF",
+                "bold": true
+              },
+              {
+                "text": ", aby pobrać plik PDF. Wersja robocza pokazuje wyłącznie podgląd ze znakiem wodnym — musisz najpierw wystawić dokument, aby go pobrać lub wysłać."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Wyślij e-mailem",
+                "bold": true
+              },
+              {
+                "text": ", aby wysłać dokument e-mailem: podaj "
+              },
+              {
+                "text": "E-mail odbiorcy",
+                "bold": true
+              },
+              {
+                "text": " (wypełniony domyślnie e-mailem klienta, jeśli jest ustawiony) i opcjonalnie "
+              },
+              {
+                "text": "Wiadomość",
+                "bold": true
+              },
+              {
+                "text": ", a następnie kliknij "
+              },
+              {
+                "text": "Wyślij",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Dla faktur i faktur korygujących kliknij "
+              },
+              {
+                "text": "Pobierz e-fakturę (XML)",
+                "bold": true
+              },
+              {
+                "text": ", aby pobrać ustrukturyzowany plik e-faktury: we własnym formacie Twojego kraju — XRechnung (Niemcy), UBL (Francja), FatturaPA (Włochy), KSeF FA(3) (Polska), CIUS-RO (Rumunia), Facturae (Hiszpania) — albo, dla wystawcy z Bułgarii i każdego innego kraju bez dedykowanego formatu, ogólny plik EN 16931/Peppol UBL. Fakturcho wyłącznie generuje plik; pobierasz go i sam przesyłasz na swoją krajową platformę — aplikacja nigdy nic nie zgłasza w Twoim imieniu. Dowody dostawy nigdy nie otrzymują e-faktury. Jeśli brakuje danych wymaganych przez format (np. numeru VAT nabywcy przy odwrotnym obciążeniu, kodu jednostki pozycji, Twojego IBAN), komunikat pod przyciskiem dokładnie wskazuje, czego brakuje."
+              }
+            ],
+            [
+              {
+                "text": "Gdy dokument ma status Wystawiona lub Zaległa, kliknij "
+              },
+              {
+                "text": "Oznacz jako opłacony",
+                "bold": true
+              },
+              {
+                "text": ", aby zapisać płatność."
+              }
+            ],
+            [
+              {
+                "text": "Kliknij "
+              },
+              {
+                "text": "Anuluj dokument",
+                "bold": true
+              },
+              {
+                "text": ", aby anulować wystawiony, zaległy lub opłacony dokument. Numer pozostaje zarezerwowany i nigdy nie jest ponownie użyty."
+              }
+            ],
+            [
+              {
+                "text": "Aby skorygować wystawioną fakturę, przejdź do "
+              },
+              {
+                "text": "Nowy dokument",
+                "bold": true
+              },
+              {
+                "text": ", wybierz "
+              },
+              {
+                "text": "Fakturę korygującą (in minus)",
+                "bold": true
+              },
+              {
+                "text": " lub "
+              },
+              {
+                "text": "Fakturę korygującą (in plus)",
+                "bold": true
+              },
+              {
+                "text": " i wskaż fakturę pierwotną — patrz krok 3 powyżej."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "7. Kredyt i płatności",
+      "id": "7-kredyt-i-platnosci",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cel: sekcja "
+            },
+            {
+              "text": "Płatności",
+              "bold": true
+            },
+            {
+              "text": " pokazuje Twoje saldo, pozwala je doładować i zarządzać abonamentem."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Otwórz "
+              },
+              {
+                "text": "Płatności",
+                "bold": true
+              },
+              {
+                "text": ", aby zobaczyć swoje "
+              },
+              {
+                "text": "Saldo",
+                "bold": true
+              },
+              {
+                "text": " i liczbę dokumentów, jaką reprezentuje."
+              }
+            ],
+            [
+              {
+                "text": "Wersje robocze, klienci i pozycje katalogowe nigdy nie zużywają kredytu — zużywa go wyłącznie wystawianie, po 0,10 € za dokument."
+              }
+            ],
+            [
+              {
+                "text": "W sekcji "
+              },
+              {
+                "text": "Pakiety doładowań",
+                "bold": true
+              },
+              {
+                "text": " kliknij "
+              },
+              {
+                "text": "Kup",
+                "bold": true
+              },
+              {
+                "text": ", aby dokonać jednorazowego doładowania — pakiety kosztują 5 €, 10 € i 25 €."
+              }
+            ],
+            [
+              {
+                "text": "W sekcji "
+              },
+              {
+                "text": "Abonament",
+                "bold": true
+              },
+              {
+                "text": " aktywuj plan miesięczny (5, 10 lub 25 € miesięcznie): przyznaje on podwójny kredyt względem odpowiadającego mu pakietu w każdym okresie, a niewykorzystany kredyt przechodzi na kolejny okres — nie znosi to opłaty 0,10 € za wystawienie, po prostu czyni każdy dokument tańszym w rozliczeniu salda. W dowolnym momencie kliknij "
+              },
+              {
+                "text": "Zmień na",
+                "bold": true
+              },
+              {
+                "text": ", aby przejść na inny plan, albo anuluj go — dostęp trwa do końca opłaconego okresu."
+              }
+            ],
+            [
+              {
+                "text": "Ostatnia aktywność",
+                "bold": true
+              },
+              {
+                "text": " wyświetla każdą zmianę salda: bonus powitalny, zakup środków, wystawienie dokumentu, doładowanie z abonamentu lub korektę."
+              }
+            ],
+            [
+              {
+                "text": "Fakturcho nie wystawia własnej faktury za to, co płacisz — ta lista aktywności jest Twoim zapisem, a Revolut, który obsługuje płatność, wysyła własne potwierdzenie płatności z numerem zamówienia."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "8. Język",
+      "id": "8-jezyk",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Język aplikacji na Twoim koncie jest ustawiany raz, przy rejestracji, na podstawie wybranego kraju — wybierz Niemcy i aplikacja działa po niemiecku, wybierz kraj bez własnego tłumaczenia, a aplikacja przełączy się na angielski. Na publicznych stronach logowania i rejestracji, zanim masz konto, dostępny jest przełącznik języka, ale po zalogowaniu nie ma już przełącznika języka w aplikacji."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Język dokumentów jest odrębny i ustawiany dla każdego klienta osobno: w polu "
+            },
+            {
+              "text": "Język dokumentów",
+              "bold": true
+            },
+            {
+              "text": " klienta zostaw "
+            },
+            {
+              "text": "Jak u wystawcy",
+              "bold": true
+            },
+            {
+              "text": ", aby używać Twojego własnego języka wystawcy, albo wybierz konkretny język dla dokumentów tego klienta — zmienia to wyłącznie język dokumentów wystawianych temu klientowi, a nie język interfejsu Twojej aplikacji."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "9. Zasady fakturowania w Twoim kraju",
+      "id": "9-zasady-fakturowania-w-twoim-kraju",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ta strona linkuje do przewodnika po zasadach fakturowania specyficznych dla Twojego kraju, obejmującego lokalne stawki VAT, numerację i zasady e-fakturowania — zobacz przewodnik podlinkowany poniżej."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "10. Pomoc i kontakt",
+      "id": "10-pomoc-i-kontakt",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Jeśli coś nie działa lub masz pytanie, napisz na "
+            },
+            {
+              "text": "support@fakturcho.com",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "FAQ",
+  "faq": [
+    {
+      "question": "Dlaczego nie mogę wystawić dokumentu?",
+      "answer": [
+        {
+          "text": "Albo Twój profil wystawcy jest niekompletny (uzupełnij brakujące pola, do których kieruje Cię sekcja Dokumenty pod linkiem "
+        },
+        {
+          "text": "Przejdź do profilu wystawcy",
+          "bold": true
+        },
+        {
+          "text": "), albo Twoje saldo kredytu jest za niskie (doładuj je w sekcji "
+        },
+        {
+          "text": "Doładuj konto",
+          "bold": true
+        },
+        {
+          "text": ")."
+        }
+      ]
+    },
+    {
+      "question": "Popełniłem/-am błąd na wystawionej fakturze — jak go poprawić?",
+      "answer": [
+        {
+          "text": "Wystawionego dokumentu nie możesz edytować. Utwórz "
+        },
+        {
+          "text": "fakturę korygującą (in minus)",
+          "bold": true
+        },
+        {
+          "text": " lub "
+        },
+        {
+          "text": "fakturę korygującą (in plus)",
+          "bold": true
+        },
+        {
+          "text": " z poziomu "
+        },
+        {
+          "text": "Nowy dokument",
+          "bold": true
+        },
+        {
+          "text": ", wybierz fakturę pierwotną jako "
+        },
+        {
+          "text": "Dokument pierwotny",
+          "bold": true
+        },
+        {
+          "text": " i wprowadź korektę."
+        }
+      ]
+    },
+    {
+      "question": "Gdzie jest XML e-faktury i czy Fakturcho wysyła go za mnie?",
+      "answer": [
+        {
+          "text": "Otwórz wystawiony dokument i kliknij "
+        },
+        {
+          "text": "Pobierz e-fakturę (XML)",
+          "bold": true
+        },
+        {
+          "text": ". Fakturcho wyłącznie generuje plik — sam przesyłasz go na platformę swojego kraju. Dostępne dla faktur i faktur korygujących: Niemcy, Francja, Włochy, Polska, Rumunia i Hiszpania mają swój format krajowy; Bułgaria i każdy inny kraj otrzymują ogólny plik EN 16931/Peppol UBL."
+        }
+      ]
+    },
+    {
+      "question": "Czy tworzenie wersji roboczej kosztuje kredyt?",
+      "answer": [
+        {
+          "text": "Nie. Wersje robocze, klienci i pozycje katalogowe są bezpłatne. Kredyt — 0,10 € z Twojego salda — pobiera wyłącznie wystawienie, czyli nadanie dokumentowi numeru."
+        }
+      ]
+    },
+    {
+      "question": "Czy mogę wybrać walutę dokumentu?",
+      "answer": [
+        {
+          "text": "Nie, każdy dokument jest w euro; nie ma wyboru waluty."
+        }
+      ]
+    },
+    {
+      "question": "Czy mogę zmienić kolejny numer dokumentu?",
+      "answer": [
+        {
+          "text": "Tylko dopóki dana seria (rodzaj dokumentu) nie ma jeszcze żadnego wystawionego dokumentu, za pomocą opcji "
+        },
+        {
+          "text": "Zmień kolejny numer (opcjonalnie)",
+          "bold": true
+        },
+        {
+          "text": " w oknie wystawiania. Po wystawieniu dokumentu numeracja kontynuuje się automatycznie, bez luk."
+        }
+      ]
+    },
+    {
+      "question": "Jaka jest różnica między fakturą pro forma a fakturą?",
+      "answer": [
+        {
+          "text": "Faktura pro forma wygląda jak faktura, zawiera te same dane, ale nie tworzy obowiązku podatkowego; faktura jest dokumentem podatkowym. Obie mają własny numer, w osobnych seriach numeracji."
+        }
+      ]
+    },
+    {
+      "question": "Czy abonament oznacza, że dokumenty są darmowe?",
+      "answer": [
+        {
+          "text": "Nie. Abonament doładowuje Twój kredyt w podwójnej wysokości względem odpowiadającego mu jednorazowego pakietu, a niewykorzystany kredyt przechodzi na kolejny okres — ale każdy wystawiony dokument nadal kosztuje 0,10 € z tego salda."
+        }
+      ]
+    }
+  ]
+}

@@ -514,7 +514,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Questo fornitore non supporta il controllo dello stato.",
       "INTERNAL_ERROR": "Si è verificato un errore imprevisto. Riprovare."
     },
-    "guideLink": "Guida alla fatturazione"
+    "guideLink": "Guida alla fatturazione",
+    "helpLink": "Come si usa"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -912,6 +913,12 @@
     "indexDescription": "Guide alla fatturazione per paese, a cura di Fakturcho.",
     "tableOfContents": "In questa pagina",
     "lastReviewed": "Ultima verifica: {date}",
-    "euOverviewLink": "Panoramica UE"
+    "euOverviewLink": "Panoramica UE",
+    "backToApp": "Torna all'app"
+  },
+  "help": {
+    "pageTitle": "Come si usa",
+    "emptyTitle": "La guida non è ancora disponibile nella tua lingua",
+    "emptyDescription": "Stiamo ancora traducendo questa pagina. Torna presto a controllare."
   }
 }

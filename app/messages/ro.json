@@ -514,7 +514,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Acest furnizor nu permite verificarea statusului.",
       "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou."
     },
-    "guideLink": "Ghid de facturare"
+    "guideLink": "Ghid de facturare",
+    "helpLink": "Cum se folosește"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -912,6 +913,12 @@
     "indexDescription": "Ghiduri de facturare pe țări, de la Fakturcho.",
     "tableOfContents": "Pe această pagină",
     "lastReviewed": "Ultima verificare: {date}",
-    "euOverviewLink": "Prezentare generală UE"
+    "euOverviewLink": "Prezentare generală UE",
+    "backToApp": "Înapoi la aplicație"
+  },
+  "help": {
+    "pageTitle": "Cum se folosește",
+    "emptyTitle": "Ajutorul nu este încă disponibil în limba dvs.",
+    "emptyDescription": "Încă traducem această pagină. Reveniți în curând."
   }
 }

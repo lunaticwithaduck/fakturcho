@@ -34,6 +34,7 @@ export default async function LocaleGuideIndexPage({ params }: LocaleGuideIndexP
       guides={guides}
       euOverview={eu}
       euOverviewLabel={messages.guides.euOverviewLink}
+      backToAppLabel={messages.guides.backToApp}
     />
   );
 }

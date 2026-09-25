@@ -16,7 +16,8 @@
       "!**/.turbo",
       "!**/coverage",
       "!**/next-env.d.ts",
-      "!app/src/features/guides/content/*.json"
+      "!app/src/features/guides/content/*.json",
+      "!app/src/features/help/content/*.json"
     ]
   },
   "assist": {

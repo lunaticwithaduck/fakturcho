@@ -31,7 +31,7 @@ function splitFrontmatter(raw, file) {
   return { frontmatterText: match[1] ?? '', body: match[2] ?? '' };
 }
 
-function parseFrontmatter(text, file) {
+function parseFrontmatterFields(text) {
   const data = {};
   for (const rawLine of text.split('\n')) {
     const line = rawLine.trim();
@@ -48,6 +48,11 @@ function parseFrontmatter(text, file) {
     }
     data[key] = value;
   }
+  return data;
+}
+
+function parseFrontmatter(text, file) {
+  const data = parseFrontmatterFields(text);
   const required = ['country', 'locale', 'slug', 'title', 'description', 'h1', 'answer'];
   for (const field of required) {
     if (!data[field] || data[field].trim() === '') {
@@ -68,6 +73,10 @@ function parseFrontmatter(text, file) {
 
 function stripSourcesComment(body) {
   return body.replace(/<!--\s*SOURCES[\s\S]*$/, '').trimEnd();
+}
+
+function stripHtmlComments(body) {
+  return body.replace(/<!--[\s\S]*?-->/g, '').trim();
 }
 
 function extractLastReviewed(body) {
@@ -180,6 +189,19 @@ function parseBlocks(lines, file) {
       const dataLines = tableLines.slice(1).filter((row, idx) => idx > 0 || !isSeparatorRow(row));
       const rows = dataLines.filter((row) => !isSeparatorRow(row)).map(splitTableRow);
       blocks.push({ type: 'table', head, rows });
+      continue;
+    }
+    if (/^>/.test(line)) {
+      const quoteLines = [];
+      while (i < lines.length && /^>/.test(lines[i].trim())) {
+        quoteLines.push(lines[i].trim().replace(/^>\s?/, ''));
+        i++;
+      }
+      const text = quoteLines
+        .join(' ')
+        .trim()
+        .replace(/^Tip:\s*/i, '');
+      blocks.push({ type: 'tip', inline: parseInline(text) });
       continue;
     }
     if (/^[-*]\s+/.test(line)) {
@@ -344,26 +366,28 @@ function parseGuideMarkdown(raw, file) {
   };
 }
 
-function regenerateIndex(outDir) {
+function regenerateIndex(outDir, options = {}) {
+  const {
+    typeName = 'GuideContent',
+    typeImportPath = '../types',
+    exportName = 'GUIDE_MODULES',
+    prefix = 'guide',
+  } = options;
   const files = existsSync(outDir)
     ? readdirSync(outDir)
         .filter((f) => f.endsWith('.json'))
         .sort()
     : [];
-  const identifiers = files.map((_file, i) => `guide${i}`);
+  const identifiers = files.map((_file, i) => `${prefix}${i}`);
   const importLines = files.map((file, i) => `import ${identifiers[i]} from './${file}';`);
   const arrayExpr =
     files.length > 0 ? `[\n${identifiers.map((id) => `  ${id},`).join('\n')}\n]` : '[]';
-  const typeImportLine = "import type { GuideContent } from '../types';";
+  const typeImportLine = `import type { ${typeName} } from '${typeImportPath}';`;
   const lines = [typeImportLine];
   if (importLines.length > 0) {
     lines.push('', ...importLines);
   }
-  lines.push(
-    '',
-    `export const GUIDE_MODULES: GuideContent[] = ${arrayExpr} as GuideContent[];`,
-    '',
-  );
+  lines.push('', `export const ${exportName}: ${typeName}[] = ${arrayExpr} as ${typeName}[];`, '');
   writeFileSync(join(outDir, 'index.ts'), lines.join('\n'));
   return files.length;
 }
@@ -401,4 +425,18 @@ function main() {
 const isMainModule = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMainModule) main();
 
-export { main, parseGuideMarkdown, parseInline, regenerateIndex, slugify, stripInline };
+export {
+  main,
+  parseBlocks,
+  parseFaq,
+  parseFrontmatterFields,
+  parseGuideMarkdown,
+  parseInline,
+  regenerateIndex,
+  slugify,
+  splitFrontmatter,
+  splitH2Groups,
+  stripHtmlComments,
+  stripInline,
+  uniqueId,
+};

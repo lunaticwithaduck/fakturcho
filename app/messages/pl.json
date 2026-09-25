@@ -514,7 +514,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ten dostawca nie obsługuje sprawdzania statusu.",
       "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
     },
-    "guideLink": "Poradnik fakturowania"
+    "guideLink": "Poradnik fakturowania",
+    "helpLink": "Jak korzystać"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -912,6 +913,12 @@
     "indexDescription": "Poradniki fakturowania dla poszczególnych krajów od Fakturcho.",
     "tableOfContents": "Na tej stronie",
     "lastReviewed": "Ostatnia weryfikacja: {date}",
-    "euOverviewLink": "Przegląd UE"
+    "euOverviewLink": "Przegląd UE",
+    "backToApp": "Wróć do aplikacji"
+  },
+  "help": {
+    "pageTitle": "Jak korzystać",
+    "emptyTitle": "Pomoc nie jest jeszcze dostępna w Twoim języku",
+    "emptyDescription": "Wciąż tłumaczymy tę stronę. Zajrzyj tu wkrótce ponownie."
   }
 }

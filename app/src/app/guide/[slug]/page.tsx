@@ -50,6 +50,7 @@ export default async function BgGuideSlugPage({ params }: BgGuideSlugPageProps) 
         lastReviewedLabel: bgMessages.guides.lastReviewed,
         signupLabel: bgMessages.marketing.nav.signup,
         brand: bgMessages.marketing.brand,
+        backToAppLabel: bgMessages.guides.backToApp,
       }}
     />
   );

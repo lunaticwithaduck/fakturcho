@@ -1,0 +1,1190 @@
+{
+  "locale": "de",
+  "title": "So funktioniert Fakturcho",
+  "intro": "Fakturcho ist eine Web-App zum Ausstellen EU-konformer Rechnungen und anderer Geschäftsdokumente. Diese Seite führt Sie Bildschirm für Bildschirm durch die App, in der Reihenfolge, in der ein neues Konto sie normalerweise braucht.",
+  "sections": [
+    {
+      "heading": "1. Die ersten Schritte nach der Anmeldung",
+      "id": "1-die-ersten-schritte-nach-der-anmeldung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Bei der Anmeldung erhalten Sie ein einmaliges Startguthaben von "
+            },
+            {
+              "text": "1,00 €",
+              "bold": true
+            },
+            {
+              "text": " – 10 ausgestellte Dokumente, keine Karte erforderlich. Das Land, das Sie bei der Anmeldung wählen, legt sowohl Ihre App-Sprache als auch die geltenden rechtlichen Vorgaben fest (USt.-Sätze, Pflichtfelder, Nummerierungsformat) für alles, was Sie ausstellen."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Melden Sie sich mit Name, E-Mail, Passwort und Land an."
+              }
+            ],
+            [
+              {
+                "text": "Sie landen auf "
+              },
+              {
+                "text": "Dokumente",
+                "bold": true
+              },
+              {
+                "text": ". Füllen Sie Ihr Ausstellerprofil aus, bevor Sie etwas ausstellen – Fakturcho blockiert das Ausstellen, solange die gesetzlich erforderlichen Mindestangaben zu Ihrem Unternehmen fehlen (nächster Abschnitt)."
+              }
+            ],
+            [
+              {
+                "text": "Legen Sie mindestens einen Kunden an und optional einige Katalogartikel, um Ihr erstes Dokument schneller zu erstellen."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Tipp: Entwürfe, Kunden und Katalogartikel verbrauchen nie Guthaben. Nur das Ausstellen eines Dokuments kostet etwas."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "2. Ihr Ausstellerprofil vervollständigen",
+      "id": "2-ihr-ausstellerprofil-vervollstandigen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zweck: Ihr Ausstellerprofil erscheint auf jedem Dokument, das Sie ausstellen, und das Ausstellen ist blockiert, bis die für Ihr Land erforderlichen Pflichtfelder ausgefüllt sind."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Öffnen Sie "
+              },
+              {
+                "text": "Profil",
+                "bold": true
+              },
+              {
+                "text": " über das Menü."
+              }
+            ],
+            [
+              {
+                "text": "Füllen Sie unter "
+              },
+              {
+                "text": "Firmendaten",
+                "bold": true
+              },
+              {
+                "text": " die Felder "
+              },
+              {
+                "text": "Firma",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Land",
+                "bold": true
+              },
+              {
+                "text": " und die von Ihrem Land geforderten Adressfelder aus (in der Regel "
+              },
+              {
+                "text": "Straße und Hausnummer",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Postleitzahl",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Ort",
+                "bold": true
+              },
+              {
+                "text": "; einige Länder verlangen zusätzlich eine feste Adresszeile oder ein Feld für Region/Landkreis) sowie Ihre nationale Unternehmenskennung, benannt je nach Land (z. B. „ЕИК / Булстат“ in Bulgarien, „SIREN“ in Frankreich, „NIP“ in Polen)."
+              }
+            ],
+            [
+              {
+                "text": "Wenn Sie umsatzsteuerlich registriert sind, aktivieren Sie "
+              },
+              {
+                "text": "Umsatzsteuerlich registriert",
+                "bold": true
+              },
+              {
+                "text": " unter "
+              },
+              {
+                "text": "USt-Registrierung",
+                "bold": true
+              },
+              {
+                "text": " und geben Sie Ihre "
+              },
+              {
+                "text": "USt-IdNr.",
+                "bold": true
+              },
+              {
+                "text": " ein."
+              }
+            ],
+            [
+              {
+                "text": "Fügen Sie unter "
+              },
+              {
+                "text": "Bankverbindung",
+                "bold": true
+              },
+              {
+                "text": " optional "
+              },
+              {
+                "text": "Bank",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "IBAN",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "BIC",
+                "bold": true
+              },
+              {
+                "text": " und eine "
+              },
+              {
+                "text": "Alternative Bankverbindung",
+                "bold": true
+              },
+              {
+                "text": " hinzu – diese erscheinen auf Ihren Dokumenten, sobald sie ausgefüllt sind."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Profil speichern",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Solange nicht alle Pflichtfelder ausgefüllt sind, zeigt Dokumente den Hinweis „Profil noch nicht bereit zum Ausstellen“ mit einer Liste der fehlenden Angaben und dem Link "
+            },
+            {
+              "text": "Zum Ausstellerprofil",
+              "bold": true
+            },
+            {
+              "text": ". Entwürfe können Sie trotzdem erstellen und speichern – ausstellen können Sie erst danach."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Es gibt weder einen Logo-Upload noch eine Dokumentsprache-Einstellung im Ausstellerprofil selbst: Ihre Ausstellersprache richtet sich nach Ihrem Ausstellerland, und jeder Kunde kann sie individuell überschreiben (siehe „Sprache“ weiter unten)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "3. Kunden anlegen",
+      "id": "3-kunden-anlegen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zweck: Kunden sind die Empfänger, die Sie beim Erstellen eines Dokuments auswählen, und jeder Kunde hat sein eigenes Land, eigene Steuerkennungen und eine eigene Dokumentsprache."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Öffnen Sie "
+              },
+              {
+                "text": "Kunden",
+                "bold": true
+              },
+              {
+                "text": " und klicken Sie auf "
+              },
+              {
+                "text": "Neuer Kunde",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Füllen Sie "
+              },
+              {
+                "text": "Firmenname",
+                "bold": true
+              },
+              {
+                "text": ", das nationale Kennungsfeld und die Adresse aus – Länder mit strukturierter Adresse erhalten getrennte Felder für "
+              },
+              {
+                "text": "Straße und Hausnummer",
+                "bold": true
+              },
+              {
+                "text": " und "
+              },
+              {
+                "text": "Postleitzahl",
+                "bold": true
+              },
+              {
+                "text": "; bei anderen gibt es ein einzelnes Feld "
+              },
+              {
+                "text": "Adresse",
+                "bold": true
+              },
+              {
+                "text": ". Fügen Sie "
+              },
+              {
+                "text": "Ort",
+                "bold": true
+              },
+              {
+                "text": " hinzu und, wo relevant, ein Feld für Region/Landkreis, und wählen Sie dann das "
+              },
+              {
+                "text": "Land",
+                "bold": true
+              },
+              {
+                "text": " des Kunden."
+              }
+            ],
+            [
+              {
+                "text": "Stellen Sie die "
+              },
+              {
+                "text": "Dokumentsprache",
+                "bold": true
+              },
+              {
+                "text": " ein: "
+              },
+              {
+                "text": "Wie beim Aussteller",
+                "bold": true
+              },
+              {
+                "text": " verwendet Ihre eigene Ausstellersprache, oder wählen Sie für diesen Kunden eine bestimmte Sprache."
+              }
+            ],
+            [
+              {
+                "text": "Fügen Sie optional "
+              },
+              {
+                "text": "E-Mail",
+                "bold": true
+              },
+              {
+                "text": " (füllt den Empfänger beim „Per E-Mail senden“ vor) und "
+              },
+              {
+                "text": "Vertreten durch",
+                "bold": true
+              },
+              {
+                "text": " hinzu."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Speichern",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Bestehende Kunden können Sie über die Liste bearbeiten oder löschen (Suche nach Firmenname oder Kennung); das Löschen erfordert eine Bestätigung und kann nicht rückgängig gemacht werden."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "4. Ihren Katalog aufbauen",
+      "id": "4-ihren-katalog-aufbauen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zweck: Katalogartikel sind wiederverwendbare Produkte oder Dienstleistungen, die Sie direkt als Position in ein Dokument einfügen können."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Öffnen Sie "
+              },
+              {
+                "text": "Katalog",
+                "bold": true
+              },
+              {
+                "text": " und klicken Sie auf "
+              },
+              {
+                "text": "Neuer Artikel",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Füllen Sie "
+              },
+              {
+                "text": "Bezeichnung",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Einheit",
+                "bold": true
+              },
+              {
+                "text": " (z. B. „Stk., Std., kg …“) und "
+              },
+              {
+                "text": "Standardpreis",
+                "bold": true
+              },
+              {
+                "text": " aus."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Speichern",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ein Katalogartikel speichert nur Bezeichnung, Einheit und Standardpreis – einen eigenen USt.-Satz hat er nicht. Die Umsatzsteuer wird beim Erstellen direkt im Dokument festgelegt (siehe nächster Abschnitt). Beim Erstellen eines Dokuments vervollständigt die Eingabe eines Positionsnamens automatisch anhand Ihres Katalogs und füllt den Preis für Sie aus."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "5. Ein Dokument erstellen",
+      "id": "5-ein-dokument-erstellen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zweck: Hier erstellen Sie Rechnungen, Proforma-Rechnungen, Rechnungskorrekturen, Belastungsanzeigen, Angebote und Lieferscheine – die einzigen Dokumenttypen, die Fakturcho unterstützt."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Dokumente",
+                "bold": true
+              },
+              {
+                "text": " und dann auf "
+              },
+              {
+                "text": "Neues Dokument",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Wählen Sie den "
+              },
+              {
+                "text": "Dokumenttyp",
+                "bold": true
+              },
+              {
+                "text": ": Rechnung, Proforma-Rechnung, Rechnungskorrektur, Belastungsanzeige, Angebot oder Lieferschein."
+              }
+            ],
+            [
+              {
+                "text": "Wählen Sie bei einer "
+              },
+              {
+                "text": "Rechnungskorrektur",
+                "bold": true
+              },
+              {
+                "text": " oder "
+              },
+              {
+                "text": "Belastungsanzeige",
+                "bold": true
+              },
+              {
+                "text": " das "
+              },
+              {
+                "text": "Originaldokument",
+                "bold": true
+              },
+              {
+                "text": " – auswählbar sind nur bereits ausgestellte Dokumente, da eine Rechnungskorrektur oder Belastungsanzeige ein anderes Dokument berichtigt."
+              }
+            ],
+            [
+              {
+                "text": "Wählen Sie einen "
+              },
+              {
+                "text": "Kunden",
+                "bold": true
+              },
+              {
+                "text": " aus der Liste, oder belassen Sie es bei "
+              },
+              {
+                "text": "Kein Kunde",
+                "bold": true
+              },
+              {
+                "text": " (Sie können mit "
+              },
+              {
+                "text": "+ Neuer Kunde",
+                "bold": true
+              },
+              {
+                "text": " auch direkt einen neuen Kunden anlegen)."
+              }
+            ],
+            [
+              {
+                "text": "Füllen Sie Referenznummer und Daten aus sowie – bei Lieferscheinen – die Felder unter "
+              },
+              {
+                "text": "Lieferdetails",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Fügen Sie "
+              },
+              {
+                "text": "Positionen",
+                "bold": true
+              },
+              {
+                "text": " hinzu: "
+              },
+              {
+                "text": "Bezeichnung",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Menge",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Preis",
+                "bold": true
+              },
+              {
+                "text": "; nutzen Sie "
+              },
+              {
+                "text": "Position hinzufügen",
+                "bold": true
+              },
+              {
+                "text": " für weitere Zeilen."
+              }
+            ],
+            [
+              {
+                "text": "Fügen Sie optional unter "
+              },
+              {
+                "text": "Rabatte",
+                "bold": true
+              },
+              {
+                "text": " einen Rabatt hinzu, entweder als "
+              },
+              {
+                "text": "Prozent",
+                "bold": true
+              },
+              {
+                "text": " oder als fester "
+              },
+              {
+                "text": "Betrag",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Lassen Sie unter "
+              },
+              {
+                "text": "Umsatzsteuer",
+                "bold": true
+              },
+              {
+                "text": " "
+              },
+              {
+                "text": "USt. berechnen (…%)",
+                "bold": true
+              },
+              {
+                "text": " aktiviert, oder schalten Sie sie aus und wählen Sie einen "
+              },
+              {
+                "text": "Grund, warum keine USt. berechnet wird",
+                "bold": true
+              },
+              {
+                "text": " – die zulässigen Gründe hängen von Ihrem Ausstellerland ab (Kleinunternehmerregelung, Reverse-Charge-Verfahren, innergemeinschaftliche Lieferung, Ausfuhr usw.)."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Entwurf speichern",
+                "bold": true
+              },
+              {
+                "text": ", um später weiterzuarbeiten, oder auf "
+              },
+              {
+                "text": "Speichern und ausstellen",
+                "bold": true
+              },
+              {
+                "text": ", um das Dokument sofort auszustellen."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dokumente werden immer in Euro erstellt – es gibt keine Währungsauswahl. Die Nummerierung erfolgt pro Dokumenttyp: Beim Ausstellen wird die "
+            },
+            {
+              "text": "Nächste Nummer im Nummernkreis",
+              "bold": true
+            },
+            {
+              "text": " angezeigt, die Sie nur überschreiben können, solange in diesem Nummernkreis noch keine Dokumente ausgestellt wurden."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Das Ausstellen kostet "
+            },
+            {
+              "text": "0,10 €",
+              "bold": true
+            },
+            {
+              "text": ", die in dem Moment von Ihrem Guthaben abgezogen werden, in dem das Dokument eine Nummer erhält. "
+            },
+            {
+              "text": "Ein ausgestelltes Dokument lässt sich nicht mehr bearbeiten",
+              "bold": true
+            },
+            {
+              "text": " – es ist unveränderlich und kann nur durch eine Rechnungskorrektur oder Belastungsanzeige berichtigt werden."
+            }
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Tipp: Wenn Sie versuchen auszustellen, ohne genug Guthaben zu haben oder mit einem unvollständigen Ausstellerprofil, zeigt der Dialog den Grund und einen Link direkt zu "
+            },
+            {
+              "text": "Guthaben aufladen",
+              "bold": true
+            },
+            {
+              "text": " oder "
+            },
+            {
+              "text": "Zum Ausstellerprofil",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "6. Nach dem Ausstellen eines Dokuments",
+      "id": "6-nach-dem-ausstellen-eines-dokuments",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zweck: Sobald ein Dokument eine Nummer hat, können Sie es herunterladen, versenden, die E-Rechnungs-Datei abrufen oder den Zahlungsstatus verfolgen."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Öffnen Sie das Dokument über "
+              },
+              {
+                "text": "Dokumente",
+                "bold": true
+              },
+              {
+                "text": ". Der Status wird als Abzeichen angezeigt (Entwurf, Ausgestellt, BEZAHLT, ÜBERFÄLLIG, STORNIERT)."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "PDF herunterladen",
+                "bold": true
+              },
+              {
+                "text": ", um die PDF-Datei zu erhalten. Bei einem Entwurf sehen Sie nur eine Vorschau mit Wasserzeichen – Sie müssen das Dokument erst ausstellen, um es herunterzuladen oder zu versenden."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Per E-Mail senden",
+                "bold": true
+              },
+              {
+                "text": ", um es per E-Mail zu verschicken: Geben Sie die "
+              },
+              {
+                "text": "E-Mail-Adresse des Empfängers",
+                "bold": true
+              },
+              {
+                "text": " ein (vorausgefüllt mit der E-Mail des Kunden, sofern hinterlegt) und optional eine "
+              },
+              {
+                "text": "Nachricht",
+                "bold": true
+              },
+              {
+                "text": ", dann "
+              },
+              {
+                "text": "Senden",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie bei Rechnungen, Rechnungskorrekturen und Belastungsanzeigen auf "
+              },
+              {
+                "text": "E-Rechnung herunterladen (XML)",
+                "bold": true
+              },
+              {
+                "text": ", um die strukturierte E-Rechnungs-Datei zu erhalten: das Format Ihres Landes – XRechnung (Deutschland), UBL (Frankreich), FatturaPA (Italien), FA(3) (Polen), CIUS-RO (Rumänien), Facturae (Spanien) – oder, für einen bulgarischen Aussteller und jedes andere Land ohne eigenes Format, eine allgemeine EN 16931/Peppol-UBL-Datei. Fakturcho erzeugt nur die Datei; Sie laden sie herunter und reichen sie selbst bei Ihrer nationalen Plattform ein – Fakturcho übermittelt nie etwas in Ihrem Namen. Lieferscheine erhalten nie eine solche Datei. Fehlen für das Format nötige Daten (z. B. eine USt-IdNr. des Käufers beim Reverse-Charge-Verfahren, ein Einheitencode einer Position, Ihre IBAN), listet ein Hinweis unter dem Button genau auf, was fehlt."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie, sobald das Dokument ausgestellt oder überfällig ist, auf "
+              },
+              {
+                "text": "Als bezahlt markieren",
+                "bold": true
+              },
+              {
+                "text": ", um die Zahlung zu erfassen."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie auf "
+              },
+              {
+                "text": "Stornieren",
+                "bold": true
+              },
+              {
+                "text": ", um ein ausgestelltes, überfälliges oder bezahltes Dokument zu stornieren. Die Nummer bleibt reserviert und wird nie erneut vergeben."
+              }
+            ],
+            [
+              {
+                "text": "Um eine ausgestellte Rechnung zu berichtigen, gehen Sie zu "
+              },
+              {
+                "text": "Neues Dokument",
+                "bold": true
+              },
+              {
+                "text": ", wählen Sie "
+              },
+              {
+                "text": "Rechnungskorrektur",
+                "bold": true
+              },
+              {
+                "text": " oder "
+              },
+              {
+                "text": "Belastungsanzeige",
+                "bold": true
+              },
+              {
+                "text": " und wählen Sie die ursprüngliche Rechnung aus – siehe Schritt 3 oben."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "7. Guthaben und Abrechnung",
+      "id": "7-guthaben-und-abrechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zweck: Unter "
+            },
+            {
+              "text": "Abrechnung",
+              "bold": true
+            },
+            {
+              "text": " sehen Sie Ihr Guthaben, können es aufladen und ein Abonnement verwalten."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Öffnen Sie "
+              },
+              {
+                "text": "Abrechnung",
+                "bold": true
+              },
+              {
+                "text": ", um Ihr "
+              },
+              {
+                "text": "Guthaben",
+                "bold": true
+              },
+              {
+                "text": " zu sehen und wie viele Dokumente das entspricht."
+              }
+            ],
+            [
+              {
+                "text": "Entwürfe, Kunden und Katalogartikel verbrauchen nie Guthaben – nur das Ausstellen kostet jeweils 0,10 €."
+              }
+            ],
+            [
+              {
+                "text": "Klicken Sie unter "
+              },
+              {
+                "text": "Guthabenpakete",
+                "bold": true
+              },
+              {
+                "text": " auf "
+              },
+              {
+                "text": "Kaufen",
+                "bold": true
+              },
+              {
+                "text": " für eine einmalige Aufladung – die Pakete kosten 5 €, 10 € und 25 €."
+              }
+            ],
+            [
+              {
+                "text": "Aktivieren Sie unter "
+              },
+              {
+                "text": "Abonnement",
+                "bold": true
+              },
+              {
+                "text": " einen monatlichen Plan (5, 10 oder 25 € pro Monat): Er gewährt pro Zeitraum das doppelte Guthaben des entsprechenden Pakets, und nicht verbrauchtes Guthaben wird übertragen – er erlässt nicht die Ausstellungsgebühr von 0,10 €, sondern macht nur jedes Dokument im Saldo günstiger. Über "
+              },
+              {
+                "text": "Wechseln zu",
+                "bold": true
+              },
+              {
+                "text": " können Sie jederzeit zu einer anderen Stufe wechseln, oder kündigen Sie – der Zugang bleibt bis zum Ende des bezahlten Zeitraums bestehen."
+              }
+            ],
+            [
+              {
+                "text": "Unter "
+              },
+              {
+                "text": "Letzte Aktivitäten",
+                "bold": true
+              },
+              {
+                "text": " sehen Sie jede Guthabenänderung: Startguthaben, Guthabenkauf, Dokument ausgestellt, Abo-Aufladung oder Anpassung."
+              }
+            ],
+            [
+              {
+                "text": "Fakturcho stellt für Ihre Zahlungen an Fakturcho selbst keine eigene Rechnung aus – diese Aktivitätsliste ist Ihr Beleg, und Revolut, das die Zahlungsabwicklung übernimmt, sendet Ihnen eine eigene Zahlungsbestätigung mit einer Bestellnummer."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "8. Sprache",
+      "id": "8-sprache",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Die App-Sprache Ihres Kontos wird einmalig bei der Anmeldung anhand des gewählten Landes festgelegt – wählen Sie Deutschland, läuft die App auf Deutsch; wählen Sie ein Land ohne eigene Übersetzung, wird auf Englisch zurückgegriffen. Auf den öffentlichen Anmelde- und Registrierungsseiten gibt es einen Sprachumschalter, solange Sie noch kein Konto haben – nach der Anmeldung gibt es innerhalb der App keinen Sprachumschalter mehr."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Die Dokumentsprache ist davon getrennt und wird pro Kunde festgelegt: Belassen Sie das Feld "
+            },
+            {
+              "text": "Dokumentsprache",
+              "bold": true
+            },
+            {
+              "text": " eines Kunden bei "
+            },
+            {
+              "text": "Wie beim Aussteller",
+              "bold": true
+            },
+            {
+              "text": ", um Ihre eigene Ausstellersprache zu verwenden, oder wählen Sie für diesen Kunden eine bestimmte Sprache – das ändert nur die Sprache der Dokumente für diesen Kunden, nicht die Sprache der App-Oberfläche."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "9. Rechnungsvorschriften Ihres Landes",
+      "id": "9-rechnungsvorschriften-ihres-landes",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Diese Seite verlinkt auf einen länderspezifischen Rechnungsstellungs-Ratgeber mit den lokalen USt.-Sätzen, Nummerierungs- und E-Rechnungsvorschriften für Ihr Land – siehe den verlinkten Ratgeber unten."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "10. Hilfe und Kontakt",
+      "id": "10-hilfe-und-kontakt",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Wenn etwas nicht funktioniert oder Sie eine Frage haben, schreiben Sie eine E-Mail an "
+            },
+            {
+              "text": "support@fakturcho.com",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "FAQ",
+  "faq": [
+    {
+      "question": "Warum kann ich kein Dokument ausstellen?",
+      "answer": [
+        {
+          "text": "Entweder ist Ihr Ausstellerprofil unvollständig (füllen Sie die fehlenden Felder aus, auf die Dokumente unter "
+        },
+        {
+          "text": "Zum Ausstellerprofil",
+          "bold": true
+        },
+        {
+          "text": " hinweist), oder Ihr Guthaben ist zu niedrig (laden Sie es unter "
+        },
+        {
+          "text": "Guthaben aufladen",
+          "bold": true
+        },
+        {
+          "text": " auf)."
+        }
+      ]
+    },
+    {
+      "question": "Ich habe einen Fehler auf einer ausgestellten Rechnung gemacht – wie korrigiere ich ihn?",
+      "answer": [
+        {
+          "text": "Ein ausgestelltes Dokument lässt sich nicht bearbeiten. Erstellen Sie über "
+        },
+        {
+          "text": "Neues Dokument",
+          "bold": true
+        },
+        {
+          "text": " eine "
+        },
+        {
+          "text": "Rechnungskorrektur",
+          "bold": true
+        },
+        {
+          "text": " oder "
+        },
+        {
+          "text": "Belastungsanzeige",
+          "bold": true
+        },
+        {
+          "text": ", wählen Sie die ursprüngliche Rechnung als "
+        },
+        {
+          "text": "Originaldokument",
+          "bold": true
+        },
+        {
+          "text": " und geben Sie die Korrektur ein."
+        }
+      ]
+    },
+    {
+      "question": "Wo finde ich die E-Rechnung als XML, und übermittelt Fakturcho sie für mich?",
+      "answer": [
+        {
+          "text": "Öffnen Sie das ausgestellte Dokument und klicken Sie auf "
+        },
+        {
+          "text": "E-Rechnung herunterladen (XML)",
+          "bold": true
+        },
+        {
+          "text": ". Fakturcho erzeugt nur die Datei – Sie laden sie selbst bei der Plattform Ihres Landes hoch. Verfügbar für Rechnungen, Rechnungskorrekturen und Belastungsanzeigen: Deutschland, Frankreich, Italien, Polen, Rumänien und Spanien erhalten ihr nationales Format; Bulgarien und alle anderen Länder erhalten eine allgemeine EN 16931/Peppol-UBL-Datei."
+        }
+      ]
+    },
+    {
+      "question": "Kostet das Erstellen eines Entwurfs Guthaben?",
+      "answer": [
+        {
+          "text": "Nein. Entwürfe, Kunden und Katalogartikel sind kostenlos. Nur das Ausstellen – also die Vergabe einer Nummer an ein Dokument – zieht 0,10 € von Ihrem Guthaben ab."
+        }
+      ]
+    },
+    {
+      "question": "Kann ich die Währung eines Dokuments wählen?",
+      "answer": [
+        {
+          "text": "Nein, jedes Dokument wird in Euro erstellt; es gibt keine Währungsauswahl."
+        }
+      ]
+    },
+    {
+      "question": "Kann ich die nächste Dokumentnummer ändern?",
+      "answer": [
+        {
+          "text": "Nur solange ein Nummernkreis (ein Dokumenttyp) noch keine ausgestellten Dokumente enthält, über "
+        },
+        {
+          "text": "Nächste Nummer manuell festlegen",
+          "bold": true
+        },
+        {
+          "text": " im Ausstellen-Dialog. Sobald ein Dokument ausgestellt ist, läuft die Nummerierung automatisch und lückenlos weiter."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Proforma-Rechnung und einer Rechnung?",
+      "answer": [
+        {
+          "text": "Eine Proforma-Rechnung sieht aus wie eine Rechnung mit denselben Angaben, begründet aber keine Steuerpflicht; eine Rechnung ist das Steuerdokument. Beide erhalten eine eigene Nummer, in getrennten Nummernkreisen."
+        }
+      ]
+    },
+    {
+      "question": "Bedeutet ein Abonnement, dass Dokumente kostenlos sind?",
+      "answer": [
+        {
+          "text": "Nein. Es lädt Ihr Guthaben um das Doppelte des entsprechenden einmaligen Pakets auf, und nicht verbrauchtes Guthaben wird übertragen – aber jedes ausgestellte Dokument kostet weiterhin 0,10 € aus diesem Guthaben."
+        }
+      ]
+    }
+  ]
+}

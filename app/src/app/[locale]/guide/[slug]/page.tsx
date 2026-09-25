@@ -49,6 +49,7 @@ export default async function LocaleGuideSlugPage({ params }: LocaleGuideSlugPag
         lastReviewedLabel: messages.guides.lastReviewed,
         signupLabel: messages.marketing.nav.signup,
         brand: messages.marketing.brand,
+        backToAppLabel: messages.guides.backToApp,
       }}
     />
   );

@@ -32,6 +32,7 @@ const CHROME = {
   lastReviewedLabel: 'Zuletzt geprüft: {date}',
   signupLabel: 'Konto erstellen',
   brand: 'Fakturcho',
+  backToAppLabel: 'Back to the app',
 };
 
 afterEach(cleanup);

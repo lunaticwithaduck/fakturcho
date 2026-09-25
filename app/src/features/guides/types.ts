@@ -36,12 +36,18 @@ export interface GuideHeadingBlock {
   text: string;
 }
 
+export interface GuideTipBlock {
+  type: 'tip';
+  inline: Inline;
+}
+
 export type GuideBlock =
   | GuideParagraphBlock
   | GuideUlBlock
   | GuideOlBlock
   | GuideTableBlock
-  | GuideHeadingBlock;
+  | GuideHeadingBlock
+  | GuideTipBlock;
 
 export interface GuideSection {
   heading: string;
