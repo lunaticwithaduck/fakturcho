@@ -13,7 +13,7 @@ describe('resolveVatTreatment', () => {
     expect(treatment).toEqual({
       vatCharged: false,
       vatRateBp: 0,
-      vatExemptionGround: 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.',
+      vatExemptionGround: 'Steuerbefreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG.',
     });
   });
 
@@ -97,10 +97,10 @@ describe('resolveVatTreatment', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: false,
-      requestedGround: 'чл.113, ал.9 от ЗДДС',
+      requestedGround: 'чл. 113, ал. 9 от ЗДДС',
       issuerCountry: 'BG',
     });
-    expect(treatment.vatExemptionGround).toBe('чл.113, ал.9 от ЗДДС');
+    expect(treatment.vatExemptionGround).toBe('чл. 113, ал. 9 от ЗДДС');
   });
 
   it('no longer dead-ends a non-registered generic-EU issuer: the SME ground applies automatically', () => {
@@ -111,7 +111,7 @@ describe('resolveVatTreatment', () => {
       issuerCountry: 'NL',
     });
     expect(treatment.vatExemptionGround).toBe(
-      'VAT exemption for small enterprises, Article 284 of Council Directive 2006/112/EC',
+      'Small enterprise scheme – Article 284 of Council Directive 2006/112/EC',
     );
   });
 
@@ -130,11 +130,11 @@ describe('resolveVatTreatment', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+      requestedGround: 'Reverse charge – Article 196 of Council Directive 2006/112/EC',
       issuerCountry: 'NL',
     });
     expect(treatment.vatExemptionGround).toBe(
-      'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+      'Reverse charge – Article 196 of Council Directive 2006/112/EC',
     );
   });
 });
@@ -169,7 +169,7 @@ describe('applyLineVatGroups', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'чл.21 от ЗДДС',
+      requestedGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
       issuerCountry: 'BG',
     });
     const result = applyLineVatGroups(treatment, [
@@ -183,7 +183,7 @@ describe('applyLineVatGroups', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'чл.21 от ЗДДС',
+      requestedGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
       issuerCountry: 'BG',
     });
     const result = applyLineVatGroups(treatment, [
@@ -193,7 +193,7 @@ describe('applyLineVatGroups', () => {
     expect(result).toEqual({
       vatCharged: true,
       vatRateBp: 2000,
-      vatExemptionGround: 'чл.21 от ЗДДС',
+      vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
     });
   });
 
@@ -212,7 +212,7 @@ describe('applyLineVatGroups', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'чл.30 ал.1 от ЗДДС',
+      requestedGround: 'чл. 30, ал. 1 от ЗДДС',
       issuerCountry: 'BG',
     });
     const result = applyLineVatGroups(treatment, [
@@ -222,7 +222,7 @@ describe('applyLineVatGroups', () => {
     expect(result).toEqual({
       vatCharged: true,
       vatRateBp: 2000,
-      vatExemptionGround: 'чл.30 ал.1 от ЗДДС',
+      vatExemptionGround: 'чл. 30, ал. 1 от ЗДДС',
     });
   });
 });

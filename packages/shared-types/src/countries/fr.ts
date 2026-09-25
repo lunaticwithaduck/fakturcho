@@ -2,16 +2,18 @@ import { type CountryConfig, GENERIC_EU_CONFIG } from './base';
 
 const FR_DEFAULT_EXEMPTION_GROUND = 'TVA non applicable, art. 293 B du CGI';
 
+const FR_AUTOLIQUIDATION_GROUND =
+  'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE';
+
 const FR_EXEMPTION_GROUNDS = [
   'Exonération de TVA, article 262 ter I du CGI',
   'Exonération de TVA, article 262 I du CGI',
-  'Autoliquidation, article 283 du CGI',
+  FR_AUTOLIQUIDATION_GROUND,
 ] as const;
 
 export const FR_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'FR',
-  locale: 'en',
   language: 'fr',
   timeZone: 'Europe/Paris',
   vatRates: [
@@ -26,6 +28,12 @@ export const FR_CONFIG: CountryConfig = {
   vatNumberPattern: /^FR[0-9A-Z]{2}\d{9}$/,
   exemptionGrounds: FR_EXEMPTION_GROUNDS,
   defaultExemptionGround: FR_DEFAULT_EXEMPTION_GROUND,
+  vatNoteGrounds: [
+    FR_AUTOLIQUIDATION_GROUND,
+    FR_DEFAULT_EXEMPTION_GROUND,
+    'Exonération de TVA, article 262 ter I du CGI',
+    'Exonération de TVA, article 262 I du CGI',
+  ],
   identifiers: [
     { key: 'siret', label: 'SIRET', pattern: /^\d{14}$/, required: false },
     { key: 'rcs', label: 'RCS', pattern: null, required: false },

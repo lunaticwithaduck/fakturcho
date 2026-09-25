@@ -14,7 +14,7 @@ describe('issuer address county/province printing', () => {
       issuerCity: 'Roma',
       issuerCountyRegion: 'RM',
     });
-    const html = buildIssuerBlock(document, locale);
+    const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Via Roma 1, 00186 Roma (RM)');
   });
 
@@ -27,7 +27,7 @@ describe('issuer address county/province printing', () => {
       issuerCity: 'Timișoara',
       issuerCountyRegion: 'Timiș',
     });
-    const html = buildIssuerBlock(document, locale);
+    const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Str. Exemplu 1, 300001 Timișoara, jud. Timiș');
   });
 
@@ -40,7 +40,7 @@ describe('issuer address county/province printing', () => {
       issuerCity: 'Madrid',
       issuerCountyRegion: 'Guadalajara',
     });
-    expect(buildIssuerBlock(differing, locale)).toContain(
+    expect(buildIssuerBlock(differing, 'invoice', locale)).toContain(
       'Calle Mayor 1, 28001 Madrid, Guadalajara',
     );
 
@@ -51,7 +51,7 @@ describe('issuer address county/province printing', () => {
       issuerCity: 'Madrid',
       issuerCountyRegion: 'Madrid',
     });
-    const html = buildIssuerBlock(same, locale);
+    const html = buildIssuerBlock(same, 'invoice', locale);
     expect(html).toContain('Calle Mayor 1, 28001 Madrid');
     expect(html).not.toContain('Madrid, Madrid');
   });
@@ -65,7 +65,7 @@ describe('issuer address county/province printing', () => {
       issuerCity: 'Berlin',
       issuerCountyRegion: 'Berlin',
     });
-    const html = buildIssuerBlock(document, locale);
+    const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Musterstraße 1, 10115 Berlin<');
   });
 });
@@ -110,6 +110,6 @@ describe('recipient address county/province printing decides by recipientCountry
       recipientCountry: 'DE',
     });
     const html = buildRecipientBlock(document, 'invoice', locale);
-    expect(html).toContain('Musterstraße 1, 10115 Berlin<');
+    expect(html).toContain('Musterstraße 1, 10115 Berlin, Germania<');
   });
 });

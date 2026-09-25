@@ -255,6 +255,7 @@ describe('DocumentIssuanceService', () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {
       country: 'IT',
+      vatNumber: 'IT12345678903',
       street: 'Via Roma 1',
       postcode: '00100',
       countyRegion: 'RM',
@@ -277,6 +278,7 @@ describe('DocumentIssuanceService', () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {
       country: 'IT',
+      vatNumber: 'IT12345678903',
       street: 'Via Roma 1',
       postcode: '00100',
       countyRegion: 'RM',

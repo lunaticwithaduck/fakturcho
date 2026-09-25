@@ -3,7 +3,8 @@ import { formatDateForLocale } from '../../../../money/format';
 import { toSharedDocumentType } from '../../../prisma-mappers';
 import type { MentionsBuilder } from './index';
 
-const AUTOLIQUIDATION_MENTION = 'Autoliquidation, article 283 du CGI';
+const AUTOLIQUIDATION_MENTION =
+  'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE';
 const INTRA_EU_SUPPLY_MENTION = 'Exonération de TVA, article 262 ter I du CGI';
 const EXPORT_MENTION = 'Exonération de TVA, article 262 I du CGI';
 
@@ -11,6 +12,7 @@ export const frMentions: MentionsBuilder = ({ document, lineItems }) => {
   const mentions: string[] = [];
   const categories = new Set(lineItems.map((line) => line.vatCategory));
   const ground = document.vatExemptionGround;
+  const sharedType = toSharedDocumentType(document.documentType);
 
   if (categories.has('AE') && ground !== AUTOLIQUIDATION_MENTION) {
     mentions.push(AUTOLIQUIDATION_MENTION);
@@ -22,7 +24,7 @@ export const frMentions: MentionsBuilder = ({ document, lineItems }) => {
     mentions.push(EXPORT_MENTION);
   }
 
-  if (TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)]) {
+  if (TAX_DOCUMENT_TYPES[sharedType] && sharedType !== 'credit_note') {
     if (document.dueAt) {
       mentions.push(`Date d'échéance : ${formatDateForLocale(document.dueAt, 'fr')}`);
     }

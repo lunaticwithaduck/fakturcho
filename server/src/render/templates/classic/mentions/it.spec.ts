@@ -44,7 +44,7 @@ describe('itMentions', () => {
       { vatCategory: 'K', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Operazione non imponibile ai sensi dell'art. 41, comma 1, lett. a), D.L. 331/1993",
+      'Operazione non imponibile ai sensi dell’art. 41, comma 1, lett. a), D.L. 331/1993',
     ]);
   });
 
@@ -53,7 +53,8 @@ describe('itMentions', () => {
       { vatCategory: 'AE', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Inversione contabile ai sensi dell'art. 7-ter, D.P.R. 633/1972",
+      'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     ]);
   });
 
@@ -62,7 +63,22 @@ describe('itMentions', () => {
       { vatCategory: 'AE', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Inversione contabile ai sensi dell'art. 17, comma 6, D.P.R. 633/1972",
+      'Inversione contabile ai sensi dell’art. 17, comma 6, D.P.R. 633/1972',
+    ]);
+  });
+
+  it('does not repeat the reverse-charge mention when the issuer already chose it as the exemption ground', () => {
+    const input = buildInput(
+      {
+        recipientCountry: 'DE',
+        vatAmount: 0,
+        amount: 100000,
+        vatExemptionGround: 'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+      },
+      [{ vatCategory: 'AE', vatRateBp: 0 }],
+    );
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     ]);
   });
 
@@ -71,7 +87,7 @@ describe('itMentions', () => {
       { vatCategory: 'E', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Imposta di bollo assolta in modo virtuale ai sensi dell'art. 15 della Tariffa, Parte I, allegata al D.P.R. 642/1972 e del D.M. 17/06/2014",
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     ]);
   });
 
@@ -82,12 +98,12 @@ describe('itMentions', () => {
     expect(itMentions(input)).toEqual([]);
   });
 
-  it('does not add the stamp duty mention on a reverse-charge or intra-EU document', () => {
-    const input = buildInput({ vatAmount: 0, amount: 100000, recipientCountry: 'DE' }, [
+  it('does not add the stamp duty mention on a domestic reverse-charge or intra-EU document', () => {
+    const input = buildInput({ vatAmount: 0, amount: 100000, recipientCountry: 'IT' }, [
       { vatCategory: 'AE', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).not.toContain(
-      "Imposta di bollo assolta in modo virtuale ai sensi dell'art. 15 della Tariffa, Parte I, allegata al D.P.R. 642/1972 e del D.M. 17/06/2014",
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     );
   });
 

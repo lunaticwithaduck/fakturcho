@@ -1,3 +1,4 @@
+import type { DocumentType } from '../enums';
 import type { DocumentLanguage, Locale } from '../languages';
 import type { VatExemptionGround } from '../vat';
 
@@ -33,9 +34,9 @@ export interface CountryConfig {
   vatNumberPattern: RegExp | null;
   exemptionGrounds: readonly VatExemptionGround[];
   defaultExemptionGround: VatExemptionGround | null;
-  // Grounds that are VAT notes, not exemptions — printed on their own without
-  // labels.exemptionPrefix when they match document.vatExemptionGround.
   vatNoteGrounds?: readonly string[];
+  zeroRateGrounds?: readonly string[];
+  documentTypeTitles?: Partial<Record<DocumentType, string>>;
   identifiers: readonly IssuerIdentifierField[];
   numberingUsesFixedWidth: boolean;
   requiredIssuerFields: readonly string[];
@@ -50,14 +51,20 @@ export interface CountryConfig {
 }
 
 const EU_DIRECTIVE_SME_EXEMPTION_GROUND =
-  'VAT exemption for small enterprises, Article 284 of Council Directive 2006/112/EC';
+  'Small enterprise scheme – Article 284 of Council Directive 2006/112/EC';
+
+// Must match labels/en.ts reverseChargeNote exactly: mentions/generic.ts skips its
+// own reverse-charge mention when document.vatExemptionGround already says this.
+const EU_DIRECTIVE_REVERSE_CHARGE_GROUND =
+  'Reverse charge – Article 196 of Council Directive 2006/112/EC';
 
 const EU_DIRECTIVE_EXEMPTION_GROUNDS = [
   EU_DIRECTIVE_SME_EXEMPTION_GROUND,
-  'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+  EU_DIRECTIVE_REVERSE_CHARGE_GROUND,
   'Intra-Community supply, Article 138 of Council Directive 2006/112/EC',
   'Export, Article 146 of Council Directive 2006/112/EC',
-  'Exempt supply, Article 132 or 135 of Council Directive 2006/112/EC',
+  'Exempt supply, Article 132 of Council Directive 2006/112/EC',
+  'Exempt supply, Article 135 of Council Directive 2006/112/EC',
 ] as const;
 
 export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
@@ -75,6 +82,7 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   vatNumberPattern: null,
   exemptionGrounds: EU_DIRECTIVE_EXEMPTION_GROUNDS,
   defaultExemptionGround: EU_DIRECTIVE_SME_EXEMPTION_GROUND,
+  vatNoteGrounds: [EU_DIRECTIVE_REVERSE_CHARGE_GROUND],
   identifiers: [],
   numberingUsesFixedWidth: false,
   requiredIssuerFields: ['companyName', 'street', 'city', 'postcode'],

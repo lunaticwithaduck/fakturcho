@@ -42,10 +42,13 @@ export interface ClassicLabels {
   subtotalLabel: string;
   discountRowLabel: (percent: number | null, customLabel: string | null) => string;
   totalLabel: string;
+  totalWithVatLabel?: string;
+  netValueLabel: string;
   dueLabel: string;
   creditDueLabel: string;
   paidLabel: string;
   exemptionPrefix: string;
+  zeroRatePrefix?: string;
   proformaNotice: string;
   reverseChargeNote: string;
   originalMarker: string;

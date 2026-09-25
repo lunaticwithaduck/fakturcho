@@ -3,6 +3,15 @@ import { type CountryConfig, GENERIC_EU_CONFIG } from './base';
 const ES_VAT_NUMBER_PATTERN =
   /^ES(?:\d{8}[A-Z]|[XYZ]\d{7}[A-Z]|[ABCDEFGHJKLMNPQRSUVW]\d{7}[0-9A-Z])$/;
 
+// B2B services to a business established in another member state: the place of
+// supply moves to the customer's country under art. 69.Uno.1º, so the service is
+// not subject to Spanish VAT (not exempt from it). RD 1619/2012 art. 6.1.j still
+// requires the reference, so this note is worded as "no sujeta", never "exenta",
+// and vatNoteGrounds below tells the template to print it without the exemption
+// prefix.
+const ES_NOT_SUBJECT_EU_B2B_SERVICES =
+  'Operación no sujeta a IVA (artículo 69.Uno.1º de la Ley 37/1992 del IVA)';
+
 // Spain has not transposed Directive (EU) 2020/285 (deadline 2025-01-01; the
 // Commission referred Spain to the CJEU in March 2026) so there is no
 // small-business franchise regime here. A non-VAT-registered issuer in Spain
@@ -32,14 +41,17 @@ export const ES_CONFIG: CountryConfig = {
     'artículo 20.Uno.4º de la Ley 37/1992 del IVA',
     'artículo 20.Uno.5º de la Ley 37/1992 del IVA',
     'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
+    'artículo 20.Uno.10º de la Ley 37/1992 del IVA',
     'artículo 20.Uno.16º de la Ley 37/1992 del IVA',
     'artículo 20.Uno.18º de la Ley 37/1992 del IVA',
+    'artículo 20.Uno.23º de la Ley 37/1992 del IVA',
     'artículo 20.Uno.26º de la Ley 37/1992 del IVA',
     'artículo 21 de la Ley 37/1992 del IVA',
     'artículo 22 de la Ley 37/1992 del IVA',
     'artículo 25 de la Ley 37/1992 del IVA',
-    'artículo 84.Uno.2º de la Ley 37/1992 del IVA',
+    ES_NOT_SUBJECT_EU_B2B_SERVICES,
   ],
+  vatNoteGrounds: [ES_NOT_SUBJECT_EU_B2B_SERVICES],
   defaultExemptionGround: null,
   identifiers: [
     {

@@ -5,7 +5,7 @@ import { buildStatutoryMentions } from './index';
 
 describe('genericMentions — BG and generic EU countries without a dedicated builder', () => {
   it('adds the reverse-charge note for BG when a line is AE and the ground does not already say so', () => {
-    const document = buildFakeDocument({ vatExemptionGround: 'чл.21 от ЗДДС' });
+    const document = buildFakeDocument({ vatExemptionGround: 'чл. 53, ал. 1 от ЗДДС' });
     const locale = resolveClassicLocale('bg', 'BG');
     const mentions = buildStatutoryMentions({
       document,

@@ -36,9 +36,9 @@ describe('formatCentsForLocale — en', () => {
 });
 
 describe('formatMoneyForLocale — en', () => {
-  it('appends the € suffix to the en-formatted amount', () => {
-    expect(formatMoneyForLocale(1_000_00, 'en')).toBe('1,000.00 €');
-    expect(formatMoneyForLocale(-160000, 'en')).toBe('-1,600.00 €');
+  it('prefixes the en-formatted amount with €', () => {
+    expect(formatMoneyForLocale(1_000_00, 'en')).toBe('€1,000.00');
+    expect(formatMoneyForLocale(-160000, 'en')).toBe('-€1,600.00');
   });
 });
 

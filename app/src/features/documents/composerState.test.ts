@@ -153,11 +153,13 @@ describe('toSaveDraftRequest', () => {
 
   it('sends the exemption ground only when it is selectable', () => {
     const state = withOneCompleteLine(blankComposerState());
-    state.vatExemptionGround = 'чл.21 от ЗДДС';
+    state.vatExemptionGround = 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС';
 
     expect(toSaveDraftRequest(state, VAT_20).vatExemptionGround).toBeNull();
     expect(toSaveDraftRequest(state, NO_VAT).vatExemptionGround).toBeNull();
-    expect(toSaveDraftRequest(state, VAT_GROUND).vatExemptionGround).toBe('чл.21 от ЗДДС');
+    expect(toSaveDraftRequest(state, VAT_GROUND).vatExemptionGround).toBe(
+      'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
+    );
   });
 });
 

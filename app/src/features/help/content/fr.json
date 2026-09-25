@@ -473,7 +473,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Objectif : c'est ici que vous composez factures, factures pro forma, avoirs, notes de débit, devis et bons de livraison — les seuls types de documents pris en charge par Fakturcho."
+              "text": "Objectif : c'est ici que vous composez factures, factures pro forma, avoirs, factures rectificatives, devis et bons de livraison — les seuls types de documents pris en charge par Fakturcho."
             }
           ]
         },
@@ -508,7 +508,7 @@
                 "bold": true
               },
               {
-                "text": " : Facture, Facture pro forma, Avoir, Note de débit, Devis ou Bon de livraison."
+                "text": " : Facture, Facture pro forma, Avoir, Facture rectificative, Devis ou Bon de livraison."
               }
             ],
             [
@@ -523,7 +523,7 @@
                 "text": " ou une "
               },
               {
-                "text": "Note de débit",
+                "text": "Facture rectificative",
                 "bold": true
               },
               {
@@ -534,7 +534,7 @@
                 "bold": true
               },
               {
-                "text": " — seuls les documents déjà émis peuvent être sélectionnés, puisqu'un avoir ou une note de débit en corrige un."
+                "text": " — seuls les documents déjà émis peuvent être sélectionnés, puisqu'un avoir ou une facture rectificative en corrige un."
               }
             ],
             [
@@ -721,7 +721,7 @@
               "bold": true
             },
             {
-              "text": " — il est immuable et ne peut être corrigé que par un avoir ou une note de débit établi contre lui."
+              "text": " — il est immuable et ne peut être corrigé que par un avoir ou une facture rectificative établi contre lui."
             }
           ]
         },
@@ -823,7 +823,7 @@
             ],
             [
               {
-                "text": "Pour les factures, avoirs et notes de débit, cliquez sur "
+                "text": "Pour les factures, avoirs et factures rectificatives, cliquez sur "
               },
               {
                 "text": "Télécharger la facture électronique (XML)",
@@ -876,7 +876,7 @@
                 "text": " ou "
               },
               {
-                "text": "Note de débit",
+                "text": "Facture rectificative",
                 "bold": true
               },
               {
@@ -1099,7 +1099,7 @@
           "text": " ou une "
         },
         {
-          "text": "Note de débit",
+          "text": "Facture rectificative",
           "bold": true
         },
         {
@@ -1132,7 +1132,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho génère uniquement le fichier — vous le téléversez vous-même sur la plateforme de votre pays. Disponible pour les factures, avoirs et notes de débit : l'Allemagne, la France, l'Italie, la Pologne, la Roumanie et l'Espagne obtiennent leur format national ; la Bulgarie et tout autre pays obtiennent un fichier UBL générique EN 16931."
+          "text": ". Fakturcho génère uniquement le fichier — vous le téléversez vous-même sur la plateforme de votre pays. Disponible pour les factures, avoirs et factures rectificatives : l'Allemagne, la France, l'Italie, la Pologne, la Roumanie et l'Espagne obtiennent leur format national ; la Bulgarie et tout autre pays obtiennent un fichier UBL générique EN 16931."
         }
       ]
     },

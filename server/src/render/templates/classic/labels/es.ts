@@ -29,7 +29,7 @@ export const es: ClassicLabels = {
   recipientSignaturePrefix: () => 'Recibí: ', // fixed verb form, invariable
   colName: 'Descripción',
   colQuantity: 'Cantidad',
-  colPrice: 'Precio',
+  colPrice: 'Precio unitario',
   colTotal: 'Total',
   vatBasePrefix: 'Base imponible:',
   vatRatePrefix: (percent) => `IVA (${percent}%):`,
@@ -37,6 +37,7 @@ export const es: ClassicLabels = {
   discountRowLabel: (percent, customLabel) =>
     `Descuento${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Total:',
+  netValueLabel: 'Valor total:',
   dueLabel: 'Total a pagar:',
   creditDueLabel: 'Total a abonar:',
   paidLabel: 'Importe pagado:',

@@ -25,6 +25,7 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
     postcode: profile.postcode,
     city: profile.city,
     countyRegion: profile.countyRegion,
+    vatNumber: profile.vatNumber,
   };
   const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const missing = requiredIssuerFields
@@ -35,6 +36,8 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
       missing.push(`identifier:${field.key}`);
     }
   }
-  if (profile.vatRegistered && isBlank(profile.vatNumber)) missing.push('vatNumber');
+  if (profile.vatRegistered && isBlank(profile.vatNumber) && !missing.includes('vatNumber')) {
+    missing.push('vatNumber');
+  }
   return missing;
 }

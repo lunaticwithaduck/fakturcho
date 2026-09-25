@@ -1,14 +1,16 @@
 import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
 
-const DE_PLAIN_RECIPIENT_TYPES = new Set<DocumentType>(['quote', 'delivery_note']);
-const DE_PLAIN_DATE_TYPES = new Set<DocumentType>(['delivery_note', 'proforma']);
+const DE_PLAIN_DATE_TYPES = new Set<DocumentType>(['delivery_note', 'proforma', 'credit_note']);
 
 export const de: ClassicLabels = {
   companyIdLabel: 'Handelsregisternummer',
-  supplierTitle: 'Rechnungssteller:',
-  recipientTitle: (documentType) =>
-    DE_PLAIN_RECIPIENT_TYPES.has(documentType) ? 'Empfänger:' : 'Rechnungsempfänger:',
+  supplierTitle: 'Aussteller:',
+  recipientTitle: (documentType) => {
+    if (documentType === 'delivery_note') return 'Lieferanschrift:';
+    if (documentType === 'quote' || documentType === 'proforma') return 'Empfänger:';
+    return 'Rechnungsempfänger:';
+  },
   vatNumberPrefix: 'USt-IdNr.: ',
   molPrefix: 'Vertreten durch: ',
   issuedAtPrefix: (documentType) =>
@@ -32,20 +34,22 @@ export const de: ClassicLabels = {
   recipientSignaturePrefix: () => 'Empfangen von: ',
   colName: 'Bezeichnung',
   colQuantity: 'Menge',
-  colPrice: 'Preis',
-  colTotal: 'Gesamt',
+  colPrice: 'Einzelpreis (netto)',
+  colTotal: 'Gesamtpreis (netto)',
   vatBasePrefix: 'Nettobetrag:',
-  vatRatePrefix: (percent) => `USt. (${percent}%):`,
+  vatRatePrefix: (percent) => `USt. ${percent} %:`,
   subtotalLabel: 'Zwischensumme:',
   discountRowLabel: (percent, customLabel) =>
-    `Rabatt${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
+    `Rabatt${percent !== null ? ` (${percent} %)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Gesamtbetrag:',
+  netValueLabel: 'Gesamtwert:',
   dueLabel: 'Zu zahlender Betrag:',
   creditDueLabel: 'Erstattungsbetrag:',
   paidLabel: 'Bezahlter Betrag:',
   exemptionPrefix: 'Hinweis: ',
   proformaNotice: 'Dies ist keine Rechnung im Sinne des UStG.',
-  reverseChargeNote: 'Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
+  reverseChargeNote:
+    'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
   originalMarker: '',
   draftLabel: 'Entwurf',
   numberSign: 'Nr.',
@@ -60,5 +64,5 @@ export const de: ClassicLabels = {
     delivery_note: 'Lieferschein',
   },
   watermarkMain: 'ENTWURF',
-  watermarkSub: 'RECHTLICH NICHT GÜLTIG',
+  watermarkSub: 'KEINE GÜLTIGE RECHNUNG',
 };

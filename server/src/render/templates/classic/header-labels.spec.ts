@@ -9,7 +9,7 @@ describe('supplier heading', () => {
     const cases: Array<[string, string]> = [
       ['bg', 'Доставчик:'],
       ['en', 'Supplier:'],
-      ['de', 'Rechnungssteller:'],
+      ['de', 'Aussteller:'],
       ['fr', 'Émetteur :'],
       ['it', 'Cedente/prestatore:'],
       ['pl', 'Sprzedawca:'],
@@ -18,21 +18,21 @@ describe('supplier heading', () => {
     ];
     for (const [language, expected] of cases) {
       const locale = resolveClassicLocale(language as never);
-      const html = buildIssuerBlock(buildFakeDocument(), locale);
+      const html = buildIssuerBlock(buildFakeDocument(), 'invoice', locale);
       expect(html).toContain(`<div class="block-title">${expected}</div>`);
     }
   });
 });
 
 describe('recipientTitle as a function of document type', () => {
-  it('DE: uses Empfänger for a quote and a delivery note, Rechnungsempfänger otherwise', () => {
+  it('DE: uses Empfänger for a quote, Lieferanschrift for a delivery note, Rechnungsempfänger otherwise', () => {
     const locale = resolveClassicLocale('de', 'DE');
     expect(buildRecipientBlock(buildFakeDocument(), 'invoice', locale)).toContain(
       'Rechnungsempfänger:',
     );
     expect(buildRecipientBlock(buildFakeDocument(), 'quote', locale)).toContain('Empfänger:');
     expect(buildRecipientBlock(buildFakeDocument(), 'delivery_note', locale)).toContain(
-      'Empfänger:',
+      'Lieferanschrift:',
     );
   });
 
@@ -67,11 +67,12 @@ describe('DE issuedAtPrefix as a function of document type', () => {
     expect(buildDatesBlock(buildFakeDocument(), 'proforma', locale)).toContain('Datum: ');
   });
 
-  it('uses Rechnungsdatum for an invoice, credit note and debit note', () => {
+  it('uses Rechnungsdatum for an invoice and debit note, Datum for a credit note', () => {
     expect(buildDatesBlock(buildFakeDocument(), 'invoice', locale)).toContain('Rechnungsdatum: ');
-    expect(buildDatesBlock(buildFakeDocument(), 'credit_note', locale)).toContain(
+    expect(buildDatesBlock(buildFakeDocument(), 'debit_note', locale)).toContain(
       'Rechnungsdatum: ',
     );
+    expect(buildDatesBlock(buildFakeDocument(), 'credit_note', locale)).toContain('Datum: ');
   });
 });
 

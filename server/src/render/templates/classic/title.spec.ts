@@ -30,7 +30,7 @@ describe('buildTitle — number sign and draft title per language', () => {
     en: 'Invoice (draft)',
     de: 'Rechnung (Entwurf)',
     fr: 'Facture (brouillon)',
-    it: 'Fattura (bozza)',
+    it: 'Bozza di fattura',
     pl: 'Faktura – wersja robocza',
     ro: 'Factură – ciornă',
     es: 'Factura (borrador)',

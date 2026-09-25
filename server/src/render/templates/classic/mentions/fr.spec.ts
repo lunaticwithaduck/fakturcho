@@ -33,6 +33,9 @@ describe('frMentions — standard-rate invoice', () => {
 });
 
 describe('frMentions — reverse charge (AE)', () => {
+  const AUTOLIQUIDATION =
+    'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE';
+
   it('adds the autoliquidation mention', () => {
     const mentions = buildStatutoryMentions({
       document: buildFakeDocument({ issuerCountry: 'FR', vatExemptionGround: null }),
@@ -40,20 +43,20 @@ describe('frMentions — reverse charge (AE)', () => {
       locale,
     });
 
-    expect(mentions).toContain('Autoliquidation, article 283 du CGI');
+    expect(mentions).toContain(AUTOLIQUIDATION);
   });
 
   it('does not add a second copy when it is already the document-wide exemption ground printed by the totals block', () => {
     const mentions = buildStatutoryMentions({
       document: buildFakeDocument({
         issuerCountry: 'FR',
-        vatExemptionGround: 'Autoliquidation, article 283 du CGI',
+        vatExemptionGround: AUTOLIQUIDATION,
       }),
       lineItems: buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 }),
       locale,
     });
 
-    expect(mentions).not.toContain('Autoliquidation, article 283 du CGI');
+    expect(mentions).not.toContain(AUTOLIQUIDATION);
   });
 });
 
@@ -85,6 +88,22 @@ describe('frMentions — non-tax documents', () => {
       document: buildFakeDocument({
         issuerCountry: 'FR',
         documentType: 'QUOTE',
+        dueAt: new Date('2026-09-15'),
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toEqual([]);
+  });
+});
+
+describe('frMentions — credit note', () => {
+  it('carries no payment-terms boilerplate, since nothing is owed by the client', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        documentType: 'CREDIT_NOTE',
         dueAt: new Date('2026-09-15'),
       }),
       lineItems: buildFakeLineItems({ vatCategory: 'S' }),

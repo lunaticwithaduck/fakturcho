@@ -1,8 +1,8 @@
 import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
 
-// facture/facture pro forma/note de débit are feminine; "un avoir", "un
-// devis" and "un bon de livraison" are masculine.
+// facture/facture pro forma/facture rectificative are feminine; "un avoir",
+// "un devis" and "un bon de livraison" are masculine.
 const FR_MASCULINE_TYPES = new Set<DocumentType>(['credit_note', 'quote', 'delivery_note']);
 const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
   FR_MASCULINE_TYPES.has(documentType) ? masculine : feminine;
@@ -29,19 +29,21 @@ export const fr: ClassicLabels = {
   recipientSignaturePrefix: (documentType) => agree(documentType, 'Reçue par : ', 'Reçu par : '),
   colName: 'Désignation',
   colQuantity: 'Quantité',
-  colPrice: 'Prix unitaire',
-  colTotal: 'Total',
+  colPrice: 'Prix unitaire HT',
+  colTotal: 'Total HT',
   vatBasePrefix: 'Base HT :',
-  vatRatePrefix: (percent) => `TVA (${String(percent).replace('.', ',')}%) :`,
+  vatRatePrefix: (percent) => `TVA (${String(percent).replace('.', ',')} %) :`,
   subtotalLabel: 'Sous-total :',
   discountRowLabel: (percent, customLabel) =>
-    `Remise${percent !== null ? ` (${String(percent).replace('.', ',')}%)` : ''}${customLabel ? ` – ${customLabel}` : ''} :`,
+    `Remise${percent !== null ? ` (${String(percent).replace('.', ',')} %)` : ''}${customLabel ? ` – ${customLabel}` : ''} :`,
   totalLabel: 'Total :',
+  totalWithVatLabel: 'Total TTC :',
+  netValueLabel: 'Valeur totale :',
   dueLabel: 'Net à payer :',
   creditDueLabel: 'Net à déduire :',
   paidLabel: 'Montant payé :',
   exemptionPrefix: "Motif d'exonération de TVA : ",
-  proformaNotice: 'Facture proforma – document sans valeur fiscale.',
+  proformaNotice: 'Facture pro forma – document sans valeur fiscale.',
   reverseChargeNote: 'Autoliquidation – article 196 de la directive 2006/112/CE',
   originalMarker: ' (Original)',
   draftLabel: 'Brouillon',
@@ -52,7 +54,7 @@ export const fr: ClassicLabels = {
     invoice: 'Facture',
     proforma: 'Facture pro forma',
     credit_note: 'Avoir',
-    debit_note: 'Note de débit',
+    debit_note: 'Facture rectificative',
     quote: 'Devis',
     delivery_note: 'Bon de livraison',
   },

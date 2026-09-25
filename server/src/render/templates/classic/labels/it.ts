@@ -37,16 +37,18 @@ export const it: ClassicLabels = {
   discountRowLabel: (percent, customLabel) =>
     `Sconto${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Totale:',
+  netValueLabel: 'Valore totale:',
   dueLabel: 'Totale da pagare:',
   creditDueLabel: 'Totale a credito:',
   paidLabel: 'Importo pagato:',
-  exemptionPrefix: "Natura dell'operazione: ",
-  proformaNotice: "Documento privo di valenza fiscale ai sensi dell'art. 21 D.P.R. 633/1972.",
+  exemptionPrefix: 'Natura dell’operazione: ',
+  proformaNotice:
+    'Documento privo di valenza fiscale ai sensi dell’art. 21 D.P.R. 633/1972; la fattura sarà emessa al pagamento.',
   reverseChargeNote: 'Inversione contabile – art. 196 della direttiva 2006/112/CE',
   originalMarker: ' (Originale)',
   draftLabel: 'Bozza',
   numberSign: 'n.',
-  draftTitle: (l) => `${l} (bozza)`,
+  draftTitle: (l) => `Bozza di ${l.charAt(0).toLowerCase()}${l.slice(1)}`,
   correctsInvoice: (number, date) => `Riferita alla fattura n. ${number} del ${date}`,
   documentType: {
     invoice: 'Fattura',

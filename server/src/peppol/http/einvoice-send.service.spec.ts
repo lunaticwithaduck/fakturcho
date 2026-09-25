@@ -410,6 +410,7 @@ describe('EinvoiceSendService', () => {
       const accountId = await createAccount(prisma);
       await createCompleteIssuerProfile(prisma, accountId, undefined, {
         country: 'IT',
+        vatNumber: 'IT12345678903',
         street: 'Via Roma 1',
         postcode: '00100',
         countyRegion: 'RM',

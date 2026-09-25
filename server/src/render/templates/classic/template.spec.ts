@@ -30,14 +30,14 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('ЕИК: 987654321');
     expect(html).toContain('ДДС №: BG987654321');
     expect(html).toContain('Дата на издаване: 02.08.2026');
-    expect(html).toContain('Данъчно събитие: 02.08.2026');
+    expect(html).toContain('Дата на данъчното събитие: 02.08.2026');
     expect(html).not.toContain('Валидно до');
     expect(html).toContain('Фактура № 0000000001 (Оригинал)');
     expect(html).toContain('Наименование');
     expect(html).toContain('Количество');
-    expect(html).toContain('Цена');
-    expect(html).toContain('Общо');
-    expect(html).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН EUR И 00 ЦЕНТА');
+    expect(html).toContain('Ед. цена без ДДС');
+    expect(html).toContain('Стойност');
+    expect(html).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН ЕВРО И 00 ЕВРОЦЕНТА');
     expect(html).toContain('Данъчна основа:');
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('Общо:');
@@ -65,7 +65,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Company registration no.: 987654321');
     expect(html).toContain('VAT no.: BG987654321');
     expect(html).toContain('Issue date: 02/08/2026');
-    expect(html).toContain('Tax event: 02/08/2026');
+    expect(html).toContain('Date of supply: 02/08/2026');
     expect(html).toContain('Invoice no. 0000000001');
     expect(html).not.toContain('(Original)');
     expect(html).not.toContain('Оригинал');
@@ -74,7 +74,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Price');
     expect(html).toContain('Total');
     expect(html).not.toContain('class="amount-words"');
-    expect(html).toContain('Taxable amount:');
+    expect(html).toContain('Net amount (excl. VAT):');
     expect(html).toContain('VAT (20%):');
     expect(html).toContain('Amount due:');
     expect(html).not.toContain('лв.');
@@ -105,7 +105,7 @@ describe('renderClassicTemplateHtml', () => {
       issuerVatRegistered: false,
       issuerVatNumber: null,
       issuerIdentifiers: { steuernummer: '21/815/08150' },
-      vatExemptionGround: 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.',
+      vatExemptionGround: 'Steuerbefreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG.',
     });
     const presentation = resolveVatPresentation({
       vatRegistered: false,
@@ -124,7 +124,7 @@ describe('renderClassicTemplateHtml', () => {
     });
 
     expect(html).toContain('Steuernummer: 21/815/08150');
-    expect(html).toContain('Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.');
+    expect(html).toContain('Steuerbefreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG.');
   });
 
   it('formats a fractional quantity with the locale decimal separator', () => {
@@ -168,7 +168,7 @@ describe('renderClassicTemplateHtml', () => {
       amount: 110000,
       vatRateBp: 2000,
       vatAmount: 10000,
-      vatExemptionGround: 'чл.21 от ЗДДС',
+      vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
     });
     const presentation = resolveVatPresentation({
       vatRegistered: true,
@@ -189,9 +189,11 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('500,00 €');
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('100,00 €');
-    expect(html).toContain('Основание за неначисляване на ДДС: чл.21 от ЗДДС');
+    expect(html).toContain(
+      '<div class="exemption">Обратно начисляване – чл. 21, ал. 2 от ЗДДС</div>',
+    );
     expect(html).not.toContain('ДДС (0%):');
-    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(2);
     expect(html).toContain('1 100,00 €');
   });
 
@@ -202,7 +204,7 @@ describe('renderClassicTemplateHtml', () => {
       amount: 110000,
       vatRateBp: 2000,
       vatAmount: 10000,
-      vatExemptionGround: 'чл.21 от ЗДДС',
+      vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
     });
     const presentation = resolveVatPresentation({
       vatRegistered: true,
@@ -219,14 +221,14 @@ describe('renderClassicTemplateHtml', () => {
       language: 'en',
     });
 
-    expect(html).toContain('Taxable amount:');
-    expect(html).toContain('500.00 €');
+    expect(html).toContain('Net amount (excl. VAT):');
+    expect(html).toContain('€500.00');
     expect(html).toContain('VAT (20%):');
-    expect(html).toContain('100.00 €');
-    expect(html).toContain('VAT exemption ground: чл.21 от ЗДДС');
+    expect(html).toContain('€100.00');
+    expect(html).toContain('VAT exemption ground: Обратно начисляване – чл. 21, ал. 2 от ЗДДС');
     expect(html).not.toContain('VAT (0%):');
-    expect((html.match(/Taxable amount:/g) ?? []).length).toBe(1);
-    expect(html).toContain('1,100.00 €');
+    expect((html.match(/Net amount \(excl\. VAT\):/g) ?? []).length).toBe(2);
+    expect(html).toContain('€1,100.00');
   });
 
   it('renders identical output when discountTotal is zero regardless of stored discounts', () => {
@@ -299,14 +301,14 @@ describe('renderClassicTemplateHtml', () => {
     });
 
     expect(html).toContain('Subtotal:');
-    expect(html).toContain('5,000.00 €');
+    expect(html).toContain('€5,000.00');
     expect(html).toContain('Discount (10%):');
-    expect(html).toContain('-500.00 €');
-    expect(html).toContain('Taxable amount:');
-    expect(html).toContain('4,500.00 €');
+    expect(html).toContain('-€500.00');
+    expect(html).toContain('Net amount (excl. VAT):');
+    expect(html).toContain('€4,500.00');
     expect(html).toContain('VAT (20%):');
-    expect(html).toContain('900.00 €');
-    expect(html).toContain('5,400.00 €');
+    expect(html).toContain('€900.00');
+    expect(html).toContain('€5,400.00');
   });
 
   it('prints a flat-amount discount with a custom label and no percentage (bg)', () => {
@@ -368,7 +370,7 @@ describe('renderClassicTemplateHtml', () => {
       amount: 99000,
       vatRateBp: 2000,
       vatAmount: 9000,
-      vatExemptionGround: 'чл.21 от ЗДДС',
+      vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
     });
     const presentation = resolveVatPresentation({
       vatRegistered: true,
@@ -393,8 +395,10 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('450,00 €');
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('90,00 €');
-    expect(html).toContain('Основание за неначисляване на ДДС: чл.21 от ЗДДС');
-    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect(html).toContain(
+      '<div class="exemption">Обратно начисляване – чл. 21, ал. 2 от ЗДДС</div>',
+    );
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(2);
     expect((html.match(/Междинна сума:/g) ?? []).length).toBe(1);
     expect(html).toContain('990,00 €');
   });

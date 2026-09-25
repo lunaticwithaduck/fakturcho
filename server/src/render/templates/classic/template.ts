@@ -60,11 +60,11 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
   ${
     showPrices
-      ? `${buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, documentType, discounts)}`
+      ? `${isDeliveryNote ? '' : buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, documentType, discounts)}`
       : ''
   }
   ${buildMentionsBlock({ document, lineItems, locale })}
-  ${buildIssuerBlock(document, locale)}
+  ${buildIssuerBlock(document, documentType, locale)}
   ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, documentType, locale) : ''}
 </body>
 </html>`;

@@ -44,6 +44,35 @@ describe('PL country config', () => {
     expect(config.exemptionGrounds).not.toContain(config.defaultExemptionGround);
   });
 
+  it('offers a not-subject ground for a B2B service supplied to an EU business (art. 28b)', () => {
+    expect(config.exemptionGrounds).toContain(
+      'usługa niepodlegająca opodatkowaniu na terytorium kraju – art. 28b ustawy o podatku od towarów i usług',
+    );
+  });
+
+  it('names the specific pkt for every domestic exemption instead of a bare "art. 43 ust. 1"', () => {
+    for (const ground of config.exemptionGrounds) {
+      if (ground.includes('art. 43 ust. 1')) {
+        expect(ground).toMatch(/art\. 43 ust\. 1 pkt \d+/);
+      }
+    }
+  });
+
+  it('marks the 0%-rate and not-subject grounds as VAT notes, not exemptions', () => {
+    expect(config.vatNoteGrounds).toEqual(
+      expect.arrayContaining([
+        'eksport towarów – art. 41 ust. 4 i 5 ustawy o podatku od towarów i usług',
+        'wewnątrzwspólnotowa dostawa towarów – art. 42 ust. 1 ustawy o podatku od towarów i usług',
+        'usługi w zakresie transportu międzynarodowego – art. 83 ust. 1 pkt 23 ustawy o podatku od towarów i usług',
+        'usługa niepodlegająca opodatkowaniu na terytorium kraju – art. 28b ustawy o podatku od towarów i usług',
+      ]),
+    );
+    // A true exemption (e.g. insurance, art. 43 ust. 1 pkt 37) keeps the prefix.
+    expect(config.vatNoteGrounds).not.toContain(
+      'usługi ubezpieczeniowe – art. 43 ust. 1 pkt 37 ustawy o podatku od towarów i usług',
+    );
+  });
+
   it('carries KRS and REGON as optional secondary identifiers', () => {
     const keys = config.identifiers.map((field) => field.key);
     expect(keys).toEqual(['krs', 'regon']);

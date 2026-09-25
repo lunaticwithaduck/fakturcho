@@ -97,8 +97,8 @@ describe('delivery_note rendering', () => {
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
     expect(text).toContain('Дата на доставка');
-    expect(text).toContain('Цена');
-    expect(text).toContain('Общо:');
+    expect(text).toContain('Ед. цена без ДДС');
+    expect(text).toContain('Обща стойност:');
     expect(text).not.toContain('Данъчно събитие');
   });
 

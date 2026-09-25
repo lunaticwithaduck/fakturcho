@@ -139,7 +139,7 @@ describe('toFatturaPaXml — Natura codes for non-standard VAT categories', () =
   it('emits N3.2 and a RiferimentoNormativo for an intra-community supply line', () => {
     const document: DocumentDto = {
       ...itDomesticStandardInvoice,
-      vatExemptionGround: 'чл.22 от ЗДДС',
+      vatExemptionGround: 'чл. 22 от ЗДДС',
       vatRateBp: 0,
       vatAmount: 0,
       amount: 100000,
@@ -159,7 +159,7 @@ describe('toFatturaPaXml — Natura codes for non-standard VAT categories', () =
     };
     const xml = toFatturaPaXml(document);
     expect(xml).toContain('<AliquotaIVA>0.00</AliquotaIVA><Natura>N3.2</Natura>');
-    expect(xml).toContain('<RiferimentoNormativo>чл.22 от ЗДДС</RiferimentoNormativo>');
+    expect(xml).toContain('<RiferimentoNormativo>чл. 22 от ЗДДС</RiferimentoNormativo>');
   });
 });
 

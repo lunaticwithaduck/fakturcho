@@ -40,11 +40,11 @@ describe('credit_note prints every amount as negative', () => {
       isDraft: false,
       language: 'en',
     });
-    expect(html).toContain('Taxable amount:');
-    expect(html).toContain('-1,000.00 €');
+    expect(html).toContain('Net amount (excl. VAT):');
+    expect(html).toContain('-€1,000.00');
     expect(html).toContain('VAT (20%):');
-    expect(html).toContain('-200.00 €');
-    expect(html).toContain('-1,200.00 €');
+    expect(html).toContain('-€200.00');
+    expect(html).toContain('-€1,200.00');
     expect(html).toContain('Total credited:');
     expect(html).not.toContain('Amount due:');
   });
@@ -67,9 +67,9 @@ describe('credit_note prints every amount as negative', () => {
       language: 'en',
     });
     expect(html).toContain('Subtotal:');
-    expect(html).toContain('-1,000.00 €');
+    expect(html).toContain('-€1,000.00');
     expect(html).toContain('Discount (10%):');
-    expect(html).toContain('100.00 €');
+    expect(html).toContain('€100.00');
   });
 });
 
@@ -82,7 +82,7 @@ describe('quote drops the due row but keeps the total row', () => {
       isDraft: false,
       language: 'en',
     });
-    expect(html).toContain('Total:');
+    expect(html).toContain('Total (incl. VAT):');
     expect(html).not.toContain('Amount due:');
   });
 });
@@ -99,6 +99,6 @@ describe('a PAID status relabels the due row without changing the amount', () =>
     });
     expect(html).toContain('Amount paid:');
     expect(html).not.toContain('Amount due:');
-    expect((html.match(/5,500\.00 €/g) ?? []).length).toBeGreaterThanOrEqual(2);
+    expect((html.match(/€5,500\.00/g) ?? []).length).toBeGreaterThanOrEqual(2);
   });
 });

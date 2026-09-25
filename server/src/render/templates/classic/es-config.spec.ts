@@ -35,20 +35,28 @@ describe('ES_CONFIG', () => {
     expect(config.exemptionGrounds).toContain('artículo 20.Uno.9º de la Ley 37/1992 del IVA');
   });
 
-  it('offers the export, assimilated-export, intra-EU and reverse-charge grounds', () => {
+  it('offers the export, assimilated-export, intra-EU and not-subject EU B2B grounds', () => {
     expect(config.exemptionGrounds).toEqual([
       'artículo 20.Uno.2º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.3º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.4º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.5º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.10º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.16º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.18º de la Ley 37/1992 del IVA',
+      'artículo 20.Uno.23º de la Ley 37/1992 del IVA',
       'artículo 20.Uno.26º de la Ley 37/1992 del IVA',
       'artículo 21 de la Ley 37/1992 del IVA',
       'artículo 22 de la Ley 37/1992 del IVA',
       'artículo 25 de la Ley 37/1992 del IVA',
-      'artículo 84.Uno.2º de la Ley 37/1992 del IVA',
+      'Operación no sujeta a IVA (artículo 69.Uno.1º de la Ley 37/1992 del IVA)',
+    ]);
+  });
+
+  it('prints the not-subject EU B2B ground as a bare note, not an exemption', () => {
+    expect(config.vatNoteGrounds).toEqual([
+      'Operación no sujeta a IVA (artículo 69.Uno.1º de la Ley 37/1992 del IVA)',
     ]);
   });
 

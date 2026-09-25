@@ -73,9 +73,18 @@ describe('FR country config — exemption grounds', () => {
     expect(FR.exemptionGrounds).toEqual([
       'Exonération de TVA, article 262 ter I du CGI',
       'Exonération de TVA, article 262 I du CGI',
-      'Autoliquidation, article 283 du CGI',
+      'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE',
     ]);
     expect(FR.exemptionGrounds).not.toContain(FR.defaultExemptionGround);
+  });
+
+  it('prints every FR ground as a VAT note, without the exemption prefix', () => {
+    expect(FR.vatNoteGrounds).toEqual([
+      'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE',
+      'TVA non applicable, art. 293 B du CGI',
+      'Exonération de TVA, article 262 ter I du CGI',
+      'Exonération de TVA, article 262 I du CGI',
+    ]);
   });
 
   it('has no exemption line for a VAT-registered issuer at the standard rate', () => {

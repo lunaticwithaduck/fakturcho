@@ -12,8 +12,6 @@ export function line(label: string, value: string | null | undefined): string {
   return `<div>${escapeHtml(label)}${escapeHtml(value)}</div>`;
 }
 
-// County/province printing per country: IT folds the province into the city
-// ("Roma (RM)"); RO and ES append it to the whole address line instead.
 export function cityWithCountyRegion(
   city: string | null | undefined,
   countyRegion: string | null | undefined,
@@ -35,4 +33,26 @@ export function appendCountyRegionSuffix(
     return `${address}, ${countyRegion}`;
   }
   return address;
+}
+
+export function labelled(label: string, language: string): string {
+  return language === 'fr' ? `${label} : ` : `${label}: `;
+}
+
+export function identifierLine(
+  label: string,
+  value: string | null | undefined,
+  language: string,
+): string {
+  if (!value) return '';
+  if (value.toUpperCase().startsWith(label.toUpperCase())) return line('', value);
+  return line(labelled(label, language), value);
+}
+
+export function countryName(country: string, language: string): string {
+  try {
+    return new Intl.DisplayNames([language], { type: 'region' }).of(country) ?? country;
+  } catch {
+    return country;
+  }
 }

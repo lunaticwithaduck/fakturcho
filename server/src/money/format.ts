@@ -82,6 +82,10 @@ export function formatCentsForLocale(cents: Cents, language: DocumentLanguage): 
 }
 
 export function formatMoneyForLocale(cents: Cents, language: DocumentLanguage): string {
+  if (language === 'en') {
+    const amount = formatCentsEn(Math.abs(cents));
+    return cents < 0 ? `-€${amount}` : `€${amount}`;
+  }
   return `${formatCentsForLocale(cents, language)} €`;
 }
 

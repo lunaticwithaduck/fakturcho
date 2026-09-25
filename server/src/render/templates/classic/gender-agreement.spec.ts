@@ -63,9 +63,9 @@ describe('gender agreement per document type', () => {
 
   it('RO: ofertă is feminine, the aviz of a delivery note takes the masculine form', () => {
     const invoice = renderStatus('ro', 'INVOICE', 'PAID');
-    expect(invoice).toContain('Status: PLĂTITĂ');
+    expect(invoice).toContain('Status: ACHITATĂ');
     const quote = renderStatus('ro', 'QUOTE', 'PAID');
-    expect(quote).toContain('Status: PLĂTITĂ');
+    expect(quote).toContain('Status: ACHITATĂ');
     expect(quote).toContain('Valabilă până la:');
     const deliveryNote = renderStatus('ro', 'DELIVERY_NOTE', 'CANCELLED');
     expect(deliveryNote).toContain('Status: ANULAT<');

@@ -508,7 +508,7 @@
                 "bold": true
               },
               {
-                "text": ": Factură, Factură proformă, Notă de credit, Notă de debit, Ofertă sau Aviz de însoțire a mărfii."
+                "text": ": Factură, Factură proformă, Factură de stornare, Factură de corecție, Ofertă sau Aviz de însoțire a mărfii."
               }
             ],
             [
@@ -516,14 +516,14 @@
                 "text": "Pentru o "
               },
               {
-                "text": "Notă de credit",
+                "text": "Factură de stornare",
                 "bold": true
               },
               {
                 "text": " sau o "
               },
               {
-                "text": "Notă de debit",
+                "text": "Factură de corecție",
                 "bold": true
               },
               {
@@ -869,14 +869,14 @@
                 "text": ", alegeți "
               },
               {
-                "text": "Notă de credit",
+                "text": "Factură de stornare",
                 "bold": true
               },
               {
                 "text": " sau "
               },
               {
-                "text": "Notă de debit",
+                "text": "Factură de corecție",
                 "bold": true
               },
               {
@@ -1085,14 +1085,14 @@
           "text": "Nu puteți edita un document emis. Creați o "
         },
         {
-          "text": "Notă de credit",
+          "text": "Factură de stornare",
           "bold": true
         },
         {
           "text": " sau o "
         },
         {
-          "text": "Notă de debit",
+          "text": "Factură de corecție",
           "bold": true
         },
         {

@@ -88,7 +88,7 @@
       },
       "notDraft": {
         "title": "Seuls les brouillons peuvent être modifiés",
-        "description": "Ce document a déjà été émis et ne peut plus être modifié. Un document émis se corrige au moyen d'un avoir ou d'une note de débit.",
+        "description": "Ce document a déjà été émis et ne peut plus être modifié. Un document émis se corrige au moyen d'un avoir ou d'une facture rectificative.",
         "action": "Aller au document"
       },
       "errors": {
@@ -890,7 +890,7 @@
         },
         {
           "question": "Comment corriger une facture déjà émise ?",
-          "answer": "Les documents émis sont immuables ; les corrections se font au moyen d'un avoir ou d'une note de débit faisant référence au document d'origine."
+          "answer": "Les documents émis sont immuables ; les corrections se font au moyen d'un avoir ou d'une facture rectificative faisant référence au document d'origine."
         },
         {
           "question": "Comment obtenir le PDF et le XML de la facture électronique ?",

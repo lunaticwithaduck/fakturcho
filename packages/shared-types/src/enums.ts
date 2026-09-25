@@ -41,7 +41,7 @@ export const DOCUMENT_TYPE_LABELS_FR: Record<DocumentType, string> = {
   invoice: 'Facture',
   proforma: 'Facture pro forma',
   credit_note: 'Avoir',
-  debit_note: 'Note de débit',
+  debit_note: 'Facture rectificative',
   quote: 'Devis',
   delivery_note: 'Bon de livraison',
 };
@@ -68,11 +68,13 @@ export const DOCUMENT_TYPE_LABELS_PL: Record<DocumentType, string> = {
   delivery_note: 'Dowód dostawy',
 };
 
+// Both corrections print as a named "factură" on the document (Codul fiscal
+// art. 330 has no separate "notă de credit"/"notă de debit" document type).
 export const DOCUMENT_TYPE_LABELS_RO: Record<DocumentType, string> = {
   invoice: 'Factură',
   proforma: 'Factură proformă',
-  credit_note: 'Notă de credit',
-  debit_note: 'Notă de debit',
+  credit_note: 'Factură de stornare',
+  debit_note: 'Factură de corecție',
   quote: 'Ofertă',
   delivery_note: 'Aviz de însoțire a mărfii',
 };

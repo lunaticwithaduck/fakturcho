@@ -63,6 +63,8 @@ const BG_CONFIG: CountryConfig = {
   vatNumberPattern: /^BG\d{9,10}$/,
   exemptionGrounds: [...VAT_EXEMPTION_GROUNDS, DEFAULT_EXEMPTION_GROUND],
   defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,
+  vatNoteGrounds: ['Обратно начисляване – чл. 21, ал. 2 от ЗДДС'],
+  zeroRateGrounds: ['чл. 28 от ЗДДС', 'чл. 30, ал. 1 от ЗДДС', 'чл. 53, ал. 1 от ЗДДС'],
   identifiers: [],
   numberingUsesFixedWidth: true,
   requiredIssuerFields: ['companyName', 'eik', 'addressLine', 'city'],
@@ -91,11 +93,22 @@ function resolveLocale(config: CountryConfig): CountryConfig {
   return { ...config, locale };
 }
 
+const GENERIC_COUNTRY_EXTRAS: Record<string, Partial<CountryConfig>> = {
+  IE: { documentTypeTitles: { debit_note: 'Supplementary invoice' } },
+};
+
 export function getCountryConfig(country: string): CountryConfig {
   const configured = COUNTRY_CONFIGS[country];
   if (configured) return resolveLocale(configured);
   const rateOverride = EU_RATE_OVERRIDES[country];
-  if (rateOverride) return resolveLocale({ ...GENERIC_EU_CONFIG, country, ...rateOverride });
+  if (rateOverride) {
+    return resolveLocale({
+      ...GENERIC_EU_CONFIG,
+      country,
+      ...rateOverride,
+      ...GENERIC_COUNTRY_EXTRAS[country],
+    });
+  }
   if (isEuVatAreaCountry(country)) return resolveLocale({ ...GENERIC_EU_CONFIG, country });
   return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country });
 }

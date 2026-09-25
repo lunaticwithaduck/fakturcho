@@ -20,7 +20,7 @@ describe('roMentions', () => {
     const document = buildFakeDocument({ issuerCountry: 'RO', vatAmount: 0, vatRateBp: 0 });
     const lineItems = buildFakeMixedLineItems();
     expect(roMentions({ document, lineItems, locale })).toEqual([
-      'Taxare inversă conform art. 307 alin. (2) din Codul fiscal',
+      'Taxare inversă – art. 196 din Directiva 2006/112/CE',
     ]);
   });
 
@@ -28,8 +28,19 @@ describe('roMentions', () => {
     const document = buildFakeDocument({ issuerCountry: 'RO', vatAmount: 0, vatRateBp: 0 });
     const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
     expect(roMentions({ document, lineItems, locale })).toEqual([
-      'Taxare inversă conform art. 307 alin. (2) din Codul fiscal',
+      'Taxare inversă – art. 196 din Directiva 2006/112/CE',
     ]);
+  });
+
+  it('does not duplicate the mention when the exemption ground already states it', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      vatAmount: 0,
+      vatRateBp: 0,
+      vatExemptionGround: 'Taxare inversă',
+    });
+    const lineItems = buildFakeMixedLineItems();
+    expect(roMentions({ document, lineItems, locale })).toEqual([]);
   });
 
   it('adds no mention for an exempt (E) or intra-community (K) line', () => {

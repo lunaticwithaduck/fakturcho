@@ -1,7 +1,14 @@
 import type { DocumentType } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
-import { appendCountyRegionSuffix, cityWithCountyRegion, escapeHtml, line } from './html-utils';
+import {
+  appendCountyRegionSuffix,
+  cityWithCountyRegion,
+  countryName,
+  escapeHtml,
+  identifierLine,
+  line,
+} from './html-utils';
 import type { ClassicLabels } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
@@ -29,19 +36,34 @@ function formatRecipientAddress(document: Document): string {
   );
 }
 
+function withForeignCountry(
+  address: string,
+  country: string | null,
+  locale: ClassicLocaleContext,
+): string {
+  if (!address || !country || country === locale.issuerCountry) return address;
+  const name = countryName(country, locale.language);
+  if (address.toLowerCase().includes(name.toLowerCase())) return address;
+  return `${address}, ${name}`;
+}
+
 export function buildRecipientBlock(
   document: Document,
   documentType: DocumentType,
   locale: ClassicLocaleContext,
 ): string {
   const { labels } = locale;
-  const recipientAddress = formatRecipientAddress(document);
+  const recipientAddress = withForeignCountry(
+    formatRecipientAddress(document),
+    document.recipientCountry,
+    locale,
+  );
   const rows = [
     document.recipientCompanyName
       ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
       : '',
     recipientAddress ? `<div>${escapeHtml(recipientAddress)}</div>` : '',
-    line(`${labels.companyIdLabel}: `, document.recipientEik),
+    identifierLine(labels.companyIdLabel, document.recipientEik, locale.language),
     line(labels.vatNumberPrefix, document.recipientVatNumber),
     locale.showMol ? line(labels.molPrefix, document.recipientMol) : '',
   ]

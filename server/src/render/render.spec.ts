@@ -62,14 +62,14 @@ describe('render pipeline', () => {
     expect(text).toContain('Петър Георгиев');
     expect(text).toContain('€');
     expect(text).not.toContain('лв.');
-    expect(text).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН EUR И 00 ЦЕНТА');
+    expect(text).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН ЕВРО И 00 ЕВРОЦЕНТА');
   });
 
   it('invariant 18: the IBAN is never hyphenated or broken mid-string', async () => {
     const document = await seedDocument(db.prisma, { accountId, number: 2 });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('BG80BNBG96611020345678');
+    expect(text).toContain('BG80 BNBG 9661 1020 3456 78');
   });
 
   it('a sent invoice carries (Оригинал) after the number', async () => {
@@ -115,7 +115,7 @@ describe('render pipeline', () => {
     expect(text).not.toContain('Данъчно събитие');
   });
 
-  it('an invoice shows Данъчно събитие and no Валидно до', async () => {
+  it('an invoice shows the tax-event date and no Валидно до', async () => {
     const document = await seedDocument(db.prisma, {
       accountId,
       documentType: 'INVOICE',
@@ -123,7 +123,7 @@ describe('render pipeline', () => {
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Данъчно събитие');
+    expect(text).toContain('Дата на данъчното събитие');
     expect(text).not.toContain('Валидно до');
   });
 
@@ -140,7 +140,7 @@ describe('render pipeline', () => {
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Основание за неначисляване на ДДС: чл.113, ал.9 от ЗДДС');
+    expect(text).toContain('Основание за неначисляване на ДДС: чл. 113, ал. 9 от ЗДДС');
   });
 
   it('invariant 16: Content-Disposition carries an ASCII fallback and RFC 5987 filename*', async () => {

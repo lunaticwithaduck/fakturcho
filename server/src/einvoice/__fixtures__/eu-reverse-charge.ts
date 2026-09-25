@@ -27,7 +27,7 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
   vatIncluded: false,
   vatRateBp: 0,
   vatAmount: 0,
-  vatExemptionGround: 'чл.28c(E)(3) 77/388/EEC',
+  vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
   currency: 'EUR',
   clientId: 'client-2',
   preparedBy: 'Иван Иванов',

@@ -12,11 +12,19 @@ describe('esMentions', () => {
     expect(esMentions({ document, lineItems, locale })).toEqual([]);
   });
 
-  it('flags reverse charge when a line carries AE', () => {
-    const document = buildFakeDocument();
+  it('cites the domestic reverse charge when a line carries AE for a Spanish client', () => {
+    const document = buildFakeDocument({ issuerCountry: 'ES', recipientCountry: 'ES' });
     const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
     expect(esMentions({ document, lineItems, locale })).toEqual([
       'Inversión del sujeto pasivo, artículo 84.Uno.2º de la Ley 37/1992 del IVA',
+    ]);
+  });
+
+  it('cites the EU Directive reverse charge when a line carries AE for a foreign client', () => {
+    const document = buildFakeDocument({ issuerCountry: 'ES', recipientCountry: 'DE' });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(esMentions({ document, lineItems, locale })).toEqual([
+      'Inversión del sujeto pasivo (artículo 196 de la Directiva 2006/112/CE)',
     ]);
   });
 

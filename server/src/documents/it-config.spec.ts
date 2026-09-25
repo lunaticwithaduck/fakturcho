@@ -38,19 +38,20 @@ describe('IT_CONFIG', () => {
 
   it('defaults the exemption ground to the regime forfettario wording', () => {
     expect(IT_CONFIG.defaultExemptionGround).toBe(
-      "Operazione senza applicazione dell'IVA ai sensi dell'art. 1, commi da 54 a 89, L. 190/2014",
+      'Operazione senza applicazione dell’IVA ai sensi dell’art. 1, commi da 54 a 89, L. 190/2014',
     );
     expect(IT_CONFIG.exemptionGrounds).toContain(IT_CONFIG.defaultExemptionGround);
   });
 
   it('lists the statutory exemption grounds used on Italian invoices', () => {
     expect(IT_CONFIG.exemptionGrounds).toEqual([
-      "Operazione senza applicazione dell'IVA ai sensi dell'art. 1, commi da 54 a 89, L. 190/2014",
-      "Operazione non imponibile ai sensi dell'art. 41, comma 1, lett. a), D.L. 331/1993",
-      "Operazione non imponibile ai sensi dell'art. 8, comma 1, lett. a), D.P.R. 633/1972",
-      "Operazione esente ai sensi dell'art. 10, D.P.R. 633/1972",
-      "Operazione fuori campo IVA ai sensi dell'art. 7-ter, D.P.R. 633/1972",
-      "Inversione contabile ai sensi dell'art. 17, comma 6, D.P.R. 633/1972",
+      'Operazione senza applicazione dell’IVA ai sensi dell’art. 1, commi da 54 a 89, L. 190/2014',
+      'Operazione non imponibile ai sensi dell’art. 41, comma 1, lett. a), D.L. 331/1993',
+      'Operazione non imponibile ai sensi dell’art. 8, comma 1, lett. a), D.P.R. 633/1972',
+      'Operazione esente ai sensi dell’art. 10, D.P.R. 633/1972',
+      'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+      'Operazione non soggetta ad IVA ai sensi dell’art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+      'Inversione contabile ai sensi dell’art. 17, comma 6, D.P.R. 633/1972',
     ]);
   });
 
@@ -67,10 +68,11 @@ describe('IT_CONFIG', () => {
     expect(rea?.pattern?.test('milano-1234567')).toBe(false);
   });
 
-  it('requires company name, codice fiscale and full address on the issuer', () => {
+  it('requires company name, codice fiscale, partita IVA and full address on the issuer', () => {
     expect(IT_CONFIG.requiredIssuerFields).toEqual([
       'companyName',
       'eik',
+      'vatNumber',
       'street',
       'postcode',
       'city',

@@ -72,7 +72,7 @@ describe('toUblXml — BG issuer, intra-EU reverse charge to a DE client', () =>
       '<cac:ClassifiedTaxCategory><cbc:ID>AE</cbc:ID><cbc:Percent>0.00</cbc:Percent>',
     );
     expect(xml).toContain(
-      '<cbc:TaxExemptionReason>чл.28c(E)(3) 77/388/EEC</cbc:TaxExemptionReason>',
+      '<cbc:TaxExemptionReason>Обратно начисляване – чл. 21, ал. 2 от ЗДДС</cbc:TaxExemptionReason>',
     );
   });
 

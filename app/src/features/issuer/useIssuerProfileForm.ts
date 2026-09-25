@@ -60,7 +60,10 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
     country: values.country,
     phone: values.phone.trim() || null,
     vatRegistered: values.vatRegistered,
-    vatNumber: values.vatRegistered ? values.vatNumber.trim() || null : null,
+    vatNumber:
+      values.vatRegistered || requiresVatNumber(values.country)
+        ? values.vatNumber.trim() || null
+        : null,
     bankName: values.bankName.trim() || null,
     iban: values.iban.trim() || null,
     bic: values.bic.trim() || null,
@@ -71,6 +74,10 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
         .filter(([, value]) => value !== ''),
     ),
   };
+}
+
+export function requiresVatNumber(country: string): boolean {
+  return getCountryConfig(country).requiredIssuerFields.includes('vatNumber');
 }
 
 export interface IssuerProfileFieldErrors {

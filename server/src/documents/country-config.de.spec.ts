@@ -24,17 +24,30 @@ describe('DE country config', () => {
     expect(config.vatNumberPattern?.test('DE12345678A')).toBe(false);
   });
 
-  it('carries the §19 UStG small-business note as the default exemption ground', () => {
+  it('carries the § 19 Abs. 1 UStG small-business note as the default exemption ground', () => {
     expect(config.defaultExemptionGround).toBe(
-      'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.',
+      'Steuerbefreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG.',
     );
   });
 
-  it('offers the intra-community, export and reverse-charge grounds for a VAT-registered issuer', () => {
+  it('offers the intra-community, export, both reverse-charge and the common domestic exemption grounds', () => {
     expect(config.exemptionGrounds).toEqual([
       'Steuerfreie innergemeinschaftliche Lieferung gemäß § 4 Nr. 1 Buchst. b i. V. m. § 6a UStG',
       'Steuerfreie Ausfuhrlieferung gemäß § 4 Nr. 1 Buchst. a i. V. m. § 6 UStG',
       'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
+      'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
+      'Steuerfreie Finanzumsätze gemäß § 4 Nr. 8 UStG',
+      'Steuerfreie Umsätze aus der Tätigkeit als Versicherungsvertreter oder -makler gemäß § 4 Nr. 11 UStG',
+      'Steuerfreie Vermietung und Verpachtung gemäß § 4 Nr. 12 UStG',
+      'Steuerfreie Heilbehandlung gemäß § 4 Nr. 14 UStG',
+      'Steuerfreie Bildungsleistung gemäß § 4 Nr. 21 UStG',
+    ]);
+  });
+
+  it('lists both reverse-charge grounds as VAT notes, not exemptions', () => {
+    expect(config.vatNoteGrounds).toEqual([
+      'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
+      'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
     ]);
   });
 

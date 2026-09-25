@@ -55,6 +55,7 @@ export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boole
     postcode: profile.postcode,
     city: profile.city,
     countyRegion: profile.countyRegion,
+    vatNumber: profile.vatNumber,
   };
   const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const required = requiredIssuerFields.map((field) => fieldValues[field] ?? null);

@@ -13,7 +13,7 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
       issuerPostcode: '10115',
       issuerCity: 'Berlin',
     });
-    const html = buildIssuerBlock(document, locale);
+    const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Musterstraße 1, 10115 Berlin');
   });
 
@@ -24,7 +24,7 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
       issuerPostcode: null,
       issuerCity: 'Berlin',
     });
-    const html = buildIssuerBlock(document, locale);
+    const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Musterstraße 1, Berlin');
   });
 
@@ -32,7 +32,7 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
     const document = buildFakeDocument({
       issuerIdentifiers: { steuernummer: '27/815/08150' },
     });
-    const html = buildIssuerBlock(document, locale);
+    const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Steuernummer: 27/815/08150');
   });
 });

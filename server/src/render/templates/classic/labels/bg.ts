@@ -1,4 +1,13 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
+
+// Кредитно/дебитно известие (neuter noun) takes the neuter adjective form;
+// every other document noun here (фактура, оферта, разписка) is feminine.
+const NEUTER_DOCUMENT_TYPES: readonly DocumentType[] = ['credit_note', 'debit_note'];
+
+function isNeuterDocument(documentType: DocumentType): boolean {
+  return NEUTER_DOCUMENT_TYPES.includes(documentType);
+}
 
 export const bg: ClassicLabels = {
   companyIdLabel: 'ЕИК',
@@ -7,33 +16,36 @@ export const bg: ClassicLabels = {
   vatNumberPrefix: 'ДДС №: ',
   molPrefix: 'МОЛ: ',
   issuedAtPrefix: () => 'Дата на издаване: ',
-  taxEventPrefix: 'Данъчно събитие: ',
+  taxEventPrefix: 'Дата на данъчното събитие: ',
   validUntilPrefix: () => 'Валидно до: ',
   deliveryDatePrefix: 'Дата на доставка: ',
   transportReasonPrefix: 'Основание за транспорта: ',
   transportedAtPrefix: 'Дата и час на транспорта: ',
   carrierNamePrefix: 'Превозвач: ',
   transportNotePrefix: 'Данни за транспорта: ',
-  statusPaid: () => 'Статус: ПЛАТЕНО',
-  statusCancelled: () => 'Статус: АНУЛИРАНА',
+  statusPaid: (documentType) => `Статус: ${isNeuterDocument(documentType) ? 'ПЛАТЕНО' : 'ПЛАТЕНА'}`,
+  statusCancelled: (documentType) =>
+    `Статус: ${isNeuterDocument(documentType) ? 'АНУЛИРАНО' : 'АНУЛИРАНА'}`,
   phonePrefix: 'Телефон: ',
   bicPrefix: 'BIC: ',
   preparedByPrefix: () => 'Съставил: ',
-  recipientSignaturePrefix: () => 'Получател: ',
+  recipientSignaturePrefix: () => 'Получил: ',
   colName: 'Наименование',
   colQuantity: 'Количество',
-  colPrice: 'Цена',
-  colTotal: 'Общо',
+  colPrice: 'Ед. цена без ДДС',
+  colTotal: 'Стойност',
   vatBasePrefix: 'Данъчна основа:',
   vatRatePrefix: (percent) => `ДДС (${percent}%):`,
   subtotalLabel: 'Междинна сума:',
   discountRowLabel: (percent, customLabel) =>
     `Отстъпка${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Общо:',
+  netValueLabel: 'Обща стойност:',
   dueLabel: 'Сума за плащане:',
   creditDueLabel: 'Сума за възстановяване:',
   paidLabel: 'Платено:',
   exemptionPrefix: 'Основание за неначисляване на ДДС: ',
+  zeroRatePrefix: 'Основание за прилагане на нулева ставка: ',
   proformaNotice: 'Проформа фактурата не е данъчен документ.',
   reverseChargeNote: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
   originalMarker: ' (Оригинал)',
