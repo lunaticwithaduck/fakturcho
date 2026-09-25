@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": " para obtener el archivo de factura electrónica estructurado: el formato propio de su país — XRechnung (Alemania), UBL (Francia), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (Rumanía), Facturae (España) — o, para un emisor búlgaro y cualquier otro país sin formato propio, un archivo UBL genérico EN 16931/Peppol. Fakturcho solo genera el archivo; usted lo descarga y lo sube usted mismo a su plataforma nacional — nunca presenta nada en su nombre. Los albaranes nunca lo obtienen. Si faltan datos que exige el formato (p. ej. el NIF-IVA del comprador para la inversión del sujeto pasivo, el código de unidad de una línea, su IBAN), un mensaje bajo el botón indica exactamente qué falta."
+                "text": " para obtener el archivo de factura electrónica estructurado: el formato propio de su país — XRechnung (Alemania), UBL (Francia), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (Rumanía), Facturae (España) — o, para un emisor búlgaro y cualquier otro país sin formato propio, un archivo UBL genérico EN 16931. Fakturcho solo genera el archivo; usted lo descarga y lo sube usted mismo a su plataforma nacional — nunca presenta nada en su nombre. Los albaranes nunca lo obtienen. Si faltan datos que exige el formato (p. ej. el NIF-IVA del comprador para la inversión del sujeto pasivo, el código de unidad de una línea, su IBAN), un mensaje bajo el botón indica exactamente qué falta."
               }
             ],
             [
@@ -1132,7 +1132,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho solo genera el archivo — usted lo sube usted mismo a la plataforma de su país. Disponible para facturas, facturas rectificativas de abono y de cargo: Alemania, Francia, Italia, Polonia, Rumanía y España reciben su formato nacional; Bulgaria y cualquier otro país reciben un archivo UBL genérico EN 16931/Peppol."
+          "text": ". Fakturcho solo genera el archivo — usted lo sube usted mismo a la plataforma de su país. Disponible para facturas, facturas rectificativas de abono y de cargo: Alemania, Francia, Italia, Polonia, Rumanía y España reciben su formato nacional; Bulgaria y cualquier otro país reciben un archivo UBL genérico EN 16931."
         }
       ]
     },

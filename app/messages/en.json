@@ -172,7 +172,7 @@
         "cancel": "Cancel"
       }
     },
-    "peppol": {
+    "einvoice": {
       "downloadXml": "Download e-invoice (XML)",
       "notReadyHint": "Missing e-invoice data: {fields}",
       "missingFieldFallback": "Missing e-invoice data.",
@@ -238,13 +238,7 @@
           "nip": "Missing recipient NIP, required for a domestic Polish buyer.",
           "nipChecksum": "The recipient NIP fails the checksum validation."
         }
-      },
-      "send": "Send via Peppol",
-      "sending": "Sending...",
-      "statusQueued": "Queued",
-      "statusSent": "Sent",
-      "statusDelivered": "Delivered",
-      "statusRejected": "Rejected"
+      }
     }
   },
   "billing": {
@@ -354,8 +348,6 @@
     "cityLabel": "City",
     "emailLabel": "Email",
     "molLabel": "Representative",
-    "peppolEndpointIdLabel": "Peppol endpoint ID",
-    "peppolSchemeLabel": "Peppol scheme",
     "invalidFormat": "Invalid format",
     "countryLabel": "Country",
     "documentLanguageLabel": "Document language",
@@ -598,7 +590,7 @@
           "heading": "2. What the service is",
           "paragraphs": [
             "{productName} is a web application through which a business or sole trader established in the European Union composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file, together with a structured e-invoice file where the document type and the issuer's country call for one.",
-            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves, or to send over the Peppol network.",
+            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves.",
             "Each account represents a single issuer with its own list of clients, catalogue and numbering series."
           ]
         },
@@ -807,7 +799,7 @@
       "items": {
         "BG": {
           "name": "Bulgaria",
-          "line": "20% VAT, invoices in Bulgarian, e-invoices ready for the Peppol network."
+          "line": "20% VAT, invoices in Bulgarian, e-invoices in the European EN 16931 (UBL) format."
         },
         "DE": {
           "name": "Germany",
@@ -841,7 +833,7 @@
         "Invoices, proformas, credit and debit notes, quotes and delivery notes.",
         "Sequential numbering — no gaps, no repeats.",
         "VAT by country: local rates, exemptions, and reverse charge for cross-border B2B with a live VIES check of the customer's VAT ID.",
-        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) or to send over Peppol.",
+        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
         "A ready PDF in your country's language, downloadable or sent by email."
       ]
     },
@@ -877,7 +869,7 @@
         },
         {
           "question": "Which countries are supported?",
-          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland, Romania, Spain and Bulgaria, ready to upload to the national platform or send over Peppol."
+          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland, Romania and Spain, ready to upload to the national platform; for Bulgaria it's generated in the EU EN 16931 (UBL) format."
         },
         {
           "question": "How is VAT handled for a customer in another EU country?",
@@ -897,7 +889,7 @@
         },
         {
           "question": "How do I get the PDF and the e-invoice XML?",
-          "answer": "Both are generated server-side; download them, email them to the customer, or upload the e-invoice yourself to your national platform or send it over Peppol."
+          "answer": "Both are generated server-side; download them, email them to the customer, or upload the e-invoice yourself to your national platform."
         }
       ]
     },
@@ -906,7 +898,7 @@
   "seo": {
     "home": {
       "title": "Fakturcho — invoicing and e-invoicing for EU businesses",
-      "description": "Issue invoices, proformas, credit and debit notes and quotes that meet EU requirements, with EN 16931 e-invoicing and Peppol. Pay 0.10 € per issued document.",
+      "description": "Issue invoices, proformas, credit and debit notes and quotes that meet EU requirements, with EN 16931 e-invoicing. Pay 0.10 € per issued document.",
       "ogTagline": "Invoicing and e-invoicing for EU businesses"
     },
     "login": {

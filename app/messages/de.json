@@ -172,7 +172,7 @@
         "cancel": "Abbrechen"
       }
     },
-    "peppol": {
+    "einvoice": {
       "downloadXml": "E-Rechnung herunterladen (XML)",
       "notReadyHint": "Fehlende Daten für die E-Rechnung: {fields}",
       "missingFieldFallback": "Fehlende Daten für die E-Rechnung.",
@@ -238,13 +238,7 @@
           "nip": "NIP des Empfängers fehlt (bei inländischen polnischen Käufern erforderlich).",
           "nipChecksum": "Die Prüfsumme der NIP des Empfängers ist ungültig."
         }
-      },
-      "send": "Über Peppol senden",
-      "sending": "Wird gesendet...",
-      "statusQueued": "In Warteschlange",
-      "statusSent": "Gesendet",
-      "statusDelivered": "Zugestellt",
-      "statusRejected": "Abgelehnt"
+      }
     }
   },
   "billing": {
@@ -354,8 +348,6 @@
     "cityLabel": "Ort",
     "emailLabel": "E-Mail",
     "molLabel": "Vertreten durch",
-    "peppolEndpointIdLabel": "Peppol-Endpunkt-ID",
-    "peppolSchemeLabel": "Peppol-Schema",
     "invalidFormat": "Ungültiges Format",
     "countryLabel": "Land",
     "documentLanguageLabel": "Dokumentsprache",
@@ -598,7 +590,7 @@
           "heading": "2. What the service is",
           "paragraphs": [
             "{productName} is a web application through which a business or sole trader established in the European Union composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file, together with a structured e-invoice file where the document type and the issuer's country call for one.",
-            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves, or to send over the Peppol network.",
+            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves.",
             "Each account represents a single issuer with its own list of clients, catalogue and numbering series."
           ]
         },
@@ -807,7 +799,7 @@
       "items": {
         "BG": {
           "name": "Bulgarien",
-          "line": "20 % USt., Rechnungen auf Bulgarisch, E-Rechnungen bereit für das Peppol-Netzwerk."
+          "line": "20 % USt., Rechnungen auf Bulgarisch, E-Rechnungen im europäischen EN-16931-Format (UBL)."
         },
         "DE": {
           "name": "Deutschland",
@@ -841,7 +833,7 @@
         "Rechnungen, Proforma-Rechnungen, Rechnungskorrekturen, Belastungsanzeigen, Angebote und Lieferscheine.",
         "Fortlaufende Nummerierung – ohne Lücken, ohne Wiederholungen.",
         "Umsatzsteuer nach Land: landesspezifische Steuersätze, Steuerbefreiungen und Reverse Charge bei grenzüberschreitenden B2B-Umsätzen – mit Live-Prüfung der USt-IdNr. des Kunden über VIES.",
-        "E-Rechnungen nach EN 16931 im Format Ihres Landes – XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO – bereit zum Hochladen auf Ihre nationale Plattform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) oder zum Versand über Peppol.",
+        "E-Rechnungen nach EN 16931 im Format Ihres Landes – XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO – bereit zum Hochladen auf Ihre nationale Plattform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
         "Ein fertiges PDF in der Sprache Ihres Landes – zum Herunterladen oder zum Versand per E-Mail."
       ]
     },
@@ -877,7 +869,7 @@
         },
         {
           "question": "Welche Länder werden unterstützt?",
-          "answer": "Jedes Unternehmen mit Sitz im EU-Umsatzsteuergebiet kann Dokumente ausstellen. Strukturierte E-Rechnungen im jeweiligen nationalen Format werden für Deutschland, Frankreich, Italien, Polen, Rumänien, Spanien und Bulgarien erstellt – bereit zum Hochladen auf die nationale Plattform oder zum Versand über Peppol."
+          "answer": "Jedes Unternehmen mit Sitz im EU-Umsatzsteuergebiet kann Dokumente ausstellen. Strukturierte E-Rechnungen im jeweiligen nationalen Format werden für Deutschland, Frankreich, Italien, Polen, Rumänien und Spanien erstellt – bereit zum Hochladen auf die nationale Plattform; für Bulgarien im EU-Format EN 16931 (UBL)."
         },
         {
           "question": "Wie wird die Umsatzsteuer für einen Kunden in einem anderen EU-Land behandelt?",
@@ -897,7 +889,7 @@
         },
         {
           "question": "Wie erhalte ich das PDF und die E-Rechnung im XML-Format?",
-          "answer": "Beide werden serverseitig erzeugt; laden Sie sie herunter, senden Sie sie per E-Mail an den Kunden oder laden Sie die E-Rechnung selbst auf Ihre nationale Plattform hoch bzw. versenden Sie sie über Peppol."
+          "answer": "Beide werden serverseitig erzeugt; laden Sie sie herunter, senden Sie sie per E-Mail an den Kunden oder laden Sie die E-Rechnung selbst auf Ihre nationale Plattform hoch."
         }
       ]
     },
@@ -906,7 +898,7 @@
   "seo": {
     "home": {
       "title": "Fakturcho – Rechnungen und E-Rechnungen für EU-Unternehmen",
-      "description": "EU-konforme Rechnungen, Proformas, Rechnungskorrekturen, Belastungsanzeigen und Angebote – mit E-Rechnung nach EN 16931 und Peppol. 0,10 € pro Dokument.",
+      "description": "EU-konforme Rechnungen, Proformas, Rechnungskorrekturen, Belastungsanzeigen und Angebote – mit E-Rechnung nach EN 16931. 0,10 € pro Dokument.",
       "ogTagline": "Rechnungen und E-Rechnungen für EU-Unternehmen"
     },
     "login": {

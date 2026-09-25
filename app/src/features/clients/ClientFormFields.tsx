@@ -122,16 +122,6 @@ export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientF
         value={values.mol}
         onChange={(event) => onChange('mol', event.target.value)}
       />
-      <Input
-        label={t('peppolEndpointIdLabel')}
-        value={values.peppolEndpointId}
-        onChange={(event) => onChange('peppolEndpointId', event.target.value)}
-      />
-      <Input
-        label={t('peppolSchemeLabel')}
-        value={values.peppolScheme}
-        onChange={(event) => onChange('peppolScheme', event.target.value)}
-      />
     </div>
   );
 }

@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": ", um die strukturierte E-Rechnungs-Datei zu erhalten: das Format Ihres Landes – XRechnung (Deutschland), UBL (Frankreich), FatturaPA (Italien), FA(3) (Polen), CIUS-RO (Rumänien), Facturae (Spanien) – oder, für einen bulgarischen Aussteller und jedes andere Land ohne eigenes Format, eine allgemeine EN 16931/Peppol-UBL-Datei. Fakturcho erzeugt nur die Datei; Sie laden sie herunter und reichen sie selbst bei Ihrer nationalen Plattform ein – Fakturcho übermittelt nie etwas in Ihrem Namen. Lieferscheine erhalten nie eine solche Datei. Fehlen für das Format nötige Daten (z. B. eine USt-IdNr. des Käufers beim Reverse-Charge-Verfahren, ein Einheitencode einer Position, Ihre IBAN), listet ein Hinweis unter dem Button genau auf, was fehlt."
+                "text": ", um die strukturierte E-Rechnungs-Datei zu erhalten: das Format Ihres Landes – XRechnung (Deutschland), UBL (Frankreich), FatturaPA (Italien), FA(3) (Polen), CIUS-RO (Rumänien), Facturae (Spanien) – oder, für einen bulgarischen Aussteller und jedes andere Land ohne eigenes Format, eine allgemeine EN 16931-UBL-Datei. Fakturcho erzeugt nur die Datei; Sie laden sie herunter und reichen sie selbst bei Ihrer nationalen Plattform ein – Fakturcho übermittelt nie etwas in Ihrem Namen. Lieferscheine erhalten nie eine solche Datei. Fehlen für das Format nötige Daten (z. B. eine USt-IdNr. des Käufers beim Reverse-Charge-Verfahren, ein Einheitencode einer Position, Ihre IBAN), listet ein Hinweis unter dem Button genau auf, was fehlt."
               }
             ],
             [
@@ -1135,7 +1135,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho erzeugt nur die Datei – Sie laden sie selbst bei der Plattform Ihres Landes hoch. Verfügbar für Rechnungen, Rechnungskorrekturen und Belastungsanzeigen: Deutschland, Frankreich, Italien, Polen, Rumänien und Spanien erhalten ihr nationales Format; Bulgarien und alle anderen Länder erhalten eine allgemeine EN 16931/Peppol-UBL-Datei."
+          "text": ". Fakturcho erzeugt nur die Datei – Sie laden sie selbst bei der Plattform Ihres Landes hoch. Verfügbar für Rechnungen, Rechnungskorrekturen und Belastungsanzeigen: Deutschland, Frankreich, Italien, Polen, Rumänien und Spanien erhalten ihr nationales Format; Bulgarien und alle anderen Länder erhalten eine allgemeine EN 16931-UBL-Datei."
         }
       ]
     },
