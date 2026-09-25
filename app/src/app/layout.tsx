@@ -1,3 +1,4 @@
+import { manifestHref } from '@app/features/pwa/buildManifest';
 import { loadMessages } from '@app/i18n/locale';
 import { ogLocaleAlternates, ogLocaleTag } from '@app/i18n/ogLocale';
 import type { Locale } from '@shared/types';
@@ -17,6 +18,7 @@ const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
 const BG_METADATA: Metadata = {
   metadataBase: new URL('https://www.fakturcho.com'),
+  manifest: manifestHref('bg'),
   title: {
     default: 'Фактурчо — фактури за българския бизнес',
     template: '%s — Фактурчо',
@@ -48,6 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     ...BG_METADATA,
     title: { default: seo.title, template: '%s — Fakturcho' },
+    manifest: manifestHref(locale),
     description: seo.description,
     openGraph: {
       type: 'website',

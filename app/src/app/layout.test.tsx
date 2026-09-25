@@ -58,12 +58,14 @@ describe('RootLayout', () => {
       template: '%s — Фактурчо',
     });
     expect(metadata.openGraph?.siteName).toBe('Фактурчо');
+    expect(metadata.manifest).toBe('/manifest.webmanifest');
   });
 
   it('uses the Latin brand and the locale copy for every other locale', async () => {
     getLocaleMock.mockResolvedValue('de');
     const metadata = await generateMetadata();
     expect(metadata.title).toMatchObject({ template: '%s — Fakturcho' });
+    expect(metadata.manifest).toBe('/de/manifest.webmanifest');
     expect(JSON.stringify(metadata)).not.toMatch(/[\u0400-\u04FF]/);
   });
 });
