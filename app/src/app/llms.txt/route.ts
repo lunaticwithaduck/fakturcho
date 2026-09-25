@@ -1,3 +1,5 @@
+import { guidesLlmsSection } from '@app/features/guides/llmsSection';
+import { allGuides } from '@app/features/guides/registry';
 import {
   CREDIT_PACKS,
   DEFAULT_EXEMPTION_GROUND,
@@ -18,6 +20,7 @@ const tierLines = SUBSCRIPTION_TIER_IDS.map(
   (id) =>
     `${eur(SUBSCRIPTION_TIERS[id].priceCents)} на месец дава ${eur(SUBSCRIPTION_TIERS[id].grantCents)} кредит (${eur(perDocumentCents(SUBSCRIPTION_TIERS[id].priceCents, SUBSCRIPTION_TIERS[id].grantCents))} на документ)`,
 ).join('; ');
+const guidesSection = guidesLlmsSection('Наръчници за фактуриране', allGuides());
 
 const CONTENT = `# Фактурчо
 
@@ -35,7 +38,7 @@ const CONTENT = `# Фактурчо
 - [Общи условия](https://www.fakturcho.com/terms): условия за ползване на услугата.
 - [Политика за поверителност](https://www.fakturcho.com/privacy): обработка на лични данни.
 - [Възстановяване на суми](https://www.fakturcho.com/refunds): политика за възстановяване на плащания.
-
+${guidesSection}
 English version: [https://www.fakturcho.com/en/llms.txt](https://www.fakturcho.com/en/llms.txt).
 
 Fakturcho is a web app for issuing Bulgarian-compliant invoices, proformas, credit/debit notes, quotes and delivery notes, billed per document.

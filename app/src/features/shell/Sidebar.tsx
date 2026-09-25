@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import brandIcon from './brand-icon.png';
+import { IssuerGuideLink } from './IssuerGuideLink';
 import { isNavItemActive, NAV_ITEMS } from './navItems';
 import { SignOutButton } from './SignOutButton';
 
@@ -37,6 +38,10 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <IssuerGuideLink className="px-3 py-2 text-sm text-text-muted underline" />
+      <Link href="/help" className="px-3 py-2 text-sm text-text-muted underline">
+        {t('helpLink')}
+      </Link>
       <SignOutButton className="justify-start" />
     </aside>
   );

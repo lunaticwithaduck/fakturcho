@@ -1,0 +1,1187 @@
+{
+  "locale": "en",
+  "title": "How to use Fakturcho",
+  "intro": "Fakturcho is a web app for issuing EU-compliant invoices and other commercial documents. This page walks through the app screen by screen, in the order a new account usually needs them.",
+  "sections": [
+    {
+      "heading": "1. First steps after signup",
+      "id": "1-first-steps-after-signup",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Signing up gives you a one-off starting credit of "
+            },
+            {
+              "text": "1.00 €",
+              "bold": true
+            },
+            {
+              "text": " — 10 issued documents, no card required. The country you choose at signup sets both your app language and the legal rules (VAT rates, required fields, numbering format) applied to everything you issue."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Sign up with your name, email, password and country."
+              }
+            ],
+            [
+              {
+                "text": "You land on "
+              },
+              {
+                "text": "Documents",
+                "bold": true
+              },
+              {
+                "text": ". Fill in your issuer profile before issuing anything — Fakturcho blocks issuing until it has the minimum legal details about your business (next section)."
+              }
+            ],
+            [
+              {
+                "text": "Add at least one client and, optionally, some catalogue items to speed up your first document."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "drafts, clients and catalogue items never spend credit. Only issuing a document does."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "2. Complete your issuer profile",
+      "id": "2-complete-your-issuer-profile",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Purpose: your issuer profile is what gets printed on every document you issue, and issuing is blocked until the required fields for your country are filled in."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Open "
+              },
+              {
+                "text": "Profile",
+                "bold": true
+              },
+              {
+                "text": " from the menu."
+              }
+            ],
+            [
+              {
+                "text": "Under "
+              },
+              {
+                "text": "Company details",
+                "bold": true
+              },
+              {
+                "text": ", fill in "
+              },
+              {
+                "text": "Company",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Country",
+                "bold": true
+              },
+              {
+                "text": ", and the address fields your country requires (usually "
+              },
+              {
+                "text": "Street and number",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Postal code",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "City",
+                "bold": true
+              },
+              {
+                "text": "; a few countries add a fixed address line or a regional/county field) and your national company ID, labeled per country (e.g. \"ЕИК / Булстат\" in Bulgaria, \"SIREN\" in France, \"NIP\" in Poland)."
+              }
+            ],
+            [
+              {
+                "text": "If you're VAT-registered, switch on "
+              },
+              {
+                "text": "VAT registered",
+                "bold": true
+              },
+              {
+                "text": " under "
+              },
+              {
+                "text": "VAT registration",
+                "bold": true
+              },
+              {
+                "text": " and enter your "
+              },
+              {
+                "text": "VAT number",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Under "
+              },
+              {
+                "text": "Bank account",
+                "bold": true
+              },
+              {
+                "text": ", optionally add "
+              },
+              {
+                "text": "Bank",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "IBAN",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "BIC",
+                "bold": true
+              },
+              {
+                "text": " and an "
+              },
+              {
+                "text": "Alternative account",
+                "bold": true
+              },
+              {
+                "text": " — these appear on your documents when filled in."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Save profile",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Until every required field is filled, Documents shows \"Profile is not ready for issuing\" with a list of what's missing and a "
+            },
+            {
+              "text": "Go to issuer profile",
+              "bold": true
+            },
+            {
+              "text": " link. You can still create and save drafts — you just can't issue."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "There's no logo upload and no document-language setting on the issuer profile itself: your issuer language follows your issuer country, and each client can override it individually (see \"Language\" below)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "3. Add your clients",
+      "id": "3-add-your-clients",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Purpose: clients are the recipients you pick when composing a document, and each one carries its own country, tax identifiers and document language."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Open "
+              },
+              {
+                "text": "Clients",
+                "bold": true
+              },
+              {
+                "text": " and click "
+              },
+              {
+                "text": "New client",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Fill in "
+              },
+              {
+                "text": "Company name",
+                "bold": true
+              },
+              {
+                "text": ", the national ID field, and address — countries with a structured address get separate "
+              },
+              {
+                "text": "Street and number",
+                "bold": true
+              },
+              {
+                "text": " and "
+              },
+              {
+                "text": "Postal code",
+                "bold": true
+              },
+              {
+                "text": " fields; others get a single "
+              },
+              {
+                "text": "Address",
+                "bold": true
+              },
+              {
+                "text": " field. Add "
+              },
+              {
+                "text": "City",
+                "bold": true
+              },
+              {
+                "text": " and, where relevant, a regional/county field, then pick the client's "
+              },
+              {
+                "text": "Country",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Set "
+              },
+              {
+                "text": "Document language",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Same as issuer",
+                "bold": true
+              },
+              {
+                "text": " uses your own issuer language, or pick a specific one for that client's documents."
+              }
+            ],
+            [
+              {
+                "text": "Optionally add "
+              },
+              {
+                "text": "Email",
+                "bold": true
+              },
+              {
+                "text": " (prefills the \"send by email\" recipient) and "
+              },
+              {
+                "text": "Representative",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Save",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Existing clients can be edited or deleted from the list (search by company name or ID); deleting asks for confirmation and can't be undone."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "4. Build your catalogue",
+      "id": "4-build-your-catalogue",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Purpose: catalogue items are reusable products or services you can drop straight into a document's line items."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Open "
+              },
+              {
+                "text": "Catalogue",
+                "bold": true
+              },
+              {
+                "text": " and click "
+              },
+              {
+                "text": "New item",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Fill in "
+              },
+              {
+                "text": "Name",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Unit",
+                "bold": true
+              },
+              {
+                "text": " (e.g. \"pcs, hour, kg...\") and "
+              },
+              {
+                "text": "Default price",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Save",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "A catalogue item only stores a name, unit and default price — it doesn't carry its own VAT rate. VAT is set on the document itself when you compose it (see the next section). When composing a document, typing a line item's name autocompletes against your catalogue and fills in the price for you."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "5. Create a document",
+      "id": "5-create-a-document",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Purpose: this is where you compose invoices, proformas, credit/debit notes, quotes and delivery notes — the only document types Fakturcho supports."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "From "
+              },
+              {
+                "text": "Documents",
+                "bold": true
+              },
+              {
+                "text": ", click "
+              },
+              {
+                "text": "New document",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Pick the "
+              },
+              {
+                "text": "Document type",
+                "bold": true
+              },
+              {
+                "text": ": Invoice, Proforma invoice, Credit note, Debit note, Quote, or Delivery note."
+              }
+            ],
+            [
+              {
+                "text": "For a "
+              },
+              {
+                "text": "Credit note",
+                "bold": true
+              },
+              {
+                "text": " or "
+              },
+              {
+                "text": "Debit note",
+                "bold": true
+              },
+              {
+                "text": ", pick the "
+              },
+              {
+                "text": "Original document",
+                "bold": true
+              },
+              {
+                "text": " — only already-issued documents can be selected, since a credit/debit note corrects one."
+              }
+            ],
+            [
+              {
+                "text": "Pick a "
+              },
+              {
+                "text": "Client",
+                "bold": true
+              },
+              {
+                "text": " from the list, or leave it as "
+              },
+              {
+                "text": "No client",
+                "bold": true
+              },
+              {
+                "text": " (you can also add a new client inline with "
+              },
+              {
+                "text": "+ New client",
+                "bold": true
+              },
+              {
+                "text": ")."
+              }
+            ],
+            [
+              {
+                "text": "Fill in the reference number, dates and, for delivery notes, the delivery fields shown under "
+              },
+              {
+                "text": "Delivery details",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Add "
+              },
+              {
+                "text": "Line items",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Name",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Quantity",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Price",
+                "bold": true
+              },
+              {
+                "text": "; use "
+              },
+              {
+                "text": "Add item",
+                "bold": true
+              },
+              {
+                "text": " for more lines."
+              }
+            ],
+            [
+              {
+                "text": "Optionally add a discount under "
+              },
+              {
+                "text": "Discounts",
+                "bold": true
+              },
+              {
+                "text": ", either as a "
+              },
+              {
+                "text": "Percent",
+                "bold": true
+              },
+              {
+                "text": " or a fixed "
+              },
+              {
+                "text": "Amount",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Under "
+              },
+              {
+                "text": "VAT",
+                "bold": true
+              },
+              {
+                "text": ", leave "
+              },
+              {
+                "text": "Charge VAT (…%)",
+                "bold": true
+              },
+              {
+                "text": " on, or switch it off and select a "
+              },
+              {
+                "text": "Reason for not charging VAT",
+                "bold": true
+              },
+              {
+                "text": " — the allowed reasons depend on your issuer country (small-business exemption, reverse charge, intra-EU supply, export, etc.)."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Save draft",
+                "bold": true
+              },
+              {
+                "text": " to keep working on it later, or "
+              },
+              {
+                "text": "Save and issue",
+                "bold": true
+              },
+              {
+                "text": " to issue it immediately."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Documents are always in euro — there's no currency selector. Numbering is per document type: issuing shows the "
+            },
+            {
+              "text": "Next number in the series",
+              "bold": true
+            },
+            {
+              "text": ", which you can only override while that series has no issued documents yet."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Issuing costs "
+            },
+            {
+              "text": "0.10 €",
+              "bold": true
+            },
+            {
+              "text": ", deducted from your credit balance the moment the document gets a number. "
+            },
+            {
+              "text": "Once issued, a document can't be edited",
+              "bold": true
+            },
+            {
+              "text": " — it's immutable, and can only be corrected with a credit or debit note against it."
+            }
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "if you try to issue without enough credit or with an incomplete issuer profile, the dialog shows the reason and a link straight to "
+            },
+            {
+              "text": "Buy credits",
+              "bold": true
+            },
+            {
+              "text": " or "
+            },
+            {
+              "text": "Go to issuer profile",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "6. After you issue a document",
+      "id": "6-after-you-issue-a-document",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Purpose: once a document has a number, you can download it, send it, get its e-invoice file, or track its payment status."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Open the document from "
+              },
+              {
+                "text": "Documents",
+                "bold": true
+              },
+              {
+                "text": ". Its status is shown as a badge (Draft, Issued, PAID, OVERDUE, CANCELLED)."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Download PDF",
+                "bold": true
+              },
+              {
+                "text": " to get the PDF file. A draft only shows a watermarked preview — you must issue it first to download or send it."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Send by email",
+                "bold": true
+              },
+              {
+                "text": " to email it: enter the "
+              },
+              {
+                "text": "Recipient email",
+                "bold": true
+              },
+              {
+                "text": " (prefilled from the client's email if set) and an optional "
+              },
+              {
+                "text": "Message",
+                "bold": true
+              },
+              {
+                "text": ", then "
+              },
+              {
+                "text": "Send",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "For invoices, credit notes and debit notes, click "
+              },
+              {
+                "text": "Download e-invoice (XML)",
+                "bold": true
+              },
+              {
+                "text": " to get the structured e-invoice file: your country's own format — XRechnung (Germany), UBL (France), FatturaPA (Italy), FA(3) (Poland), CIUS-RO (Romania), Facturae (Spain) — or, for a Bulgarian issuer and any other country without a dedicated format, a generic EN 16931/Peppol UBL file. Fakturcho only generates the file; you download it and upload it yourself to your national platform — it never submits anything on your behalf. Delivery notes never get one. If data the format needs is missing (e.g. a buyer VAT number for reverse charge, a line's unit code, your IBAN), a message under the button lists exactly what's missing."
+              }
+            ],
+            [
+              {
+                "text": "Once it's Issued or Overdue, click "
+              },
+              {
+                "text": "Mark as paid",
+                "bold": true
+              },
+              {
+                "text": " to record payment."
+              }
+            ],
+            [
+              {
+                "text": "Click "
+              },
+              {
+                "text": "Cancel",
+                "bold": true
+              },
+              {
+                "text": " to cancel an issued/overdue/paid document. The number stays reserved and is never reused."
+              }
+            ],
+            [
+              {
+                "text": "To correct an issued invoice, go to "
+              },
+              {
+                "text": "New document",
+                "bold": true
+              },
+              {
+                "text": ", choose "
+              },
+              {
+                "text": "Credit note",
+                "bold": true
+              },
+              {
+                "text": " or "
+              },
+              {
+                "text": "Debit note",
+                "bold": true
+              },
+              {
+                "text": ", and select the original invoice — see step 3 above."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "7. Credit and billing",
+      "id": "7-credit-and-billing",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Purpose: "
+            },
+            {
+              "text": "Billing",
+              "bold": true
+            },
+            {
+              "text": " is where you see your balance, top it up, and manage a subscription."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Open "
+              },
+              {
+                "text": "Billing",
+                "bold": true
+              },
+              {
+                "text": " to see your "
+              },
+              {
+                "text": "Balance",
+                "bold": true
+              },
+              {
+                "text": " and how many documents that's worth."
+              }
+            ],
+            [
+              {
+                "text": "Drafts, clients and catalogue items never spend credit — only issuing does, at 0.10 € each."
+              }
+            ],
+            [
+              {
+                "text": "Under "
+              },
+              {
+                "text": "Credit packs",
+                "bold": true
+              },
+              {
+                "text": ", click "
+              },
+              {
+                "text": "Buy",
+                "bold": true
+              },
+              {
+                "text": " for a one-off top-up — packs are 5 €, 10 € and 25 €."
+              }
+            ],
+            [
+              {
+                "text": "Under "
+              },
+              {
+                "text": "Subscription",
+                "bold": true
+              },
+              {
+                "text": ", activate a monthly plan (5, 10 or 25 € per month): it grants double the credit of the equivalent pack every period, and unused credit carries over — it doesn't waive the 0.10 € issuance charge, it just makes each document cheaper on balance. "
+              },
+              {
+                "text": "Switch to",
+                "bold": true
+              },
+              {
+                "text": " a different tier any time, or cancel — access continues to the end of the paid period."
+              }
+            ],
+            [
+              {
+                "text": "Recent activity",
+                "bold": true
+              },
+              {
+                "text": " lists every balance change: signup bonus, credit purchase, document issued, subscription top-up, or adjustment."
+              }
+            ],
+            [
+              {
+                "text": "Fakturcho doesn't issue its own invoice for what you pay it — this activity list is your record, and Revolut, which processes checkout, sends its own payment confirmation with an order number."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "8. Language",
+      "id": "8-language",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Your account's app language is set once, at signup, based on the country you choose — pick Germany and the app runs in German, pick a country without its own translation and it falls back to English. There's a language switcher on the public login and signup pages before you have an account, but once you're signed in there's no in-app language switch."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Document language is separate and set per client: on a client's "
+            },
+            {
+              "text": "Document language",
+              "bold": true
+            },
+            {
+              "text": " field, leave it as "
+            },
+            {
+              "text": "Same as issuer",
+              "bold": true
+            },
+            {
+              "text": " to use your own issuer language, or pick a specific language for that client's documents — this only changes the language documents to that client are written in, not your app's interface."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "9. Your country's invoicing rules",
+      "id": "9-your-country-s-invoicing-rules",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "This page links to a country-specific invoicing guide covering local VAT rates, numbering and e-invoicing rules for your country — see the linked guide below."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "10. Help and contact",
+      "id": "10-help-and-contact",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "If something doesn't work or you have a question, email "
+            },
+            {
+              "text": "support@fakturcho.com",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "FAQ",
+  "faq": [
+    {
+      "question": "Why can't I issue a document?",
+      "answer": [
+        {
+          "text": "Either your issuer profile is incomplete (fill in the missing fields Documents points you to under "
+        },
+        {
+          "text": "Go to issuer profile",
+          "bold": true
+        },
+        {
+          "text": "), or your credit balance is too low (top it up under "
+        },
+        {
+          "text": "Buy credits",
+          "bold": true
+        },
+        {
+          "text": ")."
+        }
+      ]
+    },
+    {
+      "question": "I made a mistake on an issued invoice — how do I fix it?",
+      "answer": [
+        {
+          "text": "You can't edit an issued document. Create a "
+        },
+        {
+          "text": "Credit note",
+          "bold": true
+        },
+        {
+          "text": " or "
+        },
+        {
+          "text": "Debit note",
+          "bold": true
+        },
+        {
+          "text": " from "
+        },
+        {
+          "text": "New document",
+          "bold": true
+        },
+        {
+          "text": ", pick the original invoice as the "
+        },
+        {
+          "text": "Original document",
+          "bold": true
+        },
+        {
+          "text": ", and enter the correction."
+        }
+      ]
+    },
+    {
+      "question": "Where is the e-invoice XML, and does Fakturcho send it for me?",
+      "answer": [
+        {
+          "text": "Open the issued document and click "
+        },
+        {
+          "text": "Download e-invoice (XML)",
+          "bold": true
+        },
+        {
+          "text": ". Fakturcho only generates the file — you upload it yourself to your country's platform. Available for invoices, credit and debit notes: Germany, France, Italy, Poland, Romania and Spain get their national format; Bulgaria and any other country get a generic EN 16931/Peppol UBL file."
+        }
+      ]
+    },
+    {
+      "question": "Does composing a draft cost credit?",
+      "answer": [
+        {
+          "text": "No. Drafts, clients and catalogue items are free. Only issuing — giving a document a number — deducts 0.10 € from your balance."
+        }
+      ]
+    },
+    {
+      "question": "Can I choose the currency on a document?",
+      "answer": [
+        {
+          "text": "No, every document is in euro; there's no currency selector."
+        }
+      ]
+    },
+    {
+      "question": "Can I change the next document number?",
+      "answer": [
+        {
+          "text": "Only while a series (a document type) has no issued documents yet, via "
+        },
+        {
+          "text": "Override the next number",
+          "bold": true
+        },
+        {
+          "text": " in the issue dialog. Once a document is issued, numbering continues automatically with no gaps."
+        }
+      ]
+    },
+    {
+      "question": "What's the difference between a proforma and an invoice?",
+      "answer": [
+        {
+          "text": "A proforma looks like an invoice with the same details but creates no tax obligation; an invoice is the tax document. Both get their own number, in separate numbering series."
+        }
+      ]
+    },
+    {
+      "question": "Does a subscription mean documents are free?",
+      "answer": [
+        {
+          "text": "No. It tops up your credit at double the amount of the equivalent one-off pack and unused credit carries over — but each issued document still costs 0.10 € from that balance."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,543 @@
+{
+  "country": "PL",
+  "locale": "pl",
+  "slug": "faktura-ksef",
+  "title": "Faktura VAT i KSeF 2026 — wymogi i terminy | Fakturcho",
+  "description": "Co musi zawierać faktura VAT, kiedy ją wystawić, jak numerować, kiedy korygować i od kiedy obowiązkowy KSeF w 2026 r. Aktualne przepisy i terminy.",
+  "h1": "Faktura VAT i KSeF w 2026 roku",
+  "answer": "Faktura VAT musi zawierać elementy z art. 106e ustawy o VAT i dotrzeć do nabywcy do 15. dnia miesiąca po dostawie. Obowiązkowy KSeF wchodzi etapami: od 1 lutego 2026 r. dla podatników z 2024 sprzedażą >200 mln zł, od 1 kwietnia 2026 r. dla pozostałych, od 1 stycznia 2027 r. dla firm do 10 tys. zł miesięcznie.",
+  "lastReviewed": "2026-09-25",
+  "sections": [
+    {
+      "heading": "Co musi zawierać faktura VAT?",
+      "id": "co-musi-zawierac-faktura-vat",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Prowadzisz firmę w Polsce i szukasz jasnej odpowiedzi, co musi zawierać faktura, kiedy ją wystawić i od kiedy obowiązuje Krajowy System e-Faktur? Poniżej znajdziesz aktualne wymogi na podstawie ustawy o VAT i oficjalnych materiałów Ministerstwa Finansów."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Obowiązkowe elementy faktury określa art. 106e ust. 1 ustawy o podatku od towarów i usług (ustawa o VAT). Najważniejsze z nich:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Element",
+            "Podstawa prawna"
+          ],
+          "rows": [
+            [
+              "Data wystawienia",
+              "art. 106e ust. 1 pkt 1"
+            ],
+            [
+              "Kolejny numer, jednoznacznie identyfikujący fakturę",
+              "art. 106e ust. 1 pkt 2"
+            ],
+            [
+              "Imiona i nazwiska lub nazwy sprzedawcy i nabywcy oraz ich adresy",
+              "art. 106e ust. 1 pkt 3"
+            ],
+            [
+              "NIP sprzedawcy",
+              "art. 106e ust. 1 pkt 4"
+            ],
+            [
+              "NIP (lub numer VAT-UE) nabywcy",
+              "art. 106e ust. 1 pkt 5"
+            ],
+            [
+              "Data dokonania/zakończenia dostawy lub zapłaty, jeśli różni się od daty wystawienia",
+              "art. 106e ust. 1 pkt 6"
+            ],
+            [
+              "Nazwa (rodzaj) towaru lub usługi",
+              "art. 106e ust. 1 pkt 7"
+            ],
+            [
+              "Miara i ilość towarów lub zakres usług",
+              "art. 106e ust. 1 pkt 8"
+            ],
+            [
+              "Cena jednostkowa netto",
+              "art. 106e ust. 1 pkt 9"
+            ],
+            [
+              "Kwoty opustów/rabatów, jeśli nie ujęto ich w cenie",
+              "art. 106e ust. 1 pkt 10"
+            ],
+            [
+              "Wartość sprzedaży netto",
+              "art. 106e ust. 1 pkt 11"
+            ],
+            [
+              "Stawka VAT",
+              "art. 106e ust. 1 pkt 12"
+            ],
+            [
+              "Suma wartości sprzedaży netto wg stawek",
+              "art. 106e ust. 1 pkt 13"
+            ],
+            [
+              "Kwota VAT wg stawek",
+              "art. 106e ust. 1 pkt 14"
+            ],
+            [
+              "Kwota należności ogółem",
+              "art. 106e ust. 1 pkt 15"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dodatkowo, w określonych sytuacjach faktura musi zawierać specjalne oznaczenia: „metoda kasowa\" (art. 106e ust. 1 pkt 16), „samofakturowanie\" przy fakturach wystawianych przez nabywcę w jego imieniu (pkt 17), „odwrotne obciążenie\" (pkt 18) czy — przy sprzedaży zwolnionej z VAT na podstawie art. 43 ust. 1, art. 113 ust. 1 i 9 albo art. 113a ust. 1 — wskazanie konkretnego przepisu, na podstawie którego stosowane jest zwolnienie (pkt 19)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kiedy trzeba wystawić fakturę?",
+      "id": "kiedy-trzeba-wystawic-fakture",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zgodnie z art. 106i ust. 1 ustawy o VAT fakturę wystawia się "
+            },
+            {
+              "text": "nie później niż 15. dnia miesiąca następującego po miesiącu",
+              "bold": true
+            },
+            {
+              "text": ", w którym dokonano dostawy towaru lub wykonano usługę. Ta sama zasada obowiązuje, jeśli przed dostawą otrzymano zaliczkę (art. 106i ust. 2) — liczy się miesiąc otrzymania zapłaty."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ustawa przewiduje też terminy szczególne (art. 106i ust. 3–5), m.in.:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "30 dni od wykonania usług budowlanych lub budowlano-montażowych (art. 19a ust. 5 pkt 3 lit. a),"
+              }
+            ],
+            [
+              {
+                "text": "60 dni od wydania towarów przy dostawie książek, gazet, czasopism i magazynów drukowanych — 120 dni, jeśli umowa przewiduje rozliczenie zwrotów wydawnictw (art. 19a ust. 5 pkt 3 lit. b, art. 106i ust. 4),"
+              }
+            ],
+            [
+              {
+                "text": "90 dni od wykonania czynności drukowania książek, gazet, czasopism i magazynów określonych w ustawie (art. 19a ust. 5 pkt 3 lit. c),"
+              }
+            ],
+            [
+              {
+                "text": "z upływem terminu płatności — dla usług stałej obsługi prawnej i podobnych (art. 19a ust. 5 pkt 4)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Faktury nie można wystawić wcześniej niż "
+            },
+            {
+              "text": "60 dni przed",
+              "bold": true
+            },
+            {
+              "text": " dostawą towaru, wykonaniem usługi lub otrzymaniem zaliczki (art. 106i ust. 7), poza wyjątkami dla rozliczeń okresowych, gdy faktura wskazuje okres, którego dotyczy (art. 106i ust. 8)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Jak numerować faktury?",
+      "id": "jak-numerowac-faktury",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ustawa nie narzuca konkretnego formatu numeru. Wymóg z art. 106e ust. 1 pkt 2 mówi jedynie o „kolejnym numerze nadanym w ramach jednej lub więcej serii, który w sposób jednoznaczny identyfikuje fakturę\". W praktyce oznacza to, że numeracja musi być rosnąca i niepowtarzalna w ramach przyjętej serii (np. rocznej lub miesięcznej) — wybór formatu (np. FV/1/2026 czy 2026/01/001) należy do podatnika."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Zwolnienie podmiotowe z VAT — do jakiej kwoty?",
+      "id": "zwolnienie-podmiotowe-z-vat-do-jakiej-kwoty",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Podatnik z siedzibą w Polsce jest zwolniony z VAT, jeśli wartość sprzedaży (bez kwoty podatku) "
+            },
+            {
+              "text": "nie przekroczyła w poprzednim ani bieżącym roku podatkowym kwoty 240 000 zł",
+              "bold": true
+            },
+            {
+              "text": " (art. 113 ust. 1 ustawy o VAT). Firma rozpoczynająca działalność w trakcie roku korzysta ze zwolnienia w proporcji do okresu prowadzenia działalności w tym roku (art. 113 ust. 9). Do limitu nie wlicza się m.in. sprzedaży środków trwałych ani większości transakcji zwolnionych przedmiotowo (art. 113 ust. 2)."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Po przekroczeniu limitu zwolnienie traci moc od czynności, którą limit przekroczono (art. 113 ust. 5 i 10). Podatnik może też dobrowolnie zrezygnować ze zwolnienia, zawiadamiając na piśmie naczelnika urzędu skarbowego przed początkiem miesiąca rezygnacji (art. 113 ust. 4)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kiedy faktura musi mieć adnotację „mechanizm podzielonej płatności\"?",
+      "id": "kiedy-faktura-musi-miec-adnotacje-mechanizm-podzielonej-platnosci",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Jeśli kwota należności ogółem na fakturze przekracza "
+            },
+            {
+              "text": "15 000 zł",
+              "bold": true
+            },
+            {
+              "text": " (lub równowartość w walucie obcej) i dotyczy towarów lub usług wymienionych w załączniku nr 15 do ustawy o VAT, faktura musi zawierać wyrazy „"
+            },
+            {
+              "text": "mechanizm podzielonej płatności",
+              "bold": true
+            },
+            {
+              "text": "\" (art. 106e ust. 1 pkt 18a)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kiedy wystawić fakturę korygującą?",
+      "id": "kiedy-wystawic-fakture-korygujaca",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturę korygującą wystawia się, gdy po wystawieniu faktury (art. 106j ust. 1): zmieniła się podstawa opodatkowania lub kwota VAT, zwrócono towary lub opakowania, zwrócono nabywcy całość lub część zapłaty, albo stwierdzono pomyłkę w dowolnej pozycji faktury."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Faktura korygująca musi zawierać (art. 106j ust. 2):"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "kolejny numer i datę wystawienia,"
+              }
+            ],
+            [
+              {
+                "text": "numer identyfikujący w KSeF fakturę pierwotną (o ile faktura pierwotna go otrzymała),"
+              }
+            ],
+            [
+              {
+                "text": "dane z faktury pierwotnej: datę wystawienia, numer, strony transakcji i ich NIP-y (art. 106e ust. 1 pkt 1–5) oraz nazwę towaru/usługi objętych korektą,"
+              }
+            ],
+            [
+              {
+                "text": "jeśli korekta zmienia podstawę opodatkowania lub VAT — kwotę korekty z podziałem na stawki; w innych przypadkach — prawidłową treść korygowanych pozycji."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Oznaczenie „FAKTURA KORYGUJĄCA\" lub „KOREKTA\" oraz podanie przyczyny korekty są opcjonalne (art. 106j ust. 2a). Korektę faktury ustrukturyzowanej wystawia się jako fakturę ustrukturyzowaną (art. 106j ust. 4)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Czy faktura pro forma to faktura VAT?",
+      "id": "czy-faktura-pro-forma-to-faktura-vat",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nie. Ministerstwo Finansów wprost wyjaśnia: „W rozumieniu ustawy o VAT «proforma» nie jest fakturą. Wystawianie tego typu dokumentów nie będzie odbywać się [w] KSeF\". Dokument pro forma nie wywołuje skutków w VAT, nie jest ewidencjonowany w JPK_VAT i nie trafia do KSeF — pełni funkcję informacyjną (np. oferty lub wezwania do zapłaty przed dostawą), a właściwa faktura VAT musi zostać wystawiona osobno."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kto musi wystawiać faktury w KSeF i od kiedy?",
+      "id": "kto-musi-wystawiac-faktury-w-ksef-i-od-kiedy",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Krajowy System e-Faktur (KSeF) staje się obowiązkowy dla większości podatników VAT w Polsce. Struktura logiczna e-faktury to "
+            },
+            {
+              "text": "FA(3)",
+              "bold": true
+            },
+            {
+              "text": ", która od 1 lutego 2026 r. zastąpiła strukturę FA(2). Harmonogram wdrożenia:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Termin",
+            "Kogo dotyczy"
+          ],
+          "rows": [
+            [
+              "1 lutego 2026 r.",
+              "Podatnicy, u których wartość sprzedaży (wraz z VAT) przekroczyła w 2024 r. 200 mln zł"
+            ],
+            [
+              "1 kwietnia 2026 r.",
+              "Pozostali podatnicy VAT (poza zwolnionymi niżej)"
+            ],
+            [
+              "do 31 grudnia 2026 r.",
+              "Ulga dla firm, których łączna sprzedaż udokumentowana fakturami (wraz z podatkiem) nie przekracza 10 tys. zł miesięcznie — mogą nadal wystawiać faktury papierowe/elektroniczne poza KSeF"
+            ],
+            [
+              "1 stycznia 2027 r.",
+              "KSeF obowiązkowy dla wszystkich, w tym dla firm korzystających dotąd z ulgi do 10 tys. zł miesięcznie"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Etapy z 1 lutego i 1 kwietnia 2026 r. już obowiązują — od tych dat duzi podatnicy, a następnie pozostali podatnicy VAT, mają obowiązek wystawiania faktur ustrukturyzowanych w KSeF. W praktyce, poza wskazaną niżej ulgą do 10 tys. zł miesięcznie, obowiązek dotyczy dziś już większości firm."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Poza KSeF pozostają m.in. faktury dla konsumentów (B2C), podatnicy bez siedziby lub stałego miejsca prowadzenia działalności w Polsce, transakcje w procedurach szczególnych (m.in. OSS/IOSS), podatnicy korzystający ze zwolnienia transgranicznego z art. 113a, niektóre dostawy/usługi wskazane w rozporządzeniu wydanym na podstawie art. 106s ustawy o VAT (art. 106ga ust. 1–2) oraz faktury pro forma i dokumenty wewnętrzne."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Kod QR.",
+              "bold": true
+            },
+            {
+              "text": " Faktura ustrukturyzowana udostępniana poza systemem (np. jako PDF) musi być oznaczona kodem umożliwiającym dostęp do niej w KSeF i weryfikację danych (art. 106gb ust. 5). Ministerstwo Finansów opisuje go jako kod QR: „specjalny znak graficzny umieszczany na wizualizacji faktury. Pozwala w prosty sposób sprawdzić czy dokument znajduje się w systemie, a po wpisaniu dodatkowych danych pobrać go z KSeF\"."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Tryb offline24 i awaria KSeF.",
+              "bold": true
+            },
+            {
+              "text": " Podatnik zobowiązany do wystawiania faktur ustrukturyzowanych może w trybie offline24 wystawić fakturę elektroniczną zgodnie ze wzorem i przesłać ją do KSeF nie później niż następnego dnia roboczego (art. 106nda). W czasie potwierdzonej awarii systemu (ogłaszanej komunikatem Ministerstwa Finansów) obowiązują odrębne zasady wystawiania faktur poza KSeF, z obowiązkiem uzupełniającego przesłania po ustaniu awarii (art. 106nf i art. 106ne)."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Kary.",
+              "bold": true
+            },
+            {
+              "text": " Za niewystawienie faktury ustrukturyzowanej wbrew obowiązkowi albo niedotrzymanie terminu przesłania faktury z trybu offline/awaryjnego do KSeF grozi kara pieniężna do 100% kwoty VAT wykazanej na fakturze (albo do 18,7% kwoty należności ogółem, gdy VAT nie wystąpił) — art. 106ni. Przepisy te wejdą w życie 1 stycznia 2027 r., więc do tego czasu sankcja nie jest jeszcze stosowana."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Checklist przed wystawieniem faktury",
+      "id": "checklist-przed-wystawieniem-faktury",
+      "blocks": [
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Sprawdź, czy masz komplet danych nabywcy: nazwę, adres, NIP."
+              }
+            ],
+            [
+              {
+                "text": "Upewnij się, że numer faktury jest kolejny i niepowtarzalny w Twojej serii."
+              }
+            ],
+            [
+              {
+                "text": "Wystaw fakturę najpóźniej do 15. dnia miesiąca po dostawie/usłudze (lub po zaliczce)."
+              }
+            ],
+            [
+              {
+                "text": "Dodaj właściwą stawkę VAT albo podstawę zwolnienia (art. 43, 113 lub 113a)."
+              }
+            ],
+            [
+              {
+                "text": "Sprawdź, czy transakcja podlega obowiązkowi „mechanizm podzielonej płatności\" (>15 000 zł, załącznik nr 15)."
+              }
+            ],
+            [
+              {
+                "text": "Sprawdź, od kiedy Twoja firma podlega obowiązkowemu KSeF (200 mln zł → 1.02.2026, pozostali → 1.04.2026, do 10 tys. zł/mies. → 1.01.2027)."
+              }
+            ],
+            [
+              {
+                "text": "Nie myl faktury pro forma z fakturą VAT — pro forma nie zastępuje faktury i nie trafia do KSeF."
+              }
+            ],
+            [
+              {
+                "text": "Przy korekcie uzupełnij numer KSeF faktury pierwotnej (jeśli była wystawiona ustrukturyzowanie)."
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Najczęściej zadawane pytania",
+  "faq": [
+    {
+      "question": "Czy muszę już teraz wystawiać faktury w KSeF?",
+      "answer": [
+        {
+          "text": "Zależy od wielkości sprzedaży. Obowiązek wchodzi 1 lutego 2026 r. dla podatników, których sprzedaż wraz z VAT przekroczyła w 2024 r. 200 mln zł, a 1 kwietnia 2026 r. dla pozostałych podatników VAT. Firmy z fakturowaną sprzedażą do 10 tys. zł miesięcznie mają czas do 1 stycznia 2027 r."
+        }
+      ]
+    },
+    {
+      "question": "Jakie kary grożą za brak lub spóźnione wystawienie faktury w KSeF?",
+      "answer": [
+        {
+          "text": "Za niewystawienie faktury ustrukturyzowanej wbrew obowiązkowi albo za niedotrzymanie terminu przesłania do KSeF faktury z trybu offline/awaryjnego grozi kara pieniężna do 100% kwoty VAT wykazanej na fakturze (albo do 18,7% kwoty należności ogółem, gdy VAT nie wystąpił). Przepis wejdzie w życie 1 stycznia 2027 r., więc do tego czasu sankcja nie jest jeszcze stosowana."
+        }
+      ]
+    },
+    {
+      "question": "Do kiedy mam czas na wystawienie faktury po sprzedaży?",
+      "answer": [
+        {
+          "text": "Co do zasady do 15. dnia miesiąca następującego po miesiącu dostawy towaru lub wykonania usługi (art. 106i ust. 1 ustawy o VAT). Dla niektórych usług (np. budowlanych) obowiązują inne terminy."
+        }
+      ]
+    },
+    {
+      "question": "Jaki jest limit zwolnienia z VAT dla małej firmy?",
+      "answer": [
+        {
+          "text": "240 000 zł wartości sprzedaży netto w poprzednim i bieżącym roku podatkowym (art. 113 ust. 1). Firma zaczynająca działalność w trakcie roku liczy limit proporcjonalnie do liczby dni prowadzenia działalności."
+        }
+      ]
+    },
+    {
+      "question": "Co to jest FA(3)?",
+      "answer": [
+        {
+          "text": "To aktualna struktura logiczna (schemat XML) faktury ustrukturyzowanej w KSeF, obowiązująca od 1 lutego 2026 r. — zastąpiła wcześniejszą strukturę FA(2)."
+        }
+      ]
+    },
+    {
+      "question": "Czy muszę umieszczać kod QR na każdej fakturze?",
+      "answer": [
+        {
+          "text": "Kod QR jest wymagany, gdy udostępniasz fakturę ustrukturyzowaną poza KSeF (np. jako PDF) — umożliwia odbiorcy sprawdzenie i pobranie faktury z systemu (art. 106gb ust. 5)."
+        }
+      ]
+    },
+    {
+      "question": "Co się stanie, jeśli KSeF przestanie działać w dniu wystawienia faktury?",
+      "answer": [
+        {
+          "text": "W czasie potwierdzonej awarii lub planowanej niedostępności KSeF obowiązują odrębne zasady wystawiania faktur poza systemem, z obowiązkiem ich późniejszego przesłania do KSeF (art. 106nf, art. 106nh)."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Jak w tym pomaga Fakturcho",
+    "body": [
+      {
+        "text": "Fakturcho generuje dla polskich faktur (VAT, korekt i innych dokumentów sprzedaży) plik XML zgodny ze strukturą "
+      },
+      {
+        "text": "FA(3)",
+        "bold": true
+      },
+      {
+        "text": ", gotowy do samodzielnego przesłania przez użytkownika do KSeF jego własnym kanałem. Każdy wystawiony dokument można też pobrać lub wysłać mailem jako PDF w języku polskim."
+      }
+    ]
+  }
+}

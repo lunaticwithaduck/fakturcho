@@ -513,7 +513,9 @@
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "El proveedor de factura electrónica no está configurado.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Este proveedor no admite la consulta de estado.",
       "INTERNAL_ERROR": "Se ha producido un error inesperado. Inténtelo de nuevo."
-    }
+    },
+    "guideLink": "Guía de facturación",
+    "helpLink": "Cómo se usa"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -887,7 +889,8 @@
           "answer": "Ambos se generan en el servidor; puede descargarlos, enviarlos por correo electrónico al cliente o subir usted mismo la factura electrónica a su plataforma nacional o enviarla por Peppol."
         }
       ]
-    }
+    },
+    "guideLink": "Guía de facturación"
   },
   "seo": {
     "home": {
@@ -903,5 +906,19 @@
       "title": "Registrarse",
       "description": "Cree una cuenta gratuita y emita su primera factura en minutos. 1,00 € de crédito inicial, sin suscripción."
     }
+  },
+  "guides": {
+    "breadcrumbHome": "Inicio",
+    "breadcrumbGuides": "Guías",
+    "indexDescription": "Guías de facturación por país de Fakturcho.",
+    "tableOfContents": "En esta página",
+    "lastReviewed": "Última revisión: {date}",
+    "euOverviewLink": "Resumen UE",
+    "backToApp": "Volver a la aplicación"
+  },
+  "help": {
+    "pageTitle": "Cómo se usa",
+    "emptyTitle": "La ayuda aún no está disponible en su idioma",
+    "emptyDescription": "Todavía estamos traduciendo esta página. Vuelva pronto."
   }
 }

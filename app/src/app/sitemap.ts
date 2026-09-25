@@ -1,3 +1,9 @@
+import {
+  guideIndexAlternates,
+  guideIndexLocales,
+  latestGuideReview,
+} from '@app/features/guides/indexAlternates';
+import { allGuides } from '@app/features/guides/registry';
 import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
 import { PUBLISHED_LOCALES } from '@shared/types';
 import type { MetadataRoute } from 'next';
@@ -45,6 +51,29 @@ function legalEntries(basePath: string): MetadataRoute.Sitemap {
   ];
 }
 
+function guideEntries(): MetadataRoute.Sitemap {
+  return allGuides().map((guide) => ({
+    url: `${BASE_URL}${toLocalePath(`/guide/${guide.slug}`, guide.locale)}`,
+    lastModified: guide.lastReviewed,
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+}
+
+function guideIndexEntries(): MetadataRoute.Sitemap {
+  const languages = Object.fromEntries(
+    Object.entries(guideIndexAlternates()).map(([locale, path]) => [locale, `${BASE_URL}${path}`]),
+  );
+  const lastModified = latestGuideReview();
+  return guideIndexLocales().map((locale) => ({
+    url: `${BASE_URL}${toLocalePath('/guide', locale)}`,
+    ...(lastModified ? { lastModified } : {}),
+    changeFrequency: 'monthly',
+    priority: 0.5,
+    alternates: { languages },
+  }));
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...localizedEntries('/', 'weekly', 1),
@@ -52,5 +81,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...legalEntries('/privacy'),
     ...legalEntries('/terms'),
     ...legalEntries('/refunds'),
+    ...guideEntries(),
+    ...guideIndexEntries(),
   ];
 }

@@ -513,7 +513,9 @@
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "The e-invoice provider is not configured.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "This provider does not support status checks.",
       "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
-    }
+    },
+    "guideLink": "Invoicing guide",
+    "helpLink": "How to use"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -887,7 +889,8 @@
           "answer": "Both are generated server-side; download them, email them to the customer, or upload the e-invoice yourself to your national platform or send it over Peppol."
         }
       ]
-    }
+    },
+    "guideLink": "Invoicing guide"
   },
   "seo": {
     "home": {
@@ -903,5 +906,19 @@
       "title": "Sign up",
       "description": "Create a free account and issue your first invoice in minutes. 1.00 € starting credit, no subscription."
     }
+  },
+  "guides": {
+    "breadcrumbHome": "Home",
+    "breadcrumbGuides": "Guides",
+    "indexDescription": "Country invoicing guides from Fakturcho.",
+    "tableOfContents": "On this page",
+    "lastReviewed": "Last reviewed: {date}",
+    "euOverviewLink": "EU overview guide",
+    "backToApp": "Back to the app"
+  },
+  "help": {
+    "pageTitle": "How to use",
+    "emptyTitle": "Help isn't available in your language yet",
+    "emptyDescription": "We're still translating this page. Check back soon."
   }
 }

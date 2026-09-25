@@ -513,7 +513,9 @@
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Dostawca e-faktur nie jest skonfigurowany.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ten dostawca nie obsługuje sprawdzania statusu.",
       "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
-    }
+    },
+    "guideLink": "Poradnik fakturowania",
+    "helpLink": "Jak korzystać"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -887,7 +889,8 @@
           "answer": "Oba pliki generowane są po stronie serwera; można je pobrać, wysłać e-mailem do klienta lub samodzielnie przesłać e-fakturę na krajową platformę albo wysłać ją przez Peppol."
         }
       ]
-    }
+    },
+    "guideLink": "Poradnik fakturowania"
   },
   "seo": {
     "home": {
@@ -903,5 +906,19 @@
       "title": "Rejestracja",
       "description": "Załóż bezpłatne konto i wystaw pierwszą fakturę w kilka minut. 1,00 € środków na start, bez abonamentu."
     }
+  },
+  "guides": {
+    "breadcrumbHome": "Strona główna",
+    "breadcrumbGuides": "Poradniki",
+    "indexDescription": "Poradniki fakturowania dla poszczególnych krajów od Fakturcho.",
+    "tableOfContents": "Na tej stronie",
+    "lastReviewed": "Ostatnia weryfikacja: {date}",
+    "euOverviewLink": "Przegląd UE",
+    "backToApp": "Wróć do aplikacji"
+  },
+  "help": {
+    "pageTitle": "Jak korzystać",
+    "emptyTitle": "Pomoc nie jest jeszcze dostępna w Twoim języku",
+    "emptyDescription": "Wciąż tłumaczymy tę stronę. Zajrzyj tu wkrótce ponownie."
   }
 }

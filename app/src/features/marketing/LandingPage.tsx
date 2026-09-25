@@ -16,7 +16,9 @@ import {
 } from '@shared/types';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CountryCardGuideLink } from './CountryCardGuideLink';
 import { getCountriesContent, getMarketingContent } from './content';
+import { HeroGuideLink } from './HeroGuideLink';
 import { LandingFaq } from './LandingFaq';
 import { TARGET_COUNTRIES } from './targetCountries';
 
@@ -64,6 +66,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
         <section className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold text-text">{content.hero.title}</h1>
           <p className="text-lg leading-relaxed text-text-muted">{content.hero.subtitle}</p>
+          <HeroGuideLink locale={locale} label={content.guideLink} />
         </section>
 
         {locale !== 'bg' ? (
@@ -84,6 +87,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
                         {content.nav.signup}
                       </Link>
                     </Button>
+                    <CountryCardGuideLink country={code} label={content.guideLink} />
                   </Card>
                 );
               })}

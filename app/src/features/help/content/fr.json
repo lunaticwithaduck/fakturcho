@@ -1,0 +1,1187 @@
+{
+  "locale": "fr",
+  "title": "Comment utiliser Fakturcho",
+  "intro": "Fakturcho est une application web pour émettre des factures et autres documents commerciaux conformes aux règles de l'UE. Cette page passe en revue l'application écran par écran, dans l'ordre où un nouveau compte en a généralement besoin.",
+  "sections": [
+    {
+      "heading": "1. Premiers pas après l'inscription",
+      "id": "1-premiers-pas-apres-l-inscription",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "L'inscription vous donne un crédit de départ unique de "
+            },
+            {
+              "text": "1,00 €",
+              "bold": true
+            },
+            {
+              "text": " — 10 documents à émettre, sans carte bancaire requise. Le pays que vous choisissez lors de l'inscription définit à la fois la langue de l'application et les règles légales (taux de TVA, champs obligatoires, format de numérotation) appliquées à tout ce que vous émettez."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Inscrivez-vous avec votre nom, votre e-mail, votre mot de passe et votre pays."
+              }
+            ],
+            [
+              {
+                "text": "Vous arrivez sur "
+              },
+              {
+                "text": "Documents",
+                "bold": true
+              },
+              {
+                "text": ". Complétez votre profil émetteur avant d'émettre quoi que ce soit — Fakturcho bloque l'émission tant qu'il ne dispose pas des informations légales minimales sur votre entreprise (section suivante)."
+              }
+            ],
+            [
+              {
+                "text": "Ajoutez au moins un client et, éventuellement, quelques articles du catalogue pour accélérer votre premier document."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Astuce : les brouillons, les clients et les articles du catalogue ne consomment jamais de crédit. Seule l'émission d'un document en consomme."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "2. Complétez votre profil émetteur",
+      "id": "2-completez-votre-profil-emetteur",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Objectif : votre profil émetteur est ce qui est imprimé sur chaque document que vous émettez, et l'émission est bloquée tant que les champs obligatoires pour votre pays ne sont pas remplis."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Ouvrez "
+              },
+              {
+                "text": "Profil",
+                "bold": true
+              },
+              {
+                "text": " depuis le menu."
+              }
+            ],
+            [
+              {
+                "text": "Dans "
+              },
+              {
+                "text": "Informations de l'entreprise",
+                "bold": true
+              },
+              {
+                "text": ", renseignez la "
+              },
+              {
+                "text": "Raison sociale",
+                "bold": true
+              },
+              {
+                "text": ", le "
+              },
+              {
+                "text": "Pays",
+                "bold": true
+              },
+              {
+                "text": ", et les champs d'adresse exigés par votre pays (généralement "
+              },
+              {
+                "text": "Rue et numéro",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Code postal",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Ville",
+                "bold": true
+              },
+              {
+                "text": " ; certains pays ajoutent une ligne d'adresse fixe ou un champ région/département), ainsi que votre identifiant national d'entreprise, dont le nom varie selon le pays (par ex. « ЕИК / Булстат » en Bulgarie, « SIREN » en France, « NIP » en Pologne)."
+              }
+            ],
+            [
+              {
+                "text": "Si vous êtes assujetti à la TVA, activez "
+              },
+              {
+                "text": "Assujetti à la TVA",
+                "bold": true
+              },
+              {
+                "text": " dans la section "
+              },
+              {
+                "text": "Assujettissement à la TVA",
+                "bold": true
+              },
+              {
+                "text": " puis renseignez votre "
+              },
+              {
+                "text": "Numéro de TVA",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Dans "
+              },
+              {
+                "text": "Compte bancaire",
+                "bold": true
+              },
+              {
+                "text": ", ajoutez éventuellement une "
+              },
+              {
+                "text": "Banque",
+                "bold": true
+              },
+              {
+                "text": ", un "
+              },
+              {
+                "text": "IBAN",
+                "bold": true
+              },
+              {
+                "text": ", un "
+              },
+              {
+                "text": "BIC",
+                "bold": true
+              },
+              {
+                "text": " et un "
+              },
+              {
+                "text": "Compte secondaire",
+                "bold": true
+              },
+              {
+                "text": " — ces informations apparaissent sur vos documents dès qu'elles sont renseignées."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Enregistrer le profil",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Tant que tous les champs obligatoires ne sont pas remplis, Documents affiche « Le profil n'est pas prêt pour l'émission de documents » avec la liste de ce qui manque et un lien "
+            },
+            {
+              "text": "Aller au profil de l'émetteur",
+              "bold": true
+            },
+            {
+              "text": ". Vous pouvez toujours créer et enregistrer des brouillons — vous ne pouvez simplement pas les émettre."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Il n'y a ni téléversement de logo ni réglage de langue de document sur le profil émetteur lui-même : votre langue d'émetteur suit votre pays d'émetteur, et chaque client peut la remplacer individuellement (voir « Langue » ci-dessous)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "3. Ajoutez vos clients",
+      "id": "3-ajoutez-vos-clients",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Objectif : les clients sont les destinataires que vous sélectionnez lors de la composition d'un document, et chacun a son propre pays, ses propres identifiants fiscaux et sa propre langue de document."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Ouvrez "
+              },
+              {
+                "text": "Clients",
+                "bold": true
+              },
+              {
+                "text": " puis cliquez sur "
+              },
+              {
+                "text": "Nouveau client",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Renseignez la "
+              },
+              {
+                "text": "Raison sociale",
+                "bold": true
+              },
+              {
+                "text": ", le champ d'identifiant national, et l'adresse — les pays à adresse structurée ont des champs séparés "
+              },
+              {
+                "text": "Rue et numéro",
+                "bold": true
+              },
+              {
+                "text": " et "
+              },
+              {
+                "text": "Code postal",
+                "bold": true
+              },
+              {
+                "text": " ; les autres ont un seul champ "
+              },
+              {
+                "text": "Adresse",
+                "bold": true
+              },
+              {
+                "text": ". Ajoutez la "
+              },
+              {
+                "text": "Ville",
+                "bold": true
+              },
+              {
+                "text": " et, le cas échéant, un champ région/département, puis choisissez le "
+              },
+              {
+                "text": "Pays",
+                "bold": true
+              },
+              {
+                "text": " du client."
+              }
+            ],
+            [
+              {
+                "text": "Définissez la "
+              },
+              {
+                "text": "Langue des documents",
+                "bold": true
+              },
+              {
+                "text": " : "
+              },
+              {
+                "text": "Langue de l'émetteur",
+                "bold": true
+              },
+              {
+                "text": " utilise votre propre langue d'émetteur, ou choisissez une langue précise pour les documents de ce client."
+              }
+            ],
+            [
+              {
+                "text": "Ajoutez éventuellement un "
+              },
+              {
+                "text": "E-mail",
+                "bold": true
+              },
+              {
+                "text": " (préremplit le destinataire de « envoyer par e-mail ») et un "
+              },
+              {
+                "text": "Représentant légal",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Enregistrer",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Les clients existants peuvent être modifiés ou supprimés depuis la liste (recherche par raison sociale ou par identifiant) ; la suppression demande une confirmation et est définitive."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "4. Constituez votre catalogue",
+      "id": "4-constituez-votre-catalogue",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Objectif : les articles du catalogue sont des produits ou services réutilisables que vous pouvez insérer directement dans les lignes d'un document."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Ouvrez "
+              },
+              {
+                "text": "Catalogue",
+                "bold": true
+              },
+              {
+                "text": " puis cliquez sur "
+              },
+              {
+                "text": "Nouvel article",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Renseignez la "
+              },
+              {
+                "text": "Désignation",
+                "bold": true
+              },
+              {
+                "text": ", l'"
+              },
+              {
+                "text": "Unité",
+                "bold": true
+              },
+              {
+                "text": " (ex. « pièce, heure, kg... ») et le "
+              },
+              {
+                "text": "Prix par défaut",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Enregistrer",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Un article du catalogue ne stocke qu'une désignation, une unité et un prix par défaut — il ne porte pas son propre taux de TVA. La TVA se règle sur le document lui-même lors de sa composition (voir la section suivante). Lors de la composition d'un document, saisir la désignation d'une ligne propose une saisie automatique à partir de votre catalogue et remplit le prix pour vous."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "5. Créer un document",
+      "id": "5-creer-un-document",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Objectif : c'est ici que vous composez factures, factures pro forma, avoirs, notes de débit, devis et bons de livraison — les seuls types de documents pris en charge par Fakturcho."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Depuis "
+              },
+              {
+                "text": "Documents",
+                "bold": true
+              },
+              {
+                "text": ", cliquez sur "
+              },
+              {
+                "text": "Nouveau document",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Choisissez le "
+              },
+              {
+                "text": "Type de document",
+                "bold": true
+              },
+              {
+                "text": " : Facture, Facture pro forma, Avoir, Note de débit, Devis ou Bon de livraison."
+              }
+            ],
+            [
+              {
+                "text": "Pour un "
+              },
+              {
+                "text": "Avoir",
+                "bold": true
+              },
+              {
+                "text": " ou une "
+              },
+              {
+                "text": "Note de débit",
+                "bold": true
+              },
+              {
+                "text": ", choisissez le "
+              },
+              {
+                "text": "Document d'origine",
+                "bold": true
+              },
+              {
+                "text": " — seuls les documents déjà émis peuvent être sélectionnés, puisqu'un avoir ou une note de débit en corrige un."
+              }
+            ],
+            [
+              {
+                "text": "Choisissez un "
+              },
+              {
+                "text": "Client",
+                "bold": true
+              },
+              {
+                "text": " dans la liste, ou laissez "
+              },
+              {
+                "text": "Aucun client",
+                "bold": true
+              },
+              {
+                "text": " (vous pouvez aussi ajouter un nouveau client directement avec "
+              },
+              {
+                "text": "+ Nouveau client",
+                "bold": true
+              },
+              {
+                "text": ")."
+              }
+            ],
+            [
+              {
+                "text": "Renseignez le numéro de référence, les dates et, pour les bons de livraison, les champs de livraison affichés sous "
+              },
+              {
+                "text": "Détails de la livraison",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Ajoutez des "
+              },
+              {
+                "text": "Lignes du document",
+                "bold": true
+              },
+              {
+                "text": " : "
+              },
+              {
+                "text": "Désignation",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Quantité",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Prix unitaire",
+                "bold": true
+              },
+              {
+                "text": " ; utilisez "
+              },
+              {
+                "text": "Ajouter une ligne",
+                "bold": true
+              },
+              {
+                "text": " pour d'autres lignes."
+              }
+            ],
+            [
+              {
+                "text": "Ajoutez éventuellement une remise sous "
+              },
+              {
+                "text": "Remises",
+                "bold": true
+              },
+              {
+                "text": ", sous forme de "
+              },
+              {
+                "text": "Pourcentage",
+                "bold": true
+              },
+              {
+                "text": " ou de "
+              },
+              {
+                "text": "Montant",
+                "bold": true
+              },
+              {
+                "text": " fixe."
+              }
+            ],
+            [
+              {
+                "text": "Dans "
+              },
+              {
+                "text": "TVA",
+                "bold": true
+              },
+              {
+                "text": ", laissez "
+              },
+              {
+                "text": "Appliquer la TVA (… %)",
+                "bold": true
+              },
+              {
+                "text": " activé, ou désactivez-le et sélectionnez un "
+              },
+              {
+                "text": "Motif d'exonération de TVA",
+                "bold": true
+              },
+              {
+                "text": " — les motifs autorisés dépendent de votre pays d'émetteur (franchise en base, autoliquidation, livraison intracommunautaire, exportation, etc.)."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Enregistrer le brouillon",
+                "bold": true
+              },
+              {
+                "text": " pour continuer plus tard, ou sur "
+              },
+              {
+                "text": "Enregistrer et émettre",
+                "bold": true
+              },
+              {
+                "text": " pour l'émettre immédiatement."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Les documents sont toujours en euros — il n'y a pas de sélecteur de devise. La numérotation est propre à chaque type de document : l'émission affiche le "
+            },
+            {
+              "text": "Prochain numéro de la série",
+              "bold": true
+            },
+            {
+              "text": ", que vous ne pouvez modifier que tant que cette série n'a aucun document émis."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "L'émission coûte "
+            },
+            {
+              "text": "0,10 €",
+              "bold": true
+            },
+            {
+              "text": ", déduits de votre solde de crédit au moment où le document reçoit un numéro. "
+            },
+            {
+              "text": "Une fois émis, un document ne peut plus être modifié",
+              "bold": true
+            },
+            {
+              "text": " — il est immuable et ne peut être corrigé que par un avoir ou une note de débit établi contre lui."
+            }
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Astuce : si vous essayez d'émettre sans crédit suffisant ou avec un profil émetteur incomplet, la boîte de dialogue indique la raison et propose un lien direct vers "
+            },
+            {
+              "text": "Acheter du crédit",
+              "bold": true
+            },
+            {
+              "text": " ou "
+            },
+            {
+              "text": "Aller au profil de l'émetteur",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "6. Après avoir émis un document",
+      "id": "6-apres-avoir-emis-un-document",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Objectif : une fois qu'un document a un numéro, vous pouvez le télécharger, l'envoyer, obtenir son fichier de facture électronique, ou suivre son statut de paiement."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Ouvrez le document depuis "
+              },
+              {
+                "text": "Documents",
+                "bold": true
+              },
+              {
+                "text": ". Son statut s'affiche sous forme de badge (Brouillon, Émise, PAYÉE, EN RETARD, ANNULÉE)."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Télécharger le PDF",
+                "bold": true
+              },
+              {
+                "text": " pour obtenir le fichier PDF. Un brouillon n'affiche qu'un aperçu avec filigrane — vous devez d'abord l'émettre pour le télécharger ou l'envoyer."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Envoyer par e-mail",
+                "bold": true
+              },
+              {
+                "text": " pour l'envoyer par e-mail : saisissez l'"
+              },
+              {
+                "text": "E-mail du destinataire",
+                "bold": true
+              },
+              {
+                "text": " (prérempli avec l'e-mail du client si renseigné) et un "
+              },
+              {
+                "text": "Message",
+                "bold": true
+              },
+              {
+                "text": " facultatif, puis cliquez sur "
+              },
+              {
+                "text": "Envoyer",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Pour les factures, avoirs et notes de débit, cliquez sur "
+              },
+              {
+                "text": "Télécharger la facture électronique (XML)",
+                "bold": true
+              },
+              {
+                "text": " pour obtenir le fichier de facture électronique structuré : le format propre à votre pays — XRechnung (Allemagne), UBL (France), FatturaPA (Italie), FA(3) (Pologne), CIUS-RO (Roumanie), Facturae (Espagne) — ou, pour un émetteur bulgare et tout autre pays sans format dédié, un fichier UBL générique EN 16931/Peppol. Fakturcho génère uniquement le fichier ; vous le téléchargez et le téléversez vous-même sur votre plateforme nationale — l'application ne soumet jamais rien en votre nom. Les bons de livraison n'en obtiennent jamais. Si des données requises par le format manquent (par ex. un numéro de TVA de l'acheteur pour l'autoliquidation, le code d'unité d'une ligne, votre IBAN), un message sous le bouton liste précisément ce qui manque."
+              }
+            ],
+            [
+              {
+                "text": "Une fois le document émis ou en retard, cliquez sur "
+              },
+              {
+                "text": "Marquer comme payé",
+                "bold": true
+              },
+              {
+                "text": " pour enregistrer le paiement."
+              }
+            ],
+            [
+              {
+                "text": "Cliquez sur "
+              },
+              {
+                "text": "Annuler",
+                "bold": true
+              },
+              {
+                "text": " pour annuler un document émis, en retard ou payé. Le numéro reste réservé et n'est jamais réutilisé."
+              }
+            ],
+            [
+              {
+                "text": "Pour corriger une facture émise, allez dans "
+              },
+              {
+                "text": "Nouveau document",
+                "bold": true
+              },
+              {
+                "text": ", choisissez "
+              },
+              {
+                "text": "Avoir",
+                "bold": true
+              },
+              {
+                "text": " ou "
+              },
+              {
+                "text": "Note de débit",
+                "bold": true
+              },
+              {
+                "text": ", et sélectionnez la facture d'origine — voir l'étape 3 ci-dessus."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "7. Crédit et abonnement",
+      "id": "7-credit-et-abonnement",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Objectif : "
+            },
+            {
+              "text": "Crédit",
+              "bold": true
+            },
+            {
+              "text": " est l'endroit où vous voyez votre solde, le rechargez, et gérez un abonnement."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Ouvrez "
+              },
+              {
+                "text": "Crédit",
+                "bold": true
+              },
+              {
+                "text": " pour voir votre "
+              },
+              {
+                "text": "Solde",
+                "bold": true
+              },
+              {
+                "text": " et le nombre de documents que cela représente."
+              }
+            ],
+            [
+              {
+                "text": "Les brouillons, les clients et les articles du catalogue ne consomment jamais de crédit — seule l'émission en consomme, à 0,10 € chacune."
+              }
+            ],
+            [
+              {
+                "text": "Sous "
+              },
+              {
+                "text": "Packs de crédit",
+                "bold": true
+              },
+              {
+                "text": ", cliquez sur "
+              },
+              {
+                "text": "Acheter",
+                "bold": true
+              },
+              {
+                "text": " pour une recharge ponctuelle — les packs sont à 5 €, 10 € et 25 €."
+              }
+            ],
+            [
+              {
+                "text": "Sous "
+              },
+              {
+                "text": "Abonnement",
+                "bold": true
+              },
+              {
+                "text": ", activez une formule mensuelle (5, 10 ou 25 € par mois) : elle accorde le double du crédit du pack équivalent à chaque période, et le crédit non utilisé est reporté — cela ne dispense pas des 0,10 € facturés à chaque émission, cela rend simplement chaque document moins cher sur le solde. "
+              },
+              {
+                "text": "Changer de formule",
+                "bold": true
+              },
+              {
+                "text": " à tout moment, ou résiliez — l'accès continue jusqu'à la fin de la période payée."
+              }
+            ],
+            [
+              {
+                "text": "Activité récente",
+                "bold": true
+              },
+              {
+                "text": " liste chaque mouvement de solde : bonus d'inscription, achat de crédit, document émis, recharge d'abonnement, ou ajustement."
+              }
+            ],
+            [
+              {
+                "text": "Fakturcho n'émet pas sa propre facture pour ce que vous lui payez — cette liste d'activité est votre justificatif, et Revolut, qui traite le paiement, envoie sa propre confirmation de paiement avec un numéro de commande."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "8. Langue",
+      "id": "8-langue",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La langue de l'application de votre compte est définie une seule fois, à l'inscription, selon le pays que vous choisissez — choisissez l'Allemagne et l'application s'exécute en allemand, choisissez un pays sans traduction propre et elle bascule sur l'anglais. Il y a un sélecteur de langue sur les pages publiques de connexion et d'inscription avant que vous ayez un compte, mais une fois connecté, il n'y a pas de changement de langue dans l'application."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La langue des documents est distincte et se définit par client : sur le champ "
+            },
+            {
+              "text": "Langue des documents",
+              "bold": true
+            },
+            {
+              "text": " d'un client, laissez "
+            },
+            {
+              "text": "Langue de l'émetteur",
+              "bold": true
+            },
+            {
+              "text": " pour utiliser votre propre langue d'émetteur, ou choisissez une langue précise pour les documents de ce client — cela ne change que la langue dans laquelle les documents adressés à ce client sont rédigés, pas la langue de l'interface de votre application."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "9. Les règles de facturation de votre pays",
+      "id": "9-les-regles-de-facturation-de-votre-pays",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cette page renvoie vers un guide de facturation propre à votre pays, couvrant les taux de TVA locaux, la numérotation et les règles de facturation électronique de votre pays — voir le guide lié ci-dessous."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "10. Aide et contact",
+      "id": "10-aide-et-contact",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Si quelque chose ne fonctionne pas ou si vous avez une question, écrivez à "
+            },
+            {
+              "text": "support@fakturcho.com",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "FAQ",
+  "faq": [
+    {
+      "question": "Pourquoi ne puis-je pas émettre de document ?",
+      "answer": [
+        {
+          "text": "Soit votre profil émetteur est incomplet (renseignez les champs manquants que Documents vous indique sous "
+        },
+        {
+          "text": "Aller au profil de l'émetteur",
+          "bold": true
+        },
+        {
+          "text": "), soit votre solde de crédit est trop bas (rechargez-le sous "
+        },
+        {
+          "text": "Acheter du crédit",
+          "bold": true
+        },
+        {
+          "text": ")."
+        }
+      ]
+    },
+    {
+      "question": "J'ai fait une erreur sur une facture déjà émise — comment la corriger ?",
+      "answer": [
+        {
+          "text": "Vous ne pouvez pas modifier un document émis. Créez un "
+        },
+        {
+          "text": "Avoir",
+          "bold": true
+        },
+        {
+          "text": " ou une "
+        },
+        {
+          "text": "Note de débit",
+          "bold": true
+        },
+        {
+          "text": " depuis "
+        },
+        {
+          "text": "Nouveau document",
+          "bold": true
+        },
+        {
+          "text": ", choisissez la facture d'origine comme "
+        },
+        {
+          "text": "Document d'origine",
+          "bold": true
+        },
+        {
+          "text": ", et saisissez la correction."
+        }
+      ]
+    },
+    {
+      "question": "Où se trouve le fichier XML de la facture électronique, et Fakturcho l'envoie-t-il à ma place ?",
+      "answer": [
+        {
+          "text": "Ouvrez le document émis et cliquez sur "
+        },
+        {
+          "text": "Télécharger la facture électronique (XML)",
+          "bold": true
+        },
+        {
+          "text": ". Fakturcho génère uniquement le fichier — vous le téléversez vous-même sur la plateforme de votre pays. Disponible pour les factures, avoirs et notes de débit : l'Allemagne, la France, l'Italie, la Pologne, la Roumanie et l'Espagne obtiennent leur format national ; la Bulgarie et tout autre pays obtiennent un fichier UBL générique EN 16931/Peppol."
+        }
+      ]
+    },
+    {
+      "question": "La création d'un brouillon consomme-t-elle du crédit ?",
+      "answer": [
+        {
+          "text": "Non. Les brouillons, les clients et les articles du catalogue sont gratuits. Seule l'émission — donner un numéro à un document — déduit 0,10 € de votre solde."
+        }
+      ]
+    },
+    {
+      "question": "Puis-je choisir la devise d'un document ?",
+      "answer": [
+        {
+          "text": "Non, tous les documents sont en euros ; il n'y a pas de sélecteur de devise."
+        }
+      ]
+    },
+    {
+      "question": "Puis-je modifier le prochain numéro de document ?",
+      "answer": [
+        {
+          "text": "Seulement tant qu'une série (un type de document) n'a aucun document émis, via "
+        },
+        {
+          "text": "Modifier le prochain numéro (facultatif)",
+          "bold": true
+        },
+        {
+          "text": " dans la boîte de dialogue d'émission. Une fois un document émis, la numérotation continue automatiquement sans lacune."
+        }
+      ]
+    },
+    {
+      "question": "Quelle est la différence entre une facture pro forma et une facture ?",
+      "answer": [
+        {
+          "text": "Une facture pro forma ressemble à une facture avec les mêmes informations mais ne crée aucune obligation fiscale ; une facture est le document fiscal. Les deux ont leur propre numéro, dans des séries de numérotation distinctes."
+        }
+      ]
+    },
+    {
+      "question": "Un abonnement signifie-t-il que les documents sont gratuits ?",
+      "answer": [
+        {
+          "text": "Non. Il recharge votre crédit du double du montant du pack ponctuel équivalent et le crédit non utilisé est reporté — mais chaque document émis coûte toujours 0,10 € sur ce solde."
+        }
+      ]
+    }
+  ]
+}

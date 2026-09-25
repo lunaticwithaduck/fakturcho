@@ -69,6 +69,18 @@ describe('LandingPage', () => {
     }
   });
 
+  it('links the en homepage to the EU overview guide', () => {
+    render(<LandingPage locale="en" />);
+    const links = screen.getAllByRole('link', { name: 'Invoicing guide' });
+    expect(links[0]?.getAttribute('href')).toBe('/en/guide/eu-vat-invoice-requirements');
+  });
+
+  it('links the bg homepage to the Bulgarian guide', () => {
+    render(<LandingPage />);
+    const hrefs = screen.getAllByRole('link').map((link) => link.getAttribute('href'));
+    expect(hrefs).toContain('/guide/faktura-zadalzhitelni-rekviziti-zdds');
+  });
+
   it('hides the language button when EN_LOCALE is off', () => {
     render(<LandingPage />);
     expect(screen.queryByRole('button', { name: /Избор на език/ })).toBeNull();

@@ -1,0 +1,1180 @@
+{
+  "locale": "ro",
+  "title": "Cum se folosește Fakturcho",
+  "intro": "Fakturcho este o aplicație web pentru emiterea de facturi și alte documente comerciale conforme cu cerințele UE. Această pagină parcurge aplicația ecran cu ecran, în ordinea în care un cont nou are de obicei nevoie de ele.",
+  "sections": [
+    {
+      "heading": "1. Primii pași după înregistrare",
+      "id": "1-primii-pasi-dupa-inregistrare",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Înregistrarea vă oferă un credit inițial unic de "
+            },
+            {
+              "text": "1,00 €",
+              "bold": true
+            },
+            {
+              "text": " — 10 documente emise, fără a fi nevoie de card. Țara pe care o alegeți la înregistrare stabilește atât limba aplicației, cât și regulile legale (cote de TVA, câmpuri obligatorii, format de numerotare) aplicate la tot ce emiteți."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Înregistrați-vă cu numele, emailul, parola și țara dumneavoastră."
+              }
+            ],
+            [
+              {
+                "text": "Ajungeți pe "
+              },
+              {
+                "text": "Documente",
+                "bold": true
+              },
+              {
+                "text": ". Completați profilul emitentului înainte de a emite orice — Fakturcho blochează emiterea până când sunt introduse detaliile legale minime despre afacerea dumneavoastră (secțiunea următoare)."
+              }
+            ],
+            [
+              {
+                "text": "Adăugați cel puțin un client și, opțional, câteva articole din catalog, pentru a vă accelera primul document."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Sfat: ciornele, clienții și articolele din catalog nu consumă niciodată credit. Doar emiterea unui document face acest lucru."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "2. Completați profilul emitentului",
+      "id": "2-completati-profilul-emitentului",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Scop: profilul emitentului este ceea ce apare tipărit pe fiecare document pe care îl emiteți, iar emiterea este blocată până când câmpurile obligatorii pentru țara dumneavoastră sunt completate."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Deschideți "
+              },
+              {
+                "text": "Profil",
+                "bold": true
+              },
+              {
+                "text": " din meniu."
+              }
+            ],
+            [
+              {
+                "text": "La secțiunea "
+              },
+              {
+                "text": "Detalii firmă",
+                "bold": true
+              },
+              {
+                "text": ", completați "
+              },
+              {
+                "text": "Firmă",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Țară",
+                "bold": true
+              },
+              {
+                "text": " și câmpurile de adresă cerute de țara dumneavoastră (de obicei "
+              },
+              {
+                "text": "Stradă și număr",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Cod poștal",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Localitate",
+                "bold": true
+              },
+              {
+                "text": "; câteva țări adaugă un câmp de adresă fix sau un câmp regional/de județ) și codul de identificare fiscală al firmei dumneavoastră, etichetat diferit în funcție de țară (de exemplu „ЕИК / Булстат” în Bulgaria, „SIREN” în Franța, „NIP” în Polonia)."
+              }
+            ],
+            [
+              {
+                "text": "Dacă sunteți înregistrat în scopuri de TVA, activați "
+              },
+              {
+                "text": "Plătitor de TVA",
+                "bold": true
+              },
+              {
+                "text": " la secțiunea "
+              },
+              {
+                "text": "Înregistrare TVA",
+                "bold": true
+              },
+              {
+                "text": " și introduceți "
+              },
+              {
+                "text": "Cod TVA",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "La secțiunea "
+              },
+              {
+                "text": "Cont bancar",
+                "bold": true
+              },
+              {
+                "text": ", adăugați opțional "
+              },
+              {
+                "text": "Bancă",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "IBAN",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "BIC",
+                "bold": true
+              },
+              {
+                "text": " și un "
+              },
+              {
+                "text": "Cont alternativ",
+                "bold": true
+              },
+              {
+                "text": " — acestea apar pe documentele dumneavoastră atunci când sunt completate."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Salvează profilul",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Până când fiecare câmp obligatoriu este completat, secțiunea Documente afișează „Profilul nu este pregătit pentru emitere”, cu o listă a ceea ce lipsește și un link "
+            },
+            {
+              "text": "Mergi la profilul emitentului",
+              "bold": true
+            },
+            {
+              "text": ". Puteți în continuare crea și salva ciorne — doar nu puteți emite."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nu există opțiune de încărcare a unui logo și nici o setare a limbii documentelor pe profilul emitentului în sine: limba emitentului dumneavoastră urmează țara emitentului, iar fiecare client o poate suprascrie individual (vezi „Limbă” mai jos)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "3. Adăugați-vă clienții",
+      "id": "3-adaugati-va-clientii",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Scop: clienții sunt destinatarii pe care îi alegeți atunci când compuneți un document, iar fiecare are propria țară, propriile identificatoare fiscale și propria limbă a documentelor."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Deschideți "
+              },
+              {
+                "text": "Clienți",
+                "bold": true
+              },
+              {
+                "text": " și faceți clic pe "
+              },
+              {
+                "text": "Client nou",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Completați "
+              },
+              {
+                "text": "Denumire firmă",
+                "bold": true
+              },
+              {
+                "text": ", câmpul de identificare fiscală națională și adresa — țările cu adresă structurată au câmpuri separate "
+              },
+              {
+                "text": "Stradă și număr",
+                "bold": true
+              },
+              {
+                "text": " și "
+              },
+              {
+                "text": "Cod poștal",
+                "bold": true
+              },
+              {
+                "text": "; celelalte au un singur câmp "
+              },
+              {
+                "text": "Adresă",
+                "bold": true
+              },
+              {
+                "text": ". Adăugați "
+              },
+              {
+                "text": "Localitate",
+                "bold": true
+              },
+              {
+                "text": " și, unde este relevant, un câmp regional/de județ, apoi alegeți "
+              },
+              {
+                "text": "Țara",
+                "bold": true
+              },
+              {
+                "text": " clientului."
+              }
+            ],
+            [
+              {
+                "text": "Setați "
+              },
+              {
+                "text": "Limba documentelor",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Ca la emitent",
+                "bold": true
+              },
+              {
+                "text": " folosește propria dumneavoastră limbă de emitent, sau alegeți una specifică pentru documentele acelui client."
+              }
+            ],
+            [
+              {
+                "text": "Adăugați opțional "
+              },
+              {
+                "text": "Email",
+                "bold": true
+              },
+              {
+                "text": " (precompletează destinatarul pentru „trimitere prin email”) și "
+              },
+              {
+                "text": "Reprezentant legal",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Salvează",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Clienții existenți pot fi editați sau șterși din listă (căutare după denumirea firmei sau după cod); ștergerea cere o confirmare și nu poate fi anulată."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "4. Construiți-vă catalogul",
+      "id": "4-construiti-va-catalogul",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Scop: articolele din catalog sunt produse sau servicii reutilizabile pe care le puteți introduce direct în liniile unui document."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Deschideți "
+              },
+              {
+                "text": "Catalog",
+                "bold": true
+              },
+              {
+                "text": " și faceți clic pe "
+              },
+              {
+                "text": "Articol nou",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Completați "
+              },
+              {
+                "text": "Denumire",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "U.M.",
+                "bold": true
+              },
+              {
+                "text": " (de exemplu „buc, oră, kg...”) și "
+              },
+              {
+                "text": "Preț implicit",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Salvează",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Un articol de catalog stochează doar o denumire, o unitate de măsură și un preț implicit — nu are propria cotă de TVA. TVA-ul se stabilește pe document, atunci când îl compuneți (vezi secțiunea următoare). Când compuneți un document, tastarea denumirii unei linii completează automat pe baza catalogului și vă completează prețul."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "5. Creați un document",
+      "id": "5-creati-un-document",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Scop: aici compuneți facturi, proforme, note de credit/debit, oferte și avize de însoțire a mărfii — singurele tipuri de documente pe care Fakturcho le acceptă."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Din "
+              },
+              {
+                "text": "Documente",
+                "bold": true
+              },
+              {
+                "text": ", faceți clic pe "
+              },
+              {
+                "text": "Document nou",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Alegeți "
+              },
+              {
+                "text": "Tip document",
+                "bold": true
+              },
+              {
+                "text": ": Factură, Factură proformă, Notă de credit, Notă de debit, Ofertă sau Aviz de însoțire a mărfii."
+              }
+            ],
+            [
+              {
+                "text": "Pentru o "
+              },
+              {
+                "text": "Notă de credit",
+                "bold": true
+              },
+              {
+                "text": " sau o "
+              },
+              {
+                "text": "Notă de debit",
+                "bold": true
+              },
+              {
+                "text": ", alegeți "
+              },
+              {
+                "text": "Document original",
+                "bold": true
+              },
+              {
+                "text": " — pot fi selectate doar documente deja emise, deoarece o notă de credit/debit corectează un astfel de document."
+              }
+            ],
+            [
+              {
+                "text": "Alegeți un "
+              },
+              {
+                "text": "Client",
+                "bold": true
+              },
+              {
+                "text": " din listă sau lăsați "
+              },
+              {
+                "text": "Fără client",
+                "bold": true
+              },
+              {
+                "text": " (puteți adăuga și un client nou direct din formular, cu "
+              },
+              {
+                "text": "+ Client nou",
+                "bold": true
+              },
+              {
+                "text": ")."
+              }
+            ],
+            [
+              {
+                "text": "Completați numărul de referință, datele și, pentru avizele de însoțire a mărfii, câmpurile de livrare afișate la secțiunea "
+              },
+              {
+                "text": "Detalii livrare",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Adăugați "
+              },
+              {
+                "text": "liniile documentului",
+                "bold": true
+              },
+              {
+                "text": ": "
+              },
+              {
+                "text": "Denumire",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Cantitate",
+                "bold": true
+              },
+              {
+                "text": ", "
+              },
+              {
+                "text": "Preț",
+                "bold": true
+              },
+              {
+                "text": "; folosiți "
+              },
+              {
+                "text": "Adaugă articol",
+                "bold": true
+              },
+              {
+                "text": " pentru mai multe linii."
+              }
+            ],
+            [
+              {
+                "text": "Adăugați opțional o reducere la secțiunea "
+              },
+              {
+                "text": "Reduceri",
+                "bold": true
+              },
+              {
+                "text": ", fie ca "
+              },
+              {
+                "text": "Procent",
+                "bold": true
+              },
+              {
+                "text": ", fie ca "
+              },
+              {
+                "text": "Sumă",
+                "bold": true
+              },
+              {
+                "text": " fixă."
+              }
+            ],
+            [
+              {
+                "text": "La secțiunea "
+              },
+              {
+                "text": "TVA",
+                "bold": true
+              },
+              {
+                "text": ", lăsați activat "
+              },
+              {
+                "text": "Aplică TVA (…%)",
+                "bold": true
+              },
+              {
+                "text": " sau dezactivați-l și selectați un "
+              },
+              {
+                "text": "Temei pentru neaplicarea TVA",
+                "bold": true
+              },
+              {
+                "text": " — motivele permise depind de țara emitentului dumneavoastră (scutire pentru întreprinderi mici, taxare inversă, livrare intracomunitară, export etc.)."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Salvează ciorna",
+                "bold": true
+              },
+              {
+                "text": " pentru a continua mai târziu, sau pe "
+              },
+              {
+                "text": "Salvează și emite",
+                "bold": true
+              },
+              {
+                "text": " pentru a-l emite imediat."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Documentele sunt întotdeauna în euro — nu există selector de monedă. Numerotarea este per tip de document: la emitere se afișează "
+            },
+            {
+              "text": "Următorul număr din serie",
+              "bold": true
+            },
+            {
+              "text": ", pe care îl puteți suprascrie doar cât timp acea serie nu are încă documente emise."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Emiterea costă "
+            },
+            {
+              "text": "0,10 €",
+              "bold": true
+            },
+            {
+              "text": ", deduse din soldul de credit în momentul în care documentul primește un număr. "
+            },
+            {
+              "text": "Odată emis, un document nu mai poate fi editat",
+              "bold": true
+            },
+            {
+              "text": " — este imuabil și poate fi corectat doar printr-o notă de credit sau de debit asupra lui."
+            }
+          ]
+        },
+        {
+          "type": "tip",
+          "inline": [
+            {
+              "text": "Sfat: dacă încercați să emiteți fără credit suficient sau cu un profil de emitent incomplet, fereastra afișează motivul și un link direct către "
+            },
+            {
+              "text": "Cumpără credite",
+              "bold": true
+            },
+            {
+              "text": " sau "
+            },
+            {
+              "text": "Mergi la profilul emitentului",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "6. După ce emiteți un document",
+      "id": "6-dupa-ce-emiteti-un-document",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Scop: odată ce un document are un număr, îl puteți descărca, trimite, obține fișierul de e-factură sau urmări statusul plății."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Deschideți documentul din "
+              },
+              {
+                "text": "Documente",
+                "bold": true
+              },
+              {
+                "text": ". Statusul lui este afișat ca insignă (Ciornă, Emisă, PLĂTITĂ, RESTANTĂ, ANULATĂ)."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Descarcă PDF",
+                "bold": true
+              },
+              {
+                "text": " pentru a obține fișierul PDF. O ciornă afișează doar o previzualizare cu filigran — trebuie să o emiteți mai întâi pentru a o descărca sau trimite."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Trimite prin email",
+                "bold": true
+              },
+              {
+                "text": " pentru a-l trimite: introduceți "
+              },
+              {
+                "text": "Email destinatar",
+                "bold": true
+              },
+              {
+                "text": " (precompletat din emailul clientului, dacă este setat) și, opțional, un "
+              },
+              {
+                "text": "Mesaj",
+                "bold": true
+              },
+              {
+                "text": ", apoi "
+              },
+              {
+                "text": "Trimite",
+                "bold": true
+              },
+              {
+                "text": "."
+              }
+            ],
+            [
+              {
+                "text": "Pentru facturi, note de credit și note de debit, faceți clic pe "
+              },
+              {
+                "text": "Descarcă e-factura (XML)",
+                "bold": true
+              },
+              {
+                "text": " pentru a obține fișierul de e-factură structurat: formatul propriu al țării dumneavoastră — XRechnung (Germania), UBL (Franța), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (România), Facturae (Spania) — sau, pentru un emitent din Bulgaria și pentru orice altă țară fără format dedicat, un fișier generic EN 16931/Peppol UBL. Fakturcho doar generează fișierul; îl descărcați și îl încărcați dumneavoastră pe platforma națională — nu transmite niciodată nimic în numele dumneavoastră. Avizele de însoțire a mărfii nu primesc niciodată unul. Dacă lipsesc date necesare formatului (de exemplu codul de TVA al cumpărătorului pentru taxare inversă, codul de unitate al unei linii, IBAN-ul dumneavoastră), un mesaj sub buton listează exact ce lipsește."
+              }
+            ],
+            [
+              {
+                "text": "Odată ce este Emisă sau Restantă, faceți clic pe "
+              },
+              {
+                "text": "Marchează ca plătit",
+                "bold": true
+              },
+              {
+                "text": " pentru a înregistra plata."
+              }
+            ],
+            [
+              {
+                "text": "Faceți clic pe "
+              },
+              {
+                "text": "Anulează",
+                "bold": true
+              },
+              {
+                "text": " pentru a anula un document emis/restant/plătit. Numărul rămâne rezervat și nu este niciodată reutilizat."
+              }
+            ],
+            [
+              {
+                "text": "Pentru a corecta o factură emisă, mergeți la "
+              },
+              {
+                "text": "Document nou",
+                "bold": true
+              },
+              {
+                "text": ", alegeți "
+              },
+              {
+                "text": "Notă de credit",
+                "bold": true
+              },
+              {
+                "text": " sau "
+              },
+              {
+                "text": "Notă de debit",
+                "bold": true
+              },
+              {
+                "text": " și selectați factura originală — vezi pasul 3 de mai sus."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "7. Credit și facturare",
+      "id": "7-credit-si-facturare",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Scop: "
+            },
+            {
+              "text": "Sold",
+              "bold": true
+            },
+            {
+              "text": " este locul unde vă vedeți soldul, îl reîncărcați și gestionați un abonament."
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Deschideți "
+              },
+              {
+                "text": "Sold",
+                "bold": true
+              },
+              {
+                "text": " pentru a vedea soldul disponibil și câte documente valorează acesta."
+              }
+            ],
+            [
+              {
+                "text": "Ciornele, clienții și articolele din catalog nu consumă niciodată credit — doar emiterea o face, la 0,10 € fiecare."
+              }
+            ],
+            [
+              {
+                "text": "La secțiunea "
+              },
+              {
+                "text": "Pachete de credit",
+                "bold": true
+              },
+              {
+                "text": ", faceți clic pe "
+              },
+              {
+                "text": "Cumpără",
+                "bold": true
+              },
+              {
+                "text": " pentru o reîncărcare unică — pachetele sunt de 5 €, 10 € și 25 €."
+              }
+            ],
+            [
+              {
+                "text": "La secțiunea "
+              },
+              {
+                "text": "Abonament",
+                "bold": true
+              },
+              {
+                "text": ", activați un plan lunar (5, 10 sau 25 € pe lună): acesta acordă dublul creditului pachetului echivalent în fiecare perioadă, iar creditul neutilizat se reportează — nu scutește de taxa de emitere de 0,10 €, ci doar face fiecare document mai ieftin din sold. "
+              },
+              {
+                "text": "Treceți la",
+                "bold": true
+              },
+              {
+                "text": " un alt nivel oricând, sau anulați — accesul continuă până la sfârșitul perioadei plătite."
+              }
+            ],
+            [
+              {
+                "text": "Activitate recentă",
+                "bold": true
+              },
+              {
+                "text": " listează fiecare modificare a soldului: bonus de înregistrare, achiziție de credit, document emis, reîncărcare din abonament sau ajustare."
+              }
+            ],
+            [
+              {
+                "text": "Fakturcho nu emite propria factură pentru ceea ce plătiți — această listă de activitate este evidența dumneavoastră, iar Revolut, care procesează plata, trimite propria confirmare de plată cu un număr de comandă."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "8. Limbă",
+      "id": "8-limba",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Limba aplicației pentru contul dumneavoastră este setată o singură dată, la înregistrare, pe baza țării alese — alegeți Germania și aplicația rulează în germană, alegeți o țară fără traducere proprie și aplicația revine la engleză. Există un selector de limbă pe paginile publice de autentificare și înregistrare, înainte de a avea un cont, dar odată autentificat nu mai există schimbare a limbii în aplicație."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Limba documentelor este separată și se setează per client: pe câmpul "
+            },
+            {
+              "text": "Limba documentelor",
+              "bold": true
+            },
+            {
+              "text": " al unui client, lăsați "
+            },
+            {
+              "text": "Ca la emitent",
+              "bold": true
+            },
+            {
+              "text": " pentru a folosi propria dumneavoastră limbă de emitent, sau alegeți o limbă specifică pentru documentele acelui client — aceasta schimbă doar limba în care sunt scrise documentele către acel client, nu limba interfeței aplicației dumneavoastră."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "9. Regulile de facturare din țara dumneavoastră",
+      "id": "9-regulile-de-facturare-din-tara-dumneavoastra",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Această pagină face trimitere către un ghid de facturare specific țării dumneavoastră, care acoperă cotele locale de TVA, numerotarea și regulile de e-facturare pentru țara dumneavoastră — vezi ghidul indicat mai jos."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "10. Ajutor și contact",
+      "id": "10-ajutor-si-contact",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dacă ceva nu funcționează sau aveți o întrebare, scrieți-ne la "
+            },
+            {
+              "text": "support@fakturcho.com",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Întrebări frecvente",
+  "faq": [
+    {
+      "question": "De ce nu pot emite un document?",
+      "answer": [
+        {
+          "text": "Fie profilul dumneavoastră de emitent este incomplet (completați câmpurile lipsă indicate de Documente la "
+        },
+        {
+          "text": "Mergi la profilul emitentului",
+          "bold": true
+        },
+        {
+          "text": "), fie soldul de credit este prea mic (reîncărcați-l la "
+        },
+        {
+          "text": "Cumpără credite",
+          "bold": true
+        },
+        {
+          "text": ")."
+        }
+      ]
+    },
+    {
+      "question": "Am greșit ceva pe o factură emisă — cum o corectez?",
+      "answer": [
+        {
+          "text": "Nu puteți edita un document emis. Creați o "
+        },
+        {
+          "text": "Notă de credit",
+          "bold": true
+        },
+        {
+          "text": " sau o "
+        },
+        {
+          "text": "Notă de debit",
+          "bold": true
+        },
+        {
+          "text": " din "
+        },
+        {
+          "text": "Document nou",
+          "bold": true
+        },
+        {
+          "text": ", alegeți factura originală ca "
+        },
+        {
+          "text": "Document original",
+          "bold": true
+        },
+        {
+          "text": " și introduceți corecția."
+        }
+      ]
+    },
+    {
+      "question": "Unde este XML-ul de e-factură și îl trimite Fakturcho pentru mine?",
+      "answer": [
+        {
+          "text": "Deschideți documentul emis și faceți clic pe "
+        },
+        {
+          "text": "Descarcă e-factura (XML)",
+          "bold": true
+        },
+        {
+          "text": ". Fakturcho doar generează fișierul — îl încărcați dumneavoastră pe platforma țării dumneavoastră. Disponibil pentru facturi, note de credit și de debit: Germania, Franța, Italia, Polonia, România și Spania primesc formatul lor național; Bulgaria și orice altă țară primesc un fișier generic EN 16931/Peppol UBL."
+        }
+      ]
+    },
+    {
+      "question": "Compunerea unei ciorne costă credit?",
+      "answer": [
+        {
+          "text": "Nu. Ciornele, clienții și articolele din catalog sunt gratuite. Doar emiterea — atribuirea unui număr unui document — deduce 0,10 € din sold."
+        }
+      ]
+    },
+    {
+      "question": "Pot alege moneda pe un document?",
+      "answer": [
+        {
+          "text": "Nu, fiecare document este în euro; nu există selector de monedă."
+        }
+      ]
+    },
+    {
+      "question": "Pot schimba următorul număr de document?",
+      "answer": [
+        {
+          "text": "Doar cât timp o serie (un tip de document) nu are încă documente emise, prin "
+        },
+        {
+          "text": "Modificați numărul următor",
+          "bold": true
+        },
+        {
+          "text": " în fereastra de emitere. Odată ce un document este emis, numerotarea continuă automat, fără goluri."
+        }
+      ]
+    },
+    {
+      "question": "Care este diferența dintre o proformă și o factură?",
+      "answer": [
+        {
+          "text": "O proformă arată ca o factură, cu aceleași detalii, dar nu creează nicio obligație fiscală; factura este documentul fiscal. Ambele au propriul număr, în serii de numerotare separate."
+        }
+      ]
+    },
+    {
+      "question": "Un abonament înseamnă că documentele sunt gratuite?",
+      "answer": [
+        {
+          "text": "Nu. Acesta reîncarcă creditul dumneavoastră cu dublul sumei pachetului unic echivalent, iar creditul neutilizat se reportează — dar fiecare document emis costă în continuare 0,10 € din acel sold."
+        }
+      ]
+    }
+  ]
+}

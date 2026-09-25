@@ -1,0 +1,603 @@
+{
+  "country": "FR",
+  "locale": "fr",
+  "slug": "mentions-obligatoires-facture-france",
+  "title": "Mentions obligatoires facture France 2026 | Fakturcho",
+  "description": "Mentions obligatoires, numérotation, délais, TVA et facturation électronique 2026-2027 en France : guide à jour pour indépendants, TPE et PME.",
+  "h1": "Facture conforme en France : mentions obligatoires, délais et facturation électronique 2026",
+  "answer": "Une facture française doit porter un numéro chronologique continu, la date, l'identité et le SIREN des deux parties, le prix HT, le taux et le montant de TVA (ou la mention d'exonération), et l'indemnité forfaitaire de 40 €. Dès le 1er septembre 2026, toute entreprise doit pouvoir recevoir une facture électronique ; l'émission devient obligatoire par étapes jusqu'en 2027.",
+  "lastReviewed": "2026-09-25",
+  "sections": [
+    {
+      "heading": "Quelles sont les mentions obligatoires sur une facture ?",
+      "id": "quelles-sont-les-mentions-obligatoires-sur-une-facture",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Une facture doit identifier le document, les deux parties, l'opération, le prix, la TVA et les conditions de paiement. Son contenu est encadré par deux textes complémentaires : l'"
+            },
+            {
+              "text": "article 242 nonies A de l'annexe II au Code général des impôts (CGI)",
+              "bold": true
+            },
+            {
+              "text": ", pour les mentions fiscales, et l'"
+            },
+            {
+              "text": "article L441-9 du Code de commerce",
+              "bold": true
+            },
+            {
+              "text": ", pour les mentions liées aux délais de paiement. Une mention manquante ou inexacte expose à une amende fiscale de 15 € par mention, plafonnée au quart du montant de la facture (CGI, art. 1737, II)."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Catégorie",
+            "Mention obligatoire"
+          ],
+          "rows": [
+            [
+              "Identification du document",
+              "Numéro unique issu d'une séquence chronologique continue, date d'émission"
+            ],
+            [
+              "Vendeur",
+              "Nom ou raison sociale, adresse, numéro de TVA intracommunautaire, SIREN/SIRET"
+            ],
+            [
+              "Client (professionnel)",
+              "Nom ou raison sociale, adresse de facturation"
+            ],
+            [
+              "Opération",
+              "Date de la vente ou de la prestation, quantité, dénomination précise des biens/services"
+            ],
+            [
+              "Prix",
+              "Prix unitaire HT, rabais/remises/ristournes acquis et chiffrables, prix total HT"
+            ],
+            [
+              "TVA",
+              "Taux de TVA légalement applicable et montant correspondant par taux, ou référence à l'exonération (article du CGI ou de la directive UE)"
+            ],
+            [
+              "Paiement",
+              "Échéance, escompte pour paiement anticipé, taux des pénalités de retard, indemnité forfaitaire de recouvrement"
+            ],
+            [
+              "Divers",
+              "Numéro de bon de commande s'il a été établi au préalable"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pour les opérations intracommunautaires, en autoliquidation ou pour certaines prestations, le numéro de TVA du client doit aussi figurer."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Comment numéroter ses factures correctement ?",
+      "id": "comment-numeroter-ses-factures-correctement",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La numérotation doit suivre une "
+            },
+            {
+              "text": "suite chronologique continue, sans rupture ni doublon",
+              "bold": true
+            },
+            {
+              "text": ", par exercice ou par série clairement identifiée (par exemple par point de vente, si justifié). Il est interdit de « sauter » un numéro ou de recommencer une numérotation en cours d'année sans justification. Le défaut de facturation ou de numérotation conforme, prévu à l'article L441-9 du Code de commerce, est puni d'une amende administrative pouvant atteindre 75 000 € (personne physique) ou 375 000 € (personne morale), doublée en cas de réitération sous deux ans."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Quel délai pour émettre une facture ?",
+      "id": "quel-delai-pour-emettre-une-facture",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Le principe fiscal est simple : "
+            },
+            {
+              "text": "la facture doit être émise dès la livraison du bien ou l'achèvement de la prestation",
+              "bold": true
+            },
+            {
+              "text": ", au moment du fait générateur de la TVA. Quelques jours de délai sont tolérés pour la gestion administrative. Deux régimes particuliers :"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Facturation périodique",
+                "bold": true
+              },
+              {
+                "text": " (plusieurs opérations avec un même client sur un mois civil) : une facture récapitulative est admise, mais pas au-delà de la fin du mois de livraison ou de prestation."
+              }
+            ],
+            [
+              {
+                "text": "Livraisons intracommunautaires et prestations vers un assujetti d'un autre État membre",
+                "bold": true
+              },
+              {
+                "text": " : facture au plus tard le 15 du mois suivant l'opération."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Facture d'acompte et avoir : comment corriger une facture ?",
+      "id": "facture-d-acompte-et-avoir-comment-corriger-une-facture",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Une "
+            },
+            {
+              "text": "facture d'acompte",
+              "bold": true
+            },
+            {
+              "text": " est émise dès qu'un acompte est encaissé avant la livraison ou la prestation ; elle peut ne pas porter toutes les mentions obligatoires si certains éléments (par exemple le détail final des biens) ne sont pas encore connus. La facture finale déduit ensuite les acomptes déjà facturés."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pour corriger une facture déjà émise, deux méthodes existent : la "
+            },
+            {
+              "text": "note d'avoir",
+              "bold": true
+            },
+            {
+              "text": " (facture rectificative), qui référence explicitement la facture initiale (numéro, date) et reprend les mentions obligatoires applicables ; ou la facture "
+            },
+            {
+              "text": "« annule et remplace »",
+              "bold": true
+            },
+            {
+              "text": ", qui indique expressément qu'elle annule et remplace l'initiale, avec sa référence exacte."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "La franchise en base de TVA : que doit porter la facture ?",
+      "id": "la-franchise-en-base-de-tva-que-doit-porter-la-facture",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Une entreprise (y compris une micro-entreprise) sous les seuils de la franchise en base de TVA n'applique pas de TVA et doit indiquer sur chaque facture "
+            },
+            {
+              "text": "« TVA non applicable, article 293 B du CGI »",
+              "bold": true
+            },
+            {
+              "text": ". En 2026, les seuils restent à leur niveau antérieur au 1er mars 2025 :"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Activité",
+            "Seuil de base",
+            "Seuil majoré (tolérance)"
+          ],
+          "rows": [
+            [
+              "Prestations de services (BNC/BIC services)",
+              "37 500 €",
+              "41 250 €"
+            ],
+            [
+              "Ventes de marchandises, restauration, hébergement",
+              "85 000 €",
+              "93 500 €"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Le projet de seuil unique à 25 000 € (loi de finances pour 2025) a été suspendu puis définitivement abrogé par la "
+            },
+            {
+              "text": "loi n° 2025-1044 du 3 novembre 2025",
+              "bold": true
+            },
+            {
+              "text": ", rétablissant ces seuils différenciés. Depuis le 1er janvier 2025, dépasser le seuil majoré fait perdre la franchise dès ce jour."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Pénalités de retard et indemnité forfaitaire de 40 € : que doit indiquer la facture ?",
+      "id": "penalites-de-retard-et-indemnite-forfaitaire-de-40-que-doit-indiquer-la-facture",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Toute facture entre professionnels doit préciser le "
+            },
+            {
+              "text": "taux des pénalités de retard",
+              "bold": true
+            },
+            {
+              "text": " exigibles après la date d'échéance, ainsi que l'"
+            },
+            {
+              "text": "indemnité forfaitaire de recouvrement",
+              "bold": true
+            },
+            {
+              "text": ", fixée à "
+            },
+            {
+              "text": "40 €",
+              "bold": true
+            },
+            {
+              "text": " par l'article D441-5 du Code de commerce (application de l'art. L441-10, II). Elle est due de plein droit, sans mise en demeure, dès le premier jour de retard, et s'ajoute aux pénalités de retard sans les remplacer. Si les frais réels dépassent 40 €, une indemnisation complémentaire peut être demandée sur justification. À défaut de taux contractuel, le taux légal des pénalités est égal au taux directeur de la BCE majoré de 10 points, avec un plancher de trois fois le taux d'intérêt légal."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "La facture pro forma a-t-elle une valeur légale ?",
+      "id": "la-facture-pro-forma-a-t-elle-une-valeur-legale",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Non. Document commercial informatif (devis présenté sous forme de facture, pour une commande à l'international ou un dossier de financement), elle n'a "
+            },
+            {
+              "text": "aucune valeur comptable ni fiscale",
+              "bold": true
+            },
+            {
+              "text": ", ne déclenche aucune exigibilité de TVA et ne remplace jamais la facture définitive. Elle ne doit pas être numérotée dans la séquence des factures réelles."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Facturation électronique 2026-2027 : qui est concerné et à partir de quand ?",
+      "id": "facturation-electronique-2026-2027-qui-est-concerne-et-a-partir-de-quand",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Toute entreprise assujettie à la TVA en France doit pouvoir recevoir une facture électronique dès le 1er septembre 2026, et l'émission devient obligatoire par étapes jusqu'en 2027. Ce calendrier progressif vient de la réforme de la facturation électronique (article 91 de la loi de finances pour 2024, décret n° 2024-266 du 25 mars 2024), confirmé par la Direction générale des Finances publiques (DGFiP) :"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Date",
+            "Obligation"
+          ],
+          "rows": [
+            [
+              "1er septembre 2026",
+              "Réception d'une facture électronique : toutes les entreprises assujetties à la TVA établies en France"
+            ],
+            [
+              "1er septembre 2026",
+              "Émission obligatoire pour les grandes entreprises et les entreprises de taille intermédiaire (ETI)"
+            ],
+            [
+              "1er septembre 2027",
+              "Émission obligatoire étendue aux PME, TPE et micro-entreprises"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Depuis le 1er septembre 2026, un PDF simple envoyé par e-mail ne suffit plus pour les opérations B2B domestiques des grandes entreprises et des ETI ; ce sera aussi le cas pour les PME, TPE et micro-entreprises à partir du 1er septembre 2027. Dans les deux cas, la facture doit transiter par une "
+            },
+            {
+              "text": "plateforme agréée (PA, anciennement PDP)",
+              "bold": true
+            },
+            {
+              "text": ", société privée immatriculée par l'État, dans un format structuré."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Quel format et quelle plateforme pour la facture électronique ?",
+      "id": "quel-format-et-quelle-plateforme-pour-la-facture-electronique",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Les formats reconnus sont "
+            },
+            {
+              "text": "Factur-X",
+              "bold": true
+            },
+            {
+              "text": " (PDF/A-3 avec XML embarqué), "
+            },
+            {
+              "text": "UBL",
+              "bold": true
+            },
+            {
+              "text": " et "
+            },
+            {
+              "text": "CII",
+              "bold": true
+            },
+            {
+              "text": " ; un simple PDF ou un scan ne suffit pas. La transmission passe par une plateforme agréée (PA) choisie par l'entreprise ; le "
+            },
+            {
+              "text": "Portail Public de Facturation (PPF)",
+              "bold": true
+            },
+            {
+              "text": " n'a plus qu'un rôle d'annuaire des entreprises et de concentrateur des données transmises à l'administration (e-reporting), pas de canal de transmission. Les factures au secteur public restent soumises à l'obligation, déjà en vigueur, de passer par "
+            },
+            {
+              "text": "Chorus Pro",
+              "bold": true
+            },
+            {
+              "text": ", distincte de la réforme B2B."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Quelles mentions la réforme de la facturation électronique ajoute-t-elle ?",
+      "id": "quelles-mentions-la-reforme-de-la-facturation-electronique-ajoute-t-elle",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La réforme (décret n° 2022-1299 du 7 octobre 2022) ajoute quatre mentions à celles déjà exigées par le CGI et le Code de commerce :"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Le "
+              },
+              {
+                "text": "numéro SIREN du client",
+                "bold": true
+              },
+              {
+                "text": " professionnel (en plus de celui du fournisseur, déjà obligatoire) ;"
+              }
+            ],
+            [
+              {
+                "text": "La "
+              },
+              {
+                "text": "nature de l'opération",
+                "bold": true
+              },
+              {
+                "text": " : livraison de biens, prestation de services, ou les deux ;"
+              }
+            ],
+            [
+              {
+                "text": "L'"
+              },
+              {
+                "text": "adresse de livraison",
+                "bold": true
+              },
+              {
+                "text": ", si elle diffère de l'adresse de facturation ;"
+              }
+            ],
+            [
+              {
+                "text": "La mention de l'"
+              },
+              {
+                "text": "option pour le paiement de la taxe d'après les débits",
+                "bold": true
+              },
+              {
+                "text": ", lorsque le prestataire a exercé cette option."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Checklist : les points à vérifier sur chaque facture",
+      "id": "checklist-les-points-a-verifier-sur-chaque-facture",
+      "blocks": [
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Numéro unique, en séquence chronologique continue et sans trou"
+              }
+            ],
+            [
+              {
+                "text": "Date d'émission, date de la vente/prestation si différente"
+              }
+            ],
+            [
+              {
+                "text": "Identité complète du vendeur : nom, adresse, SIREN/SIRET, n° de TVA intracommunautaire"
+              }
+            ],
+            [
+              {
+                "text": "Identité complète du client, avec son SIREN pour un client professionnel"
+              }
+            ],
+            [
+              {
+                "text": "Désignation précise de chaque bien ou service, quantité, prix unitaire HT"
+              }
+            ],
+            [
+              {
+                "text": "Taux et montant de TVA par taux, ou mention d'exonération exacte (ex. art. 293 B)"
+              }
+            ],
+            [
+              {
+                "text": "Adresse de livraison si différente de l'adresse de facturation"
+              }
+            ],
+            [
+              {
+                "text": "Échéance, taux des pénalités de retard, indemnité forfaitaire de 40 €"
+              }
+            ],
+            [
+              {
+                "text": "Référence à la facture initiale sur tout avoir ou facture rectificative"
+              }
+            ],
+            [
+              {
+                "text": "Format Factur-X, UBL ou CII prêt pour dépôt sur votre plateforme agréée"
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Foire aux questions",
+  "faq": [
+    {
+      "question": "Une micro-entreprise doit-elle facturer la TVA ?",
+      "answer": [
+        {
+          "text": "Non, tant qu'elle reste sous les seuils de la franchise en base (37 500 € services, 85 000 € ventes de biens en 2026), avec la mention « TVA non applicable, article 293 B du CGI » et aucun taux de TVA affiché."
+        }
+      ]
+    },
+    {
+      "question": "Que risque-t-on en cas de facture sans numéro ou avec une mention manquante ?",
+      "answer": [
+        {
+          "text": "Une amende fiscale de 15 € par mention manquante ou inexacte, plafonnée au quart du montant de la facture (CGI, art. 1737, II), et une amende administrative jusqu'à 75 000 € (personne physique) ou 375 000 € (personne morale) pour défaut de facturation ou de numérotation conforme."
+        }
+      ]
+    },
+    {
+      "question": "Faut-il indiquer l'indemnité de 40 € même si le client paie toujours à temps ?",
+      "answer": [
+        {
+          "text": "Oui, sur toute facture entre professionnels, quel que soit le comportement de paiement du client."
+        }
+      ]
+    },
+    {
+      "question": "La facture pro forma remplace-t-elle la facture définitive ?",
+      "answer": [
+        {
+          "text": "Non : sans valeur fiscale ou comptable, elle doit toujours être suivie d'une facture numérotée dans la séquence normale une fois la vente réalisée."
+        }
+      ]
+    },
+    {
+      "question": "Le Portail Public de Facturation (PPF) permet-il encore d'envoyer une facture électronique ?",
+      "answer": [
+        {
+          "text": "Non. Depuis la réforme, le PPF n'est plus un canal de transmission universel : son rôle se limite à l'annuaire des entreprises et au concentrateur des données transmises à l'administration (e-reporting). L'envoi passe obligatoirement par une plateforme agréée (PA) choisie par l'entreprise."
+        }
+      ]
+    },
+    {
+      "question": "Un PDF envoyé par e-mail est-il encore valable pour les opérations B2B domestiques ?",
+      "answer": [
+        {
+          "text": "Non, déjà plus depuis le 1er septembre 2026 pour les grandes entreprises et les ETI ; ce sera aussi le cas pour les PME, TPE et micro-entreprises à partir du 1er septembre 2027. La facture doit passer par une plateforme agréée, en Factur-X, UBL ou CII."
+        }
+      ]
+    },
+    {
+      "question": "Quelle différence entre une note d'avoir et une facture qui annule et remplace ?",
+      "answer": [
+        {
+          "text": "La note d'avoir corrige un montant en référençant la facture initiale ; la facture « annule et remplace » s'y substitue entièrement, en la référençant explicitement."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Comment Fakturcho vous aide",
+    "body": [
+      {
+        "text": "Fakturcho attribue à chaque facture, avoir et pro forma un numéro en séquence chronologique continue, propose la mention « TVA non applicable, article 293 B du CGI » pour les comptes en franchise, et vérifie le SIREN/SIRET avant l'émission. Pour un émetteur français, Fakturcho génère aussi le fichier XML au format UBL, prêt à déposer sur votre plateforme agréée ou sur Chorus Pro, ainsi qu'un PDF en français par e-mail — le dépôt reste une étape que vous effectuez vous-même. *Dernière mise à jour : 25.09.2026. Ces informations sont données à titre général et ne constituent pas un conseil fiscal ou juridique personnalisé ; pour votre situation, consultez un expert-comptable ou l'administration fiscale.*"
+      }
+    ]
+  }
+}
