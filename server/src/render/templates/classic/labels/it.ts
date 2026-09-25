@@ -40,6 +40,7 @@ export const it: ClassicLabels = {
   exemptionPrefix: "Natura dell'operazione: ",
   originalMarker: ' (Originale)',
   draftLabel: 'Bozza',
+  correctsInvoice: (number, date) => `Riferita alla fattura n. ${number} del ${date}`,
   documentType: {
     invoice: 'Fattura',
     proforma: 'Fattura proforma',

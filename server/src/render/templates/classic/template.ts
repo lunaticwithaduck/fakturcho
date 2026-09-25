@@ -1,6 +1,7 @@
 import type { Discount, Document, LineItem } from '@prisma/client';
 import type { VatPresentation } from '../../../money/vat';
 import { toSharedDocumentType } from '../../prisma-mappers';
+import { buildCorrectionReference, type OriginalDocumentRef } from './correction-reference';
 import { buildIssuerBlock, buildSignatureRow } from './footer-blocks';
 import { buildDatesBlock, buildRecipientBlock } from './header-blocks';
 import type { ClassicLanguage } from './labels';
@@ -21,6 +22,7 @@ export interface ClassicTemplateInput {
   language: ClassicLanguage;
   issuerCountry?: string | null;
   discounts?: readonly Discount[];
+  originalDocument?: OriginalDocumentRef | null;
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
@@ -32,6 +34,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     language,
     issuerCountry = document.issuerCountry,
     discounts = [],
+    originalDocument = null,
   } = input;
   const locale = resolveClassicLocale(language, issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
@@ -52,6 +55,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     ${buildDatesBlock(document, documentType, locale)}
   </div>
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
+  ${buildCorrectionReference(documentType, originalDocument, locale)}
   ${buildLineItemsTable(lineItems, locale, showPrices)}
   ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
   ${

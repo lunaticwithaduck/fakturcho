@@ -33,6 +33,7 @@ export const en: ClassicLabels = {
   exemptionPrefix: 'VAT exemption ground: ',
   originalMarker: ' (Original)',
   draftLabel: 'Draft',
+  correctsInvoice: (number, date) => `Relates to invoice no. ${number} of ${date}`,
   documentType: {
     invoice: 'Invoice',
     proforma: 'Proforma invoice',

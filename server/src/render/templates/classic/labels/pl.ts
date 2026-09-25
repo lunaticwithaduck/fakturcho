@@ -38,6 +38,7 @@ export const pl: ClassicLabels = {
   exemptionPrefix: 'Podstawa zwolnienia: ',
   originalMarker: '',
   draftLabel: 'Wersja robocza',
+  correctsInvoice: (number, date) => `Dotyczy faktury nr ${number} z dnia ${date}`,
   // art. 106j ustawy o VAT: any correction of an invoiced amount, up or down, is
   // a faktura korygująca — a nota debetowa is not a VAT document.
   documentType: {

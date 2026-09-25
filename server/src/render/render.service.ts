@@ -73,6 +73,15 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       ? resolveDocumentLanguage(document.documentLanguage, issuerCountry)
       : 'bg';
 
+    const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';
+    const originalDocument =
+      isCorrection && document.originalDocumentId
+        ? await this.prisma.document.findFirst({
+            where: { id: document.originalDocumentId, accountId },
+            select: { number: true, numberPrefix: true, numberSuffix: true, issuedAt: true },
+          })
+        : null;
+
     const html = renderClassicTemplateHtml({
       document,
       lineItems: document.lineItems,
@@ -81,6 +90,7 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       isDraft,
       language,
       issuerCountry,
+      originalDocument,
     });
 
     const buffer = await this.renderHtmlToPdf(html);

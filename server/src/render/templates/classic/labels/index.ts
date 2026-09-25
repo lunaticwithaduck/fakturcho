@@ -45,6 +45,7 @@ export interface ClassicLabels {
   exemptionPrefix: string;
   originalMarker: string;
   draftLabel: string;
+  correctsInvoice: (number: string, date: string) => string;
   documentType: Record<DocumentType, string>;
   watermarkMain: string;
   watermarkSub: string;

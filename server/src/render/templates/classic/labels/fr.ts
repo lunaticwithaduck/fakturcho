@@ -40,6 +40,7 @@ export const fr: ClassicLabels = {
   exemptionPrefix: "Motif d'exonération de TVA : ",
   originalMarker: ' (Original)',
   draftLabel: 'Brouillon',
+  correctsInvoice: (number, date) => `Facture d'origine : n° ${number} du ${date}`,
   documentType: {
     invoice: 'Facture',
     proforma: 'Facture pro forma',

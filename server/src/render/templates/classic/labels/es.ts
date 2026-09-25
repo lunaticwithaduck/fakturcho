@@ -40,6 +40,7 @@ export const es: ClassicLabels = {
   exemptionPrefix: 'Operación exenta de IVA según el ',
   originalMarker: ' (Original)',
   draftLabel: 'Borrador',
+  correctsInvoice: (number, date) => `Factura rectificada: n.º ${number} de ${date}`,
   documentType: {
     invoice: 'Factura',
     proforma: 'Factura proforma',

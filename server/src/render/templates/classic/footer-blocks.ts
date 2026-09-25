@@ -28,6 +28,7 @@ export function buildIssuerBlock(document: Document, locale: ClassicLocaleContex
       : '',
     line(`${labels.companyIdLabel}: `, document.issuerEik),
     identifierRows,
+    line(labels.vatNumberPrefix, document.issuerVatNumber),
     locale.showMol ? line(labels.molPrefix, document.issuerMol) : '',
   ].join('');
   const columnTwo = [

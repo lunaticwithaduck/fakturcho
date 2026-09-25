@@ -39,6 +39,7 @@ export const ro: ClassicLabels = {
   exemptionPrefix: '',
   originalMarker: ' (Original)',
   draftLabel: 'Ciornă',
+  correctsInvoice: (number, date) => `Referitoare la factura nr. ${number} din ${date}`,
   documentType: {
     invoice: 'Factură',
     proforma: 'Factură proformă',

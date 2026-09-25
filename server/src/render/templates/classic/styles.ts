@@ -55,6 +55,10 @@ export function buildStyles(): string {
       font-weight: 700;
       margin: 24px 0;
     }
+    .correction-reference {
+      text-align: center;
+      margin: -16px 0 24px;
+    }
     table.line-items {
       width: 100%;
       border-collapse: collapse;

@@ -33,6 +33,7 @@ export const bg: ClassicLabels = {
   exemptionPrefix: 'Основание за неначисляване на ДДС: ',
   originalMarker: ' (Оригинал)',
   draftLabel: 'Чернова',
+  correctsInvoice: (number, date) => `Към фактура № ${number} от ${date}`,
   documentType: {
     invoice: 'Фактура',
     proforma: 'Проформа фактура',

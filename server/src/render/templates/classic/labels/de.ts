@@ -33,6 +33,7 @@ export const de: ClassicLabels = {
   exemptionPrefix: 'Hinweis: ',
   originalMarker: '',
   draftLabel: 'Entwurf',
+  correctsInvoice: (number, date) => `Zur Rechnung Nr. ${number} vom ${date}`,
   documentType: {
     invoice: 'Rechnung',
     proforma: 'Proforma-Rechnung',

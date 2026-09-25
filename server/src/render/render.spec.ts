@@ -310,4 +310,22 @@ describe('render pipeline', () => {
       await flags.setEnabled('EN_LOCALE', true);
     }
   });
+
+  it('a credit note names the invoice it corrects and prints the issuer VAT number', async () => {
+    const original = await seedDocument(db.prisma, {
+      accountId,
+      number: 41,
+      overrides: { issuedAt: new Date('2026-07-15'), issuerVatNumber: 'BG123456789' },
+    });
+    const creditNote = await seedDocument(db.prisma, {
+      accountId,
+      documentType: 'CREDIT_NOTE',
+      number: 42,
+      overrides: { originalDocumentId: original.id, issuerVatNumber: 'BG123456789' },
+    });
+    const { buffer } = await service.renderPdf(creditNote.id, accountId);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Към фактура № 0000000041 от 15.07.2026');
+    expect(text).toContain('ДДС №: BG123456789');
+  });
 });
