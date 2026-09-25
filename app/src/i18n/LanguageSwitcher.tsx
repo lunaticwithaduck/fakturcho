@@ -7,15 +7,23 @@ interface LanguageSwitcherProps {
   locale: Locale;
   currentPath: string;
   enabled: boolean;
+  className?: string;
 }
 
-export function LanguageSwitcher({ locale, currentPath, enabled }: LanguageSwitcherProps) {
+export function LanguageSwitcher({
+  locale,
+  currentPath,
+  enabled,
+  className,
+}: LanguageSwitcherProps) {
   if (!enabled) return null;
 
   return (
     <nav
       aria-label={NAV_LABELS[locale]}
-      className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm"
+      className={['flex flex-wrap items-center gap-x-3 gap-y-1 text-sm', className]
+        .filter(Boolean)
+        .join(' ')}
     >
       {PUBLISHED_LOCALES.map((code) => (
         <a
