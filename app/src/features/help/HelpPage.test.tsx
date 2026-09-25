@@ -21,6 +21,10 @@ vi.mock('@app/features/guides/registry', () => ({
 
 import { HelpPage } from './HelpPage';
 
+vi.mock('@app/auth/hooks', () => ({
+  useAuthSession: () => ({ session: null, isPending: false, error: null }),
+}));
+
 const CHROME = {
   pageTitle: 'How to use',
   tocLabel: 'On this page',

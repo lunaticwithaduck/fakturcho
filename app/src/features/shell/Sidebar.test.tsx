@@ -27,6 +27,10 @@ vi.mock('next/image', () => ({
 
 import { Sidebar } from './Sidebar';
 
+vi.mock('@app/auth/hooks', () => ({
+  useAuthSession: () => ({ session: null, isPending: false, error: null }),
+}));
+
 afterEach(() => {
   cleanup();
   useGetIssuerProfileQueryMock.mockReset();

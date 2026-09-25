@@ -1,4 +1,5 @@
 import { GuideIndexPage } from '@app/features/guides/GuideIndexPage';
+import { guideIndexAlternates } from '@app/features/guides/indexAlternates';
 import { euGuide, guidesForLocale } from '@app/features/guides/registry';
 import { loadMessages } from '@app/i18n/locale';
 import type { Locale } from '@shared/types';
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: LocaleGuideIndexPageProps): P
   return {
     title: { absolute: `${messages.guides.breadcrumbGuides} — ${messages.marketing.brand}` },
     description: messages.guides.indexDescription,
-    alternates: { canonical: `/${locale}/guide` },
+    alternates: { canonical: `/${locale}/guide`, languages: guideIndexAlternates() },
   };
 }
 

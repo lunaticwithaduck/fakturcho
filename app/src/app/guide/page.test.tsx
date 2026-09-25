@@ -14,6 +14,11 @@ describe('bg guide index metadata', () => {
   it('is absolutely titled and self-canonical', () => {
     expect(metadata.title).toEqual({ absolute: 'Наръчници — Фактурчо' });
     expect(metadata.alternates?.canonical).toBe('/guide');
+    expect(metadata.alternates?.languages).toMatchObject({
+      bg: '/guide',
+      pl: '/pl/guide',
+      'x-default': '/guide',
+    });
     expect(typeof metadata.description).toBe('string');
   });
 });

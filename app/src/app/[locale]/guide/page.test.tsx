@@ -15,6 +15,11 @@ describe('locale guide index metadata', () => {
     const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'de' }) });
     expect(metadata.title).toEqual({ absolute: 'Leitfäden — Fakturcho' });
     expect(metadata.alternates?.canonical).toBe('/de/guide');
+    expect(metadata.alternates?.languages).toMatchObject({
+      bg: '/guide',
+      de: '/de/guide',
+      'x-default': '/guide',
+    });
   });
 });
 

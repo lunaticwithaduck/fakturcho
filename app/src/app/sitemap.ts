@@ -1,3 +1,8 @@
+import {
+  guideIndexAlternates,
+  guideIndexLocales,
+  latestGuideReview,
+} from '@app/features/guides/indexAlternates';
 import { allGuides } from '@app/features/guides/registry';
 import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
 import { PUBLISHED_LOCALES } from '@shared/types';
@@ -56,11 +61,16 @@ function guideEntries(): MetadataRoute.Sitemap {
 }
 
 function guideIndexEntries(): MetadataRoute.Sitemap {
-  const locales = [...new Set(allGuides().map((guide) => guide.locale))];
-  return locales.map((locale) => ({
+  const languages = Object.fromEntries(
+    Object.entries(guideIndexAlternates()).map(([locale, path]) => [locale, `${BASE_URL}${path}`]),
+  );
+  const lastModified = latestGuideReview();
+  return guideIndexLocales().map((locale) => ({
     url: `${BASE_URL}${toLocalePath('/guide', locale)}`,
+    ...(lastModified ? { lastModified } : {}),
     changeFrequency: 'monthly',
     priority: 0.5,
+    alternates: { languages },
   }));
 }
 
