@@ -1,4 +1,6 @@
-import { ogLocaleAlternates } from '@app/i18n/ogLocale';
+import { loadMessages } from '@app/i18n/locale';
+import { ogLocaleAlternates, ogLocaleTag } from '@app/i18n/ogLocale';
+import type { Locale } from '@shared/types';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
@@ -13,7 +15,7 @@ import './globals.css';
 const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC;
 const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
 
-export const metadata: Metadata = {
+const BG_METADATA: Metadata = {
   metadataBase: new URL('https://www.fakturcho.com'),
   title: {
     default: 'Фактурчо — фактури за българския бизнес',
@@ -38,6 +40,23 @@ export const metadata: Metadata = {
     follow: true,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = (await getLocale()) as Locale;
+  if (locale === 'bg') return BG_METADATA;
+  const seo = (await loadMessages(locale)).seo.home;
+  return {
+    ...BG_METADATA,
+    title: { default: seo.title, template: '%s — Fakturcho' },
+    description: seo.description,
+    openGraph: {
+      type: 'website',
+      locale: ogLocaleTag(locale),
+      alternateLocale: ogLocaleAlternates(locale),
+      siteName: 'Fakturcho',
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: THEME_COLOR,

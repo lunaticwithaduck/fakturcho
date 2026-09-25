@@ -5,11 +5,9 @@ import type { Metadata } from 'next';
 import { getLocale, getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = (await getLocale()) as Locale;
-  const content = getHelpContent(locale);
   const t = await getTranslations('help');
   return {
-    title: content?.title ?? t('pageTitle'),
+    title: t('pageTitle'),
     robots: { index: false, follow: false },
   };
 }
