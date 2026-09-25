@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: LocaleLoginPageProps): Promis
   return {
     title: { absolute: seo.title },
     description: seo.description,
+    robots: { index: false, follow: true },
     alternates: {
       canonical: toLocalePath('/login', locale as Locale),
       languages: hreflangAlternates('/login'),

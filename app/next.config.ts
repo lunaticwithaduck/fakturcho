@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
     '/[locale]/opengraph-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
     '/[locale]/twitter-image': ['./src/app/fonts/**', './src/features/shell/brand-icon.png'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'fakturcho.com' }],
+        destination: 'https://www.fakturcho.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     const serverUrl = process.env.SERVER_URL ?? 'http://localhost:3001';
     return [{ source: '/api/:path*', destination: `${serverUrl}/api/:path*` }];
