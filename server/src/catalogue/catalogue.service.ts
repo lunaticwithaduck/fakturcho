@@ -8,12 +8,14 @@ export interface CreateCatalogueItemInput {
   name: string;
   defaultUnitPrice: Cents;
   unit: string;
+  unitCode?: string | null | undefined;
 }
 
 export interface UpdateCatalogueItemInput {
   name?: string | undefined;
   defaultUnitPrice?: Cents | undefined;
   unit?: string | undefined;
+  unitCode?: string | null | undefined;
 }
 
 function toDto(item: CatalogueItem): CatalogueItemDto {
@@ -22,6 +24,7 @@ function toDto(item: CatalogueItem): CatalogueItemDto {
     name: item.name,
     defaultUnitPrice: item.defaultUnitPrice,
     unit: item.unit,
+    unitCode: item.unitCode,
   };
 }
 
@@ -50,6 +53,7 @@ export class CatalogueService {
         name: input.name,
         defaultUnitPrice: input.defaultUnitPrice,
         unit: input.unit,
+        unitCode: input.unitCode ?? null,
       },
     });
     return toDto(item);
@@ -70,6 +74,7 @@ export class CatalogueService {
           ? { defaultUnitPrice: input.defaultUnitPrice }
           : {}),
         ...(input.unit !== undefined ? { unit: input.unit } : {}),
+        ...(input.unitCode !== undefined ? { unitCode: input.unitCode } : {}),
       },
     });
     return toDto(item);

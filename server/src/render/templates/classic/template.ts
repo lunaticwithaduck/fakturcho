@@ -8,6 +8,12 @@ import type { ClassicLanguage } from './labels';
 import { buildLineItemsTable } from './line-items';
 import { resolveClassicLocale } from './locale';
 import { buildMentionsBlock } from './mentions-block';
+import {
+  buildKsefQrBlock,
+  buildVerifactuQrBlock,
+  type KsefQrBlock,
+  type VerifactuQrBlock,
+} from './qr-block';
 import { buildStyles } from './styles';
 import { buildTitle } from './title';
 import { buildAmountWordsBlock, buildTotalsBlock } from './totals-block';
@@ -23,6 +29,8 @@ export interface ClassicTemplateInput {
   issuerCountry?: string | null;
   discounts?: readonly Discount[];
   originalDocument?: OriginalDocumentRef | null;
+  ksefQr?: KsefQrBlock | null;
+  verifactuQr?: VerifactuQrBlock | null;
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
@@ -35,6 +43,8 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     issuerCountry = document.issuerCountry,
     discounts = [],
     originalDocument = null,
+    ksefQr = null,
+    verifactuQr = null,
   } = input;
   const locale = resolveClassicLocale(language, issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
@@ -50,12 +60,13 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
 </head>
 <body>
   ${buildWatermark(isDraft, locale)}
+  ${buildVerifactuQrBlock(verifactuQr)}
   <div class="header">
     ${buildRecipientBlock(document, documentType, locale)}
     ${buildDatesBlock(document, documentType, locale)}
   </div>
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
-  ${buildCorrectionReference(documentType, originalDocument, locale)}
+  ${buildCorrectionReference(documentType, originalDocument, document.correctionReason, locale)}
   ${buildLineItemsTable(lineItems, locale, documentType, showPrices)}
   ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
   ${
@@ -65,6 +76,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   }
   ${buildMentionsBlock({ document, lineItems, locale })}
   ${buildIssuerBlock(document, documentType, locale)}
+  ${buildKsefQrBlock(ksefQr)}
   ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, documentType, locale) : ''}
 </body>
 </html>`;

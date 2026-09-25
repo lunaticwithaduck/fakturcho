@@ -182,6 +182,30 @@ describe('toFatturaPaXml — document type codes', () => {
   });
 });
 
+describe('toFatturaPaXml — correction reason', () => {
+  it('carries the correction reason as a Causale on a credit note', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      documentType: 'credit_note',
+      correctionReason: 'Reso della merce',
+    };
+    expect(toFatturaPaXml(document)).toContain('<Causale>Reso della merce</Causale>');
+  });
+
+  it('does not touch Causale on an invoice, even with a correction reason set', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      correctionReason: 'Reso della merce',
+    };
+    expect(toFatturaPaXml(document)).not.toContain('Reso della merce');
+  });
+
+  it('omits Causale when there is no correction reason', () => {
+    const document: DocumentDto = { ...itDomesticStandardInvoice, documentType: 'debit_note' };
+    expect(toFatturaPaXml(document)).not.toContain('<Causale>');
+  });
+});
+
 describe('toFatturaPaXml — RegimeFiscale and IscrizioneREA', () => {
   it('uses RF01 for a VAT-registered issuer', () => {
     expect(toFatturaPaXml(itDomesticStandardInvoice)).toContain(

@@ -38,6 +38,31 @@ describe('CatalogueService', () => {
     expect(afterDelete).toHaveLength(0);
   });
 
+  it('carries a default unitCode through create, update and toDto', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+
+    const created = await service.create(account.id, {
+      name: 'Hosting',
+      defaultUnitPrice: 5000,
+      unit: 'month',
+      unitCode: 'MON',
+    });
+    expect(created.unitCode).toBe('MON');
+
+    const withoutCode = await service.create(account.id, {
+      name: 'Support',
+      defaultUnitPrice: 3000,
+      unit: 'pcs',
+    });
+    expect(withoutCode.unitCode).toBeNull();
+
+    const updated = await service.update(account.id, created.id, { unitCode: 'HUR' });
+    expect(updated.unitCode).toBe('HUR');
+
+    const cleared = await service.update(account.id, created.id, { unitCode: null });
+    expect(cleared.unitCode).toBeNull();
+  });
+
   it('scopes items by account', async () => {
     const accountA = await db.prisma.account.create({ data: {} });
     const accountB = await db.prisma.account.create({ data: {} });

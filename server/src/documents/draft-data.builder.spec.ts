@@ -72,3 +72,35 @@ describe('buildDraftData — grouped totals', () => {
     );
   });
 });
+
+describe('buildDraftData — FR nature-of-operation and delivery address', () => {
+  const lineItems: LineItemInput[] = [
+    { name: 'A', quantity: '1', unitPrice: 1000, sortOrder: 0, vatCategory: 'S', vatRateBp: 2000 },
+  ];
+  const resolved: ResolvedDraftLineItem[] = [
+    { quantity: '1', unitPrice: 1000, vatCategory: 'S', vatRateBp: 2000 },
+  ];
+
+  it('carries the nature of operation and the delivery address through unchanged', () => {
+    const data = buildDraftData(
+      'acc1',
+      request(lineItems, {
+        operationNature: 'services',
+        deliveryAddress: '12 rue de la Gare, 69001 Lyon',
+      }),
+      registered,
+      resolved,
+      'FR',
+    );
+
+    expect(data.operationNature).toBe('services');
+    expect(data.deliveryAddress).toBe('12 rue de la Gare, 69001 Lyon');
+  });
+
+  it('defaults both to null when absent', () => {
+    const data = buildDraftData('acc1', request(lineItems), registered, resolved, 'FR');
+
+    expect(data.operationNature).toBeNull();
+    expect(data.deliveryAddress).toBeNull();
+  });
+});

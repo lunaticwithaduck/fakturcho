@@ -7,8 +7,8 @@ import {
   createDiscount,
   createLineItem,
   toSaveDraftRequest,
-  validateComposerState,
 } from './composerState';
+import { validateComposerState } from './composerValidation';
 import type { VatTreatment } from './liveTotals';
 
 const NO_VAT: VatTreatment = {
@@ -54,6 +54,7 @@ function fakeDocument(overrides: Partial<DocumentDto>): DocumentDto {
     transportedAt: null,
     carrierName: null,
     transportNote: null,
+    correctionReason: null,
     subtotal: 0,
     discountTotal: 0,
     amount: 0,
@@ -130,10 +131,39 @@ describe('toSaveDraftRequest', () => {
     const request = toSaveDraftRequest(state, VAT_20);
 
     expect(request.lineItems).toEqual([
-      { name: 'Услуга', quantity: '2', unitPrice: 1000, sortOrder: 0 },
+      { name: 'Услуга', quantity: '2', unitPrice: 1000, sortOrder: 0, unitCode: null },
     ]);
     expect(request.discounts).toEqual([
       { label: '10%', percentBp: 1000, amount: null, sortOrder: 0 },
+    ]);
+  });
+
+  it('sends an explicit vatRateBp and unitCode only for lines that carry one', () => {
+    const state = blankComposerState();
+    state.lineItems = [
+      { ...createLineItem(), name: 'Standard', quantity: '1', unitPrice: 1000 },
+      {
+        ...createLineItem(),
+        name: 'Reduced',
+        quantity: '1',
+        unitPrice: 1000,
+        vatRateBp: 900,
+        unitCode: 'HUR',
+      },
+    ];
+
+    const request = toSaveDraftRequest(state, VAT_20);
+
+    expect(request.lineItems).toEqual([
+      { name: 'Standard', quantity: '1', unitPrice: 1000, sortOrder: 0, unitCode: null },
+      {
+        name: 'Reduced',
+        quantity: '1',
+        unitPrice: 1000,
+        sortOrder: 1,
+        vatRateBp: 900,
+        unitCode: 'HUR',
+      },
     ]);
   });
 
@@ -151,6 +181,42 @@ describe('toSaveDraftRequest', () => {
     expect(request.originalDocumentId).toBe('doc-1');
   });
 
+  it('drops correctionReason for a non-correction document type', () => {
+    const state = withOneCompleteLine(blankComposerState());
+    state.correctionReason = 'Върната стока';
+    const request = toSaveDraftRequest(state, VAT_20);
+    expect(request.correctionReason).toBeNull();
+  });
+
+  it('trims and keeps correctionReason for credit and debit notes', () => {
+    const state = withOneCompleteLine({ ...blankComposerState(), documentType: 'debit_note' });
+    state.correctionReason = '  Върната стока  ';
+    const request = toSaveDraftRequest(state, VAT_20);
+    expect(request.correctionReason).toBe('Върната стока');
+  });
+
+  it('sends null correctionReason for a correction document type when left blank', () => {
+    const state = withOneCompleteLine({ ...blankComposerState(), documentType: 'credit_note' });
+    const request = toSaveDraftRequest(state, VAT_20);
+    expect(request.correctionReason).toBeNull();
+  });
+
+  it('sends the nature of operation and delivery address only for a French tax document', () => {
+    const state = {
+      ...withOneCompleteLine(blankComposerState()),
+      operationNature: 'services' as const,
+      deliveryAddress: '12 rue de la Gare, Lyon',
+    };
+
+    expect(toSaveDraftRequest(state, VAT_20, 'FR').operationNature).toBe('services');
+    expect(toSaveDraftRequest(state, VAT_20, 'FR').deliveryAddress).toBe('12 rue de la Gare, Lyon');
+    expect(toSaveDraftRequest(state, VAT_20, 'BG').operationNature).toBeNull();
+    expect(toSaveDraftRequest(state, VAT_20, 'BG').deliveryAddress).toBeNull();
+    expect(
+      toSaveDraftRequest(state, { ...VAT_20, isTaxDocument: false }, 'FR').operationNature,
+    ).toBeNull();
+  });
+
   it('sends the exemption ground only when it is selectable', () => {
     const state = withOneCompleteLine(blankComposerState());
     state.vatExemptionGround = 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС';
@@ -161,13 +227,58 @@ describe('toSaveDraftRequest', () => {
       'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
     );
   });
+
+  it('carries an existing correctionReason into the form, defaulting to an empty string', () => {
+    const withReason = fakeDocument({ correctionReason: 'Върната стока' });
+    expect(composerStateFromDocument(withReason, 'Europe/Sofia', 2000).correctionReason).toBe(
+      'Върната стока',
+    );
+
+    const withoutReason = fakeDocument({ correctionReason: null });
+    expect(composerStateFromDocument(withoutReason, 'Europe/Sofia', 2000).correctionReason).toBe(
+      '',
+    );
+  });
 });
 
 describe('composerStateFromDocument', () => {
   it('localizes transportedAt into the issuer country timezone for editing', () => {
     const document = fakeDocument({ transportedAt: '2026-09-15T07:30:00.000Z' });
-    const state = composerStateFromDocument(document, 'Europe/Rome');
+    const state = composerStateFromDocument(document, 'Europe/Rome', 2000);
     expect(state.transportedAt).toBe('2026-09-15T09:30');
+  });
+
+  it('treats a line at the document default rate as unset, and a reduced rate as an explicit override', () => {
+    const document = fakeDocument({
+      vatRateBp: 2000,
+      lineItems: [
+        {
+          id: 'li-1',
+          name: 'A',
+          quantity: '1',
+          unitPrice: 1000,
+          lineTotal: 1000,
+          sortOrder: 0,
+          vatRateBp: 2000,
+          vatCategory: 'S',
+          unitCode: null,
+        },
+        {
+          id: 'li-2',
+          name: 'B',
+          quantity: '1',
+          unitPrice: 1000,
+          lineTotal: 1000,
+          sortOrder: 1,
+          vatRateBp: 900,
+          vatCategory: 'S',
+          unitCode: 'HUR',
+        },
+      ],
+    });
+    const state = composerStateFromDocument(document, 'Europe/Sofia', 2000);
+    expect(state.lineItems[0]).toMatchObject({ vatRateBp: null, unitCode: null });
+    expect(state.lineItems[1]).toMatchObject({ vatRateBp: 900, unitCode: 'HUR' });
   });
 });
 
@@ -189,5 +300,24 @@ describe('validateComposerState', () => {
   it('passes for a complete invoice with standard VAT', () => {
     const state = withOneCompleteLine(blankComposerState());
     expect(validateComposerState(state, VAT_20)).toBeNull();
+  });
+
+  it('requires the nature of operation for a French tax document', () => {
+    const state = withOneCompleteLine(blankComposerState());
+    expect(validateComposerState(state, VAT_20, 'FR')).toBe('missingOperationNature');
+    expect(validateComposerState(state, VAT_20, 'BG')).toBeNull();
+  });
+
+  it('passes once the nature of operation is set for a French tax document', () => {
+    const state = {
+      ...withOneCompleteLine(blankComposerState()),
+      operationNature: 'goods' as const,
+    };
+    expect(validateComposerState(state, VAT_20, 'FR')).toBeNull();
+  });
+
+  it('does not require the nature of operation for a French quote', () => {
+    const state = withOneCompleteLine({ ...blankComposerState(), documentType: 'quote' });
+    expect(validateComposerState(state, { ...VAT_20, isTaxDocument: false }, 'FR')).toBeNull();
   });
 });

@@ -98,6 +98,125 @@ describe('frMentions — non-tax documents', () => {
   });
 });
 
+describe('frMentions — option pour le paiement de la taxe d’après les débits', () => {
+  it('adds the mention on an invoice when the issuer opted for the debits basis', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', issuerVatOnDebits: true }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toContain("Option pour le paiement de la taxe d'après les débits");
+  });
+
+  it('adds no mention when the issuer has not opted for it', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', issuerVatOnDebits: false }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions.some((line) => line.startsWith('Option pour le paiement de la taxe'))).toBe(
+      false,
+    );
+  });
+
+  it('adds the mention on a credit note too, since it states a VAT collection rule, not a payment term', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        documentType: 'CREDIT_NOTE',
+        issuerVatOnDebits: true,
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toContain("Option pour le paiement de la taxe d'après les débits");
+  });
+
+  it('adds no mention on a quote even when the issuer opted for it', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        documentType: 'QUOTE',
+        issuerVatOnDebits: true,
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toEqual([]);
+  });
+});
+
+describe('frMentions — nature of operation and delivery address', () => {
+  it('prints the nature of operation and delivery address for a tax document', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        operationNature: 'services',
+        deliveryAddress: '12 rue de la Gare, 69001 Lyon',
+        dueAt: null,
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toContain("Nature de l'opération : Prestation de services");
+    expect(mentions).toContain('Adresse de livraison : 12 rue de la Gare, 69001 Lyon');
+  });
+
+  it('prints the mixed-nature wording', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', operationNature: 'mixed' }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toContain(
+      "Nature de l'opération : Livraison de biens et prestation de services",
+    );
+  });
+
+  it('translates the mention into the chosen document language', () => {
+    const enLocale = resolveClassicLocale('en', 'FR');
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', operationNature: 'goods' }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale: enLocale,
+    });
+
+    expect(mentions).toContain('Nature of operation: Goods delivery');
+  });
+
+  it('omits both lines when neither is set', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', operationNature: null }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions.some((line) => line.startsWith("Nature de l'opération"))).toBe(false);
+    expect(mentions.some((line) => line.startsWith('Adresse de livraison'))).toBe(false);
+  });
+
+  it('omits both lines for a non-tax document such as a quote', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        documentType: 'QUOTE',
+        operationNature: 'goods',
+        deliveryAddress: '1 rue Test',
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toEqual([]);
+  });
+});
+
 describe('frMentions — credit note', () => {
   it('carries no payment-terms boilerplate, since nothing is owed by the client', () => {
     const mentions = buildStatutoryMentions({

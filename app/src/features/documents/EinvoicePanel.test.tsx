@@ -12,6 +12,7 @@ let flagsResult = { EN_LOCALE: true, EINVOICE: true };
 vi.mock('@app/api', () => ({
   useGetEinvoiceReadinessQuery: () => readinessResult,
   getEinvoiceXmlUrl: (id: string) => `/api/documents/${id}/einvoice/xml`,
+  useSetDocumentKsefNumberMutation: () => [vi.fn(), { isLoading: false }],
 }));
 
 vi.mock('@app/feature-flags', () => ({
@@ -28,10 +29,16 @@ afterEach(() => {
 function renderPanel(
   status: 'draft' | 'sent' | 'cancelled',
   documentType: 'invoice' | 'delivery_note' = 'invoice',
+  issuerCountry: string | null = null,
 ) {
   return render(
     <NextIntlClientProvider locale="bg" messages={bgMessages}>
-      <EinvoicePanel documentId="doc-1" documentType={documentType} status={status} />
+      <EinvoicePanel
+        documentId="doc-1"
+        documentType={documentType}
+        status={status}
+        issuerCountry={issuerCountry}
+      />
     </NextIntlClientProvider>,
   );
 }
@@ -133,5 +140,17 @@ describe('EinvoicePanel', () => {
     renderPanel('sent', 'delivery_note');
 
     expect(screen.queryByRole('link', { name: 'Изтегли е-фактура (XML)' })).toBeNull();
+  });
+
+  it('shows the KSeF number field for a PL-issued document', () => {
+    renderPanel('sent', 'invoice', 'PL');
+
+    expect(screen.getByLabelText('Номер в KSeF')).toBeTruthy();
+  });
+
+  it('hides the KSeF number field for a non-PL issuer', () => {
+    renderPanel('sent', 'invoice', 'BG');
+
+    expect(screen.queryByLabelText('Номер в KSeF')).toBeNull();
   });
 });

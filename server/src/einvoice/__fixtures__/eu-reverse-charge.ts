@@ -21,6 +21,7 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
   transportedAt: null,
   carrierName: null,
   transportNote: null,
+  correctionReason: null,
   subtotal: 200000,
   discountTotal: 0,
   amount: 200000,

@@ -9,6 +9,8 @@ describe('saveDraftRequestSchema', () => {
       paymentMeansCode: '30',
       paymentTermsNote: 'Net 30',
       deliveryDate: '2026-09-15',
+      operationNature: 'services',
+      deliveryAddress: '12 rue de la Gare, 69001 Lyon',
       lineItems: [
         {
           name: 'Consulting',
@@ -26,6 +28,16 @@ describe('saveDraftRequestSchema', () => {
     expect(parsed).toMatchObject(body);
   });
 
+  it('rejects an invalid operationNature', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'invoice',
+        operationNature: 'other',
+        lineItems: [],
+      }),
+    ).toThrow();
+  });
+
   it('rejects an invalid vatCategory', () => {
     expect(() =>
       saveDraftRequestSchema.parse({
@@ -35,6 +47,23 @@ describe('saveDraftRequestSchema', () => {
         ],
       }),
     ).toThrow();
+  });
+
+  it('rejects a unitCode outside the UN/ECE Rec 20 list', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'invoice',
+        lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0, unitCode: 'szt.' }],
+      }),
+    ).toThrow();
+  });
+
+  it('accepts a null unitCode', () => {
+    const parsed = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0, unitCode: null }],
+    });
+    expect(parsed.lineItems[0]?.unitCode).toBeNull();
   });
 });
 

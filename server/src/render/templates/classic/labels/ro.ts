@@ -29,8 +29,24 @@ export const ro: ClassicLabels = {
   recipientSignaturePrefix: () => 'Semnătură de primire: ',
   colName: 'Denumire produse sau servicii',
   colQuantity: 'Cantitate',
+  colUnit: 'U.M.',
+  colVatRate: 'Cotă TVA',
   colPrice: 'Preț unitar',
   colTotal: 'Valoare',
+  unitLabels: {
+    C62: 'buc.',
+    H87: 'buc.',
+    HUR: 'h',
+    DAY: 'zi',
+    MON: 'lună',
+    KGM: 'kg',
+    MTR: 'm',
+    MTK: 'mp',
+    LTR: 'l',
+    KMT: 'km',
+    SET: 'set',
+  },
+  reverseChargeLineMarker: '—',
   vatBasePrefix: 'Bază impozabilă:',
   vatRatePrefix: (percent) => `TVA (${percent}%):`,
   subtotalLabel: 'Subtotal:',
@@ -42,6 +58,16 @@ export const ro: ClassicLabels = {
   creditDueLabel: 'Total de plată:',
   paidLabel: 'Achitat:',
   exemptionPrefix: '',
+  operationNaturePrefix: 'Natura operațiunii: ',
+  operationNatureLabels: {
+    goods: 'Livrare de bunuri',
+    services: 'Prestare de servicii',
+    mixed: 'Livrare de bunuri și prestare de servicii',
+  },
+  deliveryAddressPrefix: 'Adresa de livrare: ',
+  // Codul fiscal art. 319 alin. (20) lit. j: TVA în lei, cursul BNR și data acestuia.
+  vatAmountLocalLine: ({ currencyLabel, amount, sourceLabel, rate, date, table }) =>
+    `TVA în ${currencyLabel}: ${amount} (curs ${sourceLabel} ${rate} din ${date}${table ? `, tabelul nr. ${table}` : ''})`,
   proformaNotice: 'Factura proformă nu este document fiscal.',
   reverseChargeNote: 'Taxare inversă – art. 196 din Directiva 2006/112/CE',
   originalMarker: ' (Original)',
@@ -49,6 +75,7 @@ export const ro: ClassicLabels = {
   numberSign: 'nr.',
   draftTitle: (l) => `${l} – ciornă`,
   correctsInvoice: (number, date) => `Referitoare la factura nr. ${number} din ${date}`,
+  correctionReasonPrefix: 'Motivul corecției: ',
   // Codul fiscal art. 330 knows only "factură" for a correction, negative or
   // positive — "notă de credit"/"notă de debit" are not statutory VAT document
   // types here, so both print as a named factură (as PL and ES do for the same

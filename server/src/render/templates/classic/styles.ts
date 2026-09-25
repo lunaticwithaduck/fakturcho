@@ -59,6 +59,10 @@ export function buildStyles(): string {
       text-align: center;
       margin: -16px 0 24px;
     }
+    .correction-reason {
+      text-align: center;
+      margin: -20px 0 24px;
+    }
     table.line-items {
       width: 100%;
       border-collapse: collapse;
@@ -73,6 +77,10 @@ export function buildStyles(): string {
     table.line-items th:first-child,
     table.line-items td:first-child {
       text-align: left;
+    }
+    table.line-items .col-narrow {
+      width: 1%;
+      white-space: nowrap;
     }
     .amount-words {
       font-style: italic;
@@ -142,6 +150,32 @@ export function buildStyles(): string {
       font-weight: 700;
       letter-spacing: 6px;
       white-space: nowrap;
+    }
+    .verifactu-qr-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+    .ksef-qr,
+    .verifactu-qr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .ksef-qr {
+      margin-top: 20px;
+    }
+    .ksef-qr .qr-image,
+    .verifactu-qr .qr-image {
+      width: 35mm;
+      height: 35mm;
+    }
+    .qr-label,
+    .qr-legend {
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
     }
   `;
 }

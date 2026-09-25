@@ -2,6 +2,8 @@ import {
   DOCUMENT_LANGUAGES,
   DOCUMENT_STATUSES,
   DOCUMENT_TYPES,
+  OPERATION_NATURES,
+  UNIT_CODES,
   VAT_CATEGORIES,
 } from '@fakturcho/shared-types';
 import { z } from 'zod';
@@ -18,7 +20,7 @@ const lineItemInputSchema = z.object({
   sortOrder: z.number().int(),
   vatRateBp: z.number().int().optional(),
   vatCategory: z.enum(VAT_CATEGORIES).optional(),
-  unitCode: z.string().nullish(),
+  unitCode: z.enum(UNIT_CODES).nullish(),
 });
 
 const discountInputSchema = z.object({
@@ -43,6 +45,9 @@ export const saveDraftRequestSchema = z.object({
   transportedAt: wallClockDateTimeSchema.nullish(),
   carrierName: z.string().nullish(),
   transportNote: z.string().nullish(),
+  correctionReason: z.string().nullish(),
+  operationNature: z.enum(OPERATION_NATURES).nullish(),
+  deliveryAddress: z.string().nullish(),
   vatIncluded: z.boolean().optional(),
   vatExemptionGround: z.string().nullish(),
   clientId: z.string().nullish(),
@@ -58,6 +63,10 @@ export const saveDraftRequestSchema = z.object({
 export const issueDocumentRequestSchema = z.object({
   issuedAt: z.string().optional(),
   overrideNumber: z.number().int().positive().optional(),
+});
+
+export const setKsefNumberRequestSchema = z.object({
+  ksefNumber: z.string().trim().min(1).max(50).nullable(),
 });
 
 export const documentListQuerySchema = z.object({

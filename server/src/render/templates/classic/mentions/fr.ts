@@ -1,3 +1,4 @@
+import type { OperationNature } from '@fakturcho/shared-types';
 import { TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { formatDateForLocale } from '../../../../money/format';
 import { toSharedDocumentType } from '../../../prisma-mappers';
@@ -7,8 +8,11 @@ const AUTOLIQUIDATION_MENTION =
   'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE';
 const INTRA_EU_SUPPLY_MENTION = 'Exonération de TVA, article 262 ter I du CGI';
 const EXPORT_MENTION = 'Exonération de TVA, article 262 I du CGI';
+// CGI art. 242 nonies A I 17°: mandatory on every invoice once the supplier
+// has opted for the debits basis (paiement de la taxe d'après les débits).
+const VAT_ON_DEBITS_MENTION = "Option pour le paiement de la taxe d'après les débits";
 
-export const frMentions: MentionsBuilder = ({ document, lineItems }) => {
+export const frMentions: MentionsBuilder = ({ document, lineItems, locale }) => {
   const mentions: string[] = [];
   const categories = new Set(lineItems.map((line) => line.vatCategory));
   const ground = document.vatExemptionGround;
@@ -22,6 +26,21 @@ export const frMentions: MentionsBuilder = ({ document, lineItems }) => {
   }
   if (categories.has('G') && ground !== EXPORT_MENTION) {
     mentions.push(EXPORT_MENTION);
+  }
+
+  if (document.issuerVatOnDebits && TAX_DOCUMENT_TYPES[sharedType]) {
+    mentions.push(VAT_ON_DEBITS_MENTION);
+  }
+  if (TAX_DOCUMENT_TYPES[sharedType]) {
+    if (document.operationNature) {
+      const nature = document.operationNature as OperationNature;
+      mentions.push(
+        `${locale.labels.operationNaturePrefix}${locale.labels.operationNatureLabels[nature]}`,
+      );
+    }
+    if (document.deliveryAddress) {
+      mentions.push(`${locale.labels.deliveryAddressPrefix}${document.deliveryAddress}`);
+    }
   }
 
   if (TAX_DOCUMENT_TYPES[sharedType] && sharedType !== 'credit_note') {

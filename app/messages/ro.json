@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Selectați documentul original pentru a continua.",
         "missingLineItems": "Adăugați cel puțin un articol cu denumire, cantitate și preț.",
-        "missingVatGround": "Selectați un temei pentru neaplicarea TVA."
+        "missingVatGround": "Selectați un temei pentru neaplicarea TVA.",
+        "missingOperationNature": "Selectați natura operațiunii pentru a continua."
       },
       "documentType": {
         "label": "Tip document"
@@ -119,10 +120,22 @@
         "carrierNameLabel": "Transportator",
         "transportNoteLabel": "Detalii transport"
       },
+      "frMentions": {
+        "operationNatureLabel": "Natura operațiunii",
+        "operationNaturePlaceholder": "Selectați natura",
+        "operationNatureGoods": "Livrare de bunuri",
+        "operationNatureServices": "Prestare de servicii",
+        "operationNatureMixed": "Livrare de bunuri și prestare de servicii",
+        "deliveryAddressLabel": "Adresa de livrare (dacă diferă)"
+      },
       "originalDocument": {
         "label": "Document original",
         "placeholder": "Selectați documentul",
         "noClient": "Fără client"
+      },
+      "correctionReason": {
+        "label": "Motivul corecției",
+        "requiredHint": "Obligatoriu pentru emitenții din Bulgaria, Irlanda și Spania."
       },
       "deliveryReference": {
         "label": "Factură asociată",
@@ -135,7 +148,23 @@
         "priceLabel": "Preț",
         "totalLabel": "Valoare",
         "removeButton": "Elimină",
-        "addButton": "Adaugă articol"
+        "addButton": "Adaugă articol",
+        "unitLabel": "U.M.",
+        "unitNoneOption": "Fără",
+        "vatRateLabel": "Cotă TVA",
+        "units": {
+          "C62": "Bucată / unitate",
+          "H87": "Bucată",
+          "HUR": "Oră",
+          "DAY": "Zi",
+          "MON": "Lună",
+          "KGM": "Kilogram",
+          "MTR": "Metru",
+          "MTK": "Metru pătrat",
+          "LTR": "Litru",
+          "KMT": "Kilometru",
+          "SET": "Set"
+        }
       },
       "discounts": {
         "heading": "Reduceri",
@@ -174,6 +203,11 @@
     },
     "einvoice": {
       "downloadXml": "Descarcă e-factura (XML)",
+      "ksefNumberLabel": "Număr KSeF",
+      "ksefNumberHint": "Lipiți numărul alocat de KSeF după ce încărcați dvs. fișierul XML.",
+      "ksefNumberSave": "Salvează",
+      "ksefNumberSaved": "Numărul KSeF a fost salvat",
+      "ksefNumberSaveError": "Numărul KSeF nu a putut fi salvat",
       "notReadyHint": "Lipsesc date pentru e-factură: {fields}",
       "missingFieldFallback": "Lipsesc date pentru e-factură.",
       "missingFields": {
@@ -318,7 +352,22 @@
     "unitPlaceholder": "buc, oră, kg...",
     "priceLabel": "Preț implicit",
     "defaultUnit": "buc",
-    "validationError": "Completați denumirea, unitatea de măsură și prețul."
+    "validationError": "Completați denumirea, unitatea de măsură și prețul.",
+    "unitCodeLabel": "Cod unitate (opțional)",
+    "unitCodeNoneOption": "Fără",
+    "units": {
+      "C62": "Bucată / unitate",
+      "H87": "Bucată",
+      "HUR": "Oră",
+      "DAY": "Zi",
+      "MON": "Lună",
+      "KGM": "Kilogram",
+      "MTR": "Metru",
+      "MTK": "Metru pătrat",
+      "LTR": "Litru",
+      "KMT": "Kilometru",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Clienți",
@@ -413,7 +462,9 @@
     "vatFields": {
       "heading": "Înregistrare TVA",
       "vatRegistered": "Plătitor de TVA",
-      "vatNumber": "Cod TVA"
+      "vatNumber": "Cod TVA",
+      "vatOnCashBasis": "TVA la încasare",
+      "vatOnDebits": "Opțiunea TVA la debite (Franța)"
     },
     "bankFields": {
       "heading": "Cont bancar",
@@ -493,6 +544,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Selectați documentul original pentru a continua.",
       "ISSUER_PROFILE_INCOMPLETE": "Profilul emitentului este incomplet. Completați datele firmei pentru a putea emite documente.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Avizul de însoțire a mărfii pentru această țară necesită completarea datelor de transport înainte de a fi emis.",
+      "CORRECTION_REASON_REQUIRED": "Nota de credit sau de debit din Bulgaria, Irlanda sau Spania necesită un motiv al corecției înainte de a fi emisă.",
       "VAT_GROUND_NOT_ALLOWED": "Acest temei de scutire de TVA nu este permis.",
       "CLIENT_EIK_DUPLICATE": "Există deja un client cu acest cod de identificare fiscală.",
       "SUBSCRIPTION_REQUIRED": "Este necesar un abonament activ.",
@@ -506,7 +558,9 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Furnizorul de plăți nu răspunde. Încercați din nou peste câteva minute.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Furnizorul de e-factură nu este configurat.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Acest furnizor nu permite verificarea statusului.",
-      "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou."
+      "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou.",
+      "OPERATION_NATURE_REQUIRED": "Documentele fiscale franceze trebuie să indice natura operațiunii înainte de a putea fi emise.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Nu s-a putut obține cursul de schimb necesar pentru emiterea acestui document. Încercați din nou peste puțin timp."
     },
     "guideLink": "Ghid de facturare",
     "helpLink": "Vedeți ghidul",

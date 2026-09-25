@@ -23,6 +23,8 @@ const BASE: IssuerProfileFormValues = {
   bic: '',
   altIban: '',
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
 };
 
 describe('computeIssuerFieldErrors', () => {

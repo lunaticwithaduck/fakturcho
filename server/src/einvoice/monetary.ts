@@ -4,8 +4,14 @@ import { groupVatSubtotals } from './vat-grouping';
 import { dateOnly, textEl, toDecimalString, toPercentString } from './xml';
 
 export function deliveryBlock(document: DocumentDto): string {
-  if (!document.deliveryDate) return '';
-  return `<cac:Delivery>${textEl('cbc:ActualDeliveryDate', dateOnly(document.deliveryDate))}</cac:Delivery>`;
+  if (!document.deliveryDate && !document.deliveryAddress) return '';
+  const date = document.deliveryDate
+    ? textEl('cbc:ActualDeliveryDate', dateOnly(document.deliveryDate))
+    : '';
+  const location = document.deliveryAddress
+    ? `<cac:DeliveryLocation><cac:Address>${textEl('cbc:StreetName', document.deliveryAddress)}</cac:Address></cac:DeliveryLocation>`
+    : '';
+  return `<cac:Delivery>${date}${location}</cac:Delivery>`;
 }
 
 export function paymentMeansBlock(document: DocumentDto): string {

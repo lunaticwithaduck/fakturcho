@@ -1,7 +1,10 @@
 import { MoneyInput } from '@app/features/shared/MoneyInput';
-import { Input } from '@design/components';
+import { Input, Select, SelectItem } from '@design/components';
+import { UNIT_CODES } from '@fakturcho/shared-types';
 import { useTranslations } from 'next-intl';
 import type { CatalogueFormValues } from './catalogueForm';
+
+const NO_UNIT_CODE = 'none';
 
 interface CatalogueFormFieldsProps {
   values: CatalogueFormValues;
@@ -34,6 +37,18 @@ export function CatalogueFormFields({ values, onChange }: CatalogueFormFieldsPro
           onChange={(value) => onChange('defaultUnitPrice', value)}
         />
       </div>
+      <Select
+        label={t('unitCodeLabel')}
+        value={values.unitCode ?? NO_UNIT_CODE}
+        onValueChange={(value) => onChange('unitCode', value === NO_UNIT_CODE ? null : value)}
+      >
+        <SelectItem value={NO_UNIT_CODE}>{t('unitCodeNoneOption')}</SelectItem>
+        {UNIT_CODES.map((code) => (
+          <SelectItem key={code} value={code}>
+            {t(`units.${code}`)}
+          </SelectItem>
+        ))}
+      </Select>
     </div>
   );
 }

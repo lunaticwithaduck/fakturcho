@@ -39,6 +39,7 @@ function document(lineItems: LineItemDto[]): DocumentDto {
     transportedAt: null,
     carrierName: null,
     transportNote: null,
+    correctionReason: null,
     subtotal: lineItems.reduce((sum, l) => sum + l.lineTotal, 0),
     discountTotal: 0,
     amount: lineItems.reduce((sum, l) => sum + l.lineTotal, 0),

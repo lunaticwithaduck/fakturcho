@@ -128,6 +128,20 @@ describe('toCiusRoXml — Romanian CUI/VAT validation', () => {
   });
 });
 
+describe('toCiusRoXml — correction reason', () => {
+  it('inherits the header cbc:Note carrying the correction reason from the core mapper', () => {
+    const creditNote: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      documentType: 'credit_note',
+      originalDocumentId: 'doc-ro-domestic-1',
+      correctionReason: 'Marfă returnată',
+    };
+    expect(toCiusRoXml(creditNote)).toContain(
+      '<cbc:CreditNoteTypeCode>381</cbc:CreditNoteTypeCode><cbc:Note>Marfă returnată</cbc:Note>',
+    );
+  });
+});
+
 describe('toCiusRoXml — out-of-scope document types', () => {
   it('throws for proforma, delegating to the core mapper', () => {
     const proforma: DocumentDto = { ...roDomesticStandardInvoice, documentType: 'proforma' };

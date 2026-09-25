@@ -79,6 +79,29 @@ describe('toFrenchUblXml — validation', () => {
   });
 });
 
+describe('toFrenchUblXml — delivery address (BG-15)', () => {
+  it('maps the delivery address into a Delivery/DeliveryLocation/Address block', () => {
+    const withDeliveryAddress: DocumentDto = {
+      ...frDomesticStandardInvoice,
+      deliveryAddress: '12 rue de la Gare, 69001 Lyon',
+    };
+    const xml = toFrenchUblXml(withDeliveryAddress);
+    expect(xml).toContain(
+      '<cac:Delivery><cbc:ActualDeliveryDate>2026-09-01</cbc:ActualDeliveryDate>' +
+        '<cac:DeliveryLocation><cac:Address><cbc:StreetName>12 rue de la Gare, 69001 Lyon</cbc:StreetName></cac:Address></cac:DeliveryLocation></cac:Delivery>',
+    );
+  });
+
+  it('does not add a Delivery block when neither the date nor the address is set', () => {
+    const noDelivery: DocumentDto = {
+      ...frDomesticStandardInvoice,
+      deliveryDate: null,
+      deliveryAddress: null,
+    };
+    expect(toFrenchUblXml(noDelivery)).not.toContain('<cac:Delivery>');
+  });
+});
+
 describe('toFrenchUblXml — inherits the discount-adjusted VAT breakdown from the core mapper', () => {
   it('does not double count VAT when the document carries a discount', () => {
     const discounted: DocumentDto = {

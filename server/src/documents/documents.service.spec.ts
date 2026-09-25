@@ -480,4 +480,42 @@ describe('DocumentsService', () => {
     expect(refetched.transportReason).toBe('Vendita');
     expect(refetched.transportedAt).toBe('2026-09-15T07:30:00.000Z');
   });
+
+  it('correctionReason round-trips through a draft save without being required to save', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+
+    const original = await documentsService.saveDraft(accountId, null, draftRequest());
+    const withoutReason = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'credit_note', originalDocumentId: original.id }),
+    );
+    expect(withoutReason.correctionReason).toBeNull();
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: original.id,
+        correctionReason: 'Върната стока',
+      }),
+    );
+    expect(draft.correctionReason).toBe('Върната стока');
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.correctionReason).toBe('Върната стока');
+
+    const cleared = await documentsService.saveDraft(
+      accountId,
+      draft.id,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: original.id,
+        correctionReason: null,
+      }),
+    );
+    expect(cleared.correctionReason).toBeNull();
+  });
 });

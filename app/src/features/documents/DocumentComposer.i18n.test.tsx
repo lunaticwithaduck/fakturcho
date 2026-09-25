@@ -14,8 +14,10 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ComposerCorrectionReasonField } from './ComposerCorrectionReasonField';
 import { ComposerDetailsFields } from './ComposerDetailsFields';
 import { ComposerDiscountRow } from './ComposerDiscountRow';
+import { ComposerFrMentionsFields } from './ComposerFrMentionsFields';
 import { ComposerOriginalDocumentField } from './ComposerOriginalDocumentField';
 import { ComposerVatSection } from './ComposerVatSection';
 import type { DiscountFormState } from './composerState';
@@ -102,6 +104,7 @@ const BASE_DOCUMENT: DocumentDto = {
   transportedAt: null,
   carrierName: null,
   transportNote: null,
+  correctionReason: null,
   subtotal: 0,
   discountTotal: 0,
   amount: 0,
@@ -146,10 +149,12 @@ const ISSUER_PROFILE: IssuerProfileDto = {
   peppolEndpointId: null,
   peppolScheme: null,
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
 };
 
 const CATALOGUE_ITEMS: CatalogueItemDto[] = [
-  { id: 'cat-1', name: 'Консултация', defaultUnitPrice: 10000, unit: 'бр.' },
+  { id: 'cat-1', name: 'Консултация', defaultUnitPrice: 10000, unit: 'бр.', unitCode: null },
 ];
 
 const CLIENTS: ClientDto[] = [
@@ -558,6 +563,62 @@ describe('ComposerVatSection', () => {
   });
 });
 
+describe('ComposerFrMentionsFields', () => {
+  it('renders the Bulgarian copy including the required-field error', () => {
+    renderWithLocale(
+      'bg',
+      <ComposerFrMentionsFields
+        operationNature={null}
+        deliveryAddress=""
+        hasOperationNatureError
+        onChange={() => {}}
+      />,
+    );
+    expect(screen.getByText('Естество на сделката')).toBeTruthy();
+    expect(screen.getByText('Адрес на доставка (ако е различен)')).toBeTruthy();
+    expect(screen.getByText('Задължително поле')).toBeTruthy();
+  });
+
+  it('renders the English copy without missing-key warnings', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderWithLocale(
+      'en',
+      <ComposerFrMentionsFields
+        operationNature={null}
+        deliveryAddress=""
+        hasOperationNatureError
+        onChange={() => {}}
+      />,
+    );
+    expect(screen.getByText('Nature of operation')).toBeTruthy();
+    expect(screen.getByText('Delivery address (if different)')).toBeTruthy();
+    expect(screen.getByText('Required field')).toBeTruthy();
+
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+});
+
+describe('DocumentComposerPage — FR nature-of-operation visibility', () => {
+  it('shows the nature-of-operation field for a French issuer', () => {
+    vi.mocked(api.useGetIssuerProfileQuery).mockReturnValue({
+      data: { ...ISSUER_PROFILE, country: 'FR' },
+      isLoading: false,
+    } as unknown as ReturnType<typeof api.useGetIssuerProfileQuery>);
+
+    renderComposerPage('en');
+
+    expect(screen.getByText('Nature of operation')).toBeTruthy();
+  });
+
+  it('hides the nature-of-operation field for a Bulgarian issuer', () => {
+    renderComposerPage('en');
+
+    expect(screen.queryByText('Nature of operation')).toBeNull();
+  });
+});
+
 describe('ComposerOriginalDocumentField', () => {
   beforeEach(() => {
     vi.mocked(api.useListDocumentsQuery).mockReturnValue({
@@ -598,5 +659,51 @@ describe('ComposerOriginalDocumentField', () => {
 
     expect(consoleError).not.toHaveBeenCalled();
     consoleError.mockRestore();
+  });
+});
+
+describe('ComposerCorrectionReasonField', () => {
+  it('renders the Bulgarian label and required hint', () => {
+    renderWithLocale('bg', <ComposerCorrectionReasonField value="" required onChange={() => {}} />);
+    expect(screen.getByText('Основание за корекцията')).toBeTruthy();
+    expect(
+      screen.getByText('Задължително за издатели от България, Ирландия и Испания.'),
+    ).toBeTruthy();
+  });
+
+  it('renders the English label without a hint when not required, without missing-key warnings', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderWithLocale(
+      'en',
+      <ComposerCorrectionReasonField value="" required={false} onChange={() => {}} />,
+    );
+    expect(screen.getByText('Reason for the correction')).toBeTruthy();
+    expect(screen.queryByText('Required for issuers in Bulgaria, Ireland and Spain.')).toBeNull();
+
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+});
+
+describe('DocumentComposerPage — correction reason field visibility', () => {
+  it('shows the correction reason field for a credit note but not for an invoice', () => {
+    vi.mocked(api.useGetDocumentQuery).mockReturnValue({
+      data: { ...BASE_DOCUMENT, documentType: 'credit_note', originalDocumentId: 'doc-0' },
+      isLoading: false,
+    } as unknown as ReturnType<typeof api.useGetDocumentQuery>);
+
+    renderComposerPage('en', 'doc-1');
+    expect(screen.getByText('Reason for the correction')).toBeTruthy();
+  });
+
+  it('does not show the correction reason field for an invoice', () => {
+    vi.mocked(api.useGetDocumentQuery).mockReturnValue({
+      data: BASE_DOCUMENT,
+      isLoading: false,
+    } as unknown as ReturnType<typeof api.useGetDocumentQuery>);
+
+    renderComposerPage('en', 'doc-1');
+    expect(screen.queryByText('Reason for the correction')).toBeNull();
   });
 });

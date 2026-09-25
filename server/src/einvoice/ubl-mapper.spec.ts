@@ -147,6 +147,35 @@ describe('toUblXml — credit note and debit note type codes', () => {
     expect(xml).toContain('<cbc:InvoiceTypeCode>383</cbc:InvoiceTypeCode>');
     expect(xml).toContain('<cac:InvoiceLine>');
   });
+
+  it('carries the correction reason as a header cbc:Note on a credit note', () => {
+    const creditNote: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      documentType: 'credit_note',
+      originalDocumentId: 'doc-bg-domestic-1',
+      correctionReason: 'Върната стока',
+    };
+    expect(toUblXml(creditNote)).toContain(
+      '<cbc:CreditNoteTypeCode>381</cbc:CreditNoteTypeCode><cbc:Note>Върната стока</cbc:Note>',
+    );
+  });
+
+  it('does not add a header cbc:Note on an invoice, even with a correction reason set', () => {
+    const invoice: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      correctionReason: 'Върната стока',
+    };
+    expect(toUblXml(invoice)).not.toContain('Върната стока');
+  });
+
+  it('omits the header cbc:Note when there is no correction reason', () => {
+    const debitNote: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      documentType: 'debit_note',
+      originalDocumentId: 'doc-bg-domestic-1',
+    };
+    expect(toUblXml(debitNote)).not.toContain('</cbc:InvoiceTypeCode><cbc:Note>');
+  });
 });
 
 describe('toUblXml — grouping with mixed VAT categories on one document', () => {
@@ -272,5 +301,35 @@ describe('toUblXml — a document discount is reflected in the TaxSubtotal break
       ((discounted.subtotal - discounted.discountTotal) / 100).toFixed(2),
     );
     expect(subtotalVatSum.toFixed(2)).toBe((discounted.vatAmount / 100).toFixed(2));
+  });
+});
+
+describe('toUblXml — delivery block (BG-15 delivery information)', () => {
+  it('keeps printing only the delivery date when no delivery address is set', () => {
+    const xml = toUblXml(bgDomesticStandardInvoice);
+    expect(xml).toContain(
+      '<cac:Delivery><cbc:ActualDeliveryDate>2026-09-01</cbc:ActualDeliveryDate></cac:Delivery>',
+    );
+  });
+
+  it('adds a DeliveryLocation/Address block when a delivery address is set', () => {
+    const withAddress: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      deliveryAddress: 'ул. Раковски 5, гр. Пловдив',
+    };
+    const xml = toUblXml(withAddress);
+    expect(xml).toContain(
+      '<cac:Delivery><cbc:ActualDeliveryDate>2026-09-01</cbc:ActualDeliveryDate>' +
+        '<cac:DeliveryLocation><cac:Address><cbc:StreetName>ул. Раковски 5, гр. Пловдив</cbc:StreetName></cac:Address></cac:DeliveryLocation></cac:Delivery>',
+    );
+  });
+
+  it('omits the Delivery block entirely when neither field is set', () => {
+    const noDelivery: DocumentDto = {
+      ...bgDomesticStandardInvoice,
+      deliveryDate: null,
+      deliveryAddress: null,
+    };
+    expect(toUblXml(noDelivery)).not.toContain('<cac:Delivery>');
   });
 });

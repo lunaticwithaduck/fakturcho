@@ -13,11 +13,16 @@ export interface OriginalDocumentRef {
 export function buildCorrectionReference(
   documentType: DocumentType,
   original: OriginalDocumentRef | null | undefined,
+  reason: string | null | undefined,
   locale: ClassicLocaleContext,
 ): string {
   if (documentType !== 'credit_note' && documentType !== 'debit_note') return '';
   if (!original || original.number === null) return '';
   const number = `${original.numberPrefix ?? ''}${formatDocumentNumber(Number(original.number))}${original.numberSuffix ?? ''}`;
   const date = original.issuedAt ? formatDateForLocale(original.issuedAt, locale.language) : '—';
-  return `<div class="correction-reference">${escapeHtml(locale.labels.correctsInvoice(number, date))}</div>`;
+  const referenceLine = `<div class="correction-reference">${escapeHtml(locale.labels.correctsInvoice(number, date))}</div>`;
+  const reasonLine = reason
+    ? `<div class="correction-reason">${escapeHtml(locale.labels.correctionReasonPrefix + reason)}</div>`
+    : '';
+  return referenceLine + reasonLine;
 }

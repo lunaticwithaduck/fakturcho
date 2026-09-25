@@ -81,6 +81,60 @@ describe('computeLiveTotals', () => {
     expect(totals.amount).toBe(550000);
   });
 
+  it('groups mixed per-line VAT rates instead of applying a single blended rate', () => {
+    const totals = computeLiveTotals({
+      lineItems: [
+        { quantity: '1', unitPrice: 100000, vatRateBp: 2000 },
+        { quantity: '1', unitPrice: 100000, vatRateBp: 900 },
+      ],
+      discounts: [],
+      vatCharged: true,
+      vatRateBp: 2000,
+    });
+    expect(totals.subtotal).toBe(200000);
+    expect(totals.vatAmount).toBe(20000 + 9000);
+    expect(totals.amount).toBe(200000 + 29000);
+  });
+
+  it('a line with no explicit vatRateBp falls back to the document rate', () => {
+    const totals = computeLiveTotals({
+      lineItems: [
+        { quantity: '1', unitPrice: 100000 },
+        { quantity: '1', unitPrice: 100000, vatRateBp: 900 },
+      ],
+      discounts: [],
+      vatCharged: true,
+      vatRateBp: 2000,
+    });
+    expect(totals.vatAmount).toBe(20000 + 9000);
+  });
+
+  it('a discount that does not split evenly still sums exactly across mixed-rate lines', () => {
+    const totals = computeLiveTotals({
+      lineItems: [
+        { quantity: '1', unitPrice: 333, vatRateBp: 2000 },
+        { quantity: '1', unitPrice: 333, vatRateBp: 900 },
+        { quantity: '1', unitPrice: 334, vatRateBp: 0 },
+      ],
+      discounts: [{ percentBp: 100, amount: null }],
+      vatCharged: true,
+      vatRateBp: 2000,
+    });
+    expect(totals.subtotal).toBe(1000);
+    expect(totals.discountTotal).toBe(10);
+    expect(totals.amount).toBe(totals.subtotal - totals.discountTotal + totals.vatAmount);
+  });
+
+  it('per-line rates with no document VAT charged still zero out', () => {
+    const totals = computeLiveTotals({
+      lineItems: [{ quantity: '1', unitPrice: 100000, vatRateBp: 2000 }],
+      discounts: [],
+      vatCharged: false,
+      vatRateBp: 2000,
+    });
+    expect(totals.vatAmount).toBe(0);
+  });
+
   it('sums multiple line items and discounts', () => {
     const totals = computeLiveTotals({
       lineItems: [

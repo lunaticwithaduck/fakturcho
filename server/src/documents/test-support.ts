@@ -17,6 +17,8 @@ export async function createCompleteIssuerProfile(
     countyRegion: string | null;
     vatRegistered: boolean;
     vatNumber: string | null;
+    vatOnCashBasis: boolean;
+    vatOnDebits: boolean;
   }> = {},
 ) {
   return prisma.issuerProfile.create({

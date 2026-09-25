@@ -35,6 +35,8 @@ const baseUpdateIssuerProfileSchema = z.object({
   identifiers: z.record(z.string(), z.string()).optional(),
   peppolEndpointId: peppolEndpointIdSchema.nullable().optional(),
   peppolScheme: peppolSchemeSchema.nullable().optional(),
+  vatOnCashBasis: z.boolean().optional(),
+  vatOnDebits: z.boolean().optional(),
 });
 
 export const updateIssuerProfileSchema = withCountryFieldPatterns(baseUpdateIssuerProfileSchema);

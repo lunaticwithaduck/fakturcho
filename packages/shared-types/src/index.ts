@@ -12,4 +12,5 @@ export * from './feature-flags';
 export * from './issuer';
 export * from './me';
 export * from './money';
+export * from './units';
 export * from './vat';

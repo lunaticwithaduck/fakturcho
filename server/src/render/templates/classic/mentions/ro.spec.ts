@@ -49,3 +49,42 @@ describe('roMentions', () => {
     expect(roMentions({ document, lineItems, locale })).toEqual([]);
   });
 });
+
+describe('roMentions — TVA la încasare', () => {
+  it('adds the mention on an invoice when the issuer is on the cash VAT scheme', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+    });
+    const lineItems = buildFakeLineItems();
+    expect(roMentions({ document, lineItems, locale })).toEqual(['TVA la încasare']);
+  });
+
+  it('adds the mention on a debit note but not on a quote or delivery note', () => {
+    const lineItems = buildFakeLineItems();
+    const debitNote = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'DEBIT_NOTE',
+      issuerVatOnCashBasis: true,
+    });
+    expect(roMentions({ document: debitNote, lineItems, locale })).toEqual(['TVA la încasare']);
+
+    const quote = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'QUOTE',
+      issuerVatOnCashBasis: true,
+    });
+    expect(roMentions({ document: quote, lineItems, locale })).toEqual([]);
+  });
+
+  it('adds no mention when the issuer is not on the cash VAT scheme', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: false,
+    });
+    const lineItems = buildFakeLineItems();
+    expect(roMentions({ document, lineItems, locale })).toEqual([]);
+  });
+});

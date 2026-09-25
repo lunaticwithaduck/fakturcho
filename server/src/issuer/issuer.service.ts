@@ -24,6 +24,8 @@ export interface UpdateIssuerProfileInput {
   peppolEndpointId?: string | null | undefined;
   peppolScheme?: string | null | undefined;
   identifiers?: Record<string, string> | undefined;
+  vatOnCashBasis?: boolean | undefined;
+  vatOnDebits?: boolean | undefined;
 }
 
 function toDto(profile: IssuerProfile): IssuerProfileDto {
@@ -48,6 +50,8 @@ function toDto(profile: IssuerProfile): IssuerProfileDto {
     peppolEndpointId: profile.peppolEndpointId,
     peppolScheme: profile.peppolScheme,
     identifiers: readIdentifiers(profile.identifiers),
+    vatOnCashBasis: profile.vatOnCashBasis,
+    vatOnDebits: profile.vatOnDebits,
   };
 }
 
@@ -88,6 +92,8 @@ export class IssuerService {
       ...(input.altIban !== undefined ? { altIban: input.altIban } : {}),
       ...(input.peppolEndpointId !== undefined ? { peppolEndpointId: input.peppolEndpointId } : {}),
       ...(input.peppolScheme !== undefined ? { peppolScheme: input.peppolScheme } : {}),
+      ...(input.vatOnCashBasis !== undefined ? { vatOnCashBasis: input.vatOnCashBasis } : {}),
+      ...(input.vatOnDebits !== undefined ? { vatOnDebits: input.vatOnDebits } : {}),
     };
     const profile = await this.prisma.issuerProfile.upsert({
       where: { accountId },

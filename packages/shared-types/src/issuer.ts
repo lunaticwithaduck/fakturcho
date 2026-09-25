@@ -21,6 +21,12 @@ export interface IssuerProfileDto {
   peppolEndpointId: string | null;
   peppolScheme: string | null;
   identifiers: Record<string, string>;
+  // Codul fiscal art. 282 alin. (3)-(8), art. 319 alin. (20) lit. p): RO cash
+  // VAT accounting scheme, printed as "TVA la încasare" when set.
+  vatOnCashBasis: boolean;
+  // CGI art. 242 nonies A I 17°: FR option for VAT on debits, printed as
+  // "Option pour le paiement de la taxe d'après les débits" when set.
+  vatOnDebits: boolean;
 }
 
 export interface UpdateIssuerProfileRequest {
@@ -43,6 +49,8 @@ export interface UpdateIssuerProfileRequest {
   peppolEndpointId?: string | null;
   peppolScheme?: string | null;
   identifiers?: Record<string, string>;
+  vatOnCashBasis?: boolean;
+  vatOnDebits?: boolean;
 }
 
 export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boolean {

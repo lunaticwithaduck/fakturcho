@@ -37,6 +37,20 @@ describe('getApiErrorMessage', () => {
     );
   });
 
+  it('maps CORRECTION_REASON_REQUIRED to a Bulgarian message', () => {
+    const error = { status: 422, data: { code: 'CORRECTION_REASON_REQUIRED' } };
+    expect(getApiErrorMessage(error, 'bg')).toBe(
+      'Кредитното или дебитно известие от България, Ирландия или Испания изисква основание за корекцията, преди да бъде издадено.',
+    );
+  });
+
+  it('maps CORRECTION_REASON_REQUIRED to an English message', () => {
+    const error = { status: 422, data: { code: 'CORRECTION_REASON_REQUIRED' } };
+    expect(getApiErrorMessage(error, 'en')).toBe(
+      'A credit or debit note from Bulgaria, Ireland or Spain needs a reason for the correction before it can be issued.',
+    );
+  });
+
   it('maps CLIENT_EIK_DUPLICATE to an English message', () => {
     const error = { status: 409, data: { code: 'CLIENT_EIK_DUPLICATE' } };
     expect(getApiErrorMessage(error, 'en')).toBe('A client with this company ID already exists.');

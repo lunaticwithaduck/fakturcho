@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Select the original document to continue.",
         "missingLineItems": "Add at least one line item with a name, quantity and price.",
-        "missingVatGround": "Select a reason for not charging VAT."
+        "missingVatGround": "Select a reason for not charging VAT.",
+        "missingOperationNature": "Select the nature of the operation to continue."
       },
       "documentType": {
         "label": "Document type"
@@ -119,10 +120,22 @@
         "carrierNameLabel": "Carrier",
         "transportNoteLabel": "Transport details"
       },
+      "frMentions": {
+        "operationNatureLabel": "Nature of operation",
+        "operationNaturePlaceholder": "Select nature",
+        "operationNatureGoods": "Goods delivery",
+        "operationNatureServices": "Service provision",
+        "operationNatureMixed": "Goods delivery and service provision",
+        "deliveryAddressLabel": "Delivery address (if different)"
+      },
       "originalDocument": {
         "label": "Original document",
         "placeholder": "Select document",
         "noClient": "No client"
+      },
+      "correctionReason": {
+        "label": "Reason for the correction",
+        "requiredHint": "Required for issuers in Bulgaria, Ireland and Spain."
       },
       "deliveryReference": {
         "label": "Related invoice",
@@ -135,7 +148,23 @@
         "priceLabel": "Price",
         "totalLabel": "Total",
         "removeButton": "Remove",
-        "addButton": "Add item"
+        "addButton": "Add item",
+        "unitLabel": "Unit",
+        "unitNoneOption": "None",
+        "vatRateLabel": "VAT rate",
+        "units": {
+          "C62": "Piece / unit",
+          "H87": "Piece",
+          "HUR": "Hour",
+          "DAY": "Day",
+          "MON": "Month",
+          "KGM": "Kilogram",
+          "MTR": "Metre",
+          "MTK": "Square metre",
+          "LTR": "Litre",
+          "KMT": "Kilometre",
+          "SET": "Set"
+        }
       },
       "discounts": {
         "heading": "Discounts",
@@ -174,6 +203,11 @@
     },
     "einvoice": {
       "downloadXml": "Download e-invoice (XML)",
+      "ksefNumberLabel": "KSeF number",
+      "ksefNumberHint": "Paste the number KSeF assigned after you upload the XML yourself.",
+      "ksefNumberSave": "Save",
+      "ksefNumberSaved": "KSeF number saved",
+      "ksefNumberSaveError": "Could not save the KSeF number",
       "notReadyHint": "Missing e-invoice data: {fields}",
       "missingFieldFallback": "Missing e-invoice data.",
       "missingFields": {
@@ -318,7 +352,22 @@
     "unitPlaceholder": "pcs, hour, kg...",
     "priceLabel": "Default price",
     "defaultUnit": "pcs",
-    "validationError": "Fill in the name, unit and price."
+    "validationError": "Fill in the name, unit and price.",
+    "unitCodeLabel": "Unit code (optional)",
+    "unitCodeNoneOption": "None",
+    "units": {
+      "C62": "Piece / unit",
+      "H87": "Piece",
+      "HUR": "Hour",
+      "DAY": "Day",
+      "MON": "Month",
+      "KGM": "Kilogram",
+      "MTR": "Metre",
+      "MTK": "Square metre",
+      "LTR": "Litre",
+      "KMT": "Kilometre",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Clients",
@@ -413,7 +462,9 @@
     "vatFields": {
       "heading": "VAT registration",
       "vatRegistered": "VAT registered",
-      "vatNumber": "VAT number"
+      "vatNumber": "VAT number",
+      "vatOnCashBasis": "Cash-basis VAT scheme (TVA la încasare)",
+      "vatOnDebits": "VAT on debits option (paiement d'après les débits)"
     },
     "bankFields": {
       "heading": "Bank account",
@@ -493,6 +544,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Select the original document to continue.",
       "ISSUER_PROFILE_INCOMPLETE": "The issuer profile is incomplete. Fill in the company details to issue documents.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "A delivery note in this country needs its transport details filled in before it can be issued.",
+      "CORRECTION_REASON_REQUIRED": "A credit or debit note from Bulgaria, Ireland or Spain needs a reason for the correction before it can be issued.",
       "VAT_GROUND_NOT_ALLOWED": "This VAT exemption ground is not allowed.",
       "CLIENT_EIK_DUPLICATE": "A client with this company ID already exists.",
       "SUBSCRIPTION_REQUIRED": "An active subscription is required.",
@@ -506,7 +558,9 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "The payment provider is not responding. Please try again in a few minutes.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "The e-invoice provider is not configured.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "This provider does not support status checks.",
-      "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
+      "INTERNAL_ERROR": "An unexpected error occurred. Please try again.",
+      "OPERATION_NATURE_REQUIRED": "French tax documents must state the nature of the operation before they can be issued.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Could not fetch the exchange rate needed to issue this document. Please try again shortly."
     },
     "guideLink": "Invoicing guide",
     "helpLink": "View setup guide",

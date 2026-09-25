@@ -23,6 +23,8 @@ export interface IssuerProfileFormValues {
   bic: string;
   altIban: string;
   identifiers: Record<string, string>;
+  vatOnCashBasis: boolean;
+  vatOnDebits: boolean;
 }
 
 function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
@@ -44,6 +46,8 @@ function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
     bic: profile.bic ?? '',
     altIban: profile.altIban ?? '',
     identifiers: { ...profile.identifiers },
+    vatOnCashBasis: profile.vatOnCashBasis,
+    vatOnDebits: profile.vatOnDebits,
   };
 }
 
@@ -73,6 +77,8 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
         .map(([key, value]) => [key, value.trim()])
         .filter(([, value]) => value !== ''),
     ),
+    vatOnCashBasis: values.vatOnCashBasis,
+    vatOnDebits: values.vatOnDebits,
   };
 }
 

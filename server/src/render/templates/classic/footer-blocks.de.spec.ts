@@ -35,4 +35,29 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
     const html = buildIssuerBlock(document, 'invoice', locale);
     expect(html).toContain('Steuernummer: 27/815/08150');
   });
+
+  it('prints Registergericht, Sitz and Geschäftsführer when set', () => {
+    const document = buildFakeDocument({
+      issuerIdentifiers: {
+        steuernummer: '27/815/08150',
+        registergericht: 'Amtsgericht München',
+        sitz: 'München',
+        geschaeftsfuehrer: 'Max Mustermann',
+      },
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain('Registergericht: Amtsgericht München');
+    expect(html).toContain('Sitz: München');
+    expect(html).toContain('Geschäftsführer: Max Mustermann');
+  });
+
+  it('prints nothing for Registergericht, Sitz or Geschäftsführer for a sole trader who left them blank', () => {
+    const document = buildFakeDocument({
+      issuerIdentifiers: { steuernummer: '27/815/08150' },
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).not.toContain('Registergericht');
+    expect(html).not.toContain('Sitz:');
+    expect(html).not.toContain('Geschäftsführer');
+  });
 });

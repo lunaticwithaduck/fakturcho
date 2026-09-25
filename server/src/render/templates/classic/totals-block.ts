@@ -12,6 +12,7 @@ import type { VatPresentation } from '../../../money/vat';
 import { computeVatSubtotals } from '../../../vat-eu/subtotals';
 import { escapeHtml } from './html-utils';
 import type { ClassicLabels, ClassicLanguage } from './labels';
+import { buildLocalCurrencyVatRow } from './local-currency-vat-row';
 import type { ClassicLocaleContext } from './locale';
 
 export function buildAmountWordsBlock(document: Document, locale: ClassicLocaleContext): string {
@@ -171,8 +172,10 @@ export function buildTotalsBlock(
   const dueValue = formatMoneyForLocale(document.amount * sign, language);
   const totalLabel =
     document.vatAmount !== 0 ? (labels.totalWithVatLabel ?? labels.totalLabel) : labels.totalLabel;
+  const localCurrencyVatRow = buildLocalCurrencyVatRow(document, labels, language, sign);
   const totals = `<div class="totals">
     ${discountRows(document, discounts, labels, language, sign) + vatRows}
+    ${localCurrencyVatRow}
     ${totalsRow(totalLabel, formatMoneyForLocale(document.amount * sign, language), 'totals-row total')}
     ${dueRow(document, documentType, labels, dueValue)}
   </div>`;

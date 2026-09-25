@@ -52,9 +52,13 @@ export const PL_CONFIG: CountryConfig = {
   exemptionGrounds: PL_EXEMPTION_GROUNDS,
   defaultExemptionGround: PL_SMALL_BUSINESS_GROUND,
   vatNoteGrounds: PL_VAT_NOTE_GROUNDS,
+  // Sąd rejestrowy/kapitał zakładowy (KSH art. 206 § 1 for sp. z o.o., art. 374
+  // for S.A.) are optional here since a sole trader has none of them.
   identifiers: [
     { key: 'krs', label: 'KRS', pattern: /^\d{10}$/, required: false },
     { key: 'regon', label: 'REGON', pattern: /^\d{9}(\d{5})?$/, required: false },
+    { key: 'sadRejestrowy', label: 'Sąd rejestrowy', pattern: null, required: false },
+    { key: 'kapitalZakladowy', label: 'Kapitał zakładowy', pattern: null, required: false },
   ],
   requiredIssuerFields: ['companyName', 'eik', 'street', 'postcode', 'city'],
   showMol: false,

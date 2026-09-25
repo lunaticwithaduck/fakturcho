@@ -7,6 +7,7 @@ import { type FormEvent, useState } from 'react';
 export interface CatalogueFormValues {
   name: string;
   unit: string;
+  unitCode: string | null;
   defaultUnitPrice: Cents | null;
 }
 
@@ -17,6 +18,7 @@ export function catalogueItemToFormValues(
   return {
     name: item?.name ?? '',
     unit: item?.unit ?? defaultUnit,
+    unitCode: item?.unitCode ?? null,
     defaultUnitPrice: item?.defaultUnitPrice ?? null,
   };
 }
@@ -29,6 +31,7 @@ function toRequestBody(values: CatalogueFormValues): CreateCatalogueItemRequest 
   return {
     name: values.name.trim(),
     unit: values.unit.trim(),
+    unitCode: values.unitCode,
     defaultUnitPrice: values.defaultUnitPrice ?? 0,
   };
 }

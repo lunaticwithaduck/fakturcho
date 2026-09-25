@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Wybierz dokument pierwotny, aby kontynuować.",
         "missingLineItems": "Dodaj co najmniej jedną pozycję z nazwą, ilością i ceną.",
-        "missingVatGround": "Wybierz podstawę zwolnienia z VAT."
+        "missingVatGround": "Wybierz podstawę zwolnienia z VAT.",
+        "missingOperationNature": "Wybierz rodzaj czynności, aby kontynuować."
       },
       "documentType": {
         "label": "Rodzaj dokumentu"
@@ -119,10 +120,22 @@
         "carrierNameLabel": "Przewoźnik",
         "transportNoteLabel": "Szczegóły transportu"
       },
+      "frMentions": {
+        "operationNatureLabel": "Rodzaj czynności",
+        "operationNaturePlaceholder": "Wybierz rodzaj",
+        "operationNatureGoods": "Dostawa towarów",
+        "operationNatureServices": "Świadczenie usług",
+        "operationNatureMixed": "Dostawa towarów i świadczenie usług",
+        "deliveryAddressLabel": "Adres dostawy (jeśli inny)"
+      },
       "originalDocument": {
         "label": "Dokument pierwotny",
         "placeholder": "Wybierz dokument",
         "noClient": "Brak klienta"
+      },
+      "correctionReason": {
+        "label": "Przyczyna korekty",
+        "requiredHint": "Wymagane dla wystawców z Bułgarii, Irlandii i Hiszpanii."
       },
       "deliveryReference": {
         "label": "Powiązana faktura",
@@ -135,7 +148,23 @@
         "priceLabel": "Cena",
         "totalLabel": "Wartość",
         "removeButton": "Usuń",
-        "addButton": "Dodaj pozycję"
+        "addButton": "Dodaj pozycję",
+        "unitLabel": "Miara",
+        "unitNoneOption": "Brak",
+        "vatRateLabel": "Stawka VAT",
+        "units": {
+          "C62": "Sztuka / jednostka",
+          "H87": "Sztuka",
+          "HUR": "Godzina",
+          "DAY": "Dzień",
+          "MON": "Miesiąc",
+          "KGM": "Kilogram",
+          "MTR": "Metr",
+          "MTK": "Metr kwadratowy",
+          "LTR": "Litr",
+          "KMT": "Kilometr",
+          "SET": "Komplet"
+        }
       },
       "discounts": {
         "heading": "Rabaty",
@@ -174,6 +203,11 @@
     },
     "einvoice": {
       "downloadXml": "Pobierz e-fakturę (XML)",
+      "ksefNumberLabel": "Numer KSeF",
+      "ksefNumberHint": "Wklej numer nadany przez KSeF po samodzielnym przesłaniu pliku XML.",
+      "ksefNumberSave": "Zapisz",
+      "ksefNumberSaved": "Numer KSeF zapisany",
+      "ksefNumberSaveError": "Nie udało się zapisać numeru KSeF",
       "notReadyHint": "Brak danych do e-faktury: {fields}",
       "missingFieldFallback": "Brak danych do e-faktury.",
       "missingFields": {
@@ -318,7 +352,22 @@
     "unitPlaceholder": "szt., godz., kg...",
     "priceLabel": "Cena domyślna",
     "defaultUnit": "szt.",
-    "validationError": "Uzupełnij nazwę, jednostkę i cenę."
+    "validationError": "Uzupełnij nazwę, jednostkę i cenę.",
+    "unitCodeLabel": "Kod jednostki (opcjonalnie)",
+    "unitCodeNoneOption": "Brak",
+    "units": {
+      "C62": "Sztuka / jednostka",
+      "H87": "Sztuka",
+      "HUR": "Godzina",
+      "DAY": "Dzień",
+      "MON": "Miesiąc",
+      "KGM": "Kilogram",
+      "MTR": "Metr",
+      "MTK": "Metr kwadratowy",
+      "LTR": "Litr",
+      "KMT": "Kilometr",
+      "SET": "Komplet"
+    }
   },
   "clients": {
     "pageTitle": "Klienci",
@@ -413,7 +462,9 @@
     "vatFields": {
       "heading": "Rejestracja VAT",
       "vatRegistered": "Czynny podatnik VAT",
-      "vatNumber": "Numer VAT"
+      "vatNumber": "Numer VAT",
+      "vatOnCashBasis": "Metoda kasowa VAT (TVA la încasare, Rumunia)",
+      "vatOnDebits": "Opcja VAT od obciążeń (Francja)"
     },
     "bankFields": {
       "heading": "Rachunek bankowy",
@@ -493,6 +544,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Wybierz dokument pierwotny, aby kontynuować.",
       "ISSUER_PROFILE_INCOMPLETE": "Profil wystawcy jest niekompletny. Uzupełnij dane firmy, aby wystawiać dokumenty.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Dowód dostawy dla tego kraju wymaga uzupełnienia danych transportu przed wystawieniem.",
+      "CORRECTION_REASON_REQUIRED": "Faktura korygująca (nota kredytowa lub debetowa) z Bułgarii, Irlandii lub Hiszpanii wymaga podania przyczyny korekty przed wystawieniem.",
       "VAT_GROUND_NOT_ALLOWED": "Ta podstawa zwolnienia z VAT jest niedozwolona.",
       "CLIENT_EIK_DUPLICATE": "Klient z tym numerem identyfikacyjnym już istnieje.",
       "SUBSCRIPTION_REQUIRED": "Wymagany jest aktywny abonament.",
@@ -506,7 +558,9 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Operator płatności nie odpowiada. Spróbuj ponownie za kilka minut.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Dostawca e-faktur nie jest skonfigurowany.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ten dostawca nie obsługuje sprawdzania statusu.",
-      "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
+      "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.",
+      "OPERATION_NATURE_REQUIRED": "Francuskie dokumenty podatkowe muszą wskazywać rodzaj czynności przed wystawieniem.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Nie udało się pobrać kursu wymiany potrzebnego do wystawienia tego dokumentu. Spróbuj ponownie za chwilę."
     },
     "guideLink": "Poradnik fakturowania",
     "helpLink": "Zobacz przewodnik",

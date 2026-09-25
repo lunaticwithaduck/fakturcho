@@ -88,3 +88,20 @@ describe('FR credit note carries no payment-terms boilerplate', () => {
     expect(html).not.toContain('recouvrement');
   });
 });
+
+describe('FR nature-of-operation and delivery-address mentions (CGI art. 242 nonies A)', () => {
+  it('prints both mentions on a tax document that carries them', () => {
+    const html = renderFr({
+      operationNature: 'services',
+      deliveryAddress: '12 rue de la Gare, 69001 Lyon',
+    });
+    expect(html).toContain('Nature de l&#39;opération : Prestation de services');
+    expect(html).toContain('Adresse de livraison : 12 rue de la Gare, 69001 Lyon');
+  });
+
+  it('omits both mentions when neither field is set', () => {
+    const html = renderFr({ operationNature: null, deliveryAddress: null });
+    expect(html).not.toContain('Nature de l&#39;opération');
+    expect(html).not.toContain('Adresse de livraison');
+  });
+});

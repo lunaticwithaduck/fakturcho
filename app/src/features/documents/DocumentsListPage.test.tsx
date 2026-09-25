@@ -28,6 +28,8 @@ const BASE_PROFILE: IssuerProfileDto = {
   peppolEndpointId: null,
   peppolScheme: null,
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
 };
 
 let issuerProfileResult: { data: IssuerProfileDto | undefined; isLoading: boolean } = {

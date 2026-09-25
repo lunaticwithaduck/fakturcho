@@ -29,6 +29,20 @@ export function IssuerVatFields({ values, onChange }: IssuerVatFieldsProps) {
           onChange={(event) => onChange('vatNumber', event.target.value)}
         />
       ) : null}
+      {values.country === 'RO' ? (
+        <Switch
+          label={t('vatFields.vatOnCashBasis')}
+          checked={values.vatOnCashBasis}
+          onCheckedChange={(checked) => onChange('vatOnCashBasis', checked)}
+        />
+      ) : null}
+      {values.country === 'FR' ? (
+        <Switch
+          label={t('vatFields.vatOnDebits')}
+          checked={values.vatOnDebits}
+          onCheckedChange={(checked) => onChange('vatOnDebits', checked)}
+        />
+      ) : null}
     </div>
   );
 }

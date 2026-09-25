@@ -49,7 +49,14 @@ export const DE_CONFIG: CountryConfig = {
   exemptionGrounds: DE_EXEMPTION_GROUNDS,
   defaultExemptionGround: DE_DEFAULT_EXEMPTION_GROUND,
   vatNoteGrounds: [DE_DOMESTIC_REVERSE_CHARGE_GROUND, DE_CROSS_BORDER_REVERSE_CHARGE_GROUND],
-  identifiers: [{ key: 'steuernummer', label: 'Steuernummer', pattern: null, required: true }],
+  // Registergericht/Sitz/Geschäftsführer (§ 35a GmbHG, § 37a HGB, § 80 AktG)
+  // are optional here since a sole trader has none of them.
+  identifiers: [
+    { key: 'steuernummer', label: 'Steuernummer', pattern: null, required: true },
+    { key: 'registergericht', label: 'Registergericht', pattern: null, required: false },
+    { key: 'sitz', label: 'Sitz', pattern: null, required: false },
+    { key: 'geschaeftsfuehrer', label: 'Geschäftsführer', pattern: null, required: false },
+  ],
   requiredIssuerFields: ['companyName', 'street', 'postcode', 'city'],
   showMol: false,
   showSignatureRow: false,

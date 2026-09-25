@@ -157,6 +157,8 @@ model IssuerProfile {
   peppolEndpointId String?
   peppolScheme     String?
   identifiers      Json?
+  vatOnCashBasis   Boolean  @default(false)
+  vatOnDebits      Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -236,6 +238,15 @@ model Document {
   originalDocumentId String?
   originalDocument   Document?  @relation("DocumentCorrections", fields: [originalDocumentId], references: [id], onDelete: Restrict)
   corrections        Document[] @relation("DocumentCorrections")
+  // credit_note/debit_note only: reason for issuing the correction (BG ЗДДС
+  // чл. 115, ал. 4, т. 2; IE VAT Regulations 2010 Reg. 20; ES RD 1619/2012
+  // art. 15), required at issuance for BG/IE/ES issuers, optional elsewhere.
+  correctionReason String?
+
+  // PL only: the KSeF number the user pastes back in after uploading the FA(3)
+  // XML to KSeF themselves (fakturcho never submits it). Printed under the
+  // KOD I QR code once set; the invoice shows "OFFLINE" until then.
+  ksefNumber String?
 
   issuedAt     DateTime? @db.Date
   taxEventAt   DateTime? @db.Date
@@ -255,6 +266,12 @@ model Document {
   carrierName     String?
   transportNote   String?
 
+  // CGI art. 242 nonies A (French e-invoicing reform): nature of the
+  // operation ("goods" | "services" | "mixed") and, when it differs from the
+  // client address, the delivery address of goods.
+  operationNature  String?
+  deliveryAddress  String?
+
   subtotal           Int     @default(0)
   discountTotal      Int     @default(0)
   amount             Int     @default(0)
@@ -263,6 +280,16 @@ model Document {
   vatAmount          Int     @default(0)
   vatExemptionGround String?
   currency           String  @default("EUR")
+
+  // VAT Directive art. 230 snapshot, set at issuance for issuers in a
+  // non-euro EU_VAT_AREA_COUNTRIES state. Null for drafts, euro-area
+  // issuers, and documents issued before this column existed.
+  localCurrency      String?
+  exchangeRate       String?
+  exchangeRateDate   DateTime? @db.Date
+  exchangeRateSource String?
+  exchangeRateTable  String?
+  vatAmountLocal     Int?
 
   clientId String?
   client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
@@ -273,23 +300,25 @@ model Document {
   emailedAt  DateTime?
   templateId String    @default("classic")
 
-  issuerCompanyName   String?
-  issuerEik           String?
-  issuerMol           String?
-  issuerAddressLine   String?
-  issuerStreet        String?
-  issuerPostcode      String?
-  issuerCountyRegion  String?
-  issuerCity          String?
-  issuerCountry       String?
-  issuerPhone         String?
-  issuerVatRegistered Boolean?
-  issuerVatNumber     String?
-  issuerBankName      String?
-  issuerIban          String?
-  issuerBic           String?
-  issuerAltIban       String?
-  issuerIdentifiers   Json?
+  issuerCompanyName    String?
+  issuerEik            String?
+  issuerMol            String?
+  issuerAddressLine    String?
+  issuerStreet         String?
+  issuerPostcode       String?
+  issuerCountyRegion   String?
+  issuerCity           String?
+  issuerCountry        String?
+  issuerPhone          String?
+  issuerVatRegistered  Boolean?
+  issuerVatNumber      String?
+  issuerBankName       String?
+  issuerIban           String?
+  issuerBic            String?
+  issuerAltIban        String?
+  issuerIdentifiers    Json?
+  issuerVatOnCashBasis Boolean?
+  issuerVatOnDebits    Boolean?
 
   recipientCompanyName      String?
   recipientEik              String?

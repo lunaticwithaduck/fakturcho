@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Seleccione el documento original para continuar.",
         "missingLineItems": "Añada al menos un concepto con descripción, cantidad y precio.",
-        "missingVatGround": "Seleccione el motivo para no aplicar IVA."
+        "missingVatGround": "Seleccione el motivo para no aplicar IVA.",
+        "missingOperationNature": "Selecciona la naturaleza de la operación para continuar."
       },
       "documentType": {
         "label": "Tipo de documento"
@@ -119,10 +120,22 @@
         "carrierNameLabel": "Transportista",
         "transportNoteLabel": "Detalles del transporte"
       },
+      "frMentions": {
+        "operationNatureLabel": "Naturaleza de la operación",
+        "operationNaturePlaceholder": "Seleccionar naturaleza",
+        "operationNatureGoods": "Entrega de bienes",
+        "operationNatureServices": "Prestación de servicios",
+        "operationNatureMixed": "Entrega de bienes y prestación de servicios",
+        "deliveryAddressLabel": "Dirección de entrega (si es diferente)"
+      },
       "originalDocument": {
         "label": "Documento original",
         "placeholder": "Seleccionar documento",
         "noClient": "Sin cliente"
+      },
+      "correctionReason": {
+        "label": "Motivo de la rectificación",
+        "requiredHint": "Obligatorio para emisores en Bulgaria, Irlanda y España."
       },
       "deliveryReference": {
         "label": "Factura relacionada",
@@ -135,7 +148,23 @@
         "priceLabel": "Precio",
         "totalLabel": "Total",
         "removeButton": "Eliminar",
-        "addButton": "Añadir concepto"
+        "addButton": "Añadir concepto",
+        "unitLabel": "Unidad",
+        "unitNoneOption": "Ninguna",
+        "vatRateLabel": "Tipo de IVA",
+        "units": {
+          "C62": "Unidad",
+          "H87": "Pieza",
+          "HUR": "Hora",
+          "DAY": "Día",
+          "MON": "Mes",
+          "KGM": "Kilogramo",
+          "MTR": "Metro",
+          "MTK": "Metro cuadrado",
+          "LTR": "Litro",
+          "KMT": "Kilómetro",
+          "SET": "Juego"
+        }
       },
       "discounts": {
         "heading": "Descuentos",
@@ -174,6 +203,11 @@
     },
     "einvoice": {
       "downloadXml": "Descargar factura electrónica (XML)",
+      "ksefNumberLabel": "Número KSeF",
+      "ksefNumberHint": "Pegue el número asignado por KSeF después de subir usted mismo el archivo XML.",
+      "ksefNumberSave": "Guardar",
+      "ksefNumberSaved": "Número KSeF guardado",
+      "ksefNumberSaveError": "No se pudo guardar el número KSeF",
       "notReadyHint": "Faltan datos de la factura electrónica: {fields}",
       "missingFieldFallback": "Faltan datos de la factura electrónica.",
       "missingFields": {
@@ -318,7 +352,22 @@
     "unitPlaceholder": "ud., hora, kg...",
     "priceLabel": "Precio predeterminado",
     "defaultUnit": "ud.",
-    "validationError": "Complete el nombre, la unidad y el precio."
+    "validationError": "Complete el nombre, la unidad y el precio.",
+    "unitCodeLabel": "Código de unidad (opcional)",
+    "unitCodeNoneOption": "Ninguna",
+    "units": {
+      "C62": "Unidad",
+      "H87": "Pieza",
+      "HUR": "Hora",
+      "DAY": "Día",
+      "MON": "Mes",
+      "KGM": "Kilogramo",
+      "MTR": "Metro",
+      "MTK": "Metro cuadrado",
+      "LTR": "Litro",
+      "KMT": "Kilómetro",
+      "SET": "Juego"
+    }
   },
   "clients": {
     "pageTitle": "Clientes",
@@ -413,7 +462,9 @@
     "vatFields": {
       "heading": "Registro de IVA",
       "vatRegistered": "Registrado a efectos de IVA",
-      "vatNumber": "NIF-IVA"
+      "vatNumber": "NIF-IVA",
+      "vatOnCashBasis": "IVA de caja (TVA la încasare, Rumanía)",
+      "vatOnDebits": "Opción de IVA sobre cargos (Francia)"
     },
     "bankFields": {
       "heading": "Cuenta bancaria",
@@ -493,6 +544,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Seleccione el documento original para continuar.",
       "ISSUER_PROFILE_INCOMPLETE": "El perfil del emisor está incompleto. Complete los datos de la empresa para poder emitir documentos.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un albarán para este país necesita que se completen los datos de transporte antes de poder emitirse.",
+      "CORRECTION_REASON_REQUIRED": "Una nota de crédito o de débito de Bulgaria, Irlanda o España necesita un motivo de la rectificación antes de poder emitirse.",
       "VAT_GROUND_NOT_ALLOWED": "Este motivo de exención de IVA no está permitido.",
       "CLIENT_EIK_DUPLICATE": "Ya existe un cliente con este identificador fiscal.",
       "SUBSCRIPTION_REQUIRED": "Se requiere una suscripción activa.",
@@ -506,7 +558,9 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "El proveedor de pagos no responde. Inténtelo de nuevo en unos minutos.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "El proveedor de factura electrónica no está configurado.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Este proveedor no admite la consulta de estado.",
-      "INTERNAL_ERROR": "Se ha producido un error inesperado. Inténtelo de nuevo."
+      "INTERNAL_ERROR": "Se ha producido un error inesperado. Inténtelo de nuevo.",
+      "OPERATION_NATURE_REQUIRED": "Los documentos fiscales franceses deben indicar la naturaleza de la operación antes de poder emitirse.",
+      "EXCHANGE_RATE_UNAVAILABLE": "No se pudo obtener el tipo de cambio necesario para emitir este documento. Inténtelo de nuevo en unos instantes."
     },
     "guideLink": "Guía de facturación",
     "helpLink": "Ver la guía",

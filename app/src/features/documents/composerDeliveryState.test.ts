@@ -28,6 +28,7 @@ function fakeDocument(overrides: Partial<DocumentDto>): DocumentDto {
     transportedAt: null,
     carrierName: null,
     transportNote: null,
+    correctionReason: null,
     subtotal: 0,
     discountTotal: 0,
     amount: 0,

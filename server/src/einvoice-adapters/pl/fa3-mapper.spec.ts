@@ -134,6 +134,19 @@ describe('toFa3Xml — credit note type', () => {
     };
     expect(() => toFa3Xml(unresolved)).toThrow();
   });
+
+  it('carries PrzyczynaKorekty inside DaneFaKorygowanej when a correction reason is set', () => {
+    const withReason: DocumentDto = { ...creditNote, correctionReason: 'Zwrot towaru' };
+    const xmlWithReason = toFa3Xml(withReason);
+    expect(xmlWithReason).toContain('<PrzyczynaKorekty>Zwrot towaru</PrzyczynaKorekty>');
+    expect(xmlWithReason.indexOf('<PrzyczynaKorekty>')).toBeLessThan(
+      xmlWithReason.indexOf('</DaneFaKorygowanej>'),
+    );
+  });
+
+  it('omits PrzyczynaKorekty when there is no correction reason', () => {
+    expect(xml).not.toContain('PrzyczynaKorekty');
+  });
 });
 
 describe('toFa3Xml — debit note type', () => {

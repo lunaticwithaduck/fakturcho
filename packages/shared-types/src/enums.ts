@@ -116,6 +116,11 @@ export const TAX_DOCUMENT_TYPES: Record<DocumentType, boolean> = {
 
 export const CORRECTION_DOCUMENT_TYPES: readonly DocumentType[] = ['credit_note', 'debit_note'];
 
+// BG ЗДДС чл. 115, ал. 4, т. 2; IE VAT Regulations 2010 Reg. 20; ES RD
+// 1619/2012 art. 15: these issuer countries require a stated reason before a
+// credit or debit note can be issued.
+export const CORRECTION_REASON_REQUIRED_COUNTRIES: readonly string[] = ['BG', 'IE', 'ES'];
+
 export const STORED_DOCUMENT_STATUSES = ['draft', 'sent', 'paid', 'cancelled'] as const;
 export type StoredDocumentStatus = (typeof STORED_DOCUMENT_STATUSES)[number];
 

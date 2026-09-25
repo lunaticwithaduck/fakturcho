@@ -27,6 +27,8 @@ const BG_VALUES: IssuerProfileFormValues = {
   bic: '',
   altIban: '',
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
 };
 
 const DE_VALUES: IssuerProfileFormValues = {

@@ -1,4 +1,9 @@
-import type { DocumentLanguage, DocumentType } from '@fakturcho/shared-types';
+import type {
+  DocumentLanguage,
+  DocumentType,
+  OperationNature,
+  UnitCode,
+} from '@fakturcho/shared-types';
 import { bg } from './bg';
 import { de } from './de';
 import { en } from './en';
@@ -9,6 +14,15 @@ import { pl } from './pl';
 import { ro } from './ro';
 
 export type ClassicLanguage = DocumentLanguage;
+
+export interface VatAmountLocalLineParams {
+  currencyLabel: string;
+  amount: string;
+  sourceLabel: string;
+  rate: string;
+  date: string;
+  table: string | null;
+}
 
 export interface ClassicLabels {
   companyIdLabel: string;
@@ -35,8 +49,15 @@ export interface ClassicLabels {
   recipientSignaturePrefix: (documentType: DocumentType) => string;
   colName: string;
   colQuantity: string;
+  colUnit: string;
+  colVatRate: string;
   colPrice: string;
   colTotal: string;
+  // Short printed abbreviation per UN/ECE Rec 20 unit code (VAT Directive art.
+  // 226(6); PL art. 106e ust. 1 pkt 8 "miara"; BG ЗДДС чл. 114 ал. 1 т. 8).
+  unitLabels: Record<UnitCode, string>;
+  // Printed in the per-line VAT rate column for a reverse-charged (AE) line.
+  reverseChargeLineMarker: string;
   vatBasePrefix: string;
   vatRatePrefix: (percent: number) => string;
   subtotalLabel: string;
@@ -49,6 +70,14 @@ export interface ClassicLabels {
   paidLabel: string;
   exemptionPrefix: string;
   zeroRatePrefix?: string;
+  // CGI art. 242 nonies A (French e-invoicing reform): printed only for a
+  // French issuer's tax documents, in the chosen document language.
+  operationNaturePrefix: string;
+  operationNatureLabels: Record<OperationNature, string>;
+  deliveryAddressPrefix: string;
+  // VAT Directive art. 230: the VAT amount in the issuer's national currency,
+  // shown only when Document.vatAmountLocal was snapshotted at issuance.
+  vatAmountLocalLine: (params: VatAmountLocalLineParams) => string;
   proformaNotice: string;
   reverseChargeNote: string;
   originalMarker: string;
@@ -56,6 +85,7 @@ export interface ClassicLabels {
   numberSign: string;
   draftTitle: (documentLabel: string) => string;
   correctsInvoice: (number: string, date: string) => string;
+  correctionReasonPrefix: string;
   documentType: Record<DocumentType, string>;
   watermarkMain: string;
   watermarkSub: string;

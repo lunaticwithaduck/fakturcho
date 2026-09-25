@@ -4,6 +4,7 @@ import type {
   DocumentListQuery,
   IssueDocumentRequest,
   SaveDraftRequest,
+  SetKsefNumberRequest,
 } from '@fakturcho/shared-types';
 import { API_ROUTES } from '@fakturcho/shared-types';
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
@@ -14,6 +15,7 @@ import {
   documentListQuerySchema,
   issueDocumentRequestSchema,
   saveDraftRequestSchema,
+  setKsefNumberRequestSchema,
 } from './dto-schemas';
 import { parseOrThrow } from './zod-parse.util';
 
@@ -72,5 +74,15 @@ export class DocumentsController {
   @Post(':id/paid')
   markPaid(@AccountId() accountId: string, @Param('id') id: string): Promise<DocumentDto> {
     return this.issuanceService.markPaid(accountId, id);
+  }
+
+  @Put(':id/ksef-number')
+  setKsefNumber(
+    @AccountId() accountId: string,
+    @Param('id') id: string,
+    @Body() body: unknown,
+  ): Promise<DocumentDto> {
+    const request = parseOrThrow(setKsefNumberRequestSchema, body) as SetKsefNumberRequest;
+    return this.documentsService.setKsefNumber(accountId, id, request.ksefNumber);
   }
 }

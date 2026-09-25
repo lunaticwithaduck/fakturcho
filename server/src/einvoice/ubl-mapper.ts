@@ -52,6 +52,9 @@ export function toUblXml(document: DocumentDto): string {
     (document.issuedAt ? textEl('cbc:IssueDate', dateOnly(document.issuedAt)) : '') +
     (document.dueAt ? textEl('cbc:DueDate', dateOnly(document.dueAt)) : '') +
     textEl(typeCodeTag, DOCUMENT_TYPE_CODES[kind]) +
+    (kind !== 'invoice' && document.correctionReason
+      ? textEl('cbc:Note', document.correctionReason)
+      : '') +
     textEl('cbc:DocumentCurrencyCode', document.currency) +
     (document.buyerReference ? textEl('cbc:BuyerReference', document.buyerReference) : '');
 

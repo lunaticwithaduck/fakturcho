@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Wählen Sie das Originaldokument aus, um fortzufahren.",
         "missingLineItems": "Fügen Sie mindestens eine Position mit Bezeichnung, Menge und Preis hinzu.",
-        "missingVatGround": "Wählen Sie aus, warum keine USt. berechnet wird."
+        "missingVatGround": "Wählen Sie aus, warum keine USt. berechnet wird.",
+        "missingOperationNature": "Wählen Sie die Art des Umsatzes aus, um fortzufahren."
       },
       "documentType": {
         "label": "Dokumenttyp"
@@ -119,10 +120,22 @@
         "carrierNameLabel": "Spediteur",
         "transportNoteLabel": "Transporthinweise"
       },
+      "frMentions": {
+        "operationNatureLabel": "Art des Umsatzes",
+        "operationNaturePlaceholder": "Art auswählen",
+        "operationNatureGoods": "Lieferung von Gegenständen",
+        "operationNatureServices": "Erbringung einer Dienstleistung",
+        "operationNatureMixed": "Lieferung von Gegenständen und Erbringung einer Dienstleistung",
+        "deliveryAddressLabel": "Lieferadresse (falls abweichend)"
+      },
       "originalDocument": {
         "label": "Originaldokument",
         "placeholder": "Dokument auswählen",
         "noClient": "Kein Kunde"
+      },
+      "correctionReason": {
+        "label": "Grund der Korrektur",
+        "requiredHint": "Erforderlich für Aussteller aus Bulgarien, Irland und Spanien."
       },
       "deliveryReference": {
         "label": "Zugehörige Rechnung",
@@ -135,7 +148,23 @@
         "priceLabel": "Preis",
         "totalLabel": "Gesamt",
         "removeButton": "Entfernen",
-        "addButton": "Position hinzufügen"
+        "addButton": "Position hinzufügen",
+        "unitLabel": "Einheit",
+        "unitNoneOption": "Keine",
+        "vatRateLabel": "USt.-Satz",
+        "units": {
+          "C62": "Stück / Einheit",
+          "H87": "Stück",
+          "HUR": "Stunde",
+          "DAY": "Tag",
+          "MON": "Monat",
+          "KGM": "Kilogramm",
+          "MTR": "Meter",
+          "MTK": "Quadratmeter",
+          "LTR": "Liter",
+          "KMT": "Kilometer",
+          "SET": "Set"
+        }
       },
       "discounts": {
         "heading": "Rabatte",
@@ -174,6 +203,11 @@
     },
     "einvoice": {
       "downloadXml": "E-Rechnung herunterladen (XML)",
+      "ksefNumberLabel": "KSeF-Nummer",
+      "ksefNumberHint": "Fügen Sie die Nummer ein, die KSeF vergeben hat, nachdem Sie die XML-Datei selbst hochgeladen haben.",
+      "ksefNumberSave": "Speichern",
+      "ksefNumberSaved": "KSeF-Nummer gespeichert",
+      "ksefNumberSaveError": "KSeF-Nummer konnte nicht gespeichert werden",
       "notReadyHint": "Fehlende Daten für die E-Rechnung: {fields}",
       "missingFieldFallback": "Fehlende Daten für die E-Rechnung.",
       "missingFields": {
@@ -318,7 +352,22 @@
     "unitPlaceholder": "Stk., Std., kg...",
     "priceLabel": "Standardpreis",
     "defaultUnit": "Stk.",
-    "validationError": "Füllen Sie Bezeichnung, Einheit und Preis aus."
+    "validationError": "Füllen Sie Bezeichnung, Einheit und Preis aus.",
+    "unitCodeLabel": "Einheitencode (optional)",
+    "unitCodeNoneOption": "Keine",
+    "units": {
+      "C62": "Stück / Einheit",
+      "H87": "Stück",
+      "HUR": "Stunde",
+      "DAY": "Tag",
+      "MON": "Monat",
+      "KGM": "Kilogramm",
+      "MTR": "Meter",
+      "MTK": "Quadratmeter",
+      "LTR": "Liter",
+      "KMT": "Kilometer",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Kunden",
@@ -413,7 +462,9 @@
     "vatFields": {
       "heading": "USt-Registrierung",
       "vatRegistered": "Umsatzsteuerlich registriert",
-      "vatNumber": "USt-IdNr."
+      "vatNumber": "USt-IdNr.",
+      "vatOnCashBasis": "Ist-Besteuerung der Umsatzsteuer (TVA la încasare, Rumänien)",
+      "vatOnDebits": "MwSt.-Besteuerung nach vereinbarten Entgelten (Frankreich)"
     },
     "bankFields": {
       "heading": "Bankverbindung",
@@ -493,6 +544,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Wählen Sie das Originaldokument aus, um fortzufahren.",
       "ISSUER_PROFILE_INCOMPLETE": "Das Ausstellerprofil ist unvollständig. Geben Sie die Firmendaten ein, um Dokumente ausstellen zu können.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Ein Lieferschein für dieses Land benötigt ausgefüllte Transportangaben, bevor er ausgestellt werden kann.",
+      "CORRECTION_REASON_REQUIRED": "Eine Gutschrift oder Lastschrift aus Bulgarien, Irland oder Spanien benötigt einen Korrekturgrund, bevor sie ausgestellt werden kann.",
       "VAT_GROUND_NOT_ALLOWED": "Dieser Befreiungsgrund ist nicht zulässig.",
       "CLIENT_EIK_DUPLICATE": "Es existiert bereits ein Kunde mit dieser Registernummer.",
       "SUBSCRIPTION_REQUIRED": "Ein aktives Abonnement ist erforderlich.",
@@ -506,7 +558,9 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Der Zahlungsanbieter antwortet nicht. Bitte versuchen Sie es in einigen Minuten erneut.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Der Anbieter für E-Rechnungen ist nicht konfiguriert.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Dieser Anbieter unterstützt keine Statusabfragen.",
-      "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+      "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+      "OPERATION_NATURE_REQUIRED": "Französische Steuerdokumente müssen vor der Ausstellung die Art des Umsatzes angeben.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Der für die Ausstellung dieses Dokuments benötigte Wechselkurs konnte nicht abgerufen werden. Bitte versuchen Sie es in Kürze erneut."
     },
     "guideLink": "Rechnungsleitfaden",
     "helpLink": "Anleitung ansehen",

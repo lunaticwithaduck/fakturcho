@@ -56,6 +56,21 @@ describe('DE country config', () => {
     expect(steuernummer).toMatchObject({ label: 'Steuernummer', required: true });
   });
 
+  it('carries Registergericht, Sitz and Geschäftsführer as optional identifiers (§ 35a GmbHG, § 37a HGB, § 80 AktG)', () => {
+    const optional = ['registergericht', 'sitz', 'geschaeftsfuehrer'];
+    for (const key of optional) {
+      const field = config.identifiers.find((entry) => entry.key === key);
+      expect(field?.required).toBe(false);
+    }
+    expect(config.identifiers.find((entry) => entry.key === 'registergericht')?.label).toBe(
+      'Registergericht',
+    );
+    expect(config.identifiers.find((entry) => entry.key === 'sitz')?.label).toBe('Sitz');
+    expect(config.identifiers.find((entry) => entry.key === 'geschaeftsfuehrer')?.label).toBe(
+      'Geschäftsführer',
+    );
+  });
+
   it('requires the structured street/postcode/city address but not the Handelsregister number', () => {
     expect(config.requiredIssuerFields).toEqual(['companyName', 'street', 'postcode', 'city']);
   });

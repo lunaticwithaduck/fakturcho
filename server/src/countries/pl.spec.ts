@@ -73,10 +73,19 @@ describe('PL country config', () => {
     );
   });
 
-  it('carries KRS and REGON as optional secondary identifiers', () => {
+  it('carries KRS, REGON, Sąd rejestrowy and Kapitał zakładowy as optional secondary identifiers', () => {
     const keys = config.identifiers.map((field) => field.key);
-    expect(keys).toEqual(['krs', 'regon']);
+    expect(keys).toEqual(['krs', 'regon', 'sadRejestrowy', 'kapitalZakladowy']);
     expect(config.identifiers.every((field) => field.required === false)).toBe(true);
+  });
+
+  it('labels the new identifiers Sąd rejestrowy and Kapitał zakładowy (KSH art. 206 § 1, art. 374)', () => {
+    expect(config.identifiers.find((field) => field.key === 'sadRejestrowy')?.label).toBe(
+      'Sąd rejestrowy',
+    );
+    expect(config.identifiers.find((field) => field.key === 'kapitalZakladowy')?.label).toBe(
+      'Kapitał zakładowy',
+    );
   });
 
   it('validates KRS as 10 digits and REGON as 9 or 14 digits', () => {

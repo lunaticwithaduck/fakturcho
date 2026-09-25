@@ -5,7 +5,8 @@ import type { DocumentDto, Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
-import { type ComposerFormState, toSaveDraftRequest, validateComposerState } from './composerState';
+import { type ComposerFormState, toSaveDraftRequest } from './composerState';
+import { validateComposerState } from './composerValidation';
 import type { VatTreatment } from './liveTotals';
 
 export function useComposerSubmit(
@@ -13,6 +14,7 @@ export function useComposerSubmit(
   state: ComposerFormState,
   vat: VatTreatment,
   locale: Locale,
+  issuerCountry = '',
 ) {
   const t = useTranslations('documents');
   const router = useRouter();
@@ -22,12 +24,12 @@ export function useComposerSubmit(
 
   async function persist(): Promise<DocumentDto | null> {
     setError(null);
-    const validationError = validateComposerState(state, vat);
+    const validationError = validateComposerState(state, vat, issuerCountry);
     if (validationError) {
       setError(t(`composer.errors.${validationError}`));
       return null;
     }
-    const body = toSaveDraftRequest(state, vat);
+    const body = toSaveDraftRequest(state, vat, issuerCountry);
     try {
       return documentId
         ? await updateDraft({ id: documentId, body }).unwrap()

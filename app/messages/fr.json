@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Sélectionnez le document d'origine pour continuer.",
         "missingLineItems": "Ajoutez au moins une ligne avec une désignation, une quantité et un prix.",
-        "missingVatGround": "Sélectionnez un motif d'exonération de TVA."
+        "missingVatGround": "Sélectionnez un motif d'exonération de TVA.",
+        "missingOperationNature": "Sélectionnez la nature de l'opération pour continuer."
       },
       "documentType": {
         "label": "Type de document"
@@ -119,10 +120,22 @@
         "carrierNameLabel": "Transporteur",
         "transportNoteLabel": "Détails du transport"
       },
+      "frMentions": {
+        "operationNatureLabel": "Nature de l'opération",
+        "operationNaturePlaceholder": "Sélectionner la nature",
+        "operationNatureGoods": "Livraison de biens",
+        "operationNatureServices": "Prestation de services",
+        "operationNatureMixed": "Livraison de biens et prestation de services",
+        "deliveryAddressLabel": "Adresse de livraison (si différente)"
+      },
       "originalDocument": {
         "label": "Document d'origine",
         "placeholder": "Sélectionner un document",
         "noClient": "Aucun client"
+      },
+      "correctionReason": {
+        "label": "Motif de la correction",
+        "requiredHint": "Obligatoire pour les émetteurs établis en Bulgarie, en Irlande et en Espagne."
       },
       "deliveryReference": {
         "label": "Facture liée",
@@ -135,7 +148,23 @@
         "priceLabel": "Prix unitaire",
         "totalLabel": "Total",
         "removeButton": "Supprimer",
-        "addButton": "Ajouter une ligne"
+        "addButton": "Ajouter une ligne",
+        "unitLabel": "Unité",
+        "unitNoneOption": "Aucune",
+        "vatRateLabel": "Taux de TVA",
+        "units": {
+          "C62": "Unité",
+          "H87": "Pièce",
+          "HUR": "Heure",
+          "DAY": "Jour",
+          "MON": "Mois",
+          "KGM": "Kilogramme",
+          "MTR": "Mètre",
+          "MTK": "Mètre carré",
+          "LTR": "Litre",
+          "KMT": "Kilomètre",
+          "SET": "Lot"
+        }
       },
       "discounts": {
         "heading": "Remises",
@@ -174,6 +203,11 @@
     },
     "einvoice": {
       "downloadXml": "Télécharger la facture électronique (XML)",
+      "ksefNumberLabel": "Numéro KSeF",
+      "ksefNumberHint": "Collez le numéro attribué par KSeF après avoir téléversé vous-même le fichier XML.",
+      "ksefNumberSave": "Enregistrer",
+      "ksefNumberSaved": "Numéro KSeF enregistré",
+      "ksefNumberSaveError": "Impossible d'enregistrer le numéro KSeF",
       "notReadyHint": "Données manquantes pour la facture électronique : {fields}",
       "missingFieldFallback": "Données manquantes pour la facture électronique.",
       "missingFields": {
@@ -318,7 +352,22 @@
     "unitPlaceholder": "pièce, heure, kg...",
     "priceLabel": "Prix par défaut",
     "defaultUnit": "pièce",
-    "validationError": "Renseignez la désignation, l'unité et le prix."
+    "validationError": "Renseignez la désignation, l'unité et le prix.",
+    "unitCodeLabel": "Code d'unité (facultatif)",
+    "unitCodeNoneOption": "Aucune",
+    "units": {
+      "C62": "Unité",
+      "H87": "Pièce",
+      "HUR": "Heure",
+      "DAY": "Jour",
+      "MON": "Mois",
+      "KGM": "Kilogramme",
+      "MTR": "Mètre",
+      "MTK": "Mètre carré",
+      "LTR": "Litre",
+      "KMT": "Kilomètre",
+      "SET": "Lot"
+    }
   },
   "clients": {
     "pageTitle": "Clients",
@@ -413,7 +462,9 @@
     "vatFields": {
       "heading": "Assujettissement à la TVA",
       "vatRegistered": "Assujetti à la TVA",
-      "vatNumber": "Numéro de TVA"
+      "vatNumber": "Numéro de TVA",
+      "vatOnCashBasis": "TVA sur les encaissements (TVA la încasare, Roumanie)",
+      "vatOnDebits": "Option pour le paiement de la taxe d'après les débits"
     },
     "bankFields": {
       "heading": "Compte bancaire",
@@ -493,6 +544,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Sélectionnez le document d'origine pour continuer.",
       "ISSUER_PROFILE_INCOMPLETE": "Le profil de l'émetteur est incomplet. Renseignez les informations de l'entreprise pour émettre des documents.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un bon de livraison pour ce pays nécessite que les informations de transport soient renseignées avant de pouvoir être émis.",
+      "CORRECTION_REASON_REQUIRED": "Un avoir ou une note de débit émis depuis la Bulgarie, l'Irlande ou l'Espagne nécessite un motif de correction avant de pouvoir être émis.",
       "VAT_GROUND_NOT_ALLOWED": "Ce motif d'exonération de TVA n'est pas autorisé.",
       "CLIENT_EIK_DUPLICATE": "Un client avec ce numéro d'identification existe déjà.",
       "SUBSCRIPTION_REQUIRED": "Un abonnement actif est requis.",
@@ -506,7 +558,9 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Le prestataire de paiement ne répond pas. Veuillez réessayer dans quelques minutes.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Le prestataire de facturation électronique n'est pas configuré.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ce prestataire ne prend pas en charge la vérification du statut.",
-      "INTERNAL_ERROR": "Une erreur inattendue est survenue. Veuillez réessayer."
+      "INTERNAL_ERROR": "Une erreur inattendue est survenue. Veuillez réessayer.",
+      "OPERATION_NATURE_REQUIRED": "Les documents fiscaux français doivent indiquer la nature de l'opération avant de pouvoir être émis.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Impossible de récupérer le taux de change nécessaire pour émettre ce document. Veuillez réessayer dans quelques instants."
     },
     "guideLink": "Guide de facturation",
     "helpLink": "Voir le guide",

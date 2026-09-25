@@ -16,6 +16,7 @@ import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
 import { buildDocumentListWhere } from './document-list-query';
 import { buildDraftData } from './draft-data.builder';
+import { setDocumentKsefNumber } from './set-ksef-number';
 import { applyLineVatGroups, resolveVatTreatment } from './vat-treatment';
 
 @Injectable()
@@ -154,6 +155,10 @@ export class DocumentsService {
       throw new DomainError('NOT_FOUND', 'Document not found.');
     }
     return toDocumentDto(record);
+  }
+
+  setKsefNumber(accountId: string, documentId: string, ksefNumber: string | null) {
+    return setDocumentKsefNumber(this.prisma, accountId, documentId, ksefNumber);
   }
 
   async list(

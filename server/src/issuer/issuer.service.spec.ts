@@ -49,4 +49,21 @@ describe('IssuerService', () => {
     expect(partial.city).toBe('Plovdiv');
     expect(partial.phone).toBe('+359888000000');
   });
+
+  it('defaults vatOnCashBasis and vatOnDebits to false and round-trips them once set', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const fresh = await service.getProfile(account.id);
+    expect(fresh.vatOnCashBasis).toBe(false);
+    expect(fresh.vatOnDebits).toBe(false);
+
+    const updated = await service.updateProfile(account.id, {
+      country: 'RO',
+      vatOnCashBasis: true,
+    });
+    expect(updated.vatOnCashBasis).toBe(true);
+    expect(updated.vatOnDebits).toBe(false);
+
+    const fetched = await service.getProfile(account.id);
+    expect(fetched.vatOnCashBasis).toBe(true);
+  });
 });

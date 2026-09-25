@@ -13,18 +13,21 @@ import type {
 import { useLocale, useTranslations } from 'next-intl';
 import { ComposerActions } from './ComposerActions';
 import { ComposerClientField } from './ComposerClientField';
+import { ComposerCorrectionFields } from './ComposerCorrectionFields';
 import { ComposerDeliveryFields } from './ComposerDeliveryFields';
 import { ComposerDetailsFields } from './ComposerDetailsFields';
 import { ComposerDiscountsList } from './ComposerDiscountsList';
 import { ComposerDocumentTypeField } from './ComposerDocumentTypeField';
+import { ComposerFrMentionsFields } from './ComposerFrMentionsFields';
 import { ComposerLineItemsTable } from './ComposerLineItemsTable';
 import { ComposerNotesFields } from './ComposerNotesFields';
-import { ComposerOriginalDocumentField } from './ComposerOriginalDocumentField';
 import { ComposerTotalsPanel } from './ComposerTotalsPanel';
 import { ComposerVatSection } from './ComposerVatSection';
-import { computeLiveTotals, resolveVatTreatment } from './liveTotals';
+import { isFrenchTaxDocument } from './composerFrMentionsState';
+import { resolveVatTreatment } from './liveTotals';
 import { useComposerState } from './useComposerState';
 import { useComposerSubmit } from './useComposerSubmit';
+import { useComposerTotals } from './useComposerTotals';
 
 interface DocumentComposerFormProps {
   documentId: string | null;
@@ -44,7 +47,11 @@ export function DocumentComposerForm({
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
   const countryConfig = getCountryConfig(issuerProfile.country);
-  const controller = useComposerState(existing, countryConfig.timeZone);
+  const controller = useComposerState(
+    existing,
+    countryConfig.timeZone,
+    countryConfig.defaultVatRateBp,
+  );
   const { state, setField, patchState } = controller;
   const vat = resolveVatTreatment({
     documentType: state.documentType,
@@ -54,27 +61,18 @@ export function DocumentComposerForm({
     groundRequired:
       countryConfig.defaultExemptionGround === null && countryConfig.exemptionGrounds.length > 0,
   });
-  const totals = computeLiveTotals({
-    lineItems: state.lineItems.map((line) => ({
-      quantity: line.quantity,
-      unitPrice: line.unitPrice ?? 0,
-    })),
-    discounts: state.discounts.map((discount) => ({
-      percentBp: discount.mode === 'percent' ? discount.percentBp : null,
-      amount: discount.mode === 'amount' ? discount.amount : null,
-    })),
-    vatCharged: vat.vatCharged,
-    vatRateBp: vat.vatRateBp,
-  });
+  const { totals, vatRatePercent } = useComposerTotals(state, vat, countryConfig.defaultVatRateBp);
   const isCorrection = (CORRECTION_DOCUMENT_TYPES as readonly DocumentType[]).includes(
     state.documentType,
   );
   const isDeliveryNote = state.documentType === 'delivery_note';
+  const showFrMentions = isFrenchTaxDocument(issuerProfile.country, vat.isTaxDocument);
   const { error, isSubmitting, handleSaveDraft, handleSaveAndIssue } = useComposerSubmit(
     documentId,
     state,
     vat,
     locale,
+    issuerProfile.country,
   );
 
   return (
@@ -99,15 +97,18 @@ export function DocumentComposerForm({
             onChange={(value) => setField('clientId', value)}
           />
         </div>
-        {isCorrection || isDeliveryNote ? (
-          <ComposerOriginalDocumentField
-            documentType={state.documentType}
-            value={state.originalDocumentId}
-            currentDocumentId={documentId}
-            hasError={isCorrection && !!error && !state.originalDocumentId}
-            onChange={(value) => setField('originalDocumentId', value)}
-          />
-        ) : null}
+        <ComposerCorrectionFields
+          documentType={state.documentType}
+          documentId={documentId}
+          isCorrection={isCorrection}
+          isDeliveryNote={isDeliveryNote}
+          issuerCountry={issuerProfile.country}
+          originalDocumentId={state.originalDocumentId}
+          correctionReason={state.correctionReason}
+          hasError={!!error}
+          onOriginalChange={(value) => setField('originalDocumentId', value)}
+          onReasonChange={(value) => setField('correctionReason', value)}
+        />
         <ComposerDetailsFields
           documentType={state.documentType}
           referenceNumber={state.referenceNumber}
@@ -132,9 +133,23 @@ export function DocumentComposerForm({
         </Card>
       ) : null}
 
+      {showFrMentions ? (
+        <Card>
+          <ComposerFrMentionsFields
+            operationNature={state.operationNature}
+            deliveryAddress={state.deliveryAddress}
+            hasOperationNatureError={!!error && !state.operationNature}
+            onChange={patchState}
+          />
+        </Card>
+      ) : null}
+
       <ComposerLineItemsTable
         lineItems={state.lineItems}
         catalogueItems={catalogueItems}
+        vatCharged={vat.vatCharged}
+        vatRates={countryConfig.vatRates}
+        defaultVatRateBp={countryConfig.defaultVatRateBp}
         onAdd={controller.addLineItem}
         onChange={controller.updateLineItem}
         onRemove={controller.removeLineItem}
@@ -165,7 +180,7 @@ export function DocumentComposerForm({
       <ComposerTotalsPanel
         totals={totals}
         vatCharged={vat.vatCharged}
-        vatRatePercent={vat.vatCharged ? vat.vatRateBp / 100 : null}
+        vatRatePercent={vatRatePercent}
       />
 
       <Card>

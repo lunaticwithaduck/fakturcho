@@ -11,6 +11,7 @@ export function buildFakeDocument(overrides: Record<string, unknown> = {}): Docu
     numberSuffix: null,
     referenceNumber: null,
     originalDocumentId: null,
+    ksefNumber: null,
     issuedAt: new Date('2026-08-02'),
     taxEventAt: new Date('2026-08-02'),
     dueAt: null,

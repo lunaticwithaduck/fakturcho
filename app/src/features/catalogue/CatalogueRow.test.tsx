@@ -11,6 +11,7 @@ const item = {
   name: 'Консултация',
   defaultUnitPrice: 5000,
   unit: 'час',
+  unitCode: null,
 };
 
 afterEach(cleanup);

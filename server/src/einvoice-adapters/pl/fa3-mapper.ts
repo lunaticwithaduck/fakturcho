@@ -79,6 +79,7 @@ function correctionBlock(document: DocumentDto): string {
     textEl('DataWystFaKorygowanej', original.issuedAt) +
     textEl('NrFaKorygowanej', originalNumber) +
     ksefBlock +
+    optionalTextEl('PrzyczynaKorekty', document.correctionReason) +
     '</DaneFaKorygowanej>'
   );
 }

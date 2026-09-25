@@ -11,6 +11,7 @@ import { PUBLISHED_LOCALES } from './languages';
 import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
 export * from './countries/base';
+export * from './countries/non-euro';
 export * from './languages';
 
 export const EU_VAT_AREA_COUNTRIES = [

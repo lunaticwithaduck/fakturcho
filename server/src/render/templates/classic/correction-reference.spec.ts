@@ -28,9 +28,25 @@ const EXPECTED: Record<ClassicLanguage, string> = {
   es: 'Factura rectificada: n.º 0000000041 de 15/07/2026',
 };
 
-function render(language: ClassicLanguage, documentType: string, withOriginal = true) {
+const EXPECTED_REASON: Record<ClassicLanguage, string> = {
+  bg: 'Основание за издаване: Върната стока',
+  en: 'Reason: Returned goods',
+  de: 'Grund der Korrektur: Rückgabe der Ware',
+  fr: 'Motif : Retour de marchandise',
+  it: 'Causale: Reso della merce',
+  pl: 'Przyczyna korekty: Zwrot towaru',
+  ro: 'Motivul corecției: Returnarea mărfii',
+  es: 'Motivo de la rectificación: Devolución de mercancía',
+};
+
+function render(
+  language: ClassicLanguage,
+  documentType: string,
+  withOriginal = true,
+  correctionReason: string | null = null,
+) {
   return renderClassicTemplateHtml({
-    document: buildFakeDocument({ documentType, number: 42 }),
+    document: buildFakeDocument({ documentType, number: 42, correctionReason }),
     lineItems: buildFakeLineItems(),
     presentation,
     isDraft: false,
@@ -50,6 +66,41 @@ describe('correction reference', () => {
   it('prints nothing on an invoice or without an original', () => {
     expect(render('en', 'INVOICE')).not.toContain('Relates to invoice');
     expect(render('en', 'CREDIT_NOTE', false)).not.toContain('Relates to invoice');
+  });
+
+  const REASON_TEXT: Record<ClassicLanguage, string> = {
+    bg: 'Върната стока',
+    en: 'Returned goods',
+    de: 'Rückgabe der Ware',
+    fr: 'Retour de marchandise',
+    it: 'Reso della merce',
+    pl: 'Zwrot towaru',
+    ro: 'Returnarea mărfii',
+    es: 'Devolución de mercancía',
+  };
+
+  for (const [language, expected] of Object.entries(EXPECTED_REASON)) {
+    it(`prints the correction reason under the correction reference (${language})`, () => {
+      const reason = REASON_TEXT[language as ClassicLanguage];
+      const creditHtml = render(language as ClassicLanguage, 'CREDIT_NOTE', true, reason);
+      const debitHtml = render(language as ClassicLanguage, 'DEBIT_NOTE', true, reason);
+      expect(creditHtml).toContain(expected);
+      expect(debitHtml).toContain(expected);
+      expect(creditHtml.indexOf('correction-reference')).toBeLessThan(
+        creditHtml.indexOf('correction-reason'),
+      );
+    });
+  }
+
+  it('prints no reason line when there is no correction reason', () => {
+    const html = render('en', 'CREDIT_NOTE', true, null);
+    expect(html).not.toContain('<div class="correction-reason">');
+  });
+
+  it('escapes an untrusted reason before printing it', () => {
+    const html = render('en', 'CREDIT_NOTE', true, '<script>alert(1)</script>');
+    expect(html).toContain('Reason: &lt;script&gt;alert(1)&lt;/script&gt;');
+    expect(html).not.toContain('<script>alert(1)</script>');
   });
 
   it('prints the issuer VAT number in the issuer block', () => {

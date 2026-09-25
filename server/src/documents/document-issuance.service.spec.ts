@@ -356,4 +356,206 @@ describe('DocumentIssuanceService', () => {
     expect(issued.status).toBe('sent');
     expect(issued.number).not.toBeNull();
   });
+
+  const completeIssuerOverridesFor = (country: string) => ({
+    country,
+    street: 'Main Street 1',
+    postcode: '10000',
+    vatRegistered: true,
+    vatNumber: `${country}123456789`,
+  });
+
+  it.each(['BG', 'IE', 'ES'])(
+    'a %s credit note cannot be issued without a correction reason',
+    async (country) => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(
+        prisma,
+        accountId,
+        null,
+        completeIssuerOverridesFor(country),
+      );
+      const original = await documentsService.saveDraft(accountId, null, draftRequest());
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({ documentType: 'credit_note', originalDocumentId: original.id }),
+      );
+
+      await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+        code: 'CORRECTION_REASON_REQUIRED',
+      });
+
+      const stillDraft = await documentsService.get(accountId, draft.id);
+      expect(stillDraft.status).toBe('draft');
+    },
+  );
+
+  it.each(['BG', 'IE', 'ES'])(
+    'a %s debit note issues once a correction reason is set',
+    async (country) => {
+      const accountId = await createAccount(prisma);
+      await createCompleteIssuerProfile(
+        prisma,
+        accountId,
+        null,
+        completeIssuerOverridesFor(country),
+      );
+      const original = await documentsService.saveDraft(accountId, null, draftRequest());
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({
+          documentType: 'debit_note',
+          originalDocumentId: original.id,
+          correctionReason: 'Грешка в количеството',
+        }),
+      );
+
+      const issued = await issuanceService.issue(accountId, draft.id, {});
+      expect(issued.status).toBe('sent');
+      expect(issued.correctionReason).toBe('Грешка в количеството');
+    },
+  );
+
+  it('a French credit note issues without a correction reason', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, completeIssuerOverridesFor('FR'));
+    const original = await documentsService.saveDraft(accountId, null, draftRequest());
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: original.id,
+        operationNature: 'services',
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+    expect(issued.correctionReason).toBeNull();
+  });
+
+  it('a Spanish credit or debit note is issued with an "R-" prefix when no explicit prefix is set', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, completeIssuerOverridesFor('ES'));
+    const original = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    for (const documentType of ['credit_note', 'debit_note'] as const) {
+      const draft = await documentsService.saveDraft(
+        accountId,
+        null,
+        draftRequest({
+          documentType,
+          originalDocumentId: original.id,
+          correctionReason: 'Devolución de mercancía',
+        }),
+      );
+      const issued = await issuanceService.issue(accountId, draft.id, {});
+      expect(issued.numberPrefix).toBe('R-');
+    }
+  });
+
+  it('a Spanish invoice keeps no number prefix', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, completeIssuerOverridesFor('ES'));
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.numberPrefix).toBeNull();
+  });
+
+  it('snapshots issuerVatOnCashBasis and issuerVatOnDebits at issuance and never updates them retroactively', async () => {
+    const accountId = await createAccount(prisma);
+    const issuerProfile = await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'RO',
+      street: 'Str. Victoriei 1',
+      postcode: '010071',
+      countyRegion: 'București',
+      vatOnCashBasis: true,
+    });
+    expect(issuerProfile.vatOnCashBasis).toBe(true);
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+
+    const stored = await prisma.document.findUniqueOrThrow({ where: { id: issued.id } });
+    expect(stored.issuerVatOnCashBasis).toBe(true);
+    expect(stored.issuerVatOnDebits).toBe(false);
+
+    await prisma.issuerProfile.update({
+      where: { accountId },
+      data: { vatOnCashBasis: false },
+    });
+    const restored = await prisma.document.findUniqueOrThrow({ where: { id: issued.id } });
+    expect(restored.issuerVatOnCashBasis).toBe(true);
+  });
+
+  it('a French invoice cannot be issued without the nature of the operation', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'FR',
+      vatRegistered: true,
+      vatNumber: 'FR40394426001',
+      street: '10 rue de la Paix',
+      postcode: '75002',
+    });
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+      code: 'OPERATION_NATURE_REQUIRED',
+    });
+
+    const stillDraft = await documentsService.get(accountId, draft.id);
+    expect(stillDraft.status).toBe('draft');
+  });
+
+  it('a French invoice issues once the nature of the operation is set', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'FR',
+      vatRegistered: true,
+      vatNumber: 'FR40394426001',
+      street: '10 rue de la Paix',
+      postcode: '75002',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ operationNature: 'services', deliveryAddress: '12 rue de la Gare, Lyon' }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+    expect(issued.operationNature).toBe('services');
+    expect(issued.deliveryAddress).toBe('12 rue de la Gare, Lyon');
+  });
+
+  it('a French quote issues without the nature of the operation, since it is not a tax document', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'FR',
+      vatRegistered: true,
+      vatNumber: 'FR40394426001',
+      street: '10 rue de la Paix',
+      postcode: '75002',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'quote' }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
+
+  it('a non-French invoice issues without the nature of the operation', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
 });

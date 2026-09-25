@@ -39,6 +39,7 @@ const document: DocumentDto = {
   transportedAt: null,
   carrierName: null,
   transportNote: null,
+  correctionReason: null,
   subtotal: 1000,
   discountTotal: 0,
   amount: 1000,

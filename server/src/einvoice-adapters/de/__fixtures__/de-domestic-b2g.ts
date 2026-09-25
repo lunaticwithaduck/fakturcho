@@ -21,6 +21,7 @@ export const deDomesticB2GInvoice: DocumentDto = {
   transportedAt: null,
   carrierName: null,
   transportNote: null,
+  correctionReason: null,
   subtotal: 300000,
   discountTotal: 0,
   amount: 357000,
