@@ -1,5 +1,5 @@
 import type { FeatureFlagKey } from '@fakturcho/shared-types';
-import { getCountryConfig, isPublishedLocale } from '@fakturcho/shared-types';
+import { getCountryConfig, isEuVatAreaCountry, isPublishedLocale } from '@fakturcho/shared-types';
 import type { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
@@ -22,10 +22,16 @@ const ALWAYS_ENABLED: FeatureFlagsReader = { isEnabled: async () => true };
  * accountId NOT NULL, so the tenant must exist and be attached to the create
  * payload before Better-Auth inserts the row, not afterwards.
  */
-async function provisionTenant(prisma: PrismaClient): Promise<string> {
+async function provisionTenant(prisma: PrismaClient, signupCountry: unknown): Promise<string> {
+  const country =
+    typeof signupCountry === 'string' && isEuVatAreaCountry(signupCountry)
+      ? signupCountry
+      : undefined;
   const account = await prisma.$transaction(async (tx) => {
     const created = await tx.account.create({ data: {} });
-    await tx.issuerProfile.create({ data: { accountId: created.id } });
+    await tx.issuerProfile.create({
+      data: country ? { accountId: created.id, country } : { accountId: created.id },
+    });
     // SPEC §11: the signup grant lands in the transaction that creates the account, exactly once
     await grantSignupCredits(tx, created.id);
     return created;
@@ -90,7 +96,7 @@ export function createAuth(
       user: {
         create: {
           before: async (user) => {
-            const accountId = await provisionTenant(prisma);
+            const accountId = await provisionTenant(prisma, user.country);
             const enLocale = await flags.isEnabled('EN_LOCALE');
             const locale = !enLocale
               ? 'bg'

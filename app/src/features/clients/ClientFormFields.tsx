@@ -1,11 +1,13 @@
 import { Input, Select, SelectItem } from '@design/components';
 import {
+  companyIdLabelFor,
   DOCUMENT_LANGUAGES,
   type DocumentLanguage,
   EU_VAT_AREA_COUNTRIES,
   getCountryConfig,
+  type Locale,
 } from '@shared/types';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   type ClientFieldErrors,
   type ClientFormValues,
@@ -24,8 +26,10 @@ const SAME_AS_ISSUER = 'same';
 
 export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientFormFieldsProps) {
   const t = useTranslations('clients');
+  const locale = useLocale() as Locale;
   const structuredAddress = usesStructuredClientAddress(values.country);
-  const { countyRegion, companyIdLabel } = getCountryConfig(values.country);
+  const { countyRegion } = getCountryConfig(values.country);
+  const companyIdLabel = companyIdLabelFor(values.country, locale);
 
   return (
     <div className="flex flex-col gap-4">

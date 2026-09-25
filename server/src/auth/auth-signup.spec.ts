@@ -154,6 +154,39 @@ describe('signup provisions a tenant', () => {
     expect(user.locale).toBe('bg');
   });
 
+  it('provisions the issuer profile with the signup country', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Country Profile User',
+        email: 'country-profile@example.com',
+        password: 'correct-horse-battery',
+        country: 'DE',
+      },
+    });
+
+    const accountId = result.user.accountId;
+    const issuerProfile = await db.prisma.issuerProfile.findUnique({ where: { accountId } });
+    expect(issuerProfile?.country).toBe('DE');
+  });
+
+  it('provisions the issuer profile with the default country when none is given', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'No Country Profile User',
+        email: 'no-country-profile@example.com',
+        password: 'correct-horse-battery',
+      },
+    });
+
+    const accountId = result.user.accountId;
+    const issuerProfile = await db.prisma.issuerProfile.findUnique({ where: { accountId } });
+    expect(issuerProfile?.country).toBe('BG');
+  });
+
   it('EN_LOCALE off: still stores the country, but derives locale bg', async () => {
     const flags = new FeatureFlagsService(db.prisma as unknown as PrismaService);
     await flags.setEnabled('EN_LOCALE', false);

@@ -67,6 +67,7 @@
       }
     },
     "view": {
+      "pageTitle": "Document",
       "notFound": "Document introuvable",
       "downloadPdf": "Télécharger le PDF",
       "draftPreviewNotice": "Le brouillon n'est affiché qu'en aperçu avec filigrane. Émettez le document pour le télécharger ou l'envoyer.",
@@ -531,6 +532,16 @@
     "signupSubmit": "S'inscrire",
     "haveAccount": "Vous avez déjà un compte ?",
     "loginLink": "Se connecter",
+    "errors": {
+      "INVALID_EMAIL_OR_PASSWORD": "E-mail ou mot de passe incorrect.",
+      "INVALID_EMAIL": "Adresse e-mail invalide.",
+      "USER_NOT_FOUND": "E-mail ou mot de passe incorrect.",
+      "USER_ALREADY_EXISTS": "Un compte existe déjà avec cet e-mail.",
+      "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Un compte existe déjà avec cet e-mail.",
+      "PASSWORD_TOO_SHORT": "Le mot de passe est trop court.",
+      "PASSWORD_TOO_LONG": "Le mot de passe est trop long.",
+      "generic": "Une erreur est survenue. Veuillez réessayer."
+    },
     "countries": {
       "BG": "Bulgarie",
       "AT": "Autriche",
@@ -920,5 +931,10 @@
     "pageTitle": "Mode d'emploi",
     "emptyTitle": "L'aide n'est pas encore disponible dans votre langue",
     "emptyDescription": "Cette page est en cours de traduction. Revenez bientôt."
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "link": "Vers Fakturcho"
   }
 }

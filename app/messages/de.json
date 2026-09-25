@@ -67,6 +67,7 @@
       }
     },
     "view": {
+      "pageTitle": "Dokument",
       "notFound": "Dokument nicht gefunden",
       "downloadPdf": "PDF herunterladen",
       "draftPreviewNotice": "Der Entwurf wird nur als Vorschau mit Wasserzeichen angezeigt. Stellen Sie das Dokument aus, um es herunterzuladen oder zu senden.",
@@ -531,6 +532,16 @@
     "signupSubmit": "Registrieren",
     "haveAccount": "Bereits ein Konto?",
     "loginLink": "Anmelden",
+    "errors": {
+      "INVALID_EMAIL_OR_PASSWORD": "Falsche E-Mail-Adresse oder falsches Passwort.",
+      "INVALID_EMAIL": "Ungültige E-Mail-Adresse.",
+      "USER_NOT_FOUND": "Falsche E-Mail-Adresse oder falsches Passwort.",
+      "USER_ALREADY_EXISTS": "Für diese E-Mail-Adresse existiert bereits ein Konto.",
+      "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Für diese E-Mail-Adresse existiert bereits ein Konto.",
+      "PASSWORD_TOO_SHORT": "Das Passwort ist zu kurz.",
+      "PASSWORD_TOO_LONG": "Das Passwort ist zu lang.",
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+    },
     "countries": {
       "BG": "Bulgarien",
       "AT": "Österreich",
@@ -920,5 +931,10 @@
     "pageTitle": "Anleitung",
     "emptyTitle": "Hilfe ist in Ihrer Sprache noch nicht verfügbar",
     "emptyDescription": "Wir übersetzen diese Seite noch. Schauen Sie bald wieder vorbei."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "link": "Zu Fakturcho"
   }
 }

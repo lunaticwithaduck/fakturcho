@@ -67,6 +67,7 @@
       }
     },
     "view": {
+      "pageTitle": "Document",
       "notFound": "Document not found",
       "downloadPdf": "Download PDF",
       "draftPreviewNotice": "The draft is shown only as a watermarked preview. Issue the document to download or send it.",
@@ -531,6 +532,16 @@
     "signupSubmit": "Sign up",
     "haveAccount": "Already have an account?",
     "loginLink": "Log in",
+    "errors": {
+      "INVALID_EMAIL_OR_PASSWORD": "Incorrect email or password.",
+      "INVALID_EMAIL": "Invalid email address.",
+      "USER_NOT_FOUND": "Incorrect email or password.",
+      "USER_ALREADY_EXISTS": "An account with this email already exists.",
+      "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "An account with this email already exists.",
+      "PASSWORD_TOO_SHORT": "Password is too short.",
+      "PASSWORD_TOO_LONG": "Password is too long.",
+      "generic": "Something went wrong. Please try again."
+    },
     "countries": {
       "BG": "Bulgaria",
       "AT": "Austria",
@@ -920,5 +931,10 @@
     "pageTitle": "How to use",
     "emptyTitle": "Help isn't available in your language yet",
     "emptyDescription": "We're still translating this page. Check back soon."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "link": "Go to Fakturcho"
   }
 }

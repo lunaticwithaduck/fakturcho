@@ -67,6 +67,7 @@
       }
     },
     "view": {
+      "pageTitle": "Document",
       "notFound": "Documentul nu a fost găsit",
       "downloadPdf": "Descarcă PDF",
       "draftPreviewNotice": "Ciorna este afișată doar ca previzualizare cu filigran. Emiteți documentul pentru a-l descărca sau trimite.",
@@ -531,6 +532,16 @@
     "signupSubmit": "Înregistrare",
     "haveAccount": "Aveți deja un cont?",
     "loginLink": "Conectare",
+    "errors": {
+      "INVALID_EMAIL_OR_PASSWORD": "Email sau parolă incorectă.",
+      "INVALID_EMAIL": "Adresă de email invalidă.",
+      "USER_NOT_FOUND": "Email sau parolă incorectă.",
+      "USER_ALREADY_EXISTS": "Există deja un cont cu acest email.",
+      "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Există deja un cont cu acest email.",
+      "PASSWORD_TOO_SHORT": "Parola este prea scurtă.",
+      "PASSWORD_TOO_LONG": "Parola este prea lungă.",
+      "generic": "A apărut o eroare. Încercați din nou."
+    },
     "countries": {
       "BG": "Bulgaria",
       "AT": "Austria",
@@ -920,5 +931,10 @@
     "pageTitle": "Cum se folosește",
     "emptyTitle": "Ajutorul nu este încă disponibil în limba dvs.",
     "emptyDescription": "Încă traducem această pagină. Reveniți în curând."
+  },
+  "notFound": {
+    "title": "Pagina nu a fost găsită",
+    "description": "Pagina pe care o căutați nu există sau a fost mutată.",
+    "link": "Către Fakturcho"
   }
 }

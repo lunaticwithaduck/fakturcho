@@ -5,13 +5,10 @@ import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { IssuerGuideLink } from './IssuerGuideLink';
 
-const { useGetIssuerProfileQueryMock, guideForIssuerCountryMock, sessionMock } = vi.hoisted(() => ({
+const { useGetIssuerProfileQueryMock, guideForIssuerCountryMock } = vi.hoisted(() => ({
   useGetIssuerProfileQueryMock: vi.fn(),
   guideForIssuerCountryMock: vi.fn(),
-  sessionMock: vi.fn(() => ({ session: null })),
 }));
-
-vi.mock('@app/auth/hooks', () => ({ useAuthSession: sessionMock }));
 
 vi.mock('@app/api', () => ({
   useGetIssuerProfileQuery: useGetIssuerProfileQueryMock,
@@ -26,7 +23,6 @@ afterEach(() => {
   cleanup();
   useGetIssuerProfileQueryMock.mockReset();
   guideForIssuerCountryMock.mockReset();
-  sessionMock.mockReturnValue({ session: null });
 });
 
 function renderLink() {
@@ -63,19 +59,10 @@ describe('IssuerGuideLink', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('uses the signup country until the issuer profile has been filled in', () => {
-    useGetIssuerProfileQueryMock.mockReturnValue({ data: { country: 'BG', companyName: '' } });
-    sessionMock.mockReturnValue({ session: { user: { country: 'DE' } } } as never);
+  it('uses the issuer profile country even before the profile has a company name', () => {
+    useGetIssuerProfileQueryMock.mockReturnValue({ data: { country: 'DE', companyName: '' } });
     guideForIssuerCountryMock.mockReturnValue({ slug: 'rechnung', locale: 'de' });
     renderLink();
     expect(guideForIssuerCountryMock).toHaveBeenCalledWith('DE');
-  });
-
-  it('uses the issuer profile country once the profile has a company name', () => {
-    useGetIssuerProfileQueryMock.mockReturnValue({ data: { country: 'PL', companyName: 'Firma' } });
-    sessionMock.mockReturnValue({ session: { user: { country: 'DE' } } } as never);
-    guideForIssuerCountryMock.mockReturnValue({ slug: 'faktura-ksef', locale: 'pl' });
-    renderLink();
-    expect(guideForIssuerCountryMock).toHaveBeenCalledWith('PL');
   });
 });

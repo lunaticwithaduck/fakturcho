@@ -1,6 +1,6 @@
 import { Input, Select, SelectItem } from '@design/components';
-import { getCountryConfig } from '@fakturcho/shared-types';
-import { useTranslations } from 'next-intl';
+import { companyIdLabelFor, getCountryConfig, type Locale } from '@fakturcho/shared-types';
+import { useLocale, useTranslations } from 'next-intl';
 import { ISSUER_COUNTRY_CODES } from './issuerCountries';
 import type { IssuerProfileFieldErrors, IssuerProfileFormValues } from './useIssuerProfileForm';
 
@@ -19,9 +19,9 @@ export function IssuerCompanyFields({
   fieldErrors = { identifiers: {} },
 }: IssuerCompanyFieldsProps) {
   const t = useTranslations('issuer');
-  const { requiredIssuerFields, identifiers, companyIdLabel, countyRegion } = getCountryConfig(
-    values.country,
-  );
+  const locale = useLocale() as Locale;
+  const { requiredIssuerFields, identifiers, countyRegion } = getCountryConfig(values.country);
+  const companyIdLabel = companyIdLabelFor(values.country, locale);
   const isRequired = (field: string) => requiredIssuerFields.includes(field);
   const invalidFormat = t('companyFields.invalidFormat');
 

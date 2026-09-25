@@ -22,7 +22,7 @@ vi.mock('../store/providers', () => ({
 vi.mock('next/script', () => ({ default: () => null }));
 vi.mock('./fonts', () => ({ uiFont: { variable: 'font-var' } }));
 
-import RootLayout from './layout';
+import RootLayout, { generateMetadata } from './layout';
 
 afterEach(() => {
   cleanup();
@@ -48,5 +48,24 @@ describe('RootLayout', () => {
     await renderLayout('en');
 
     expect(document.querySelector('html')?.lang).toBe('en');
+  });
+
+  it('keeps the Bulgarian title template and brand for bg', async () => {
+    getLocaleMock.mockResolvedValue('bg');
+    const metadata = await generateMetadata();
+    expect(metadata.title).toEqual({
+      default: 'Фактурчо — фактури за българския бизнес',
+      template: '%s — Фактурчо',
+    });
+    expect(metadata.openGraph?.siteName).toBe('Фактурчо');
+    expect(metadata.manifest).toBe('/manifest.webmanifest');
+  });
+
+  it('uses the Latin brand and the locale copy for every other locale', async () => {
+    getLocaleMock.mockResolvedValue('de');
+    const metadata = await generateMetadata();
+    expect(metadata.title).toMatchObject({ template: '%s — Fakturcho' });
+    expect(metadata.manifest).toBe('/de/manifest.webmanifest');
+    expect(JSON.stringify(metadata)).not.toMatch(/[\u0400-\u04FF]/);
   });
 });
