@@ -3,6 +3,7 @@ import type { ClassicLocaleContext } from '../locale';
 import { deMentions } from './de';
 import { esMentions } from './es';
 import { frMentions } from './fr';
+import { genericMentions } from './generic';
 import { itMentions } from './it';
 import { plMentions } from './pl';
 import { roMentions } from './ro';
@@ -26,5 +27,5 @@ const BY_COUNTRY: Record<string, MentionsBuilder> = {
 
 export function buildStatutoryMentions(input: MentionsInput): string[] {
   const builder = BY_COUNTRY[input.locale.issuerCountry];
-  return builder ? builder(input) : [];
+  return (builder ?? genericMentions)(input);
 }

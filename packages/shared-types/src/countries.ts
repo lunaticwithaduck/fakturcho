@@ -1,6 +1,7 @@
 import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
 import { DE_CONFIG } from './countries/de';
 import { ES_CONFIG } from './countries/es';
+import { EU_RATE_OVERRIDES } from './countries/eu-rates';
 import { FR_CONFIG } from './countries/fr';
 import { IT_CONFIG } from './countries/it';
 import { PL_CONFIG } from './countries/pl';
@@ -93,6 +94,8 @@ function resolveLocale(config: CountryConfig): CountryConfig {
 export function getCountryConfig(country: string): CountryConfig {
   const configured = COUNTRY_CONFIGS[country];
   if (configured) return resolveLocale(configured);
+  const rateOverride = EU_RATE_OVERRIDES[country];
+  if (rateOverride) return resolveLocale({ ...GENERIC_EU_CONFIG, country, ...rateOverride });
   if (isEuVatAreaCountry(country)) return resolveLocale({ ...GENERIC_EU_CONFIG, country });
   return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country });
 }

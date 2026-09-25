@@ -8,10 +8,12 @@ const agree = (documentType: DocumentType, feminine: string, masculine: string) 
 
 export const ro: ClassicLabels = {
   companyIdLabel: 'CUI',
-  recipientTitle: 'Cumpărător:',
+  supplierTitle: 'Furnizor:',
+  recipientTitle: (documentType) =>
+    documentType === 'delivery_note' ? 'Destinatar:' : 'Cumpărător:',
   vatNumberPrefix: 'Cod TVA: ',
   molPrefix: 'Reprezentant legal: ',
-  issuedAtPrefix: 'Data emiterii: ',
+  issuedAtPrefix: () => 'Data emiterii: ',
   taxEventPrefix: 'Data livrării/prestării: ',
   validUntilPrefix: () => 'Valabilă până la: ',
   deliveryDatePrefix: 'Data livrării: ',
@@ -36,9 +38,15 @@ export const ro: ClassicLabels = {
     `Reducere${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Total:',
   dueLabel: 'Total de plată:',
+  creditDueLabel: 'Total de plată:',
+  paidLabel: 'Achitat:',
   exemptionPrefix: '',
+  proformaNotice: 'Factura proformă nu este document fiscal.',
+  reverseChargeNote: 'Taxare inversă – art. 196 din Directiva 2006/112/CE',
   originalMarker: ' (Original)',
   draftLabel: 'Ciornă',
+  numberSign: 'nr.',
+  draftTitle: (l) => `${l} – ciornă`,
   correctsInvoice: (number, date) => `Referitoare la factura nr. ${number} din ${date}`,
   documentType: {
     invoice: 'Factură',

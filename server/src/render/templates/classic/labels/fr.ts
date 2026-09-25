@@ -9,10 +9,11 @@ const agree = (documentType: DocumentType, feminine: string, masculine: string) 
 
 export const fr: ClassicLabels = {
   companyIdLabel: 'SIREN',
-  recipientTitle: 'Client :',
+  supplierTitle: 'Émetteur :',
+  recipientTitle: () => 'Client :',
   vatNumberPrefix: 'N° TVA intracommunautaire : ',
   molPrefix: 'Représentant légal : ',
-  issuedAtPrefix: "Date d'émission : ",
+  issuedAtPrefix: () => "Date d'émission : ",
   taxEventPrefix: 'Date de livraison / prestation : ',
   validUntilPrefix: () => "Valable jusqu'au : ", // invariable adjective
   deliveryDatePrefix: 'Date de livraison : ',
@@ -37,9 +38,15 @@ export const fr: ClassicLabels = {
     `Remise${percent !== null ? ` (${String(percent).replace('.', ',')}%)` : ''}${customLabel ? ` – ${customLabel}` : ''} :`,
   totalLabel: 'Total :',
   dueLabel: 'Net à payer :',
+  creditDueLabel: 'Net à déduire :',
+  paidLabel: 'Montant payé :',
   exemptionPrefix: "Motif d'exonération de TVA : ",
+  proformaNotice: 'Facture proforma – document sans valeur fiscale.',
+  reverseChargeNote: 'Autoliquidation – article 196 de la directive 2006/112/CE',
   originalMarker: ' (Original)',
   draftLabel: 'Brouillon',
+  numberSign: 'n°',
+  draftTitle: (l) => `${l} (brouillon)`,
   correctsInvoice: (number, date) => `Facture d'origine : n° ${number} du ${date}`,
   documentType: {
     invoice: 'Facture',

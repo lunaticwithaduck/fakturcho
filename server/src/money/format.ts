@@ -19,6 +19,10 @@ const CONVENTIONS: Record<DocumentLanguage, NumberConvention> = {
   es: { thousands: '.', decimal: ',', dateSeparator: '/' },
 };
 
+export function decimalSeparatorForLocale(language: DocumentLanguage): string {
+  return CONVENTIONS[language].decimal;
+}
+
 function groupThousands(value: number): string {
   const digits = String(value);
   const groups: string[] = [];

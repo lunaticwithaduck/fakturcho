@@ -32,7 +32,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Дата на издаване: 02.08.2026');
     expect(html).toContain('Данъчно събитие: 02.08.2026');
     expect(html).not.toContain('Валидно до');
-    expect(html).toContain('Фактура # 0000000001 (Оригинал)');
+    expect(html).toContain('Фактура № 0000000001 (Оригинал)');
     expect(html).toContain('Наименование');
     expect(html).toContain('Количество');
     expect(html).toContain('Цена');
@@ -66,7 +66,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('VAT no.: BG987654321');
     expect(html).toContain('Issue date: 02/08/2026');
     expect(html).toContain('Tax event: 02/08/2026');
-    expect(html).toContain('Invoice # 0000000001');
+    expect(html).toContain('Invoice no. 0000000001');
     expect(html).not.toContain('(Original)');
     expect(html).not.toContain('Оригинал');
     expect(html).toContain('Description');
@@ -92,7 +92,7 @@ describe('renderClassicTemplateHtml', () => {
       language: 'en',
     });
 
-    expect(html).toContain('Invoice # Draft');
+    expect(html).toContain('Invoice (draft)');
     expect(html).toContain('DRAFT');
     expect(html).toContain('NOT LEGALLY VALID');
   });

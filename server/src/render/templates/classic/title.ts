@@ -15,12 +15,14 @@ export function buildTitle(
 ): string {
   const label = locale.labels.documentType[documentType];
   if (number === null) {
-    return escapeHtml(`${label} # ${locale.labels.draftLabel}`);
+    return escapeHtml(locale.labels.draftTitle(label));
   }
   const marker =
     locale.showOriginalStamp && TAX_DOCUMENT_TYPES[documentType]
       ? locale.labels.originalMarker
       : '';
   const padded = formatDocumentNumber(number);
-  return escapeHtml(`${label} # ${numberPrefix ?? ''}${padded}${numberSuffix ?? ''}${marker}`);
+  return escapeHtml(
+    `${label} ${locale.labels.numberSign} ${numberPrefix ?? ''}${padded}${numberSuffix ?? ''}${marker}`,
+  );
 }

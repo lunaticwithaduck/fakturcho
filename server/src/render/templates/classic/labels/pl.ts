@@ -5,12 +5,18 @@ import type { ClassicLabels } from './index';
 const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
   documentType === 'delivery_note' ? masculine : feminine;
 
+const PL_RECIPIENT_TITLES: Partial<Record<DocumentType, string>> = {
+  quote: 'Klient:',
+  delivery_note: 'Odbiorca:',
+};
+
 export const pl: ClassicLabels = {
   companyIdLabel: 'NIP',
-  recipientTitle: 'Nabywca:',
+  supplierTitle: 'Sprzedawca:',
+  recipientTitle: (documentType) => PL_RECIPIENT_TITLES[documentType] ?? 'Nabywca:',
   vatNumberPrefix: 'NIP UE: ',
   molPrefix: 'Reprezentant: ',
-  issuedAtPrefix: 'Data wystawienia: ',
+  issuedAtPrefix: () => 'Data wystawienia: ',
   taxEventPrefix: 'Data sprzedaży: ',
   validUntilPrefix: () => 'Ważna do: ',
   deliveryDatePrefix: 'Data dostawy: ',
@@ -35,9 +41,15 @@ export const pl: ClassicLabels = {
     `Rabat${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Razem:',
   dueLabel: 'Do zapłaty:',
+  creditDueLabel: 'Do zwrotu:',
+  paidLabel: 'Zapłacono:',
   exemptionPrefix: 'Podstawa zwolnienia: ',
+  proformaNotice: 'Faktura pro forma nie jest fakturą VAT.',
+  reverseChargeNote: 'Odwrotne obciążenie – art. 196 dyrektywy 2006/112/WE',
   originalMarker: '',
   draftLabel: 'Wersja robocza',
+  numberSign: 'nr',
+  draftTitle: (l) => `${l} – wersja robocza`,
   correctsInvoice: (number, date) => `Dotyczy faktury nr ${number} z dnia ${date}`,
   // art. 106j ustawy o VAT: any correction of an invoiced amount, up or down, is
   // a faktura korygująca — a nota debetowa is not a VAT document.

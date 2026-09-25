@@ -1,7 +1,7 @@
 import type { DocumentType } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
-import { escapeHtml, line } from './html-utils';
+import { appendCountyRegionSuffix, cityWithCountyRegion, escapeHtml, line } from './html-utils';
 import type { ClassicLabels } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
@@ -10,16 +10,30 @@ import type { ClassicLocaleContext } from './locale';
 // client with structured fields keeps recipientAddress as the line before the city
 // and prints street, then postcode/city on the same line.
 function formatRecipientAddress(document: Document): string {
-  if (document.recipientStreet) {
-    const postcodeCity = [document.recipientPostcode, document.recipientCity]
-      .filter(Boolean)
-      .join(' ');
-    return [document.recipientStreet, postcodeCity].filter(Boolean).join(', ');
-  }
-  return [document.recipientAddress, document.recipientCity].filter(Boolean).join(', ');
+  const country = document.recipientCountry;
+  const city = cityWithCountyRegion(
+    document.recipientCity,
+    document.recipientCountyRegion,
+    country,
+  );
+  const address = document.recipientStreet
+    ? [document.recipientStreet, [document.recipientPostcode, city].filter(Boolean).join(' ')]
+        .filter(Boolean)
+        .join(', ')
+    : [document.recipientAddress, city].filter(Boolean).join(', ');
+  return appendCountyRegionSuffix(
+    address,
+    document.recipientCity,
+    document.recipientCountyRegion,
+    country,
+  );
 }
 
-export function buildRecipientBlock(document: Document, locale: ClassicLocaleContext): string {
+export function buildRecipientBlock(
+  document: Document,
+  documentType: DocumentType,
+  locale: ClassicLocaleContext,
+): string {
   const { labels } = locale;
   const recipientAddress = formatRecipientAddress(document);
   const rows = [
@@ -33,7 +47,7 @@ export function buildRecipientBlock(document: Document, locale: ClassicLocaleCon
   ]
     .filter(Boolean)
     .join('');
-  return `<div class="recipient"><div class="block-title">${labels.recipientTitle}</div>${rows}</div>`;
+  return `<div class="recipient"><div class="block-title">${labels.recipientTitle(documentType)}</div>${rows}</div>`;
 }
 
 export function buildDatesBlock(
@@ -45,7 +59,7 @@ export function buildDatesBlock(
   const issuedAt = document.issuedAt
     ? formatDateForLocale(document.issuedAt, locale.language)
     : '—';
-  const rows = [`<div>${labels.issuedAtPrefix}${issuedAt}</div>`];
+  const rows = [`<div>${labels.issuedAtPrefix(documentType)}${issuedAt}</div>`];
   if (documentType === 'quote') {
     const validUntil = document.validUntil
       ? formatDateForLocale(document.validUntil, locale.language)
@@ -56,7 +70,7 @@ export function buildDatesBlock(
       ? formatDateForLocale(document.deliveryDate, locale.language)
       : '—';
     rows.push(`<div>${labels.deliveryDatePrefix}${deliveryDate}</div>`);
-  } else {
+  } else if (documentType !== 'proforma') {
     const taxEventAt = document.taxEventAt
       ? formatDateForLocale(document.taxEventAt, locale.language)
       : '—';

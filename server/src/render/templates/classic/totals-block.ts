@@ -1,4 +1,9 @@
-import { roundHalfUp, type VatCategory } from '@fakturcho/shared-types';
+import {
+  type DocumentType,
+  getCountryConfig,
+  roundHalfUp,
+  type VatCategory,
+} from '@fakturcho/shared-types';
 import type { Discount, Document, LineItem } from '@prisma/client';
 import { amountInWords } from '../../../money/amount-in-words';
 import { formatMoneyForLocale } from '../../../money/format';
@@ -35,16 +40,17 @@ function discountRows(
   discounts: readonly Discount[],
   labels: ClassicLabels,
   language: ClassicLanguage,
+  sign: 1 | -1,
 ): string {
   if (document.discountTotal <= 0) return '';
   const single = discounts.length === 1 ? discounts[0] : null;
   const percent = single?.percentBp != null ? single.percentBp / 100 : null;
   const customLabel = single?.label || null;
   return (
-    totalsRow(labels.subtotalLabel, formatMoneyForLocale(document.subtotal, language)) +
+    totalsRow(labels.subtotalLabel, formatMoneyForLocale(document.subtotal * sign, language)) +
     totalsRow(
       labels.discountRowLabel(percent, customLabel),
-      formatMoneyForLocale(-document.discountTotal, language),
+      formatMoneyForLocale(-document.discountTotal * sign, language),
     )
   );
 }
@@ -54,16 +60,20 @@ function mixedVatBlock(
   lineItems: readonly LineItem[],
   labels: ClassicLabels,
   language: ClassicLanguage,
+  sign: 1 | -1,
 ): { rows: string; exemptionGround: string | null } {
   const groups = discountAdjustedVatGroups(document, lineItems);
   const rows = groups
     .filter((group) => group.rateBp > 0)
     .map(
       (group) =>
-        totalsRow(labels.vatBasePrefix, formatMoneyForLocale(group.taxableAmount, language)) +
+        totalsRow(
+          labels.vatBasePrefix,
+          formatMoneyForLocale(group.taxableAmount * sign, language),
+        ) +
         totalsRow(
           labels.vatRatePrefix(group.rateBp / 100),
-          formatMoneyForLocale(group.vatAmount, language),
+          formatMoneyForLocale(group.vatAmount * sign, language),
         ),
     )
     .join('');
@@ -73,43 +83,65 @@ function mixedVatBlock(
   return { rows, exemptionGround };
 }
 
+function dueRow(
+  document: Document,
+  documentType: DocumentType,
+  labels: ClassicLabels,
+  dueValue: string,
+): string {
+  if (documentType === 'quote') return '';
+  const label =
+    documentType === 'credit_note'
+      ? labels.creditDueLabel
+      : document.status === 'PAID'
+        ? labels.paidLabel
+        : labels.dueLabel;
+  return totalsRow(label, dueValue, 'totals-row due');
+}
+
 export function buildTotalsBlock(
   document: Document,
   lineItems: readonly LineItem[],
   presentation: VatPresentation,
   locale: ClassicLocaleContext,
+  documentType: DocumentType,
   discounts: readonly Discount[] = [],
 ): string {
   const { labels, language } = locale;
+  const sign = documentType === 'credit_note' ? -1 : 1;
   const isMixed =
     new Set(lineItems.map((line) => `${line.vatCategory}:${line.vatRateBp}`)).size > 1;
 
   let vatRows: string;
   let exemptionGround: string | null;
   if (isMixed) {
-    const mixed = mixedVatBlock(document, lineItems, labels, language);
+    const mixed = mixedVatBlock(document, lineItems, labels, language, sign);
     vatRows = mixed.rows;
     exemptionGround = mixed.exemptionGround;
   } else {
     const base = document.subtotal - document.discountTotal;
     vatRows = presentation.vatCharged
-      ? totalsRow(labels.vatBasePrefix, formatMoneyForLocale(base, language)) +
+      ? totalsRow(labels.vatBasePrefix, formatMoneyForLocale(base * sign, language)) +
         totalsRow(
           labels.vatRatePrefix(document.vatRateBp / 100),
-          formatMoneyForLocale(document.vatAmount, language),
+          formatMoneyForLocale(document.vatAmount * sign, language),
         )
       : '';
     exemptionGround = presentation.showExemptionLine ? presentation.exemptionGround : null;
   }
 
-  const dueValue = formatMoneyForLocale(document.amount, language);
+  const dueValue = formatMoneyForLocale(document.amount * sign, language);
   const totals = `<div class="totals">
-    ${discountRows(document, discounts, labels, language) + vatRows}
-    ${totalsRow(labels.totalLabel, formatMoneyForLocale(document.amount, language), 'totals-row total')}
-    ${totalsRow(labels.dueLabel, dueValue, 'totals-row due')}
+    ${discountRows(document, discounts, labels, language, sign) + vatRows}
+    ${totalsRow(labels.totalLabel, formatMoneyForLocale(document.amount * sign, language), 'totals-row total')}
+    ${dueRow(document, documentType, labels, dueValue)}
   </div>`;
+  const noteGrounds = getCountryConfig(locale.issuerCountry).vatNoteGrounds ?? [];
+  const isNote = exemptionGround != null && noteGrounds.includes(exemptionGround);
   const exemption = exemptionGround
-    ? `<div class="exemption">${labels.exemptionPrefix}${escapeHtml(exemptionGround)}</div>`
+    ? `<div class="exemption">${isNote ? '' : labels.exemptionPrefix}${escapeHtml(exemptionGround)}</div>`
     : '';
-  return `${totals}${exemption}`;
+  const proformaNotice =
+    documentType === 'proforma' ? `<div class="exemption">${labels.proformaNotice}</div>` : '';
+  return `${totals}${exemption}${proformaNotice}`;
 }

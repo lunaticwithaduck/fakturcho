@@ -9,10 +9,11 @@ const agree = (documentType: DocumentType, feminine: string, masculine: string) 
 
 export const es: ClassicLabels = {
   companyIdLabel: 'NIF',
-  recipientTitle: 'Cliente:',
+  supplierTitle: 'Emisor:',
+  recipientTitle: () => 'Cliente:',
   vatNumberPrefix: 'NIF-IVA: ',
   molPrefix: 'Representante: ',
-  issuedAtPrefix: 'Fecha de expedición: ',
+  issuedAtPrefix: () => 'Fecha de expedición: ',
   taxEventPrefix: 'Fecha de la operación: ',
   validUntilPrefix: () => 'Válido hasta: ', // only printed for quote (el presupuesto)
   deliveryDatePrefix: 'Fecha de entrega: ',
@@ -37,9 +38,15 @@ export const es: ClassicLabels = {
     `Descuento${percent !== null ? ` (${percent}%)` : ''}${customLabel ? ` – ${customLabel}` : ''}:`,
   totalLabel: 'Total:',
   dueLabel: 'Total a pagar:',
+  creditDueLabel: 'Total a abonar:',
+  paidLabel: 'Importe pagado:',
   exemptionPrefix: 'Operación exenta de IVA según el ',
+  proformaNotice: 'Documento sin validez fiscal.',
+  reverseChargeNote: 'Inversión del sujeto pasivo – artículo 196 de la Directiva 2006/112/CE',
   originalMarker: ' (Original)',
   draftLabel: 'Borrador',
+  numberSign: 'n.º',
+  draftTitle: (l) => `${l} (borrador)`,
   correctsInvoice: (number, date) => `Factura rectificada: n.º ${number} de ${date}`,
   documentType: {
     invoice: 'Factura',

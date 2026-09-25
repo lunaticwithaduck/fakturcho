@@ -80,7 +80,7 @@ describe('render pipeline', () => {
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Фактура # 0000000003 (Оригинал)');
+    expect(text).toContain('Фактура № 0000000003 (Оригинал)');
   });
 
   it('invariant 14: proforma renders without (Оригинал) and without an exemption line', async () => {

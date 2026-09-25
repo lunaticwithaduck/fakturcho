@@ -1,32 +1,35 @@
+import type { DocumentType } from '@fakturcho/shared-types';
 import type { LineItem } from '@prisma/client';
-import { formatCentsForLocale } from '../../../money/format';
+import { decimalSeparatorForLocale, formatCentsForLocale } from '../../../money/format';
 import { escapeHtml } from './html-utils';
 import type { ClassicLanguage } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
-function formatQuantity(raw: unknown, language: ClassicLanguage): string {
-  const numeric = Number(raw);
+function formatQuantity(raw: unknown, language: ClassicLanguage, sign: 1 | -1 = 1): string {
+  const numeric = Number(raw) * sign;
   if (Number.isInteger(numeric)) return String(numeric);
   const trimmed = numeric.toFixed(3).replace(/0+$/, '').replace(/\.$/, '');
-  return language === 'bg' ? trimmed.replace('.', ',') : trimmed;
+  return trimmed.replace('.', decimalSeparatorForLocale(language));
 }
 
 export function buildLineItemsTable(
   lineItems: readonly LineItem[],
   locale: ClassicLocaleContext,
+  documentType: DocumentType,
   showPrices = true,
 ): string {
   const { labels, language } = locale;
+  const sign = documentType === 'credit_note' ? -1 : 1;
   const priceCells = (item: LineItem) =>
     showPrices
       ? `<td>${formatCentsForLocale(item.unitPrice, language)}</td>
-        <td>${formatCentsForLocale(item.lineTotal, language)}</td>`
+        <td>${formatCentsForLocale(item.lineTotal * sign, language)}</td>`
       : '';
   const rows = lineItems
     .map(
       (item) => `<tr>
         <td>${escapeHtml(item.name)}</td>
-        <td>${formatQuantity(item.quantity, language)}</td>
+        <td>${formatQuantity(item.quantity, language, sign)}</td>
         ${priceCells(item)}
       </tr>`,
     )

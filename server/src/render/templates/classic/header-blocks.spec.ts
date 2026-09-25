@@ -13,7 +13,7 @@ describe('buildRecipientBlock — structured street/postcode/city address', () =
       recipientPostcode: '10115',
       recipientCity: 'Berlin',
     });
-    const html = buildRecipientBlock(document, locale);
+    const html = buildRecipientBlock(document, 'invoice', locale);
     expect(html).toContain('Musterstraße 1, 10115 Berlin');
   });
 
@@ -24,7 +24,7 @@ describe('buildRecipientBlock — structured street/postcode/city address', () =
       recipientPostcode: null,
       recipientCity: null,
     });
-    const html = buildRecipientBlock(document, locale);
+    const html = buildRecipientBlock(document, 'invoice', locale);
     expect(html).toContain('гр. Пловдив, бул. Свобода 5');
     expect(html).not.toContain('гр. Пловдив, бул. Свобода 5,');
   });
@@ -36,7 +36,7 @@ describe('buildRecipientBlock — structured street/postcode/city address', () =
       recipientPostcode: null,
       recipientCity: 'София',
     });
-    const html = buildRecipientBlock(document, locale);
+    const html = buildRecipientBlock(document, 'invoice', locale);
     expect(html).toContain('ул. Тестова 1, София');
   });
 });

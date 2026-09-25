@@ -33,6 +33,9 @@ export interface CountryConfig {
   vatNumberPattern: RegExp | null;
   exemptionGrounds: readonly VatExemptionGround[];
   defaultExemptionGround: VatExemptionGround | null;
+  // Grounds that are VAT notes, not exemptions — printed on their own without
+  // labels.exemptionPrefix when they match document.vatExemptionGround.
+  vatNoteGrounds?: readonly string[];
   identifiers: readonly IssuerIdentifierField[];
   numberingUsesFixedWidth: boolean;
   requiredIssuerFields: readonly string[];

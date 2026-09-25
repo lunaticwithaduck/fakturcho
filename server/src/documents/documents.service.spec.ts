@@ -368,7 +368,7 @@ describe('DocumentsService', () => {
       draftRequest({ clientId: client.id }),
     );
 
-    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2100 });
   });
 
   it('reverse-charge: an explicit vatCategory is always honored, even cross-border', async () => {

@@ -51,16 +51,16 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
 <body>
   ${buildWatermark(isDraft, locale)}
   <div class="header">
-    ${buildRecipientBlock(document, locale)}
+    ${buildRecipientBlock(document, documentType, locale)}
     ${buildDatesBlock(document, documentType, locale)}
   </div>
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
   ${buildCorrectionReference(documentType, originalDocument, locale)}
-  ${buildLineItemsTable(lineItems, locale, showPrices)}
+  ${buildLineItemsTable(lineItems, locale, documentType, showPrices)}
   ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
   ${
     showPrices
-      ? `${buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, discounts)}`
+      ? `${buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, documentType, discounts)}`
       : ''
   }
   ${buildMentionsBlock({ document, lineItems, locale })}

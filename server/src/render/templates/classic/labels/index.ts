@@ -12,10 +12,11 @@ export type ClassicLanguage = DocumentLanguage;
 
 export interface ClassicLabels {
   companyIdLabel: string;
-  recipientTitle: string;
+  supplierTitle: string;
+  recipientTitle: (documentType: DocumentType) => string;
   vatNumberPrefix: string;
   molPrefix: string;
-  issuedAtPrefix: string;
+  issuedAtPrefix: (documentType: DocumentType) => string;
   taxEventPrefix: string;
   // Functions of the document type: several languages inflect these for the
   // grammatical gender of the document noun (e.g. IT "il preventivo" is
@@ -42,9 +43,15 @@ export interface ClassicLabels {
   discountRowLabel: (percent: number | null, customLabel: string | null) => string;
   totalLabel: string;
   dueLabel: string;
+  creditDueLabel: string;
+  paidLabel: string;
   exemptionPrefix: string;
+  proformaNotice: string;
+  reverseChargeNote: string;
   originalMarker: string;
   draftLabel: string;
+  numberSign: string;
+  draftTitle: (documentLabel: string) => string;
   correctsInvoice: (number: string, date: string) => string;
   documentType: Record<DocumentType, string>;
   watermarkMain: string;

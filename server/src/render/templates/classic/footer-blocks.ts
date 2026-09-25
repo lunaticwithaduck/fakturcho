@@ -1,28 +1,40 @@
 import { type DocumentType, getCountryConfig } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { readIdentifiers } from '../../../issuer/identifiers';
-import { escapeHtml, line } from './html-utils';
+import { appendCountyRegionSuffix, cityWithCountyRegion, escapeHtml, line } from './html-utils';
 import type { ClassicLocaleContext } from './locale';
 
 // Some countries collect a single free-text addressLine (BG); others collect
 // structured street/postcode/city (DE and others via requiredIssuerFields).
 // The classic template prints whichever the issuer profile actually has.
-function formatIssuerAddress(document: Document): string {
-  if (document.issuerAddressLine) {
-    return [document.issuerAddressLine, document.issuerCity].filter(Boolean).join(', ');
-  }
-  const postcodeCity = [document.issuerPostcode, document.issuerCity].filter(Boolean).join(' ');
-  return [document.issuerStreet, postcodeCity].filter(Boolean).join(', ');
+function formatIssuerAddress(document: Document, issuerCountry: string): string {
+  const city = cityWithCountyRegion(
+    document.issuerCity,
+    document.issuerCountyRegion,
+    issuerCountry,
+  );
+  const address = document.issuerAddressLine
+    ? [document.issuerAddressLine, city].filter(Boolean).join(', ')
+    : [document.issuerStreet, [document.issuerPostcode, city].filter(Boolean).join(' ')]
+        .filter(Boolean)
+        .join(', ');
+  return appendCountyRegionSuffix(
+    address,
+    document.issuerCity,
+    document.issuerCountyRegion,
+    issuerCountry,
+  );
 }
 
 export function buildIssuerBlock(document: Document, locale: ClassicLocaleContext): string {
   const { labels } = locale;
-  const addressLine = formatIssuerAddress(document);
+  const addressLine = formatIssuerAddress(document, locale.issuerCountry);
   const identifiers = readIdentifiers(document.issuerIdentifiers);
   const identifierRows = getCountryConfig(locale.issuerCountry)
     .identifiers.map((field) => line(`${field.label}: `, identifiers[field.key] ?? null))
     .join('');
   const columnOne = [
+    `<div class="block-title">${labels.supplierTitle}</div>`,
     document.issuerCompanyName
       ? `<div class="no-break">${escapeHtml(document.issuerCompanyName)}</div>`
       : '',
@@ -37,7 +49,9 @@ export function buildIssuerBlock(document: Document, locale: ClassicLocaleContex
   ].join('');
   const columnThree = [
     document.issuerBankName ? `<div>${escapeHtml(document.issuerBankName)}</div>` : '',
-    document.issuerIban ? `<div class="no-break">${escapeHtml(document.issuerIban)}</div>` : '',
+    document.issuerIban
+      ? `<div class="no-break">IBAN: ${escapeHtml(document.issuerIban)}</div>`
+      : '',
     line(labels.bicPrefix, document.issuerBic),
   ].join('');
   return `<div class="issuer-block">
