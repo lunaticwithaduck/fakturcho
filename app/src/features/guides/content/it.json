@@ -1,0 +1,554 @@
+{
+  "country": "IT",
+  "locale": "it",
+  "slug": "fattura-elettronica-obbligatoria",
+  "title": "Fattura elettronica in Italia: guida 2026 | Fakturcho",
+  "description": "Contenuto obbligatorio, termini di emissione, nota di credito, fattura semplificata e obbligo SdI/FatturaPA in Italia, con le fonti di legge aggiornate al 2026.",
+  "h1": "Fattura elettronica obbligatoria in Italia: cosa deve contenere e come si invia",
+  "answer": "In Italia ogni fattura tra soggetti IVA passa per il Sistema di Interscambio in formato XML FatturaPA. Deve avere i dati dell'art. 21 DPR 633/1972, essere emessa entro 12 giorni (o in forma differita), e dal 1° gennaio 2024 l'obbligo vale anche per i forfettari, senza più eccezioni legate al fatturato.",
+  "lastReviewed": "2026-09-25",
+  "sections": [
+    {
+      "heading": "Chi deve emettere la fattura elettronica in Italia?",
+      "id": "chi-deve-emettere-la-fattura-elettronica-in-italia",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dal 1° gennaio 2019 la fatturazione elettronica è obbligatoria per le cessioni di beni e le prestazioni di servizi effettuate tra soggetti residenti, stabiliti o identificati ai fini IVA in Italia, sia B2B sia B2C. L'obbligo è stato introdotto dalla Legge di Bilancio 2018 (legge 27 dicembre 2017, n. 205, art. 1, commi 909-928) e riguarda tutte le fatture emesse a partire da quella data."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fino al 2024 i contribuenti in regime forfettario (art. 1, commi 54-89, legge 190/2014) erano in gran parte esonerati. L'art. 18 del decreto-legge 30 aprile 2022, n. 36 ha eliminato l'esonero in due fasi:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "dal 1° luglio 2022, per chi nell'anno precedente aveva superato 25.000 € di ricavi o compensi;"
+              }
+            ],
+            [
+              {
+                "text": "dal 1° gennaio 2024, per tutti gli altri forfettari, senza più soglia di fatturato."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Restano fuori dall'obbligo generale alcune categorie minori (es. piccoli produttori agricoli in regime di esonero); per le fatture verso l'estero si usa il file XML se il cliente è identificato ai fini IVA in Italia, altrimenti si può emettere in altro formato, salva la comunicazione dei dati."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Cosa deve contenere ogni fattura secondo l'art. 21 del DPR 633/1972?",
+      "id": "cosa-deve-contenere-ogni-fattura-secondo-l-art-21-del-dpr-633-1972",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "L'art. 21 del DPR 633/1972 elenca gli elementi obbligatori della fattura ordinaria. Il file FatturaPA riproduce tutti questi campi in formato strutturato."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Elemento",
+            "Riferimento",
+            "Note"
+          ],
+          "rows": [
+            [
+              "Data di emissione",
+              "art. 21, c. 2, lett. a)",
+              "Data in cui il documento viene generato/trasmesso"
+            ],
+            [
+              "Numero progressivo univoco",
+              "art. 21, c. 2, lett. b)",
+              "Deve identificare la fattura in modo univoco, tipicamente per anno"
+            ],
+            [
+              "Dati del cedente/prestatore",
+              "art. 21, c. 2, lett. c)",
+              "Denominazione o nome e cognome, indirizzo"
+            ],
+            [
+              "Partita IVA del cedente/prestatore",
+              "art. 21, c. 2, lett. c)",
+              ""
+            ],
+            [
+              "Dati del cessionario/committente",
+              "art. 21, c. 2, lett. e)",
+              "Denominazione o nome e cognome, indirizzo"
+            ],
+            [
+              "Partita IVA o codice fiscale del cliente",
+              "art. 21, c. 2, lett. f)",
+              "Per i privati italiani serve il codice fiscale"
+            ],
+            [
+              "Natura, qualità e quantità dei beni/servizi",
+              "art. 21, c. 2, lett. g)",
+              "Descrizione dell'operazione"
+            ],
+            [
+              "Data dell'operazione, se diversa dall'emissione",
+              "art. 21, c. 2, lett. g-bis)",
+              "Rilevante per l'IVA per cassa/competenza"
+            ],
+            [
+              "Corrispettivi e altri dati per la base imponibile",
+              "art. 21, c. 2, lett. h)",
+              ""
+            ],
+            [
+              "Aliquota, ammontare dell'imposta e imponibile",
+              "art. 21, c. 2, lett. l)",
+              "Con arrotondamento al centesimo di euro"
+            ],
+            [
+              "Annotazione per operazioni non imponibili/esenti",
+              "art. 21, c. 6, c. 6-bis",
+              "Con la norma di riferimento (es. art. 41 DL 331/1993, art. 17 c. 6, art. 7-ter)"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Entro quanto tempo va emessa la fattura? I 12 giorni e la fattura differita",
+      "id": "entro-quanto-tempo-va-emessa-la-fattura-i-12-giorni-e-la-fattura-differita",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La regola generale (art. 21, c. 4, DPR 633/1972) è che la fattura va emessa "
+            },
+            {
+              "text": "entro dodici giorni dall'effettuazione dell'operazione",
+              "bold": true
+            },
+            {
+              "text": " (cioè dalla consegna/spedizione del bene o dal pagamento del corrispettivo per i servizi)."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Esistono deroghe per la "
+            },
+            {
+              "text": "fattura differita",
+              "bold": true
+            },
+            {
+              "text": ":"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "per le cessioni di beni accompagnate da documento di trasporto (DDT) verso lo stesso soggetto, si può emettere un'unica fattura riepilogativa entro il giorno 15 del mese successivo a quello di consegna (art. 21, c. 4, lett. a);"
+              }
+            ],
+            [
+              {
+                "text": "per alcune prestazioni di servizi individuabili tramite idonea documentazione (anche una proforma, secondo la prassi dell'Agenzia delle Entrate), si applica la stessa regola del giorno 15 del mese successivo."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "In pratica, DDT o più prestazioni allo stesso cliente nel mese possono confluire in un'unica fattura differita, invece di 12 giorni per ogni operazione."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Cos'è la fattura semplificata e quando si può usare (art. 21-bis)?",
+      "id": "cos-e-la-fattura-semplificata-e-quando-si-puo-usare-art-21-bis",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Per operazioni di importo complessivo "
+            },
+            {
+              "text": "non superiore a 400 €",
+              "bold": true
+            },
+            {
+              "text": " (soglia elevata dai 100 € originari con il decreto ministeriale 10 maggio 2019), l'art. 21-bis del DPR 633/1972 consente un contenuto ridotto:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "data di emissione e numero progressivo;"
+              }
+            ],
+            [
+              {
+                "text": "dati identificativi del cedente/prestatore, partita IVA;"
+              }
+            ],
+            [
+              {
+                "text": "identificazione del cliente (basta il codice fiscale o partita IVA, senza indirizzo completo);"
+              }
+            ],
+            [
+              {
+                "text": "descrizione dei beni/servizi;"
+              }
+            ],
+            [
+              {
+                "text": "corrispettivo complessivo e imposta incorporata (o i dati per calcolarla)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "È ammessa anche per le note di variazione, indipendentemente dall'importo. Non è utilizzabile per le cessioni intracomunitarie (art. 41, comma 1, DL 331/1993) né per le operazioni di cui all'art. 21, comma 6-bis, lett. a), DPR 633/1972."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dal 1° gennaio 2025 il limite di 400 € non si applica ai forfettari, che possono emettere fattura semplificata anche per importi superiori (D.Lgs. 13 novembre 2024, n. 180, di recepimento della direttiva UE 2020/285 sulle piccole imprese); per le partite IVA in regime ordinario il limite resta invariato."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Come funzionano la nota di credito e la nota di debito (art. 26)?",
+      "id": "come-funzionano-la-nota-di-credito-e-la-nota-di-debito-art-26",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "L'art. 26 del DPR 633/1972 disciplina le variazioni dell'imponibile o dell'imposta dopo l'emissione della fattura originaria:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "variazione in aumento (nota di debito)",
+                "bold": true
+              },
+              {
+                "text": ": obbligatoria ogni volta che, per qualsiasi motivo, imponibile o imposta aumentano rispetto alla fattura originaria; nessun termine specifico previsto dalla norma;"
+              }
+            ],
+            [
+              {
+                "text": "variazione in diminuzione (nota di credito)",
+                "bold": true
+              },
+              {
+                "text": ": facoltativa, per annullamento, revoca, risoluzione, rescissione, abbuoni/sconti pattuiti o errori di fatturazione; se la variazione dipende da un accordo sopravvenuto tra le parti, non può essere emessa oltre un anno dall'effettuazione dell'operazione originaria (comma 3). Il limite temporale non si applica invece alle variazioni per procedure concorsuali o esecutive rimaste infruttuose (comma 3-bis)."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "La fattura proforma ha valore fiscale?",
+      "id": "la-fattura-proforma-ha-valore-fiscale",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La fattura proforma non è un documento previsto dal DPR 633/1972: riporta gli stessi dati di una fattura ma "
+            },
+            {
+              "text": "non ha valore fiscale né contabile",
+              "bold": true
+            },
+            {
+              "text": ", non genera obbligo IVA, non va registrata nei registri IVA e non si trasmette al Sistema di Interscambio. Serve solo a scopo informativo o commerciale, ad esempio per anticipare l'importo dovuto prima della fattura definitiva o per una richiesta di pagamento anticipato."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Cos'è il formato FatturaPA e come funziona il Sistema di Interscambio (SdI)?",
+      "id": "cos-e-il-formato-fatturapa-e-come-funziona-il-sistema-di-interscambio-sdi",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Tutte le fatture elettroniche italiane devono rispettare il tracciato "
+            },
+            {
+              "text": "FatturaPA",
+              "bold": true
+            },
+            {
+              "text": ", un file XML con struttura e campi fissati dalle specifiche tecniche dell'Agenzia delle Entrate. Il file non va inviato direttamente al cliente: passa obbligatoriamente attraverso il "
+            },
+            {
+              "text": "Sistema di Interscambio (SdI)",
+              "bold": true
+            },
+            {
+              "text": ", la piattaforma pubblica gestita dall'Agenzia delle Entrate che riceve il file, ne controlla il formato e i dati fiscali minimi, e lo recapita al destinatario."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Il recapito avviene tramite:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "il "
+              },
+              {
+                "text": "codice destinatario",
+                "bold": true
+              },
+              {
+                "text": ", un codice a 7 caratteri fornito dal proprio software gestionale o richiesto in Agenzia delle Entrate (\"0000000\" per i privati identificati senza codice attivo);"
+              }
+            ],
+            [
+              {
+                "text": "oppure la "
+              },
+              {
+                "text": "PEC",
+                "bold": true
+              },
+              {
+                "text": " del destinatario, usata quando non è disponibile un codice destinatario attivo."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Per inviare o ricevere fatture tramite SdI occorre un canale accreditato (SdiCoop, SdiFTP o l'indirizzo PEC dedicato sdi01@pec.fatturapa.it) oppure un intermediario/software che gestisca l'invio per conto dell'utente."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Quando si applica l'imposta di bollo da 2 € sulle fatture esenti?",
+      "id": "quando-si-applica-l-imposta-di-bollo-da-2-sulle-fatture-esenti",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Sulle fatture (anche elettroniche) che documentano operazioni "
+            },
+            {
+              "text": "non imponibili, non soggette o esenti da IVA",
+              "bold": true
+            },
+            {
+              "text": " e il cui importo supera "
+            },
+            {
+              "text": "77,47 €",
+              "bold": true
+            },
+            {
+              "text": ", è dovuta l'imposta di bollo di "
+            },
+            {
+              "text": "2 €",
+              "bold": true
+            },
+            {
+              "text": ", assolta in modalità virtuale ai sensi dell'art. 6 del decreto ministeriale 17 giugno 2014 e dell'art. 12-novies del DL 34/2019. Nel file XML questo si indica valorizzando a \"SI\" il campo \"Bollo virtuale\". Restano escluse alcune tipologie di documento e alcuni regimi speciali."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Checklist prima di emettere una fattura in Italia",
+      "id": "checklist-prima-di-emettere-una-fattura-in-italia",
+      "blocks": [
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Numero progressivo univoco e data di emissione corretti."
+              }
+            ],
+            [
+              {
+                "text": "Dati completi di cedente e cliente, con partita IVA o codice fiscale validi."
+              }
+            ],
+            [
+              {
+                "text": "Aliquota IVA corretta (22%, 10%, 5%, 4% o natura dell'esenzione con norma di riferimento)."
+              }
+            ],
+            [
+              {
+                "text": "Rispetto del termine di 12 giorni, oppure requisiti della fattura differita (DDT o documentazione idonea) rispettati."
+              }
+            ],
+            [
+              {
+                "text": "Codice destinatario o PEC del cliente presenti, per l'invio tramite SdI."
+              }
+            ],
+            [
+              {
+                "text": "Verifica se serve l'imposta di bollo da 2 € (operazione esente/non imponibile oltre 77,47 €)."
+              }
+            ],
+            [
+              {
+                "text": "Se il cliente è forfettario o l'operazione è esente, indicazione della norma corretta in fattura."
+              }
+            ],
+            [
+              {
+                "text": "Fattura proforma mai usata al posto della fattura fiscale definitiva."
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Domande frequenti",
+  "faq": [
+    {
+      "question": "Quali aliquote IVA si indicano in fattura?",
+      "answer": [
+        {
+          "text": "In Italia si applicano l'aliquota ordinaria del 22% e le aliquote ridotte del 10%, del 5% e del 4%, secondo le tabelle allegate al DPR 633/1972 pubblicate dall'Agenzia delle Entrate. L'aliquota corretta va indicata per ciascuna riga o raggruppamento di beni e servizi in fattura."
+        }
+      ]
+    },
+    {
+      "question": "Che codice documento hanno la nota di credito e la nota di debito nel tracciato XML?",
+      "answer": [
+        {
+          "text": "Nel formato FatturaPA la nota di credito ha il codice documento TD04 e la nota di debito il codice TD05. Entrambe vanno trasmesse tramite il Sistema di Interscambio quando si riferiscono a operazioni originariamente fatturate elettronicamente."
+        }
+      ]
+    },
+    {
+      "question": "Cos'è il codice destinatario e a cosa serve?",
+      "answer": [
+        {
+          "text": "È il codice a 7 caratteri che indica al Sistema di Interscambio dove recapitare la fattura elettronica (il gestionale del cliente). In alternativa si può indicare la PEC del destinatario."
+        }
+      ]
+    },
+    {
+      "question": "La fattura proforma può sostituire la fattura elettronica?",
+      "answer": [
+        {
+          "text": "No. La proforma non ha valore fiscale, non passa dal Sistema di Interscambio e non sostituisce in alcun caso la fattura elettronica obbligatoria."
+        }
+      ]
+    },
+    {
+      "question": "La nota di debito è obbligatoria come la nota di credito?",
+      "answer": [
+        {
+          "text": "No. La nota di debito è obbligatoria ogni volta che imponibile o imposta aumentano rispetto alla fattura originaria, mentre la nota di credito resta facoltativa e non è mai imposta dalla legge, anche quando l'imponibile diminuisce (art. 26 DPR 633/1972)."
+        }
+      ]
+    },
+    {
+      "question": "Posso usare la fattura semplificata per una nota di variazione di importo superiore a 400 €?",
+      "answer": [
+        {
+          "text": "Sì. La fattura semplificata è ammessa per le note di variazione indipendentemente dall'importo dell'operazione originaria, anche oltre la soglia di 400 € prevista in generale per le fatture semplificate (art. 21-bis DPR 633/1972)."
+        }
+      ]
+    },
+    {
+      "question": "Come si versa l'imposta di bollo dovuta sulle fatture elettroniche?",
+      "answer": [
+        {
+          "text": "Tramite modello F24, con scadenza trimestrale (il primo trimestre entro il 31 maggio). Se l'importo dovuto per un trimestre non supera 5.000 €, il versamento può essere cumulato con quello del trimestre successivo, senza limite di frequenza entro l'anno (soglia elevata da 250 € a 5.000 € dall'art. 3, commi 4-5, DL 21 giugno 2022, n. 73, conv. con modificazioni dalla L. 122/2022, con effetto dal 1° gennaio 2023)."
+        }
+      ]
+    },
+    {
+      "question": "Le fatture verso l'estero vanno inviate tramite SdI?",
+      "answer": [
+        {
+          "text": "Se il cliente è identificato ai fini IVA in Italia sì, si usa comunque il formato FatturaPA. Per i clienti esteri non identificati in Italia si può usare un altro formato, con i relativi obblighi di comunicazione dei dati."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Come aiuta Fakturcho",
+    "body": [
+      {
+        "text": "Fakturcho genera automaticamente il file XML in formato FatturaPA (fattura TD01, nota di credito TD04, nota di debito TD05) con i codici destinatario/PEC del cliente, pronto per essere caricato sul proprio canale SdI (portale \"Fatture e Corrispettivi\", intermediario o software abilitato); l'invio effettivo resta a cura dell'utente con le proprie credenziali. Sulla stessa fattura Fakturcho compila in automatico le diciture obbligatorie per inversione contabile, operazioni intra-UE e regime forfettario, e aggiunge la dicitura dell'imposta di bollo virtuale quando l'operazione è esente e supera 77,47 €. Oltre al fattura, proforma, nota di credito/debito, preventivo e DDT, ogni documento viene inviato anche in PDF via email nella lingua del paese. Ultimo aggiornamento: 25.09.2026. Informazioni di carattere generale, non costituiscono consulenza fiscale: per il caso specifico rivolgersi al proprio commercialista."
+      }
+    ]
+  }
+}

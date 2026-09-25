@@ -1,3 +1,5 @@
+import { guidesLlmsSection } from '@app/features/guides/llmsSection';
+import { allGuides } from '@app/features/guides/registry';
 import {
   CREDIT_PACKS,
   ISSUANCE_COST_CENTS,
@@ -17,6 +19,7 @@ const tierLines = SUBSCRIPTION_TIER_IDS.map(
   (id) =>
     `${eur(SUBSCRIPTION_TIERS[id].priceCents)} per month grants ${eur(SUBSCRIPTION_TIERS[id].grantCents)} credit (${eur(perDocumentCents(SUBSCRIPTION_TIERS[id].priceCents, SUBSCRIPTION_TIERS[id].grantCents))} per document)`,
 ).join('; ');
+const guidesSection = guidesLlmsSection('Invoicing guides', allGuides());
 
 const CONTENT = `# Fakturcho
 
@@ -34,7 +37,7 @@ The product supports gap-free sequential numbering and VAT by country, including
 - [Terms of Service](https://www.fakturcho.com/en/terms): terms for using the service.
 - [Privacy Policy](https://www.fakturcho.com/en/privacy): personal data processing.
 - [Refunds](https://www.fakturcho.com/en/refunds): refund policy for payments.
-
+${guidesSection}
 Bulgarian version: [https://www.fakturcho.com/llms.txt](https://www.fakturcho.com/llms.txt).
 `;
 

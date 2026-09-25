@@ -513,7 +513,8 @@
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Der Anbieter für E-Rechnungen ist nicht konfiguriert.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Dieser Anbieter unterstützt keine Statusabfragen.",
       "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
-    }
+    },
+    "guideLink": "Rechnungsleitfaden"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -887,7 +888,8 @@
           "answer": "Beide werden serverseitig erzeugt; laden Sie sie herunter, senden Sie sie per E-Mail an den Kunden oder laden Sie die E-Rechnung selbst auf Ihre nationale Plattform hoch bzw. versenden Sie sie über Peppol."
         }
       ]
-    }
+    },
+    "guideLink": "Rechnungsleitfaden"
   },
   "seo": {
     "home": {
@@ -903,5 +905,13 @@
       "title": "Registrieren",
       "description": "Erstellen Sie ein kostenloses Konto und stellen Sie in wenigen Minuten Ihre erste Rechnung aus. 1,00 € Startguthaben, kein Abo erforderlich."
     }
+  },
+  "guides": {
+    "breadcrumbHome": "Start",
+    "breadcrumbGuides": "Leitfäden",
+    "indexDescription": "Länderspezifische Rechnungsleitfäden von Fakturcho.",
+    "tableOfContents": "Auf dieser Seite",
+    "lastReviewed": "Zuletzt geprüft: {date}",
+    "euOverviewLink": "EU-Überblick"
   }
 }

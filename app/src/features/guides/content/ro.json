@@ -1,0 +1,541 @@
+{
+  "country": "RO",
+  "locale": "ro",
+  "slug": "factura-efactura-anaf-spv",
+  "title": "RO e-Factura 2026 și factura conformă | Fakturcho",
+  "description": "Ce trebuie să conțină o factură în România, termenul de emitere, numerotarea, factura de stornare și obligația RO e-Factura (CIUS-RO, SPV, termene, amenzi).",
+  "h1": "RO e-Factura și factura conformă în România",
+  "answer": "O factură emisă în România trebuie să conțină elementele de la art. 319 din Codul fiscal, să fie emisă până cel târziu în a 15-a zi a lunii următoare faptului generator și, pentru B2B și B2C, să fie transmisă prin RO e-Factura în format CIUS-RO, în cel mult 5 zile lucrătoare, sub sancțiunea amenzii.",
+  "lastReviewed": "2026-09-25",
+  "sections": [
+    {
+      "heading": "Ce trebuie să conțină obligatoriu o factură?",
+      "id": "ce-trebuie-sa-contina-obligatoriu-o-factura",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Orice persoană impozabilă stabilită în România care emite facturi — firmă, PFA sau altă formă de activitate independentă — trebuie să respecte simultan două seturi de reguli: conținutul obligatoriu al facturii, stabilit de Codul fiscal, și, pentru majoritatea tranzacțiilor, transmiterea facturii prin sistemul național RO e-Factura. Mai jos sunt regulile actuale, cu termenele și sumele în vigoare."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Conform art. 319 alin. (20) din Legea nr. 227/2015 privind Codul fiscal, factura cuprinde în mod obligatoriu:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Element",
+            "Explicație"
+          ],
+          "rows": [
+            [
+              "Număr de ordine",
+              "Secvențial, pe baza uneia sau mai multor serii, identifică factura în mod unic"
+            ],
+            [
+              "Data emiterii",
+              "Ziua în care este emisă factura"
+            ],
+            [
+              "Data livrării/prestării sau a avansului",
+              "Doar dacă este anterioară datei emiterii"
+            ],
+            [
+              "Date furnizor",
+              "Denumire, adresă, cod de TVA (dacă e cazul) sau cod de identificare fiscală"
+            ],
+            [
+              "Date beneficiar",
+              "Denumire, adresă, cod de TVA sau cod de identificare fiscală (dacă e persoană impozabilă/juridică)"
+            ],
+            [
+              "Denumirea și cantitatea bunurilor/serviciilor",
+              "Descrierea operațiunii facturate"
+            ],
+            [
+              "Baza de impozitare pe fiecare cotă/scutire",
+              "Preț unitar fără TVA, rabaturi, remize, risturne"
+            ],
+            [
+              "Cota de TVA aplicată și suma TVA",
+              "Exprimată în lei"
+            ],
+            [
+              "Mențiuni speciale, după caz",
+              "„autofactură”, temeiul scutirii de TVA, „taxare inversă”, „TVA la încasare”, „regimul marjei” etc."
+            ],
+            [
+              "Referință la facturi anterioare",
+              "Când se emit mai multe facturi pentru aceeași operațiune"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pentru facturile a căror valoare, inclusiv TVA, nu depășește 100 euro (sau documentele asimilate facturii), se poate emite "
+            },
+            {
+              "text": "factură simplificată",
+              "bold": true
+            },
+            {
+              "text": ", cu un set redus de informații — art. 319 alin. (12) și (21) Cod fiscal."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Sumele pot fi exprimate în orice monedă, dar valoarea TVA trebuie exprimată obligatoriu și în lei, la cursul prevăzut la art. 290 din Codul fiscal (art. 319 alin. (23))."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Care este termenul de emitere a facturii?",
+      "id": "care-este-termenul-de-emitere-a-facturii",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Regula generală, art. 319 alin. (16) Cod fiscal: factura se emite "
+            },
+            {
+              "text": "cel târziu până în a 15-a zi a lunii următoare",
+              "bold": true
+            },
+            {
+              "text": " celei în care a intervenit faptul generator de taxă (livrarea, prestarea) sau în care a fost încasat un avans — dacă factura nu a fost deja emisă mai devreme. Pentru livrările intracomunitare de bunuri scutite, termenul este identic (art. 319 alin. (15))."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Cum se numerotează facturile?",
+      "id": "cum-se-numeroteaza-facturile",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Legea cere doar ca numărul să fie secvențial, pe baza uneia sau mai multor serii, și să identifice unic fiecare factură (art. 319 alin. (20) lit. a). În practică, o serie nu trebuie să aibă goluri sau numere repetate — orice factură anulată sau greșită rămâne cu numărul „consumat”, corectarea făcându-se prin document separat, nu prin reutilizarea numărului."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Cum corectezi o factură greșită (factura de stornare)?",
+      "id": "cum-corectezi-o-factura-gresita-factura-de-stornare",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Corectarea facturilor este reglementată de art. 330 din Codul fiscal:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Dacă factura "
+              },
+              {
+                "text": "nu a fost încă transmisă",
+                "bold": true
+              },
+              {
+                "text": " beneficiarului, se anulează și se emite alta, cu numărul următor din serie."
+              }
+            ],
+            [
+              {
+                "text": "Dacă factura "
+              },
+              {
+                "text": "a fost deja transmisă",
+                "bold": true
+              },
+              {
+                "text": ", corectarea se face fie prin (a) o factură nouă care cuprinde datele facturii inițiale, numărul și data facturii corectate, valorile cu semnul minus (sau mențiunea că sunt negative) plus valorile corecte, fie prin (b) o factură cu valorile corecte emisă concomitent cu o factură de stornare (valori negative) care indică numărul și data facturii corectate."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Aceleași reguli se aplică și autofacturilor (art. 330 alin. (4)). O factură de stornare/corecție se transmite și beneficiarului, la fel ca factura inițială."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Factura proformă are valoare fiscală?",
+      "id": "factura-proforma-are-valoare-fiscala",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nu. Factura proformă nu este reglementată de Codul fiscal — legea cunoaște doar „factura” (art. 319) și documentele asimilate ei. Proforma este un document comercial informativ, folosit pentru a comunica prețul și condițiile înainte de livrare sau de emiterea facturii fiscale; nu generează obligația de a colecta TVA și nu se înregistrează în evidența contabilă ca document fiscal. Factura fiscală propriu-zisă se emite separat, respectând termenele de mai sus."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ce este regimul special de scutire pentru întreprinderile mici (neplătitor de TVA)?",
+      "id": "ce-este-regimul-special-de-scutire-pentru-intreprinderile-mici-neplatitor-de-tva",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Persoana impozabilă stabilită în România a cărei cifră de afaceri anuală este sub plafon poate aplica regimul special de scutire de TVA prevăzut la art. 310 din Codul fiscal — adică nu colectează TVA, dar nici nu o poate deduce. Plafonul a fost majorat de la 300.000 lei la "
+            },
+            {
+              "text": "395.000 lei, cu efect din 1 septembrie 2025",
+              "bold": true
+            },
+            {
+              "text": ", prin ordonanța de guvern care transpune Directiva UE 2020/285 privind regimul IMM. Pe factura emisă în regim de scutire trebuie trecută mențiunea temeiului legal, de exemplu „scutit de TVA conform art. 310 din Codul fiscal”, în locul cotei și sumei de TVA."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ce este mențiunea „taxare inversă”?",
+      "id": "ce-este-mentiunea-taxare-inversa",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Când cumpărătorul este persoana obligată la plata TVA în locul furnizorului (măsură de simplificare reglementată la art. 331 din Codul fiscal, aplicabilă exclusiv livrărilor de bunuri/prestărilor de servicii în interiorul țării, pentru categorii precum deșeuri reciclabile, masă lemnoasă, cereale, construcții/terenuri, telefoane mobile, console/tablete/laptopuri peste 22.500 lei etc.), factura nu conține TVA colectată, ci mențiunea obligatorie „taxare inversă” (art. 319 alin. (20) lit. m). Beneficiarul înregistrează atât taxa colectată, cât și cea deductibilă, prin decontul propriu de TVA."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ce este RO e-Factura și cine este obligat să o folosească?",
+      "id": "ce-este-ro-e-factura-si-cine-este-obligat-sa-o-foloseasca",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "RO e-Factura este sistemul național administrat de ANAF/Ministerul Finanțelor prin care facturile emise în relația "
+            },
+            {
+              "text": "B2B",
+              "bold": true
+            },
+            {
+              "text": " (între persoane impozabile stabilite în România) și "
+            },
+            {
+              "text": "B2C",
+              "bold": true
+            },
+            {
+              "text": " (către persoane fizice) se transmit electronic către Spațiul Privat Virtual (SPV), pentru validare și arhivare de către stat. Cadrul legal este OUG nr. 120/2021, modificată succesiv, ultima dată prin Legea nr. 296/2023 (B2B) și OUG nr. 69/2024 (B2C)."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Relație",
+            "Statut",
+            "De la"
+          ],
+          "rows": [
+            [
+              "B2G (către instituții publice)",
+              "Obligatoriu pentru operatorii care optează pentru sistem",
+              "de la introducerea sistemului"
+            ],
+            [
+              "B2B (între firme/PFA din România)",
+              "Obligatoriu",
+              "1 iulie 2024 (perioadă de grație fără amenzi: 1 ianuarie – 31 mai 2024)"
+            ],
+            [
+              "B2C (către persoane fizice)",
+              "Opțional 1 iulie – 31 decembrie 2024, apoi obligatoriu",
+              "1 ianuarie 2025"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fac excepție de la obligație, printre altele, operațiunile pentru care nu există obligația emiterii unei facturi conform art. 319 din Codul fiscal, precum și facturile simplificate emise conform art. 319 alin. (12) în relația B2C."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ce format trebuie să aibă factura electronică (CIUS-RO)?",
+      "id": "ce-format-trebuie-sa-aiba-factura-electronica-cius-ro",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Factura electronică transmisă în RO e-Factura trebuie să respecte specificația națională "
+            },
+            {
+              "text": "CIUS-RO",
+              "bold": true
+            },
+            {
+              "text": " (RO_CIUS) — o particularizare a standardului european EN 16931, în sintaxă "
+            },
+            {
+              "text": "UBL 2.1",
+              "bold": true
+            },
+            {
+              "text": ", aprobată prin Ordinul ministrului finanțelor nr. 1.366/2021 (cu actualizările ulterioare ale artefactelor de validare). Sistemul validează fișierul XML după schema UBL Invoice/CreditNote-2 și regulile Schematron RO_CIUS înainte de a-l accepta."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Care este termenul de transmitere a facturii în SPV?",
+      "id": "care-este-termenul-de-transmitere-a-facturii-in-spv",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Termenul s-a schimbat de la 1 ianuarie 2026: transmiterea se face în cel mult "
+            },
+            {
+              "text": "5 zile lucrătoare",
+              "bold": true
+            },
+            {
+              "text": " de la data emiterii facturii, dar nu mai târziu de 5 zile lucrătoare de la termenul legal de emitere prevăzut la art. 319 alin. (16) din Codul fiscal (OUG nr. 89/2025, care a modificat art. 10 alin. (7) din OUG nr. 120/2021). Anterior, între 1 iulie 2024 și 31 decembrie 2025, termenul era de 5 zile "
+            },
+            {
+              "text": "calendaristice",
+              "bold": true
+            },
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ce amenzi riști dacă nu transmiți factura la timp?",
+      "id": "ce-amenzi-risti-daca-nu-transmiti-factura-la-timp",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nerespectarea termenului de transmitere constituie contravenție și se sancționează, în funcție de tipul contribuabilului:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Categorie contribuabil",
+            "Amendă"
+          ],
+          "rows": [
+            [
+              "Contribuabili mari",
+              "5.000 – 10.000 lei"
+            ],
+            [
+              "Contribuabili mijlocii",
+              "2.500 – 5.000 lei"
+            ],
+            [
+              "Alte persoane juridice și persoane fizice",
+              "1.000 – 2.500 lei"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Separat, dacă beneficiarul unei relații B2B primește și înregistrează în contabilitate o factură care nu a fost transmisă prin RO e-Factura, riscă o amendă egală cu "
+            },
+            {
+              "text": "15% din valoarea totală a facturii",
+              "bold": true
+            },
+            {
+              "text": " (aplicabil de la 1 iulie 2024)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Checklist pentru o factură conformă în România",
+      "id": "checklist-pentru-o-factura-conforma-in-romania",
+      "blocks": [
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Numărul de ordine este secvențial, dintr-o serie fără goluri."
+              }
+            ],
+            [
+              {
+                "text": "Data emiterii respectă termenul legal (cel târziu a 15-a zi a lunii următoare faptului generator)."
+              }
+            ],
+            [
+              {
+                "text": "Sunt trecute datele complete ale furnizorului și beneficiarului (denumire, adresă, CUI/CIF sau cod de TVA)."
+              }
+            ],
+            [
+              {
+                "text": "Baza de impozitare, cota și suma TVA apar pe fiecare linie/cotă, cu suma TVA exprimată și în lei."
+              }
+            ],
+            [
+              {
+                "text": "Dacă emitentul este neplătitor de TVA, apare mențiunea temeiului de scutire (ex. art. 310 Cod fiscal)."
+              }
+            ],
+            [
+              {
+                "text": "Dacă se aplică taxare inversă, apare mențiunea „taxare inversă”."
+              }
+            ],
+            [
+              {
+                "text": "Pentru relația B2B și B2C din România, factura este transmisă în format CIUS-RO prin SPV, în maximum 5 zile lucrătoare de la emitere."
+              }
+            ],
+            [
+              {
+                "text": "O factură greșită se corectează conform art. 330, niciodată prin ștergere sau reutilizarea numărului."
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Întrebări frecvente",
+  "faq": [
+    {
+      "question": "Facturile către persoane fizice (B2C) trebuie transmise obligatoriu în RO e-Factura?",
+      "answer": [
+        {
+          "text": "Da, de la 1 ianuarie 2025, cu excepția facturilor simplificate (valoare inclusiv TVA sub 100 euro) și a altor cazuri exceptate expres, precum operațiunile pentru care Codul fiscal nu impune emiterea unei facturi."
+        }
+      ]
+    },
+    {
+      "question": "Ce se întâmplă dacă transmit factura după termenul de 5 zile lucrătoare?",
+      "answer": [
+        {
+          "text": "Constituie contravenție și se sancționează cu amendă între 1.000 și 10.000 lei, în funcție de categoria contribuabilului (mare, mijlociu sau altă persoană juridică/fizică)."
+        }
+      ]
+    },
+    {
+      "question": "RO e-Factura este obligatorie și pentru facturile către instituții publice (B2G)?",
+      "answer": [
+        {
+          "text": "Da, dar cu un regim diferit de B2B și B2C: pentru relația B2G (către instituții publice), transmiterea prin RO e-Factura este obligatorie pentru operatorii economici care optează să folosească acest canal, obligație introdusă odată cu sistemul — deci înaintea obligațiilor generale B2B (1 iulie 2024) și B2C (1 ianuarie 2025)."
+        }
+      ]
+    },
+    {
+      "question": "Cât este plafonul de scutire de TVA pentru întreprinderile mici în 2026?",
+      "answer": [
+        {
+          "text": "395.000 lei, prag valabil din 1 septembrie 2025 (majorat de la 300.000 lei)."
+        }
+      ]
+    },
+    {
+      "question": "Ce format trebuie să aibă fișierul XML pentru RO e-Factura?",
+      "answer": [
+        {
+          "text": "Formatul CIUS-RO (RO_CIUS), o particularizare națională a standardului european EN 16931, în sintaxă UBL 2.1, conform Ordinului MF nr. 1.366/2021."
+        }
+      ]
+    },
+    {
+      "question": "Trebuie să emit factura și pe hârtie/PDF dacă o transmit prin RO e-Factura?",
+      "answer": [
+        {
+          "text": "Legea nu impune un format anume pentru exemplarul păstrat de emitent și beneficiar, dar în practică se păstrează și un PDF lizibil alături de XML-ul transmis prin SPV."
+        }
+      ]
+    },
+    {
+      "question": "Ce mențiune trec pe factură dacă sunt neplătitor de TVA?",
+      "answer": [
+        {
+          "text": "Temeiul legal al scutirii, de exemplu „scutit de TVA conform art. 310 din Codul fiscal” pentru regimul întreprinderilor mici, sau articolul corespunzător (art. 292, art. 294) pentru alte scutiri."
+        }
+      ]
+    },
+    {
+      "question": "Cine este obligat să transmită facturile B2B prin RO e-Factura?",
+      "answer": [
+        {
+          "text": "Orice persoană impozabilă stabilită în România, indiferent dacă este sau nu înregistrată în scopuri de TVA, pentru livrări/prestări către alte persoane impozabile stabilite în România — obligatoriu din 1 iulie 2024."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Cum te ajută Fakturcho",
+    "body": [
+      {
+        "text": "Fakturcho generează pentru facturile emise din România fișierul XML în format "
+      },
+      {
+        "text": "CIUS-RO",
+        "bold": true
+      },
+      {
+        "text": " (UBL 2.1, conform EN 16931), gata de încărcat de tine în Spațiul Privat Virtual (SPV) al ANAF — aplicația nu depune automat factura la ANAF, ci pregătește fișierul corect din punct de vedere tehnic pentru propria ta transmitere. Primești și un PDF al facturii pe e-mail. Aplicația completează automat numărul de ordine secvențial, câmpurile obligatorii ale emitentului (CUI/CIF, județ) și temeiul de scutire de TVA ales din lista prevăzută de Codul fiscal, iar pe lângă factură poți emite și proforme, facturi de stornare, note de credit/debit și avize de însoțire. Ultima actualizare: 25.09.2026. Acest ghid oferă informații generale, nu constituie consultanță fiscală; pentru situația ta specifică, consultă un contabil sau un consultant fiscal autorizat."
+      }
+    ]
+  }
+}

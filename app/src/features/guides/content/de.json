@@ -1,0 +1,572 @@
+{
+  "country": "DE",
+  "locale": "de",
+  "slug": "rechnung-pflichtangaben-e-rechnung",
+  "title": "Rechnung Pflichtangaben & E-Rechnung 2026 | Fakturcho",
+  "description": "Pflichtangaben nach § 14 UStG, Rechnungsnummer, Kleinbetragsrechnung und E-Rechnungspflicht 2025–2028 – verständlich für Selbstständige und Kleinunternehmer.",
+  "h1": "Rechnung schreiben in Deutschland: Pflichtangaben, Fristen und E-Rechnungspflicht",
+  "answer": "Eine Rechnung in Deutschland braucht zehn Pflichtangaben nach § 14 Abs. 4 UStG, darunter eine fortlaufende Rechnungsnummer, und muss meist innerhalb von sechs Monaten ausgestellt werden. Seit 1. Januar 2025 müssen alle Unternehmer elektronische Rechnungen empfangen können; die Pflicht zum Ausstellen folgt stufenweise bis 2027/2028.",
+  "lastReviewed": "2026-09-25",
+  "sections": [
+    {
+      "heading": "Was muss auf einer Rechnung stehen? (Pflichtangaben nach § 14 UStG)",
+      "id": "was-muss-auf-einer-rechnung-stehen-pflichtangaben-nach-14-ustg",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Wer in Deutschland eine Rechnung schreibt, muss zwei Dinge gleichzeitig im Blick haben: die klassischen Pflichtangaben aus dem Umsatzsteuergesetz und die neue E-Rechnungspflicht, die seit 2025 schrittweise eingeführt wird. Dieser Leitfaden fasst beides zusammen, mit den genauen Paragrafen."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "§ 14 Abs. 4 UStG zählt abschließend auf, welche Angaben eine Rechnung enthalten muss, wenn eine Leistung an einen anderen Unternehmer für dessen Unternehmen erbracht wird oder eine steuerpflichtige Werklieferung bzw. grundstücksbezogene Leistung vorliegt:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Nr.",
+            "Pflichtangabe"
+          ],
+          "rows": [
+            [
+              "1",
+              "Vollständiger Name und vollständige Anschrift von leistendem Unternehmer und Leistungsempfänger"
+            ],
+            [
+              "2",
+              "Steuernummer (vom Finanzamt) oder USt-IdNr. (vom Bundeszentralamt für Steuern) des leistenden Unternehmers"
+            ],
+            [
+              "3",
+              "Ausstellungsdatum"
+            ],
+            [
+              "4",
+              "Fortlaufende Rechnungsnummer, vom Aussteller einmalig vergeben"
+            ],
+            [
+              "5",
+              "Menge und handelsübliche Bezeichnung der gelieferten Gegenstände bzw. Umfang und Art der Leistung"
+            ],
+            [
+              "6",
+              "Zeitpunkt der Lieferung/Leistung (bzw. der Vereinnahmung des Entgelts bei Anzahlungen)"
+            ],
+            [
+              "7",
+              "Nach Steuersätzen und Steuerbefreiungen aufgeschlüsseltes Entgelt sowie vorab vereinbarte Entgeltminderungen"
+            ],
+            [
+              "8",
+              "Anzuwendender Steuersatz und Steuerbetrag, oder bei Steuerbefreiung ein Hinweis darauf"
+            ],
+            [
+              "9",
+              "Hinweis auf die Aufbewahrungspflicht des Leistungsempfängers, wenn § 14b Abs. 1 Satz 5 UStG greift"
+            ],
+            [
+              "10",
+              "Die Angabe „Gutschrift\", wenn die Rechnung vom Leistungsempfänger ausgestellt wird"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zusätzlich gilt: Echtheit der Herkunft, Unversehrtheit des Inhalts und Lesbarkeit der Rechnung müssen während der gesamten Aufbewahrungsfrist gewährleistet sein (§ 14 Abs. 3 UStG). Bei grenzüberschreitenden Umsätzen, reverse-charge-Fällen oder besonderen Besteuerungsverfahren kommen weitere Angaben nach § 14a UStG hinzu, etwa der Hinweis „Steuerschuldnerschaft des Leistungsempfängers\" bei einer sonstigen Leistung nach § 3a Abs. 2 UStG, die im übrigen Gemeinschaftsgebiet steuerpflichtig ist und deren Steuer dort der Leistungsempfänger schuldet, oder „innergemeinschaftliches Dreiecksgeschäft\" beim Dreiecksgeschäft."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Bis wann muss ich eine Rechnung ausstellen?",
+      "id": "bis-wann-muss-ich-eine-rechnung-ausstellen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nach § 14 Abs. 2 UStG besteht eine Pflicht zur Rechnungsstellung "
+            },
+            {
+              "text": "innerhalb von sechs Monaten nach Ausführung der Leistung",
+              "bold": true
+            },
+            {
+              "text": ", wenn nicht ohnehin ein steuerfreier Umsatz nach § 4 Nr. 8 bis 29 UStG vorliegt, und zwar für:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Leistungen an einen anderen Unternehmer für dessen Unternehmen,"
+              }
+            ],
+            [
+              {
+                "text": "Leistungen an eine juristische Person, die nicht Unternehmer ist,"
+              }
+            ],
+            [
+              {
+                "text": "steuerpflichtige Werklieferungen oder grundstücksbezogene sonstige Leistungen an sonstige Empfänger."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Bei innergemeinschaftlichen Lieferungen und bei sonstigen Leistungen, für die der Leistungsempfänger die Steuer im übrigen Gemeinschaftsgebiet schuldet, verkürzt § 14a UStG diese Frist: Die Rechnung muss bis zum 15. Tag des Monats ausgestellt werden, der auf den Monat der Lieferung bzw. Leistung folgt."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Für reine B2C-Leistungen ohne Grundstücksbezug gibt es keine gesetzliche Rechnungsstellungspflicht mit fester Frist – wird eine Rechnung ausgestellt, muss sie aber trotzdem die Pflichtangaben tragen."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Wie vergebe ich die Rechnungsnummer richtig?",
+      "id": "wie-vergebe-ich-die-rechnungsnummer-richtig",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Das Gesetz verlangt „eine fortlaufende Nummer mit einer oder mehreren Zahlenreihen, die zur Identifizierung der Rechnung vom Rechnungsaussteller einmalig vergeben wird\" (§ 14 Abs. 4 Nr. 4 UStG). Ein festes Format schreibt das Gesetz nicht vor, in der Praxis prüft das Finanzamt aber, ob die Nummernvergabe lückenlos nachvollziehbar ist – üblich sind fortlaufende Nummern je Kalenderjahr, teils mit Präfix. Separate Serien für Rechnungen, Gutschriften, Angebote oder Lieferscheine sind zulässig, solange jede Serie für sich fortlaufend und eindeutig ist."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Was ist eine Kleinbetragsrechnung?",
+      "id": "was-ist-eine-kleinbetragsrechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "§ 33 UStDV vereinfacht die Pflichtangaben für Rechnungen, deren "
+            },
+            {
+              "text": "Gesamtbetrag 250 Euro nicht übersteigt",
+              "bold": true
+            },
+            {
+              "text": ". Solche Kleinbetragsrechnungen brauchen nur:"
+            }
+          ]
+        },
+        {
+          "type": "ol",
+          "items": [
+            [
+              {
+                "text": "Vollständigen Namen und vollständige Anschrift des leistenden Unternehmers,"
+              }
+            ],
+            [
+              {
+                "text": "das Ausstellungsdatum,"
+              }
+            ],
+            [
+              {
+                "text": "Menge und Art der gelieferten Gegenstände bzw. Umfang und Art der Leistung,"
+              }
+            ],
+            [
+              {
+                "text": "Entgelt und Steuerbetrag in einer Summe sowie den Steuersatz (oder einen Hinweis auf die Steuerbefreiung)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Diese Erleichterung gilt nicht für Umsätze nach §§ 3c, 6a und 13b UStG (z. B. innergemeinschaftlicher Fernverkauf, innergemeinschaftliche Lieferung, Reverse-Charge). Eine Kleinbetragsrechnung darf außerdem immer als „sonstige Rechnung\" – also z. B. als PDF oder auf Papier – übermittelt werden, selbst wenn der Empfänger eigentlich eine E-Rechnung verlangen könnte (§ 33 Satz 4 UStDV)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Wie stelle ich als Kleinunternehmer eine Rechnung?",
+      "id": "wie-stelle-ich-als-kleinunternehmer-eine-rechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Die Kleinunternehmerregelung nach § 19 UStG befreit Umsätze von der Umsatzsteuer, wenn der Gesamtumsatz"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "im Vorjahr "
+              },
+              {
+                "text": "25.000 Euro",
+                "bold": true
+              },
+              {
+                "text": " nicht überschritten hat "
+              },
+              {
+                "text": "und",
+                "bold": true
+              }
+            ],
+            [
+              {
+                "text": "im laufenden Jahr "
+              },
+              {
+                "text": "100.000 Euro",
+                "bold": true
+              },
+              {
+                "text": " nicht überschreitet"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "(für im übrigen Gemeinschaftsgebiet ansässige Unternehmer gilt statt der 25.000-Euro-Grenze ein EU-weiter Vorjahresumsatz bis 100.000 Euro, zusammen mit einer Kleinunternehmer-Identifikationsnummer). Das Gesetz schreibt keinen bestimmten Wortlaut für den Hinweis auf die Steuerbefreiung vor, verlangt aber nach § 14 Abs. 4 Nr. 8 UStG in jedem Fall einen Hinweis, dass für die Leistung eine Steuerbefreiung gilt – in der Praxis üblich ist eine Formulierung wie „Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.\" Wichtig: Wer als Kleinunternehmer versehentlich einen Steuerbetrag gesondert ausweist, schuldet diesen Betrag trotzdem ans Finanzamt (§ 14c Abs. 2 UStG, unberechtigter Steuerausweis) und kann ihn nur über ein gesondertes Berichtigungsverfahren zurückholen. Wer freiwillig auf die Kleinunternehmerregelung verzichtet, ist daran mindestens fünf Kalenderjahre gebunden (§ 19 Abs. 3 UStG)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Gutschrift, Rechnungskorrektur und Stornorechnung – wo liegt der Unterschied?",
+      "id": "gutschrift-rechnungskorrektur-und-stornorechnung-wo-liegt-der-unterschied",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Gutschrift, Rechnungskorrektur und Stornorechnung werden häufig verwechselt, bezeichnen aber unterschiedliche Vorgänge:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Gutschrift",
+                "bold": true
+              },
+              {
+                "text": " ist im UStG kein Rabatt, sondern eine Rechnung, die der "
+              },
+              {
+                "text": "Leistungsempfänger",
+                "bold": true
+              },
+              {
+                "text": " anstelle des leistenden Unternehmers ausstellt – das muss vorher vereinbart sein (§ 14 Abs. 2 Satz 5 UStG) und das Dokument muss als „Gutschrift\" gekennzeichnet werden (§ 14 Abs. 4 Nr. 10 UStG). Widerspricht der ursprüngliche Leistende dem Dokument, verliert es seine Wirkung als Rechnung."
+              }
+            ],
+            [
+              {
+                "text": "Eine "
+              },
+              {
+                "text": "Rechnungskorrektur",
+                "bold": true
+              },
+              {
+                "text": " berichtigt eine bereits ausgestellte Rechnung – etwa über eine Korrekturrechnung mit Bezug auf die ursprüngliche Rechnungsnummer, meist als Belastungsanzeige (Nachbelastung) oder Kreditierung (Gutschrift im kaufmännischen Sinn, nicht im UStG-Sinn) umgesetzt. § 14 Abs. 4 Satz 4 UStG stellt klar: Die Berichtigung fehlender oder unzutreffender Angaben ist kein rückwirkendes Ereignis nach § 175 AO bzw. § 233a AO."
+              }
+            ],
+            [
+              {
+                "text": "Stornorechnung",
+                "bold": true
+              },
+              {
+                "text": " ist kein Begriff aus dem UStG, sondern ein in der Praxis gebräuchlicher Ausdruck für eine Korrektur, die eine Rechnung vollständig aufhebt (Betrag mit umgekehrtem Vorzeichen unter Bezug auf die Originalrechnung), statt sie nur teilweise anzupassen."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ist eine Proformarechnung eine echte Rechnung?",
+      "id": "ist-eine-proformarechnung-eine-echte-rechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nein. Eine Proformarechnung ist keine Rechnung im Sinne des § 14 UStG, löst keine Steuerschuld aus und berechtigt den Empfänger nicht zum Vorsteuerabzug. Sie dient als Vorab-Dokument, etwa für Zollzwecke, Vorkasse oder zur Bestellbestätigung, und sollte deshalb klar als „Proforma-Rechnung\" gekennzeichnet sein, um Verwechslungen mit einer echten Rechnung zu vermeiden."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Ab wann gilt die E-Rechnungspflicht für B2B in Deutschland?",
+      "id": "ab-wann-gilt-die-e-rechnungspflicht-fur-b2b-in-deutschland",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Seit 1. Januar 2025 gilt in Deutschland eine E-Rechnungspflicht für inländische B2B-Umsätze, die bis 2027/2028 stufenweise eingeführt wird. Grundlage ist das Wachstumschancengesetz, das § 14 UStG für nach dem 31.12.2024 ausgeführte Umsätze neu gefasst hat. Eine "
+            },
+            {
+              "text": "elektronische Rechnung (E-Rechnung)",
+              "bold": true
+            },
+            {
+              "text": " ist danach eine Rechnung, die in einem strukturierten elektronischen Format ausgestellt, übermittelt und empfangen wird und eine elektronische Verarbeitung ermöglicht (§ 14 Abs. 1 Satz 3 UStG) – eine PDF per E-Mail zählt rechtlich weiterhin als „sonstige Rechnung\", nicht als E-Rechnung. Die Einführung erfolgt stufenweise über eine Übergangsregelung in § 27 Abs. 38 UStG:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Zeitraum",
+            "Regelung"
+          ],
+          "rows": [
+            [
+              "ab 1.1.2025",
+              "Alle inländischen Unternehmer müssen E-Rechnungen empfangen können"
+            ],
+            [
+              "1.1.2025 – 31.12.2026",
+              "Allgemeine Übergangsregelung: Rechnungen dürfen weiterhin als Papier- oder sonstige elektronische Rechnung ausgestellt werden (mit Zustimmung des Empfängers bei elektronischem Format)"
+            ],
+            [
+              "1.1.2027 – 31.12.2027",
+              "Nur noch Unternehmer mit Vorjahresumsatz (2026) bis 800.000 Euro dürfen weiterhin Papier-/sonstige Rechnungen ausstellen; EDI-Verfahren nach der Empfehlung 94/820/EG bleiben mit Zustimmung des Empfängers zulässig"
+            ],
+            [
+              "ab 1.1.2028",
+              "E-Rechnung ist für inländische B2B-Umsätze grundsätzlich verpflichtend"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Die Pflicht betrifft Umsätze zwischen im Inland ansässigen Unternehmern (§ 14 Abs. 2 Satz 2 Nr. 1 UStG), einschließlich Gutschriften und Reverse-Charge-Fällen zwischen Inländern (§ 13b UStG), gilt aber auch dann, wenn der Empfänger Kleinunternehmer ist oder nur steuerfreie Umsätze ausführt. Ausgenommen von der Pflicht zum "
+            },
+            {
+              "text": "Ausstellen",
+              "bold": true
+            },
+            {
+              "text": " einer E-Rechnung bleiben laut BMF-Schreiben Kleinbetragsrechnungen bis 250 Euro, Rechnungen von Kleinunternehmern nach § 19 UStG und Fahrausweise – diese dürfen immer als sonstige Rechnung übermittelt werden."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Welche Formate gelten als E-Rechnung – XRechnung, ZUGFeRD, EN 16931?",
+      "id": "welche-formate-gelten-als-e-rechnung-xrechnung-zugferd-en-16931",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zulässig ist jedes strukturierte Rechnungsformat, das der europäischen Norm EN 16931 (Richtlinie 2014/55/EU) entspricht oder mit dieser interoperabel ist (§ 14 Abs. 1 Satz 6 UStG). Laut den FAQ des Bundesfinanzministeriums erfüllen insbesondere "
+            },
+            {
+              "text": "XRechnung",
+              "bold": true
+            },
+            {
+              "text": " und "
+            },
+            {
+              "text": "ZUGFeRD ab Version 2.0.1",
+              "bold": true
+            },
+            {
+              "text": " (außer den Profilen MINIMUM und BASIC-WL, die keine ausreichenden strukturierten Daten enthalten) diese Anforderungen. Alle nach § 14, § 14a UStG vorgeschriebenen Angaben müssen dabei im strukturierten Teil der Rechnung stehen – ein bloßer Verweis auf eine unstrukturierte Anlage genügt nicht."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Muss ich E-Rechnungen auch als Kleinunternehmer empfangen können?",
+      "id": "muss-ich-e-rechnungen-auch-als-kleinunternehmer-empfangen-konnen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ja. Die Pflicht, E-Rechnungen empfangen zu können, gilt seit 1.1.2025 für "
+            },
+            {
+              "text": "alle",
+              "bold": true
+            },
+            {
+              "text": " im Inland ansässigen Unternehmer – auch für Kleinunternehmer, auch wenn sie selbst nur steuerfreie Umsätze ausführen. Ein einfaches E-Mail-Postfach reicht dafür aus; eine besondere Empfangsplattform schreibt das Gesetz nicht vor."
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": "Checkliste für eine korrekte Rechnung"
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Vollständiger Name und Anschrift von Aussteller und Empfänger"
+              }
+            ],
+            [
+              {
+                "text": "Steuernummer oder USt-IdNr. des Ausstellers"
+              }
+            ],
+            [
+              {
+                "text": "Ausstellungsdatum und Leistungszeitpunkt"
+              }
+            ],
+            [
+              {
+                "text": "Fortlaufende, einmalige Rechnungsnummer"
+              }
+            ],
+            [
+              {
+                "text": "Menge/Art der Ware oder Umfang/Art der Leistung"
+              }
+            ],
+            [
+              {
+                "text": "Entgelt aufgeschlüsselt nach Steuersätzen, Steuerbetrag oder Hinweis auf Steuerbefreiung"
+              }
+            ],
+            [
+              {
+                "text": "Bei Kleinunternehmern: Hinweis auf die Steuerbefreiung, kein gesonderter Steuerausweis"
+              }
+            ],
+            [
+              {
+                "text": "Bei Gutschriften: Kennzeichnung „Gutschrift\""
+              }
+            ],
+            [
+              {
+                "text": "Ab 2025/2027/2028: E-Rechnung im XRechnung- oder gleichwertigen EN-16931-Format für inländische B2B-Umsätze prüfen"
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Häufige Fragen",
+  "faq": [
+    {
+      "question": "Muss ich als Freiwilliger oder Kleinunternehmer eine Rechnungsnummer vergeben?",
+      "answer": [
+        {
+          "text": "Ja, § 14 Abs. 4 Nr. 4 UStG gilt unabhängig davon, ob der Umsatz steuerpflichtig oder nach § 19 UStG steuerfrei ist."
+        }
+      ]
+    },
+    {
+      "question": "Was passiert, wenn ich die Sechs-Monats-Frist zur Rechnungsstellung verpasse?",
+      "answer": [
+        {
+          "text": "Das UStG enthält für die verspätete Rechnungsstellung im Regelfall kein eigenes Bußgeld; die Vorsteuerabzugsberechtigung des Empfängers und die korrekte Umsatzsteuervoranmeldung können aber betroffen sein. Rechnungen sollten daher zeitnah nach Leistungserbringung ausgestellt werden."
+        }
+      ]
+    },
+    {
+      "question": "Ist eine PDF-Rechnung per E-Mail ab 2025 noch erlaubt?",
+      "answer": [
+        {
+          "text": "Ja, als „sonstige Rechnung\" – aber nur innerhalb der Übergangsfristen nach § 27 Abs. 38 UStG bzw. dauerhaft bei Kleinbetragsrechnungen, Kleinunternehmer-Rechnungen und Fahrausweisen. Für alle anderen inländischen B2B-Umsätze wird ab 2027/2028 ein strukturiertes E-Rechnungsformat verpflichtend."
+        }
+      ]
+    },
+    {
+      "question": "Brauche ich für den Empfang von E-Rechnungen ein besonderes Portal?",
+      "answer": [
+        {
+          "text": "Nein. Ein normales E-Mail-Postfach genügt für den Empfang; es gibt in Deutschland – anders als z. B. in Italien oder Polen – keine zentrale staatliche Empfangsplattform für B2B-E-Rechnungen."
+        }
+      ]
+    },
+    {
+      "question": "Was ist der Unterschied zwischen Steuernummer und USt-IdNr. auf der Rechnung?",
+      "answer": [
+        {
+          "text": "§ 14 Abs. 4 Nr. 2 UStG lässt beide zu: die vom Finanzamt erteilte Steuernummer oder die vom Bundeszentralamt für Steuern erteilte Umsatzsteuer-Identifikationsnummer. Eine der beiden Angaben muss auf jeder Rechnung stehen."
+        }
+      ]
+    },
+    {
+      "question": "Darf ich als Kleinunternehmer Umsatzsteuer auf der Rechnung ausweisen?",
+      "answer": [
+        {
+          "text": "Nein – tut man es trotzdem, schuldet man den ausgewiesenen Betrag laut § 14c Abs. 2 UStG dem Finanzamt, unabhängig davon, ob man selbst umsatzsteuerpflichtig ist."
+        }
+      ]
+    },
+    {
+      "question": "Muss eine Gutschrift im UStG-Sinn immer so genannt werden?",
+      "answer": [
+        {
+          "text": "Ja, § 14 Abs. 4 Nr. 10 UStG verlangt ausdrücklich die Angabe „Gutschrift\" auf einer Rechnung, die vom Leistungsempfänger ausgestellt wird."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Wie Fakturcho hilft",
+    "body": [
+      {
+        "text": "Fakturcho vergibt Rechnungs-, Gutschrift- und Belastungsanzeigenummern automatisch fortlaufend und lückenlos je Dokumentart und trägt bei einem Kleinunternehmer-Profil automatisch den Hinweis auf die Steuerbefreiung nach § 19 UStG ein, statt Umsatzsteuer gesondert auszuweisen. Für Rechnungen, Gutschriften und Belastungsanzeigen in Deutschland erzeugt Fakturcho zusätzlich eine XRechnung-XML-Datei (EN-16931-konform), die du selbst per E-Mail oder über deinen eigenen Kanal an deine Geschäftskunden weitergeben kannst; parallel verschickt Fakturcho die Rechnung als PDF per E-Mail. Proformarechnungen und Lieferscheine sind bewusst vom E-Rechnungs-Export ausgenommen, da sie keine Rechnungen im Sinne des UStG sind. Stand: 25.09.2026. Dies sind allgemeine Informationen, keine Steuerberatung – für den Einzelfall wende dich an deinen Steuerberater oder dein Finanzamt."
+      }
+    ]
+  }
+}

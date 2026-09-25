@@ -1,0 +1,603 @@
+{
+  "country": "EU",
+  "locale": "en",
+  "slug": "eu-vat-invoice-requirements",
+  "title": "EU VAT Invoice Requirements 2026 Guide | Fakturcho",
+  "description": "EU VAT invoice rules under Directive 2006/112/EC: mandatory fields, deadlines, credit notes, reverse charge, EN 16931, Peppol and ViDA e-invoicing from 2030.",
+  "h1": "What must an EU VAT invoice contain?",
+  "answer": "Under Council Directive 2006/112/EC (Article 226), an EU VAT invoice needs a date, sequential number, both parties' details, the supplier's VAT number, a description of goods or services, taxable amount, VAT rate and amount, or the exemption/reverse-charge wording. Intra-EU invoices are due by the 15th of the next month. From 2030, e-invoicing becomes mandatory for cross-border B2B supplies EU-wide.",
+  "lastReviewed": "2026-09-25",
+  "sections": [
+    {
+      "heading": "What are the mandatory fields on an EU VAT invoice? (Article 226)",
+      "id": "what-are-the-mandatory-fields-on-an-eu-vat-invoice-article-226",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Every EU business that charges VAT follows the same rulebook: Council Directive 2006/112/EC, the \"VAT Directive,\" which sets minimum invoice content, issue deadlines, and required wording for corrections and exempt or reverse-charged transactions. Member states can add local requirements (numbering, currency, language, e-invoicing platforms) on top of this floor — see the country-specific guide for local rules and e-invoicing mandates."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Article 226 of Directive 2006/112/EC lists the details a full VAT invoice must contain:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "#",
+            "Field",
+            "Notes"
+          ],
+          "rows": [
+            [
+              "1",
+              "Date of issue",
+              ""
+            ],
+            [
+              "2",
+              "Sequential number",
+              "Unique, based on one or more series"
+            ],
+            [
+              "3",
+              "Supplier's VAT identification number",
+              ""
+            ],
+            [
+              "4",
+              "Customer's VAT identification number",
+              "Required for reverse charge and intra-Community supplies"
+            ],
+            [
+              "5",
+              "Full name and address of supplier and customer",
+              ""
+            ],
+            [
+              "6",
+              "Quantity/nature of the goods, or extent/nature of the services",
+              ""
+            ],
+            [
+              "7",
+              "Date the supply was made or completed",
+              "If different from the invoice date"
+            ],
+            [
+              "7a",
+              "\"Cash accounting\"",
+              "Where VAT becomes chargeable on receipt of payment (cash-accounting scheme)"
+            ],
+            [
+              "8",
+              "Taxable amount per rate/exemption, unit price excl. VAT, discounts/rebates if not included",
+              ""
+            ],
+            [
+              "9",
+              "VAT rate applied",
+              ""
+            ],
+            [
+              "10",
+              "VAT amount payable",
+              ""
+            ],
+            [
+              "10a",
+              "\"Self-billing\"",
+              "Where the customer, not the supplier, issues the invoice"
+            ],
+            [
+              "11",
+              "Reference to the exemption provision, or \"reverse charge\"",
+              "Where VAT is not charged (Article 226(11), 226(11a))"
+            ],
+            [
+              "12",
+              "Details for new means of transport",
+              ""
+            ],
+            [
+              "13–14",
+              "Reference to margin schemes (travel agents, second-hand goods/art/antiques)",
+              ""
+            ],
+            [
+              "15",
+              "VAT identification number and details of a tax representative",
+              "Where supplier uses one"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "These points define a full invoice. A member state can require extra local fields (company registration number, capital, bank IBAN, etc.)."
+            }
+          ]
+        },
+        {
+          "type": "h3",
+          "text": "What content does a simplified invoice need? (Article 226b)"
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Under Article 220a, member states must allow a simplified invoice when the amount is no more than "
+            },
+            {
+              "text": "€100",
+              "bold": true
+            },
+            {
+              "text": " (or the national-currency equivalent), for a document treated as an invoice under Article 219 (corrections), or for suppliers using the small-enterprise exemption. A higher threshold needs an individual EU derogation under Article 395 — not a general range. A simplified invoice under Article 226b needs only:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "date of issue;"
+              }
+            ],
+            [
+              {
+                "text": "identification of the supplier;"
+              }
+            ],
+            [
+              {
+                "text": "identification of the type of goods or services supplied;"
+              }
+            ],
+            [
+              {
+                "text": "the VAT amount payable, or the information needed to calculate it;"
+              }
+            ],
+            [
+              {
+                "text": "for a corrective document, a specific and unambiguous reference to the invoice it amends."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "When must an EU invoice be issued?",
+      "id": "when-must-an-eu-invoice-be-issued",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "For an intra-Community supply of goods (Article 138), or a supply where the customer accounts for VAT under reverse charge (Article 196), "
+            },
+            {
+              "text": "Article 222",
+              "bold": true
+            },
+            {
+              "text": " currently requires the invoice "
+            },
+            {
+              "text": "no later than the 15th day of the month following the month the chargeable event (the supply) occurred.",
+              "bold": true
+            },
+            {
+              "text": " Domestic deadlines for purely local supplies are left to each member state."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "This deadline shortens under ViDA: from "
+            },
+            {
+              "text": "1 July 2030",
+              "bold": true
+            },
+            {
+              "text": ", once Digital Reporting Requirements apply, Article 222 requires these invoices within "
+            },
+            {
+              "text": "10 days of the chargeable event",
+              "bold": true
+            },
+            {
+              "text": " (or of payment on account), and summary invoices within 10 days of the calendar month's end."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "What wording do reverse charge and intra-Community exemptions need?",
+      "id": "what-wording-do-reverse-charge-and-intra-community-exemptions-need",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Two situations require a specific legal reference on the invoice, not just an omitted VAT line:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Reverse charge (Article 196):",
+                "bold": true
+              },
+              {
+                "text": " cross-border B2B service supply, customer accounts for VAT — invoice must state that fact, in practice \"reverse charge,\" plus, where used, a reference to Article 196. No VAT amount is shown."
+              }
+            ],
+            [
+              {
+                "text": "Intra-Community supply of goods, VAT-exempt (Article 138):",
+                "bold": true
+              },
+              {
+                "text": " goods dispatched to a taxable person in another member state, exempt at origin — both parties' valid VAT numbers required, plus a note referencing the exemption (commonly \"intra-Community supply, Article 138 Directive 2006/112/EC\"). Supplier must also file an EC Sales List; since Directive (EU) 2018/1910, a missing or incorrect VAT number or Sales List entry can forfeit the exemption."
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "How do you correct an invoice or issue a credit note?",
+      "id": "how-do-you-correct-an-invoice-or-issue-a-credit-note",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "The Directive has no separate \"credit note\" category: Article 90 requires the taxable amount to be reduced on cancellation, refusal, total or partial non-payment, or a price reduction after supply, under conditions each member state sets. Article 219 treats any document that specifically and unambiguously amends an earlier invoice as an invoice in its own right — it must carry the same mandatory content and cross-reference the original invoice number. National law sets the exact form."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Are proformas invoices?",
+      "id": "are-proformas-invoices",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "A proforma (or quote) is not a VAT invoice under the Directive: it does not trigger the chargeable event, does not need a sequential number, and does not entitle the recipient to deduct VAT. It becomes an invoice only once reissued with the mandatory Article 226 content after the supply."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "What are EN 16931 and Peppol?",
+      "id": "what-are-en-16931-and-peppol",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "EN 16931",
+              "bold": true
+            },
+            {
+              "text": " is the European semantic standard for electronic invoicing, developed by CEN under Directive 2014/55/EU. It defines the business terms a \"core invoice\" must carry, independent of file syntax (compliant syntaxes: UBL and UN/CEFACT CII). Since 2019, all EU public-sector contracting authorities must be able to receive EN 16931-compliant e-invoices."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Peppol",
+              "bold": true
+            },
+            {
+              "text": " (Pan-European Public Procurement OnLine) is the delivery network built on that standard: a \"four-corner\" model where supplier and customer each connect through their own accredited Peppol Access Point, with no direct link needed between the parties. Many national e-invoicing mandates route documents over Peppol using an EN 16931-based national spec (a \"CIUS\")."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "What is ViDA and when do its e-invoicing rules apply?",
+      "id": "what-is-vida-and-when-do-its-e-invoicing-rules-apply",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "The Council adopted the "
+            },
+            {
+              "text": "VAT in the Digital Age (ViDA)",
+              "bold": true
+            },
+            {
+              "text": " package on 11 March 2025; it entered into force on 14 April 2025. Milestones:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Date",
+            "What changes"
+          ],
+          "rows": [
+            [
+              "14 April 2025",
+              "ViDA enters into force; member states may introduce a domestic e-invoicing mandate without a Council derogation"
+            ],
+            [
+              "1 July 2028",
+              "Single VAT Registration pillar: extended One-Stop-Shop scope, mandatory reverse charge for certain non-established suppliers"
+            ],
+            [
+              "1 July 2030",
+              "Digital Reporting Requirements make structured e-invoicing mandatory for intra-EU B2B and mandatory-reverse-charge transactions"
+            ],
+            [
+              "1 January 2035",
+              "Member states with a pre-existing domestic real-time reporting system must align it with the EU model"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "The 1 July 2030 change is more than a reporting rule — ViDA rewrites four Directive articles:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Article 217:",
+                "bold": true
+              },
+              {
+                "text": " only a structured, machine-readable format counts as an \"electronic invoice.\""
+              }
+            ],
+            [
+              {
+                "text": "Article 218(3):",
+                "bold": true
+              },
+              {
+                "text": " EN 16931 (with the syntaxes under Directive 2014/55/EU) becomes the reference format."
+              }
+            ],
+            [
+              {
+                "text": "Article 232:",
+                "bold": true
+              },
+              {
+                "text": " a recipient can no longer refuse an EN 16931-compliant e-invoice in scope of the new digital reporting rules."
+              }
+            ],
+            [
+              {
+                "text": "Article 226:",
+                "bold": true
+              },
+              {
+                "text": " gains two new mandatory fields — a reference to the invoice being corrected, and the supplier's bank/virtual account number."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Until 2030, whether you must issue a structured e-invoice domestically depends on your member state's mandate — several have already legislated ahead of the EU-wide date (see table below)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "National e-invoicing mandates — quick reference",
+      "id": "national-e-invoicing-mandates-quick-reference",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "One line per country; dates are the domestic B2B mandate as legislated. Several are phased by company size — see each country's guide for the full schedule."
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": [
+            "Country",
+            "Status"
+          ],
+          "rows": [
+            [
+              "Bulgaria (BG)",
+              "No domestic B2B/B2G mandate yet. Public bodies must receive EN 16931 e-invoices since 1 Nov. 2019. A mandatory clearance model is announced for public consultation, no legislated date."
+            ],
+            [
+              "Germany (DE)",
+              "Receiving mandatory for domestic B2B since 1 Jan. 2025. Issuing mandatory from 1 Jan. 2027 (turnover over €800,000 prior year), from 1 Jan. 2028 for everyone."
+            ],
+            [
+              "France (FR)",
+              "Receiving mandatory for all businesses; issuing/e-reporting mandatory for large/mid-size companies, since 1 Sept. 2026. SMEs/micro-enterprises from 1 Sept. 2027."
+            ],
+            [
+              "Italy (IT)",
+              "SdI (Sistema di Interscambio) mandatory for domestic B2B and B2C since 1 Jan. 2019."
+            ],
+            [
+              "Poland (PL)",
+              "KSeF mandatory since 1 Feb. 2026 (2024 turnover over PLN 200 million), since 1 Apr. 2026 for other entrepreneurs. Sales ≤ PLN 10,000/month exempt through end 2026, mandatory from 1 Jan. 2027."
+            ],
+            [
+              "Romania (RO)",
+              "RO e-Factura mandatory for domestic B2B since 1 Jan. 2024, B2C since 1 Jan. 2025."
+            ],
+            [
+              "Spain (ES)",
+              "Royal Decree 238/2026 (25 March 2026, BOE 31 March 2026) sets the B2B system but defers application to a ministerial technical order — per the Tax Agency, still unpublished as of September 2026, no compliance date fixed yet. Once published: turnover above €8 million gets 12 months, others 24."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Checklist: before you send an EU B2B/B2C invoice",
+      "id": "checklist-before-you-send-an-eu-b2b-b2c-invoice",
+      "blocks": [
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Sequential, unbroken invoice number"
+              }
+            ],
+            [
+              {
+                "text": "Date of issue and date of supply (if different)"
+              }
+            ],
+            [
+              {
+                "text": "Your VAT number and registered details"
+              }
+            ],
+            [
+              {
+                "text": "Customer's VAT number (mandatory for reverse charge and intra-Community supplies)"
+              }
+            ],
+            [
+              {
+                "text": "Description, quantity, unit price and VAT rate per line"
+              }
+            ],
+            [
+              {
+                "text": "Taxable amount and VAT amount per rate, or the exemption/reverse-charge reference"
+              }
+            ],
+            [
+              {
+                "text": "For intra-EU B2B supplies: issued by the 15th of the month after the supply"
+              }
+            ],
+            [
+              {
+                "text": "Corrections issued as a credit/debit note cross-referencing the original invoice number"
+              }
+            ],
+            [
+              {
+                "text": "Check whether your country already mandates a structured e-invoice format for this transaction"
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "FAQ",
+  "faq": [
+    {
+      "question": "Does every EU invoice need a QR code or digital signature?",
+      "answer": [
+        {
+          "text": "No — the VAT Directive does not require one. Some member states add extra requirements (QR code, software certification, real-time reporting) on top of Article 226; that is a national rule, not EU-wide."
+        }
+      ]
+    },
+    {
+      "question": "Can I issue an invoice in a foreign currency?",
+      "answer": [
+        {
+          "text": "Yes. The Directive allows any currency, but the VAT amount payable must also be expressed, or convertible, in the national currency where the tax is due, at an official rate."
+        }
+      ]
+    },
+    {
+      "question": "Is a proforma invoice enough to prove a sale for VAT purposes?",
+      "answer": [
+        {
+          "text": "No. A proforma carries no legal VAT invoice number and does not itself trigger VAT chargeability or a deduction right. A genuine invoice must follow once the goods or services are supplied."
+        }
+      ]
+    },
+    {
+      "question": "What happens if I get an intra-Community invoice wrong?",
+      "answer": [
+        {
+          "text": "Since Directive (EU) 2018/1910 amended Article 138, a missing or invalid customer VAT number, or a missing/incorrect EC Sales List entry, can forfeit the zero-rate exemption — the supplier can become liable for the VAT."
+        }
+      ]
+    },
+    {
+      "question": "Do I need to mention \"reverse charge\" in a specific language?",
+      "answer": [
+        {
+          "text": "The Directive requires the fact to be stated, not fixed wording in a fixed language; most member states expect their own official language or accept \"reverse charge\" in English."
+        }
+      ]
+    },
+    {
+      "question": "Will I have to send e-invoices to every EU customer soon?",
+      "answer": [
+        {
+          "text": "From 1 July 2030, Digital Reporting Requirements make structured e-invoicing mandatory for intra-EU B2B transactions. Before that date, obligations depend on your country's domestic mandate (see the table above) — several already require it earlier."
+        }
+      ]
+    },
+    {
+      "question": "What is the difference between EN 16931 and Peppol?",
+      "answer": [
+        {
+          "text": "EN 16931 is the semantic content standard — what data an invoice must contain and mean. Peppol is the delivery network and technical spec used to transmit that structured invoice between accredited providers. Last reviewed: 25.09.2026. This page is general information, not tax or legal advice — confirm your own obligations with your tax authority or accountant."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "How Fakturcho helps",
+    "body": [
+      {
+        "text": "Fakturcho generates every invoice, credit note and debit note with the Article 226 fields above — sequential numbering, both parties' details, VAT rate and amount or the correct exemption/reverse-charge ground, and intra-Community wording where it applies — plus a PDF emailed to your recipient. Where a structured e-invoice XML format exists in Fakturcho, you get an EN 16931/UBL-based XML file ready to upload through your own channel on the national platform; Fakturcho does not submit it for you."
+      }
+    ]
+  }
+}

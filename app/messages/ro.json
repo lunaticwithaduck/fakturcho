@@ -513,7 +513,8 @@
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Furnizorul de e-factură nu este configurat.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Acest furnizor nu permite verificarea statusului.",
       "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou."
-    }
+    },
+    "guideLink": "Ghid de facturare"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -887,7 +888,8 @@
           "answer": "Ambele sunt generate pe server. Le descărcați sau le trimiteți clientului prin email, iar e-factura o încărcați personal pe platforma națională ori o trimiteți prin Peppol."
         }
       ]
-    }
+    },
+    "guideLink": "Ghid de facturare"
   },
   "seo": {
     "home": {
@@ -903,5 +905,13 @@
       "title": "Înregistrare",
       "description": "Creați un cont gratuit și emiteți prima factură în câteva minute. Credit inițial de 1,00 €, fără abonament."
     }
+  },
+  "guides": {
+    "breadcrumbHome": "Acasă",
+    "breadcrumbGuides": "Ghiduri",
+    "indexDescription": "Ghiduri de facturare pe țări, de la Fakturcho.",
+    "tableOfContents": "Pe această pagină",
+    "lastReviewed": "Ultima verificare: {date}",
+    "euOverviewLink": "Prezentare generală UE"
   }
 }

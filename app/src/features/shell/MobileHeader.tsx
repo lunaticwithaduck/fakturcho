@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import brandIcon from './brand-icon.png';
+import { IssuerGuideLink } from './IssuerGuideLink';
 import { SignOutButton } from './SignOutButton';
 
 export function MobileHeader() {
@@ -14,7 +15,10 @@ export function MobileHeader() {
         <Image src={brandIcon} alt="" className="h-6 w-6" />
         <p className="text-base font-bold text-text">{t('brandName')}</p>
       </div>
-      <SignOutButton />
+      <div className="flex items-center gap-3">
+        <IssuerGuideLink className="text-sm text-text-muted underline" />
+        <SignOutButton />
+      </div>
     </header>
   );
 }

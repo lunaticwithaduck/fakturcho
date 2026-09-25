@@ -513,7 +513,8 @@
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Le prestataire de facturation électronique n'est pas configuré.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ce prestataire ne prend pas en charge la vérification du statut.",
       "INTERNAL_ERROR": "Une erreur inattendue est survenue. Veuillez réessayer."
-    }
+    },
+    "guideLink": "Guide de facturation"
   },
   "auth": {
     "brandName": "Fakturcho",
@@ -887,7 +888,8 @@
           "answer": "Tous deux sont générés côté serveur : vous pouvez les télécharger ou les envoyer par e-mail au client, ou bien déposer vous-même la facture électronique sur votre plateforme nationale ou l'envoyer via Peppol."
         }
       ]
-    }
+    },
+    "guideLink": "Guide de facturation"
   },
   "seo": {
     "home": {
@@ -903,5 +905,13 @@
       "title": "Inscription",
       "description": "Créez un compte gratuit et émettez votre première facture en quelques minutes. 1,00 € de crédit offert, sans abonnement."
     }
+  },
+  "guides": {
+    "breadcrumbHome": "Accueil",
+    "breadcrumbGuides": "Guides",
+    "indexDescription": "Guides de facturation par pays, par Fakturcho.",
+    "tableOfContents": "Sur cette page",
+    "lastReviewed": "Dernière vérification : {date}",
+    "euOverviewLink": "Aperçu UE"
   }
 }
