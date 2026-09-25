@@ -1,7 +1,6 @@
 import { getFeatureFlags } from '@app/feature-flags';
-import { COMPANY } from '@app/features/legal/company';
 import { LandingPage } from '@app/features/marketing/LandingPage';
-import { getLandingFaq } from '@app/features/marketing/landingFaq';
+import { buildSiteJsonLd } from '@app/features/marketing/siteJsonLd';
 import { hreflangAlternates } from '@app/i18n/localeRedirect';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
@@ -17,39 +16,6 @@ export const metadata: Metadata = {
   },
 };
 
-function buildJsonLd() {
-  const organization = {
-    '@type': 'Organization',
-    '@id': `${COMPANY.website}/#organization`,
-    name: COMPANY.productName,
-    url: COMPANY.website,
-    logo: `${COMPANY.website}/icon.png`,
-  };
-  const website = {
-    '@type': 'WebSite',
-    '@id': `${COMPANY.website}/#website`,
-    name: COMPANY.productName,
-    url: COMPANY.website,
-    inLanguage: 'bg',
-    publisher: { '@id': `${COMPANY.website}/#organization` },
-  };
-  const faqPage = {
-    '@type': 'FAQPage',
-    mainEntity: getLandingFaq('bg').map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer,
-      },
-    })),
-  };
-  return JSON.stringify({
-    '@context': 'https://schema.org',
-    '@graph': [organization, website, faqPage],
-  }).replace(/</g, '\\u003c');
-}
-
 export default async function HomePage() {
   const store = await cookies();
   if (store.getAll().some((entry) => entry.name.endsWith('session_token'))) {
@@ -58,7 +24,7 @@ export default async function HomePage() {
   const flags = await getFeatureFlags();
   return (
     <>
-      <script type="application/ld+json">{buildJsonLd()}</script>
+      <script type="application/ld+json">{buildSiteJsonLd()}</script>
       <LandingPage enEnabled={flags.EN_LOCALE} />
     </>
   );

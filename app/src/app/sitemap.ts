@@ -13,7 +13,7 @@ function absoluteAlternates(basePath: string): Record<string, string> {
   );
 }
 
-// Home, login and signup have real per-locale content, so every published
+// Home and signup have real per-locale content, so every published
 // locale gets its own sitemap entry. Legal pages are pure English proxies
 // (see [locale]/privacy|terms|refunds) and are never worth listing per
 // locale — only the bg original and the canonical /en copy are.
@@ -49,7 +49,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...localizedEntries('/', 'weekly', 1),
     ...localizedEntries('/signup', 'weekly', 0.8),
-    ...localizedEntries('/login', 'weekly', 0.8),
     ...legalEntries('/privacy'),
     ...legalEntries('/terms'),
     ...legalEntries('/refunds'),
