@@ -91,9 +91,9 @@ describe('DocumentsListPage', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByText('Profile is not ready for issuing')).toBeTruthy();
+    expect(screen.getByText('Welcome to Fakturcho!')).toBeTruthy();
     expect(screen.getByText(/Company/)).toBeTruthy();
-    const link = screen.getByRole('link', { name: 'Go to issuer profile' });
+    const link = screen.getByRole('link', { name: 'Complete setup' });
     expect(link.getAttribute('href')).toBe('/profile');
   });
 
@@ -106,7 +106,7 @@ describe('DocumentsListPage', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.queryByText('Profile is not ready for issuing')).toBeNull();
+    expect(screen.queryByText('Welcome to Fakturcho!')).toBeNull();
   });
 
   it('hides the notice while the profile is still loading', () => {
@@ -118,7 +118,7 @@ describe('DocumentsListPage', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.queryByText('Profile is not ready for issuing')).toBeNull();
+    expect(screen.queryByText('Welcome to Fakturcho!')).toBeNull();
   });
 
   it('shows the Bulgarian notice copy with the profile link when incomplete', () => {
@@ -133,8 +133,8 @@ describe('DocumentsListPage', () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByText('Профилът не е готов за издаване')).toBeTruthy();
-    const link = screen.getByRole('link', { name: 'Към профила на издателя' });
+    expect(screen.getByText('Добре дошли във Фактурчо!')).toBeTruthy();
+    const link = screen.getByRole('link', { name: 'Завършете настройката' });
     expect(link.getAttribute('href')).toBe('/profile');
   });
 
@@ -214,7 +214,7 @@ describe('DocumentsListPage', () => {
         </NextIntlClientProvider>,
       );
 
-      expect(screen.getByText('Profile is not ready for issuing')).toBeTruthy();
+      expect(screen.getByText('Welcome to Fakturcho!')).toBeTruthy();
       expect(screen.getByText(new RegExp(expectedField))).toBeTruthy();
       if (unexpectedField) {
         expect(screen.queryByText(new RegExp(unexpectedField))).toBeNull();

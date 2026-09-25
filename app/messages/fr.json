@@ -431,9 +431,10 @@
       "altIban": "Compte secondaire"
     },
     "completenessHint": {
-      "title": "Le profil n'est pas prêt pour l'émission de documents",
-      "body": "Complétez les champs suivants pour pouvoir émettre des documents : {fields}.",
-      "profileLink": "Aller au profil de l'émetteur",
+      "welcomeTitle": "Bienvenue sur Fakturcho !",
+      "welcomeBody": "Vous êtes presque prêt à émettre des documents. Complétez votre profil.",
+      "completeSetup": "Compléter le profil",
+      "missingFieldsLabel": "Champs manquants :",
       "fields": {
         "companyName": "Raison sociale",
         "addressLine": "Adresse",
@@ -516,7 +517,11 @@
       "INTERNAL_ERROR": "Une erreur inattendue est survenue. Veuillez réessayer."
     },
     "guideLink": "Guide de facturation",
-    "helpLink": "Mode d'emploi"
+    "helpLink": "Voir le guide",
+    "guideCard": {
+      "title": "Vous vous en sortez très bien",
+      "body": "Gardez votre entreprise organisée et professionnelle."
+    }
   },
   "auth": {
     "brandName": "Fakturcho",

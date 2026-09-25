@@ -5,6 +5,7 @@ export const badgeStyles = tv({
   variants: {
     variant: {
       neutral: 'border-border bg-surface-sunken text-text-muted',
+      accent: 'border-accent-border bg-accent-subtle text-accent',
       success: 'border-success-border bg-success-subtle text-success',
       warning: 'border-warning-border bg-warning-subtle text-warning',
       danger: 'border-danger-border bg-danger-subtle text-danger',

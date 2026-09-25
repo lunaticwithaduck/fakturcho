@@ -2,38 +2,38 @@
   --font-sans:
     var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --color-surface: #f6f7f9;
-  --color-surface-raised: #ffffff;
-  --color-surface-sunken: #eef0f3;
+  --color-surface: #f7f1e8;
+  --color-surface-raised: #fffcf7;
+  --color-surface-sunken: #efe6d8;
 
-  --color-border: #dfe3e9;
-  --color-border-strong: #c3c9d4;
+  --color-border: #e2d5c3;
+  --color-border-strong: #cdb99f;
 
-  --color-text: #12151a;
-  --color-text-muted: #5c6472;
-  --color-text-subtle: #8b93a1;
+  --color-text: #241c15;
+  --color-text-muted: #6b5f52;
+  --color-text-subtle: #7d6f5f;
   --color-text-inverse: #ffffff;
 
-  --color-accent: #1d4fd8;
-  --color-accent-hover: #1741b8;
-  --color-accent-active: #123491;
-  --color-accent-subtle: #e8eefd;
-  --color-accent-border: #b7c8f7;
+  --color-accent: #ad4a29;
+  --color-accent-hover: #954023;
+  --color-accent-active: #7a341c;
+  --color-accent-subtle: #f7e3d6;
+  --color-accent-border: #e8b89e;
 
-  --color-success: #15803d;
-  --color-success-subtle: #e7f6ed;
-  --color-success-border: #a7dfbf;
+  --color-success: #4d6a3a;
+  --color-success-subtle: #e7efdf;
+  --color-success-border: #b9cfa4;
 
-  --color-warning: #b45309;
-  --color-warning-subtle: #fdf1e0;
-  --color-warning-border: #f0cd93;
+  --color-warning: #8f5d0d;
+  --color-warning-subtle: #f7ecd2;
+  --color-warning-border: #e4c583;
 
-  --color-danger: #c22a2f;
-  --color-danger-hover: #a11f24;
-  --color-danger-subtle: #fbeaea;
-  --color-danger-border: #f0b4b6;
+  --color-danger: #6b2434;
+  --color-danger-hover: #511a27;
+  --color-danger-subtle: #fbe6e6;
+  --color-danger-border: #e8b3b8;
 
-  --color-overlay: rgb(18 21 26 / 0.55);
+  --color-overlay: rgb(36 28 21 / 0.55);
 
   --spacing: 0.25rem;
 
@@ -42,10 +42,10 @@
   --radius-lg: 0.875rem;
   --radius-xl: 1.25rem;
 
-  --shadow-xs: 0 1px 2px 0 rgb(15 18 24 / 0.04);
-  --shadow-sm: 0 1px 3px 0 rgb(15 18 24 / 0.06), 0 1px 2px -1px rgb(15 18 24 / 0.05);
-  --shadow-md: 0 4px 10px -2px rgb(15 18 24 / 0.08), 0 2px 4px -2px rgb(15 18 24 / 0.05);
-  --shadow-lg: 0 12px 24px -6px rgb(15 18 24 / 0.12), 0 4px 8px -4px rgb(15 18 24 / 0.06);
+  --shadow-xs: 0 1px 2px 0 rgb(36 28 21 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(36 28 21 / 0.06), 0 1px 2px -1px rgb(36 28 21 / 0.05);
+  --shadow-md: 0 4px 10px -2px rgb(36 28 21 / 0.08), 0 2px 4px -2px rgb(36 28 21 / 0.05);
+  --shadow-lg: 0 12px 24px -6px rgb(36 28 21 / 0.12), 0 4px 8px -4px rgb(36 28 21 / 0.06);
 
   --text-xs: 0.75rem;
   --text-xs--line-height: 1rem;

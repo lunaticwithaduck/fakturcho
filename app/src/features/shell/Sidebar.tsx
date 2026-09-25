@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import brandIcon from './brand-icon.png';
 import { IssuerGuideLink } from './IssuerGuideLink';
 import { isNavItemActive, NAV_ITEMS } from './navItems';
+import { SetupGuideCard } from './SetupGuideCard';
 import { SignOutButton } from './SignOutButton';
 
 export function Sidebar() {
@@ -22,6 +23,7 @@ export function Sidebar() {
       <nav className="mt-8 flex flex-1 flex-col gap-1">
         {NAV_ITEMS.map((item) => {
           const active = isNavItemActive(pathname, item.href);
+          const Icon = item.icon;
           return (
             <Link
               key={item.href}
@@ -33,15 +35,14 @@ export function Sidebar() {
                   : 'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-text-muted hover:bg-surface-sunken hover:text-text'
               }
             >
+              <Icon className="size-4" aria-hidden />
               {t(`navItems.${item.labelKey}`)}
             </Link>
           );
         })}
       </nav>
       <IssuerGuideLink className="px-3 py-2 text-sm text-text-muted underline" />
-      <Link href="/help" className="px-3 py-2 text-sm text-text-muted underline">
-        {t('helpLink')}
-      </Link>
+      <SetupGuideCard />
       <SignOutButton className="justify-start" />
     </aside>
   );

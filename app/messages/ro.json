@@ -431,9 +431,10 @@
       "altIban": "Cont alternativ"
     },
     "completenessHint": {
-      "title": "Profilul nu este pregătit pentru emitere",
-      "body": "Completați următoarele câmpuri pentru a putea emite documente: {fields}.",
-      "profileLink": "Mergi la profilul emitentului",
+      "welcomeTitle": "Bine ați venit la Fakturcho!",
+      "welcomeBody": "Sunteți aproape gata să emiteți documente. Completați-vă profilul.",
+      "completeSetup": "Completați profilul",
+      "missingFieldsLabel": "Câmpuri lipsă:",
       "fields": {
         "companyName": "Firmă",
         "addressLine": "Adresă",
@@ -516,7 +517,11 @@
       "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou."
     },
     "guideLink": "Ghid de facturare",
-    "helpLink": "Cum se folosește"
+    "helpLink": "Vedeți ghidul",
+    "guideCard": {
+      "title": "Vă descurcați foarte bine",
+      "body": "Păstrați-vă afacerea ordonată și profesionistă."
+    }
   },
   "auth": {
     "brandName": "Fakturcho",

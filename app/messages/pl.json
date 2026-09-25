@@ -431,9 +431,10 @@
       "altIban": "Dodatkowy rachunek"
     },
     "completenessHint": {
-      "title": "Profil nie jest gotowy do wystawiania dokumentów",
-      "body": "Uzupełnij następujące pola, aby móc wystawiać dokumenty: {fields}.",
-      "profileLink": "Przejdź do profilu wystawcy",
+      "welcomeTitle": "Witaj w Fakturcho!",
+      "welcomeBody": "Jesteś już prawie gotowy do wystawiania dokumentów. Uzupełnij swój profil.",
+      "completeSetup": "Uzupełnij profil",
+      "missingFieldsLabel": "Brakujące pola:",
       "fields": {
         "companyName": "Firma",
         "addressLine": "Adres",
@@ -516,7 +517,11 @@
       "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
     },
     "guideLink": "Poradnik fakturowania",
-    "helpLink": "Jak korzystać"
+    "helpLink": "Zobacz przewodnik",
+    "guideCard": {
+      "title": "Świetnie sobie radzisz",
+      "body": "Dbaj o porządek i profesjonalny wizerunek swojej firmy."
+    }
   },
   "auth": {
     "brandName": "Fakturcho",

@@ -1,5 +1,26 @@
 export type { LucideIcon } from 'lucide-react';
-export { ChevronDown, FileText, Globe, HelpCircle, Plus } from 'lucide-react';
+export {
+  ArrowRight,
+  Ban,
+  Building2,
+  CalendarDays,
+  ChevronDown,
+  CircleAlert,
+  CircleCheck,
+  Clock,
+  CreditCard,
+  FileText,
+  Globe,
+  HelpCircle,
+  Package,
+  Pencil,
+  Plus,
+  Send,
+  Settings,
+  Sprout,
+  Store,
+  Users,
+} from 'lucide-react';
 export type { BadgeStylesProps } from './Badge';
 export { Badge } from './Badge';
 export type { ButtonStylesProps } from './Button';

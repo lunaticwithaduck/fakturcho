@@ -431,9 +431,10 @@
       "altIban": "Alternative Bankverbindung"
     },
     "completenessHint": {
-      "title": "Profil noch nicht bereit zum Ausstellen",
-      "body": "Vervollständigen Sie die folgenden Felder, um Dokumente ausstellen zu können: {fields}.",
-      "profileLink": "Zum Ausstellerprofil",
+      "welcomeTitle": "Willkommen bei Fakturcho!",
+      "welcomeBody": "Sie sind fast bereit, Dokumente auszustellen. Vervollständigen Sie Ihr Profil.",
+      "completeSetup": "Profil vervollständigen",
+      "missingFieldsLabel": "Fehlende Felder:",
       "fields": {
         "companyName": "Firma",
         "addressLine": "Adresse",
@@ -516,7 +517,11 @@
       "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
     },
     "guideLink": "Rechnungsleitfaden",
-    "helpLink": "Anleitung"
+    "helpLink": "Anleitung ansehen",
+    "guideCard": {
+      "title": "Sie machen das großartig",
+      "body": "Halten Sie Ihr Unternehmen ordentlich und professionell."
+    }
   },
   "auth": {
     "brandName": "Fakturcho",

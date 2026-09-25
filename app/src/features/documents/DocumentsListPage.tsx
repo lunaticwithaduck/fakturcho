@@ -31,7 +31,10 @@ export function DocumentsListPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-text">{t('pageTitle')}</h1>
+        <div className="flex flex-col gap-1.5">
+          <h1 className="text-2xl font-bold text-text">{t('pageTitle')}</h1>
+          <span className="h-0.5 w-16 rounded-full bg-accent" aria-hidden />
+        </div>
         <Button asChild>
           <Link href="/documents/new">{t('newDocument')}</Link>
         </Button>

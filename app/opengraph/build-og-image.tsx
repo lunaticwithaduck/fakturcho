@@ -5,10 +5,10 @@ import { ImageResponse } from 'next/og';
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-const SURFACE = '#ffffff';
-const SURFACE_SUNKEN = '#eef0f3';
-const ACCENT = '#1d4fd8';
-const TEXT_MUTED = '#5c6472';
+const SURFACE = '#fffcf7';
+const SURFACE_SUNKEN = '#efe6d8';
+const ACCENT = '#ad4a29';
+const TEXT_MUTED = '#6b5f52';
 
 export interface OgImageContent {
   brand: string;
