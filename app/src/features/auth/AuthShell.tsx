@@ -29,7 +29,12 @@ export function AuthShell({ locale = 'bg', enEnabled = false, children }: AuthSh
           <Image src={brandIcon} alt="" className="h-12 w-12" priority />
           <span className="text-xl font-bold text-text">{t('brandName')}</span>
         </Link>
-        <LanguageSwitcher locale={locale} currentPath={pathname} enabled={enEnabled} />
+        <LanguageSwitcher
+          locale={locale}
+          currentPath={pathname}
+          enabled={enEnabled}
+          className="justify-center"
+        />
         <div className="w-full">{children}</div>
       </main>
       <LegalFooter locale={locale} />
