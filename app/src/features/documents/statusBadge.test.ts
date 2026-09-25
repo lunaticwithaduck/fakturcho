@@ -5,10 +5,10 @@ import { getStatusBadgeVariant } from './statusBadge';
 describe('getStatusBadgeVariant', () => {
   const cases: Array<[DocumentStatus, string]> = [
     ['draft', 'neutral'],
-    ['sent', 'neutral'],
+    ['sent', 'accent'],
     ['paid', 'success'],
-    ['overdue', 'warning'],
-    ['cancelled', 'danger'],
+    ['overdue', 'danger'],
+    ['cancelled', 'neutral'],
   ];
 
   it.each(cases)('maps %s to the %s badge variant', (status, expected) => {

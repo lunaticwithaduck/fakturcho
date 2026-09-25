@@ -431,9 +431,10 @@
       "altIban": "Alternative account"
     },
     "completenessHint": {
-      "title": "Profile is not ready for issuing",
-      "body": "Complete the following fields to be able to issue documents: {fields}.",
-      "profileLink": "Go to issuer profile",
+      "welcomeTitle": "Welcome to Fakturcho!",
+      "welcomeBody": "You're almost ready to issue documents. Complete your profile.",
+      "completeSetup": "Complete setup",
+      "missingFieldsLabel": "Missing fields:",
       "fields": {
         "companyName": "Company",
         "addressLine": "Address",
@@ -516,7 +517,11 @@
       "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
     },
     "guideLink": "Invoicing guide",
-    "helpLink": "How to use"
+    "helpLink": "View setup guide",
+    "guideCard": {
+      "title": "You're doing great",
+      "body": "Keep your business tidy and professional."
+    }
   },
   "auth": {
     "brandName": "Fakturcho",

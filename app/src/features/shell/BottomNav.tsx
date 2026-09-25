@@ -13,6 +13,7 @@ export function BottomNav() {
     <nav className="fixed inset-x-0 bottom-0 z-10 flex border-t border-border bg-surface-raised md:hidden">
       {NAV_ITEMS.map((item) => {
         const active = isNavItemActive(pathname, item.href);
+        const Icon = item.icon;
         return (
           <Link
             key={item.href}
@@ -20,10 +21,11 @@ export function BottomNav() {
             aria-current={active ? 'page' : undefined}
             className={
               active
-                ? 'flex flex-1 items-center justify-center border-t-2 border-accent py-3 text-sm font-semibold text-accent'
-                : 'flex flex-1 items-center justify-center border-t-2 border-transparent py-3 text-sm font-medium text-text-muted'
+                ? 'flex flex-1 flex-col items-center justify-center gap-1 border-t-2 border-accent py-2.5 text-xs font-semibold text-accent'
+                : 'flex flex-1 flex-col items-center justify-center gap-1 border-t-2 border-transparent py-2.5 text-xs font-medium text-text-muted'
             }
           >
+            <Icon className="size-5" aria-hidden />
             {t(`navItems.${item.labelKey}`)}
           </Link>
         );

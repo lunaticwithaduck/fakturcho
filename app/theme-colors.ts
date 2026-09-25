@@ -1,2 +1,2 @@
-export const THEME_COLOR = '#1d4fd8';
-export const BACKGROUND_COLOR = '#f6f7f9';
+export const THEME_COLOR = '#ad4a29';
+export const BACKGROUND_COLOR = '#f7f1e8';

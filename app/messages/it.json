@@ -431,9 +431,10 @@
       "altIban": "Conto alternativo"
     },
     "completenessHint": {
-      "title": "Il profilo non è pronto per l'emissione",
-      "body": "Completare i seguenti campi per poter emettere documenti: {fields}.",
-      "profileLink": "Vai al profilo azienda",
+      "welcomeTitle": "Benvenuto su Fakturcho!",
+      "welcomeBody": "Sei quasi pronto per emettere documenti. Completa il tuo profilo.",
+      "completeSetup": "Completa il profilo",
+      "missingFieldsLabel": "Campi mancanti:",
       "fields": {
         "companyName": "Ragione sociale",
         "addressLine": "Indirizzo",
@@ -516,7 +517,11 @@
       "INTERNAL_ERROR": "Si è verificato un errore imprevisto. Riprovare."
     },
     "guideLink": "Guida alla fatturazione",
-    "helpLink": "Come si usa"
+    "helpLink": "Vedi la guida",
+    "guideCard": {
+      "title": "Stai andando alla grande",
+      "body": "Mantieni la tua attività ordinata e professionale."
+    }
   },
   "auth": {
     "brandName": "Fakturcho",
