@@ -1,19 +1,11 @@
 'use client';
 
-import {
-  getEinvoiceXmlUrl,
-  useGetEinvoiceReadinessQuery,
-  useGetEinvoiceTransmissionQuery,
-  useSendEinvoicePeppolMutation,
-} from '@app/api';
+import { getEinvoiceXmlUrl, useGetEinvoiceReadinessQuery } from '@app/api';
 import { useFeatureFlags } from '@app/feature-flags';
-import { getApiErrorMessage } from '@app/features/shared/apiError';
-import { Badge, Button } from '@design/components';
-import type { ClientDto, DocumentStatus, DocumentType, Locale } from '@shared/types';
-import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { Button } from '@design/components';
+import type { DocumentStatus, DocumentType } from '@shared/types';
+import { useTranslations } from 'next-intl';
 import { canDownloadDocument } from './documentDownload';
-import { getPeppolStatusBadgeVariant, getPeppolStatusMessageKey } from './peppolStatus';
 
 const KNOWN_MISSING_FIELD_CODES = new Set([
   'document.type',
@@ -79,38 +71,20 @@ interface EinvoicePanelProps {
   documentId: string;
   documentType: DocumentType;
   status: DocumentStatus;
-  client: ClientDto | undefined;
 }
 
-export function EinvoicePanel({ documentId, documentType, status, client }: EinvoicePanelProps) {
-  const t = useTranslations('documents.peppol');
-  const locale = useLocale() as Locale;
-  const { EINVOICE, PEPPOL } = useFeatureFlags();
+export function EinvoicePanel({ documentId, documentType, status }: EinvoicePanelProps) {
+  const t = useTranslations('documents.einvoice');
+  const { EINVOICE } = useFeatureFlags();
   const isIssued = canDownloadDocument(status);
   const { data: readiness } = useGetEinvoiceReadinessQuery(documentId, {
     skip: !isIssued || !EINVOICE,
   });
-  const { data: transmission } = useGetEinvoiceTransmissionQuery(documentId, {
-    skip: !isIssued || !EINVOICE || !PEPPOL,
-  });
-  const [sendPeppol, { isLoading: isSending }] = useSendEinvoicePeppolMutation();
-  const [sendError, setSendError] = useState<string | null>(null);
 
-  // A delivery note is never e-invoiced or Peppol-sent (no country accepts one).
+  // A delivery note is never e-invoiced (no country accepts one).
   if (documentType === 'delivery_note') return null;
   if (!isIssued || !EINVOICE) return null;
 
-  async function handleSend() {
-    setSendError(null);
-    try {
-      await sendPeppol(documentId).unwrap();
-    } catch (err) {
-      setSendError(getApiErrorMessage(err, locale));
-    }
-  }
-
-  const canSendPeppol =
-    PEPPOL && status !== 'cancelled' && Boolean(client?.peppolEndpointId && client?.peppolScheme);
   const missingFieldMessages = readiness
     ? Array.from(new Set(readiness.missingFields.map((code) => t(getMissingFieldMessageKey(code)))))
     : [];
@@ -128,24 +102,6 @@ export function EinvoicePanel({ documentId, documentType, status, client }: Einv
           {t('notReadyHint', { fields: missingFieldMessages.join(', ') })}
         </p>
       ) : null}
-
-      {canSendPeppol ? (
-        <div className="flex flex-wrap items-center gap-3">
-          <Button variant="secondary" size="sm" onClick={handleSend} disabled={isSending}>
-            {isSending ? t('sending') : t('send')}
-          </Button>
-          {transmission ? (
-            <Badge variant={getPeppolStatusBadgeVariant(transmission.status)}>
-              {t(getPeppolStatusMessageKey(transmission.status))}
-            </Badge>
-          ) : null}
-        </div>
-      ) : null}
-
-      {PEPPOL && transmission?.errorText ? (
-        <p className="text-sm font-medium text-danger">{transmission.errorText}</p>
-      ) : null}
-      {sendError ? <p className="text-sm font-medium text-danger">{sendError}</p> : null}
     </div>
   );
 }

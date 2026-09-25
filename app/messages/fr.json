@@ -172,7 +172,7 @@
         "cancel": "Annuler"
       }
     },
-    "peppol": {
+    "einvoice": {
       "downloadXml": "Télécharger la facture électronique (XML)",
       "notReadyHint": "Données manquantes pour la facture électronique : {fields}",
       "missingFieldFallback": "Données manquantes pour la facture électronique.",
@@ -238,13 +238,7 @@
           "nip": "NIP du destinataire manquant, requis pour un acheteur établi en Pologne.",
           "nipChecksum": "Le NIP du destinataire est invalide (clé de contrôle incorrecte)."
         }
-      },
-      "send": "Envoyer via Peppol",
-      "sending": "Envoi...",
-      "statusQueued": "En attente",
-      "statusSent": "Envoyé",
-      "statusDelivered": "Remis",
-      "statusRejected": "Rejeté"
+      }
     }
   },
   "billing": {
@@ -354,8 +348,6 @@
     "cityLabel": "Ville",
     "emailLabel": "E-mail",
     "molLabel": "Représentant légal",
-    "peppolEndpointIdLabel": "Identifiant Peppol (Endpoint ID)",
-    "peppolSchemeLabel": "Schéma Peppol",
     "invalidFormat": "Format invalide",
     "countryLabel": "Pays",
     "documentLanguageLabel": "Langue des documents",
@@ -603,7 +595,7 @@
           "heading": "2. What the service is",
           "paragraphs": [
             "{productName} is a web application through which a business or sole trader established in the European Union composes and issues commercial documents — invoices, proformas, credit and debit notes, quotes and delivery notes — and downloads them as a PDF file, together with a structured e-invoice file where the document type and the issuer's country call for one.",
-            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves, or to send over the Peppol network.",
+            "The application prepares documents from the data the user enters and applies the VAT rules of the issuer's own country. It is not an accounting service and does not replace accounting or tax advice. It does not submit anything to any tax authority or e-invoicing platform on the user's behalf: e-invoice files are generated ready for the user to download and upload themselves.",
             "Each account represents a single issuer with its own list of clients, catalogue and numbering series."
           ]
         },
@@ -812,7 +804,7 @@
       "items": {
         "BG": {
           "name": "Bulgarie",
-          "line": "TVA à 20 %, factures en bulgare, factures électroniques prêtes pour le réseau Peppol."
+          "line": "TVA à 20 %, factures en bulgare, factures électroniques au format européen EN 16931 (UBL)."
         },
         "DE": {
           "name": "Allemagne",
@@ -846,7 +838,7 @@
         "Factures, factures pro forma, avoirs, notes de débit, devis et bons de livraison.",
         "Numérotation séquentielle — sans rupture ni doublon.",
         "TVA par pays : taux locaux, exonérations et autoliquidation pour les opérations B2B transfrontalières, avec vérification en temps réel du numéro de TVA du client via VIES.",
-        "Factures électroniques EN 16931 au format de votre pays — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — prêtes à être déposées sur votre plateforme nationale (ANAF SPV, SDI, KSeF, Chorus Pro, FACe) ou envoyées via Peppol.",
+        "Factures électroniques EN 16931 au format de votre pays — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — prêtes à être déposées sur votre plateforme nationale (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
         "Un PDF prêt à l'emploi dans la langue de votre pays, à télécharger ou à envoyer par e-mail."
       ]
     },
@@ -882,7 +874,7 @@
         },
         {
           "question": "Quels pays sont pris en charge ?",
-          "answer": "Toute entreprise établie sur le territoire TVA de l'UE peut émettre des documents. Les factures électroniques structurées au format national sont générées pour l'Allemagne, la France, l'Italie, la Pologne, la Roumanie, l'Espagne et la Bulgarie, prêtes à être déposées sur la plateforme nationale ou envoyées via Peppol."
+          "answer": "Toute entreprise établie sur le territoire TVA de l'UE peut émettre des documents. Les factures électroniques structurées au format national sont générées pour l'Allemagne, la France, l'Italie, la Pologne, la Roumanie et l'Espagne, prêtes à être déposées sur la plateforme nationale ; pour la Bulgarie, au format européen EN 16931 (UBL)."
         },
         {
           "question": "Comment la TVA est-elle gérée pour un client dans un autre pays de l'UE ?",
@@ -902,7 +894,7 @@
         },
         {
           "question": "Comment obtenir le PDF et le XML de la facture électronique ?",
-          "answer": "Tous deux sont générés côté serveur : vous pouvez les télécharger ou les envoyer par e-mail au client, ou bien déposer vous-même la facture électronique sur votre plateforme nationale ou l'envoyer via Peppol."
+          "answer": "Tous deux sont générés côté serveur : vous pouvez les télécharger ou les envoyer par e-mail au client, ou bien déposer vous-même la facture électronique sur votre plateforme nationale."
         }
       ]
     },
@@ -911,7 +903,7 @@
   "seo": {
     "home": {
       "title": "Fakturcho — facturation et facture électronique pour l'UE",
-      "description": "Émettez factures, pro forma, avoirs, notes de débit et devis conformes à l'UE, avec facture électronique EN 16931 et Peppol. 0,10 € par document émis.",
+      "description": "Émettez factures, pro forma, avoirs, notes de débit et devis conformes à l'UE, avec facture électronique EN 16931. 0,10 € par document émis.",
       "ogTagline": "Facturation et facture électronique pour les entreprises de l'UE"
     },
     "login": {

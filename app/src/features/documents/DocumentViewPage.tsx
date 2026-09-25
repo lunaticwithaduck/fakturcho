@@ -2,14 +2,12 @@
 
 import {
   useCancelDocumentMutation,
-  useGetClientQuery,
   useGetDocumentQuery,
   useMarkDocumentPaidMutation,
 } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { ConfirmDialog } from '@app/features/shared/ConfirmDialog';
 import { EmptyState, Skeleton, toast } from '@design/components';
-import { skipToken } from '@reduxjs/toolkit/query/react';
 import type { Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
@@ -34,7 +32,6 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
   const locale = useLocale() as Locale;
   const router = useRouter();
   const { data: document, isLoading } = useGetDocumentQuery(documentId);
-  const { data: client } = useGetClientQuery(document?.clientId ?? skipToken);
   const [cancelDocument, { isLoading: isCancelling }] = useCancelDocumentMutation();
   const [markPaid, { isLoading: isMarkingPaid }] = useMarkDocumentPaidMutation();
   const [dialog, setDialog] = useState<DialogKind>(autoOpenIssue ? 'issue' : null);
@@ -106,7 +103,6 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         documentId={documentId}
         documentType={document.documentType}
         status={document.status}
-        client={client}
       />
 
       <DocumentPdfViewer

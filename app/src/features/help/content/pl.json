@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": ", aby pobrać ustrukturyzowany plik e-faktury: we własnym formacie Twojego kraju — XRechnung (Niemcy), UBL (Francja), FatturaPA (Włochy), KSeF FA(3) (Polska), CIUS-RO (Rumunia), Facturae (Hiszpania) — albo, dla wystawcy z Bułgarii i każdego innego kraju bez dedykowanego formatu, ogólny plik EN 16931/Peppol UBL. Fakturcho wyłącznie generuje plik; pobierasz go i sam przesyłasz na swoją krajową platformę — aplikacja nigdy nic nie zgłasza w Twoim imieniu. Dowody dostawy nigdy nie otrzymują e-faktury. Jeśli brakuje danych wymaganych przez format (np. numeru VAT nabywcy przy odwrotnym obciążeniu, kodu jednostki pozycji, Twojego IBAN), komunikat pod przyciskiem dokładnie wskazuje, czego brakuje."
+                "text": ", aby pobrać ustrukturyzowany plik e-faktury: we własnym formacie Twojego kraju — XRechnung (Niemcy), UBL (Francja), FatturaPA (Włochy), KSeF FA(3) (Polska), CIUS-RO (Rumunia), Facturae (Hiszpania) — albo, dla wystawcy z Bułgarii i każdego innego kraju bez dedykowanego formatu, ogólny plik EN 16931 UBL. Fakturcho wyłącznie generuje plik; pobierasz go i sam przesyłasz na swoją krajową platformę — aplikacja nigdy nic nie zgłasza w Twoim imieniu. Dowody dostawy nigdy nie otrzymują e-faktury. Jeśli brakuje danych wymaganych przez format (np. numeru VAT nabywcy przy odwrotnym obciążeniu, kodu jednostki pozycji, Twojego IBAN), komunikat pod przyciskiem dokładnie wskazuje, czego brakuje."
               }
             ],
             [
@@ -1132,7 +1132,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho wyłącznie generuje plik — sam przesyłasz go na platformę swojego kraju. Dostępne dla faktur i faktur korygujących: Niemcy, Francja, Włochy, Polska, Rumunia i Hiszpania mają swój format krajowy; Bułgaria i każdy inny kraj otrzymują ogólny plik EN 16931/Peppol UBL."
+          "text": ". Fakturcho wyłącznie generuje plik — sam przesyłasz go na platformę swojego kraju. Dostępne dla faktur i faktur korygujących: Niemcy, Francja, Włochy, Polska, Rumunia i Hiszpania mają swój format krajowy; Bułgaria i każdy inny kraj otrzymują ogólny plik EN 16931 UBL."
         }
       ]
     },

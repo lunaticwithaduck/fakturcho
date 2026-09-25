@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": " to get the structured e-invoice file: your country's own format — XRechnung (Germany), UBL (France), FatturaPA (Italy), FA(3) (Poland), CIUS-RO (Romania), Facturae (Spain) — or, for a Bulgarian issuer and any other country without a dedicated format, a generic EN 16931/Peppol UBL file. Fakturcho only generates the file; you download it and upload it yourself to your national platform — it never submits anything on your behalf. Delivery notes never get one. If data the format needs is missing (e.g. a buyer VAT number for reverse charge, a line's unit code, your IBAN), a message under the button lists exactly what's missing."
+                "text": " to get the structured e-invoice file: your country's own format — XRechnung (Germany), UBL (France), FatturaPA (Italy), FA(3) (Poland), CIUS-RO (Romania), Facturae (Spain) — or, for a Bulgarian issuer and any other country without a dedicated format, a generic EN 16931 UBL file. Fakturcho only generates the file; you download it and upload it yourself to your national platform — it never submits anything on your behalf. Delivery notes never get one. If data the format needs is missing (e.g. a buyer VAT number for reverse charge, a line's unit code, your IBAN), a message under the button lists exactly what's missing."
               }
             ],
             [
@@ -1132,7 +1132,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho only generates the file — you upload it yourself to your country's platform. Available for invoices, credit and debit notes: Germany, France, Italy, Poland, Romania and Spain get their national format; Bulgaria and any other country get a generic EN 16931/Peppol UBL file."
+          "text": ". Fakturcho only generates the file — you upload it yourself to your country's platform. Available for invoices, credit and debit notes: Germany, France, Italy, Poland, Romania and Spain get their national format; Bulgaria and any other country get a generic EN 16931 UBL file."
         }
       ]
     },
