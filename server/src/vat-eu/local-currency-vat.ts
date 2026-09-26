@@ -128,11 +128,19 @@ export async function resolveLocalCurrencyVatSnapshot(
   }
   const onOrBeforeDate = toIsoDate(rateAsOfDate);
 
+  // NBP and BNR only tabulate foreign currencies against their own local
+  // currency (there is no "PLN in PLN" or "RON in RON" entry), so the
+  // currency to look up is the document's own (foreign) currency. ECB's SDW
+  // series runs the other way — D.{local}.EUR — so it takes the local
+  // currency instead; that only works because a non-euro-area issuer's
+  // document currency is guaranteed EUR by the check above.
+  const rateCurrency = localCountry.rateSource === 'ECB' ? localCountry.currency : input.currency;
+
   let quote: Awaited<ReturnType<ExchangeRateService['fetchRate']>>;
   try {
     quote = await exchangeRateService.fetchRate({
       source: localCountry.rateSource,
-      currency: localCountry.currency,
+      currency: rateCurrency,
       onOrBeforeDate,
     });
   } catch {

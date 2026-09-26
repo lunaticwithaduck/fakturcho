@@ -30,12 +30,13 @@ describe('DE country config', () => {
     );
   });
 
-  it('offers the intra-community, export, both reverse-charge and the common domestic exemption grounds', () => {
+  it('offers the intra-community, export, both reverse-charge, the third-country ground and the common domestic exemption grounds', () => {
     expect(config.exemptionGrounds).toEqual([
       'Steuerfreie innergemeinschaftliche Lieferung gemäß § 4 Nr. 1 Buchst. b i. V. m. § 6a UStG',
       'Steuerfreie Ausfuhrlieferung gemäß § 4 Nr. 1 Buchst. a i. V. m. § 6 UStG',
       'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
       'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
+      'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Leistungsempfänger im Drittland',
       'Steuerfreie Finanzumsätze gemäß § 4 Nr. 8 UStG',
       'Steuerfreie Umsätze aus der Tätigkeit als Versicherungsvertreter oder -makler gemäß § 4 Nr. 11 UStG',
       'Steuerfreie Vermietung und Verpachtung gemäß § 4 Nr. 12 UStG',
@@ -44,10 +45,11 @@ describe('DE country config', () => {
     ]);
   });
 
-  it('lists both reverse-charge grounds as VAT notes, not exemptions', () => {
+  it('lists both reverse-charge grounds and the third-country ground as VAT notes, not exemptions', () => {
     expect(config.vatNoteGrounds).toEqual([
       'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
       'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
+      'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Leistungsempfänger im Drittland',
     ]);
   });
 

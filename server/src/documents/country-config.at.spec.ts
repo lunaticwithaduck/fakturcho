@@ -40,7 +40,7 @@ describe('AT country config', () => {
     expect(config.vatRates.some((rate) => rate.rateBp === 1900)).toBe(false);
   });
 
-  it('lists every reverse-charge and triangulation ground as a VAT note, not an exemption', () => {
+  it('lists every reverse-charge, triangulation and the third-country ground as a VAT note, not an exemption', () => {
     expect(config.vatNoteGrounds).toEqual([
       'Übergang der Steuerschuld auf den Leistungsempfänger (Reverse Charge) – Leistungsort gemäß § 3a Abs. 6 UStG 1994 im Mitgliedstaat des Leistungsempfängers, Steuerschuldnerschaft des Leistungsempfängers gemäß Art. 196 MwStSystRL.',
       'Innergemeinschaftliches Dreiecksgeschäft gemäß Art. 25 UStG 1994 – die Steuerschuld geht auf den Empfänger über.',
@@ -50,6 +50,7 @@ describe('AT country config', () => {
       'Übergang der Steuerschuld auf den Leistungsempfänger gemäß § 19 Abs. 1d UStG 1994 iVm § 2 UStBBKV.',
       'Übergang der Steuerschuld auf den Leistungsempfänger gemäß § 19 Abs. 1d UStG 1994 iVm der Schrott-Umsatzsteuerverordnung.',
       'Übergang der Steuerschuld auf den Leistungsempfänger gemäß § 19 Abs. 1e UStG 1994.',
+      'Nicht steuerbare sonstige Leistung gemäß § 3a Abs. 6 UStG 1994 (Leistungsempfänger im Drittland, Leistungsort am Empfängersitz).',
     ]);
   });
 

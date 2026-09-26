@@ -69,11 +69,12 @@ describe('FR country config — exemption grounds', () => {
     });
   });
 
-  it('offers intra-EU, export and reverse-charge grounds to a VAT-registered issuer, never the franchise wording', () => {
+  it('offers intra-EU, export, reverse-charge and the third-country grounds to a VAT-registered issuer, never the franchise wording', () => {
     expect(FR.exemptionGrounds).toEqual([
       'Exonération de TVA, article 262 ter I du CGI',
       'Exonération de TVA, article 262 I du CGI',
       'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE',
+      'TVA non applicable – art. 259-1 du CGI (preneur assujetti établi hors de l’Union européenne)',
     ]);
     expect(FR.exemptionGrounds).not.toContain(FR.defaultExemptionGround);
   });
@@ -81,6 +82,7 @@ describe('FR country config — exemption grounds', () => {
   it('prints every FR ground as a VAT note, without the exemption prefix', () => {
     expect(FR.vatNoteGrounds).toEqual([
       'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE',
+      'TVA non applicable – art. 259-1 du CGI (preneur assujetti établi hors de l’Union européenne)',
       'TVA non applicable, art. 293 B du CGI',
       'Exonération de TVA, article 262 ter I du CGI',
       'Exonération de TVA, article 262 I du CGI',

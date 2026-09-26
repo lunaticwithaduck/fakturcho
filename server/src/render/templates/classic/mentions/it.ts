@@ -1,5 +1,6 @@
 import { FORFETTARIO_GROUND, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { toSharedDocumentType } from '../../../prisma-mappers';
+import type { ClassicLanguage } from '../labels';
 import { discountAdjustedVatGroups } from '../totals-block';
 import type { MentionsBuilder } from './index';
 
@@ -17,6 +18,38 @@ const REVERSE_CHARGE_DOMESTIC_TEXT =
 const REVERSE_CHARGE_CROSS_BORDER_TEXT =
   'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972';
 
+// These three grounds are IT's own statutory citations (Italian, since IT
+// issues only in Italian) — a document issued in one of the app's other 6
+// languages still needs a note the reader can follow. The ground itself
+// (document.vatExemptionGround) is never translated, only the mention text.
+const INTRA_EU_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  it: INTRA_EU_TEXT,
+  en: 'Intra-Community supply, Article 138 of Council Directive 2006/112/EC (Art. 41, comma 1, lett. a, D.L. 331/1993)',
+  de: 'Steuerfreie innergemeinschaftliche Lieferung gemäß Art. 138 der Richtlinie 2006/112/EG (Art. 41, comma 1, lett. a, D.L. 331/1993)',
+  fr: 'Livraison intracommunautaire exonérée, article 138 de la directive 2006/112/CE (art. 41, comma 1, lett. a, D.L. 331/1993)',
+  pl: 'Wewnątrzwspólnotowa dostawa towarów zwolniona z VAT, art. 138 dyrektywy 2006/112/WE (art. 41, comma 1, lett. a, D.L. 331/1993)',
+  ro: 'Livrare intracomunitară scutită, art. 138 din Directiva 2006/112/CE (art. 41, comma 1, lett. a, D.L. 331/1993)',
+  bg: 'Вътреобщностна доставка, освободена от ДДС, чл. 138 от Директива 2006/112/ЕО (art. 41, comma 1, lett. a, D.L. 331/1993)',
+};
+const REVERSE_CHARGE_DOMESTIC_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  it: REVERSE_CHARGE_DOMESTIC_TEXT,
+  en: 'Domestic reverse charge, Article 199 of Council Directive 2006/112/EC (Art. 17, comma 6, D.P.R. 633/1972)',
+  de: 'Inländische Steuerschuldnerschaft des Leistungsempfängers gemäß Art. 199 der Richtlinie 2006/112/EG (Art. 17, comma 6, D.P.R. 633/1972)',
+  fr: 'Autoliquidation nationale, article 199 de la directive 2006/112/CE (art. 17, comma 6, D.P.R. 633/1972)',
+  pl: 'Krajowe odwrotne obciążenie, art. 199 dyrektywy 2006/112/WE (art. 17, comma 6, D.P.R. 633/1972)',
+  ro: 'Taxare inversă internă, art. 199 din Directiva 2006/112/CE (art. 17, comma 6, D.P.R. 633/1972)',
+  bg: 'Вътрешно обратно начисляване, чл. 199 от Директива 2006/112/ЕО (art. 17, comma 6, D.P.R. 633/1972)',
+};
+const REVERSE_CHARGE_CROSS_BORDER_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  it: REVERSE_CHARGE_CROSS_BORDER_TEXT,
+  en: 'Reverse charge – VAT to be accounted for by the recipient, Art. 196 Directive 2006/112/EC (Art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+  de: 'Steuerschuldnerschaft des Leistungsempfängers, Art. 196 der Richtlinie 2006/112/EG (Art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+  fr: 'Autoliquidation – TVA due par le preneur, art. 196 de la directive 2006/112/CE (art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+  pl: 'Odwrotne obciążenie – podatek rozlicza nabywca, art. 196 dyrektywy 2006/112/WE (art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+  ro: 'Taxare inversă – TVA datorată de beneficiar, art. 196 din Directiva 2006/112/CE (art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+  bg: 'Обратно начисляване – данъкът се дължи от получателя, чл. 196 от Директива 2006/112/ЕО (art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+};
+
 // L. 190/2014 art. 1, comma 67: a flat-rate (forfettario) issuer's fees are
 // not subject to withholding tax; the invoice must ask the withholding agent
 // not to apply it. Only meaningful when the client is itself an Italian
@@ -24,17 +57,23 @@ const REVERSE_CHARGE_CROSS_BORDER_TEXT =
 const FORFETTARIO_RITENUTA_TEXT =
   'Si richiede la non applicazione della ritenuta d’acconto ai sensi dell’art. 1, comma 67, L. 190/2014';
 
-export const itMentions: MentionsBuilder = ({ document, lineItems }) => {
+export const itMentions: MentionsBuilder = ({ document, lineItems, locale }) => {
   const mentions: string[] = [];
   const categories = new Set(lineItems.map((line) => line.vatCategory));
 
-  if (categories.has('K')) mentions.push(INTRA_EU_TEXT);
+  if (categories.has('K')) {
+    mentions.push(INTRA_EU_NOTE_BY_LANGUAGE[locale.language] ?? INTRA_EU_TEXT);
+  }
 
   const crossBorder = Boolean(
     document.recipientCountry && document.recipientCountry !== document.issuerCountry,
   );
   if (categories.has('AE')) {
-    mentions.push(crossBorder ? REVERSE_CHARGE_CROSS_BORDER_TEXT : REVERSE_CHARGE_DOMESTIC_TEXT);
+    const noteMap = crossBorder
+      ? REVERSE_CHARGE_CROSS_BORDER_NOTE_BY_LANGUAGE
+      : REVERSE_CHARGE_DOMESTIC_NOTE_BY_LANGUAGE;
+    const fallback = crossBorder ? REVERSE_CHARGE_CROSS_BORDER_TEXT : REVERSE_CHARGE_DOMESTIC_TEXT;
+    mentions.push(noteMap[locale.language] ?? fallback);
   }
 
   const isTaxDocument = TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)];

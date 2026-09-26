@@ -12,6 +12,7 @@ import {
   labelled,
   line,
 } from './html-utils';
+import { resolveIdentifierLabel } from './identifier-labels';
 import type { ClassicLocaleContext } from './locale';
 
 function formatIssuerAddress(document: Document, issuerCountry: string): string {
@@ -20,16 +21,18 @@ function formatIssuerAddress(document: Document, issuerCountry: string): string 
     document.issuerCountyRegion,
     issuerCountry,
   );
+  // Bulgarian postal convention (Български пощи): postcode before the city,
+  // e.g. "1000 София" — same order the structured-fields branch below always
+  // used; the free-text addressLine branch must carry it too, or a legacy row
+  // that still has issuerCity/issuerPostcode set separately from
+  // issuerAddressLine silently drops the postcode.
+  const cityWithPostcode = [document.issuerPostcode, city].filter(Boolean).join(' ');
+  const addressHasCity = addressContainsCity(document.issuerAddressLine, document.issuerCity);
   const address = document.issuerAddressLine
-    ? [
-        document.issuerAddressLine,
-        addressContainsCity(document.issuerAddressLine, document.issuerCity) ? '' : city,
-      ]
+    ? [document.issuerAddressLine, addressHasCity ? '' : cityWithPostcode]
         .filter(Boolean)
         .join(', ')
-    : [document.issuerStreet, [document.issuerPostcode, city].filter(Boolean).join(' ')]
-        .filter(Boolean)
-        .join(', ');
+    : [document.issuerStreet, cityWithPostcode].filter(Boolean).join(', ');
   return appendCountyRegionSuffix(
     address,
     document.issuerCity,
@@ -88,7 +91,6 @@ export function buildIssuerBlock(
   const isIt = locale.issuerCountry === 'IT';
   const isFr = locale.issuerCountry === 'FR';
   const frLegalForm = isFr ? frSoleTraderLegalForm(identifiers) : null;
-  const isCz = locale.issuerCountry === 'CZ';
   const identifierRows = getCountryConfig(locale.issuerCountry)
     .identifiers.filter(
       (field) => field.kind !== 'flag' && !(frLegalForm && field.key === 'legalForm'),
@@ -99,12 +101,10 @@ export function buildIssuerBlock(
           ? itShareCapitalValue(identifiers)
           : (identifiers[field.key] ?? null);
       return identifierLine(
-        // NOZ § 435 odst. 1 sets no language for this entry: the printed
-        // label follows the document language, not the CZ profile form's
-        // own (Czech) label.
-        isCz && field.key === 'companyRegister' && labels.companyRegisterLabel
-          ? labels.companyRegisterLabel
-          : field.label,
+        // A country's own identifier labels are written once, in that
+        // country's language — the document can be issued in any of the 7
+        // app languages, so the printed label follows the document language.
+        resolveIdentifierLabel(locale.issuerCountry, field.key, language, field.label, labels),
         rawValue !== null ? keepShortValueTogether(rawValue) : null,
         language,
       );

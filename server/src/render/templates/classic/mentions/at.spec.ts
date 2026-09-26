@@ -81,3 +81,19 @@ describe('atMentions', () => {
     expect(atMentions({ document, lineItems, locale })).toEqual([]);
   });
 });
+
+describe('atMentions — AT issuer, English document', () => {
+  const enLocale = resolveClassicLocale('en', 'AT');
+
+  it('translates the generic § 19 UStG 1994 domestic reverse-charge note into English', () => {
+    const document = buildFakeDocument({
+      vatExemptionGround: null,
+      issuerCountry: 'AT',
+      recipientCountry: 'AT',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(atMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'Reverse charge – VAT to be accounted for by the recipient (§ 19 UStG 1994)',
+    ]);
+  });
+});

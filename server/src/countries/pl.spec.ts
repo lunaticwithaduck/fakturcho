@@ -1,4 +1,4 @@
-import { getCountryConfig } from '@fakturcho/shared-types';
+import { getCountryConfig, PL_GROUND_VAT_CATEGORIES } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 
 describe('PL country config', () => {
@@ -116,5 +116,39 @@ describe('PL country config', () => {
 
   it('renders documents in Polish', () => {
     expect(config.language).toBe('pl');
+  });
+
+  // fa3-vat-groups.ts routes each VatCategory to its own FA(3) box (P_13_x)
+  // and rate code — a ground with no entry here falls back to 'E' ("zw"),
+  // which is only correct for a genuine exemption.
+  it('maps the export, ICS, international-transport and not-subject grounds to their own FA(3) category, not E', () => {
+    expect(
+      PL_GROUND_VAT_CATEGORIES.get(
+        'eksport towarów – art. 41 ust. 4 i 5 ustawy o podatku od towarów i usług',
+      ),
+    ).toBe('G');
+    expect(
+      PL_GROUND_VAT_CATEGORIES.get(
+        'wewnątrzwspólnotowa dostawa towarów – art. 42 ust. 1 ustawy o podatku od towarów i usług',
+      ),
+    ).toBe('K');
+    expect(
+      PL_GROUND_VAT_CATEGORIES.get(
+        'usługi w zakresie transportu międzynarodowego – art. 83 ust. 1 pkt 23 ustawy o podatku od towarów i usług',
+      ),
+    ).toBe('Z');
+    expect(
+      PL_GROUND_VAT_CATEGORIES.get(
+        'usługa niepodlegająca opodatkowaniu na terytorium kraju – art. 28b ustawy o podatku od towarów i usług',
+      ),
+    ).toBe('O');
+  });
+
+  it('leaves every true exemption ground (art. 43 ust. 1 pkt ...) unmapped, so it falls back to E', () => {
+    for (const ground of config.exemptionGrounds) {
+      if (ground.includes('art. 43 ust. 1')) {
+        expect(PL_GROUND_VAT_CATEGORIES.has(ground)).toBe(false);
+      }
+    }
   });
 });

@@ -380,6 +380,126 @@ describe('DocumentsService', () => {
     expect(draft.vatAmount).toBe(0);
   });
 
+  it('non-EU business client: a VAT-registered BG issuer defaults to the out-of-scope ground, not domestic VAT', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'US',
+      clientType: 'business',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.vatExemptionGround).toContain('чл. 21, ал. 2 от ЗДДС');
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+    expect(draft.vatAmount).toBe(0);
+  });
+
+  it('non-EU consumer: a VAT-registered BG issuer keeps charging domestic VAT (art. 45), unlike a business client', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'US',
+      clientType: 'consumer',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.vatExemptionGround).toBeNull();
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+    expect(draft.vatAmount).toBeGreaterThan(0);
+  });
+
+  it('non-EU business client with no country config override falls back to the Directive art. 44 wording', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'CZ',
+      vatRegistered: true,
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'US',
+      clientType: 'business',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.vatExemptionGround).toBe(
+      'Not subject to VAT – place of supply outside the EU, Article 44 of Council Directive 2006/112/EC',
+    );
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+  });
+
+  it('non-EU business default does not override an EU business client already resolving to AE reverse charge', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'DE',
+      vatNumber: 'DE123456789',
+      clientType: 'business',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.vatExemptionGround).toBeNull();
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'AE', vatRateBp: 0 });
+  });
+
+  it('non-EU business default never fires when the caller sends vatExemptionGround explicitly (existing drafts do not silently change)', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'BG',
+      vatRegistered: true,
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'US',
+      clientType: 'business',
+    });
+
+    // Simulates a draft already saved before this fix existed (or the
+    // composer resaving one unchanged): an explicit null, not an omitted
+    // field, so the new default must not kick in.
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id, vatExemptionGround: null }),
+    );
+    expect(draft.vatExemptionGround).toBeNull();
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+
+    const resaved = await documentsService.saveDraft(
+      accountId,
+      draft.id,
+      draftRequest({ clientId: client.id, vatExemptionGround: null, notes: 'unrelated edit' }),
+    );
+    expect(resaved.vatExemptionGround).toBeNull();
+    expect(resaved.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+  });
+
   it('PL art. 113 exempt issuer: an unset line vatCategory resolves to E (zw), not O (np.)', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, { country: 'PL' });
@@ -398,6 +518,107 @@ describe('DocumentsService', () => {
     const draft = await documentsService.saveDraft(accountId, null, draftRequest());
 
     expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+  });
+
+  // The 'E' default above is only correct for a genuine exemption (art. 113,
+  // or an art. 43 ust. 1 pkt ... ground): FA(3)'s bucketTags/vatRateCode maps
+  // E to "zw", but export/ICS/international-transport/not-subject grounds
+  // are their own distinct FA(3) boxes and rate codes (fa3-vat-groups.ts).
+  // Before this fix, a VAT-registered PL issuer picking any of these got the
+  // line miscategorized as E ("zw") instead.
+  it('PL export ground (art. 41 ust. 4 i 5): an unset line vatCategory resolves to G, not E', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'PL',
+      vatRegistered: true,
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        vatExemptionGround:
+          'eksport towarów – art. 41 ust. 4 i 5 ustawy o podatku od towarów i usług',
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'G', vatRateBp: 0 });
+  });
+
+  it('PL intra-EU supply of goods ground (art. 42 ust. 1): an unset line vatCategory resolves to K, not E', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'PL',
+      vatRegistered: true,
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        vatExemptionGround:
+          'wewnątrzwspólnotowa dostawa towarów – art. 42 ust. 1 ustawy o podatku od towarów i usług',
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'K', vatRateBp: 0 });
+  });
+
+  it('PL international transport ground (art. 83 ust. 1 pkt 23): an unset line vatCategory resolves to Z, not E', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'PL',
+      vatRegistered: true,
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        vatExemptionGround:
+          'usługi w zakresie transportu międzynarodowego – art. 83 ust. 1 pkt 23 ustawy o podatku od towarów i usług',
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'Z', vatRateBp: 0 });
+  });
+
+  it('PL not-subject-to-VAT ground (art. 28b): an unset line vatCategory resolves to O, not E', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'PL',
+      vatRegistered: true,
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        vatExemptionGround:
+          'usługa niepodlegająca opodatkowaniu na terytorium kraju – art. 28b ustawy o podatku od towarów i usług',
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+  });
+
+  it('PL true exemption grounds (e.g. art. 43 ust. 1 pkt 37) still resolve to E', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'PL',
+      vatRegistered: true,
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        vatExemptionGround:
+          'usługi ubezpieczeniowe – art. 43 ust. 1 pkt 37 ustawy o podatku od towarów i usług',
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'E', vatRateBp: 0 });
   });
 
   it('reverse-charge: a cross-border EU client with no VAT number stays S at the issuer standard rate', async () => {

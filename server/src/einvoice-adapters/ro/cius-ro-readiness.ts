@@ -4,7 +4,7 @@ import {
   EINVOICE_MISSING_FIELD_CODES,
   type EinvoiceReadiness,
 } from '../../einvoice/readiness';
-import { isValidRomanianCui, isValidRomanianVatNumber } from './ro-cui';
+import { extractRomanianCui, isValidRomanianCui, isValidRomanianVatNumber } from './ro-cui';
 
 export interface CheckCiusRoReadinessOptions {
   issuerCountyRegion?: string;
@@ -21,7 +21,7 @@ export function checkCiusRoReadiness(
   if (document.issuer.country === 'RO') {
     if (!document.issuer.eik) {
       missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCui);
-    } else if (!isValidRomanianCui(document.issuer.eik)) {
+    } else if (!isValidRomanianCui(extractRomanianCui(document.issuer.eik))) {
       missingFields.push(EINVOICE_MISSING_FIELD_CODES.issuerCuiChecksum);
     }
 
@@ -41,7 +41,7 @@ export function checkCiusRoReadiness(
   if (document.recipient.country === 'RO') {
     if (!document.recipient.eik) {
       missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCui);
-    } else if (!isValidRomanianCui(document.recipient.eik)) {
+    } else if (!isValidRomanianCui(extractRomanianCui(document.recipient.eik))) {
       missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientCuiChecksum);
     }
 

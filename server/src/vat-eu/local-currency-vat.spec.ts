@@ -61,11 +61,13 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
 
   it('PL: asks NBP for the day before the tax point and snapshots the rate', async () => {
     let requestedDate = '';
+    let requestedCurrency = '';
     const service = new ExchangeRateService({
       NBP: {
         fetchRateOn: async (currency, isoDate) => {
           requestedDate = isoDate;
-          return currency === 'PLN'
+          requestedCurrency = currency;
+          return currency === 'EUR'
             ? { rate: '4.2512', rateDate: isoDate, table: '181/A/NBP/2026' }
             : null;
         },
@@ -75,6 +77,9 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
     });
     const result = await resolveLocalCurrencyVatSnapshot(baseInput(), service);
     expect(requestedDate).toBe('2026-09-16');
+    // NBP's table A has no "PLN" entry — the currency looked up must be the
+    // document's own (foreign) currency, not the local one being converted to.
+    expect(requestedCurrency).toBe('EUR');
     expect(result).toEqual({
       localCurrency: 'PLN',
       exchangeRate: '4.2512',
@@ -110,12 +115,14 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
 
   it('RO: asks BNR for the business day before the tax point', async () => {
     let requestedDate = '';
+    let requestedCurrency = '';
     const service = new ExchangeRateService({
       NBP: { fetchRateOn: async () => null },
       BNR: {
         fetchRateOn: async (currency, isoDate) => {
           requestedDate = isoDate;
-          return currency === 'RON' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
+          requestedCurrency = currency;
+          return currency === 'EUR' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
         },
       },
       ECB: { fetchRateOn: async () => null },
@@ -125,6 +132,9 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
       service,
     );
     expect(requestedDate).toBe('2026-09-16');
+    // BNR's <Cube> only lists foreign currencies (there is no <Rate
+    // currency="RON">) — the lookup must use the document's own currency.
+    expect(requestedCurrency).toBe('EUR');
     expect(result?.exchangeRateSource).toBe('BNR');
     expect(result?.localCurrency).toBe('RON');
   });
@@ -136,7 +146,7 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
       BNR: {
         fetchRateOn: async (currency, isoDate) => {
           requestedDate = isoDate;
-          return currency === 'RON' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
+          return currency === 'EUR' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
         },
       },
       ECB: { fetchRateOn: async () => null },
@@ -159,7 +169,7 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
       BNR: {
         fetchRateOn: async (currency, isoDate) => {
           requestedDate = isoDate;
-          return currency === 'RON' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
+          return currency === 'EUR' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
         },
       },
       ECB: { fetchRateOn: async () => null },
@@ -261,22 +271,25 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
     expect(requestedDate).toBe('2026-09-19');
   });
 
-  it('CZ/DK/HU/SE use ECB as the rate source', async () => {
+  it('CZ/DK/HU/SE use ECB as the rate source, keyed by the LOCAL currency', async () => {
+    let requestedCurrency = '';
     const service = new ExchangeRateService({
       NBP: { fetchRateOn: async () => null },
       BNR: { fetchRateOn: async () => null },
       ECB: {
-        fetchRateOn: async (_currency, isoDate) => ({
-          rate: '25.30',
-          rateDate: isoDate,
-          table: null,
-        }),
+        fetchRateOn: async (currency, isoDate) => {
+          requestedCurrency = currency;
+          return currency === 'CZK' ? { rate: '25.30', rateDate: isoDate, table: null } : null;
+        },
       },
     });
     const result = await resolveLocalCurrencyVatSnapshot(
       baseInput({ issuerCountry: 'CZ' }),
       service,
     );
+    // ECB's SDW series is D.{local}.EUR — the opposite of NBP/BNR, it is
+    // keyed by the local currency, not the document currency.
+    expect(requestedCurrency).toBe('CZK');
     expect(result?.exchangeRateSource).toBe('ECB');
     expect(result?.localCurrency).toBe('CZK');
   });

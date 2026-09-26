@@ -103,4 +103,7 @@ export const ro: ClassicLabels = {
         : `${days} zile`,
   companyRegisterLabel: 'Înregistrare în registru',
   dueDatePrefix: 'Data scadenței: ',
+  foreignRegistrationIdFallback: 'Nr. de înregistrare',
+  foreignTaxIdFallback: 'Cod fiscal: ',
+  totalVatLabel: 'Total TVA:',
 };

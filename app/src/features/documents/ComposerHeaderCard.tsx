@@ -20,6 +20,10 @@ interface ComposerHeaderCardProps {
   state: ComposerFormState;
   setField: ComposerStateController['setField'];
   patchState: ComposerStateController['patchState'];
+  // Extra state to apply alongside a client change — e.g. the non-EU-business
+  // VAT default (see DocumentComposerForm) — computed by the caller since it
+  // needs the issuer profile this card doesn't otherwise carry.
+  onClientChangeExtra?: (clientId: string | null) => Partial<ComposerFormState>;
 }
 
 export function ComposerHeaderCard({
@@ -33,6 +37,7 @@ export function ComposerHeaderCard({
   state,
   setField,
   patchState,
+  onClientChangeExtra,
 }: ComposerHeaderCardProps) {
   return (
     <Card className="flex flex-col gap-4">
@@ -44,7 +49,7 @@ export function ComposerHeaderCard({
         <ComposerClientField
           clientId={state.clientId}
           clients={clients}
-          onChange={(value) => setField('clientId', value)}
+          onChange={(value) => patchState({ clientId: value, ...onClientChangeExtra?.(value) })}
         />
       </div>
       <ComposerCorrectionFields

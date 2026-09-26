@@ -5,11 +5,12 @@ import { DE_CONFIG } from './countries/de';
 import { EU_RATE_OVERRIDES } from './countries/eu-rates';
 import { FR_CONFIG } from './countries/fr';
 import { IT_CONFIG } from './countries/it';
+import { NON_EU_RATE_OVERRIDES } from './countries/non-eu-rates';
 import { PL_CONFIG } from './countries/pl';
 import { RO_CONFIG } from './countries/ro';
 import type { Locale } from './languages';
 import { PUBLISHED_LOCALES } from './languages';
-import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
+import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS, type VatExemptionGround } from './vat';
 
 export type { AtRecipientLocation } from './countries/at';
 export {
@@ -20,6 +21,7 @@ export {
 export * from './countries/base';
 export { FORFETTARIO_GROUND } from './countries/it';
 export * from './countries/non-euro';
+export { PL_GROUND_VAT_CATEGORIES } from './countries/pl';
 export * from './languages';
 
 export const EU_VAT_AREA_COUNTRIES = [
@@ -57,6 +59,15 @@ export function isEuVatAreaCountry(country: string): country is EuVatAreaCountry
   return (EU_VAT_AREA_COUNTRIES as readonly string[]).includes(country);
 }
 
+// чл. 21, ал. 2 от ЗДДС is the same general B2B place-of-supply rule cited by
+// the "Обратно начисляване" reverse-charge ground above (place of supply =
+// where the recipient is established) — it is not limited to a recipient
+// established in another EU member state. A business established outside
+// the EU is covered the same way; there is just no Bulgarian reverse charge
+// to invoke since that recipient is outside the EU VAT system.
+const BG_THIRD_COUNTRY_B2B_SERVICE_GROUND =
+  'Услуга с място на изпълнение извън територията на страната – чл. 21, ал. 2 от ЗДДС (получателят е данъчно задължено лице, установено извън ЕС)';
+
 const BG_CONFIG: CountryConfig = {
   country: 'BG',
   locale: 'bg',
@@ -70,9 +81,17 @@ const BG_CONFIG: CountryConfig = {
   defaultVatRateBp: 2000,
   companyIdLabel: 'ЕИК / Булстат',
   vatNumberPattern: /^BG\d{9,10}$/,
-  exemptionGrounds: [...VAT_EXEMPTION_GROUNDS, DEFAULT_EXEMPTION_GROUND],
+  exemptionGrounds: [
+    ...VAT_EXEMPTION_GROUNDS,
+    DEFAULT_EXEMPTION_GROUND,
+    BG_THIRD_COUNTRY_B2B_SERVICE_GROUND,
+  ],
   defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,
-  vatNoteGrounds: ['Обратно начисляване – чл. 21, ал. 2 от ЗДДС'],
+  vatNoteGrounds: [
+    'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
+    BG_THIRD_COUNTRY_B2B_SERVICE_GROUND,
+  ],
+  nonEuB2bServicesGround: BG_THIRD_COUNTRY_B2B_SERVICE_GROUND,
   zeroRateGrounds: ['чл. 28 от ЗДДС', 'чл. 30, ал. 1 от ЗДДС', 'чл. 53, ал. 1 от ЗДДС'],
   identifiers: [],
   numberingUsesFixedWidth: true,
@@ -129,6 +148,10 @@ export function getCountryConfig(
     });
   }
   if (isEuVatAreaCountry(country)) return resolveLocale({ ...GENERIC_EU_CONFIG, country });
+  const nonEuRateOverride = NON_EU_RATE_OVERRIDES[country];
+  if (nonEuRateOverride) {
+    return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country, ...nonEuRateOverride });
+  }
   return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country });
 }
 
@@ -145,4 +168,25 @@ export function isReverseCharge(issuerCountry: string, clientCountry: string | n
   if (!clientCountry) return false;
   if (issuerCountry === clientCountry) return false;
   return isEuVatAreaCountry(issuerCountry) && isEuVatAreaCountry(clientCountry);
+}
+
+export interface NonEuB2bServicesClient {
+  country: string | null;
+  clientType: 'business' | 'consumer' | null;
+}
+
+// Directive 2006/112/EC art. 44: a B2B service to a business established
+// outside the EU has its place of supply outside the EU too, same as the EU
+// reverse-charge case — domestic VAT is wrong for it. A consumer outside the
+// EU keeps domestic VAT (art. 45) unless the user picks a ground themselves,
+// and an unknown/EU client is untouched, so this only ever returns a ground
+// for a business client whose country is known and outside the EU VAT area.
+export function defaultNonEuB2bServicesGround(
+  issuerCountry: string,
+  issuerIdentifiers: Record<string, string> | null | undefined,
+  client: NonEuB2bServicesClient | null,
+): VatExemptionGround | null {
+  if (!client || client.clientType !== 'business') return null;
+  if (!client.country || isEuVatAreaCountry(client.country)) return null;
+  return getCountryConfig(issuerCountry, issuerIdentifiers).nonEuB2bServicesGround;
 }

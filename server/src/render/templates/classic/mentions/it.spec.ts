@@ -194,3 +194,22 @@ describe('itMentions', () => {
     expect(itMentions(input)).toEqual([]);
   });
 });
+
+describe('itMentions — IT issuer, English document', () => {
+  const enLocale: ClassicLocaleContext = { ...locale, language: 'en', labels: CLASSIC_LABELS.en };
+
+  it('translates the cross-border reverse-charge note instead of keeping the Italian wording', () => {
+    const document = buildFakeDocument({
+      documentType: 'INVOICE',
+      issuerCountry: 'IT',
+      recipientCountry: 'DE',
+      vatAmount: 0,
+      amount: 100000,
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(itMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'Reverse charge – VAT to be accounted for by the recipient, Art. 196 Directive 2006/112/EC (Art. 7-ter, comma 1, lett. a, D.P.R. 633/1972)',
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
+    ]);
+  });
+});

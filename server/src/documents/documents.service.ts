@@ -4,19 +4,19 @@ import type {
   DocumentListQuery,
   SaveDraftRequest,
 } from '@fakturcho/shared-types';
-import { CORRECTION_DOCUMENT_TYPES, getCountryConfig } from '@fakturcho/shared-types';
+import { CORRECTION_DOCUMENT_TYPES, defaultNonEuB2bServicesGround } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { readIdentifiers } from '../issuer/identifiers';
 import { computeLineTotal } from '../money/totals';
-import { hasValidVatNumberFormat, resolveLineVatCategory } from '../vat-eu/reverse-charge';
 import { toDocumentDto } from './document.mapper';
 import { DOCUMENT_INCLUDE } from './document-include';
 import { toDocumentListItemDto } from './document-list.mapper';
 import { buildDocumentListWhere } from './document-list-query';
 import { buildDraftData } from './draft-data.builder';
+import { resolveDraftLineItems } from './resolve-draft-line-items';
 import { setDocumentKsefNumber } from './set-ksef-number';
 import { applyLineVatGroups, resolveVatTreatment } from './vat-treatment';
 
@@ -58,46 +58,38 @@ export class DocumentsService {
     const issuerCountry = issuerProfile?.country ?? 'BG';
     const issuerVatRegistered = issuerProfile?.vatRegistered ?? false;
     const issuerIdentifiers = readIdentifiers(issuerProfile?.identifiers);
-    const clientHasValidVatNumber = client
-      ? hasValidVatNumberFormat(client.vatNumber, client.country)
-      : false;
+    const clientForVat = {
+      country: client?.country ?? null,
+      postcode: client?.postcode ?? null,
+      eik: client?.eik ?? null,
+      vatNumber: client?.vatNumber ?? null,
+      clientType: (client?.clientType as 'business' | 'consumer' | null) ?? null,
+    };
+
+    // Only defaults when the caller left vatExemptionGround out entirely — the
+    // composer always sends an explicit value (a ground, or null once VAT is
+    // charged), so a previously-saved draft resaved unchanged keeps whatever
+    // it already had instead of picking up this default retroactively.
+    const defaultGround =
+      request.vatExemptionGround === undefined
+        ? defaultNonEuB2bServicesGround(issuerCountry, issuerIdentifiers, clientForVat)
+        : null;
 
     const vat = resolveVatTreatment({
       documentType: request.documentType,
       vatRegistered: issuerVatRegistered,
-      requestedGround: request.vatExemptionGround ?? null,
+      requestedGround: request.vatExemptionGround ?? defaultGround,
       issuerCountry,
       issuerIdentifiers,
     });
 
-    const resolvedLineItems = request.lineItems.map((line) => {
-      const vatCategory =
-        line.vatCategory !== undefined
-          ? line.vatCategory
-          : !vat.vatCharged
-            ? issuerCountry === 'PL' && vat.vatExemptionGround
-              ? 'E'
-              : 'O'
-            : resolveLineVatCategory(
-                issuerCountry,
-                client?.country ?? null,
-                undefined,
-                clientHasValidVatNumber,
-                issuerVatRegistered,
-              );
-      const vatRateBp =
-        line.vatRateBp !== undefined
-          ? line.vatRateBp
-          : vatCategory === 'AE' || vatCategory === 'O' || vatCategory === 'E'
-            ? 0
-            : getCountryConfig(issuerCountry, issuerIdentifiers, {
-                country: client?.country ?? null,
-                postcode: client?.postcode ?? null,
-                clientType: (client?.clientType as 'business' | 'consumer' | null) ?? null,
-                eik: client?.eik ?? null,
-              }).defaultVatRateBp;
-
-      return { ...line, vatCategory, vatRateBp };
+    const resolvedLineItems = resolveDraftLineItems({
+      lineItems: request.lineItems,
+      issuerCountry,
+      issuerVatRegistered,
+      issuerIdentifiers,
+      client: clientForVat,
+      vat,
     });
 
     const documentVat = applyLineVatGroups(vat, resolvedLineItems);

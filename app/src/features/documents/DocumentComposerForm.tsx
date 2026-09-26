@@ -20,6 +20,7 @@ import { ComposerLineItemsTable } from './ComposerLineItemsTable';
 import { ComposerNotesFields } from './ComposerNotesFields';
 import { ComposerTotalsPanel } from './ComposerTotalsPanel';
 import { ComposerVatSection } from './ComposerVatSection';
+import { resolveClientChangeDefaults } from './composerClientDefaults';
 import { isFrenchTaxDocument } from './composerFrMentionsState';
 import { resolveVatTreatment } from './liveTotals';
 import { useComposerState } from './useComposerState';
@@ -112,6 +113,9 @@ export function DocumentComposerForm({
         state={state}
         setField={setField}
         patchState={patchState}
+        onClientChangeExtra={(clientId) =>
+          resolveClientChangeDefaults(issuerProfile, clients, clientId)
+        }
       />
 
       <ComposerDeliverySection

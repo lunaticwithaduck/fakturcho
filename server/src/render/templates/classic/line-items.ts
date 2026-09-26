@@ -1,4 +1,9 @@
-import { type DocumentType, TAX_DOCUMENT_TYPES, type UnitCode } from '@fakturcho/shared-types';
+import {
+  type DocumentType,
+  getCountryConfig,
+  TAX_DOCUMENT_TYPES,
+  type UnitCode,
+} from '@fakturcho/shared-types';
 import type { LineItem } from '@prisma/client';
 import { decimalSeparatorForLocale, formatCentsForLocale } from '../../../money/format';
 import { escapeHtml } from './html-utils';
@@ -30,14 +35,27 @@ function formatLineVatRate(
   language: ClassicLanguage,
   issuerCountry: string,
   issuerVatRegistered: boolean,
+  vatExemptionGround: string | null,
 ): string {
   if (item.vatCategory === 'AE') return labels.reverseChargeLineMarker;
   // art. 106e ust. 1 pkt 12 + ust. 4 pkt 3 ustawy o VAT: the Polish paper
   // convention for an exempt or out-of-scope line, distinct from the FA(3)
-  // XML codes in einvoice-adapters/pl/fa3-vat-groups.ts.
-  if (issuerCountry === 'PL') {
-    if (item.vatCategory === 'E') return 'zw';
-    if (item.vatCategory === 'O') return 'np.';
+  // XML codes in einvoice-adapters/pl/fa3-vat-groups.ts. "zw" is reserved for
+  // a real exemption (art. 43/113): a ground that is actually 0%-rated
+  // (export/WDT/international transport — see zeroRateGrounds in
+  // countries/pl.ts) prints its rate normally, and a ground that is out of
+  // scope entirely (e.g. the art. 28b cross-border B2B service, still in
+  // vatNoteGrounds but not zeroRateGrounds) prints "np." like a plain O line.
+  if (issuerCountry === 'PL' && (item.vatCategory === 'E' || item.vatCategory === 'O')) {
+    const config = getCountryConfig(issuerCountry);
+    if (vatExemptionGround && config.zeroRateGrounds?.includes(vatExemptionGround)) {
+      return formatPercentForLocale(item.vatRateBp, language);
+    }
+    const isNoteGround = vatExemptionGround && config.vatNoteGrounds?.includes(vatExemptionGround);
+    if (item.vatCategory === 'O' || isNoteGround) {
+      return 'np.';
+    }
+    return 'zw';
   }
   if (!issuerVatRegistered && item.vatRateBp === 0) return labels.reverseChargeLineMarker;
   return formatPercentForLocale(item.vatRateBp, language);
@@ -53,6 +71,7 @@ export function buildLineItemsTable(
   documentType: DocumentType,
   showPrices = true,
   issuerVatRegistered = true,
+  vatExemptionGround: string | null = null,
 ): string {
   const { labels, language, issuerCountry } = locale;
   const sign = documentType === 'credit_note' ? -1 : 1;
@@ -73,7 +92,7 @@ export function buildLineItemsTable(
       : '';
   const vatRateCell = (item: LineItem) =>
     showVatRateColumn
-      ? `<td class="col-narrow">${escapeHtml(formatLineVatRate(item, labels, language, issuerCountry, issuerVatRegistered))}</td>`
+      ? `<td class="col-narrow">${escapeHtml(formatLineVatRate(item, labels, language, issuerCountry, issuerVatRegistered, vatExemptionGround))}</td>`
       : '';
 
   const rows = lineItems

@@ -4,11 +4,18 @@ const FR_DEFAULT_EXEMPTION_GROUND = 'TVA non applicable, art. 293 B du CGI';
 
 const FR_AUTOLIQUIDATION_GROUND =
   'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE';
+// art. 259-1 du CGI also covers a preneur established outside the EU — there
+// is no autoliquidation there (the customer is outside the EU VAT system),
+// so impots.gouv.fr's own guidance for that case reads "TVA non applicable –
+// art. 259-1 du CGI" rather than mentioning autoliquidation.
+const FR_THIRD_COUNTRY_B2B_SERVICE_GROUND =
+  'TVA non applicable – art. 259-1 du CGI (preneur assujetti établi hors de l’Union européenne)';
 
 const FR_EXEMPTION_GROUNDS = [
   'Exonération de TVA, article 262 ter I du CGI',
   'Exonération de TVA, article 262 I du CGI',
   FR_AUTOLIQUIDATION_GROUND,
+  FR_THIRD_COUNTRY_B2B_SERVICE_GROUND,
 ] as const;
 
 export const FR_CONFIG: CountryConfig = {
@@ -30,10 +37,12 @@ export const FR_CONFIG: CountryConfig = {
   defaultExemptionGround: FR_DEFAULT_EXEMPTION_GROUND,
   vatNoteGrounds: [
     FR_AUTOLIQUIDATION_GROUND,
+    FR_THIRD_COUNTRY_B2B_SERVICE_GROUND,
     FR_DEFAULT_EXEMPTION_GROUND,
     'Exonération de TVA, article 262 ter I du CGI',
     'Exonération de TVA, article 262 I du CGI',
   ],
+  nonEuB2bServicesGround: FR_THIRD_COUNTRY_B2B_SERVICE_GROUND,
   identifiers: [
     { key: 'siret', label: 'SIRET', pattern: /^\d{14}$/, required: false },
     { key: 'rcs', label: 'RCS', pattern: null, required: false },

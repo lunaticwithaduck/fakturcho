@@ -1,5 +1,6 @@
 import type { LineItem } from '@prisma/client';
 import { describe, expect, it } from 'vitest';
+import { resolveClassicLocale } from '../locale';
 import { buildFakeDocument, buildFakeLineItems } from '../testing/fake-document';
 import { plMentions } from './pl';
 
@@ -43,6 +44,18 @@ describe('plMentions', () => {
     const document = buildFakeDocument();
     const lineItems = withCategory('E');
     expect(plMentions({ document, lineItems, locale: {} as never })).toEqual([]);
+  });
+});
+
+describe('plMentions — PL issuer, English document', () => {
+  const enLocale = resolveClassicLocale('en', 'PL');
+
+  it('translates "odwrotne obciążenie" into English instead of keeping the Polish word', () => {
+    const document = buildFakeDocument();
+    const lineItems = withCategory('AE');
+    expect(plMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'Reverse charge – VAT to be accounted for by the recipient, Art. 196 Directive 2006/112/EC',
+    ]);
   });
 });
 

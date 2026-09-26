@@ -18,6 +18,16 @@ const IT_TRANSPORT_REASONS = [
 export const FORFETTARIO_GROUND =
   'Operazione senza applicazione dell’IVA ai sensi dell’art. 1, commi da 54 a 89, L. 190/2014';
 
+// art. 7-ter, comma 1, lett. a) D.P.R. 633/1972 is Italy's general B2B
+// place-of-supply rule (services taxed where the business customer is
+// established); it covers a customer outside the EU the same way it covers
+// one in another member state. There is no Italian inversione contabile to
+// invoke for a non-EU customer, so this is the plain "not subject" wording
+// already in the grounds list below, not the "inversione contabile" one used
+// for the EU reverse charge (AE) case.
+const IT_THIRD_COUNTRY_B2B_SERVICE_GROUND =
+  'Operazione non soggetta ad IVA ai sensi dell’art. 7-ter, comma 1, lett. a), D.P.R. 633/1972';
+
 export const IT_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'IT',
@@ -39,10 +49,11 @@ export const IT_CONFIG: CountryConfig = {
     'Operazione non imponibile ai sensi dell’art. 8, comma 1, lett. a), D.P.R. 633/1972',
     'Operazione esente ai sensi dell’art. 10, D.P.R. 633/1972',
     'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
-    'Operazione non soggetta ad IVA ai sensi dell’art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+    IT_THIRD_COUNTRY_B2B_SERVICE_GROUND,
     'Inversione contabile ai sensi dell’art. 17, comma 6, D.P.R. 633/1972',
   ],
   defaultExemptionGround: FORFETTARIO_GROUND,
+  nonEuB2bServicesGround: IT_THIRD_COUNTRY_B2B_SERVICE_GROUND,
   identifiers: [
     { key: 'rea', label: 'Numero REA', pattern: /^[A-Z]{2}-\d{1,7}$/, required: false },
     { key: 'shareCapital', label: 'Capitale sociale', pattern: null, required: false },

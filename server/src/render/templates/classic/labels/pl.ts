@@ -99,4 +99,7 @@ export const pl: ClassicLabels = {
   correctionKsefNumberPrefix: 'Nr KSeF faktury korygowanej: ',
   paymentTermsDaysText: (days) => (days === 0 ? 'przy odbiorze' : `${days} dni`),
   companyRegisterLabel: 'Wpis do rejestru',
+  foreignRegistrationIdFallback: 'Nr rej.',
+  foreignTaxIdFallback: 'Numer podatkowy: ',
+  totalVatLabel: 'Razem VAT:',
 };

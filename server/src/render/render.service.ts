@@ -61,6 +61,7 @@ function liveRecipientSnapshotFields(client: Client | null) {
     recipientMol: client?.mol ?? null,
     recipientSdiRecipientCode: client?.sdiRecipientCode ?? null,
     recipientPec: client?.pec ?? null,
+    recipientClientType: client?.clientType ?? null,
   };
 }
 

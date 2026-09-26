@@ -86,6 +86,82 @@ describe('IT: EU VAT number label for a foreign client (art. 21 c.2 lett. f)', (
   });
 });
 
+describe("foreign client identifiers — labelled by the client's own scheme, not the issuer's", () => {
+  it('PL doc, German client: prints the generic "Nr rej." fallback, not "NIP"', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const document = buildFakeDocument({
+      recipientCountry: 'DE',
+      recipientEik: 'HRB 98765',
+      recipientVatNumber: null,
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('Nr rej.: HRB 98765');
+    expect(html).not.toContain('NIP: HRB 98765');
+  });
+
+  it('RO doc, German client: prints the generic Romanian fallback, not "CUI"', () => {
+    const locale = resolveClassicLocale('ro', 'RO');
+    const document = buildFakeDocument({
+      recipientCountry: 'DE',
+      recipientEik: 'HRB 98765',
+      recipientVatNumber: null,
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('Nr. de înregistrare: HRB 98765');
+    expect(html).not.toContain('CUI: HRB 98765');
+  });
+
+  it('FR doc, German client: prints the generic French fallback, not "SIREN"', () => {
+    const locale = resolveClassicLocale('fr', 'FR');
+    const document = buildFakeDocument({
+      recipientCountry: 'DE',
+      recipientEik: 'HRB 98765',
+      recipientVatNumber: null,
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    // escapeHtml turns the apostrophe into &#39;, same as every other label.
+    expect(html).toContain('Numéro d&#39;immatriculation : HRB 98765');
+    expect(html).not.toContain('SIREN : HRB 98765');
+  });
+
+  it('IT doc, US client: prints the EIN value as-is, not "Codice fiscale"', () => {
+    const locale = resolveClassicLocale('it', 'IT');
+    const document = buildFakeDocument({
+      recipientCountry: 'US',
+      recipientEik: 'EIN 12-3456789',
+      recipientVatNumber: null,
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    // identifierLine() already drops a label the value itself starts with
+    // (see html-utils.ts), so "EIN 12-3456789" prints without a duplicate
+    // "EIN:" prefix — same behaviour as every other identifier in this app.
+    expect(html).toContain('<div>EIN 12-3456789</div>');
+    expect(html).not.toContain('Codice fiscale: EIN 12-3456789');
+  });
+
+  it('DE doc, Swiss client: prints "MWST-Nr." for the VAT number, not "USt-IdNr."', () => {
+    const locale = resolveClassicLocale('de', 'DE');
+    const document = buildFakeDocument({
+      recipientCountry: 'CH',
+      recipientVatNumber: 'CHE-116.281.710 MWST',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('MWST-Nr.: CHE-116.281.710 MWST');
+    expect(html).not.toContain('USt-IdNr.: CHE-116.281.710 MWST');
+  });
+
+  it("a same-country client keeps the issuer document's own label unchanged", () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const document = buildFakeDocument({
+      recipientCountry: 'PL',
+      recipientEik: '5260001246',
+      recipientVatNumber: null,
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('NIP: 5260001246');
+  });
+});
+
 describe('DE issuedAtPrefix as a function of document type', () => {
   const locale = resolveClassicLocale('de', 'DE');
 

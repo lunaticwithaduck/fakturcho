@@ -94,4 +94,7 @@ export const it: ClassicLabels = {
   paymentTermsDaysText: (days) => (days === 0 ? 'alla ricezione' : `${days} giorni`),
   companyRegisterLabel: 'Iscrizione nel registro',
   dueDatePrefix: 'Scadenza: ',
+  foreignRegistrationIdFallback: 'Numero di registrazione',
+  foreignTaxIdFallback: 'Identificativo fiscale: ',
+  totalVatLabel: 'Totale IVA:',
 };

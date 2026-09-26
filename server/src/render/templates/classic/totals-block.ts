@@ -63,7 +63,7 @@ function mixedVatBlock(
   locale: ClassicLocaleContext,
   documentType: DocumentType,
   sign: 1 | -1,
-): { rows: string; exemptionGround: string | null } {
+): { rows: string; exemptionGround: string | null; totalVatAmount: number } {
   const { labels, language } = locale;
   const groups = discountAdjustedVatGroups(document, lineItems);
   const rows = groups
@@ -89,7 +89,8 @@ function mixedVatBlock(
       untaxedBaseRows(document, documentType, exemptionGround, locale, group.taxableAmount * sign),
     )
     .join('');
-  return { rows: rows + untaxedRows, exemptionGround };
+  const totalVatAmount = groups.reduce((sum, group) => sum + group.vatAmount, 0);
+  return { rows: rows + untaxedRows, exemptionGround, totalVatAmount };
 }
 
 function groundPrefix(ground: string, locale: ClassicLocaleContext): string {
@@ -153,10 +154,15 @@ export function buildTotalsBlock(
 
   let vatRows: string;
   let exemptionGround: string | null;
+  let totalVatRow = '';
   if (isMixed) {
     const mixed = mixedVatBlock(document, lineItems, locale, documentType, sign);
     vatRows = mixed.rows;
     exemptionGround = mixed.exemptionGround;
+    totalVatRow = totalsRow(
+      labels.totalVatLabel,
+      formatMoneyForLocale(mixed.totalVatAmount * sign, language),
+    );
   } else {
     const base = document.subtotal - document.discountTotal;
     exemptionGround = presentation.showExemptionLine ? presentation.exemptionGround : null;
@@ -175,6 +181,7 @@ export function buildTotalsBlock(
   const localCurrencyVatRow = buildLocalCurrencyVatRow(document, labels, language, sign);
   const totals = `<div class="totals">
     ${discountRows(document, discounts, labels, language, sign) + vatRows}
+    ${totalVatRow}
     ${localCurrencyVatRow}
     ${totalsRow(totalLabel, formatMoneyForLocale(document.amount * sign, language), 'totals-row total')}
     ${dueRow(document, documentType, labels, dueValue)}

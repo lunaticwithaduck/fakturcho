@@ -96,4 +96,7 @@ export const bg: ClassicLabels = {
   paymentTermsDaysText: (days) => (days === 0 ? 'при получаване' : `${days} дни`),
   companyRegisterLabel: 'Вписване в регистър',
   dueDatePrefix: 'Срок за плащане: ',
+  foreignRegistrationIdFallback: 'Рег. номер',
+  foreignTaxIdFallback: 'Данъчен номер: ',
+  totalVatLabel: 'Общо ДДС:',
 };

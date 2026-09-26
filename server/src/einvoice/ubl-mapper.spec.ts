@@ -91,6 +91,20 @@ describe('toUblXml — BG issuer, intra-EU reverse charge to a DE client', () =>
   });
 });
 
+describe('toUblXml — automatic AE reverse charge with no user-set ground', () => {
+  // resolveLineVatCategory sets AE automatically; nothing asks the issuer for
+  // a ground, so a real reverse-charge document reaches export with
+  // vatExemptionGround still null (see prod RO-31-inv-rc-issued fixture).
+  // EN16931 BR-AE-10 still needs a VAT exemption reason code or text.
+  it('falls back to the VATEX-EU-AE code list value', () => {
+    const xml = toUblXml({ ...bgToEuReverseChargeInvoice, vatExemptionGround: null });
+    expect(xml).toContain(
+      '<cbc:TaxExemptionReasonCode>VATEX-EU-AE</cbc:TaxExemptionReasonCode>' +
+        '<cbc:TaxExemptionReason>Reverse charge</cbc:TaxExemptionReason>',
+    );
+  });
+});
+
 describe('toUblXml — DE issuer to a domestic DE client, standard rate', () => {
   const xml = toUblXml(deDomesticStandardInvoice);
 

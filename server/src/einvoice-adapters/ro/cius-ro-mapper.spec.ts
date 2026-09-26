@@ -114,6 +114,26 @@ describe('toCiusRoXml — Romanian CUI/VAT validation', () => {
     expect(() => toCiusRoXml(invalid)).toThrow(/CUI/);
   });
 
+  it('accepts an issuer eik carrying the same RO-prefixed value as its VAT number', () => {
+    // A VAT-registered RO issuer's CUI field commonly holds the RO-prefixed
+    // CIF, exactly like its vatNumber (see prod RO-31-inv-rc-issued: both
+    // "RO18467557") — the checksum applies to the bare digits, not the raw
+    // field value.
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, eik: 'RO18547290' },
+    };
+    expect(() => toCiusRoXml(prefixed)).not.toThrow();
+  });
+
+  it('accepts a recipient eik carrying the same RO-prefixed value as its VAT number', () => {
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: { ...roDomesticStandardInvoice.recipient, eik: 'RO14399840' },
+    };
+    expect(() => toCiusRoXml(prefixed)).not.toThrow();
+  });
+
   it('does not validate CUI format for a non-Romanian party', () => {
     const notRomanian: DocumentDto = {
       ...roDomesticStandardInvoice,
@@ -125,6 +145,33 @@ describe('toCiusRoXml — Romanian CUI/VAT validation', () => {
       },
     };
     expect(() => toCiusRoXml(notRomanian)).not.toThrow();
+  });
+});
+
+describe('toCiusRoXml — automatic EU B2B reverse charge (no user-set ground)', () => {
+  it('derives the Romanian "Taxare inversă" wording instead of the generic VATEX fallback', () => {
+    const [line] = roDomesticStandardInvoice.lineItems;
+    if (!line) throw new Error('expected fixture to carry a line item');
+    // resolveLineVatCategory sets AE automatically; nothing asks the issuer
+    // for a ground, so a real reverse-charge document keeps
+    // vatExemptionGround null (see prod RO-31-inv-rc-issued).
+    const reverseCharge: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      vatExemptionGround: null,
+      vatRateBp: 0,
+      vatAmount: 0,
+      amount: roDomesticStandardInvoice.subtotal,
+      recipient: {
+        ...roDomesticStandardInvoice.recipient,
+        country: 'DE',
+        vatNumber: 'DE123456788',
+      },
+      lineItems: [{ ...line, vatRateBp: 0, vatCategory: 'AE' }],
+    };
+    const xml = toCiusRoXml(reverseCharge);
+    expect(xml).toContain('<cbc:TaxExemptionReasonCode>VATEX-EU-AE</cbc:TaxExemptionReasonCode>');
+    expect(xml).toContain('<cbc:TaxExemptionReason>Taxare inversă</cbc:TaxExemptionReason>');
+    expect(xml).not.toContain('Reverse charge');
   });
 });
 
