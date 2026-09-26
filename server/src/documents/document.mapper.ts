@@ -133,6 +133,7 @@ function toOriginalDocumentReferenceDto(
     numberSuffix: original.numberSuffix,
     issuedAt: toIsoDate(original.issuedAt),
     ksefNumber: resolveOriginalKsefNumber(original),
+    amount: original.amount,
   };
 }
 
@@ -169,6 +170,7 @@ function toLineItemDto(item: PrismaLineItem): LineItemDto {
     vatRateBp: item.vatRateBp,
     vatCategory: item.vatCategory as LineItemDto['vatCategory'],
     unitCode: item.unitCode,
+    splitPaymentAnnex15: item.splitPaymentAnnex15,
   };
 }
 

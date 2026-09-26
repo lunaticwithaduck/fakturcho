@@ -585,3 +585,114 @@ describe('toFa3Xml — P_6 (date of sale) agrees with the PDF\'s "Data sprzedaż
     expect(xml).not.toContain('<P_6>');
   });
 });
+
+describe('toFa3Xml — split payment mechanism (MPP) annotation', () => {
+  it('flags P_18A as not applicable and omits P_12_Zal_15 when no line is załącznik 15', () => {
+    const xml = toFa3Xml(plDomesticStandardInvoice);
+    expect(xml).toContain('<P_18A>2</P_18A>');
+    expect(xml).not.toContain('P_12_Zal_15');
+  });
+
+  it('flags P_18A as 1 and P_12_Zal_15 as 1 on the flagged line when the gross total exceeds 15 000 zł', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      amount: 400_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      lineItems: [{ ...baseLineItem, splitPaymentAnnex15: true }],
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain('<P_18A>1</P_18A>');
+    expect(xml).toContain('<P_12_Zal_15>1</P_12_Zal_15>');
+    // XSD FaWiersz sequence: P_12, then P_12_Zal_15, then KursWaluty.
+    const p12Index = xml.indexOf('<P_12>');
+    const zal15Index = xml.indexOf('<P_12_Zal_15>');
+    const kursIndex = xml.indexOf('<KursWaluty>');
+    expect(zal15Index).toBeGreaterThan(p12Index);
+    expect(kursIndex).toBeGreaterThan(zal15Index);
+  });
+
+  it('flags P_18A as 2 when the załącznik 15 line exists but the gross total does not exceed 15 000 zł', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      amount: 200_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      lineItems: [{ ...baseLineItem, splitPaymentAnnex15: true }],
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain('<P_18A>2</P_18A>');
+    // P_12_Zal_15 is still set per line regardless of whether MPP applies
+    // (broszura p.93: "niezależnie czy transakcja podlega... czy nie podlega").
+    expect(xml).toContain('<P_12_Zal_15>1</P_12_Zal_15>');
+  });
+
+  it('evaluates a correction against the corrected (post-correction) total, not the delta alone', () => {
+    // Original invoice: 3 400.00 EUR * rate 5 = 17 000 zł (over threshold).
+    // Credit note delta: 600.00 EUR * rate 5 = 3 000 zł, bringing the
+    // corrected total to 14 000 zł — below threshold, so P_18A must flip to 2
+    // even though the original invoice required the annotation.
+    const creditNote: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      documentType: 'credit_note',
+      amount: 60_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      originalDocumentId: 'doc-pl-domestic-1',
+      originalDocument: {
+        number: 7,
+        numberPrefix: null,
+        numberSuffix: null,
+        issuedAt: '2026-08-01',
+        ksefNumber: null,
+        amount: 340_000,
+      },
+      lineItems: [{ ...baseLineItem, splitPaymentAnnex15: true }],
+    };
+    const xml = toFa3Xml(creditNote);
+    expect(xml).toContain('<P_18A>2</P_18A>');
+  });
+
+  it('keeps P_18A at 1 on a correction when the corrected total still exceeds 15 000 zł', () => {
+    // Original: 3 400.00 EUR * 5 = 17 000 zł. Debit note delta: +200.00 EUR *
+    // 5 = 1 000 zł, corrected total 18 000 zł — still over threshold.
+    const debitNote: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      documentType: 'debit_note',
+      amount: 20_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      originalDocumentId: 'doc-pl-domestic-1',
+      originalDocument: {
+        number: 7,
+        numberPrefix: null,
+        numberSuffix: null,
+        issuedAt: '2026-08-01',
+        ksefNumber: null,
+        amount: 340_000,
+      },
+      lineItems: [{ ...baseLineItem, splitPaymentAnnex15: true }],
+    };
+    const xml = toFa3Xml(debitNote);
+    expect(xml).toContain('<P_18A>1</P_18A>');
+  });
+});
+
+describe('toFa3Xml — payment due date (Platnosc/TerminPlatnosci/Termin)', () => {
+  it('carries the due date in Platnosc/TerminPlatnosci/Termin, after the line items', () => {
+    const document: DocumentDto = { ...plDomesticStandardInvoice, dueAt: '2026-09-19' };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain(
+      '<Platnosc><TerminPlatnosci><Termin>2026-09-19</Termin></TerminPlatnosci></Platnosc>',
+    );
+    const lastWierszIndex = xml.lastIndexOf('</FaWiersz>');
+    const platnoscIndex = xml.indexOf('<Platnosc>');
+    expect(platnoscIndex).toBeGreaterThan(lastWierszIndex);
+  });
+
+  it('omits Platnosc entirely when there is no due date', () => {
+    const document: DocumentDto = { ...plDomesticStandardInvoice, dueAt: null };
+    const xml = toFa3Xml(document);
+    expect(xml).not.toContain('Platnosc');
+  });
+});

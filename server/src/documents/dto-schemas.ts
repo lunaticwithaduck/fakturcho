@@ -22,6 +22,7 @@ const lineItemInputSchema = z.object({
   vatRateBp: z.number().int().optional(),
   vatCategory: z.enum(VAT_CATEGORIES).optional(),
   unitCode: z.enum(UNIT_CODES).nullish(),
+  splitPaymentAnnex15: z.boolean().optional(),
 });
 
 const discountInputSchema = z.object({

@@ -167,6 +167,34 @@ describe('toSaveDraftRequest', () => {
     ]);
   });
 
+  it('sends splitPaymentAnnex15 only for a line that carries it, omitting the default false', () => {
+    const state = blankComposerState();
+    state.lineItems = [
+      { ...createLineItem(), name: 'Plain', quantity: '1', unitPrice: 1000 },
+      {
+        ...createLineItem(),
+        name: 'Annex 15',
+        quantity: '1',
+        unitPrice: 1000,
+        splitPaymentAnnex15: true,
+      },
+    ];
+
+    const request = toSaveDraftRequest(state, VAT_20);
+
+    expect(request.lineItems).toEqual([
+      { name: 'Plain', quantity: '1', unitPrice: 1000, sortOrder: 0, unitCode: null },
+      {
+        name: 'Annex 15',
+        quantity: '1',
+        unitPrice: 1000,
+        sortOrder: 1,
+        unitCode: null,
+        splitPaymentAnnex15: true,
+      },
+    ]);
+  });
+
   it('omits originalDocumentId for a non-correction document type', () => {
     const state = withOneCompleteLine(blankComposerState());
     state.originalDocumentId = 'doc-1';

@@ -9,6 +9,9 @@ export interface OriginalDocumentRef {
   numberSuffix: string | null;
   issuedAt: Date | null;
   ksefNumber?: string | null;
+  // PL art. 108a ust. 1a: the corrected (post-correction) gross total needs
+  // the original invoice's own gross amount (mentions/pl.ts).
+  amount?: number | null;
 }
 
 export function buildCorrectionReference(

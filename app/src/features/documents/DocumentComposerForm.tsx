@@ -116,13 +116,13 @@ export function DocumentComposerForm({
           />
         </Card>
       ) : null}
-
       <ComposerLineItemsTable
         lineItems={state.lineItems}
         catalogueItems={catalogueItems}
         vatCharged={vat.vatCharged}
         vatRates={countryConfig.vatRates}
         defaultVatRateBp={countryConfig.defaultVatRateBp}
+        issuerCountry={issuerProfile.country}
         onAdd={controller.addLineItem}
         onChange={controller.updateLineItem}
         onRemove={controller.removeLineItem}

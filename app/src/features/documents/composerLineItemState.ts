@@ -10,6 +10,8 @@ export interface LineItemFormState {
   // different rate from countryConfig.vatRates for this specific line.
   vatRateBp: number | null;
   unitCode: string | null;
+  // PL only: art. 106e ust. 1 pkt 18a / załącznik nr 15 ustawy o VAT.
+  splitPaymentAnnex15: boolean;
 }
 
 function makeKey(): string {
@@ -24,6 +26,7 @@ export function createLineItem(): LineItemFormState {
     unitPrice: null,
     vatRateBp: null,
     unitCode: null,
+    splitPaymentAnnex15: false,
   };
 }
 
@@ -38,6 +41,7 @@ export function lineItemFormStateFromDto(
     unitPrice: line.unitPrice,
     vatRateBp: line.vatRateBp === defaultVatRateBp ? null : line.vatRateBp,
     unitCode: line.unitCode,
+    splitPaymentAnnex15: line.splitPaymentAnnex15 ?? false,
   };
 }
 
@@ -55,5 +59,6 @@ export function buildLineItemInputs(lines: readonly LineItemFormState[]): LineIt
     sortOrder: index,
     ...(line.vatRateBp !== null ? { vatRateBp: line.vatRateBp } : {}),
     unitCode: line.unitCode,
+    ...(line.splitPaymentAnnex15 ? { splitPaymentAnnex15: true } : {}),
   }));
 }

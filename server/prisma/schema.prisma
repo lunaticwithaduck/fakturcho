@@ -384,6 +384,11 @@ model LineItem {
   vatCategory VatCategory @default(S)
   unitCode    String?
 
+  // PL only: art. 106e ust. 1 pkt 18a / załącznik nr 15 ustawy o VAT — this
+  // line's good/service is one the annex lists (FA(3) P_12_Zal_15), set
+  // independently of whether the invoice ends up over the MPP threshold.
+  splitPaymentAnnex15 Boolean @default(false)
+
   @@index([documentId])
   @@map("line_item")
 }

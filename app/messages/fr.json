@@ -176,6 +176,10 @@
           "LTR": "Litre",
           "KMT": "Kilomètre",
           "SET": "Lot"
+        },
+        "mpp": {
+          "checkboxLabel": "Soumis au paiement scindé (annexe 15)",
+          "hint": "Pologne uniquement — cochez les biens ou services listés à l'annexe 15 de la loi polonaise sur la TVA ; utilisé pour la mention obligatoire « mechanizm podzielonej płatności »."
         }
       },
       "discounts": {

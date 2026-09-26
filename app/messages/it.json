@@ -176,6 +176,10 @@
           "LTR": "Litro",
           "KMT": "Chilometro",
           "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Soggetto a split payment (allegato 15)",
+          "hint": "Solo Polonia — contrassegna i beni o servizi elencati nell'allegato 15 della legge IVA polacca; usato per la dicitura obbligatoria «mechanizm podzielonej płatności»."
         }
       },
       "discounts": {

@@ -38,6 +38,8 @@ export function lineBlock(
     (allocatedDiscount !== 0 ? textEl('P_10', toDecimalString(allocatedDiscount * sign)) : '') +
     textEl('P_11', toDecimalString(discountAdjustedLine.lineTotal * sign)) +
     textEl('P_12', vatRateCode(originalLine.vatCategory, originalLine.vatRateBp)) +
+    // broszura FA(3) p.93: set independently of whether MPP actually applies.
+    (originalLine.splitPaymentAnnex15 ? textEl('P_12_Zal_15', '1') : '') +
     (kursWaluty !== null ? textEl('KursWaluty', kursWaluty) : '') +
     '</FaWiersz>'
   );

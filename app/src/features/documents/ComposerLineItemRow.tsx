@@ -2,7 +2,7 @@
 
 import { formatMoney } from '@app/features/shared/format';
 import { MoneyInput } from '@app/features/shared/MoneyInput';
-import { Button, Input, Select, SelectItem } from '@design/components';
+import { Button, Checkbox, Input, Select, SelectItem } from '@design/components';
 import { UNIT_CODES, type VatRateOption } from '@fakturcho/shared-types';
 import type { CatalogueItemDto } from '@shared/types';
 import { useTranslations } from 'next-intl';
@@ -19,6 +19,7 @@ interface ComposerLineItemRowProps {
   vatCharged: boolean;
   vatRates: readonly VatRateOption[];
   defaultVatRateBp: number;
+  issuerCountry: string;
   onChange: (patch: Partial<Omit<LineItemFormState, 'key'>>) => void;
   onRemove: () => void;
 }
@@ -30,6 +31,7 @@ export function ComposerLineItemRow({
   vatCharged,
   vatRates,
   defaultVatRateBp,
+  issuerCountry,
   onChange,
   onRemove,
 }: ComposerLineItemRowProps) {
@@ -106,6 +108,16 @@ export function ComposerLineItemRow({
       <Button type="button" variant="ghost" size="sm" disabled={!canRemove} onClick={onRemove}>
         {t('composer.lineItems.removeButton')}
       </Button>
+      {issuerCountry === 'PL' ? (
+        <div className="flex flex-col gap-1 sm:basis-full">
+          <Checkbox
+            label={t('composer.lineItems.mpp.checkboxLabel')}
+            checked={line.splitPaymentAnnex15}
+            onCheckedChange={(checked) => onChange({ splitPaymentAnnex15: checked === true })}
+          />
+          <p className="text-xs text-text-muted">{t('composer.lineItems.mpp.hint')}</p>
+        </div>
+      ) : null}
     </div>
   );
 }

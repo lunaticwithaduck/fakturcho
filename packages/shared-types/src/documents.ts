@@ -28,6 +28,9 @@ export interface LineItemDto {
   vatRateBp: number;
   vatCategory: VatCategory;
   unitCode: string | null;
+  // PL only: art. 106e ust. 1 pkt 18a / załącznik nr 15 ustawy o VAT. Optional
+  // since every non-PL adapter fixture predates this field.
+  splitPaymentAnnex15?: boolean;
 }
 
 export interface DiscountDto {
@@ -80,6 +83,10 @@ export interface OriginalDocumentReferenceDto {
   numberSuffix: string | null;
   issuedAt: string | null;
   ksefNumber: string | null;
+  // PL art. 108a ust. 1a: a correction's own MPP threshold check compares the
+  // corrected (post-correction) gross total, so the original invoice's own
+  // gross amount is needed alongside the correction's delta.
+  amount?: Cents | null;
 }
 
 export interface DocumentDto {
@@ -167,6 +174,7 @@ export interface LineItemInput {
   vatRateBp?: number;
   vatCategory?: VatCategory;
   unitCode?: string | null;
+  splitPaymentAnnex15?: boolean;
 }
 
 export interface DiscountInput {

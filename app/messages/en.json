@@ -176,6 +176,10 @@
           "LTR": "Litre",
           "KMT": "Kilometre",
           "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Subject to split payment (Annex 15)",
+          "hint": "Poland only — mark goods or services listed in Annex 15 to the VAT Act; used to work out the mandatory \"mechanizm podzielonej płatności\" annotation."
         }
       },
       "discounts": {

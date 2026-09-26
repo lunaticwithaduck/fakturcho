@@ -292,6 +292,35 @@ describe('DocumentsService', () => {
     });
   });
 
+  it('splitPaymentAnnex15 (PL art. 106e ust. 1 pkt 18a) round-trips through a save, defaulting to false', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'PL' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        lineItems: [
+          { name: 'Towar', quantity: '1', unitPrice: 1000, sortOrder: 0 },
+          {
+            name: 'Towar z zał. 15',
+            quantity: '1',
+            unitPrice: 2000,
+            sortOrder: 1,
+            splitPaymentAnnex15: true,
+          },
+        ],
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ splitPaymentAnnex15: false });
+    expect(draft.lineItems[1]).toMatchObject({ splitPaymentAnnex15: true });
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.lineItems[0]).toMatchObject({ splitPaymentAnnex15: false });
+    expect(refetched.lineItems[1]).toMatchObject({ splitPaymentAnnex15: true });
+  });
+
   it('documentLanguage is resolved from the client at draft save time', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);

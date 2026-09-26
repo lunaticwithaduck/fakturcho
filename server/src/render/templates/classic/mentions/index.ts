@@ -12,6 +12,10 @@ export interface MentionsInput {
   document: Document;
   lineItems: readonly LineItem[];
   locale: ClassicLocaleContext;
+  // PL art. 108a ust. 1a: a credit_note/debit_note's MPP threshold check
+  // compares the corrected (post-correction) gross total, which needs the
+  // corrected invoice's own gross amount alongside this document's delta.
+  originalDocumentAmount?: number | null;
 }
 
 export type MentionsBuilder = (input: MentionsInput) => string[];

@@ -12,6 +12,7 @@ interface ComposerLineItemsTableProps {
   vatCharged: boolean;
   vatRates: readonly VatRateOption[];
   defaultVatRateBp: number;
+  issuerCountry: string;
   onAdd: () => void;
   onChange: (key: string, patch: Partial<Omit<LineItemFormState, 'key'>>) => void;
   onRemove: (key: string) => void;
@@ -23,6 +24,7 @@ export function ComposerLineItemsTable({
   vatCharged,
   vatRates,
   defaultVatRateBp,
+  issuerCountry,
   onAdd,
   onChange,
   onRemove,
@@ -41,6 +43,7 @@ export function ComposerLineItemsTable({
           vatCharged={vatCharged}
           vatRates={vatRates}
           defaultVatRateBp={defaultVatRateBp}
+          issuerCountry={issuerCountry}
           onChange={(patch) => onChange(line.key, patch)}
           onRemove={() => onRemove(line.key)}
         />

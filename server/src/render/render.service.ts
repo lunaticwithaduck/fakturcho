@@ -2,13 +2,13 @@ import { Injectable, type OnModuleDestroy, type OnModuleInit } from '@nestjs/com
 import type { Client, IssuerProfile } from '@prisma/client';
 import { type Browser, chromium } from 'playwright';
 import { DomainError } from '../common/domain-error';
-import { resolveOriginalKsefNumber } from '../documents/document.mapper';
 import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
 import { buildVerifactuQr } from './es-verifactu-qr.builder';
 import { resolveDocumentIssuerCountry, resolveDocumentLanguage } from './language';
+import { resolveOriginalDocumentRef } from './original-document-ref';
 import { buildKsefQr } from './pl-ksef-qr.builder';
 import { toSharedDocumentType } from './prisma-mappers';
 import { renderClassicTemplateHtml } from './templates/classic/template';
@@ -134,30 +134,12 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       ? resolveDocumentLanguage(document.documentLanguage, issuerCountry)
       : 'bg';
 
-    const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';
-    const originalRecord =
-      isCorrection && document.originalDocumentId
-        ? await this.prisma.document.findFirst({
-            where: { id: document.originalDocumentId, accountId },
-            select: {
-              number: true,
-              numberPrefix: true,
-              numberSuffix: true,
-              issuedAt: true,
-              ksefNumber: true,
-              einvoiceTransmission: true,
-            },
-          })
-        : null;
-    const originalDocument = originalRecord
-      ? {
-          number: originalRecord.number,
-          numberPrefix: originalRecord.numberPrefix,
-          numberSuffix: originalRecord.numberSuffix,
-          issuedAt: originalRecord.issuedAt,
-          ksefNumber: resolveOriginalKsefNumber(originalRecord),
-        }
-      : null;
+    const originalDocument = await resolveOriginalDocumentRef(
+      this.prisma,
+      accountId,
+      document.originalDocumentId,
+      documentType,
+    );
 
     const [ksefQr, verifactuQr] = await Promise.all([
       buildKsefQr(this.prisma, accountId, document, documentType, issuerCountry, isDraft),

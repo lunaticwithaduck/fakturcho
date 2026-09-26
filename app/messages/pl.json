@@ -176,6 +176,10 @@
           "LTR": "Litr",
           "KMT": "Kilometr",
           "SET": "Komplet"
+        },
+        "mpp": {
+          "checkboxLabel": "Podlega mechanizmowi podzielonej płatności (zał. nr 15)",
+          "hint": "Zaznacz towary lub usługi wymienione w załączniku nr 15 do ustawy o VAT — decyduje o obowiązkowej adnotacji „mechanizm podzielonej płatności”."
         }
       },
       "discounts": {

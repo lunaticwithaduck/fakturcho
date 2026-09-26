@@ -1,12 +1,12 @@
 import type { DocumentDto, DocumentType, LineItemDto } from '@fakturcho/shared-types';
 import { formatDocumentNumber, roundHalfUp } from '@fakturcho/shared-types';
 import { discountAdjustedLines } from '../../einvoice/discount';
+import { annotationsBlock, type Fa3DocumentType } from './fa3-annotations';
 import { lineBlock } from './fa3-lines';
 import { buyerParty, sellerParty } from './fa3-parties';
+import { paymentBlock } from './fa3-payment';
 import { groupFa3VatBuckets } from './fa3-vat-groups';
 import { dateOnly, optionalTextEl, textEl, toDecimalString } from './xml-escape';
-
-type Fa3DocumentType = 'invoice' | 'credit_note' | 'debit_note';
 
 // debit_note is a faktura korygująca in plus (art. 106j ustawy o VAT), the
 // same RodzajFaktury as a credit_note — not a fresh VAT invoice.
@@ -96,35 +96,6 @@ function correctionBlock(document: DocumentDto): string {
   );
 }
 
-// XSD/broszura FA(3): "W przypadku, gdy pole P_19 równa się 1, należy
-// wypełnić dodatkowo jedno z pól: P_19A, P_19B lub P_19C" — P_19=1 without a
-// ground is not schema-valid, so an E line with no vatExemptionGround must
-// fail readiness (checkFa3Readiness) before it ever reaches the mapper.
-function annotationsBlock(document: DocumentDto): string {
-  const hasReverseCharge = document.lineItems.some((line) => line.vatCategory === 'AE');
-  const hasExempt = document.lineItems.some((line) => line.vatCategory === 'E');
-  if (hasExempt && !document.vatExemptionGround) {
-    throw new Error(
-      'toFa3Xml: an exempt (E) line requires vatExemptionGround for P_19A (XSD requires P_19A/B/C when P_19=1).',
-    );
-  }
-  const exemption = hasExempt
-    ? `<Zwolnienie>${textEl('P_19', '1')}${textEl('P_19A', document.vatExemptionGround as string)}</Zwolnienie>`
-    : `<Zwolnienie>${textEl('P_19N', '1')}</Zwolnienie>`;
-  return (
-    '<Adnotacje>' +
-    textEl('P_16', '2') +
-    textEl('P_17', '2') +
-    textEl('P_18', hasReverseCharge ? '1' : '2') +
-    textEl('P_18A', '2') +
-    exemption +
-    `<NoweSrodkiTransportu>${textEl('P_22N', '1')}</NoweSrodkiTransportu>` +
-    textEl('P_23', '2') +
-    `<PMarzy>${textEl('P_PMarzyN', '1')}</PMarzy>` +
-    '</Adnotacje>'
-  );
-}
-
 export function toFa3Xml(document: DocumentDto): string {
   const kind = assertFa3Eligible(document.documentType);
   // art. 106j ust. 2 pkt 5 ustawy / broszura FA(3) "kwota różnicy": a credit
@@ -160,7 +131,7 @@ export function toFa3Xml(document: DocumentDto): string {
     // wystawienia faktury" — only filled when it differs from P_1.
     (saleDateOnly && saleDateOnly !== issueDateOnly ? textEl('P_6', saleDateOnly) : '') +
     amountsBlock(document, discountedLines, sign) +
-    annotationsBlock(document) +
+    annotationsBlock(document, kind) +
     textEl('RodzajFaktury', RODZAJ_FAKTURY[kind]) +
     // XSD: PrzyczynaKorekty is a direct child of Fa, right after
     // RodzajFaktury and before TypKorekty/DaneFaKorygowanej — not nested
@@ -171,7 +142,8 @@ export function toFa3Xml(document: DocumentDto): string {
       .map((line, index) =>
         lineBlock(line, discountedLines[index] ?? line, index, sign, kursWaluty),
       )
-      .join('');
+      .join('') +
+    paymentBlock(document);
 
   return (
     '<?xml version="1.0" encoding="UTF-8"?>' +

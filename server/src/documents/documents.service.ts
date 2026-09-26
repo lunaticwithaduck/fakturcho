@@ -122,6 +122,7 @@ export class DocumentsService {
             vatRateBp: line.vatRateBp,
             vatCategory: line.vatCategory,
             unitCode: line.unitCode ?? null,
+            splitPaymentAnnex15: line.splitPaymentAnnex15 ?? false,
           })),
         });
       }

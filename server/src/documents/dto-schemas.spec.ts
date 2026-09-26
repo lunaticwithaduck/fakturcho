@@ -88,6 +88,22 @@ describe('saveDraftRequestSchema', () => {
     });
     expect(parsed.lineItems[0]?.unitCode).toBeNull();
   });
+
+  it('accepts a line-item splitPaymentAnnex15 flag and defaults it to undefined when absent', () => {
+    const withFlag = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      lineItems: [
+        { name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0, splitPaymentAnnex15: true },
+      ],
+    });
+    expect(withFlag.lineItems[0]?.splitPaymentAnnex15).toBe(true);
+
+    const withoutFlag = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+    });
+    expect(withoutFlag.lineItems[0]?.splitPaymentAnnex15).toBeUndefined();
+  });
 });
 
 describe('saveDraftRequestSchema — format validation', () => {

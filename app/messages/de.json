@@ -176,6 +176,10 @@
           "LTR": "Liter",
           "KMT": "Kilometer",
           "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Split-Payment-pflichtig (Anlage 15)",
+          "hint": "Nur Polen — markieren Sie Waren oder Dienstleistungen aus Anlage 15 des polnischen USt-Gesetzes; entscheidend für den Pflichtvermerk „mechanizm podzielonej płatności“."
         }
       },
       "discounts": {

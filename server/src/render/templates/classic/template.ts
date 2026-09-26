@@ -76,7 +76,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
         : ''
     }
   </div>
-  ${buildMentionsBlock({ document, lineItems, locale })}
+  ${buildMentionsBlock({ document, lineItems, locale, originalDocumentAmount: originalDocument?.amount ?? null })}
   ${buildIssuerBlock(document, documentType, locale)}
   ${buildKsefQrBlock(ksefQr)}
   ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, documentType, locale) : ''}

@@ -176,6 +176,10 @@
           "LTR": "Litru",
           "KMT": "Kilometru",
           "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Supus plății defalcate (anexa 15)",
+          "hint": "Doar Polonia — marcați bunurile sau serviciile din anexa nr. 15 la legea poloneză a TVA; folosit pentru mențiunea obligatorie „mechanizm podzielonej płatności”."
         }
       },
       "discounts": {

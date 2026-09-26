@@ -176,6 +176,10 @@
           "LTR": "Litro",
           "KMT": "Kilómetro",
           "SET": "Juego"
+        },
+        "mpp": {
+          "checkboxLabel": "Sujeto a pago dividido (anexo 15)",
+          "hint": "Solo Polonia — marque los bienes o servicios del anexo 15 de la ley del IVA polaca; se usa para la mención obligatoria «mechanizm podzielonej płatności»."
         }
       },
       "discounts": {
