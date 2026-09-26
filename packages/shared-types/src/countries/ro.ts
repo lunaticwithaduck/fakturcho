@@ -13,6 +13,13 @@ const RO_TRANSPORT_REASONS = [
 
 const RO_DEFAULT_EXEMPTION_GROUND = 'Scutit de TVA conform art. 310 din Codul fiscal';
 
+// B2B services to a taxable person established in another country: the supply
+// is not taxable in Romania at all (art. 278 alin. (2) puts the place of supply
+// at the customer's location), so this is a VAT note, not an exemption — see
+// vatNoteGrounds below.
+const RO_NOT_SUBJECT_B2B_SERVICES_GROUND =
+  'Neimpozabil în România conform art. 278 alin. (2) din Codul fiscal';
+
 const RO_VAT_EXEMPTION_GROUNDS = [
   'Scutit cu drept de deducere conform art. 294 alin. (1) lit. a) din Codul fiscal',
   'Scutit cu drept de deducere conform art. 294 alin. (1) lit. c) din Codul fiscal',
@@ -24,6 +31,7 @@ const RO_VAT_EXEMPTION_GROUNDS = [
   'Scutit cu drept de deducere conform art. 294 alin. (2) lit. b) din Codul fiscal',
   'Scutit fără drept de deducere conform art. 292 alin. (1) din Codul fiscal',
   'Scutit fără drept de deducere conform art. 292 alin. (2) din Codul fiscal',
+  RO_NOT_SUBJECT_B2B_SERVICES_GROUND,
 ] as const;
 
 export const RO_CONFIG: CountryConfig = {
@@ -41,6 +49,7 @@ export const RO_CONFIG: CountryConfig = {
   vatNumberPattern: /^RO\d{2,10}$/i,
   exemptionGrounds: RO_VAT_EXEMPTION_GROUNDS,
   defaultExemptionGround: RO_DEFAULT_EXEMPTION_GROUND,
+  vatNoteGrounds: [RO_NOT_SUBJECT_B2B_SERVICES_GROUND],
   identifiers: [
     {
       key: 'regCom',

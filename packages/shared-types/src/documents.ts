@@ -1,7 +1,23 @@
+import type { ClientType } from './clients';
 import type { DocumentLanguage } from './countries';
 import type { DocumentStatus, DocumentType } from './enums';
 import type { Cents, CurrencyCode } from './money';
 import type { VatCategory } from './vat';
+
+// CGI art. 242 nonies A, as amended for the French e-invoicing reform
+// (décret 2022-1299): the nature of the operation a French tax document must
+// state, when it can be determined unambiguously.
+export const OPERATION_NATURES = ['goods', 'services', 'mixed'] as const;
+export type OperationNature = (typeof OPERATION_NATURES)[number];
+
+// The composer's payment-terms selector; dueAt = issue date + N days,
+// recomputed from the actual issue date at issuance (0 = due on receipt).
+export const PAYMENT_TERMS_DAY_OPTIONS = [0, 7, 14, 15, 30, 45, 60] as const;
+export type PaymentTermsDayOption = (typeof PAYMENT_TERMS_DAY_OPTIONS)[number];
+
+export function isPaymentTermsDayOption(value: number): value is PaymentTermsDayOption {
+  return (PAYMENT_TERMS_DAY_OPTIONS as readonly number[]).includes(value);
+}
 
 export interface LineItemDto {
   id: string;
@@ -13,6 +29,9 @@ export interface LineItemDto {
   vatRateBp: number;
   vatCategory: VatCategory;
   unitCode: string | null;
+  // PL only: art. 106e ust. 1 pkt 18a / załącznik nr 15 ustawy o VAT. Optional
+  // since every non-PL adapter fixture predates this field.
+  splitPaymentAnnex15?: boolean;
 }
 
 export interface DiscountDto {
@@ -57,6 +76,7 @@ export interface RecipientSnapshotDto {
   mol: string | null;
   sdiRecipientCode: string | null;
   pec: string | null;
+  clientType: ClientType | null;
 }
 
 export interface OriginalDocumentReferenceDto {
@@ -65,6 +85,10 @@ export interface OriginalDocumentReferenceDto {
   numberSuffix: string | null;
   issuedAt: string | null;
   ksefNumber: string | null;
+  // PL art. 108a ust. 1a: a correction's own MPP threshold check compares the
+  // corrected (post-correction) gross total, so the original invoice's own
+  // gross amount is needed alongside the correction's delta.
+  amount?: Cents | null;
 }
 
 export interface DocumentDto {
@@ -77,6 +101,7 @@ export interface DocumentDto {
   referenceNumber: string | null;
   originalDocumentId: string | null;
   originalDocument?: OriginalDocumentReferenceDto | null;
+  ksefNumber?: string | null;
   issuedAt: string | null;
   taxEventAt: string | null;
   dueAt: string | null;
@@ -85,10 +110,17 @@ export interface DocumentDto {
   buyerReference: string | null;
   paymentMeansCode: string | null;
   paymentTermsNote: string | null;
+  paymentTermsDays?: number | null;
   transportReason: string | null;
   transportedAt: string | null;
   carrierName: string | null;
   transportNote: string | null;
+  // RO delivery_note only, added after the other transport fields — optional
+  // so existing DocumentDto fixtures don't all need updating.
+  transportVehicle?: string | null;
+  correctionReason: string | null;
+  operationNature?: OperationNature | null;
+  deliveryAddress?: string | null;
   subtotal: Cents;
   discountTotal: Cents;
   amount: Cents;
@@ -97,6 +129,15 @@ export interface DocumentDto {
   vatAmount: Cents;
   vatExemptionGround: string | null;
   currency: CurrencyCode;
+  // VAT Directive art. 230: set at issuance for issuers in a non-euro
+  // EU_VAT_AREA_COUNTRIES state (PL, RO, CZ, DK, HU, SE); null otherwise,
+  // for drafts, and for documents issued before this snapshot existed.
+  localCurrency?: string | null;
+  exchangeRate?: string | null;
+  exchangeRateDate?: string | null;
+  exchangeRateSource?: 'NBP' | 'BNR' | 'ECB' | null;
+  exchangeRateTable?: string | null;
+  vatAmountLocal?: Cents | null;
   clientId: string | null;
   preparedBy: string | null;
   notes: string | null;
@@ -135,6 +176,7 @@ export interface LineItemInput {
   vatRateBp?: number;
   vatCategory?: VatCategory;
   unitCode?: string | null;
+  splitPaymentAnnex15?: boolean;
 }
 
 export interface DiscountInput {
@@ -155,10 +197,15 @@ export interface SaveDraftRequest {
   buyerReference?: string | null;
   paymentMeansCode?: string | null;
   paymentTermsNote?: string | null;
+  paymentTermsDays?: number | null;
   transportReason?: string | null;
   transportedAt?: string | null;
   carrierName?: string | null;
   transportNote?: string | null;
+  transportVehicle?: string | null;
+  correctionReason?: string | null;
+  operationNature?: OperationNature | null;
+  deliveryAddress?: string | null;
   vatIncluded?: boolean;
   vatExemptionGround?: string | null;
   clientId?: string | null;
@@ -174,6 +221,10 @@ export interface SaveDraftRequest {
 export interface IssueDocumentRequest {
   issuedAt?: string;
   overrideNumber?: number;
+}
+
+export interface SetKsefNumberRequest {
+  ksefNumber: string | null;
 }
 
 export interface DocumentListQuery {

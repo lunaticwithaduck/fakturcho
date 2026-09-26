@@ -12,6 +12,7 @@ export const API_ROUTES = {
   documentIssue: (id: string) => `/api/documents/${id}/issue`,
   documentCancel: (id: string) => `/api/documents/${id}/cancel`,
   documentMarkPaid: (id: string) => `/api/documents/${id}/paid`,
+  documentKsefNumber: (id: string) => `/api/documents/${id}/ksef-number`,
   documentRender: (id: string) => `/api/documents/${id}/render`,
   documentEmail: (id: string) => `/api/documents/${id}/email`,
   series: '/api/series',

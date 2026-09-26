@@ -239,6 +239,23 @@ describe('DocumentsService', () => {
     expect(refetched.deliveryDate).toBe('2026-09-15');
   });
 
+  it('paymentTermsDays round-trips through a save, independent of paymentTermsNote', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ paymentTermsDays: 14 }),
+    );
+
+    expect(draft.paymentTermsDays).toBe(14);
+    expect(draft.paymentTermsNote).toBeNull();
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.paymentTermsDays).toBe(14);
+  });
+
   it('per-line vatRateBp, vatCategory and unitCode round-trip through a save', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);
@@ -273,6 +290,35 @@ describe('DocumentsService', () => {
       vatCategory: 'Z',
       unitCode: 'HUR',
     });
+  });
+
+  it('splitPaymentAnnex15 (PL art. 106e ust. 1 pkt 18a) round-trips through a save, defaulting to false', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'PL' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        lineItems: [
+          { name: 'Towar', quantity: '1', unitPrice: 1000, sortOrder: 0 },
+          {
+            name: 'Towar z zał. 15',
+            quantity: '1',
+            unitPrice: 2000,
+            sortOrder: 1,
+            splitPaymentAnnex15: true,
+          },
+        ],
+      }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ splitPaymentAnnex15: false });
+    expect(draft.lineItems[1]).toMatchObject({ splitPaymentAnnex15: true });
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.lineItems[0]).toMatchObject({ splitPaymentAnnex15: false });
+    expect(refetched.lineItems[1]).toMatchObject({ splitPaymentAnnex15: true });
   });
 
   it('documentLanguage is resolved from the client at draft save time', async () => {
@@ -334,6 +380,26 @@ describe('DocumentsService', () => {
     expect(draft.vatAmount).toBe(0);
   });
 
+  it('PL art. 113 exempt issuer: an unset line vatCategory resolves to E (zw), not O (np.)', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'PL' });
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    expect(draft.vatExemptionGround).toContain('art. 113');
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'E', vatRateBp: 0 });
+    expect(draft.vatAmount).toBe(0);
+  });
+
+  it('other countries keep O for a non-VAT-registered issuer, unaffected by the PL exemption fix', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'DE' });
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+  });
+
   it('reverse-charge: a cross-border EU client with no VAT number stays S at the issuer standard rate', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {
@@ -368,7 +434,67 @@ describe('DocumentsService', () => {
       draftRequest({ clientId: client.id }),
     );
 
-    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2000 });
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2100 });
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: an AT issuer with the Jungholz/Mittelberg flag defaults a new line to 19% for a client inside the zone', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      identifiers: { jungholzMittelbergRate: 'true' },
+    });
+    const client = await createTestClient(prisma, accountId, { country: 'AT', postcode: '6991' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatRateBp: 1900 });
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: the same flag defaults to 20% for a domestic client outside Jungholz/Mittelberg (Betriebsstätte carve-out)', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      identifiers: { jungholzMittelbergRate: 'true' },
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      postcode: '1060',
+      clientType: 'business',
+    });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatRateBp: 2000 });
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: the flag still defaults to 19% with no client selected or a foreign client', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      identifiers: { jungholzMittelbergRate: 'true' },
+    });
+
+    const noClientDraft = await documentsService.saveDraft(accountId, null, draftRequest());
+    expect(noClientDraft.lineItems[0]).toMatchObject({ vatRateBp: 1900 });
+
+    const foreignClient = await createTestClient(prisma, accountId, { country: 'DE' });
+    const foreignDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: foreignClient.id }),
+    );
+    expect(foreignDraft.lineItems[0]).toMatchObject({ vatRateBp: 1900 });
   });
 
   it('reverse-charge: an explicit vatCategory is always honored, even cross-border', async () => {
@@ -479,5 +605,43 @@ describe('DocumentsService', () => {
     const refetched = await documentsService.get(accountId, draft.id);
     expect(refetched.transportReason).toBe('Vendita');
     expect(refetched.transportedAt).toBe('2026-09-15T07:30:00.000Z');
+  });
+
+  it('correctionReason round-trips through a draft save without being required to save', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });
+
+    const original = await documentsService.saveDraft(accountId, null, draftRequest());
+    const withoutReason = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ documentType: 'credit_note', originalDocumentId: original.id }),
+    );
+    expect(withoutReason.correctionReason).toBeNull();
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: original.id,
+        correctionReason: 'Върната стока',
+      }),
+    );
+    expect(draft.correctionReason).toBe('Върната стока');
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.correctionReason).toBe('Върната стока');
+
+    const cleared = await documentsService.saveDraft(
+      accountId,
+      draft.id,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: original.id,
+        correctionReason: null,
+      }),
+    );
+    expect(cleared.correctionReason).toBeNull();
   });
 });

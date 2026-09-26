@@ -1,12 +1,14 @@
 import type { Discount, Document, LineItem } from '@prisma/client';
 import type { VatPresentation } from '../../../money/vat';
 import { toSharedDocumentType } from '../../prisma-mappers';
+import { buildCorrectionReference, type OriginalDocumentRef } from './correction-reference';
 import { buildIssuerBlock, buildSignatureRow } from './footer-blocks';
 import { buildDatesBlock, buildRecipientBlock } from './header-blocks';
 import type { ClassicLanguage } from './labels';
 import { buildLineItemsTable } from './line-items';
 import { resolveClassicLocale } from './locale';
 import { buildMentionsBlock } from './mentions-block';
+import { buildKsefQrBlock, type KsefQrBlock } from './qr-block';
 import { buildStyles } from './styles';
 import { buildTitle } from './title';
 import { buildAmountWordsBlock, buildTotalsBlock } from './totals-block';
@@ -21,6 +23,8 @@ export interface ClassicTemplateInput {
   language: ClassicLanguage;
   issuerCountry?: string | null;
   discounts?: readonly Discount[];
+  originalDocument?: OriginalDocumentRef | null;
+  ksefQr?: KsefQrBlock | null;
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
@@ -32,6 +36,8 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     language,
     issuerCountry = document.issuerCountry,
     discounts = [],
+    originalDocument = null,
+    ksefQr = null,
   } = input;
   const locale = resolveClassicLocale(language, issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
@@ -46,21 +52,25 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <style>${buildStyles()}</style>
 </head>
 <body>
-  ${buildWatermark(isDraft, locale)}
-  <div class="header">
-    ${buildRecipientBlock(document, locale)}
-    ${buildDatesBlock(document, documentType, locale)}
+  <div class="watermark-area${isDraft ? ' is-draft' : ''}">
+    ${buildWatermark(isDraft, locale)}
+    <div class="header">
+      ${buildRecipientBlock(document, documentType, locale)}
+      ${buildDatesBlock(document, documentType, locale)}
+    </div>
+    <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
+    ${buildCorrectionReference(documentType, originalDocument, document.correctionReason, locale)}
+    ${buildLineItemsTable(lineItems, locale, documentType, showPrices, document.issuerVatRegistered ?? false)}
+    ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
+    ${
+      showPrices
+        ? `${isDeliveryNote ? '' : buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, documentType, discounts)}`
+        : ''
+    }
   </div>
-  <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
-  ${buildLineItemsTable(lineItems, locale, showPrices)}
-  ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
-  ${
-    showPrices
-      ? `${buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, discounts)}`
-      : ''
-  }
-  ${buildMentionsBlock({ document, lineItems, locale })}
-  ${buildIssuerBlock(document, locale)}
+  ${buildMentionsBlock({ document, lineItems, locale, originalDocumentAmount: originalDocument?.amount ?? null })}
+  ${buildIssuerBlock(document, documentType, locale)}
+  ${buildKsefQrBlock(ksefQr)}
   ${locale.showSignatureRow || isDeliveryNote ? buildSignatureRow(document, documentType, locale) : ''}
 </body>
 </html>`;

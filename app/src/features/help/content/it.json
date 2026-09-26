@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": " per ottenere il file di fattura elettronica strutturato: il formato del tuo paese — XRechnung (Germania), UBL (Francia), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (Romania), Facturae (Spagna) — oppure, per un emittente bulgaro e per qualsiasi altro paese senza un formato dedicato, un file generico EN 16931 UBL. Fakturcho genera solo il file; sei tu a scaricarlo e caricarlo sulla tua piattaforma nazionale — non invia mai nulla per tuo conto. I documenti di trasporto non ne ricevono mai uno. Se mancano dati richiesti dal formato (es. la partita IVA dell'acquirente per l'inversione contabile, il codice unità di una voce, il tuo IBAN), un messaggio sotto il pulsante elenca esattamente cosa manca."
+                "text": " per ottenere il file di fattura elettronica strutturato: il formato del tuo paese — XRechnung (Germania), UBL (Francia), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (Romania) — oppure, per un emittente bulgaro e per qualsiasi altro paese senza un formato dedicato, un file generico EN 16931 UBL. Fakturcho genera solo il file; sei tu a scaricarlo e caricarlo sulla tua piattaforma nazionale — non invia mai nulla per tuo conto. I documenti di trasporto non ne ricevono mai uno. Se mancano dati richiesti dal formato (es. la partita IVA dell'acquirente per l'inversione contabile, il codice unità di una voce, il tuo IBAN), un messaggio sotto il pulsante elenca esattamente cosa manca."
               }
             ],
             [
@@ -1132,7 +1132,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho genera solo il file — sei tu a caricarlo sulla piattaforma del tuo paese. Disponibile per fatture, note di credito e note di debito: Germania, Francia, Italia, Polonia, Romania e Spagna ottengono il proprio formato nazionale; Bulgaria e qualsiasi altro paese ottengono un file generico EN 16931 UBL."
+          "text": ". Fakturcho genera solo il file — sei tu a caricarlo sulla piattaforma del tuo paese. Disponibile per fatture, note di credito e note di debito: Germania, Francia, Italia, Polonia e Romania ottengono il proprio formato nazionale; Bulgaria e qualsiasi altro paese ottengono un file generico EN 16931 UBL."
         }
       ]
     },

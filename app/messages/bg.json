@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Изберете оригиналния документ, за да продължите.",
         "missingLineItems": "Добавете поне един артикул с попълнени наименование, количество и цена.",
-        "missingVatGround": "Изберете основание за неначисляване на ДДС."
+        "missingVatGround": "Изберете основание за неначисляване на ДДС.",
+        "missingOperationNature": "Изберете естеството на сделката, за да продължите."
       },
       "documentType": {
         "label": "Вид документ"
@@ -110,6 +111,17 @@
         "taxEventAt": "Данъчно събитие",
         "dueAt": "Падеж"
       },
+      "paymentTerms": {
+        "label": "Условия за плащане",
+        "dueOnReceipt": "При получаване",
+        "days7": "7 дни",
+        "days14": "14 дни",
+        "days15": "15 дни",
+        "days30": "30 дни",
+        "days45": "45 дни",
+        "days60": "60 дни",
+        "customDate": "Друга дата"
+      },
       "delivery": {
         "heading": "Данни за доставката",
         "deliveryDateLabel": "Дата на доставка",
@@ -117,12 +129,25 @@
         "transportReasonLabel": "Основание за транспорта",
         "transportReasonPlaceholder": "Изберете основание",
         "carrierNameLabel": "Превозвач",
-        "transportNoteLabel": "Данни за транспорта"
+        "transportNoteLabel": "Данни за транспорта",
+        "transportVehicleLabel": "Рег. номер на превозното средство"
+      },
+      "frMentions": {
+        "operationNatureLabel": "Естество на сделката",
+        "operationNaturePlaceholder": "Изберете естество",
+        "operationNatureGoods": "Доставка на стоки",
+        "operationNatureServices": "Извършване на услуга",
+        "operationNatureMixed": "Доставка на стоки и извършване на услуга",
+        "deliveryAddressLabel": "Адрес на доставка (ако е различен)"
       },
       "originalDocument": {
         "label": "Оригинален документ",
         "placeholder": "Изберете документ",
         "noClient": "Без клиент"
+      },
+      "correctionReason": {
+        "label": "Основание за корекцията",
+        "requiredHint": "Задължително за издатели от България и Ирландия."
       },
       "deliveryReference": {
         "label": "Свързана фактура",
@@ -135,7 +160,27 @@
         "priceLabel": "Цена",
         "totalLabel": "Общо",
         "removeButton": "Премахни",
-        "addButton": "Добави артикул"
+        "addButton": "Добави артикул",
+        "unitLabel": "Мярка",
+        "unitNoneOption": "Няма",
+        "vatRateLabel": "Ставка ДДС",
+        "units": {
+          "C62": "Брой",
+          "H87": "Брой (артикул)",
+          "HUR": "Час",
+          "DAY": "Ден",
+          "MON": "Месец",
+          "KGM": "Килограм",
+          "MTR": "Метър",
+          "MTK": "Квадратен метър",
+          "LTR": "Литър",
+          "KMT": "Километър",
+          "SET": "Комплект"
+        },
+        "mpp": {
+          "checkboxLabel": "Обхванато от разделено плащане (Приложение № 15)",
+          "hint": "Само за Полша — маркирайте стоки или услуги от приложение № 15 към полския Закон за ДДС; използва се за задължителната бележка „mechanizm podzielonej płatności“."
+        }
       },
       "discounts": {
         "heading": "Отстъпки",
@@ -174,6 +219,11 @@
     },
     "einvoice": {
       "downloadXml": "Изтегли е-фактура (XML)",
+      "ksefNumberLabel": "Номер в KSeF",
+      "ksefNumberHint": "Поставете номера, който KSeF присвои, след като сами качите XML файла.",
+      "ksefNumberSave": "Запази",
+      "ksefNumberSaved": "Номерът в KSeF е запазен",
+      "ksefNumberSaveError": "Номерът в KSeF не можа да бъде запазен",
       "notReadyHint": "Липсващи данни за е-фактура: {fields}",
       "missingFieldFallback": "Липсват данни за е-фактура.",
       "missingFields": {
@@ -207,8 +257,6 @@
           "countyRegion": "Липсва област/județ на издателя.",
           "sirenOrSiret": "Липсва SIREN или SIRET на издателя.",
           "vatNumberFrFormat": "ДДС номерът на издателя трябва да е във френски формат.",
-          "esTaxId": "Липсва данъчен идентификатор (NIF/CIF/NIE) на издателя.",
-          "esTaxIdInvalid": "Данъчният идентификатор на издателя не е валиден испански NIF, NIE или CIF.",
           "partitaIva": "Липсва Partita IVA на издателя.",
           "partitaIvaInvalid": "Partita IVA на издателя не е валиден италиански ДДС номер.",
           "codiceFiscale": "Липсва Codice Fiscale на издателя.",
@@ -229,8 +277,6 @@
           "countyRegion": "Липсва област/județ на получателя.",
           "sirenOrSiret": "Липсва SIREN или SIRET на получателя.",
           "vatNumberFrFormat": "ДДС номерът на получателя трябва да е във френски формат.",
-          "esTaxId": "Липсва данъчен идентификатор (NIF/CIF/NIE) на получателя.",
-          "esTaxIdInvalid": "Данъчният идентификатор на получателя не е валиден испански NIF, NIE или CIF.",
           "partitaIvaOrCodiceFiscale": "Липсва Partita IVA или Codice Fiscale на получателя.",
           "partitaIvaInvalid": "Partita IVA на получателя не е валиден италиански ДДС номер.",
           "codiceFiscaleInvalid": "Codice Fiscale на получателя няма валиден формат.",
@@ -238,7 +284,9 @@
           "nip": "Липсва NIP на получателя, необходим за местен полски купувач.",
           "nipChecksum": "NIP на получателя не преминава проверката за коректност."
         }
-      }
+      },
+      "ksefNumberInvalid": "Форматът на номера по KSeF е невалиден.",
+      "ksefNumberDateInvalid": "Датата в номера по KSeF не може да бъде преди датата на издаване на фактурата или в бъдещето."
     }
   },
   "billing": {
@@ -318,7 +366,22 @@
     "unitPlaceholder": "бр., час, кг...",
     "priceLabel": "Цена по подразбиране",
     "defaultUnit": "бр.",
-    "validationError": "Попълнете наименование, мярка и цена."
+    "validationError": "Попълнете наименование, мярка и цена.",
+    "unitCodeLabel": "Код на мярка (незадължително)",
+    "unitCodeNoneOption": "Няма",
+    "units": {
+      "C62": "Брой",
+      "H87": "Брой (артикул)",
+      "HUR": "Час",
+      "DAY": "Ден",
+      "MON": "Месец",
+      "KGM": "Килограм",
+      "MTR": "Метър",
+      "MTK": "Квадратен метър",
+      "LTR": "Литър",
+      "KMT": "Километър",
+      "SET": "Комплект"
+    }
   },
   "clients": {
     "pageTitle": "Клиенти",
@@ -348,6 +411,12 @@
     "cityLabel": "Град",
     "emailLabel": "Имейл",
     "molLabel": "МОЛ",
+    "clientTypeLabel": "Тип клиент",
+    "clientTypeOptionUnknown": "Не е зададен",
+    "clientTypeOptions": {
+      "business": "Бизнес",
+      "consumer": "Частно лице"
+    },
     "invalidFormat": "Невалиден формат",
     "countryLabel": "Държава",
     "documentLanguageLabel": "Език на документите",
@@ -389,8 +458,7 @@
       "fr": "Френски",
       "it": "Италиански",
       "pl": "Полски",
-      "ro": "Румънски",
-      "es": "Испански"
+      "ro": "Румънски"
     }
   },
   "issuer": {
@@ -408,12 +476,29 @@
       "postcode": "Пощенски код",
       "city": "Град",
       "phone": "Телефон",
-      "invalidFormat": "Невалиден формат"
+      "invalidFormat": "Невалиден формат",
+      "czRegisterHint": "Ако сте вписани в Търговския регистър или в друг публичен регистър, посочете вписването си тук — § 435 от Гражданския кодекс (Закон № 89/2012 Sb.). Задължително е само за вписаните търговци.",
+      "frLegalFormHint": "Едноличен търговец? Напишете „EI“ или „entrepreneur individuel“ — трябва да се изписва до името на всеки документ (чл. L526-22 от френския Търговски кодекс).",
+      "atJungholzMittelbergHint": "Седалището на фирмата ви е в Юнгхолц или Клайнвалзертал (Мителберг)? Съгласно § 10, ал. 4 от UStG 1994 там стандартната ставка е 19% вместо 20%. Намалените ставки (13%, 10%, 4,9%) остават непроменени."
     },
     "vatFields": {
       "heading": "ДДС регистрация",
       "vatRegistered": "Регистрация по ЗДДС",
-      "vatNumber": "ДДС номер"
+      "vatNumber": "ДДС номер",
+      "vatOnCashBasis": "ДДС при плащане (TVA la încasare, Румъния)",
+      "vatOnDebits": "ДДС при фактуриране (option pour les débits, Франция)"
+    },
+    "paymentTerms": {
+      "heading": "Условия за плащане",
+      "defaultLabel": "Стандартен срок",
+      "none": "Без стандартен — избира се за всеки документ",
+      "dueOnReceipt": "При получаване",
+      "days7": "7 дни",
+      "days14": "14 дни",
+      "days15": "15 дни",
+      "days30": "30 дни",
+      "days45": "45 дни",
+      "days60": "60 дни"
     },
     "bankFields": {
       "heading": "Банкова сметка",
@@ -446,7 +531,6 @@
       "DE": "Германия",
       "DK": "Дания",
       "EE": "Естония",
-      "ES": "Испания",
       "FI": "Финландия",
       "FR": "Франция",
       "GB": "Обединено кралство",
@@ -493,6 +577,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Изберете оригиналния документ, за да продължите.",
       "ISSUER_PROFILE_INCOMPLETE": "Профилът на издателя не е попълнен. Допълнете фирмените данни, за да издавате документи.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Стоковата разписка за тази държава изисква попълнени данни за транспорта, преди да бъде издадена.",
+      "CORRECTION_REASON_REQUIRED": "Кредитното или дебитно известие от България или Ирландия изисква основание за корекцията, преди да бъде издадено.",
       "VAT_GROUND_NOT_ALLOWED": "Този избор на основание за неначисляване на ДДС не е разрешен.",
       "CLIENT_EIK_DUPLICATE": "Вече има клиент с този ЕИК.",
       "SUBSCRIPTION_REQUIRED": "Нужен е активен абонамент.",
@@ -506,7 +591,11 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Доставчикът на плащания не отговаря. Опитайте отново след няколко минути.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Доставчикът за е-фактури не е настроен.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Този доставчик не поддържа проверка на статуса.",
-      "INTERNAL_ERROR": "Възникна неочаквана грешка. Опитайте отново."
+      "INTERNAL_ERROR": "Възникна неочаквана грешка. Опитайте отново.",
+      "OPERATION_NATURE_REQUIRED": "Френските данъчни документи трябва да посочват естеството на сделката, преди да бъдат издадени.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Не успяхме да получим необходимия валутен курс за издаване на документа. Опитайте отново след малко.",
+      "INVALID_KSEF_NUMBER": "Форматът на номера по KSeF е невалиден.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "Австрийска фактура над 10 000 € към бизнес клиент изисква УИД номера на получателя, преди да бъде издадена."
     },
     "guideLink": "Наръчник за фактуриране",
     "helpLink": "Виж ръководството",
@@ -548,7 +637,6 @@
       "DE": "Германия",
       "DK": "Дания",
       "EE": "Естония",
-      "ES": "Испания",
       "FI": "Финландия",
       "FR": "Франция",
       "GR": "Гърция",
@@ -844,7 +932,7 @@
         },
         {
           "question": "Мога ли да издавам фактури без регистрация по ДДС?",
-          "answer": "Да; за нерегистрирани издатели документът носи основанието за неначисляване чл.113, ал.9 от ЗДДС."
+          "answer": "Да; за нерегистрирани издатели документът носи основанието за неначисляване чл. 113, ал. 9 от ЗДДС."
         },
         {
           "question": "Каква е разликата между проформа и фактура?",
@@ -871,6 +959,10 @@
           "name": "Germany",
           "line": "19% VAT, invoices in German, e-invoices in XRechnung format."
         },
+        "AT": {
+          "name": "Австрия",
+          "line": "20% ДДС, фактури на немски, PDF фактури без задължителна е-фактура."
+        },
         "FR": {
           "name": "France",
           "line": "20% ДДС, фактури на френски, е-фактури във формат UBL за платформата Chorus Pro."
@@ -886,10 +978,6 @@
         "RO": {
           "name": "Romania",
           "line": "21% VAT, invoices in Romanian, e-invoices in the RO CIUS-RO format for ANAF's SPV."
-        },
-        "ES": {
-          "name": "Spain",
-          "line": "21% VAT, invoices in Spanish, e-invoices in Facturae format for the FACe platform."
         }
       }
     },

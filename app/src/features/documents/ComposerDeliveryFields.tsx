@@ -9,13 +9,16 @@ interface ComposerDeliveryFieldsProps {
   transportedAt: string;
   carrierName: string;
   transportNote: string;
+  transportVehicle: string;
   transportReasonOptions: readonly string[];
+  issuerCountry: string;
   onChange: (patch: {
     deliveryDate?: string;
     transportReason?: string;
     transportedAt?: string;
     carrierName?: string;
     transportNote?: string;
+    transportVehicle?: string;
   }) => void;
 }
 
@@ -25,7 +28,9 @@ export function ComposerDeliveryFields({
   transportedAt,
   carrierName,
   transportNote,
+  transportVehicle,
   transportReasonOptions,
+  issuerCountry,
   onChange,
 }: ComposerDeliveryFieldsProps) {
   const t = useTranslations('documents');
@@ -71,6 +76,13 @@ export function ComposerDeliveryFields({
           value={carrierName}
           onChange={(event) => onChange({ carrierName: event.target.value })}
         />
+        {issuerCountry === 'RO' ? (
+          <Input
+            label={t('composer.delivery.transportVehicleLabel')}
+            value={transportVehicle}
+            onChange={(event) => onChange({ transportVehicle: event.target.value })}
+          />
+        ) : null}
       </div>
       <Textarea
         label={t('composer.delivery.transportNoteLabel')}

@@ -102,4 +102,28 @@ describe('NumberingService', () => {
       overridable: true,
     });
   });
+
+  it('art. 226(2)+219: invoice, credit_note and debit_note draw one shared, uniquely-identifying series by default', async () => {
+    const accountId = await createAccount();
+
+    const invoice1 = await prisma.$transaction((tx) =>
+      service.claimNumber(tx, accountId, 'invoice'),
+    );
+    const creditNote1 = await prisma.$transaction((tx) =>
+      service.claimNumber(tx, accountId, 'credit_note'),
+    );
+    const debitNote1 = await prisma.$transaction((tx) =>
+      service.claimNumber(tx, accountId, 'debit_note'),
+    );
+    const invoice2 = await prisma.$transaction((tx) =>
+      service.claimNumber(tx, accountId, 'invoice'),
+    );
+
+    expect([invoice1, creditNote1, debitNote1, invoice2]).toEqual([1n, 2n, 3n, 4n]);
+
+    const proforma1 = await prisma.$transaction((tx) =>
+      service.claimNumber(tx, accountId, 'proforma'),
+    );
+    expect(proforma1).toBe(1n);
+  });
 });

@@ -55,6 +55,18 @@ export function buildStyles(): string {
       font-weight: 700;
       margin: 24px 0;
     }
+    .correction-reference {
+      text-align: center;
+      margin: -16px 0 24px;
+    }
+    .correction-ksef {
+      text-align: center;
+      margin: -16px 0 24px;
+    }
+    .correction-reason {
+      text-align: center;
+      margin: -20px 0 24px;
+    }
     table.line-items {
       width: 100%;
       border-collapse: collapse;
@@ -69,6 +81,10 @@ export function buildStyles(): string {
     table.line-items th:first-child,
     table.line-items td:first-child {
       text-align: left;
+    }
+    table.line-items .col-narrow {
+      width: 1%;
+      white-space: nowrap;
     }
     .amount-words {
       font-style: italic;
@@ -93,6 +109,7 @@ export function buildStyles(): string {
     }
     .exemption {
       margin-bottom: 16px;
+      font-size: 10px;
     }
     .mentions {
       margin-bottom: 16px;
@@ -111,12 +128,16 @@ export function buildStyles(): string {
       justify-content: space-between;
       margin-top: 32px;
     }
+    .watermark-area {
+      position: relative;
+      overflow: hidden;
+    }
+    .watermark-area.is-draft {
+      min-height: 380px;
+    }
     .watermark {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -128,16 +149,32 @@ export function buildStyles(): string {
       z-index: 10;
     }
     .watermark-main {
-      font-size: 86px;
+      font-size: 64px;
       font-weight: 700;
-      letter-spacing: 10px;
+      letter-spacing: 8px;
       white-space: nowrap;
     }
     .watermark-sub {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: 6px;
+      letter-spacing: 5px;
       white-space: nowrap;
+    }
+    .ksef-qr {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-top: 20px;
+    }
+    .ksef-qr .qr-image {
+      width: 35mm;
+      height: 35mm;
+    }
+    .qr-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
     }
   `;
 }

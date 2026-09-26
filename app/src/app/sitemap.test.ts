@@ -20,9 +20,9 @@ describe('sitemap', () => {
 
   it('links the guide index pages to each other as language versions', () => {
     const indexes = sitemap().filter((entry) => /\/guide$/.test(entry.url));
-    expect(indexes).toHaveLength(8);
+    expect(indexes).toHaveLength(7);
     for (const entry of indexes) {
-      expect(entry.lastModified).toBe('2026-09-25');
+      expect(entry.lastModified).toBe('2026-09-26');
       expect(entry.alternates?.languages).toMatchObject({
         bg: 'https://www.fakturcho.com/guide',
         de: 'https://www.fakturcho.com/de/guide',
@@ -30,6 +30,23 @@ describe('sitemap', () => {
         'x-default': 'https://www.fakturcho.com/guide',
       });
     }
+  });
+
+  it('links the AT guide language versions to each other, unlike a single-language guide', () => {
+    const entries = sitemap();
+    const atEntry = entries.find((entry) =>
+      entry.url.endsWith('/guide/rechnung-oesterreich-pflichtangaben-ustg'),
+    );
+    expect(atEntry?.alternates?.languages).toMatchObject({
+      de: 'https://www.fakturcho.com/de/guide/rechnung-oesterreich-pflichtangaben-ustg',
+      bg: 'https://www.fakturcho.com/guide/faktura-avstriya-zadalzhitelni-rekviziti',
+      en: 'https://www.fakturcho.com/en/guide/austria-invoice-requirements-vat-rates',
+    });
+
+    const deEntry = entries.find((entry) =>
+      entry.url.endsWith('/de/guide/rechnung-pflichtangaben-e-rechnung'),
+    );
+    expect(deEntry?.alternates).toBeUndefined();
   });
 
   it('never crashes when no guides are registered yet', () => {

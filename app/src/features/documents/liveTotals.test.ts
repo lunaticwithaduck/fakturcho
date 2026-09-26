@@ -81,6 +81,60 @@ describe('computeLiveTotals', () => {
     expect(totals.amount).toBe(550000);
   });
 
+  it('groups mixed per-line VAT rates instead of applying a single blended rate', () => {
+    const totals = computeLiveTotals({
+      lineItems: [
+        { quantity: '1', unitPrice: 100000, vatRateBp: 2000 },
+        { quantity: '1', unitPrice: 100000, vatRateBp: 900 },
+      ],
+      discounts: [],
+      vatCharged: true,
+      vatRateBp: 2000,
+    });
+    expect(totals.subtotal).toBe(200000);
+    expect(totals.vatAmount).toBe(20000 + 9000);
+    expect(totals.amount).toBe(200000 + 29000);
+  });
+
+  it('a line with no explicit vatRateBp falls back to the document rate', () => {
+    const totals = computeLiveTotals({
+      lineItems: [
+        { quantity: '1', unitPrice: 100000 },
+        { quantity: '1', unitPrice: 100000, vatRateBp: 900 },
+      ],
+      discounts: [],
+      vatCharged: true,
+      vatRateBp: 2000,
+    });
+    expect(totals.vatAmount).toBe(20000 + 9000);
+  });
+
+  it('a discount that does not split evenly still sums exactly across mixed-rate lines', () => {
+    const totals = computeLiveTotals({
+      lineItems: [
+        { quantity: '1', unitPrice: 333, vatRateBp: 2000 },
+        { quantity: '1', unitPrice: 333, vatRateBp: 900 },
+        { quantity: '1', unitPrice: 334, vatRateBp: 0 },
+      ],
+      discounts: [{ percentBp: 100, amount: null }],
+      vatCharged: true,
+      vatRateBp: 2000,
+    });
+    expect(totals.subtotal).toBe(1000);
+    expect(totals.discountTotal).toBe(10);
+    expect(totals.amount).toBe(totals.subtotal - totals.discountTotal + totals.vatAmount);
+  });
+
+  it('per-line rates with no document VAT charged still zero out', () => {
+    const totals = computeLiveTotals({
+      lineItems: [{ quantity: '1', unitPrice: 100000, vatRateBp: 2000 }],
+      discounts: [],
+      vatCharged: false,
+      vatRateBp: 2000,
+    });
+    expect(totals.vatAmount).toBe(0);
+  });
+
   it('sums multiple line items and discounts', () => {
     const totals = computeLiveTotals({
       lineItems: [
@@ -101,25 +155,53 @@ describe('computeLiveTotals', () => {
 });
 
 describe('resolveVatTreatment', () => {
-  it('never charges VAT for non-tax documents', () => {
-    expect(
-      resolveVatTreatment({
-        documentType: 'quote',
-        vatRegistered: true,
-        chargeVat: true,
+  it('never offers a ground selector for a non-tax document (isTaxDocument stays false)', () => {
+    for (const documentType of ['quote', 'proforma'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: false,
+          chargeVat: true,
+          vatRateBp: 2000,
+          groundRequired: true,
+        }),
+      ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+    }
+  });
+
+  // Mirrors server/src/documents/vat-treatment.ts: a proforma/quote from a
+  // VAT-registered issuer computes VAT like an invoice, with no ground to pick.
+  it('charges VAT on a proforma or quote for a VAT-registered issuer, regardless of chargeVat', () => {
+    for (const documentType of ['quote', 'proforma'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: true,
+          chargeVat: false,
+          vatRateBp: 2000,
+          groundRequired: true,
+        }),
+      ).toEqual({
+        isTaxDocument: false,
+        vatCharged: true,
         vatRateBp: 2000,
-        groundRequired: true,
-      }),
-    ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
-    expect(
-      resolveVatTreatment({
-        documentType: 'proforma',
-        vatRegistered: true,
-        chargeVat: true,
-        vatRateBp: 2000,
-        groundRequired: true,
-      }),
-    ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+        groundSelectable: false,
+      });
+    }
+  });
+
+  it('never charges VAT on a proforma or quote for a non-registered issuer', () => {
+    for (const documentType of ['quote', 'proforma'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: false,
+          chargeVat: true,
+          vatRateBp: 2000,
+          groundRequired: true,
+        }),
+      ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+    }
   });
 
   it('does not offer a ground select for a non-registered issuer with a country default', () => {

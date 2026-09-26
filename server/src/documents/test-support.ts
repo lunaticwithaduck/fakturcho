@@ -17,6 +17,10 @@ export async function createCompleteIssuerProfile(
     countyRegion: string | null;
     vatRegistered: boolean;
     vatNumber: string | null;
+    vatOnCashBasis: boolean;
+    vatOnDebits: boolean;
+    identifiers: Record<string, string>;
+    defaultPaymentTermsDays: number | null;
   }> = {},
 ) {
   return prisma.issuerProfile.create({
@@ -42,9 +46,11 @@ export async function createTestClient(
     postcode: string | null;
     countyRegion: string | null;
     documentLanguage: string | null;
+    eik: string | null;
     vatNumber: string | null;
     sdiRecipientCode: string | null;
     pec: string | null;
+    clientType: string | null;
   }> = {},
 ) {
   return prisma.client.create({ data: { accountId, companyName: 'Клиент ООД', ...overrides } });

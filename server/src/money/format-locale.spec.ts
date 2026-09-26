@@ -36,9 +36,9 @@ describe('formatCentsForLocale — en', () => {
 });
 
 describe('formatMoneyForLocale — en', () => {
-  it('appends the € suffix to the en-formatted amount', () => {
-    expect(formatMoneyForLocale(1_000_00, 'en')).toBe('1,000.00 €');
-    expect(formatMoneyForLocale(-160000, 'en')).toBe('-1,600.00 €');
+  it('prefixes the en-formatted amount with €', () => {
+    expect(formatMoneyForLocale(1_000_00, 'en')).toBe('€1,000.00');
+    expect(formatMoneyForLocale(-160000, 'en')).toBe('-€1,600.00');
   });
 });
 
@@ -53,35 +53,5 @@ describe('formatDateForLocale — en', () => {
   it('renders DD/MM/YYYY via Intl.DateTimeFormat(en-IE)', () => {
     expect(formatDateForLocale('2026-08-02', 'en')).toBe('02/08/2026');
     expect(formatDateForLocale('2026-01-05', 'en')).toBe('05/01/2026');
-  });
-});
-
-describe('formatCentsForLocale — es', () => {
-  const cases: Array<[number, string]> = [
-    [0, '0,00'],
-    [5, '0,05'],
-    [999_99, '999,99'],
-    [1_000_00, '1.000,00'],
-    [1_000_000_00, '1.000.000,00'],
-    [12_345_678_00, '12.345.678,00'],
-    [-160000, '-1.600,00'],
-  ];
-
-  it.each(cases)('formats %i cents as %s', (cents, expected) => {
-    expect(formatCentsForLocale(cents, 'es')).toBe(expected);
-  });
-});
-
-describe('formatMoneyForLocale — es', () => {
-  it('appends the € suffix to the es-formatted amount', () => {
-    expect(formatMoneyForLocale(1_000_00, 'es')).toBe('1.000,00 €');
-    expect(formatMoneyForLocale(-160000, 'es')).toBe('-1.600,00 €');
-  });
-});
-
-describe('formatDateForLocale — es', () => {
-  it('renders DD/MM/YYYY with a slash separator', () => {
-    expect(formatDateForLocale('2026-08-02', 'es')).toBe('02/08/2026');
-    expect(formatDateForLocale('2026-01-05', 'es')).toBe('05/01/2026');
   });
 });

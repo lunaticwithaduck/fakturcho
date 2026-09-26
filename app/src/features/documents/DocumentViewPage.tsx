@@ -103,6 +103,9 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         documentId={documentId}
         documentType={document.documentType}
         status={document.status}
+        issuerCountry={document.issuer.country}
+        ksefNumber={document.ksefNumber}
+        issuedAt={document.issuedAt}
       />
 
       <DocumentPdfViewer

@@ -28,6 +28,7 @@ function fakeDocument(overrides: Partial<DocumentDto>): DocumentDto {
     transportedAt: null,
     carrierName: null,
     transportNote: null,
+    correctionReason: null,
     subtotal: 0,
     discountTotal: 0,
     amount: 0,
@@ -76,6 +77,7 @@ function fakeDocument(overrides: Partial<DocumentDto>): DocumentDto {
       mol: null,
       sdiRecipientCode: null,
       pec: null,
+      clientType: null,
     },
     lineItems: [],
     discounts: [],
@@ -116,5 +118,17 @@ describe('deliveryRequestFields round trip', () => {
       false,
     );
     expect(fields.transportedAt).toBeNull();
+  });
+
+  it('round-trips the RO transport vehicle registration', () => {
+    const document = fakeDocument({ transportVehicle: 'B 123 XYZ' });
+    const state = deliveryStateFromDocument(document, 'Europe/Bucharest');
+    expect(state.transportVehicle).toBe('B 123 XYZ');
+    expect(deliveryRequestFields(state, true).transportVehicle).toBe('B 123 XYZ');
+  });
+
+  it('sends null for a blank transport vehicle registration', () => {
+    const fields = deliveryRequestFields(blankDeliveryState(), true);
+    expect(fields.transportVehicle).toBeNull();
   });
 });

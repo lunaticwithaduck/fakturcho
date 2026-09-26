@@ -39,7 +39,6 @@ describe('LocaleSignupPage metadata', () => {
       it: '/it/signup',
       pl: '/pl/signup',
       ro: '/ro/signup',
-      es: '/es/signup',
       'x-default': '/signup',
     });
   });

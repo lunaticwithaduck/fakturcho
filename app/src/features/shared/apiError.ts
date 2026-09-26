@@ -1,7 +1,6 @@
 import bgMessages from '@messages/bg.json';
 import deMessages from '@messages/de.json';
 import enMessages from '@messages/en.json';
-import esMessages from '@messages/es.json';
 import frMessages from '@messages/fr.json';
 import itMessages from '@messages/it.json';
 import plMessages from '@messages/pl.json';
@@ -47,7 +46,6 @@ const MESSAGES_BY_LOCALE: Partial<Record<Locale, ShellMessages>> = {
   it: itMessages.shell as ShellMessages,
   pl: plMessages.shell as ShellMessages,
   ro: roMessages.shell as ShellMessages,
-  es: esMessages.shell as ShellMessages,
 };
 
 function messagesFor(locale: Locale): ShellMessages {

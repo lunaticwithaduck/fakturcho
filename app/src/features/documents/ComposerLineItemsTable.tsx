@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@design/components';
-import type { CatalogueItemDto } from '@shared/types';
+import type { CatalogueItemDto, VatRateOption } from '@shared/types';
 import { useTranslations } from 'next-intl';
 import { ComposerLineItemRow } from './ComposerLineItemRow';
 import type { LineItemFormState } from './composerState';
@@ -9,6 +9,10 @@ import type { LineItemFormState } from './composerState';
 interface ComposerLineItemsTableProps {
   lineItems: readonly LineItemFormState[];
   catalogueItems: readonly CatalogueItemDto[];
+  vatCharged: boolean;
+  vatRates: readonly VatRateOption[];
+  defaultVatRateBp: number;
+  issuerCountry: string;
   onAdd: () => void;
   onChange: (key: string, patch: Partial<Omit<LineItemFormState, 'key'>>) => void;
   onRemove: (key: string) => void;
@@ -17,6 +21,10 @@ interface ComposerLineItemsTableProps {
 export function ComposerLineItemsTable({
   lineItems,
   catalogueItems,
+  vatCharged,
+  vatRates,
+  defaultVatRateBp,
+  issuerCountry,
   onAdd,
   onChange,
   onRemove,
@@ -32,6 +40,10 @@ export function ComposerLineItemsTable({
           line={line}
           catalogueItems={catalogueItems}
           canRemove={lineItems.length > 1}
+          vatCharged={vatCharged}
+          vatRates={vatRates}
+          defaultVatRateBp={defaultVatRateBp}
+          issuerCountry={issuerCountry}
           onChange={(patch) => onChange(line.key, patch)}
           onRemove={() => onRemove(line.key)}
         />

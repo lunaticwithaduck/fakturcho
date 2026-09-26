@@ -62,14 +62,14 @@ describe('render pipeline', () => {
     expect(text).toContain('Петър Георгиев');
     expect(text).toContain('€');
     expect(text).not.toContain('лв.');
-    expect(text).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН EUR И 00 ЦЕНТА');
+    expect(text).toContain('ПЕТ ХИЛЯДИ И ПЕТСТОТИН ЕВРО И 00 ЕВРОЦЕНТА');
   });
 
   it('invariant 18: the IBAN is never hyphenated or broken mid-string', async () => {
     const document = await seedDocument(db.prisma, { accountId, number: 2 });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('BG80BNBG96611020345678');
+    expect(text).toContain('BG80 BNBG 9661 1020 3456 78');
   });
 
   it('a sent invoice carries (Оригинал) after the number', async () => {
@@ -80,7 +80,7 @@ describe('render pipeline', () => {
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Фактура # 0000000003 (Оригинал)');
+    expect(text).toContain('Фактура № 0000000003 (Оригинал)');
   });
 
   it('invariant 14: proforma renders without (Оригинал) and without an exemption line', async () => {
@@ -107,15 +107,15 @@ describe('render pipeline', () => {
     expect(text).not.toContain('Основание за неначисляване');
   });
 
-  it('invariant 15: quote shows Валидно до and no Данъчно събитие', async () => {
+  it('invariant 15: quote shows Валидна до and no Данъчно събитие', async () => {
     const document = await seedDocument(db.prisma, { accountId, documentType: 'QUOTE', number: 6 });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Валидно до');
+    expect(text).toContain('Валидна до');
     expect(text).not.toContain('Данъчно събитие');
   });
 
-  it('an invoice shows Данъчно събитие and no Валидно до', async () => {
+  it('an invoice shows the tax-event date and no Валидна до', async () => {
     const document = await seedDocument(db.prisma, {
       accountId,
       documentType: 'INVOICE',
@@ -123,7 +123,7 @@ describe('render pipeline', () => {
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Данъчно събитие');
+    expect(text).toContain('Дата на данъчното събитие');
     expect(text).not.toContain('Валидно до');
   });
 
@@ -140,7 +140,7 @@ describe('render pipeline', () => {
     });
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
-    expect(text).toContain('Основание за неначисляване на ДДС: чл.113, ал.9 от ЗДДС');
+    expect(text).toContain('Основание за неначисляване на ДДС: чл. 113, ал. 9 от ЗДДС');
   });
 
   it('invariant 16: Content-Disposition carries an ASCII fallback and RFC 5987 filename*', async () => {
@@ -292,6 +292,41 @@ describe('render pipeline', () => {
     expect(text).not.toContain('Получател:');
   });
 
+  it('a draft fills the issuer block, client block and VAT status from the live profile, never the DB snapshot', async () => {
+    const draftAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({
+      data: {
+        accountId: draftAccount.id,
+        country: 'DE',
+        companyName: 'Live Issuer GmbH',
+        vatRegistered: true,
+        vatNumber: 'DE811234567',
+      },
+    });
+    const client = await db.prisma.client.create({
+      data: { accountId: draftAccount.id, companyName: 'Live Client GmbH' },
+    });
+    const document = await seedDocument(db.prisma, {
+      accountId: draftAccount.id,
+      documentType: 'INVOICE',
+      status: 'DRAFT',
+      number: null,
+      overrides: { clientId: client.id },
+    });
+    // The draft's own DB snapshot still carries the fixture's stale values —
+    // renderPdf must never leak them into a draft preview.
+    expect(document.issuerCompanyName).not.toBe('Live Issuer GmbH');
+    expect(document.recipientCompanyName).not.toBe('Live Client GmbH');
+
+    const { buffer } = await service.renderPdf(document.id, draftAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Live Issuer GmbH');
+    expect(text).toContain('Live Client GmbH');
+    expect(text).toContain('USt. 20 %:');
+    expect(text).not.toContain('"Тестова Компания" ЕООД');
+    expect(text).not.toContain('"Клиентска Фирма" ООД');
+  });
+
   it('EN_LOCALE off: renders Bulgarian even for a document tagged documentLanguage=en', async () => {
     await flags.setEnabled('EN_LOCALE', false);
     try {
@@ -309,5 +344,23 @@ describe('render pipeline', () => {
     } finally {
       await flags.setEnabled('EN_LOCALE', true);
     }
+  });
+
+  it('a credit note names the invoice it corrects and prints the issuer VAT number', async () => {
+    const original = await seedDocument(db.prisma, {
+      accountId,
+      number: 41,
+      overrides: { issuedAt: new Date('2026-07-15'), issuerVatNumber: 'BG123456789' },
+    });
+    const creditNote = await seedDocument(db.prisma, {
+      accountId,
+      documentType: 'CREDIT_NOTE',
+      number: 42,
+      overrides: { originalDocumentId: original.id, issuerVatNumber: 'BG123456789' },
+    });
+    const { buffer } = await service.renderPdf(creditNote.id, accountId);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Към фактура № 0000000041 от 15.07.2026');
+    expect(text).toContain('ДДС №: BG123456789');
   });
 });

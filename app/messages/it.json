@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Selezionare il documento originale per continuare.",
         "missingLineItems": "Aggiungere almeno una voce con descrizione, quantità e prezzo.",
-        "missingVatGround": "Selezionare un motivo per la mancata applicazione dell'IVA."
+        "missingVatGround": "Selezionare un motivo per la mancata applicazione dell'IVA.",
+        "missingOperationNature": "Seleziona la natura dell'operazione per continuare."
       },
       "documentType": {
         "label": "Tipo di documento"
@@ -110,6 +111,17 @@
         "taxEventAt": "Data di effettuazione",
         "dueAt": "Scadenza"
       },
+      "paymentTerms": {
+        "label": "Termini di pagamento",
+        "dueOnReceipt": "Pagamento alla ricezione",
+        "days7": "7 giorni",
+        "days14": "14 giorni",
+        "days15": "15 giorni",
+        "days30": "30 giorni",
+        "days45": "45 giorni",
+        "days60": "60 giorni",
+        "customDate": "Data personalizzata"
+      },
       "delivery": {
         "heading": "Dati di consegna",
         "deliveryDateLabel": "Data di consegna",
@@ -117,12 +129,25 @@
         "transportReasonLabel": "Causale del trasporto",
         "transportReasonPlaceholder": "Seleziona la causale",
         "carrierNameLabel": "Vettore",
-        "transportNoteLabel": "Dati del trasporto"
+        "transportNoteLabel": "Dati del trasporto",
+        "transportVehicleLabel": "Targa del mezzo di trasporto"
+      },
+      "frMentions": {
+        "operationNatureLabel": "Natura dell'operazione",
+        "operationNaturePlaceholder": "Seleziona la natura",
+        "operationNatureGoods": "Cessione di beni",
+        "operationNatureServices": "Prestazione di servizi",
+        "operationNatureMixed": "Cessione di beni e prestazione di servizi",
+        "deliveryAddressLabel": "Indirizzo di consegna (se diverso)"
       },
       "originalDocument": {
         "label": "Documento originale",
         "placeholder": "Seleziona documento",
         "noClient": "Nessun cliente"
+      },
+      "correctionReason": {
+        "label": "Motivo della correzione",
+        "requiredHint": "Obbligatorio per gli emittenti stabiliti in Bulgaria e Irlanda."
       },
       "deliveryReference": {
         "label": "Fattura collegata",
@@ -135,7 +160,27 @@
         "priceLabel": "Prezzo",
         "totalLabel": "Totale",
         "removeButton": "Rimuovi",
-        "addButton": "Aggiungi voce"
+        "addButton": "Aggiungi voce",
+        "unitLabel": "Unità",
+        "unitNoneOption": "Nessuna",
+        "vatRateLabel": "Aliquota IVA",
+        "units": {
+          "C62": "Unità / pezzo",
+          "H87": "Pezzo",
+          "HUR": "Ora",
+          "DAY": "Giorno",
+          "MON": "Mese",
+          "KGM": "Chilogrammo",
+          "MTR": "Metro",
+          "MTK": "Metro quadrato",
+          "LTR": "Litro",
+          "KMT": "Chilometro",
+          "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Soggetto a split payment (allegato 15)",
+          "hint": "Solo Polonia — contrassegna i beni o servizi elencati nell'allegato 15 della legge IVA polacca; usato per la dicitura obbligatoria «mechanizm podzielonej płatności»."
+        }
       },
       "discounts": {
         "heading": "Sconti",
@@ -174,6 +219,11 @@
     },
     "einvoice": {
       "downloadXml": "Scarica fattura elettronica (XML)",
+      "ksefNumberLabel": "Numero KSeF",
+      "ksefNumberHint": "Incolla il numero assegnato da KSeF dopo aver caricato tu stesso il file XML.",
+      "ksefNumberSave": "Salva",
+      "ksefNumberSaved": "Numero KSeF salvato",
+      "ksefNumberSaveError": "Impossibile salvare il numero KSeF",
       "notReadyHint": "Dati mancanti per la fattura elettronica: {fields}",
       "missingFieldFallback": "Dati mancanti per la fattura elettronica.",
       "missingFields": {
@@ -207,8 +257,6 @@
           "countyRegion": "Manca il distretto (județ) dell'emittente.",
           "sirenOrSiret": "Manca il SIREN o SIRET dell'emittente.",
           "vatNumberFrFormat": "La partita IVA dell'emittente deve essere in formato francese.",
-          "esTaxId": "Manca l'identificativo fiscale (NIF/CIF/NIE) dell'emittente.",
-          "esTaxIdInvalid": "L'identificativo fiscale dell'emittente non è un NIF, NIE o CIF spagnolo valido.",
           "partitaIva": "Manca la partita IVA dell'emittente.",
           "partitaIvaInvalid": "La partita IVA dell'emittente non è una partita IVA italiana valida.",
           "codiceFiscale": "Manca il codice fiscale dell'emittente.",
@@ -229,8 +277,6 @@
           "countyRegion": "Manca il distretto (județ) del destinatario.",
           "sirenOrSiret": "Manca il SIREN o SIRET del destinatario.",
           "vatNumberFrFormat": "La partita IVA del destinatario deve essere in formato francese.",
-          "esTaxId": "Manca l'identificativo fiscale (NIF/CIF/NIE) del destinatario.",
-          "esTaxIdInvalid": "L'identificativo fiscale del destinatario non è un NIF, NIE o CIF spagnolo valido.",
           "partitaIvaOrCodiceFiscale": "Manca la partita IVA o il codice fiscale del destinatario.",
           "partitaIvaInvalid": "La partita IVA del destinatario non è una partita IVA italiana valida.",
           "codiceFiscaleInvalid": "Il formato del codice fiscale del destinatario non è valido.",
@@ -238,7 +284,9 @@
           "nip": "Manca il NIP del destinatario, richiesto per un acquirente con sede in Polonia.",
           "nipChecksum": "Il NIP del destinatario non è valido (cifra di controllo errata)."
         }
-      }
+      },
+      "ksefNumberInvalid": "Il formato del numero KSeF non è valido.",
+      "ksefNumberDateInvalid": "La data del numero KSeF non può essere precedente alla data di emissione della fattura né futura."
     }
   },
   "billing": {
@@ -318,7 +366,22 @@
     "unitPlaceholder": "pz, ora, kg...",
     "priceLabel": "Prezzo predefinito",
     "defaultUnit": "pz",
-    "validationError": "Compilare nome, unità di misura e prezzo."
+    "validationError": "Compilare nome, unità di misura e prezzo.",
+    "unitCodeLabel": "Codice unità (facoltativo)",
+    "unitCodeNoneOption": "Nessuna",
+    "units": {
+      "C62": "Unità / pezzo",
+      "H87": "Pezzo",
+      "HUR": "Ora",
+      "DAY": "Giorno",
+      "MON": "Mese",
+      "KGM": "Chilogrammo",
+      "MTR": "Metro",
+      "MTK": "Metro quadrato",
+      "LTR": "Litro",
+      "KMT": "Chilometro",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Clienti",
@@ -348,6 +411,12 @@
     "cityLabel": "Città",
     "emailLabel": "Email",
     "molLabel": "Rappresentante",
+    "clientTypeLabel": "Tipo di cliente",
+    "clientTypeOptionUnknown": "Non impostato",
+    "clientTypeOptions": {
+      "business": "Azienda",
+      "consumer": "Privato"
+    },
     "invalidFormat": "Formato non valido",
     "countryLabel": "Paese",
     "documentLanguageLabel": "Lingua dei documenti",
@@ -389,8 +458,7 @@
       "fr": "Francese",
       "it": "Italiano",
       "pl": "Polacco",
-      "ro": "Rumeno",
-      "es": "Spagnolo"
+      "ro": "Rumeno"
     }
   },
   "issuer": {
@@ -408,12 +476,29 @@
       "postcode": "CAP",
       "city": "Città",
       "phone": "Telefono",
-      "invalidFormat": "Formato non valido"
+      "invalidFormat": "Formato non valido",
+      "czRegisterHint": "Se siete iscritti nel Registro di commercio o in un altro registro pubblico, indicate qui tale iscrizione – § 435 del Codice civile (legge n. 89/2012 Sb.). Obbligatorio solo per gli imprenditori iscritti.",
+      "frLegalFormHint": "Imprenditore individuale? Scrivere «EI» o «entrepreneur individuel»: deve comparire accanto al nome su ogni documento (art. L526-22 del Code de commerce).",
+      "atJungholzMittelbergHint": "La sede della tua attività si trova a Jungholz o nel Kleinwalsertal (Mittelberg)? Ai sensi del § 10 comma 4 UStG 1994, lì l'aliquota standard è del 19% invece del 20%. Le aliquote ridotte (13%, 10%, 4,9%) restano invariate."
     },
     "vatFields": {
       "heading": "Registrazione IVA",
       "vatRegistered": "Registrato ai fini IVA",
-      "vatNumber": "Partita IVA"
+      "vatNumber": "Partita IVA",
+      "vatOnCashBasis": "IVA per cassa (TVA la încasare, Romania)",
+      "vatOnDebits": "Opzione IVA sui debiti (Francia)"
+    },
+    "paymentTerms": {
+      "heading": "Termini di pagamento",
+      "defaultLabel": "Termine predefinito",
+      "none": "Nessun predefinito — da scegliere per ogni documento",
+      "dueOnReceipt": "Pagamento alla ricezione",
+      "days7": "7 giorni",
+      "days14": "14 giorni",
+      "days15": "15 giorni",
+      "days30": "30 giorni",
+      "days45": "45 giorni",
+      "days60": "60 giorni"
     },
     "bankFields": {
       "heading": "Conto bancario",
@@ -446,7 +531,6 @@
       "DE": "Germania",
       "DK": "Danimarca",
       "EE": "Estonia",
-      "ES": "Spagna",
       "FI": "Finlandia",
       "FR": "Francia",
       "GB": "Regno Unito",
@@ -493,6 +577,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Selezionare il documento originale per continuare.",
       "ISSUER_PROFILE_INCOMPLETE": "Il profilo azienda è incompleto. Completare i dati aziendali per emettere documenti.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un documento di trasporto per questo paese richiede che i dati del trasporto siano compilati prima dell'emissione.",
+      "CORRECTION_REASON_REQUIRED": "Una nota di credito o di debito dalla Bulgaria o dall'Irlanda richiede un motivo della correzione prima dell'emissione.",
       "VAT_GROUND_NOT_ALLOWED": "Questo motivo di esenzione IVA non è consentito.",
       "CLIENT_EIK_DUPLICATE": "Esiste già un cliente con questo codice fiscale.",
       "SUBSCRIPTION_REQUIRED": "È necessario un abbonamento attivo.",
@@ -506,7 +591,11 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Il gestore dei pagamenti non risponde. Riprovare tra qualche minuto.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Il fornitore per la fatturazione elettronica non è configurato.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Questo fornitore non supporta il controllo dello stato.",
-      "INTERNAL_ERROR": "Si è verificato un errore imprevisto. Riprovare."
+      "INTERNAL_ERROR": "Si è verificato un errore imprevisto. Riprovare.",
+      "OPERATION_NATURE_REQUIRED": "I documenti fiscali francesi devono indicare la natura dell'operazione prima di poter essere emessi.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Impossibile recuperare il tasso di cambio necessario per emettere questo documento. Riprova tra poco.",
+      "INVALID_KSEF_NUMBER": "Il formato del numero KSeF non è valido.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "Una fattura austriaca superiore a 10.000 € verso un'azienda richiede il numero UID del destinatario prima di poter essere emessa."
     },
     "guideLink": "Guida alla fatturazione",
     "helpLink": "Vedi la guida",
@@ -548,7 +637,6 @@
       "DE": "Germania",
       "DK": "Danimarca",
       "EE": "Estonia",
-      "ES": "Spagna",
       "FI": "Finlandia",
       "FR": "Francia",
       "GR": "Grecia",
@@ -810,6 +898,10 @@
           "name": "Germania",
           "line": "IVA al 19%, fatture in tedesco, fatture elettroniche in formato XRechnung."
         },
+        "AT": {
+          "name": "Austria",
+          "line": "IVA al 20%, fatture in tedesco, fatture PDF senza obbligo di fattura elettronica."
+        },
         "FR": {
           "name": "Francia",
           "line": "IVA al 20%, fatture in francese, fatture elettroniche in formato UBL per la piattaforma Chorus Pro."
@@ -825,10 +917,6 @@
         "RO": {
           "name": "Romania",
           "line": "IVA al 21%, fatture in rumeno, fatture elettroniche in formato RO CIUS-RO per lo SPV dell'ANAF."
-        },
-        "ES": {
-          "name": "Spagna",
-          "line": "IVA al 21%, fatture in spagnolo, fatture elettroniche in formato Facturae per la piattaforma FACe."
         }
       }
     },
@@ -838,7 +926,7 @@
         "Fatture, proforma, note di credito e di debito, preventivi e documenti di trasporto.",
         "Numerazione progressiva, senza salti né duplicati.",
         "IVA per paese: aliquote locali, esenzioni e inversione contabile (reverse charge) per il B2B transfrontaliero, con verifica VIES in tempo reale della partita IVA del cliente.",
-        "Fatture elettroniche EN 16931 nel formato del tuo paese — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — pronte da caricare sulla piattaforma nazionale (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "Fatture elettroniche EN 16931 nel formato del tuo paese — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — pronte da caricare sulla piattaforma nazionale (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "Un PDF pronto nella lingua del tuo paese, da scaricare o inviare via email."
       ]
     },
@@ -874,7 +962,7 @@
         },
         {
           "question": "Quali paesi sono supportati?",
-          "answer": "Qualsiasi impresa stabilita nel territorio IVA dell'UE può emettere documenti. La fattura elettronica strutturata nel formato nazionale viene generata per Germania, Francia, Italia, Polonia, Romania e Spagna, pronta da caricare sulla piattaforma nazionale; per la Bulgaria nel formato europeo EN 16931 (UBL)."
+          "answer": "Qualsiasi impresa stabilita nel territorio IVA dell'UE può emettere documenti. La fattura elettronica strutturata nel formato nazionale viene generata per Germania, Francia, Italia, Polonia e Romania, pronta da caricare sulla piattaforma nazionale; per la Bulgaria nel formato europeo EN 16931 (UBL)."
         },
         {
           "question": "Come viene gestita l'IVA per un cliente in un altro paese UE?",
@@ -882,7 +970,7 @@
         },
         {
           "question": "Posso emettere fatture se non sono registrato ai fini IVA?",
-          "answer": "Dipende dal paese. Bulgaria, Germania (§ 19 UStG), Francia (franchise en base), Italia (regime forfettario), Polonia (art. 113) e Romania (art. 310) prevedono ciascuna un regime di esonero per le piccole attività, e Fakturcho stampa automaticamente il motivo di esenzione corretto. La Spagna non ha un regime generale di esonero per le piccole imprese: un emittente spagnolo non registrato ai fini IVA deve scegliere lui stesso, per ogni documento, l'attività esente applicabile ai sensi dell'art. 20 della legge spagnola sull'IVA."
+          "answer": "Dipende dal paese. Bulgaria, Germania (§ 19 UStG), Francia (franchise en base), Italia (regime forfettario), Polonia (art. 113) e Romania (art. 310) prevedono ciascuna un regime di esonero per le piccole attività, e Fakturcho stampa automaticamente il motivo di esenzione corretto."
         },
         {
           "question": "Che differenza c'è tra fattura proforma e fattura?",

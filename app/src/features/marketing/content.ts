@@ -1,7 +1,6 @@
 import bgMessages from '@messages/bg.json';
 import deMessages from '@messages/de.json';
 import enMessages from '@messages/en.json';
-import esMessages from '@messages/es.json';
 import frMessages from '@messages/fr.json';
 import itMessages from '@messages/it.json';
 import plMessages from '@messages/pl.json';
@@ -19,7 +18,6 @@ const MESSAGES_BY_LOCALE = {
   it: itMessages,
   pl: plMessages,
   ro: roMessages,
-  es: esMessages,
 };
 
 function messagesFor(locale: Locale) {

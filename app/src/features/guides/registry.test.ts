@@ -27,7 +27,6 @@ const GUIDES: GuideContent[] = [
   stubGuide('IT', 'it'),
   stubGuide('PL', 'pl'),
   stubGuide('RO', 'ro'),
-  stubGuide('ES', 'es'),
   stubGuide('EU', 'en'),
 ];
 
@@ -38,7 +37,6 @@ const TARGET_COUNTRY_LOCALES: ReadonlyArray<[GuideContent['country'], Locale]> =
   ['IT', 'it'],
   ['PL', 'pl'],
   ['RO', 'ro'],
-  ['ES', 'es'],
 ];
 
 describe('guide registry — country to guide mapping', () => {

@@ -1,3 +1,4 @@
+import type { DocumentType } from '../enums';
 import type { DocumentLanguage, Locale } from '../languages';
 import type { VatExemptionGround } from '../vat';
 
@@ -11,6 +12,10 @@ export interface IssuerIdentifierField {
   label: string;
   pattern: RegExp | null;
   required: boolean;
+  // 'flag' renders as a checkbox and stores 'true'/'false' rather than free
+  // text (e.g. IT art. 2250 c.c. "socio unico"/"in liquidazione"). Defaults
+  // to 'text' when omitted.
+  kind?: 'text' | 'flag';
 }
 
 export interface CountyRegionField {
@@ -33,6 +38,9 @@ export interface CountryConfig {
   vatNumberPattern: RegExp | null;
   exemptionGrounds: readonly VatExemptionGround[];
   defaultExemptionGround: VatExemptionGround | null;
+  vatNoteGrounds?: readonly string[];
+  zeroRateGrounds?: readonly string[];
+  documentTypeTitles?: Partial<Record<DocumentType, string>>;
   identifiers: readonly IssuerIdentifierField[];
   numberingUsesFixedWidth: boolean;
   requiredIssuerFields: readonly string[];
@@ -44,17 +52,31 @@ export interface CountryConfig {
   // records goods movement, not a sale); BG and RO commonly carry a value column.
   deliveryNotePricesShown: boolean;
   deliveryNoteTransportReasons: readonly string[];
+  // Whether the tax-point/supply date prints even when it equals the issue
+  // date. BG (ЗДДС чл. 114, ал. 1, т. 10) and DE (§14 Abs. 4 Nr. 6 UStG) require
+  // it unconditionally; the EU directive default (art. 226(7)) — ES, FR, IT,
+  // PL, RO and every generic EU country — needs it only when the dates differ.
+  taxEventDateAlwaysShown: boolean;
+  // Highest day count the payment-terms selector may offer for this country's
+  // issuers; undefined means no statutory cap. Set only where verified.
+  maxPaymentTermsDays?: number;
 }
 
 const EU_DIRECTIVE_SME_EXEMPTION_GROUND =
-  'VAT exemption for small enterprises, Article 284 of Council Directive 2006/112/EC';
+  'Small enterprise scheme – Article 284 of Council Directive 2006/112/EC';
+
+// Must match labels/en.ts reverseChargeNote exactly: mentions/generic.ts skips its
+// own reverse-charge mention when document.vatExemptionGround already says this.
+const EU_DIRECTIVE_REVERSE_CHARGE_GROUND =
+  'Reverse charge – Article 196 of Council Directive 2006/112/EC';
 
 const EU_DIRECTIVE_EXEMPTION_GROUNDS = [
   EU_DIRECTIVE_SME_EXEMPTION_GROUND,
-  'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+  EU_DIRECTIVE_REVERSE_CHARGE_GROUND,
   'Intra-Community supply, Article 138 of Council Directive 2006/112/EC',
   'Export, Article 146 of Council Directive 2006/112/EC',
-  'Exempt supply, Article 132 or 135 of Council Directive 2006/112/EC',
+  'Exempt supply, Article 132 of Council Directive 2006/112/EC',
+  'Exempt supply, Article 135 of Council Directive 2006/112/EC',
 ] as const;
 
 export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
@@ -72,7 +94,13 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   vatNumberPattern: null,
   exemptionGrounds: EU_DIRECTIVE_EXEMPTION_GROUNDS,
   defaultExemptionGround: EU_DIRECTIVE_SME_EXEMPTION_GROUND,
-  identifiers: [],
+  vatNoteGrounds: [EU_DIRECTIVE_REVERSE_CHARGE_GROUND],
+  // No dedicated country config knows the local register name (e.g. Czech NOZ
+  // § 435 obchodní rejstřík), so this optional free-text field lets an issuer
+  // in any unconfigured EU country print their own company-register entry.
+  identifiers: [
+    { key: 'companyRegister', label: 'Company register', pattern: null, required: false },
+  ],
   numberingUsesFixedWidth: false,
   requiredIssuerFields: ['companyName', 'street', 'city', 'postcode'],
   showMol: false,
@@ -80,6 +108,7 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   showOriginalStamp: false,
   deliveryNotePricesShown: false,
   deliveryNoteTransportReasons: [],
+  taxEventDateAlwaysShown: false,
 };
 
 export const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {

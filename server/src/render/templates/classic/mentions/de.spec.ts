@@ -39,4 +39,39 @@ describe('deMentions', () => {
     const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
     expect(deMentions({ document, lineItems, locale })).toEqual([]);
   });
+
+  it('uses the § 3a Abs. 2 UStG / Art. 196 note for a cross-border B2B service', () => {
+    const document = buildFakeDocument({
+      vatExemptionGround: null,
+      issuerCountry: 'DE',
+      recipientCountry: 'FR',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(deMentions({ document, lineItems, locale })).toEqual([
+      'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
+    ]);
+  });
+
+  it('does not duplicate the cross-border note when it is already the document ground', () => {
+    const document = buildFakeDocument({
+      vatExemptionGround:
+        'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)',
+      issuerCountry: 'DE',
+      recipientCountry: 'FR',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(deMentions({ document, lineItems, locale })).toEqual([]);
+  });
+
+  it('keeps the domestic § 13b note for a domestic reverse charge even when both countries are DE', () => {
+    const document = buildFakeDocument({
+      vatExemptionGround: null,
+      issuerCountry: 'DE',
+      recipientCountry: 'DE',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(deMentions({ document, lineItems, locale })).toEqual([
+      'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
+    ]);
+  });
 });

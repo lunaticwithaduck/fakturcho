@@ -27,6 +27,9 @@ const BG_VALUES: IssuerProfileFormValues = {
   bic: '',
   altIban: '',
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 const DE_VALUES: IssuerProfileFormValues = {
@@ -46,13 +49,29 @@ const RO_VALUES: IssuerProfileFormValues = {
   countyRegion: '',
 };
 
-const ES_VALUES: IssuerProfileFormValues = {
+const CZ_VALUES: IssuerProfileFormValues = {
   ...BG_VALUES,
-  country: 'ES',
+  country: 'CZ',
+  eik: '',
   addressLine: '',
-  street: 'Calle Ejemplo 1',
-  postcode: '28001',
-  countyRegion: '',
+  street: 'Václavské náměstí 1',
+  postcode: '110 00',
+  city: 'Praha',
+};
+
+const DE_VALUES_NO_HRB: IssuerProfileFormValues = {
+  ...BG_VALUES,
+  country: 'DE',
+  eik: '',
+  addressLine: '',
+  street: 'Musterstraße 1',
+  postcode: '10115',
+  city: 'Berlin',
+};
+
+const DE_VALUES_WITH_HRB: IssuerProfileFormValues = {
+  ...DE_VALUES_NO_HRB,
+  eik: 'HRB 12345',
 };
 
 afterEach(cleanup);
@@ -140,25 +159,7 @@ describe('IssuerCompanyFields', () => {
     expect((screen.getByLabelText('Județ') as HTMLInputElement).required).toBe(true);
   });
 
-  it('renders Provincia as optional for an ES issuer', () => {
-    render(
-      <NextIntlClientProvider locale="bg" messages={bgMessages}>
-        <IssuerCompanyFields values={ES_VALUES} onChange={noop} />
-      </NextIntlClientProvider>,
-    );
-
-    expect((screen.getByLabelText('Provincia') as HTMLInputElement).required).toBe(false);
-  });
-
-  it('labels the identifier field NIF/CIF for an ES issuer and CUI/CIF for a RO issuer', () => {
-    render(
-      <NextIntlClientProvider locale="bg" messages={bgMessages}>
-        <IssuerCompanyFields values={ES_VALUES} onChange={noop} />
-      </NextIntlClientProvider>,
-    );
-    expect(screen.getByLabelText('NIF/CIF')).toBeTruthy();
-    cleanup();
-
+  it('labels the identifier field CUI/CIF for a RO issuer', () => {
     render(
       <NextIntlClientProvider locale="bg" messages={bgMessages}>
         <IssuerCompanyFields values={RO_VALUES} onChange={noop} />
@@ -218,5 +219,142 @@ describe('IssuerCompanyFields', () => {
     );
 
     expect(screen.queryByText('Невалиден формат')).toBeNull();
+  });
+
+  it('renders the Czech company-register identifier as optional with its legal hint', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={CZ_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const field = screen.getByLabelText('Zápis v rejstříku') as HTMLInputElement;
+    expect(field.required).toBe(false);
+    expect(screen.getByText(/§ 435/)).toBeTruthy();
+  });
+
+  it('does not mark Registergericht/Sitz as required for a DE issuer with no Handelsregisternummer', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={DE_VALUES_NO_HRB} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    expect((screen.getByLabelText('Registergericht') as HTMLInputElement).required).toBe(false);
+    expect((screen.getByLabelText('Sitz') as HTMLInputElement).required).toBe(false);
+  });
+
+  it('marks Registergericht/Sitz as required for a DE issuer once a Handelsregisternummer is entered', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={DE_VALUES_WITH_HRB} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    expect((screen.getByLabelText('Registergericht') as HTMLInputElement).required).toBe(true);
+    expect((screen.getByLabelText('Sitz') as HTMLInputElement).required).toBe(true);
+  });
+
+  it('renders the IT art. 2250 c.c. flags as checkboxes and toggles them', () => {
+    const IT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'IT',
+      addressLine: '',
+      street: 'Via Roma 1',
+      postcode: '00100',
+      countyRegion: 'RM',
+    };
+    const onChange = vi.fn();
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={IT_VALUES} onChange={onChange} />
+      </NextIntlClientProvider>,
+    );
+
+    fireEvent.click(screen.getByLabelText('Socio unico'));
+    expect(onChange).toHaveBeenCalledWith('identifiers', { socioUnico: 'true' });
+
+    fireEvent.click(screen.getByLabelText('In liquidazione'));
+    expect(onChange).toHaveBeenCalledWith('identifiers', { inLiquidazione: 'true' });
+  });
+
+  it('shows the FR legal-form hint on the free-text field', () => {
+    const FR_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'FR',
+      addressLine: '',
+      street: 'Rue de Rivoli 1',
+      postcode: '75001',
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={FR_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Forme juridique')).toBeTruthy();
+    expect(screen.getByText(/entrepreneur individuel/)).toBeTruthy();
+  });
+
+  it('pre-ticks the Jungholz/Mittelberg 19% flag for an AT issuer whose postcode is in the zone', () => {
+    const AT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'AT',
+      addressLine: '',
+      street: 'Dorfstraße 1',
+      postcode: '6991',
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={AT_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const checkbox = screen.getByLabelText(
+      '19 % statt 20 % (Jungholz/Mittelberg, § 10 Abs. 4 UStG 1994)',
+    );
+    expect(checkbox.getAttribute('data-state')).toBe('checked');
+    expect(screen.getByText(/Jungholz or Kleinwalsertal \(Mittelberg\)/)).toBeTruthy();
+  });
+
+  it('does not pre-tick the Jungholz/Mittelberg flag for an AT issuer outside the zone', () => {
+    const AT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'AT',
+      addressLine: '',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={AT_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const checkbox = screen.getByLabelText(
+      '19 % statt 20 % (Jungholz/Mittelberg, § 10 Abs. 4 UStG 1994)',
+    );
+    expect(checkbox.getAttribute('data-state')).toBe('unchecked');
+  });
+
+  it('respects an explicit "false" over the postcode guess once the issuer has unticked it', () => {
+    const AT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'AT',
+      addressLine: '',
+      street: 'Dorfstraße 1',
+      postcode: '6991',
+      identifiers: { jungholzMittelbergRate: 'false' },
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={AT_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const checkbox = screen.getByLabelText(
+      '19 % statt 20 % (Jungholz/Mittelberg, § 10 Abs. 4 UStG 1994)',
+    );
+    expect(checkbox.getAttribute('data-state')).toBe('unchecked');
   });
 });

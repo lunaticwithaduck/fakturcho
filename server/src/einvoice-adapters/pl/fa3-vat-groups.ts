@@ -34,12 +34,31 @@ function bucketTags(
       return { netTag: 'P_13_6_3', vatTag: null };
     case 'E':
       return { netTag: 'P_13_7', vatTag: null };
+    // resolveLineVatCategory only ever sets AE for a cross-border EU B2B
+    // service (art. 28b, place of supply outside PL) — not the domestic
+    // reverse charge of art. 17 ust. 1 pkt 7-8, which is what P_13_10/"oo"
+    // are for. Art. 100 ust. 1 pkt 4 is the applicable ground here.
     case 'AE':
-      return { netTag: 'P_13_10', vatTag: null };
+      return { netTag: 'P_13_9', vatTag: null };
     case 'O':
       return { netTag: 'P_13_8', vatTag: null };
   }
 }
+
+// FA(3) XSD Fa sequence order for the P_13_x buckets, independent of the
+// order the invoice lines were entered in.
+const NET_TAG_ORDER: readonly string[] = [
+  'P_13_1',
+  'P_13_2',
+  'P_13_3',
+  'P_13_4',
+  'P_13_6_1',
+  'P_13_6_2',
+  'P_13_6_3',
+  'P_13_7',
+  'P_13_8',
+  'P_13_9',
+];
 
 export function groupFa3VatBuckets(lineItems: readonly LineItemDto[]): Fa3VatBucket[] {
   const buckets = new Map<string, Fa3VatBucket>();
@@ -54,7 +73,9 @@ export function groupFa3VatBuckets(lineItems: readonly LineItemDto[]): Fa3VatBuc
     }
     buckets.set(netTag, { netTag, vatTag, taxableAmount: subtotal.taxableAmount, vatAmount });
   }
-  return [...buckets.values()];
+  return [...buckets.values()].sort(
+    (a, b) => NET_TAG_ORDER.indexOf(a.netTag) - NET_TAG_ORDER.indexOf(b.netTag),
+  );
 }
 
 export function vatRateCode(category: VatCategory, rateBp: number): string {
@@ -70,7 +91,7 @@ export function vatRateCode(category: VatCategory, rateBp: number): string {
     case 'E':
       return 'zw';
     case 'AE':
-      return 'oo';
+      return 'np II';
     case 'O':
       return 'np I';
   }

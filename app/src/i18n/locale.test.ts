@@ -10,7 +10,6 @@ describe('isLocale', () => {
     expect(isLocale('it')).toBe(true);
     expect(isLocale('pl')).toBe(true);
     expect(isLocale('ro')).toBe(true);
-    expect(isLocale('es')).toBe(true);
   });
 
   it('rejects anything else', () => {
@@ -18,6 +17,10 @@ describe('isLocale', () => {
     expect(isLocale(undefined)).toBe(false);
     expect(isLocale(null)).toBe(false);
     expect(isLocale(42)).toBe(false);
+  });
+
+  it('rejects es, a locale that was published and then removed', () => {
+    expect(isLocale('es')).toBe(false);
   });
 });
 
@@ -35,11 +38,16 @@ describe('localeForPathname', () => {
   });
 
   it('resolves every other published locale for its own root and subpaths', () => {
-    for (const locale of ['de', 'fr', 'it', 'pl', 'ro', 'es'] as const) {
+    for (const locale of ['de', 'fr', 'it', 'pl', 'ro'] as const) {
       expect(localeForPathname(`/${locale}`)).toBe(locale);
       expect(localeForPathname(`/${locale}/login`)).toBe(locale);
       expect(localeForPathname(`/${locale}/privacy`)).toBe(locale);
     }
+  });
+
+  it('resolves bg for the removed es locale, never crashing', () => {
+    expect(localeForPathname('/es')).toBe('bg');
+    expect(localeForPathname('/es/login')).toBe('bg');
   });
 
   it('resolves bg for every other path', () => {

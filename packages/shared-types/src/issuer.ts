@@ -21,6 +21,15 @@ export interface IssuerProfileDto {
   peppolEndpointId: string | null;
   peppolScheme: string | null;
   identifiers: Record<string, string>;
+  // Codul fiscal art. 282 alin. (3)-(8), art. 319 alin. (20) lit. p): RO cash
+  // VAT accounting scheme, printed as "TVA la încasare" when set.
+  vatOnCashBasis: boolean;
+  // CGI art. 242 nonies A I 17°: FR option for VAT on debits, printed as
+  // "Option pour le paiement de la taxe d'après les débits" when set.
+  vatOnDebits: boolean;
+  // Prefills the composer's payment-terms selector for a new document; null
+  // means no default (chosen per document).
+  defaultPaymentTermsDays: number | null;
 }
 
 export interface UpdateIssuerProfileRequest {
@@ -43,6 +52,9 @@ export interface UpdateIssuerProfileRequest {
   peppolEndpointId?: string | null;
   peppolScheme?: string | null;
   identifiers?: Record<string, string>;
+  vatOnCashBasis?: boolean;
+  vatOnDebits?: boolean;
+  defaultPaymentTermsDays?: number | null;
 }
 
 export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boolean {
@@ -55,6 +67,7 @@ export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boole
     postcode: profile.postcode,
     city: profile.city,
     countyRegion: profile.countyRegion,
+    vatNumber: profile.vatNumber,
   };
   const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const required = requiredIssuerFields.map((field) => fieldValues[field] ?? null);
@@ -62,5 +75,17 @@ export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boole
     if (field.required) required.push(profile.identifiers[field.key] ?? null);
   }
   if (profile.vatRegistered) required.push(profile.vatNumber);
+  // § 37a HGB, § 35a GmbHG: a registered merchant must print Registergericht
+  // and Sitz once a register number (the Handelsregisternummer, stored as
+  // eik) is entered — optional only for a sole trader with no entry at all.
+  if (profile.country === 'DE' && (profile.eik ?? '').trim() !== '') {
+    required.push(profile.identifiers.registergericht ?? null, profile.identifiers.sitz ?? null);
+  }
+  // UGB § 14 Abs. 1: an AT business entered in the Firmenbuch must print the
+  // Firmenbuchgericht and Sitz once a Firmenbuchnummer (stored as eik) is
+  // entered — optional only for an unregistered sole trader.
+  if (profile.country === 'AT' && (profile.eik ?? '').trim() !== '') {
+    required.push(profile.identifiers.firmenbuchgericht ?? null, profile.identifiers.sitz ?? null);
+  }
   return required.every((value) => value !== null && value.trim() !== '');
 }

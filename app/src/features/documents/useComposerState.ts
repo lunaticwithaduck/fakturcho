@@ -10,9 +10,16 @@ import {
   type LineItemFormState,
 } from './composerState';
 
-export function useComposerState(initial: DocumentDto | null, timeZone: string) {
+export function useComposerState(
+  initial: DocumentDto | null,
+  timeZone: string,
+  defaultVatRateBp: number,
+  issuerDefaultPaymentTermsDays: number | null = null,
+) {
   const [state, setState] = useState<ComposerFormState>(() =>
-    initial ? composerStateFromDocument(initial, timeZone) : blankComposerState(),
+    initial
+      ? composerStateFromDocument(initial, timeZone, defaultVatRateBp)
+      : blankComposerState(issuerDefaultPaymentTermsDays),
   );
 
   function setField<K extends keyof ComposerFormState>(key: K, value: ComposerFormState[K]) {

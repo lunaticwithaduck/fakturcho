@@ -23,6 +23,9 @@ const BASE: IssuerProfileDto = {
   peppolEndpointId: null,
   peppolScheme: null,
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 describe('getMissingIssuerFields', () => {
@@ -127,5 +130,101 @@ describe('getMissingIssuerFields', () => {
       postcode: '10001',
     };
     expect(getMissingIssuerFields(usProfile)).toEqual([]);
+  });
+
+  it('does not require the company-register identifier for a CZ issuer (NOZ §435 odst. 1 only binds registered entrepreneurs)', () => {
+    const czProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'CZ',
+      addressLine: null,
+      street: 'Václavské náměstí 1',
+      postcode: '110 00',
+      city: 'Praha',
+    };
+    expect(getMissingIssuerFields(czProfile)).toEqual([]);
+
+    const complete: IssuerProfileDto = {
+      ...czProfile,
+      identifiers: { companyRegister: 'C 12345 vedená u Městského soudu v Praze' },
+    };
+    expect(getMissingIssuerFields(complete)).toEqual([]);
+  });
+
+  it('does not require Registergericht/Sitz for a DE sole trader with no Handelsregisternummer', () => {
+    const deProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'DE',
+      addressLine: null,
+      street: 'Musterstraße 1',
+      postcode: '10115',
+      city: 'Berlin',
+      eik: null,
+      identifiers: { steuernummer: '21/815/08150' },
+    };
+    expect(getMissingIssuerFields(deProfile)).toEqual([]);
+  });
+
+  it('requires Registergericht and Sitz for a DE issuer once a Handelsregisternummer is entered', () => {
+    const deProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'DE',
+      addressLine: null,
+      street: 'Musterstraße 1',
+      postcode: '10115',
+      city: 'Berlin',
+      eik: 'HRB 12345',
+      identifiers: { steuernummer: '21/815/08150' },
+    };
+    expect(getMissingIssuerFields(deProfile)).toEqual([
+      'identifier:registergericht',
+      'identifier:sitz',
+    ]);
+
+    const complete: IssuerProfileDto = {
+      ...deProfile,
+      identifiers: {
+        ...deProfile.identifiers,
+        registergericht: 'Amtsgericht Charlottenburg',
+        sitz: 'Berlin',
+      },
+    };
+    expect(getMissingIssuerFields(complete)).toEqual([]);
+  });
+
+  it('does not require Firmenbuchgericht/Sitz for an AT sole trader with no Firmenbuchnummer', () => {
+    const atProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'AT',
+      addressLine: null,
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      city: 'Wien',
+      eik: null,
+      identifiers: {},
+    };
+    expect(getMissingIssuerFields(atProfile)).toEqual([]);
+  });
+
+  it('requires Firmenbuchgericht and Sitz for an AT issuer once a Firmenbuchnummer is entered', () => {
+    const atProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'AT',
+      addressLine: null,
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      city: 'Wien',
+      eik: 'FN 123456a',
+      identifiers: {},
+    };
+    expect(getMissingIssuerFields(atProfile)).toEqual([
+      'identifier:firmenbuchgericht',
+      'identifier:sitz',
+    ]);
+
+    const complete: IssuerProfileDto = {
+      ...atProfile,
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    };
+    expect(getMissingIssuerFields(complete)).toEqual([]);
   });
 });

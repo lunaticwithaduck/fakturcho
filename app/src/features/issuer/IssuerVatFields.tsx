@@ -1,6 +1,6 @@
 import { Input, Switch } from '@design/components';
 import { useTranslations } from 'next-intl';
-import type { IssuerProfileFormValues } from './useIssuerProfileForm';
+import { type IssuerProfileFormValues, requiresVatNumber } from './useIssuerProfileForm';
 
 interface IssuerVatFieldsProps {
   values: IssuerProfileFormValues;
@@ -21,12 +21,26 @@ export function IssuerVatFields({ values, onChange }: IssuerVatFieldsProps) {
         checked={values.vatRegistered}
         onCheckedChange={(checked) => onChange('vatRegistered', checked)}
       />
-      {values.vatRegistered ? (
+      {values.vatRegistered || requiresVatNumber(values.country) ? (
         <Input
           label={t('vatFields.vatNumber')}
           required
           value={values.vatNumber}
           onChange={(event) => onChange('vatNumber', event.target.value)}
+        />
+      ) : null}
+      {values.country === 'RO' ? (
+        <Switch
+          label={t('vatFields.vatOnCashBasis')}
+          checked={values.vatOnCashBasis}
+          onCheckedChange={(checked) => onChange('vatOnCashBasis', checked)}
+        />
+      ) : null}
+      {values.country === 'FR' ? (
+        <Switch
+          label={t('vatFields.vatOnDebits')}
+          checked={values.vatOnDebits}
+          onCheckedChange={(checked) => onChange('vatOnDebits', checked)}
         />
       ) : null}
     </div>

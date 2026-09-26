@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Wählen Sie das Originaldokument aus, um fortzufahren.",
         "missingLineItems": "Fügen Sie mindestens eine Position mit Bezeichnung, Menge und Preis hinzu.",
-        "missingVatGround": "Wählen Sie aus, warum keine USt. berechnet wird."
+        "missingVatGround": "Wählen Sie aus, warum keine USt. berechnet wird.",
+        "missingOperationNature": "Wählen Sie die Art des Umsatzes aus, um fortzufahren."
       },
       "documentType": {
         "label": "Dokumenttyp"
@@ -110,6 +111,17 @@
         "taxEventAt": "Leistungsdatum",
         "dueAt": "Fälligkeitsdatum"
       },
+      "paymentTerms": {
+        "label": "Zahlungsbedingungen",
+        "dueOnReceipt": "Zahlung bei Erhalt",
+        "days7": "7 Tage",
+        "days14": "14 Tage",
+        "days15": "15 Tage",
+        "days30": "30 Tage",
+        "days45": "45 Tage",
+        "days60": "60 Tage",
+        "customDate": "Anderes Datum"
+      },
       "delivery": {
         "heading": "Lieferdetails",
         "deliveryDateLabel": "Lieferdatum",
@@ -117,12 +129,25 @@
         "transportReasonLabel": "Transportgrund",
         "transportReasonPlaceholder": "Grund auswählen",
         "carrierNameLabel": "Spediteur",
-        "transportNoteLabel": "Transporthinweise"
+        "transportNoteLabel": "Transporthinweise",
+        "transportVehicleLabel": "Kennzeichen des Transportmittels"
+      },
+      "frMentions": {
+        "operationNatureLabel": "Art des Umsatzes",
+        "operationNaturePlaceholder": "Art auswählen",
+        "operationNatureGoods": "Lieferung von Gegenständen",
+        "operationNatureServices": "Erbringung einer Dienstleistung",
+        "operationNatureMixed": "Lieferung von Gegenständen und Erbringung einer Dienstleistung",
+        "deliveryAddressLabel": "Lieferadresse (falls abweichend)"
       },
       "originalDocument": {
         "label": "Originaldokument",
         "placeholder": "Dokument auswählen",
         "noClient": "Kein Kunde"
+      },
+      "correctionReason": {
+        "label": "Grund der Korrektur",
+        "requiredHint": "Erforderlich für Aussteller aus Bulgarien und Irland."
       },
       "deliveryReference": {
         "label": "Zugehörige Rechnung",
@@ -135,7 +160,27 @@
         "priceLabel": "Preis",
         "totalLabel": "Gesamt",
         "removeButton": "Entfernen",
-        "addButton": "Position hinzufügen"
+        "addButton": "Position hinzufügen",
+        "unitLabel": "Einheit",
+        "unitNoneOption": "Keine",
+        "vatRateLabel": "USt.-Satz",
+        "units": {
+          "C62": "Stück / Einheit",
+          "H87": "Stück",
+          "HUR": "Stunde",
+          "DAY": "Tag",
+          "MON": "Monat",
+          "KGM": "Kilogramm",
+          "MTR": "Meter",
+          "MTK": "Quadratmeter",
+          "LTR": "Liter",
+          "KMT": "Kilometer",
+          "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Split-Payment-pflichtig (Anlage 15)",
+          "hint": "Nur Polen — markieren Sie Waren oder Dienstleistungen aus Anlage 15 des polnischen USt-Gesetzes; entscheidend für den Pflichtvermerk „mechanizm podzielonej płatności“."
+        }
       },
       "discounts": {
         "heading": "Rabatte",
@@ -174,6 +219,11 @@
     },
     "einvoice": {
       "downloadXml": "E-Rechnung herunterladen (XML)",
+      "ksefNumberLabel": "KSeF-Nummer",
+      "ksefNumberHint": "Fügen Sie die Nummer ein, die KSeF vergeben hat, nachdem Sie die XML-Datei selbst hochgeladen haben.",
+      "ksefNumberSave": "Speichern",
+      "ksefNumberSaved": "KSeF-Nummer gespeichert",
+      "ksefNumberSaveError": "KSeF-Nummer konnte nicht gespeichert werden",
       "notReadyHint": "Fehlende Daten für die E-Rechnung: {fields}",
       "missingFieldFallback": "Fehlende Daten für die E-Rechnung.",
       "missingFields": {
@@ -207,8 +257,6 @@
           "countyRegion": "Kreis (județ) des Ausstellers fehlt.",
           "sirenOrSiret": "SIREN oder SIRET des Ausstellers fehlt.",
           "vatNumberFrFormat": "Die USt-IdNr. des Ausstellers muss dem französischen Format entsprechen.",
-          "esTaxId": "Steuernummer (NIF/CIF/NIE) des Ausstellers fehlt.",
-          "esTaxIdInvalid": "Die Steuernummer des Ausstellers ist keine gültige spanische NIF, NIE oder CIF.",
           "partitaIva": "Partita IVA des Ausstellers fehlt.",
           "partitaIvaInvalid": "Die Partita IVA des Ausstellers ist keine gültige italienische USt-IdNr.",
           "codiceFiscale": "Codice Fiscale des Ausstellers fehlt.",
@@ -229,8 +277,6 @@
           "countyRegion": "Kreis (județ) des Empfängers fehlt.",
           "sirenOrSiret": "SIREN oder SIRET des Empfängers fehlt.",
           "vatNumberFrFormat": "Die USt-IdNr. des Empfängers muss dem französischen Format entsprechen.",
-          "esTaxId": "Steuernummer (NIF/CIF/NIE) des Empfängers fehlt.",
-          "esTaxIdInvalid": "Die Steuernummer des Empfängers ist keine gültige spanische NIF, NIE oder CIF.",
           "partitaIvaOrCodiceFiscale": "Partita IVA oder Codice Fiscale des Empfängers fehlt.",
           "partitaIvaInvalid": "Die Partita IVA des Empfängers ist keine gültige italienische USt-IdNr.",
           "codiceFiscaleInvalid": "Das Format des Codice Fiscale des Empfängers ist ungültig.",
@@ -238,7 +284,9 @@
           "nip": "NIP des Empfängers fehlt (bei inländischen polnischen Käufern erforderlich).",
           "nipChecksum": "Die Prüfsumme der NIP des Empfängers ist ungültig."
         }
-      }
+      },
+      "ksefNumberInvalid": "Das Format der KSeF-Nummer ist ungültig.",
+      "ksefNumberDateInvalid": "Das Datum in der KSeF-Nummer darf nicht vor dem Rechnungsdatum oder in der Zukunft liegen."
     }
   },
   "billing": {
@@ -318,7 +366,22 @@
     "unitPlaceholder": "Stk., Std., kg...",
     "priceLabel": "Standardpreis",
     "defaultUnit": "Stk.",
-    "validationError": "Füllen Sie Bezeichnung, Einheit und Preis aus."
+    "validationError": "Füllen Sie Bezeichnung, Einheit und Preis aus.",
+    "unitCodeLabel": "Einheitencode (optional)",
+    "unitCodeNoneOption": "Keine",
+    "units": {
+      "C62": "Stück / Einheit",
+      "H87": "Stück",
+      "HUR": "Stunde",
+      "DAY": "Tag",
+      "MON": "Monat",
+      "KGM": "Kilogramm",
+      "MTR": "Meter",
+      "MTK": "Quadratmeter",
+      "LTR": "Liter",
+      "KMT": "Kilometer",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Kunden",
@@ -348,6 +411,12 @@
     "cityLabel": "Ort",
     "emailLabel": "E-Mail",
     "molLabel": "Vertreten durch",
+    "clientTypeLabel": "Kundentyp",
+    "clientTypeOptionUnknown": "Nicht festgelegt",
+    "clientTypeOptions": {
+      "business": "Unternehmen",
+      "consumer": "Privatperson"
+    },
     "invalidFormat": "Ungültiges Format",
     "countryLabel": "Land",
     "documentLanguageLabel": "Dokumentsprache",
@@ -389,8 +458,7 @@
       "fr": "Französisch",
       "it": "Italienisch",
       "pl": "Polnisch",
-      "ro": "Rumänisch",
-      "es": "Spanisch"
+      "ro": "Rumänisch"
     }
   },
   "issuer": {
@@ -408,12 +476,29 @@
       "postcode": "Postleitzahl",
       "city": "Ort",
       "phone": "Telefon",
-      "invalidFormat": "Ungültiges Format"
+      "invalidFormat": "Ungültiges Format",
+      "czRegisterHint": "Wenn Sie im Handelsregister oder einem anderen öffentlichen Register eingetragen sind, geben Sie diese Eintragung hier an – § 435 des Bürgerlichen Gesetzbuchs (Gesetz Nr. 89/2012 Sb.). Nur für im Register eingetragene Unternehmer verpflichtend.",
+      "frLegalFormHint": "Einzelunternehmer? Schreiben Sie „EI“ oder „entrepreneur individuel“ – die Angabe muss auf jedem Dokument neben dem Namen stehen (Art. L526-22 Code de commerce).",
+      "atJungholzMittelbergHint": "Ihr Firmensitz liegt in Jungholz oder im Kleinwalsertal (Mittelberg)? Dort gilt gemäß § 10 Abs. 4 UStG 1994 der Steuersatz von 19 % statt 20 % als Normalsteuersatz. Die ermäßigten Sätze (13 %, 10 %, 4,9 %) bleiben unverändert."
     },
     "vatFields": {
       "heading": "USt-Registrierung",
       "vatRegistered": "Umsatzsteuerlich registriert",
-      "vatNumber": "USt-IdNr."
+      "vatNumber": "USt-IdNr.",
+      "vatOnCashBasis": "Ist-Besteuerung der Umsatzsteuer (TVA la încasare, Rumänien)",
+      "vatOnDebits": "MwSt.-Besteuerung nach vereinbarten Entgelten (Frankreich)"
+    },
+    "paymentTerms": {
+      "heading": "Zahlungsbedingungen",
+      "defaultLabel": "Standardfrist",
+      "none": "Kein Standard – für jedes Dokument wählen",
+      "dueOnReceipt": "Zahlung bei Erhalt",
+      "days7": "7 Tage",
+      "days14": "14 Tage",
+      "days15": "15 Tage",
+      "days30": "30 Tage",
+      "days45": "45 Tage",
+      "days60": "60 Tage"
     },
     "bankFields": {
       "heading": "Bankverbindung",
@@ -446,7 +531,6 @@
       "DE": "Deutschland",
       "DK": "Dänemark",
       "EE": "Estland",
-      "ES": "Spanien",
       "FI": "Finnland",
       "FR": "Frankreich",
       "GB": "Vereinigtes Königreich",
@@ -493,6 +577,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Wählen Sie das Originaldokument aus, um fortzufahren.",
       "ISSUER_PROFILE_INCOMPLETE": "Das Ausstellerprofil ist unvollständig. Geben Sie die Firmendaten ein, um Dokumente ausstellen zu können.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Ein Lieferschein für dieses Land benötigt ausgefüllte Transportangaben, bevor er ausgestellt werden kann.",
+      "CORRECTION_REASON_REQUIRED": "Eine Gutschrift oder Lastschrift aus Bulgarien oder Irland benötigt einen Korrekturgrund, bevor sie ausgestellt werden kann.",
       "VAT_GROUND_NOT_ALLOWED": "Dieser Befreiungsgrund ist nicht zulässig.",
       "CLIENT_EIK_DUPLICATE": "Es existiert bereits ein Kunde mit dieser Registernummer.",
       "SUBSCRIPTION_REQUIRED": "Ein aktives Abonnement ist erforderlich.",
@@ -506,7 +591,11 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Der Zahlungsanbieter antwortet nicht. Bitte versuchen Sie es in einigen Minuten erneut.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Der Anbieter für E-Rechnungen ist nicht konfiguriert.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Dieser Anbieter unterstützt keine Statusabfragen.",
-      "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+      "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+      "OPERATION_NATURE_REQUIRED": "Französische Steuerdokumente müssen vor der Ausstellung die Art des Umsatzes angeben.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Der für die Ausstellung dieses Dokuments benötigte Wechselkurs konnte nicht abgerufen werden. Bitte versuchen Sie es in Kürze erneut.",
+      "INVALID_KSEF_NUMBER": "Das Format der KSeF-Nummer ist ungültig.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "Eine österreichische Rechnung über 10.000 € an ein Unternehmen benötigt die UID-Nummer des Empfängers, bevor sie ausgestellt werden kann."
     },
     "guideLink": "Rechnungsleitfaden",
     "helpLink": "Anleitung ansehen",
@@ -548,7 +637,6 @@
       "DE": "Deutschland",
       "DK": "Dänemark",
       "EE": "Estland",
-      "ES": "Spanien",
       "FI": "Finnland",
       "FR": "Frankreich",
       "GR": "Griechenland",
@@ -810,6 +898,10 @@
           "name": "Deutschland",
           "line": "19 % USt., Rechnungen auf Deutsch, E-Rechnungen im XRechnung-Format."
         },
+        "AT": {
+          "name": "Österreich",
+          "line": "20 % USt., Rechnungen auf Deutsch, PDF-Rechnungen ohne E-Rechnungspflicht."
+        },
         "FR": {
           "name": "Frankreich",
           "line": "20 % USt., Rechnungen auf Französisch, E-Rechnungen im UBL-Format für die Plattform Chorus Pro."
@@ -825,10 +917,6 @@
         "RO": {
           "name": "Rumänien",
           "line": "21 % USt., Rechnungen auf Rumänisch, E-Rechnungen im Format CIUS-RO für das SPV der ANAF."
-        },
-        "ES": {
-          "name": "Spanien",
-          "line": "21 % USt., Rechnungen auf Spanisch, E-Rechnungen im Facturae-Format für die FACe-Plattform."
         }
       }
     },
@@ -838,7 +926,7 @@
         "Rechnungen, Proforma-Rechnungen, Rechnungskorrekturen, Belastungsanzeigen, Angebote und Lieferscheine.",
         "Fortlaufende Nummerierung – ohne Lücken, ohne Wiederholungen.",
         "Umsatzsteuer nach Land: landesspezifische Steuersätze, Steuerbefreiungen und Reverse Charge bei grenzüberschreitenden B2B-Umsätzen – mit Live-Prüfung der USt-IdNr. des Kunden über VIES.",
-        "E-Rechnungen nach EN 16931 im Format Ihres Landes – XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO – bereit zum Hochladen auf Ihre nationale Plattform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "E-Rechnungen nach EN 16931 im Format Ihres Landes – XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO – bereit zum Hochladen auf Ihre nationale Plattform (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "Ein fertiges PDF in der Sprache Ihres Landes – zum Herunterladen oder zum Versand per E-Mail."
       ]
     },
@@ -874,7 +962,7 @@
         },
         {
           "question": "Welche Länder werden unterstützt?",
-          "answer": "Jedes Unternehmen mit Sitz im EU-Umsatzsteuergebiet kann Dokumente ausstellen. Strukturierte E-Rechnungen im jeweiligen nationalen Format werden für Deutschland, Frankreich, Italien, Polen, Rumänien und Spanien erstellt – bereit zum Hochladen auf die nationale Plattform; für Bulgarien im EU-Format EN 16931 (UBL)."
+          "answer": "Jedes Unternehmen mit Sitz im EU-Umsatzsteuergebiet kann Dokumente ausstellen. Strukturierte E-Rechnungen im jeweiligen nationalen Format werden für Deutschland, Frankreich, Italien, Polen und Rumänien erstellt – bereit zum Hochladen auf die nationale Plattform; für Bulgarien im EU-Format EN 16931 (UBL)."
         },
         {
           "question": "Wie wird die Umsatzsteuer für einen Kunden in einem anderen EU-Land behandelt?",
@@ -882,7 +970,7 @@
         },
         {
           "question": "Kann ich Rechnungen ohne Umsatzsteuerregistrierung ausstellen?",
-          "answer": "Das hängt von Ihrem Land ab. Bulgarien, Deutschland (§ 19 UStG), Frankreich (franchise en base), Italien (regime forfettario), Polen (Art. 113) und Rumänien (Art. 310) kennen jeweils eine Kleinunternehmerregelung, und Fakturcho druckt automatisch den passenden Befreiungsgrund. Spanien kennt keine allgemeine Kleinunternehmerregelung – ein nicht umsatzsteuerlich registrierter spanischer Aussteller wählt für jedes Dokument selbst die zutreffende steuerbefreite Tätigkeit nach Art. 20 des spanischen USt-Gesetzes."
+          "answer": "Das hängt von Ihrem Land ab. Bulgarien, Deutschland (§ 19 UStG), Frankreich (franchise en base), Italien (regime forfettario), Polen (Art. 113) und Rumänien (Art. 310) kennen jeweils eine Kleinunternehmerregelung, und Fakturcho druckt automatisch den passenden Befreiungsgrund."
         },
         {
           "question": "Was ist der Unterschied zwischen einer Proforma-Rechnung und einer Rechnung?",

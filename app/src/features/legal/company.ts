@@ -71,7 +71,6 @@ const PRICING_INTL_TAGS: Partial<Record<Locale, string>> = {
   it: 'it-IT',
   pl: 'pl-PL',
   ro: 'ro-RO',
-  es: 'es-ES',
 };
 
 const SUBSCRIPTION_PERIOD_WORD: Partial<Record<Locale, string>> = {
@@ -80,7 +79,6 @@ const SUBSCRIPTION_PERIOD_WORD: Partial<Record<Locale, string>> = {
   it: 'al mese',
   pl: 'miesięcznie',
   ro: 'pe lună',
-  es: 'al mes',
 };
 
 function eurAmount(tag: string, cents: number, fractionDigits: number): string {

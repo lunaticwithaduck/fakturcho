@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Wybierz dokument pierwotny, aby kontynuować.",
         "missingLineItems": "Dodaj co najmniej jedną pozycję z nazwą, ilością i ceną.",
-        "missingVatGround": "Wybierz podstawę zwolnienia z VAT."
+        "missingVatGround": "Wybierz podstawę zwolnienia z VAT.",
+        "missingOperationNature": "Wybierz rodzaj czynności, aby kontynuować."
       },
       "documentType": {
         "label": "Rodzaj dokumentu"
@@ -110,6 +111,17 @@
         "taxEventAt": "Data sprzedaży",
         "dueAt": "Termin płatności"
       },
+      "paymentTerms": {
+        "label": "Warunki płatności",
+        "dueOnReceipt": "Płatność przy odbiorze",
+        "days7": "7 dni",
+        "days14": "14 dni",
+        "days15": "15 dni",
+        "days30": "30 dni",
+        "days45": "45 dni",
+        "days60": "60 dni",
+        "customDate": "Inna data"
+      },
       "delivery": {
         "heading": "Szczegóły dostawy",
         "deliveryDateLabel": "Data dostawy",
@@ -117,12 +129,25 @@
         "transportReasonLabel": "Powód transportu",
         "transportReasonPlaceholder": "Wybierz powód",
         "carrierNameLabel": "Przewoźnik",
-        "transportNoteLabel": "Szczegóły transportu"
+        "transportNoteLabel": "Szczegóły transportu",
+        "transportVehicleLabel": "Nr rejestracyjny pojazdu"
+      },
+      "frMentions": {
+        "operationNatureLabel": "Rodzaj czynności",
+        "operationNaturePlaceholder": "Wybierz rodzaj",
+        "operationNatureGoods": "Dostawa towarów",
+        "operationNatureServices": "Świadczenie usług",
+        "operationNatureMixed": "Dostawa towarów i świadczenie usług",
+        "deliveryAddressLabel": "Adres dostawy (jeśli inny)"
       },
       "originalDocument": {
         "label": "Dokument pierwotny",
         "placeholder": "Wybierz dokument",
         "noClient": "Brak klienta"
+      },
+      "correctionReason": {
+        "label": "Przyczyna korekty",
+        "requiredHint": "Wymagane dla wystawców z Bułgarii i Irlandii."
       },
       "deliveryReference": {
         "label": "Powiązana faktura",
@@ -135,7 +160,27 @@
         "priceLabel": "Cena",
         "totalLabel": "Wartość",
         "removeButton": "Usuń",
-        "addButton": "Dodaj pozycję"
+        "addButton": "Dodaj pozycję",
+        "unitLabel": "Miara",
+        "unitNoneOption": "Brak",
+        "vatRateLabel": "Stawka VAT",
+        "units": {
+          "C62": "Sztuka / jednostka",
+          "H87": "Sztuka",
+          "HUR": "Godzina",
+          "DAY": "Dzień",
+          "MON": "Miesiąc",
+          "KGM": "Kilogram",
+          "MTR": "Metr",
+          "MTK": "Metr kwadratowy",
+          "LTR": "Litr",
+          "KMT": "Kilometr",
+          "SET": "Komplet"
+        },
+        "mpp": {
+          "checkboxLabel": "Podlega mechanizmowi podzielonej płatności (zał. nr 15)",
+          "hint": "Zaznacz towary lub usługi wymienione w załączniku nr 15 do ustawy o VAT — decyduje o obowiązkowej adnotacji „mechanizm podzielonej płatności”."
+        }
       },
       "discounts": {
         "heading": "Rabaty",
@@ -174,6 +219,11 @@
     },
     "einvoice": {
       "downloadXml": "Pobierz e-fakturę (XML)",
+      "ksefNumberLabel": "Numer KSeF",
+      "ksefNumberHint": "Wklej numer nadany przez KSeF po samodzielnym przesłaniu pliku XML.",
+      "ksefNumberSave": "Zapisz",
+      "ksefNumberSaved": "Numer KSeF zapisany",
+      "ksefNumberSaveError": "Nie udało się zapisać numeru KSeF",
       "notReadyHint": "Brak danych do e-faktury: {fields}",
       "missingFieldFallback": "Brak danych do e-faktury.",
       "missingFields": {
@@ -207,8 +257,6 @@
           "countyRegion": "Brak okręgu (județ) wystawcy.",
           "sirenOrSiret": "Brak numeru SIREN lub SIRET wystawcy.",
           "vatNumberFrFormat": "Numer VAT wystawcy musi być w formacie francuskim.",
-          "esTaxId": "Brak identyfikatora podatkowego wystawcy (NIF/CIF/NIE).",
-          "esTaxIdInvalid": "Identyfikator podatkowy wystawcy nie jest prawidłowym hiszpańskim numerem NIF, NIE ani CIF.",
           "partitaIva": "Brak numeru Partita IVA wystawcy.",
           "partitaIvaInvalid": "Numer Partita IVA wystawcy nie jest prawidłowym włoskim numerem VAT.",
           "codiceFiscale": "Brak numeru Codice Fiscale wystawcy.",
@@ -229,8 +277,6 @@
           "countyRegion": "Brak okręgu (județ) nabywcy.",
           "sirenOrSiret": "Brak numeru SIREN lub SIRET nabywcy.",
           "vatNumberFrFormat": "Numer VAT nabywcy musi być w formacie francuskim.",
-          "esTaxId": "Brak identyfikatora podatkowego nabywcy (NIF/CIF/NIE).",
-          "esTaxIdInvalid": "Identyfikator podatkowy nabywcy nie jest prawidłowym hiszpańskim numerem NIF, NIE ani CIF.",
           "partitaIvaOrCodiceFiscale": "Brak numeru Partita IVA lub Codice Fiscale nabywcy.",
           "partitaIvaInvalid": "Numer Partita IVA nabywcy nie jest prawidłowym włoskim numerem VAT.",
           "codiceFiscaleInvalid": "Numer Codice Fiscale nabywcy ma nieprawidłowy format.",
@@ -238,7 +284,9 @@
           "nip": "Brak numeru NIP nabywcy, wymaganego w przypadku nabywcy krajowego.",
           "nipChecksum": "Numer NIP nabywcy ma nieprawidłową sumę kontrolną."
         }
-      }
+      },
+      "ksefNumberInvalid": "Nieprawidłowy format numeru KSeF.",
+      "ksefNumberDateInvalid": "Data w numerze KSeF nie może być wcześniejsza niż data wystawienia faktury ani przyszła."
     }
   },
   "billing": {
@@ -318,7 +366,22 @@
     "unitPlaceholder": "szt., godz., kg...",
     "priceLabel": "Cena domyślna",
     "defaultUnit": "szt.",
-    "validationError": "Uzupełnij nazwę, jednostkę i cenę."
+    "validationError": "Uzupełnij nazwę, jednostkę i cenę.",
+    "unitCodeLabel": "Kod jednostki (opcjonalnie)",
+    "unitCodeNoneOption": "Brak",
+    "units": {
+      "C62": "Sztuka / jednostka",
+      "H87": "Sztuka",
+      "HUR": "Godzina",
+      "DAY": "Dzień",
+      "MON": "Miesiąc",
+      "KGM": "Kilogram",
+      "MTR": "Metr",
+      "MTK": "Metr kwadratowy",
+      "LTR": "Litr",
+      "KMT": "Kilometr",
+      "SET": "Komplet"
+    }
   },
   "clients": {
     "pageTitle": "Klienci",
@@ -348,6 +411,12 @@
     "cityLabel": "Miejscowość",
     "emailLabel": "E-mail",
     "molLabel": "Reprezentant",
+    "clientTypeLabel": "Typ klienta",
+    "clientTypeOptionUnknown": "Nie ustawiono",
+    "clientTypeOptions": {
+      "business": "Firma",
+      "consumer": "Osoba prywatna"
+    },
     "invalidFormat": "Nieprawidłowy format",
     "countryLabel": "Kraj",
     "documentLanguageLabel": "Język dokumentów",
@@ -389,8 +458,7 @@
       "fr": "Francuski",
       "it": "Włoski",
       "pl": "Polski",
-      "ro": "Rumuński",
-      "es": "Hiszpański"
+      "ro": "Rumuński"
     }
   },
   "issuer": {
@@ -408,12 +476,29 @@
       "postcode": "Kod pocztowy",
       "city": "Miejscowość",
       "phone": "Telefon",
-      "invalidFormat": "Nieprawidłowy format"
+      "invalidFormat": "Nieprawidłowy format",
+      "czRegisterHint": "Jeśli jesteś wpisany do rejestru handlowego lub innego rejestru publicznego, podaj ten wpis tutaj – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.). Obowiązkowe tylko dla wpisanych przedsiębiorców.",
+      "frLegalFormHint": "Jednoosobowa działalność gospodarcza? Wpisz „EI” lub „entrepreneur individuel” — musi pojawić się obok nazwy na każdym dokumencie (art. L526-22 francuskiego kodeksu handlowego).",
+      "atJungholzMittelbergHint": "Siedziba Twojej firmy znajduje się w Jungholz lub Kleinwalsertal (Mittelberg)? Zgodnie z § 10 ust. 4 UStG 1994 obowiązuje tam stawka podstawowa 19% zamiast 20%. Stawki obniżone (13%, 10%, 4,9%) pozostają bez zmian."
     },
     "vatFields": {
       "heading": "Rejestracja VAT",
       "vatRegistered": "Czynny podatnik VAT",
-      "vatNumber": "Numer VAT"
+      "vatNumber": "Numer VAT",
+      "vatOnCashBasis": "Metoda kasowa VAT (TVA la încasare, Rumunia)",
+      "vatOnDebits": "Opcja VAT od obciążeń (Francja)"
+    },
+    "paymentTerms": {
+      "heading": "Warunki płatności",
+      "defaultLabel": "Domyślny termin",
+      "none": "Brak domyślnego — wybór przy każdym dokumencie",
+      "dueOnReceipt": "Płatność przy odbiorze",
+      "days7": "7 dni",
+      "days14": "14 dni",
+      "days15": "15 dni",
+      "days30": "30 dni",
+      "days45": "45 dni",
+      "days60": "60 dni"
     },
     "bankFields": {
       "heading": "Rachunek bankowy",
@@ -446,7 +531,6 @@
       "DE": "Niemcy",
       "DK": "Dania",
       "EE": "Estonia",
-      "ES": "Hiszpania",
       "FI": "Finlandia",
       "FR": "Francja",
       "GB": "Wielka Brytania",
@@ -493,6 +577,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Wybierz dokument pierwotny, aby kontynuować.",
       "ISSUER_PROFILE_INCOMPLETE": "Profil wystawcy jest niekompletny. Uzupełnij dane firmy, aby wystawiać dokumenty.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Dowód dostawy dla tego kraju wymaga uzupełnienia danych transportu przed wystawieniem.",
+      "CORRECTION_REASON_REQUIRED": "Faktura korygująca (nota kredytowa lub debetowa) z Bułgarii lub Irlandii wymaga podania przyczyny korekty przed wystawieniem.",
       "VAT_GROUND_NOT_ALLOWED": "Ta podstawa zwolnienia z VAT jest niedozwolona.",
       "CLIENT_EIK_DUPLICATE": "Klient z tym numerem identyfikacyjnym już istnieje.",
       "SUBSCRIPTION_REQUIRED": "Wymagany jest aktywny abonament.",
@@ -506,7 +591,11 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Operator płatności nie odpowiada. Spróbuj ponownie za kilka minut.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Dostawca e-faktur nie jest skonfigurowany.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ten dostawca nie obsługuje sprawdzania statusu.",
-      "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
+      "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.",
+      "OPERATION_NATURE_REQUIRED": "Francuskie dokumenty podatkowe muszą wskazywać rodzaj czynności przed wystawieniem.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Nie udało się pobrać kursu wymiany potrzebnego do wystawienia tego dokumentu. Spróbuj ponownie za chwilę.",
+      "INVALID_KSEF_NUMBER": "Nieprawidłowy format numeru KSeF.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "Austriacka faktura powyżej 10 000 € dla firmy wymaga numeru UID odbiorcy przed wystawieniem."
     },
     "guideLink": "Poradnik fakturowania",
     "helpLink": "Zobacz przewodnik",
@@ -548,7 +637,6 @@
       "DE": "Niemcy",
       "DK": "Dania",
       "EE": "Estonia",
-      "ES": "Hiszpania",
       "FI": "Finlandia",
       "FR": "Francja",
       "GR": "Grecja",
@@ -810,6 +898,10 @@
           "name": "Niemcy",
           "line": "VAT 19%, faktury w języku niemieckim, e-faktury w formacie XRechnung."
         },
+        "AT": {
+          "name": "Austria",
+          "line": "VAT 20%, faktury w języku niemieckim, faktury PDF bez obowiązku e-faktury."
+        },
         "FR": {
           "name": "Francja",
           "line": "VAT 20%, faktury w języku francuskim, e-faktury w formacie UBL na platformę Chorus Pro."
@@ -825,10 +917,6 @@
         "RO": {
           "name": "Rumunia",
           "line": "VAT 21%, faktury w języku rumuńskim, e-faktury w formacie RO CIUS-RO do systemu SPV ANAF."
-        },
-        "ES": {
-          "name": "Hiszpania",
-          "line": "VAT 21%, faktury w języku hiszpańskim, e-faktury w formacie Facturae na platformę FACe."
         }
       }
     },
@@ -838,7 +926,7 @@
         "Faktury, faktury pro forma, faktury korygujące, oferty oraz dowody dostawy.",
         "Ciągła numeracja — bez luk i powtórzeń.",
         "VAT zależny od kraju: lokalne stawki, zwolnienia i odwrotne obciążenie w transgranicznych transakcjach B2B, z weryfikacją numeru VAT klienta w systemie VIES na bieżąco.",
-        "E-faktury zgodne z EN 16931 w formacie Twojego kraju — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gotowe do przesłania na krajową platformę (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "E-faktury zgodne z EN 16931 w formacie Twojego kraju — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — gotowe do przesłania na krajową platformę (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "Gotowy plik PDF w języku Twojego kraju, do pobrania lub wysyłki e-mailem."
       ]
     },
@@ -874,7 +962,7 @@
         },
         {
           "question": "Które kraje są obsługiwane?",
-          "answer": "Dokumenty może wystawiać każda firma zarejestrowana w obszarze VAT UE. Ustrukturyzowane e-faktury w formacie krajowym są generowane dla Niemiec, Francji, Włoch, Polski, Rumunii i Hiszpanii — gotowe do przesłania na krajową platformę; dla Bułgarii w europejskim formacie EN 16931 (UBL)."
+          "answer": "Dokumenty może wystawiać każda firma zarejestrowana w obszarze VAT UE. Ustrukturyzowane e-faktury w formacie krajowym są generowane dla Niemiec, Francji, Włoch, Polski i Rumunii — gotowe do przesłania na krajową platformę; dla Bułgarii w europejskim formacie EN 16931 (UBL)."
         },
         {
           "question": "Jak obsługiwany jest VAT w przypadku klienta z innego kraju UE?",
@@ -882,7 +970,7 @@
         },
         {
           "question": "Czy można wystawiać faktury bez rejestracji do VAT?",
-          "answer": "To zależy od kraju. Bułgaria, Niemcy (§ 19 UStG), Francja (franchise en base), Włochy (regime forfettario), Polska (art. 113) i Rumunia (art. 310) mają zwolnienie podmiotowe dla małych podmiotów, a Fakturcho automatycznie drukuje właściwą podstawę zwolnienia. Hiszpania nie ma ogólnego zwolnienia dla małych firm — niezarejestrowany do VAT wystawca z Hiszpanii sam wybiera dla każdego dokumentu właściwą zwolnioną czynność na podstawie art. 20 hiszpańskiej ustawy o VAT."
+          "answer": "To zależy od kraju. Bułgaria, Niemcy (§ 19 UStG), Francja (franchise en base), Włochy (regime forfettario), Polska (art. 113) i Rumunia (art. 310) mają zwolnienie podmiotowe dla małych podmiotów, a Fakturcho automatycznie drukuje właściwą podstawę zwolnienia."
         },
         {
           "question": "Czym różni się faktura pro forma od faktury?",

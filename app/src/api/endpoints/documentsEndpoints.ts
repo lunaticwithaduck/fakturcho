@@ -92,6 +92,16 @@ export const documentsApi = apiSlice.injectEndpoints({
       query: (id) => ({ url: toApiPath(API_ROUTES.documentMarkPaid(id)), method: 'POST' }),
       invalidatesTags: (_result, _error, id) => [idTag('Document', id), listTag('Document')],
     }),
+    setDocumentKsefNumber: builder.mutation<DocumentDto, { id: string; ksefNumber: string | null }>(
+      {
+        query: ({ id, ksefNumber }) => ({
+          url: toApiPath(API_ROUTES.documentKsefNumber(id)),
+          method: 'PUT',
+          body: { ksefNumber },
+        }),
+        invalidatesTags: (_result, _error, arg) => [idTag('Document', arg.id)],
+      },
+    ),
     listSeries: builder.query<SeriesInfoDto[], void>({
       query: () => toApiPath(API_ROUTES.series),
       providesTags: [listTag('Series')],
@@ -119,6 +129,7 @@ export const {
   useIssueDocumentMutation,
   useCancelDocumentMutation,
   useMarkDocumentPaidMutation,
+  useSetDocumentKsefNumberMutation,
   useListSeriesQuery,
   useGetEinvoiceReadinessQuery,
   useGetEinvoiceTransmissionQuery,

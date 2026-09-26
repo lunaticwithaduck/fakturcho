@@ -8,7 +8,10 @@ describe('saveDraftRequestSchema', () => {
       buyerReference: 'PO-1234',
       paymentMeansCode: '30',
       paymentTermsNote: 'Net 30',
+      paymentTermsDays: 14,
       deliveryDate: '2026-09-15',
+      operationNature: 'services',
+      deliveryAddress: '12 rue de la Gare, 69001 Lyon',
       lineItems: [
         {
           name: 'Consulting',
@@ -26,6 +29,38 @@ describe('saveDraftRequestSchema', () => {
     expect(parsed).toMatchObject(body);
   });
 
+  it('rejects an invalid operationNature', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'invoice',
+        operationNature: 'other',
+        lineItems: [],
+      }),
+    ).toThrow();
+  });
+
+  it('rejects a paymentTermsDays value the composer never offers', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'invoice',
+        paymentTermsDays: 10,
+        lineItems: [],
+      }),
+    ).toThrow();
+  });
+
+  it('accepts null and every offered paymentTermsDays value', () => {
+    for (const days of [null, 0, 7, 14, 15, 30, 45, 60]) {
+      expect(() =>
+        saveDraftRequestSchema.parse({
+          documentType: 'invoice',
+          paymentTermsDays: days,
+          lineItems: [],
+        }),
+      ).not.toThrow();
+    }
+  });
+
   it('rejects an invalid vatCategory', () => {
     expect(() =>
       saveDraftRequestSchema.parse({
@@ -35,6 +70,39 @@ describe('saveDraftRequestSchema', () => {
         ],
       }),
     ).toThrow();
+  });
+
+  it('rejects a unitCode outside the UN/ECE Rec 20 list', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'invoice',
+        lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0, unitCode: 'szt.' }],
+      }),
+    ).toThrow();
+  });
+
+  it('accepts a null unitCode', () => {
+    const parsed = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0, unitCode: null }],
+    });
+    expect(parsed.lineItems[0]?.unitCode).toBeNull();
+  });
+
+  it('accepts a line-item splitPaymentAnnex15 flag and defaults it to undefined when absent', () => {
+    const withFlag = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      lineItems: [
+        { name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0, splitPaymentAnnex15: true },
+      ],
+    });
+    expect(withFlag.lineItems[0]?.splitPaymentAnnex15).toBe(true);
+
+    const withoutFlag = saveDraftRequestSchema.parse({
+      documentType: 'invoice',
+      lineItems: [{ name: 'X', quantity: '1', unitPrice: 100, sortOrder: 0 }],
+    });
+    expect(withoutFlag.lineItems[0]?.splitPaymentAnnex15).toBeUndefined();
   });
 });
 

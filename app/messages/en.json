@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Select the original document to continue.",
         "missingLineItems": "Add at least one line item with a name, quantity and price.",
-        "missingVatGround": "Select a reason for not charging VAT."
+        "missingVatGround": "Select a reason for not charging VAT.",
+        "missingOperationNature": "Select the nature of the operation to continue."
       },
       "documentType": {
         "label": "Document type"
@@ -110,6 +111,17 @@
         "taxEventAt": "Tax event date",
         "dueAt": "Due date"
       },
+      "paymentTerms": {
+        "label": "Payment terms",
+        "dueOnReceipt": "Due on receipt",
+        "days7": "7 days",
+        "days14": "14 days",
+        "days15": "15 days",
+        "days30": "30 days",
+        "days45": "45 days",
+        "days60": "60 days",
+        "customDate": "Custom date"
+      },
       "delivery": {
         "heading": "Delivery details",
         "deliveryDateLabel": "Delivery date",
@@ -117,12 +129,25 @@
         "transportReasonLabel": "Transport reason",
         "transportReasonPlaceholder": "Select reason",
         "carrierNameLabel": "Carrier",
-        "transportNoteLabel": "Transport details"
+        "transportNoteLabel": "Transport details",
+        "transportVehicleLabel": "Vehicle registration no."
+      },
+      "frMentions": {
+        "operationNatureLabel": "Nature of operation",
+        "operationNaturePlaceholder": "Select nature",
+        "operationNatureGoods": "Goods delivery",
+        "operationNatureServices": "Service provision",
+        "operationNatureMixed": "Goods delivery and service provision",
+        "deliveryAddressLabel": "Delivery address (if different)"
       },
       "originalDocument": {
         "label": "Original document",
         "placeholder": "Select document",
         "noClient": "No client"
+      },
+      "correctionReason": {
+        "label": "Reason for the correction",
+        "requiredHint": "Required for issuers in Bulgaria and Ireland."
       },
       "deliveryReference": {
         "label": "Related invoice",
@@ -135,7 +160,27 @@
         "priceLabel": "Price",
         "totalLabel": "Total",
         "removeButton": "Remove",
-        "addButton": "Add item"
+        "addButton": "Add item",
+        "unitLabel": "Unit",
+        "unitNoneOption": "None",
+        "vatRateLabel": "VAT rate",
+        "units": {
+          "C62": "Piece / unit",
+          "H87": "Piece",
+          "HUR": "Hour",
+          "DAY": "Day",
+          "MON": "Month",
+          "KGM": "Kilogram",
+          "MTR": "Metre",
+          "MTK": "Square metre",
+          "LTR": "Litre",
+          "KMT": "Kilometre",
+          "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Subject to split payment (Annex 15)",
+          "hint": "Poland only — mark goods or services listed in Annex 15 to the VAT Act; used to work out the mandatory \"mechanizm podzielonej płatności\" annotation."
+        }
       },
       "discounts": {
         "heading": "Discounts",
@@ -174,6 +219,11 @@
     },
     "einvoice": {
       "downloadXml": "Download e-invoice (XML)",
+      "ksefNumberLabel": "KSeF number",
+      "ksefNumberHint": "Paste the number KSeF assigned after you upload the XML yourself.",
+      "ksefNumberSave": "Save",
+      "ksefNumberSaved": "KSeF number saved",
+      "ksefNumberSaveError": "Could not save the KSeF number",
       "notReadyHint": "Missing e-invoice data: {fields}",
       "missingFieldFallback": "Missing e-invoice data.",
       "missingFields": {
@@ -207,8 +257,6 @@
           "countyRegion": "Missing issuer county/județ.",
           "sirenOrSiret": "Missing issuer SIREN or SIRET.",
           "vatNumberFrFormat": "The issuer VAT number must be in the French format.",
-          "esTaxId": "Missing issuer NIF/CIF/NIE tax identifier.",
-          "esTaxIdInvalid": "The issuer tax identifier is not a valid Spanish NIF, NIE or CIF.",
           "partitaIva": "Missing issuer Partita IVA.",
           "partitaIvaInvalid": "The issuer Partita IVA is not a valid Italian VAT number.",
           "codiceFiscale": "Missing issuer Codice Fiscale.",
@@ -229,8 +277,6 @@
           "countyRegion": "Missing recipient county/județ.",
           "sirenOrSiret": "Missing recipient SIREN or SIRET.",
           "vatNumberFrFormat": "The recipient VAT number must be in the French format.",
-          "esTaxId": "Missing recipient NIF/CIF/NIE tax identifier.",
-          "esTaxIdInvalid": "The recipient tax identifier is not a valid Spanish NIF, NIE or CIF.",
           "partitaIvaOrCodiceFiscale": "Missing recipient Partita IVA or Codice Fiscale.",
           "partitaIvaInvalid": "The recipient Partita IVA is not a valid Italian VAT number.",
           "codiceFiscaleInvalid": "The recipient Codice Fiscale is not a valid format.",
@@ -238,7 +284,9 @@
           "nip": "Missing recipient NIP, required for a domestic Polish buyer.",
           "nipChecksum": "The recipient NIP fails the checksum validation."
         }
-      }
+      },
+      "ksefNumberInvalid": "The KSeF number format is invalid.",
+      "ksefNumberDateInvalid": "The KSeF number's date cannot be before the invoice's issue date or in the future."
     }
   },
   "billing": {
@@ -318,7 +366,22 @@
     "unitPlaceholder": "pcs, hour, kg...",
     "priceLabel": "Default price",
     "defaultUnit": "pcs",
-    "validationError": "Fill in the name, unit and price."
+    "validationError": "Fill in the name, unit and price.",
+    "unitCodeLabel": "Unit code (optional)",
+    "unitCodeNoneOption": "None",
+    "units": {
+      "C62": "Piece / unit",
+      "H87": "Piece",
+      "HUR": "Hour",
+      "DAY": "Day",
+      "MON": "Month",
+      "KGM": "Kilogram",
+      "MTR": "Metre",
+      "MTK": "Square metre",
+      "LTR": "Litre",
+      "KMT": "Kilometre",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Clients",
@@ -348,6 +411,12 @@
     "cityLabel": "City",
     "emailLabel": "Email",
     "molLabel": "Representative",
+    "clientTypeLabel": "Client type",
+    "clientTypeOptionUnknown": "Not set",
+    "clientTypeOptions": {
+      "business": "Business",
+      "consumer": "Consumer"
+    },
     "invalidFormat": "Invalid format",
     "countryLabel": "Country",
     "documentLanguageLabel": "Document language",
@@ -389,8 +458,7 @@
       "fr": "French",
       "it": "Italian",
       "pl": "Polish",
-      "ro": "Romanian",
-      "es": "Spanish"
+      "ro": "Romanian"
     }
   },
   "issuer": {
@@ -408,12 +476,29 @@
       "postcode": "Postal code",
       "city": "City",
       "phone": "Phone",
-      "invalidFormat": "Invalid format"
+      "invalidFormat": "Invalid format",
+      "czRegisterHint": "If you are entered in the Commercial Register or another public register, state that entry here — § 435 of the Civil Code (Act No. 89/2012 Sb.). Only entrepreneurs entered in a register must give this.",
+      "frLegalFormHint": "Sole trader? Write \"EI\" or \"entrepreneur individuel\" — it must print next to your name on every document (C. com. art. L526-22).",
+      "atJungholzMittelbergHint": "Is your business seat in Jungholz or Kleinwalsertal (Mittelberg)? Under § 10 Abs. 4 UStG 1994 the standard rate there is 19% instead of 20%. Reduced rates (13%, 10%, 4.9%) stay the same."
     },
     "vatFields": {
       "heading": "VAT registration",
       "vatRegistered": "VAT registered",
-      "vatNumber": "VAT number"
+      "vatNumber": "VAT number",
+      "vatOnCashBasis": "Cash-basis VAT scheme (TVA la încasare)",
+      "vatOnDebits": "VAT on debits option (paiement d'après les débits)"
+    },
+    "paymentTerms": {
+      "heading": "Payment terms",
+      "defaultLabel": "Default term",
+      "none": "No default — choose per document",
+      "dueOnReceipt": "Due on receipt",
+      "days7": "7 days",
+      "days14": "14 days",
+      "days15": "15 days",
+      "days30": "30 days",
+      "days45": "45 days",
+      "days60": "60 days"
     },
     "bankFields": {
       "heading": "Bank account",
@@ -446,7 +531,6 @@
       "DE": "Germany",
       "DK": "Denmark",
       "EE": "Estonia",
-      "ES": "Spain",
       "FI": "Finland",
       "FR": "France",
       "GB": "United Kingdom",
@@ -493,6 +577,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Select the original document to continue.",
       "ISSUER_PROFILE_INCOMPLETE": "The issuer profile is incomplete. Fill in the company details to issue documents.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "A delivery note in this country needs its transport details filled in before it can be issued.",
+      "CORRECTION_REASON_REQUIRED": "A credit or debit note from Bulgaria or Ireland needs a reason for the correction before it can be issued.",
       "VAT_GROUND_NOT_ALLOWED": "This VAT exemption ground is not allowed.",
       "CLIENT_EIK_DUPLICATE": "A client with this company ID already exists.",
       "SUBSCRIPTION_REQUIRED": "An active subscription is required.",
@@ -506,7 +591,11 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "The payment provider is not responding. Please try again in a few minutes.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "The e-invoice provider is not configured.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "This provider does not support status checks.",
-      "INTERNAL_ERROR": "An unexpected error occurred. Please try again."
+      "INTERNAL_ERROR": "An unexpected error occurred. Please try again.",
+      "OPERATION_NATURE_REQUIRED": "French tax documents must state the nature of the operation before they can be issued.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Could not fetch the exchange rate needed to issue this document. Please try again shortly.",
+      "INVALID_KSEF_NUMBER": "The KSeF number format is invalid.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "An Austrian invoice over €10,000 to a business needs the recipient's UID before it can be issued."
     },
     "guideLink": "Invoicing guide",
     "helpLink": "View setup guide",
@@ -548,7 +637,6 @@
       "DE": "Germany",
       "DK": "Denmark",
       "EE": "Estonia",
-      "ES": "Spain",
       "FI": "Finland",
       "FR": "France",
       "GR": "Greece",
@@ -810,6 +898,10 @@
           "name": "Germany",
           "line": "19% VAT, invoices in German, e-invoices in XRechnung format."
         },
+        "AT": {
+          "name": "Austria",
+          "line": "20% VAT, invoices in German, PDF invoices with no e-invoicing mandate."
+        },
         "FR": {
           "name": "France",
           "line": "20% VAT, invoices in French, e-invoices in UBL format for the Chorus Pro platform."
@@ -825,10 +917,6 @@
         "RO": {
           "name": "Romania",
           "line": "21% VAT, invoices in Romanian, e-invoices in the RO CIUS-RO format for ANAF's SPV."
-        },
-        "ES": {
-          "name": "Spain",
-          "line": "21% VAT, invoices in Spanish, e-invoices in Facturae format for the FACe platform."
         }
       }
     },
@@ -838,7 +926,7 @@
         "Invoices, proformas, credit and debit notes, quotes and delivery notes.",
         "Sequential numbering — no gaps, no repeats.",
         "VAT by country: local rates, exemptions, and reverse charge for cross-border B2B with a live VIES check of the customer's VAT ID.",
-        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "A ready PDF in your country's language, downloadable or sent by email."
       ]
     },
@@ -874,7 +962,7 @@
         },
         {
           "question": "Which countries are supported?",
-          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland, Romania and Spain, ready to upload to the national platform; for Bulgaria it's generated in the EU EN 16931 (UBL) format."
+          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland and Romania, ready to upload to the national platform; for Bulgaria it's generated in the EU EN 16931 (UBL) format."
         },
         {
           "question": "How is VAT handled for a customer in another EU country?",
@@ -882,7 +970,7 @@
         },
         {
           "question": "Can I issue invoices without VAT registration?",
-          "answer": "It depends on your country. Bulgaria, Germany (§ 19 UStG), France (franchise en base), Italy (regime forfettario), Poland (art. 113) and Romania (art. 310) all have a small-business VAT exemption, and Fakturcho prints the correct legal ground automatically. Spain has no general small-business exemption — a non-VAT-registered Spanish issuer selects the specific exempt activity under art. 20 of the VAT law for each document."
+          "answer": "It depends on your country. Bulgaria, Germany (§ 19 UStG), France (franchise en base), Italy (regime forfettario), Poland (art. 113) and Romania (art. 310) all have a small-business VAT exemption, and Fakturcho prints the correct legal ground automatically."
         },
         {
           "question": "What is the difference between a proforma and an invoice?",

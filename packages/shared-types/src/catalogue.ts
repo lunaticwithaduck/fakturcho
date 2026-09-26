@@ -5,12 +5,14 @@ export interface CatalogueItemDto {
   name: string;
   defaultUnitPrice: Cents;
   unit: string;
+  unitCode: string | null;
 }
 
 export interface CreateCatalogueItemRequest {
   name: string;
   defaultUnitPrice: Cents;
   unit: string;
+  unitCode?: string | null;
 }
 
 export type UpdateCatalogueItemRequest = Partial<CreateCatalogueItemRequest>;

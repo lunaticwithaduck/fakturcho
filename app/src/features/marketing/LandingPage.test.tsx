@@ -59,7 +59,6 @@ describe('LandingPage', () => {
       ['IT', 'Italy'],
       ['PL', 'Poland'],
       ['RO', 'Romania'],
-      ['ES', 'Spain'],
     ] as const;
     for (const [code, name] of countries) {
       expect(screen.getByRole('heading', { name })).toBeTruthy();

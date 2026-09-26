@@ -25,6 +25,15 @@ describe('updateIssuerProfileSchema — format validation', () => {
   it('rejects a malformed Peppol scheme', () => {
     expect(() => updateIssuerProfileSchema.parse({ peppolScheme: 'not-a-code' })).toThrow();
   });
+
+  it('rejects a defaultPaymentTermsDays value the composer never offers', () => {
+    expect(() => updateIssuerProfileSchema.parse({ defaultPaymentTermsDays: 10 })).toThrow();
+  });
+
+  it('accepts null and an offered defaultPaymentTermsDays value', () => {
+    expect(() => updateIssuerProfileSchema.parse({ defaultPaymentTermsDays: null })).not.toThrow();
+    expect(() => updateIssuerProfileSchema.parse({ defaultPaymentTermsDays: 30 })).not.toThrow();
+  });
 });
 
 describe('updateIssuerProfileSchema — country-driven identifier and region patterns', () => {

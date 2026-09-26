@@ -1,6 +1,8 @@
+import { AT_CONFIG, type AtRecipientLocation, applyAtSpecialRate } from './countries/at';
 import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
+import { CZ_CONFIG } from './countries/cz';
 import { DE_CONFIG } from './countries/de';
-import { ES_CONFIG } from './countries/es';
+import { EU_RATE_OVERRIDES } from './countries/eu-rates';
 import { FR_CONFIG } from './countries/fr';
 import { IT_CONFIG } from './countries/it';
 import { PL_CONFIG } from './countries/pl';
@@ -9,7 +11,15 @@ import type { Locale } from './languages';
 import { PUBLISHED_LOCALES } from './languages';
 import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
+export type { AtRecipientLocation } from './countries/at';
+export {
+  AT_JUNGHOLZ_MITTELBERG_POSTCODES,
+  AT_VAT_NOTE_GROUNDS,
+  isAtJungholzMittelbergPostcode,
+} from './countries/at';
 export * from './countries/base';
+export { FORFETTARIO_GROUND } from './countries/it';
+export * from './countries/non-euro';
 export * from './languages';
 
 export const EU_VAT_AREA_COUNTRIES = [
@@ -62,6 +72,8 @@ const BG_CONFIG: CountryConfig = {
   vatNumberPattern: /^BG\d{9,10}$/,
   exemptionGrounds: [...VAT_EXEMPTION_GROUNDS, DEFAULT_EXEMPTION_GROUND],
   defaultExemptionGround: DEFAULT_EXEMPTION_GROUND,
+  vatNoteGrounds: ['Обратно начисляване – чл. 21, ал. 2 от ЗДДС'],
+  zeroRateGrounds: ['чл. 28 от ЗДДС', 'чл. 30, ал. 1 от ЗДДС', 'чл. 53, ал. 1 от ЗДДС'],
   identifiers: [],
   numberingUsesFixedWidth: true,
   requiredIssuerFields: ['companyName', 'eik', 'addressLine', 'city'],
@@ -70,16 +82,18 @@ const BG_CONFIG: CountryConfig = {
   showOriginalStamp: true,
   deliveryNotePricesShown: true,
   deliveryNoteTransportReasons: [],
+  taxEventDateAlwaysShown: true,
 };
 
 const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
+  AT: AT_CONFIG,
   BG: BG_CONFIG,
+  CZ: CZ_CONFIG,
   DE: DE_CONFIG,
   FR: FR_CONFIG,
   IT: IT_CONFIG,
   PL: PL_CONFIG,
   RO: RO_CONFIG,
-  ES: ES_CONFIG,
 };
 
 // A country's own language is its UI locale, but only once translators have
@@ -90,9 +104,30 @@ function resolveLocale(config: CountryConfig): CountryConfig {
   return { ...config, locale };
 }
 
-export function getCountryConfig(country: string): CountryConfig {
+const GENERIC_COUNTRY_EXTRAS: Record<string, Partial<CountryConfig>> = {
+  IE: { documentTypeTitles: { debit_note: 'Supplementary invoice' } },
+};
+
+// identifiers is the issuer's own IssuerProfileDto.identifiers blob; recipient
+// is the client's own country/postcode. Only AT reads either (§ 10 Abs. 4
+// UStG 1994 Jungholz/Mittelberg, see countries/at.ts), every other country
+// ignores both arguments entirely.
+export function getCountryConfig(
+  country: string,
+  identifiers?: Record<string, string> | null,
+  recipient?: AtRecipientLocation | null,
+): CountryConfig {
   const configured = COUNTRY_CONFIGS[country];
-  if (configured) return resolveLocale(configured);
+  if (configured) return applyAtSpecialRate(resolveLocale(configured), identifiers, recipient);
+  const rateOverride = EU_RATE_OVERRIDES[country];
+  if (rateOverride) {
+    return resolveLocale({
+      ...GENERIC_EU_CONFIG,
+      country,
+      ...rateOverride,
+      ...GENERIC_COUNTRY_EXTRAS[country],
+    });
+  }
   if (isEuVatAreaCountry(country)) return resolveLocale({ ...GENERIC_EU_CONFIG, country });
   return resolveLocale({ ...GENERIC_NON_EU_CONFIG, country });
 }

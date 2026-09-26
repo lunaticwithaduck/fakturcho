@@ -94,7 +94,8 @@
       "errors": {
         "missingOriginalDocument": "Selectați documentul original pentru a continua.",
         "missingLineItems": "Adăugați cel puțin un articol cu denumire, cantitate și preț.",
-        "missingVatGround": "Selectați un temei pentru neaplicarea TVA."
+        "missingVatGround": "Selectați un temei pentru neaplicarea TVA.",
+        "missingOperationNature": "Selectați natura operațiunii pentru a continua."
       },
       "documentType": {
         "label": "Tip document"
@@ -110,6 +111,17 @@
         "taxEventAt": "Data livrării/prestării",
         "dueAt": "Data scadenței"
       },
+      "paymentTerms": {
+        "label": "Termeni de plată",
+        "dueOnReceipt": "Plată la primire",
+        "days7": "7 zile",
+        "days14": "14 zile",
+        "days15": "15 zile",
+        "days30": "30 zile",
+        "days45": "45 zile",
+        "days60": "60 zile",
+        "customDate": "Dată personalizată"
+      },
       "delivery": {
         "heading": "Detalii livrare",
         "deliveryDateLabel": "Data livrării",
@@ -117,12 +129,25 @@
         "transportReasonLabel": "Scopul transportului",
         "transportReasonPlaceholder": "Selectați scopul",
         "carrierNameLabel": "Transportator",
-        "transportNoteLabel": "Detalii transport"
+        "transportNoteLabel": "Detalii transport",
+        "transportVehicleLabel": "Mijloc de transport nr."
+      },
+      "frMentions": {
+        "operationNatureLabel": "Natura operațiunii",
+        "operationNaturePlaceholder": "Selectați natura",
+        "operationNatureGoods": "Livrare de bunuri",
+        "operationNatureServices": "Prestare de servicii",
+        "operationNatureMixed": "Livrare de bunuri și prestare de servicii",
+        "deliveryAddressLabel": "Adresa de livrare (dacă diferă)"
       },
       "originalDocument": {
         "label": "Document original",
         "placeholder": "Selectați documentul",
         "noClient": "Fără client"
+      },
+      "correctionReason": {
+        "label": "Motivul corecției",
+        "requiredHint": "Obligatoriu pentru emitenții din Bulgaria și Irlanda."
       },
       "deliveryReference": {
         "label": "Factură asociată",
@@ -135,7 +160,27 @@
         "priceLabel": "Preț",
         "totalLabel": "Valoare",
         "removeButton": "Elimină",
-        "addButton": "Adaugă articol"
+        "addButton": "Adaugă articol",
+        "unitLabel": "U.M.",
+        "unitNoneOption": "Fără",
+        "vatRateLabel": "Cotă TVA",
+        "units": {
+          "C62": "Bucată / unitate",
+          "H87": "Bucată",
+          "HUR": "Oră",
+          "DAY": "Zi",
+          "MON": "Lună",
+          "KGM": "Kilogram",
+          "MTR": "Metru",
+          "MTK": "Metru pătrat",
+          "LTR": "Litru",
+          "KMT": "Kilometru",
+          "SET": "Set"
+        },
+        "mpp": {
+          "checkboxLabel": "Supus plății defalcate (anexa 15)",
+          "hint": "Doar Polonia — marcați bunurile sau serviciile din anexa nr. 15 la legea poloneză a TVA; folosit pentru mențiunea obligatorie „mechanizm podzielonej płatności”."
+        }
       },
       "discounts": {
         "heading": "Reduceri",
@@ -174,6 +219,11 @@
     },
     "einvoice": {
       "downloadXml": "Descarcă e-factura (XML)",
+      "ksefNumberLabel": "Număr KSeF",
+      "ksefNumberHint": "Lipiți numărul alocat de KSeF după ce încărcați dvs. fișierul XML.",
+      "ksefNumberSave": "Salvează",
+      "ksefNumberSaved": "Numărul KSeF a fost salvat",
+      "ksefNumberSaveError": "Numărul KSeF nu a putut fi salvat",
       "notReadyHint": "Lipsesc date pentru e-factură: {fields}",
       "missingFieldFallback": "Lipsesc date pentru e-factură.",
       "missingFields": {
@@ -207,8 +257,6 @@
           "countyRegion": "Lipsește județul emitentului.",
           "sirenOrSiret": "Lipsește codul SIREN sau SIRET al emitentului.",
           "vatNumberFrFormat": "Codul de TVA al emitentului trebuie să fie în formatul francez.",
-          "esTaxId": "Lipsește identificatorul fiscal (NIF/CIF/NIE) al emitentului.",
-          "esTaxIdInvalid": "Identificatorul fiscal al emitentului nu este un NIF, NIE sau CIF spaniol valid.",
           "partitaIva": "Lipsește Partita IVA a emitentului.",
           "partitaIvaInvalid": "Partita IVA a emitentului nu este un cod de TVA italian valid.",
           "codiceFiscale": "Lipsește codul Codice Fiscale al emitentului.",
@@ -229,8 +277,6 @@
           "countyRegion": "Lipsește județul destinatarului.",
           "sirenOrSiret": "Lipsește codul SIREN sau SIRET al destinatarului.",
           "vatNumberFrFormat": "Codul de TVA al destinatarului trebuie să fie în formatul francez.",
-          "esTaxId": "Lipsește identificatorul fiscal (NIF/CIF/NIE) al destinatarului.",
-          "esTaxIdInvalid": "Identificatorul fiscal al destinatarului nu este un NIF, NIE sau CIF spaniol valid.",
           "partitaIvaOrCodiceFiscale": "Lipsește Partita IVA sau codul Codice Fiscale al destinatarului.",
           "partitaIvaInvalid": "Partita IVA a destinatarului nu este un cod de TVA italian valid.",
           "codiceFiscaleInvalid": "Codul Codice Fiscale al destinatarului nu are un format valid.",
@@ -238,7 +284,9 @@
           "nip": "Lipsește NIP-ul destinatarului, necesar pentru un cumpărător cu sediul în Polonia.",
           "nipChecksum": "NIP-ul destinatarului nu este valid (cifra de control nu corespunde)."
         }
-      }
+      },
+      "ksefNumberInvalid": "Formatul numărului KSeF nu este valid.",
+      "ksefNumberDateInvalid": "Data din numărul KSeF nu poate fi anterioară datei emiterii facturii și nici din viitor."
     }
   },
   "billing": {
@@ -318,7 +366,22 @@
     "unitPlaceholder": "buc, oră, kg...",
     "priceLabel": "Preț implicit",
     "defaultUnit": "buc",
-    "validationError": "Completați denumirea, unitatea de măsură și prețul."
+    "validationError": "Completați denumirea, unitatea de măsură și prețul.",
+    "unitCodeLabel": "Cod unitate (opțional)",
+    "unitCodeNoneOption": "Fără",
+    "units": {
+      "C62": "Bucată / unitate",
+      "H87": "Bucată",
+      "HUR": "Oră",
+      "DAY": "Zi",
+      "MON": "Lună",
+      "KGM": "Kilogram",
+      "MTR": "Metru",
+      "MTK": "Metru pătrat",
+      "LTR": "Litru",
+      "KMT": "Kilometru",
+      "SET": "Set"
+    }
   },
   "clients": {
     "pageTitle": "Clienți",
@@ -348,6 +411,12 @@
     "cityLabel": "Localitate",
     "emailLabel": "Email",
     "molLabel": "Reprezentant legal",
+    "clientTypeLabel": "Tip client",
+    "clientTypeOptionUnknown": "Nesetat",
+    "clientTypeOptions": {
+      "business": "Companie",
+      "consumer": "Persoană fizică"
+    },
     "invalidFormat": "Format nevalid",
     "countryLabel": "Țară",
     "documentLanguageLabel": "Limba documentelor",
@@ -389,8 +458,7 @@
       "fr": "Franceză",
       "it": "Italiană",
       "pl": "Polonă",
-      "ro": "Română",
-      "es": "Spaniolă"
+      "ro": "Română"
     }
   },
   "issuer": {
@@ -408,12 +476,29 @@
       "postcode": "Cod poștal",
       "city": "Localitate",
       "phone": "Telefon",
-      "invalidFormat": "Format nevalid"
+      "invalidFormat": "Format nevalid",
+      "czRegisterHint": "Dacă sunteți înregistrat în Registrul Comerțului sau într-un alt registru public, menționați această înregistrare aici – § 435 din Codul civil (Legea nr. 89/2012 Sb.). Obligatoriu doar pentru antreprenorii înregistrați.",
+      "frLegalFormHint": "Sunteți antreprenor individual? Scrieți „EI” sau „entrepreneur individuel” — trebuie să apară lângă nume pe fiecare document (art. L526-22 din Codul comercial francez).",
+      "atJungholzMittelbergHint": "Sediul afacerii dvs. este în Jungholz sau Kleinwalsertal (Mittelberg)? Conform § 10 alin. 4 UStG 1994, acolo cota standard este 19% în loc de 20%. Cotele reduse (13%, 10%, 4,9%) rămân neschimbate."
     },
     "vatFields": {
       "heading": "Înregistrare TVA",
       "vatRegistered": "Plătitor de TVA",
-      "vatNumber": "Cod TVA"
+      "vatNumber": "Cod TVA",
+      "vatOnCashBasis": "TVA la încasare",
+      "vatOnDebits": "Opțiunea TVA la debite (Franța)"
+    },
+    "paymentTerms": {
+      "heading": "Termeni de plată",
+      "defaultLabel": "Termen implicit",
+      "none": "Fără termen implicit — se alege pentru fiecare document",
+      "dueOnReceipt": "Plată la primire",
+      "days7": "7 zile",
+      "days14": "14 zile",
+      "days15": "15 zile",
+      "days30": "30 zile",
+      "days45": "45 zile",
+      "days60": "60 zile"
     },
     "bankFields": {
       "heading": "Cont bancar",
@@ -446,7 +531,6 @@
       "DE": "Germania",
       "DK": "Danemarca",
       "EE": "Estonia",
-      "ES": "Spania",
       "FI": "Finlanda",
       "FR": "Franța",
       "GB": "Regatul Unit",
@@ -493,6 +577,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Selectați documentul original pentru a continua.",
       "ISSUER_PROFILE_INCOMPLETE": "Profilul emitentului este incomplet. Completați datele firmei pentru a putea emite documente.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Avizul de însoțire a mărfii pentru această țară necesită completarea datelor de transport înainte de a fi emis.",
+      "CORRECTION_REASON_REQUIRED": "Nota de credit sau de debit din Bulgaria sau Irlanda necesită un motiv al corecției înainte de a fi emisă.",
       "VAT_GROUND_NOT_ALLOWED": "Acest temei de scutire de TVA nu este permis.",
       "CLIENT_EIK_DUPLICATE": "Există deja un client cu acest cod de identificare fiscală.",
       "SUBSCRIPTION_REQUIRED": "Este necesar un abonament activ.",
@@ -506,7 +591,11 @@
       "PAYMENT_PROVIDER_UNREACHABLE": "Furnizorul de plăți nu răspunde. Încercați din nou peste câteva minute.",
       "EINVOICE_TRANSPORT_NOT_CONFIGURED": "Furnizorul de e-factură nu este configurat.",
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Acest furnizor nu permite verificarea statusului.",
-      "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou."
+      "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou.",
+      "OPERATION_NATURE_REQUIRED": "Documentele fiscale franceze trebuie să indice natura operațiunii înainte de a putea fi emise.",
+      "EXCHANGE_RATE_UNAVAILABLE": "Nu s-a putut obține cursul de schimb necesar pentru emiterea acestui document. Încercați din nou peste puțin timp.",
+      "INVALID_KSEF_NUMBER": "Formatul numărului KSeF nu este valid.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "O factură austriacă de peste 10.000 € către o firmă necesită numărul UID al destinatarului înainte de a fi emisă."
     },
     "guideLink": "Ghid de facturare",
     "helpLink": "Vedeți ghidul",
@@ -548,7 +637,6 @@
       "DE": "Germania",
       "DK": "Danemarca",
       "EE": "Estonia",
-      "ES": "Spania",
       "FI": "Finlanda",
       "FR": "Franța",
       "GR": "Grecia",
@@ -810,6 +898,10 @@
           "name": "Germania",
           "line": "TVA 19%, facturi în limba germană, e-facturi în format XRechnung."
         },
+        "AT": {
+          "name": "Austria",
+          "line": "TVA 20%, facturi în limba germană, facturi PDF fără obligația e-facturii."
+        },
         "FR": {
           "name": "Franța",
           "line": "TVA 20%, facturi în limba franceză, e-facturi în format UBL pentru platforma Chorus Pro."
@@ -825,10 +917,6 @@
         "RO": {
           "name": "România",
           "line": "TVA 21%, facturi în limba română, e-facturi în format RO CIUS-RO pentru SPV-ul ANAF."
-        },
-        "ES": {
-          "name": "Spania",
-          "line": "TVA 21%, facturi în limba spaniolă, e-facturi în format Facturae pentru platforma FACe."
         }
       }
     },
@@ -838,7 +926,7 @@
         "Facturi, facturi proforme, note de credit și de debit, oferte și avize de însoțire a mărfii.",
         "Numerotare continuă — fără goluri și fără dubluri.",
         "TVA în funcție de țară: cote locale, scutiri și taxare inversă pentru tranzacții B2B transfrontaliere, cu verificarea în timp real în VIES a codului de TVA al clientului.",
-        "E-facturi EN 16931 în formatul specific țării dumneavoastră — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gata de încărcat pe platforma națională (SPV ANAF, SDI, KSeF, Chorus Pro, FACe).",
+        "E-facturi EN 16931 în formatul specific țării dumneavoastră — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — gata de încărcat pe platforma națională (SPV ANAF, SDI, KSeF, Chorus Pro).",
         "PDF gata făcut, în limba țării dumneavoastră, pe care îl descărcați sau îl trimiteți prin email."
       ]
     },
@@ -874,7 +962,7 @@
         },
         {
           "question": "Pentru ce țări funcționează?",
-          "answer": "Orice firmă cu sediul în spațiul de TVA al UE poate emite documente. E-facturile structurate în formatul național sunt generate pentru Germania, Franța, Italia, Polonia, România și Spania, gata de încărcat pe platforma națională; pentru Bulgaria, în formatul european EN 16931 (UBL)."
+          "answer": "Orice firmă cu sediul în spațiul de TVA al UE poate emite documente. E-facturile structurate în formatul național sunt generate pentru Germania, Franța, Italia, Polonia și România, gata de încărcat pe platforma națională; pentru Bulgaria, în formatul european EN 16931 (UBL)."
         },
         {
           "question": "Cum se aplică TVA pentru un client din altă țară UE?",
@@ -882,7 +970,7 @@
         },
         {
           "question": "Pot emite facturi fără înregistrare în scopuri de TVA?",
-          "answer": "Depinde de țară. Bulgaria, Germania (§ 19 UStG), Franța (franchise en base), Italia (regime forfettario), Polonia (art. 113) și România (art. 310) au fiecare un regim de scutire pentru întreprinderile mici, iar Fakturcho tipărește automat temeiul de scutire corect. Spania nu are un regim general de scutire pentru întreprinderile mici — un emitent spaniol neînregistrat în scopuri de TVA trebuie să aleagă el însuși, pentru fiecare document, activitatea scutită aplicabilă conform art. 20 din legea spaniolă a TVA."
+          "answer": "Depinde de țară. Bulgaria, Germania (§ 19 UStG), Franța (franchise en base), Italia (regime forfettario), Polonia (art. 113) și România (art. 310) au fiecare un regim de scutire pentru întreprinderile mici, iar Fakturcho tipărește automat temeiul de scutire corect."
         },
         {
           "question": "Care este diferența dintre o factură proformă și o factură?",

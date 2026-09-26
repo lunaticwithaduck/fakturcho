@@ -21,13 +21,14 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
   transportedAt: null,
   carrierName: null,
   transportNote: null,
+  correctionReason: null,
   subtotal: 200000,
   discountTotal: 0,
   amount: 200000,
   vatIncluded: false,
   vatRateBp: 0,
   vatAmount: 0,
-  vatExemptionGround: 'чл.28c(E)(3) 77/388/EEC',
+  vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
   currency: 'EUR',
   clientId: 'client-2',
   preparedBy: 'Иван Иванов',
@@ -69,6 +70,7 @@ export const bgToEuReverseChargeInvoice: DocumentDto = {
     mol: null,
     sdiRecipientCode: null,
     pec: null,
+    clientType: null,
   },
   lineItems: [
     {

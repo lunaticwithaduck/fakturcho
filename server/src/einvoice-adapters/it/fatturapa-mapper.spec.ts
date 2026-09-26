@@ -139,7 +139,7 @@ describe('toFatturaPaXml — Natura codes for non-standard VAT categories', () =
   it('emits N3.2 and a RiferimentoNormativo for an intra-community supply line', () => {
     const document: DocumentDto = {
       ...itDomesticStandardInvoice,
-      vatExemptionGround: 'чл.22 от ЗДДС',
+      vatExemptionGround: 'чл. 22 от ЗДДС',
       vatRateBp: 0,
       vatAmount: 0,
       amount: 100000,
@@ -159,7 +159,7 @@ describe('toFatturaPaXml — Natura codes for non-standard VAT categories', () =
     };
     const xml = toFatturaPaXml(document);
     expect(xml).toContain('<AliquotaIVA>0.00</AliquotaIVA><Natura>N3.2</Natura>');
-    expect(xml).toContain('<RiferimentoNormativo>чл.22 от ЗДДС</RiferimentoNormativo>');
+    expect(xml).toContain('<RiferimentoNormativo>чл. 22 от ЗДДС</RiferimentoNormativo>');
   });
 });
 
@@ -179,6 +179,30 @@ describe('toFatturaPaXml — document type codes', () => {
     expect(() => toFatturaPaXml(document)).toThrow(
       'toFatturaPaXml: document type "proforma" has no FatturaPA export.',
     );
+  });
+});
+
+describe('toFatturaPaXml — correction reason', () => {
+  it('carries the correction reason as a Causale on a credit note', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      documentType: 'credit_note',
+      correctionReason: 'Reso della merce',
+    };
+    expect(toFatturaPaXml(document)).toContain('<Causale>Reso della merce</Causale>');
+  });
+
+  it('does not touch Causale on an invoice, even with a correction reason set', () => {
+    const document: DocumentDto = {
+      ...itDomesticStandardInvoice,
+      correctionReason: 'Reso della merce',
+    };
+    expect(toFatturaPaXml(document)).not.toContain('Reso della merce');
+  });
+
+  it('omits Causale when there is no correction reason', () => {
+    const document: DocumentDto = { ...itDomesticStandardInvoice, documentType: 'debit_note' };
+    expect(toFatturaPaXml(document)).not.toContain('<Causale>');
   });
 });
 

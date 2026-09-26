@@ -5,6 +5,7 @@ import type { IssuerProfileDto } from '@shared/types';
 import { useTranslations } from 'next-intl';
 import { IssuerBankFields } from './IssuerBankFields';
 import { IssuerCompanyFields } from './IssuerCompanyFields';
+import { IssuerPaymentTermsFields } from './IssuerPaymentTermsFields';
 import { IssuerProfileCompletenessHint } from './IssuerProfileCompletenessHint';
 import { IssuerVatFields } from './IssuerVatFields';
 import { useIssuerProfileForm } from './useIssuerProfileForm';
@@ -36,6 +37,9 @@ export function IssuerProfileForm({ profile }: IssuerProfileFormProps) {
         </Card>
         <Card>
           <IssuerBankFields values={form.values} onChange={form.setField} />
+        </Card>
+        <Card>
+          <IssuerPaymentTermsFields values={form.values} onChange={form.setField} />
         </Card>
         {form.error ? <p className="text-sm font-medium text-danger">{form.error}</p> : null}
         <Button type="submit" disabled={form.isSubmitting} className="self-start">

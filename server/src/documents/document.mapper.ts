@@ -2,8 +2,11 @@ import type {
   CurrencyCode,
   DiscountDto,
   DocumentDto,
+  ExchangeRateSource,
   LineItemDto,
+  OperationNature,
   OriginalDocumentReferenceDto,
+  RecipientSnapshotDto,
 } from '@fakturcho/shared-types';
 import type {
   Discount as PrismaDiscount,
@@ -37,6 +40,7 @@ export function toDocumentDto(
     referenceNumber: document.referenceNumber,
     originalDocumentId: document.originalDocumentId,
     originalDocument: toOriginalDocumentReferenceDto(document.originalDocument),
+    ksefNumber: document.ksefNumber,
     issuedAt: toIsoDate(document.issuedAt),
     taxEventAt: toIsoDate(document.taxEventAt),
     dueAt: toIsoDate(document.dueAt),
@@ -45,10 +49,15 @@ export function toDocumentDto(
     buyerReference: document.buyerReference,
     paymentMeansCode: document.paymentMeansCode,
     paymentTermsNote: document.paymentTermsNote,
+    paymentTermsDays: document.paymentTermsDays,
     transportReason: document.transportReason,
     transportedAt: document.transportedAt ? document.transportedAt.toISOString() : null,
     carrierName: document.carrierName,
     transportNote: document.transportNote,
+    transportVehicle: document.transportVehicle,
+    correctionReason: document.correctionReason,
+    operationNature: document.operationNature as OperationNature | null,
+    deliveryAddress: document.deliveryAddress,
     subtotal: document.subtotal,
     discountTotal: document.discountTotal,
     amount: document.amount,
@@ -57,6 +66,12 @@ export function toDocumentDto(
     vatAmount: document.vatAmount,
     vatExemptionGround: document.vatExemptionGround,
     currency: document.currency as CurrencyCode,
+    localCurrency: document.localCurrency,
+    exchangeRate: document.exchangeRate,
+    exchangeRateDate: toIsoDate(document.exchangeRateDate),
+    exchangeRateSource: document.exchangeRateSource as ExchangeRateSource | null,
+    exchangeRateTable: document.exchangeRateTable,
+    vatAmountLocal: document.vatAmountLocal,
     clientId: document.clientId,
     preparedBy: document.preparedBy,
     notes: document.notes,
@@ -97,6 +112,7 @@ export function toDocumentDto(
       mol: document.recipientMol,
       sdiRecipientCode: document.recipientSdiRecipientCode,
       pec: document.recipientPec,
+      clientType: document.recipientClientType as RecipientSnapshotDto['clientType'],
     },
     lineItems: document.lineItems.map(toLineItemDto).sort((a, b) => a.sortOrder - b.sortOrder),
     discounts: document.discounts.map(toDiscountDto).sort((a, b) => a.sortOrder - b.sortOrder),
@@ -118,8 +134,21 @@ function toOriginalDocumentReferenceDto(
     numberPrefix: original.numberPrefix,
     numberSuffix: original.numberSuffix,
     issuedAt: toIsoDate(original.issuedAt),
-    ksefNumber: readKsefNumber(original.einvoiceTransmission),
+    ksefNumber: resolveOriginalKsefNumber(original),
+    amount: original.amount,
   };
+}
+
+// art. 106j ustawy o VAT: a correction must cite the corrected invoice's own
+// KSeF number. The user-pasted `ksefNumber` (documents.service.setKsefNumber)
+// is the number that invoice actually got; the transmission receipt is only
+// a fallback for a document fakturcho itself submitted to KSeF.
+export function resolveOriginalKsefNumber(
+  original: Pick<PrismaDocument, 'ksefNumber'> & {
+    einvoiceTransmission: PrismaEinvoiceTransmission | null;
+  },
+): string | null {
+  return original.ksefNumber ?? readKsefNumber(original.einvoiceTransmission);
 }
 
 function readKsefNumber(transmission: PrismaEinvoiceTransmission | null): string | null {
@@ -143,6 +172,7 @@ function toLineItemDto(item: PrismaLineItem): LineItemDto {
     vatRateBp: item.vatRateBp,
     vatCategory: item.vatCategory as LineItemDto['vatCategory'],
     unitCode: item.unitCode,
+    splitPaymentAnnex15: item.splitPaymentAnnex15,
   };
 }
 

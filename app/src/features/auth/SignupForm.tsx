@@ -15,13 +15,13 @@ import { type FormEvent, useState } from 'react';
 
 const BG_SIGNUP_COUNTRIES = [
   'BG',
-  ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG'),
+  ...EU_VAT_AREA_COUNTRIES.filter((country) => country !== 'BG' && country !== 'ES'),
 ] as const;
 
 const NON_BG_SIGNUP_COUNTRIES = [
   ...TARGET_COUNTRIES,
   ...EU_VAT_AREA_COUNTRIES.filter(
-    (country) => !(TARGET_COUNTRIES as readonly string[]).includes(country),
+    (country) => country !== 'ES' && !(TARGET_COUNTRIES as readonly string[]).includes(country),
   ),
 ] as const;
 
@@ -40,7 +40,7 @@ export function SignupForm({ locale = 'bg', initialCountry }: SignupFormProps) {
   const [country, setCountry] = useState<string>(() => {
     if (locale === 'bg') return 'BG';
     const upper = firstSearchParam(initialCountry)?.toUpperCase();
-    return upper && isEuVatAreaCountry(upper) ? upper : '';
+    return upper && upper !== 'ES' && isEuVatAreaCountry(upper) ? upper : '';
   });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);

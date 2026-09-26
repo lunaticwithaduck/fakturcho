@@ -1,6 +1,5 @@
 import bgMessages from '@messages/bg.json';
 import enMessages from '@messages/en.json';
-import esMessages from '@messages/es.json';
 import roMessages from '@messages/ro.json';
 import { describe, expect, it } from 'vitest';
 
@@ -31,9 +30,8 @@ describe('shell messages', () => {
     expect(enKeys).toEqual(bgKeys);
   });
 
-  it('gives the billing nav item a short, unambiguous name — not a loan or a duplicate of Facturación', () => {
+  it('gives the billing nav item a short, unambiguous name — not a loan', () => {
     expect(roMessages.shell.navItems.billing).toBe('Sold');
     expect(roMessages.shell.navItems.billing.length).toBeLessThanOrEqual(10);
-    expect(esMessages.shell.navItems.billing).toBe('Saldo');
   });
 });

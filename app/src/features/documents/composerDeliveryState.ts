@@ -7,6 +7,7 @@ export interface ComposerDeliveryFormState {
   transportedAt: string;
   carrierName: string;
   transportNote: string;
+  transportVehicle: string;
 }
 
 export interface DeliveryRequestFields {
@@ -15,6 +16,7 @@ export interface DeliveryRequestFields {
   transportedAt: string | null;
   carrierName: string | null;
   transportNote: string | null;
+  transportVehicle: string | null;
 }
 
 // <input type="datetime-local"> wants "YYYY-MM-DDTHH:mm" with no timezone —
@@ -31,6 +33,7 @@ export function blankDeliveryState(): ComposerDeliveryFormState {
     transportedAt: '',
     carrierName: '',
     transportNote: '',
+    transportVehicle: '',
   };
 }
 
@@ -44,6 +47,7 @@ export function deliveryStateFromDocument(
     transportedAt: toDateTimeLocalValue(document.transportedAt, timeZone),
     carrierName: document.carrierName ?? '',
     transportNote: document.transportNote ?? '',
+    transportVehicle: document.transportVehicle ?? '',
   };
 }
 
@@ -58,6 +62,7 @@ export function deliveryRequestFields(
       transportedAt: null,
       carrierName: null,
       transportNote: null,
+      transportVehicle: null,
     };
   }
   return {
@@ -66,5 +71,6 @@ export function deliveryRequestFields(
     transportedAt: state.transportedAt || null,
     carrierName: state.carrierName.trim() || null,
     transportNote: state.transportNote.trim() || null,
+    transportVehicle: state.transportVehicle.trim() || null,
   };
 }

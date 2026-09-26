@@ -122,6 +122,7 @@ export function buildDraftData(
     buyerReference: request.buyerReference ?? null,
     paymentMeansCode: request.paymentMeansCode ?? null,
     paymentTermsNote: request.paymentTermsNote ?? null,
+    paymentTermsDays: request.paymentTermsDays ?? null,
     transportReason: request.transportReason ?? null,
     transportedAt: parseTransportedAt(
       request.transportedAt,
@@ -129,6 +130,10 @@ export function buildDraftData(
     ),
     carrierName: request.carrierName ?? null,
     transportNote: request.transportNote ?? null,
+    transportVehicle: request.transportVehicle ?? null,
+    correctionReason: request.correctionReason ?? null,
+    operationNature: request.operationNature ?? null,
+    deliveryAddress: request.deliveryAddress ?? null,
     vatIncluded: request.vatIncluded ?? false,
     vatRateBp: vat.vatRateBp,
     vatExemptionGround: vat.vatExemptionGround,

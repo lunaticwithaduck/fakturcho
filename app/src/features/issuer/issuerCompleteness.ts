@@ -25,6 +25,7 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
     postcode: profile.postcode,
     city: profile.city,
     countyRegion: profile.countyRegion,
+    vatNumber: profile.vatNumber,
   };
   const { requiredIssuerFields, identifiers } = getCountryConfig(profile.country);
   const missing = requiredIssuerFields
@@ -35,6 +36,21 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
       missing.push(`identifier:${field.key}`);
     }
   }
-  if (profile.vatRegistered && isBlank(profile.vatNumber)) missing.push('vatNumber');
+  if (profile.vatRegistered && isBlank(profile.vatNumber) && !missing.includes('vatNumber')) {
+    missing.push('vatNumber');
+  }
+  // § 37a HGB, § 35a GmbHG: Registergericht and Sitz become required once a
+  // Handelsregisternummer (eik) is entered.
+  if (profile.country === 'DE' && !isBlank(profile.eik)) {
+    if (isBlank(profile.identifiers.registergericht)) missing.push('identifier:registergericht');
+    if (isBlank(profile.identifiers.sitz)) missing.push('identifier:sitz');
+  }
+  // UGB § 14 Abs. 1: Firmenbuchgericht and Sitz become required once a
+  // Firmenbuchnummer (eik) is entered.
+  if (profile.country === 'AT' && !isBlank(profile.eik)) {
+    if (isBlank(profile.identifiers.firmenbuchgericht))
+      missing.push('identifier:firmenbuchgericht');
+    if (isBlank(profile.identifiers.sitz)) missing.push('identifier:sitz');
+  }
   return missing;
 }

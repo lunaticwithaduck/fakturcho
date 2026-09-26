@@ -9,5 +9,5 @@ export function amountInWords(cents: Cents): string {
   const eurWords = integerToBgWords(eurWhole, 'neuter');
   const centsText = String(centsRemainder).padStart(2, '0');
   const sign = negative ? 'МИНУС ' : '';
-  return `${sign}${eurWords} EUR И ${centsText} ЦЕНТА`;
+  return `${sign}${eurWords} ЕВРО И ${centsText} ЕВРОЦЕНТА`;
 }

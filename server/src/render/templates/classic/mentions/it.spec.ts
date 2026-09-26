@@ -1,3 +1,4 @@
+import { FORFETTARIO_GROUND } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { CLASSIC_LABELS } from '../labels';
 import type { ClassicLocaleContext } from '../locale';
@@ -13,6 +14,7 @@ const locale: ClassicLocaleContext = {
   showSignatureRow: false,
   showOriginalStamp: false,
   showDeliveryNotePrices: false,
+  taxEventDateAlwaysShown: false,
 };
 
 function buildInput(
@@ -44,7 +46,7 @@ describe('itMentions', () => {
       { vatCategory: 'K', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Operazione non imponibile ai sensi dell'art. 41, comma 1, lett. a), D.L. 331/1993",
+      'Operazione non imponibile ai sensi dell’art. 41, comma 1, lett. a), D.L. 331/1993',
     ]);
   });
 
@@ -53,7 +55,8 @@ describe('itMentions', () => {
       { vatCategory: 'AE', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Inversione contabile ai sensi dell'art. 7-ter, D.P.R. 633/1972",
+      'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     ]);
   });
 
@@ -62,7 +65,22 @@ describe('itMentions', () => {
       { vatCategory: 'AE', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Inversione contabile ai sensi dell'art. 17, comma 6, D.P.R. 633/1972",
+      'Inversione contabile ai sensi dell’art. 17, comma 6, D.P.R. 633/1972',
+    ]);
+  });
+
+  it('does not repeat the reverse-charge mention when the issuer already chose it as the exemption ground', () => {
+    const input = buildInput(
+      {
+        recipientCountry: 'DE',
+        vatAmount: 0,
+        amount: 100000,
+        vatExemptionGround: 'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972',
+      },
+      [{ vatCategory: 'AE', vatRateBp: 0 }],
+    );
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     ]);
   });
 
@@ -71,7 +89,7 @@ describe('itMentions', () => {
       { vatCategory: 'E', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).toEqual([
-      "Imposta di bollo assolta in modo virtuale ai sensi dell'art. 15 della Tariffa, Parte I, allegata al D.P.R. 642/1972 e del D.M. 17/06/2014",
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     ]);
   });
 
@@ -82,18 +100,96 @@ describe('itMentions', () => {
     expect(itMentions(input)).toEqual([]);
   });
 
-  it('does not add the stamp duty mention on a reverse-charge or intra-EU document', () => {
-    const input = buildInput({ vatAmount: 0, amount: 100000, recipientCountry: 'DE' }, [
+  it('does not add the stamp duty mention on a domestic reverse-charge or intra-EU document', () => {
+    const input = buildInput({ vatAmount: 0, amount: 100000, recipientCountry: 'IT' }, [
       { vatCategory: 'AE', vatRateBp: 0 },
     ]);
     expect(itMentions(input)).not.toContain(
-      "Imposta di bollo assolta in modo virtuale ai sensi dell'art. 15 della Tariffa, Parte I, allegata al D.P.R. 642/1972 e del D.M. 17/06/2014",
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
     );
   });
 
   it('does not add the stamp duty mention on a quote', () => {
     const input = buildInput({ vatAmount: 0, amount: 100000, documentType: 'QUOTE' }, [
       { vatCategory: 'E', vatRateBp: 0 },
+    ]);
+    expect(itMentions(input)).toEqual([]);
+  });
+
+  it('adds the stamp duty mention on a mixed invoice once the untaxed lines exceed the threshold (Ris. AdE 444/E/2008)', () => {
+    const input = buildInput({ vatAmount: 4400, amount: 104400 }, [
+      { vatCategory: 'S', vatRateBp: 2200, lineTotal: 20000 },
+      { vatCategory: 'E', vatRateBp: 0, lineTotal: 100000 },
+    ]);
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
+    ]);
+  });
+
+  it('does not add the stamp duty mention on a mixed invoice when the untaxed lines stay at or below the threshold', () => {
+    const input = buildInput({ vatAmount: 4400, amount: 27747 }, [
+      { vatCategory: 'S', vatRateBp: 2200, lineTotal: 20000 },
+      { vatCategory: 'E', vatRateBp: 0, lineTotal: 7747 },
+    ]);
+    expect(itMentions(input)).toEqual([]);
+  });
+
+  it('excludes a domestic reverse-charge line from the mixed-invoice stamp duty sum', () => {
+    const input = buildInput({ vatAmount: 4400, amount: 104400, recipientCountry: 'IT' }, [
+      { vatCategory: 'S', vatRateBp: 2200, lineTotal: 20000 },
+      { vatCategory: 'AE', vatRateBp: 0, lineTotal: 100000 },
+    ]);
+    expect(itMentions(input)).toEqual([
+      'Inversione contabile ai sensi dell’art. 17, comma 6, D.P.R. 633/1972',
+    ]);
+  });
+
+  it('excludes an intra-EU goods (K) line from the mixed-invoice stamp duty sum', () => {
+    const input = buildInput({ vatAmount: 4400, amount: 104400, recipientCountry: 'FR' }, [
+      { vatCategory: 'S', vatRateBp: 2200, lineTotal: 20000 },
+      { vatCategory: 'K', vatRateBp: 0, lineTotal: 100000 },
+    ]);
+    expect(itMentions(input)).toEqual([
+      'Operazione non imponibile ai sensi dell’art. 41, comma 1, lett. a), D.L. 331/1993',
+    ]);
+  });
+
+  it('asks for no ritenuta d’acconto when the forfettario issuer bills an Italian business (art. 1, comma 67, L. 190/2014)', () => {
+    const input = buildInput(
+      {
+        vatExemptionGround: FORFETTARIO_GROUND,
+        vatAmount: 0,
+        amount: 100000,
+        recipientCountry: 'IT',
+        recipientVatNumber: 'IT12345678901',
+      },
+      [{ vatCategory: 'O', vatRateBp: 0 }],
+    );
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
+      'Si richiede la non applicazione della ritenuta d’acconto ai sensi dell’art. 1, comma 67, L. 190/2014',
+    ]);
+  });
+
+  it('does not ask for the ritenuta exemption when the forfettario issuer bills a private client (no P.IVA)', () => {
+    const input = buildInput(
+      {
+        vatExemptionGround: FORFETTARIO_GROUND,
+        vatAmount: 0,
+        amount: 100000,
+        recipientCountry: 'IT',
+        recipientVatNumber: null,
+      },
+      [{ vatCategory: 'O', vatRateBp: 0 }],
+    );
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
+    ]);
+  });
+
+  it('does not ask for the ritenuta exemption when the issuer is not on the forfettario regime', () => {
+    const input = buildInput({ vatExemptionGround: null, recipientVatNumber: 'IT12345678901' }, [
+      { vatCategory: 'S', vatRateBp: 2200 },
     ]);
     expect(itMentions(input)).toEqual([]);
   });

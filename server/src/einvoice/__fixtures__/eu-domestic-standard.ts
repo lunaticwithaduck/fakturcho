@@ -21,6 +21,7 @@ export const deDomesticStandardInvoice: DocumentDto = {
   transportedAt: null,
   carrierName: null,
   transportNote: null,
+  correctionReason: null,
   subtotal: 500000,
   discountTotal: 0,
   amount: 595000,
@@ -69,6 +70,7 @@ export const deDomesticStandardInvoice: DocumentDto = {
     mol: null,
     sdiRecipientCode: null,
     pec: null,
+    clientType: null,
   },
   lineItems: [
     {

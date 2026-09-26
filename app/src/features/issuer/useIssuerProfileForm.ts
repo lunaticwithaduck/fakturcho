@@ -23,6 +23,9 @@ export interface IssuerProfileFormValues {
   bic: string;
   altIban: string;
   identifiers: Record<string, string>;
+  vatOnCashBasis: boolean;
+  vatOnDebits: boolean;
+  defaultPaymentTermsDays: number | null;
 }
 
 function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
@@ -44,6 +47,9 @@ function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
     bic: profile.bic ?? '',
     altIban: profile.altIban ?? '',
     identifiers: { ...profile.identifiers },
+    vatOnCashBasis: profile.vatOnCashBasis,
+    vatOnDebits: profile.vatOnDebits,
+    defaultPaymentTermsDays: profile.defaultPaymentTermsDays,
   };
 }
 
@@ -60,7 +66,10 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
     country: values.country,
     phone: values.phone.trim() || null,
     vatRegistered: values.vatRegistered,
-    vatNumber: values.vatRegistered ? values.vatNumber.trim() || null : null,
+    vatNumber:
+      values.vatRegistered || requiresVatNumber(values.country)
+        ? values.vatNumber.trim() || null
+        : null,
     bankName: values.bankName.trim() || null,
     iban: values.iban.trim() || null,
     bic: values.bic.trim() || null,
@@ -70,7 +79,14 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
         .map(([key, value]) => [key, value.trim()])
         .filter(([, value]) => value !== ''),
     ),
+    vatOnCashBasis: values.vatOnCashBasis,
+    vatOnDebits: values.vatOnDebits,
+    defaultPaymentTermsDays: values.defaultPaymentTermsDays,
   };
+}
+
+export function requiresVatNumber(country: string): boolean {
+  return getCountryConfig(country).requiredIssuerFields.includes('vatNumber');
 }
 
 export interface IssuerProfileFieldErrors {

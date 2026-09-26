@@ -1,0 +1,32 @@
+import { getCountryConfig } from '@fakturcho/shared-types';
+import { describe, expect, it } from 'vitest';
+
+describe('CZ country config', () => {
+  const config = getCountryConfig('CZ');
+
+  it('carries the current standard and reduced VAT rates', () => {
+    expect(config.vatRates).toEqual([
+      { rateBp: 2100, label: '21%' },
+      { rateBp: 1200, label: '12%' },
+      { rateBp: 0, label: '0%' },
+    ]);
+    expect(config.defaultVatRateBp).toBe(2100);
+  });
+
+  it('keeps the company-register identifier optional — NOZ § 435 odst. 1 (89/2012 Sb.) only binds registered entrepreneurs', () => {
+    const companyRegister = config.identifiers.find((field) => field.key === 'companyRegister');
+    expect(companyRegister).toMatchObject({
+      label: 'Zápis v rejstříku',
+      pattern: null,
+      required: false,
+    });
+  });
+
+  it('requires the structured address fields shared with every generic EU country', () => {
+    expect(config.requiredIssuerFields).toEqual(['companyName', 'street', 'city', 'postcode']);
+  });
+
+  it('always shows the DUZP tax-event date (§29 odst. 1 písm. h) zákona o DPH, common practice)', () => {
+    expect(config.taxEventDateAlwaysShown).toBe(true);
+  });
+});

@@ -1,6 +1,7 @@
 import {
   type DocumentType,
   formatDocumentNumber,
+  getCountryConfig,
   TAX_DOCUMENT_TYPES,
 } from '@fakturcho/shared-types';
 import { escapeHtml } from './html-utils';
@@ -13,14 +14,19 @@ export function buildTitle(
   numberSuffix: string | null,
   locale: ClassicLocaleContext,
 ): string {
-  const label = locale.labels.documentType[documentType];
+  const config = getCountryConfig(locale.issuerCountry);
+  const label =
+    (locale.language === config.language ? config.documentTypeTitles?.[documentType] : undefined) ??
+    locale.labels.documentType[documentType];
   if (number === null) {
-    return escapeHtml(`${label} # ${locale.labels.draftLabel}`);
+    return escapeHtml(locale.labels.draftTitle(label));
   }
   const marker =
     locale.showOriginalStamp && TAX_DOCUMENT_TYPES[documentType]
       ? locale.labels.originalMarker
       : '';
   const padded = formatDocumentNumber(number);
-  return escapeHtml(`${label} # ${numberPrefix ?? ''}${padded}${numberSuffix ?? ''}${marker}`);
+  return escapeHtml(
+    `${label} ${locale.labels.numberSign} ${numberPrefix ?? ''}${padded}${numberSuffix ?? ''}${marker}`,
+  );
 }

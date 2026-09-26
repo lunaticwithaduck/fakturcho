@@ -28,6 +28,9 @@ const BASE: IssuerProfileDto = {
   peppolEndpointId: null,
   peppolScheme: null,
   identifiers: {},
+  vatOnCashBasis: false,
+  vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 afterEach(cleanup);

@@ -12,19 +12,19 @@ import type {
 } from '@shared/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { ComposerActions } from './ComposerActions';
-import { ComposerClientField } from './ComposerClientField';
-import { ComposerDeliveryFields } from './ComposerDeliveryFields';
-import { ComposerDetailsFields } from './ComposerDetailsFields';
+import { ComposerDeliverySection } from './ComposerDeliverySection';
 import { ComposerDiscountsList } from './ComposerDiscountsList';
-import { ComposerDocumentTypeField } from './ComposerDocumentTypeField';
+import { ComposerFrMentionsFields } from './ComposerFrMentionsFields';
+import { ComposerHeaderCard } from './ComposerHeaderCard';
 import { ComposerLineItemsTable } from './ComposerLineItemsTable';
 import { ComposerNotesFields } from './ComposerNotesFields';
-import { ComposerOriginalDocumentField } from './ComposerOriginalDocumentField';
 import { ComposerTotalsPanel } from './ComposerTotalsPanel';
 import { ComposerVatSection } from './ComposerVatSection';
-import { computeLiveTotals, resolveVatTreatment } from './liveTotals';
+import { isFrenchTaxDocument } from './composerFrMentionsState';
+import { resolveVatTreatment } from './liveTotals';
 import { useComposerState } from './useComposerState';
 import { useComposerSubmit } from './useComposerSubmit';
+import { useComposerTotals } from './useComposerTotals';
 
 interface DocumentComposerFormProps {
   documentId: string | null;
@@ -43,9 +43,30 @@ export function DocumentComposerForm({
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
-  const countryConfig = getCountryConfig(issuerProfile.country);
-  const controller = useComposerState(existing, countryConfig.timeZone);
+  const initialClient = clients.find((client) => client.id === existing?.clientId) ?? null;
+  const initialCountryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers, {
+    country: initialClient?.country ?? null,
+    postcode: initialClient?.postcode ?? null,
+    clientType: initialClient?.clientType ?? null,
+    eik: initialClient?.eik ?? null,
+  });
+  const controller = useComposerState(
+    existing,
+    initialCountryConfig.timeZone,
+    initialCountryConfig.defaultVatRateBp,
+    issuerProfile.defaultPaymentTermsDays,
+  );
   const { state, setField, patchState } = controller;
+  // § 10 Abs. 4 UStG 1994: the Jungholz/Mittelberg default rate depends on the
+  // selected client's own seat, not just the issuer's flag — recompute once
+  // the client (and therefore the recipient postcode) is known.
+  const selectedClient = clients.find((client) => client.id === state.clientId) ?? null;
+  const countryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers, {
+    country: selectedClient?.country ?? null,
+    postcode: selectedClient?.postcode ?? null,
+    clientType: selectedClient?.clientType ?? null,
+    eik: selectedClient?.eik ?? null,
+  });
   const vat = resolveVatTreatment({
     documentType: state.documentType,
     vatRegistered: issuerProfile.vatRegistered,
@@ -54,27 +75,18 @@ export function DocumentComposerForm({
     groundRequired:
       countryConfig.defaultExemptionGround === null && countryConfig.exemptionGrounds.length > 0,
   });
-  const totals = computeLiveTotals({
-    lineItems: state.lineItems.map((line) => ({
-      quantity: line.quantity,
-      unitPrice: line.unitPrice ?? 0,
-    })),
-    discounts: state.discounts.map((discount) => ({
-      percentBp: discount.mode === 'percent' ? discount.percentBp : null,
-      amount: discount.mode === 'amount' ? discount.amount : null,
-    })),
-    vatCharged: vat.vatCharged,
-    vatRateBp: vat.vatRateBp,
-  });
+  const { totals, vatRatePercent } = useComposerTotals(state, vat, countryConfig.defaultVatRateBp);
   const isCorrection = (CORRECTION_DOCUMENT_TYPES as readonly DocumentType[]).includes(
     state.documentType,
   );
   const isDeliveryNote = state.documentType === 'delivery_note';
+  const showFrMentions = isFrenchTaxDocument(issuerProfile.country, vat.isTaxDocument);
   const { error, isSubmitting, handleSaveDraft, handleSaveAndIssue } = useComposerSubmit(
     documentId,
     state,
     vat,
     locale,
+    issuerProfile.country,
   );
 
   return (
@@ -87,54 +99,46 @@ export function DocumentComposerForm({
         {documentId ? t('composer.titleEdit') : t('composer.titleNew')}
       </h1>
 
-      <Card className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <ComposerDocumentTypeField
-            value={state.documentType}
-            onChange={(value) => setField('documentType', value)}
-          />
-          <ComposerClientField
-            clientId={state.clientId}
-            clients={clients}
-            onChange={(value) => setField('clientId', value)}
-          />
-        </div>
-        {isCorrection || isDeliveryNote ? (
-          <ComposerOriginalDocumentField
-            documentType={state.documentType}
-            value={state.originalDocumentId}
-            currentDocumentId={documentId}
-            hasError={isCorrection && !!error && !state.originalDocumentId}
-            onChange={(value) => setField('originalDocumentId', value)}
-          />
-        ) : null}
-        <ComposerDetailsFields
-          documentType={state.documentType}
-          referenceNumber={state.referenceNumber}
-          taxEventAt={state.taxEventAt}
-          dueAt={state.dueAt}
-          validUntil={state.validUntil}
-          onChange={patchState}
-        />
-      </Card>
+      <ComposerHeaderCard
+        documentId={documentId}
+        clients={clients}
+        issuerCountry={issuerProfile.country}
+        {...(countryConfig.maxPaymentTermsDays !== undefined
+          ? { maxPaymentTermsDays: countryConfig.maxPaymentTermsDays }
+          : {})}
+        isCorrection={isCorrection}
+        isDeliveryNote={isDeliveryNote}
+        hasError={!!error}
+        state={state}
+        setField={setField}
+        patchState={patchState}
+      />
 
-      {isDeliveryNote ? (
+      <ComposerDeliverySection
+        documentType={state.documentType}
+        state={state}
+        issuerCountry={issuerProfile.country}
+        transportReasonOptions={countryConfig.deliveryNoteTransportReasons}
+        onChange={patchState}
+      />
+
+      {showFrMentions ? (
         <Card>
-          <ComposerDeliveryFields
-            deliveryDate={state.deliveryDate}
-            transportReason={state.transportReason}
-            transportedAt={state.transportedAt}
-            carrierName={state.carrierName}
-            transportNote={state.transportNote}
-            transportReasonOptions={countryConfig.deliveryNoteTransportReasons}
+          <ComposerFrMentionsFields
+            operationNature={state.operationNature}
+            deliveryAddress={state.deliveryAddress}
+            hasOperationNatureError={!!error && !state.operationNature}
             onChange={patchState}
           />
         </Card>
       ) : null}
-
       <ComposerLineItemsTable
         lineItems={state.lineItems}
         catalogueItems={catalogueItems}
+        vatCharged={vat.vatCharged}
+        vatRates={countryConfig.vatRates}
+        defaultVatRateBp={countryConfig.defaultVatRateBp}
+        issuerCountry={issuerProfile.country}
         onAdd={controller.addLineItem}
         onChange={controller.updateLineItem}
         onRemove={controller.removeLineItem}
@@ -165,7 +169,7 @@ export function DocumentComposerForm({
       <ComposerTotalsPanel
         totals={totals}
         vatCharged={vat.vatCharged}
-        vatRatePercent={vat.vatCharged ? vat.vatRateBp / 100 : null}
+        vatRatePercent={vatRatePercent}
       />
 
       <Card>

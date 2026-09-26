@@ -1,0 +1,373 @@
+{
+  "country": "AT",
+  "locale": "en",
+  "slug": "austria-invoice-requirements-vat-rates",
+  "title": "Austria Invoice Requirements & VAT Rates 2026 | Fakturcho",
+  "description": "Mandatory fields under § 11 UStG 1994, 2026 VAT rates (20/13/10/4.9%), the Kleinunternehmer threshold and Firmenbuch details for invoices issued from Austria.",
+  "h1": "Invoicing in Austria: mandatory fields, VAT rates and the small-business exemption",
+  "answer": "An Austrian invoice needs the mandatory fields under § 11 Abs. 1 Z 3 UStG 1994, including a sequential number and, above a gross amount of €10,000 to another business, the recipient's UID number. The standard VAT rate is 20%, alongside 13%, 10% and, from 1 July 2026, a new 4.9% rate for staple foods. A Kleinunternehmer with turnover up to €55,000 a year issues invoices without VAT.",
+  "lastReviewed": "2026-09-26",
+  "sections": [
+    {
+      "heading": "Who must issue an invoice in Austria — and by when?",
+      "id": "obligation-to-issue-and-deadlines",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Under § 11 Abs. 1 UStG 1994, an invoice must be issued for a supply to another business for its business or to a legal person, and for taxable Werklieferungen or real-property-related supplies to a private customer. The deadline is "
+            },
+            { "text": "six months", "bold": true },
+            { "text": " after the supply is made." }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Two cases have a shorter deadline: for a service to an EU business where the tax liability shifts to the recipient (Art. 196 MwStSystRL), the invoice is due by the 15th of the month following the supply — the same deadline applies to an intra-Community supply of goods (Art. 11 Abs. 1 BMR)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Mandatory invoice content (§ 11 Abs. 1 Z 3 UStG 1994)",
+      "id": "mandatory-invoice-content",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "A full invoice over €400 (see the small-amount invoice below) needs the following elements:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": ["lit.", "Mandatory field"],
+          "rows": [
+            ["a", "Name and address of the supplier"],
+            [
+              "b",
+              "Name and address of the recipient; above a gross amount of €10,000 to another business, also the recipient's UID number"
+            ],
+            ["c", "Quantity and trade description, or the type and extent of the service"],
+            [
+              "d",
+              "Date of supply or the supply period (Leistungsdatum — Fakturcho always prints it)"
+            ],
+            ["e", "The consideration and the applicable VAT rate, or a note of the exemption"],
+            ["f", "The VAT amount attributable to the consideration"],
+            ["g", "The date of issue"],
+            ["h", "A sequential invoice number, assigned once"],
+            [
+              "i",
+              "The supplier's UID number, except for a Kleinunternehmer or purely input-VAT-exempt supplies"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Where several rates apply, the consideration and VAT amount must be shown separately per rate (§ 11 Abs. 5 UStG 1994). Where the invoice is in a foreign currency, the VAT amount must also be shown in euro (§ 20 Abs. 6 UStG 1994) — Fakturcho prints a dedicated line with the ECB rate for this."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Small-amount invoice: simplified content up to €400",
+      "id": "small-amount-invoice",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Where the gross total is no more than €400, or the invoice is issued by a Kleinunternehmer, § 11 Abs. 6 UStG 1994 requires only the date of issue, the supplier's name and address, the quantity and description of the supply, the Leistungsdatum, the gross amount with the VAT amount as a single sum, and the VAT rate. The recipient's name and address, the invoice number and the UID number are not required."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cross-border cases are excluded — intra-Community supplies, reverse-charge supplies to another EU country, and triangulation always need the full invoice. Fakturcho always prints the full invoice regardless; the simplification is purely optional."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "VAT rates in Austria in 2026",
+      "id": "vat-rates-2026",
+      "blocks": [
+        {
+          "type": "table",
+          "head": ["Rate", "Applies to"],
+          "rows": [
+            ["20%", "Standard rate (§ 10 Abs. 1 UStG 1994)"],
+            [
+              "13%",
+              "e.g. art, culture, sports admission, domestic flights (§ 10 Abs. 3, Anlage 2)"
+            ],
+            [
+              "10%",
+              "e.g. food, books, restaurant meals, residential rent, passenger transport (§ 10 Abs. 2, Anlage 1)"
+            ],
+            [
+              "4.9%",
+              "New from 1 July 2026: milk, eggs, certain fruit/vegetables, rice, flour, bread and other staples under Anlage 3 (§ 10 Abs. 1a UStG 1994)"
+            ],
+            ["0%", "Exempt, reverse-charge and intra-Community supplies"]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Residential letting is taxable at 10%, not exempt (§ 6 Abs. 1 Z 16 UStG 1994 expressly excludes it from the exemption). The earlier 0% rate for photovoltaic modules has expired and no longer applies in 2026."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Special case, Jungholz/Mittelberg: a business with its seat or a permanent establishment in these two municipalities (in Tyrol and Vorarlberg respectively) charges 19% instead of 20% as its standard rate (§ 10 Abs. 4 UStG 1994) — the reduced rates stay the same. This excludes the delivery and rental of motor vehicles to recipients with their residence or seat elsewhere in Austria, and supplies to a business establishment (Betriebsstätte) outside these two areas — both stay at 20%. Fakturcho offers a dedicated checkbox for this in the issuer profile, pre-ticked from the postcode (6691, 6991, 6992, 6993)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "The Kleinunternehmerregelung: up to when is there no VAT?",
+      "id": "small-business-exemption",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Since 1 January 2025, the Kleinunternehmer exemption under § 6 Abs. 1 Z 27 UStG 1994 applies up to "
+            },
+            { "text": "€55,000 gross turnover", "bold": true },
+            {
+              "text": " in the preceding and in the current calendar year. If the threshold is exceeded by no more than 10%, the exemption still applies until year end; a larger excess ends it immediately from that supply on."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "A Kleinunternehmer issues invoices with no separate VAT shown and needs no UID number for this. Fakturcho automatically prints the note \"Umsatzsteuerfrei aufgrund der Kleinunternehmerregelung gemäß § 6 Abs. 1 Z 27 UStG 1994.\" instead of a VAT line."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Important: if a Kleinunternehmer sells services to a business in another EU country, the place of supply is abroad (§ 3a Abs. 6 UStG 1994) — a UID number is then needed after all, and the reverse-charge rules apply."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Reverse charge and intra-Community business",
+      "id": "reverse-charge-and-eu-supplies",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Where the tax liability shifts to the recipient (§ 11 Abs. 1a UStG 1994), no VAT may be shown; instead the recipient's UID number and a note of the liability shift must appear. This mainly covers:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "EU B2B services: place of supply at the recipient (§ 3a Abs. 6 UStG 1994), tax owed under Art. 196 MwStSystRL — invoice due by the 15th of the following month, also reported in the EC Sales List (Zusammenfassende Meldung, ZM)."
+              }
+            ],
+            [
+              {
+                "text": "Intra-Community supplies of goods: exempt under Art. 6 Abs. 1 iVm Art. 7 UStG 1994, both UID numbers must appear."
+              }
+            ],
+            [
+              {
+                "text": "Domestic reverse charge: among others, construction work (§ 19 Abs. 1a), security-transferred goods (§ 19 Abs. 1b), certain electronics/metals (§ 19 Abs. 1d) and mobile phones/emission certificates (§ 19 Abs. 1e)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho picks the right wording automatically: the Art. 196 wording for cross-border EU services, the selected or a generic § 19 UStG wording for domestic cases, and the Art. 6/7 BMR note for intra-Community supplies of goods."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Company name, Firmenbuch and legal form on business documents (UGB § 14)",
+      "id": "firmenbuch-and-company-law-mentions",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Every business entered in the Firmenbuch — from a sole trader (e.U.) through an OG or KG to a GmbH — must state its Firma, Rechtsform, Sitz, Firmenbuchnummer and Firmenbuchgericht on business letters addressed to a specific recipient (§ 14 Abs. 1 UGB). An unregistered sole trader (for example below the § 189 UGB accounting thresholds) does not need this — only name and address under § 11 UStG are required."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho requires the Firmenbuchgericht and Sitz automatically once a Firmenbuchnummer is entered in the issuer profile, and prints both together with the UID number in the invoice footer."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Rechnungskorrektur and Gutschrift",
+      "id": "credit-notes-and-the-gutschrift-trap",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "In Austria, \"Gutschrift\" is its own legal term: it denotes a document with which the "
+            },
+            { "text": "recipient", "bold": true },
+            {
+              "text": " of a supply self-bills (§ 11 Abs. 7 UStG 1994), not a later correction by the supplier. A correction document the seller issues itself should therefore never be called \"Gutschrift\" — Fakturcho calls it \"Rechnungskorrektur\" — including for a full cancellation — and a later additional charge \"Nachtragsrechnung\" (not the German \"Belastungsanzeige\")."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Every correction references the number and date of the original invoice and states the reason for the correction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "E-invoicing: who is required to use it in Austria?",
+      "id": "e-invoicing-in-austria",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "There is no e-invoicing mandate for B2B or B2C invoices in Austria in 2026; a PDF counts as an electronic invoice once the recipient agrees (§ 11 Abs. 2 UStG 1994). For federal (Bund) contracting authorities (B2G), however, structured e-invoices have been mandatory since 2014, submitted via USP.gv.at or PEPPOL in the ebInterface or Peppol-UBL formats."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "From 1 July 2030, structured e-invoicing becomes mandatory for intra-Community B2B supplies under EU Directive 2025/516 (ViDA); no earlier domestic date has been announced so far."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "For Austrian invoices, Fakturcho can generate a generic UBL XML file on request; it does not currently offer a dedicated format for submission to federal authorities (ebInterface/PEPPOL)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Retention and the cash-register obligation",
+      "id": "retention-and-cash-register-obligation",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Invoices must be kept for seven years (§ 11 Abs. 2 UStG 1994, § 132 BAO). The cash-register obligation (§ 131b BAO) only covers cash sales — this also includes card payments made in person, but not bank transfers. Fakturcho is not a cash register and does not replace an RKSV-compliant till for cash payments."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Frequently asked questions",
+  "faq": [
+    {
+      "question": "Do I need to assign an invoice number as a Kleinunternehmer?",
+      "answer": [
+        {
+          "text": "Not mandatory — § 11 Abs. 6 UStG 1994 lets a Kleinunternehmer use the simplified invoice with no number; Fakturcho assigns a sequential one anyway."
+        }
+      ]
+    },
+    {
+      "question": "Do I always need my customer's UID number?",
+      "answer": [
+        {
+          "text": "No, only for reverse-charge supplies, intra-Community supplies and triangulation — and for a domestic B2B invoice with a gross amount over €10,000 (§ 11 Abs. 1 Z 3 lit. b UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Is a full cancellation the same as a Gutschrift?",
+      "answer": [
+        {
+          "text": "No. In Austria, \"Gutschrift\" denotes a document with which the customer self-bills. A correction document from the seller is always called a Rechnungskorrektur, including for a full cancellation."
+        }
+      ]
+    },
+    {
+      "question": "What changes to the VAT rates on 1 July 2026?",
+      "answer": [
+        {
+          "text": "A new reduced rate of 4.9% applies from that date to certain staple foods such as milk, eggs, bread, flour and rice (§ 10 Abs. 1a UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Do I need to be able to issue or receive e-invoices?",
+      "answer": [
+        {
+          "text": "Not for private business customers; only a supplier to federal authorities must submit structured e-invoices (ebInterface or Peppol-UBL)."
+        }
+      ]
+    },
+    {
+      "question": "Does the same VAT rate apply everywhere in Austria?",
+      "answer": [
+        {
+          "text": "Almost everywhere, yes. Only a business with its seat or a permanent establishment in Jungholz or Kleinwalsertal (Mittelberg) charges 19% instead of 20% as its standard rate (§ 10 Abs. 4 UStG 1994). This excludes motor vehicles and supplies to a business establishment outside these areas, which stay at 20%."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "How Fakturcho helps",
+    "body": [
+      {
+        "text": "For Austrian issuers, Fakturcho assigns sequential invoice numbers, prints the Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz and UID number automatically in the invoice footer, and, for a Kleinunternehmer profile, adds the § 6 Abs. 1 Z 27 UStG 1994 note on its own. For a domestic B2B invoice over €10,000 gross, Fakturcho checks that the recipient's UID number is on file before the invoice can be issued. Businesses in Jungholz or Mittelberg can turn on the special 19% rate in the issuer profile. Fakturcho picks the reverse-charge and intra-Community wording automatically from the destination country and the chosen VAT exemption. As of 26 September 2026. This is general information, not tax advice — for your specific case, consult your tax adviser or the tax office (Finanzamt)."
+      }
+    ]
+  }
+}

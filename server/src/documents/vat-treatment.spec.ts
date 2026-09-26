@@ -13,62 +13,37 @@ describe('resolveVatTreatment', () => {
     expect(treatment).toEqual({
       vatCharged: false,
       vatRateBp: 0,
-      vatExemptionGround: 'Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.',
+      vatExemptionGround: 'Steuerbefreiung für Kleinunternehmer gemäß § 19 Abs. 1 UStG.',
     });
   });
 
-  it('requires an explicit ground for a non-registered ES issuer (no franchise regime)', () => {
-    expect(() =>
-      resolveVatTreatment({
-        documentType: 'invoice',
-        vatRegistered: false,
-        requestedGround: null,
-        issuerCountry: 'ES',
-      }),
-    ).toThrow(DomainError);
-    expect(() =>
-      resolveVatTreatment({
-        documentType: 'invoice',
-        vatRegistered: false,
-        requestedGround: null,
-        issuerCountry: 'ES',
-      }),
-    ).toThrow(/ES has no default VAT exemption ground/);
+  it('never charges VAT on a proforma or quote from a non-registered issuer', () => {
+    for (const documentType of ['proforma', 'quote'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: false,
+          requestedGround: null,
+          issuerCountry: 'DE',
+        }),
+      ).toEqual({ vatCharged: false, vatRateBp: 0, vatExemptionGround: null });
+    }
   });
 
-  it('accepts the apartado the non-registered ES issuer picked', () => {
-    const treatment = resolveVatTreatment({
-      documentType: 'invoice',
-      vatRegistered: false,
-      requestedGround: 'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
-      issuerCountry: 'ES',
-    });
-    expect(treatment).toEqual({
-      vatCharged: false,
-      vatRateBp: 0,
-      vatExemptionGround: 'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
-    });
-  });
-
-  it('does not require a ground for a non-tax document from a non-registered ES issuer', () => {
-    const treatment = resolveVatTreatment({
-      documentType: 'quote',
-      vatRegistered: false,
-      requestedGround: null,
-      issuerCountry: 'ES',
-    });
-    expect(treatment).toEqual({ vatCharged: false, vatRateBp: 0, vatExemptionGround: null });
-  });
-
-  it('rejects an apartado outside the ES statutory list', () => {
-    expect(() =>
-      resolveVatTreatment({
-        documentType: 'invoice',
-        vatRegistered: false,
-        requestedGround: 'foo',
-        issuerCountry: 'ES',
-      }),
-    ).toThrow(DomainError);
+  // FIXRULES item 3: a VAT-registered issuer's proforma/quote must show VAT
+  // exactly like an invoice would (SPEC §5 forbids only the exemption line
+  // and "(Original)" on these two types, not the VAT amount itself).
+  it('charges the standard rate on a proforma or quote from a VAT-registered issuer', () => {
+    for (const documentType of ['proforma', 'quote'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: true,
+          requestedGround: null,
+          issuerCountry: 'DE',
+        }),
+      ).toEqual({ vatCharged: true, vatRateBp: 1900, vatExemptionGround: null });
+    }
   });
 
   it('rejects a made-up ground for a VAT-registered issuer at 0%', () => {
@@ -97,10 +72,10 @@ describe('resolveVatTreatment', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: false,
-      requestedGround: 'чл.113, ал.9 от ЗДДС',
+      requestedGround: 'чл. 113, ал. 9 от ЗДДС',
       issuerCountry: 'BG',
     });
-    expect(treatment.vatExemptionGround).toBe('чл.113, ал.9 от ЗДДС');
+    expect(treatment.vatExemptionGround).toBe('чл. 113, ал. 9 от ЗДДС');
   });
 
   it('no longer dead-ends a non-registered generic-EU issuer: the SME ground applies automatically', () => {
@@ -111,7 +86,7 @@ describe('resolveVatTreatment', () => {
       issuerCountry: 'NL',
     });
     expect(treatment.vatExemptionGround).toBe(
-      'VAT exemption for small enterprises, Article 284 of Council Directive 2006/112/EC',
+      'Small enterprise scheme – Article 284 of Council Directive 2006/112/EC',
     );
   });
 
@@ -130,11 +105,11 @@ describe('resolveVatTreatment', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+      requestedGround: 'Reverse charge – Article 196 of Council Directive 2006/112/EC',
       issuerCountry: 'NL',
     });
     expect(treatment.vatExemptionGround).toBe(
-      'Reverse charge, Article 196 of Council Directive 2006/112/EC',
+      'Reverse charge – Article 196 of Council Directive 2006/112/EC',
     );
   });
 });
@@ -169,7 +144,7 @@ describe('applyLineVatGroups', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'чл.21 от ЗДДС',
+      requestedGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
       issuerCountry: 'BG',
     });
     const result = applyLineVatGroups(treatment, [
@@ -183,7 +158,7 @@ describe('applyLineVatGroups', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'чл.21 от ЗДДС',
+      requestedGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
       issuerCountry: 'BG',
     });
     const result = applyLineVatGroups(treatment, [
@@ -193,7 +168,7 @@ describe('applyLineVatGroups', () => {
     expect(result).toEqual({
       vatCharged: true,
       vatRateBp: 2000,
-      vatExemptionGround: 'чл.21 от ЗДДС',
+      vatExemptionGround: 'Обратно начисляване – чл. 21, ал. 2 от ЗДДС',
     });
   });
 
@@ -212,7 +187,7 @@ describe('applyLineVatGroups', () => {
     const treatment = resolveVatTreatment({
       documentType: 'invoice',
       vatRegistered: true,
-      requestedGround: 'чл.30 ал.1 от ЗДДС',
+      requestedGround: 'чл. 30, ал. 1 от ЗДДС',
       issuerCountry: 'BG',
     });
     const result = applyLineVatGroups(treatment, [
@@ -222,7 +197,7 @@ describe('applyLineVatGroups', () => {
     expect(result).toEqual({
       vatCharged: true,
       vatRateBp: 2000,
-      vatExemptionGround: 'чл.30 ал.1 от ЗДДС',
+      vatExemptionGround: 'чл. 30, ал. 1 от ЗДДС',
     });
   });
 });

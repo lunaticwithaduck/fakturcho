@@ -25,5 +25,8 @@ export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerP
     peppolEndpointId: profile.peppolEndpointId,
     peppolScheme: profile.peppolScheme,
     identifiers: readIdentifiers(profile.identifiers),
+    vatOnCashBasis: profile.vatOnCashBasis,
+    vatOnDebits: profile.vatOnDebits,
+    defaultPaymentTermsDays: profile.defaultPaymentTermsDays,
   };
 }

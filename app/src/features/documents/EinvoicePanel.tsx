@@ -6,6 +6,7 @@ import { Button } from '@design/components';
 import type { DocumentStatus, DocumentType } from '@shared/types';
 import { useTranslations } from 'next-intl';
 import { canDownloadDocument } from './documentDownload';
+import { KsefNumberField } from './KsefNumberField';
 
 const KNOWN_MISSING_FIELD_CODES = new Set([
   'document.type',
@@ -33,8 +34,6 @@ const KNOWN_MISSING_FIELD_CODES = new Set([
   'issuer.countyRegion',
   'issuer.sirenOrSiret',
   'issuer.vatNumberFrFormat',
-  'issuer.esTaxId',
-  'issuer.esTaxIdInvalid',
   'issuer.partitaIva',
   'issuer.partitaIvaInvalid',
   'issuer.codiceFiscale',
@@ -53,8 +52,6 @@ const KNOWN_MISSING_FIELD_CODES = new Set([
   'recipient.countyRegion',
   'recipient.sirenOrSiret',
   'recipient.vatNumberFrFormat',
-  'recipient.esTaxId',
-  'recipient.esTaxIdInvalid',
   'recipient.partitaIvaOrCodiceFiscale',
   'recipient.partitaIvaInvalid',
   'recipient.codiceFiscaleInvalid',
@@ -71,9 +68,19 @@ interface EinvoicePanelProps {
   documentId: string;
   documentType: DocumentType;
   status: DocumentStatus;
+  issuerCountry?: string | null;
+  ksefNumber?: string | null | undefined;
+  issuedAt?: string | null;
 }
 
-export function EinvoicePanel({ documentId, documentType, status }: EinvoicePanelProps) {
+export function EinvoicePanel({
+  documentId,
+  documentType,
+  status,
+  issuerCountry = null,
+  ksefNumber = null,
+  issuedAt = null,
+}: EinvoicePanelProps) {
   const t = useTranslations('documents.einvoice');
   const { EINVOICE } = useFeatureFlags();
   const isIssued = canDownloadDocument(status);
@@ -101,6 +108,10 @@ export function EinvoicePanel({ documentId, documentType, status }: EinvoicePane
         <p className="text-sm text-text-muted">
           {t('notReadyHint', { fields: missingFieldMessages.join(', ') })}
         </p>
+      ) : null}
+
+      {issuerCountry === 'PL' ? (
+        <KsefNumberField documentId={documentId} ksefNumber={ksefNumber} issuedAt={issuedAt} />
       ) : null}
     </div>
   );

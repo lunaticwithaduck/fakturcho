@@ -29,8 +29,8 @@ describe('PL correction document names', () => {
       language: 'pl',
     });
 
-    expect(creditNote).toContain('Faktura korygująca # 0000000005');
-    expect(debitNote).toContain('Faktura korygująca # 0000000006');
+    expect(creditNote).toContain('Faktura korygująca nr 0000000005');
+    expect(debitNote).toContain('Faktura korygująca nr 0000000006');
     expect(debitNote).not.toContain('Nota debetowa');
   });
 });

@@ -14,6 +14,9 @@ export function buildTransportBlock(document: Document, locale: ClassicLocaleCon
       : '',
     line(labels.carrierNamePrefix, document.carrierName),
     line(labels.transportNotePrefix, document.transportNote),
+    locale.issuerCountry === 'RO' && labels.transportVehiclePrefix
+      ? line(labels.transportVehiclePrefix, document.transportVehicle)
+      : '',
   ]
     .filter(Boolean)
     .join('');

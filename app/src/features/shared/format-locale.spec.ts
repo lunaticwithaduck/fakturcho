@@ -85,9 +85,7 @@ describe('parseMoneyInputForLocale — en', () => {
 });
 
 describe('parseMoneyInputForLocale — table-driven, all published locales', () => {
-  const cases: Array<
-    [string, 'bg' | 'en' | 'de' | 'fr' | 'it' | 'pl' | 'ro' | 'es', number | null]
-  > = [
+  const cases: Array<[string, 'bg' | 'en' | 'de' | 'fr' | 'it' | 'pl' | 'ro', number | null]> = [
     ['12,50', 'bg', 1250],
     ['1 600,00', 'bg', 160000],
     ['1600', 'bg', 160000],
@@ -118,10 +116,6 @@ describe('parseMoneyInputForLocale — table-driven, all published locales', () 
     ['12,50', 'ro', 1250],
     ['1.234,50', 'ro', 123450],
     ['1234', 'ro', 123400],
-    ['12,50', 'es', 1250],
-    ['12.50', 'es', 1250],
-    ['1.234,50', 'es', 123450],
-    ['1234', 'es', 123400],
     ['-12,50', 'de', -1250],
     ['-1.234,50', 'it', -123450],
     ['', 'de', null],

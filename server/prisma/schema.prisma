@@ -157,6 +157,11 @@ model IssuerProfile {
   peppolEndpointId String?
   peppolScheme     String?
   identifiers      Json?
+  vatOnCashBasis   Boolean  @default(false)
+  vatOnDebits      Boolean  @default(false)
+  // Prefills the composer's payment-terms selector for a new document; the
+  // document itself always carries its own paymentTermsDays once saved.
+  defaultPaymentTermsDays Int?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -183,6 +188,10 @@ model Client {
   peppolScheme     String?
   sdiRecipientCode String?
   pec              String?
+  // 'business' | 'consumer', nullable — existing clients are unmeasured
+  // (null), never guessed. AT §11 Abs. 1 Z 3 lit. b UStG 1994 needs this to
+  // tell a business recipient from a private one; every country can use it.
+  clientType       String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -213,12 +222,18 @@ model NumberSeries {
   accountId    String
   account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
   documentType DocumentType
+  // Art. 226(2)+219 EU VAT Directive: invoice/credit_note/debit_note draw one
+  // shared, uniquely-identifying sequence per issuer country group (ES keeps
+  // corrections in their own series per RD 1619/2012 art. 6.1.a). This key,
+  // not documentType, is what claimNumber locks and increments on.
+  seriesKey    String?
   nextNumber   BigInt       @default(1)
   issuedCount  Int          @default(0)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
   @@unique([accountId, documentType])
+  @@unique([accountId, seriesKey])
   @@map("number_series")
 }
 
@@ -236,6 +251,15 @@ model Document {
   originalDocumentId String?
   originalDocument   Document?  @relation("DocumentCorrections", fields: [originalDocumentId], references: [id], onDelete: Restrict)
   corrections        Document[] @relation("DocumentCorrections")
+  // credit_note/debit_note only: reason for issuing the correction (BG ЗДДС
+  // чл. 115, ал. 4, т. 2; IE VAT Regulations 2010 Reg. 20; ES RD 1619/2012
+  // art. 15), required at issuance for BG/IE/ES issuers, optional elsewhere.
+  correctionReason String?
+
+  // PL only: the KSeF number the user pastes back in after uploading the FA(3)
+  // XML to KSeF themselves (fakturcho never submits it). Printed under the
+  // KOD I QR code once set; the invoice shows "OFFLINE" until then.
+  ksefNumber String?
 
   issuedAt     DateTime? @db.Date
   taxEventAt   DateTime? @db.Date
@@ -246,6 +270,10 @@ model Document {
   buyerReference   String?
   paymentMeansCode String?
   paymentTermsNote String?
+  // Set by the composer's structured payment-terms selector (0 = due on
+  // receipt); when set, dueAt is recomputed from it at issuance. Null keeps
+  // the legacy free-text paymentTermsNote / manually-picked dueAt behaviour.
+  paymentTermsDays Int?
 
   // delivery_note only: IT DDT causale del trasporto / RO aviz scop, and its
   // date+time of dispatch (DPR 472/1996 art.1 requires date AND time, unlike
@@ -254,6 +282,15 @@ model Document {
   transportedAt   DateTime?
   carrierName     String?
   transportNote   String?
+  // RO aviz de însoțire a mărfii only: vehicle registration number (OMFP
+  // 2634/2015 model 14-3-6A "mijloc de transport nr.").
+  transportVehicle String?
+
+  // CGI art. 242 nonies A (French e-invoicing reform): nature of the
+  // operation ("goods" | "services" | "mixed") and, when it differs from the
+  // client address, the delivery address of goods.
+  operationNature  String?
+  deliveryAddress  String?
 
   subtotal           Int     @default(0)
   discountTotal      Int     @default(0)
@@ -264,6 +301,21 @@ model Document {
   vatExemptionGround String?
   currency           String  @default("EUR")
 
+  // VAT Directive art. 230 snapshot, set at issuance for issuers in a
+  // non-euro EU_VAT_AREA_COUNTRIES state. Null for drafts, euro-area
+  // issuers, and documents issued before this column existed.
+  localCurrency      String?
+  exchangeRate       String?
+  exchangeRateDate   DateTime? @db.Date
+  exchangeRateSource String?
+  exchangeRateTable  String?
+  vatAmountLocal     Int?
+  // PL art. 106e ust. 11 (pkt 14) / RO art. 319 alin. (20) lit. j): the local-
+  // currency VAT split by rate, [{rateBp, vatAmountLocal}]. Null whenever the
+  // document only ever had one charged rate — vatAmountLocal above still
+  // carries that single total unchanged.
+  vatAmountLocalByRate Json?
+
   clientId String?
   client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)
 
@@ -273,23 +325,25 @@ model Document {
   emailedAt  DateTime?
   templateId String    @default("classic")
 
-  issuerCompanyName   String?
-  issuerEik           String?
-  issuerMol           String?
-  issuerAddressLine   String?
-  issuerStreet        String?
-  issuerPostcode      String?
-  issuerCountyRegion  String?
-  issuerCity          String?
-  issuerCountry       String?
-  issuerPhone         String?
-  issuerVatRegistered Boolean?
-  issuerVatNumber     String?
-  issuerBankName      String?
-  issuerIban          String?
-  issuerBic           String?
-  issuerAltIban       String?
-  issuerIdentifiers   Json?
+  issuerCompanyName    String?
+  issuerEik            String?
+  issuerMol            String?
+  issuerAddressLine    String?
+  issuerStreet         String?
+  issuerPostcode       String?
+  issuerCountyRegion   String?
+  issuerCity           String?
+  issuerCountry        String?
+  issuerPhone          String?
+  issuerVatRegistered  Boolean?
+  issuerVatNumber      String?
+  issuerBankName       String?
+  issuerIban           String?
+  issuerBic            String?
+  issuerAltIban        String?
+  issuerIdentifiers    Json?
+  issuerVatOnCashBasis Boolean?
+  issuerVatOnDebits    Boolean?
 
   recipientCompanyName      String?
   recipientEik              String?
@@ -304,6 +358,7 @@ model Document {
   recipientMol              String?
   recipientSdiRecipientCode String?
   recipientPec              String?
+  recipientClientType       String?
   documentLanguage          String?
 
   lineItems            LineItem[]
@@ -333,6 +388,11 @@ model LineItem {
   vatRateBp   Int         @default(2000)
   vatCategory VatCategory @default(S)
   unitCode    String?
+
+  // PL only: art. 106e ust. 1 pkt 18a / załącznik nr 15 ustawy o VAT — this
+  // line's good/service is one the annex lists (FA(3) P_12_Zal_15), set
+  // independently of whether the invoice ends up over the MPP threshold.
+  splitPaymentAnnex15 Boolean @default(false)
 
   @@index([documentId])
   @@map("line_item")
@@ -422,15 +482,4 @@ model FeatureFlag {
   updatedAt DateTime @updatedAt
 
   @@map("feature_flag")
-}
-
-model EsVerifactuChainLink {
-  id              String   @id @default(cuid())
-  issuerNif       String   @unique
-  numSerieFactura String
-  fechaExpedicion String
-  huella          String
-  updatedAt       DateTime @updatedAt
-
-  @@map("es_verifactu_chain_link")
 }

@@ -1,18 +1,19 @@
 import type { DocumentType } from '@fakturcho/shared-types';
 import type { ClassicLabels } from './index';
 
-// facture/facture pro forma/note de débit are feminine; "un avoir", "un
-// devis" and "un bon de livraison" are masculine.
+// facture/facture pro forma/facture rectificative are feminine; "un avoir",
+// "un devis" and "un bon de livraison" are masculine.
 const FR_MASCULINE_TYPES = new Set<DocumentType>(['credit_note', 'quote', 'delivery_note']);
 const agree = (documentType: DocumentType, feminine: string, masculine: string) =>
   FR_MASCULINE_TYPES.has(documentType) ? masculine : feminine;
 
 export const fr: ClassicLabels = {
   companyIdLabel: 'SIREN',
-  recipientTitle: 'Client :',
+  supplierTitle: 'Émetteur :',
+  recipientTitle: () => 'Client :',
   vatNumberPrefix: 'N° TVA intracommunautaire : ',
   molPrefix: 'Représentant légal : ',
-  issuedAtPrefix: "Date d'émission : ",
+  issuedAtPrefix: () => "Date d'émission : ",
   taxEventPrefix: 'Date de livraison / prestation : ',
   validUntilPrefix: () => "Valable jusqu'au : ", // invariable adjective
   deliveryDatePrefix: 'Date de livraison : ',
@@ -28,26 +29,67 @@ export const fr: ClassicLabels = {
   recipientSignaturePrefix: (documentType) => agree(documentType, 'Reçue par : ', 'Reçu par : '),
   colName: 'Désignation',
   colQuantity: 'Quantité',
-  colPrice: 'Prix unitaire',
-  colTotal: 'Total',
+  colUnit: 'Unité',
+  colVatRate: 'Taux de TVA',
+  colPrice: 'Prix unitaire HT',
+  colTotal: 'Total HT',
+  unitLabels: {
+    C62: 'u',
+    H87: 'pce',
+    HUR: 'h',
+    DAY: 'j',
+    MON: 'mois',
+    KGM: 'kg',
+    MTR: 'm',
+    MTK: 'm²',
+    LTR: 'l',
+    KMT: 'km',
+    SET: 'lot',
+  },
+  reverseChargeLineMarker: '—',
   vatBasePrefix: 'Base HT :',
-  vatRatePrefix: (percent) => `TVA (${String(percent).replace('.', ',')}%) :`,
+  vatRatePrefix: (percent) => `TVA (${String(percent).replace('.', ',')} %) :`,
   subtotalLabel: 'Sous-total :',
   discountRowLabel: (percent, customLabel) =>
-    `Remise${percent !== null ? ` (${String(percent).replace('.', ',')}%)` : ''}${customLabel ? ` – ${customLabel}` : ''} :`,
+    `Remise${percent !== null ? ` (${String(percent).replace('.', ',')} %)` : ''}${customLabel ? ` – ${customLabel}` : ''} :`,
   totalLabel: 'Total :',
+  totalWithVatLabel: 'Total TTC :',
+  netValueLabel: 'Valeur totale :',
   dueLabel: 'Net à payer :',
+  creditDueLabel: 'Net à déduire :',
+  paidLabel: 'Montant payé :',
   exemptionPrefix: "Motif d'exonération de TVA : ",
+  operationNaturePrefix: "Nature de l'opération : ",
+  operationNatureLabels: {
+    goods: 'Livraison de biens',
+    services: 'Prestation de services',
+    mixed: 'Livraison de biens et prestation de services',
+  },
+  deliveryAddressPrefix: 'Adresse de livraison : ',
+  vatAmountLocalLine: ({ currencyLabel, amount, sourceLabel, rate, date, table }) =>
+    `Montant de TVA en ${currencyLabel} : ${amount} (taux ${sourceLabel} ${rate} du ${date}${table ? `, tableau n° ${table}` : ''})`,
+  proformaNotice: 'Facture pro forma – document sans valeur fiscale.',
+  reverseChargeNote: 'Autoliquidation – article 196 de la directive 2006/112/CE',
   originalMarker: ' (Original)',
   draftLabel: 'Brouillon',
+  numberSign: 'n°',
+  draftTitle: (l) => `${l} (brouillon)`,
+  correctsInvoice: (number, date) => `Facture d'origine : n° ${number} du ${date}`,
+  correctionReasonPrefix: 'Motif : ',
   documentType: {
     invoice: 'Facture',
     proforma: 'Facture pro forma',
     credit_note: 'Avoir',
-    debit_note: 'Note de débit',
+    debit_note: 'Facture rectificative',
     quote: 'Devis',
     delivery_note: 'Bon de livraison',
   },
   watermarkMain: 'BROUILLON',
   watermarkSub: 'SANS VALEUR LÉGALE',
+  vatBaseWithRatePrefix: (percent) => `Base HT (${String(percent).replace('.', ',')} %) :`,
+  buyerReferencePrefix: 'Votre référence : ',
+  paymentTermsPrefix: 'Conditions de paiement : ',
+  correctionKsefNumberPrefix: 'Numéro KSeF de la facture corrigée : ',
+  paymentTermsDaysText: (days) => (days === 0 ? 'à réception' : `${days} jours`),
+  companyRegisterLabel: 'Immatriculation au registre',
 };

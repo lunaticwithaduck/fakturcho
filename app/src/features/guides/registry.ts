@@ -3,10 +3,25 @@ import type { Locale } from '@shared/types';
 import { GUIDE_MODULES } from './content';
 import type { GuideContent } from './types';
 
+// First occurrence in `guides` wins a single-value key. A country can now
+// publish more than one guide (one per app language, e.g. AT) without
+// disturbing an existing "flagship" mapping — GUIDE_MODULES lists each
+// original one-guide-per-locale country first, so DE's own guide stays
+// guideForLocale('de') and guideForTargetCountry('DE') even once an AT guide
+// in German joins the same locale.
+function firstByKey<T>(items: readonly T[], key: (item: T) => string): Map<string, T> {
+  const map = new Map<string, T>();
+  for (const item of items) {
+    const k = key(item);
+    if (!map.has(k)) map.set(k, item);
+  }
+  return map;
+}
+
 export function buildRegistry(guides: readonly GuideContent[]) {
-  const byCountry = new Map<string, GuideContent>(guides.map((guide) => [guide.country, guide]));
-  const byLocale = new Map(guides.map((guide) => [guide.locale, guide]));
-  const byLocaleSlug = new Map(guides.map((guide) => [`${guide.locale}/${guide.slug}`, guide]));
+  const byCountry = firstByKey(guides, (guide) => guide.country);
+  const byLocale = firstByKey(guides, (guide) => guide.locale);
+  const byLocaleSlug = firstByKey(guides, (guide) => `${guide.locale}/${guide.slug}`);
 
   return {
     allGuides(): readonly GuideContent[] {

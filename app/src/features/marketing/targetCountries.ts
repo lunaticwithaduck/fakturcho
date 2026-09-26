@@ -1,7 +1,7 @@
 import type { Locale } from '@shared/types';
 import { getCountryConfig } from '@shared/types';
 
-export const TARGET_COUNTRIES = ['BG', 'DE', 'FR', 'IT', 'PL', 'RO', 'ES'] as const;
+export const TARGET_COUNTRIES = ['BG', 'DE', 'AT', 'FR', 'IT', 'PL', 'RO'] as const;
 export type TargetCountry = (typeof TARGET_COUNTRIES)[number];
 
 // The signup country picker preselects the one target country whose own

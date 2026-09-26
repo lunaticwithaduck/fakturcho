@@ -16,6 +16,9 @@ export interface VatTreatmentInput {
   vatRegistered: boolean;
   requestedGround: string | null;
   issuerCountry: string;
+  // AT only (§ 10 Abs. 4 UStG 1994 Jungholz/Mittelberg): swaps the standard
+  // rate 20% -> 19% for this issuer. Every other country ignores it.
+  issuerIdentifiers?: Record<string, string> | null;
 }
 
 export interface VatTreatment {
@@ -24,12 +27,25 @@ export interface VatTreatment {
   vatExemptionGround: string | null;
 }
 
+// A proforma or quote creates no tax obligation, but a VAT-registered issuer
+// still owes the client a figure that matches the invoice to come (SPEC §5
+// forbids only the exemption line and the "(Original)" marker on these two
+// types, not the VAT amount itself). A non-registered issuer never charges
+// VAT here either, same as before, and with no ground to select — the
+// exemption ground is a tax-document concept.
+const VAT_ESTIMATE_DOCUMENT_TYPES: readonly DocumentType[] = ['proforma', 'quote'];
+
 export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
-  const country = getCountryConfig(input.issuerCountry);
-  if (!TAX_DOCUMENT_TYPES[input.documentType]) {
+  const country = getCountryConfig(input.issuerCountry, input.issuerIdentifiers);
+  const isTaxDocument = TAX_DOCUMENT_TYPES[input.documentType];
+  const isVatEstimate = VAT_ESTIMATE_DOCUMENT_TYPES.includes(input.documentType);
+  if (!isTaxDocument && !isVatEstimate) {
     return { vatCharged: false, vatRateBp: 0, vatExemptionGround: null };
   }
   if (!input.vatRegistered) {
+    if (!isTaxDocument) {
+      return { vatCharged: false, vatRateBp: 0, vatExemptionGround: null };
+    }
     const vatExemptionGround = country.defaultExemptionGround ?? input.requestedGround;
     if (!vatExemptionGround && country.exemptionGrounds.length > 0) {
       throw new DomainError(

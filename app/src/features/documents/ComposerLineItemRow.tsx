@@ -2,17 +2,24 @@
 
 import { formatMoney } from '@app/features/shared/format';
 import { MoneyInput } from '@app/features/shared/MoneyInput';
-import { Button, Input } from '@design/components';
+import { Button, Checkbox, Input, Select, SelectItem } from '@design/components';
+import { UNIT_CODES, type VatRateOption } from '@fakturcho/shared-types';
 import type { CatalogueItemDto } from '@shared/types';
 import { useTranslations } from 'next-intl';
 import { CatalogueAutocompleteInput } from './CatalogueAutocompleteInput';
 import type { LineItemFormState } from './composerState';
 import { computeLineTotal } from './liveTotals';
 
+const NO_UNIT = 'none';
+
 interface ComposerLineItemRowProps {
   line: LineItemFormState;
   catalogueItems: readonly CatalogueItemDto[];
   canRemove: boolean;
+  vatCharged: boolean;
+  vatRates: readonly VatRateOption[];
+  defaultVatRateBp: number;
+  issuerCountry: string;
   onChange: (patch: Partial<Omit<LineItemFormState, 'key'>>) => void;
   onRemove: () => void;
 }
@@ -21,6 +28,10 @@ export function ComposerLineItemRow({
   line,
   catalogueItems,
   canRemove,
+  vatCharged,
+  vatRates,
+  defaultVatRateBp,
+  issuerCountry,
   onChange,
   onRemove,
 }: ComposerLineItemRowProps) {
@@ -28,13 +39,15 @@ export function ComposerLineItemRow({
   const lineTotal = computeLineTotal(line.quantity, line.unitPrice ?? 0);
 
   return (
-    <div className="flex flex-col gap-3 rounded-md border border-border p-3 sm:flex-row sm:items-end">
+    <div className="flex flex-col gap-3 rounded-md border border-border p-3 sm:flex-row sm:items-end sm:flex-wrap">
       <div className="sm:flex-1">
         <CatalogueAutocompleteInput
           value={line.name}
           items={catalogueItems}
           onChangeName={(name) => onChange({ name })}
-          onSelectItem={(item) => onChange({ name: item.name, unitPrice: item.defaultUnitPrice })}
+          onSelectItem={(item) =>
+            onChange({ name: item.name, unitPrice: item.defaultUnitPrice, unitCode: item.unitCode })
+          }
         />
       </div>
       <div className="sm:w-24">
@@ -46,6 +59,38 @@ export function ComposerLineItemRow({
           onChange={(event) => onChange({ quantity: event.target.value })}
         />
       </div>
+      <div className="sm:w-28">
+        <Select
+          label={t('composer.lineItems.unitLabel')}
+          value={line.unitCode ?? NO_UNIT}
+          onValueChange={(value) => onChange({ unitCode: value === NO_UNIT ? null : value })}
+        >
+          <SelectItem value={NO_UNIT}>{t('composer.lineItems.unitNoneOption')}</SelectItem>
+          {UNIT_CODES.map((code) => (
+            <SelectItem key={code} value={code}>
+              {t(`composer.lineItems.units.${code}`)}
+            </SelectItem>
+          ))}
+        </Select>
+      </div>
+      {vatCharged ? (
+        <div className="sm:w-28">
+          <Select
+            label={t('composer.lineItems.vatRateLabel')}
+            value={String(line.vatRateBp ?? defaultVatRateBp)}
+            onValueChange={(value) => {
+              const rateBp = Number(value);
+              onChange({ vatRateBp: rateBp === defaultVatRateBp ? null : rateBp });
+            }}
+          >
+            {vatRates.map((rate) => (
+              <SelectItem key={rate.rateBp} value={String(rate.rateBp)}>
+                {rate.label}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+      ) : null}
       <div className="sm:w-32">
         <MoneyInput
           label={t('composer.lineItems.priceLabel')}
@@ -63,6 +108,16 @@ export function ComposerLineItemRow({
       <Button type="button" variant="ghost" size="sm" disabled={!canRemove} onClick={onRemove}>
         {t('composer.lineItems.removeButton')}
       </Button>
+      {issuerCountry === 'PL' ? (
+        <div className="flex flex-col gap-1 sm:basis-full">
+          <Checkbox
+            label={t('composer.lineItems.mpp.checkboxLabel')}
+            checked={line.splitPaymentAnnex15}
+            onCheckedChange={(checked) => onChange({ splitPaymentAnnex15: checked === true })}
+          />
+          <p className="text-xs text-text-muted">{t('composer.lineItems.mpp.hint')}</p>
+        </div>
+      ) : null}
     </div>
   );
 }

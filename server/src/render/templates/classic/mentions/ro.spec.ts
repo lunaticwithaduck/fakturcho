@@ -20,7 +20,7 @@ describe('roMentions', () => {
     const document = buildFakeDocument({ issuerCountry: 'RO', vatAmount: 0, vatRateBp: 0 });
     const lineItems = buildFakeMixedLineItems();
     expect(roMentions({ document, lineItems, locale })).toEqual([
-      'Taxare inversă conform art. 307 alin. (2) din Codul fiscal',
+      'Taxare inversă – art. 196 din Directiva 2006/112/CE',
     ]);
   });
 
@@ -28,13 +28,122 @@ describe('roMentions', () => {
     const document = buildFakeDocument({ issuerCountry: 'RO', vatAmount: 0, vatRateBp: 0 });
     const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
     expect(roMentions({ document, lineItems, locale })).toEqual([
-      'Taxare inversă conform art. 307 alin. (2) din Codul fiscal',
+      'Taxare inversă – art. 196 din Directiva 2006/112/CE',
     ]);
+  });
+
+  it('does not duplicate the mention when the exemption ground already states it', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      vatAmount: 0,
+      vatRateBp: 0,
+      vatExemptionGround: 'Taxare inversă',
+    });
+    const lineItems = buildFakeMixedLineItems();
+    expect(roMentions({ document, lineItems, locale })).toEqual([]);
   });
 
   it('adds no mention for an exempt (E) or intra-community (K) line', () => {
     const document = buildFakeDocument({ issuerCountry: 'RO', vatAmount: 0, vatRateBp: 0 });
     const lineItems = buildFakeLineItems({ vatCategory: 'E', vatRateBp: 0 });
     expect(roMentions({ document, lineItems, locale })).toEqual([]);
+  });
+});
+
+describe('roMentions — TVA la încasare', () => {
+  it('adds the mention on an invoice when the issuer is on the cash VAT scheme', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+    });
+    const lineItems = buildFakeLineItems();
+    expect(roMentions({ document, lineItems, locale })).toEqual(['TVA la încasare']);
+  });
+
+  it('adds the mention on a debit note but not on a quote or delivery note', () => {
+    const lineItems = buildFakeLineItems();
+    const debitNote = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'DEBIT_NOTE',
+      issuerVatOnCashBasis: true,
+    });
+    expect(roMentions({ document: debitNote, lineItems, locale })).toEqual(['TVA la încasare']);
+
+    const quote = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'QUOTE',
+      issuerVatOnCashBasis: true,
+    });
+    expect(roMentions({ document: quote, lineItems, locale })).toEqual([]);
+  });
+
+  it('adds no mention when the issuer is not on the cash VAT scheme', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: false,
+    });
+    const lineItems = buildFakeLineItems();
+    expect(roMentions({ document, lineItems, locale })).toEqual([]);
+  });
+
+  it('adds no mention when a line is not taxable in Romania with VAT charged (art. 282 alin. (6))', () => {
+    for (const vatCategory of ['AE', 'E', 'O', 'K', 'G']) {
+      const document = buildFakeDocument({
+        issuerCountry: 'RO',
+        documentType: 'INVOICE',
+        issuerVatOnCashBasis: true,
+        vatAmount: 0,
+        vatRateBp: 0,
+      });
+      const lineItems = buildFakeLineItems({ vatCategory, vatRateBp: 0 });
+      expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+    }
+  });
+
+  it('adds no mention on a pure reverse-charge (AE) invoice', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+      vatAmount: 0,
+      vatRateBp: 0,
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+  });
+
+  it('adds no mention on a pure exempt (E) invoice', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+      vatAmount: 0,
+      vatRateBp: 0,
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'E', vatRateBp: 0 });
+    expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+  });
+
+  it('adds the mention on a mixed invoice with a reverse-charge line and a taxed RO line (art. 282 alin. (6))', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+    });
+    const lineItems = buildFakeMixedLineItems();
+    expect(roMentions({ document, lineItems, locale })).toContain('TVA la încasare');
+  });
+
+  it('keeps the mention on a mixed invoice that also carries an exemption ground (art. 282 alin. (6))', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+      vatExemptionGround: 'Taxare inversă',
+    });
+    const lineItems = buildFakeMixedLineItems();
+    expect(roMentions({ document, lineItems, locale })).toContain('TVA la încasare');
   });
 });

@@ -196,3 +196,37 @@ describe('decideLocaleRedirect — scope', () => {
     expect(decision.vary).toBe(true);
   });
 });
+
+describe('decideLocaleRedirect — removed locale (es)', () => {
+  it('redirects the old /es root to the default-locale root', () => {
+    const decision = decideLocaleRedirect(input({ pathname: '/es' }));
+    expect(decision.redirect).toEqual({ pathname: '/', search: '' });
+  });
+
+  it('redirects an old /es subpath to its base path, keeping the query string', () => {
+    const decision = decideLocaleRedirect(
+      input({ pathname: '/es/terms', searchParams: new URLSearchParams('ref=old') }),
+    );
+    expect(decision.redirect).toEqual({ pathname: '/terms', search: '?ref=old' });
+  });
+
+  it('never 404s or crashes: it always resolves to a redirect, not a pass-through', () => {
+    const decision = decideLocaleRedirect(
+      input({ pathname: '/es/guide/factura-obligatoria-espana' }),
+    );
+    expect(decision.redirect).toEqual({
+      pathname: '/guide/factura-obligatoria-espana',
+      search: '',
+    });
+  });
+
+  it('does not touch a path that merely starts with "es" in another word', () => {
+    const decision = decideLocaleRedirect(input({ pathname: '/estimate' }));
+    expect(decision.redirect).toBeNull();
+  });
+
+  it('does not affect the /en locale, which stays published', () => {
+    const decision = decideLocaleRedirect(input({ pathname: '/en/terms' }));
+    expect(decision.redirect).toBeNull();
+  });
+});

@@ -1,15 +1,23 @@
 import type { DocumentDto, IssueDocumentRequest } from '@fakturcho/shared-types';
-import { isIssuerProfileComplete } from '@fakturcho/shared-types';
+import { isIssuerProfileComplete, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { Injectable } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { CreditsService } from '../billing/credits.service';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { fromPrismaDocumentType } from '../numbering/document-type.mapper';
 import { NumberingService } from '../numbering/numbering.service';
-import { parseDateOnly, startOfTodayUtc } from './date.util';
+import { ExchangeRateService } from '../vat-eu/exchange-rate.service';
+import { addDaysUtc, parseDateOnly, startOfTodayUtc } from './date.util';
 import { toDocumentDto } from './document.mapper';
 import { DOCUMENT_INCLUDE } from './document-include';
+import { assertIssuable, issuedNumberPrefix } from './document-issuance.rules';
+import { resolveIssuanceLocalCurrencyVat } from './document-issuance-local-currency';
+import {
+  issuerSnapshotUpdateFields,
+  recipientSnapshotUpdateFields,
+} from './issuance-snapshot-fields';
 import { toIssuerProfileDto } from './issuer-profile.mapper';
 
 @Injectable()
@@ -18,6 +26,7 @@ export class DocumentIssuanceService {
     private readonly prisma: PrismaService,
     private readonly numberingService: NumberingService,
     private readonly creditsService: CreditsService,
+    private readonly exchangeRateService: ExchangeRateService = new ExchangeRateService(),
   ) {}
 
   async issue(
@@ -25,7 +34,10 @@ export class DocumentIssuanceService {
     documentId: string,
     request: IssueDocumentRequest,
   ): Promise<DocumentDto> {
-    const existing = await this.prisma.document.findFirst({ where: { id: documentId, accountId } });
+    const existing = await this.prisma.document.findFirst({
+      where: { id: documentId, accountId },
+      include: { lineItems: true },
+    });
     if (!existing) {
       throw new DomainError('NOT_FOUND', 'Document not found.');
     }
@@ -47,28 +59,49 @@ export class DocumentIssuanceService {
 
     const issuedAt = parseDateOnly(request.issuedAt) ?? startOfTodayUtc();
     const documentType = fromPrismaDocumentType(existing.documentType);
+    // BG ЗДДС чл. 114, ал. 1, т. 10 (and every other transposition of VAT
+    // Directive art. 226(7)) requires the tax-point date on a tax document; a
+    // blank one defaults to the issue date, so the PDF and every XML mapper
+    // agree instead of each falling back independently.
+    const taxEventAt = TAX_DOCUMENT_TYPES[documentType]
+      ? (existing.taxEventAt ?? issuedAt)
+      : existing.taxEventAt;
+    // Composer's structured payment-terms selector: dueAt is always the
+    // actual issue date plus the chosen day count, not whatever was on the
+    // draft when it was saved (issuance can happen long after).
+    const dueAt =
+      existing.paymentTermsDays != null
+        ? addDaysUtc(issuedAt, existing.paymentTermsDays)
+        : existing.dueAt;
 
-    if (documentType === 'delivery_note') {
-      // DPR 472/1996 art. 1: an Italian DDT is not valid without its causale del
-      // trasporto and the date/time transport started.
-      if (
-        issuerProfile?.country === 'IT' &&
-        (!existing.transportReason || !existing.transportedAt)
-      ) {
-        throw new DomainError(
-          'DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED',
-          'An Italian delivery note requires a transport reason and transport date/time before issuing.',
-        );
-      }
-      // OMFP 2634/2015, model 14-3-6A: an aviz de însoțire a mărfii is not valid
-      // without the carrier/delegate and the date the transport started.
-      if (issuerProfile?.country === 'RO' && (!existing.carrierName || !existing.transportedAt)) {
-        throw new DomainError(
-          'DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED',
-          'A Romanian delivery note requires a carrier/delegate and transport date/time before issuing.',
-        );
-      }
-    }
+    const country = issuerProfile?.country ?? null;
+    assertIssuable(existing, documentType, country, client);
+    const numberPrefix = issuedNumberPrefix(existing);
+
+    const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';
+    const originalDocument =
+      isCorrection && existing.originalDocumentId
+        ? await this.prisma.document.findFirst({
+            where: { id: existing.originalDocumentId, accountId },
+          })
+        : null;
+
+    const localCurrencyVat = await resolveIssuanceLocalCurrencyVat(
+      {
+        documentType,
+        issuerCountry: issuerProfile?.country ?? null,
+        currency: existing.currency,
+        vatAmount: existing.vatAmount,
+        taxEventAt,
+        issuedAt,
+        subtotal: existing.subtotal,
+        discountTotal: existing.discountTotal,
+        lineItems: existing.lineItems,
+        isCorrection,
+        originalDocument,
+      },
+      this.exchangeRateService,
+    );
 
     const record = await this.prisma.$transaction(
       async (tx) => {
@@ -84,38 +117,26 @@ export class DocumentIssuanceService {
           where: { id: documentId },
           data: {
             number,
+            numberPrefix,
             status: PrismaDocumentStatus.SENT,
             issuedAt,
-            issuerCompanyName: issuerProfile?.companyName ?? null,
-            issuerEik: issuerProfile?.eik ?? null,
-            issuerMol: issuerProfile?.mol ?? null,
-            issuerAddressLine: issuerProfile?.addressLine ?? null,
-            issuerStreet: issuerProfile?.street ?? null,
-            issuerPostcode: issuerProfile?.postcode ?? null,
-            issuerCountyRegion: issuerProfile?.countyRegion ?? null,
-            issuerCity: issuerProfile?.city ?? null,
-            issuerCountry: issuerProfile?.country ?? null,
-            issuerPhone: issuerProfile?.phone ?? null,
-            issuerVatRegistered: issuerProfile?.vatRegistered ?? false,
-            issuerVatNumber: issuerProfile?.vatNumber ?? null,
-            issuerBankName: issuerProfile?.bankName ?? null,
-            issuerIban: issuerProfile?.iban ?? null,
-            issuerBic: issuerProfile?.bic ?? null,
-            issuerAltIban: issuerProfile?.altIban ?? null,
+            taxEventAt,
+            dueAt,
+            localCurrency: localCurrencyVat?.localCurrency ?? null,
+            exchangeRate: localCurrencyVat?.exchangeRate ?? null,
+            exchangeRateDate: localCurrencyVat?.exchangeRateDate ?? null,
+            exchangeRateSource: localCurrencyVat?.exchangeRateSource ?? null,
+            exchangeRateTable: localCurrencyVat?.exchangeRateTable ?? null,
+            vatAmountLocal: localCurrencyVat?.vatAmountLocal ?? null,
+            ...(localCurrencyVat?.vatAmountLocalByRate
+              ? {
+                  vatAmountLocalByRate:
+                    localCurrencyVat.vatAmountLocalByRate as unknown as Prisma.InputJsonValue,
+                }
+              : {}),
+            ...issuerSnapshotUpdateFields(issuerProfile),
             ...(issuerProfile?.identifiers ? { issuerIdentifiers: issuerProfile.identifiers } : {}),
-            recipientCompanyName: client?.companyName ?? null,
-            recipientEik: client?.eik ?? null,
-            recipientVatNumber: client?.vatNumber ?? null,
-            recipientAddress: client?.address ?? null,
-            recipientStreet: client?.street ?? null,
-            recipientPostcode: client?.postcode ?? null,
-            recipientCountyRegion: client?.countyRegion ?? null,
-            recipientCity: client?.city ?? null,
-            recipientCountry: client?.country ?? null,
-            recipientEmail: client?.email ?? null,
-            recipientMol: client?.mol ?? null,
-            recipientSdiRecipientCode: client?.sdiRecipientCode ?? null,
-            recipientPec: client?.pec ?? null,
+            ...recipientSnapshotUpdateFields(client),
           },
           include: DOCUMENT_INCLUDE,
         });

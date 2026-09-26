@@ -1,4 +1,4 @@
-import { getCountryConfig } from '@fakturcho/shared-types';
+import { getCountryConfig, PAYMENT_TERMS_DAY_OPTIONS } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { resolveVatTreatment } from './vat-treatment';
 
@@ -73,9 +73,18 @@ describe('FR country config — exemption grounds', () => {
     expect(FR.exemptionGrounds).toEqual([
       'Exonération de TVA, article 262 ter I du CGI',
       'Exonération de TVA, article 262 I du CGI',
-      'Autoliquidation, article 283 du CGI',
+      'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE',
     ]);
     expect(FR.exemptionGrounds).not.toContain(FR.defaultExemptionGround);
+  });
+
+  it('prints every FR ground as a VAT note, without the exemption prefix', () => {
+    expect(FR.vatNoteGrounds).toEqual([
+      'Autoliquidation – TVA due par le preneur, art. 259-1 du CGI et art. 196 de la directive 2006/112/CE',
+      'TVA non applicable, art. 293 B du CGI',
+      'Exonération de TVA, article 262 ter I du CGI',
+      'Exonération de TVA, article 262 I du CGI',
+    ]);
   });
 
   it('has no exemption line for a VAT-registered issuer at the standard rate', () => {
@@ -86,6 +95,15 @@ describe('FR country config — exemption grounds', () => {
       issuerCountry: 'FR',
     });
     expect(treatment).toEqual({ vatCharged: true, vatRateBp: 2000, vatExemptionGround: null });
+  });
+});
+
+describe('FR country config — payment terms cap (C. com. art. L441-10 I)', () => {
+  it('caps the payment-terms selector at 60 days net from the invoice date', () => {
+    expect(FR.maxPaymentTermsDays).toBe(60);
+    expect(
+      PAYMENT_TERMS_DAY_OPTIONS.every((days) => days <= (FR.maxPaymentTermsDays as number)),
+    ).toBe(true);
   });
 });
 

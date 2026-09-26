@@ -2,7 +2,7 @@ import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
 import { formatDocumentNumber } from '@fakturcho/shared-types';
 import { beniServiziBlock } from './fatturapa-lines';
 import { cedentePrestatoreBlock, cessionarioCommittenteBlock } from './fatturapa-parties';
-import { dateOnly, el, toAmountString } from './xml';
+import { dateOnly, el, optionalEl, toAmountString } from './xml';
 
 type FatturaPaDocumentType = 'invoice' | 'credit_note' | 'debit_note';
 
@@ -75,6 +75,7 @@ function generalDataBlock(document: DocumentDto, kind: FatturaPaDocumentType): s
     el('Numero', idWithAffixes) +
     el('ImportoTotaleDocumento', toAmountString(document.amount)) +
     (document.notes ? el('Causale', document.notes) : '') +
+    (kind !== 'invoice' ? optionalEl('Causale', document.correctionReason) : '') +
     '</DatiGeneraliDocumento></DatiGenerali>'
   );
 }

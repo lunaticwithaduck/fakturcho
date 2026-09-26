@@ -29,6 +29,9 @@ export function percentBpToEditableValue(bp: number | null): string {
 export interface LiveLineInput {
   quantity: string;
   unitPrice: Cents;
+  // A line's own rate, when it differs from the document's vatRateBp (a
+  // reduced-rate override). Unset lines fall back to input.vatRateBp.
+  vatRateBp?: number | null;
 }
 
 export interface LiveDiscountInput {
@@ -50,19 +53,50 @@ export interface LiveTotals {
   amount: Cents;
 }
 
+interface RawLine {
+  lineTotal: Cents;
+  rateBp: number;
+}
+
+function distributeDiscount(lines: readonly RawLine[], discountTotal: Cents, subtotal: Cents) {
+  let allocated = 0;
+  let cumulativeExact = 0;
+  return lines.map((line, index) => {
+    cumulativeExact += (line.lineTotal * discountTotal) / subtotal;
+    const cumulativeRounded =
+      index === lines.length - 1 ? discountTotal : roundHalfUp(cumulativeExact, 0);
+    const lineDiscount = cumulativeRounded - allocated;
+    allocated = cumulativeRounded;
+    return { ...line, lineTotal: line.lineTotal - lineDiscount };
+  });
+}
+
 export function computeLiveTotals(input: LiveTotalsInput): LiveTotals {
-  const subtotal = input.lineItems.reduce(
-    (sum, line) => sum + computeLineTotal(line.quantity, line.unitPrice),
-    0,
-  );
+  const rawLines: RawLine[] = input.lineItems.map((line) => ({
+    lineTotal: computeLineTotal(line.quantity, line.unitPrice),
+    rateBp: input.vatCharged ? (line.vatRateBp ?? input.vatRateBp) : 0,
+  }));
+  const subtotal = rawLines.reduce((sum, line) => sum + line.lineTotal, 0);
   const discountTotal = input.discounts.reduce((sum, discount) => {
     if (discount.percentBp != null) {
       return sum + roundHalfUp((subtotal * discount.percentBp) / 10000, 0);
     }
     return sum + (discount.amount ?? 0);
   }, 0);
+  const discountedLines =
+    discountTotal === 0 || subtotal === 0
+      ? rawLines
+      : distributeDiscount(rawLines, discountTotal, subtotal);
+  const taxableByRate = new Map<number, Cents>();
+  for (const line of discountedLines) {
+    taxableByRate.set(line.rateBp, (taxableByRate.get(line.rateBp) ?? 0) + line.lineTotal);
+  }
+  const vatAmount = Array.from(taxableByRate.entries()).reduce(
+    (sum, [rateBp, taxableAmount]) =>
+      sum + (rateBp > 0 ? roundHalfUp((taxableAmount * rateBp) / 10000, 0) : 0),
+    0,
+  );
   const base = subtotal - discountTotal;
-  const vatAmount = input.vatCharged ? roundHalfUp((base * input.vatRateBp) / 10000, 0) : 0;
   return { subtotal, discountTotal, vatAmount, amount: base + vatAmount };
 }
 
@@ -81,9 +115,16 @@ export interface VatTreatment {
   groundSelectable: boolean;
 }
 
+// Mirrors server/src/documents/vat-treatment.ts: a proforma or quote from a
+// VAT-registered issuer computes VAT like an invoice (SPEC §5 forbids only
+// the exemption line and "(Original)"), with no ground selector since the
+// ground is a tax-document concept.
+const VAT_ESTIMATE_DOCUMENT_TYPES: readonly DocumentType[] = ['proforma', 'quote'];
+
 export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
   const isTaxDocument = TAX_DOCUMENT_TYPES[input.documentType];
-  if (!isTaxDocument) {
+  const isVatEstimate = VAT_ESTIMATE_DOCUMENT_TYPES.includes(input.documentType);
+  if (!isTaxDocument && !isVatEstimate) {
     return { isTaxDocument, vatCharged: false, vatRateBp: 0, groundSelectable: false };
   }
   if (!input.vatRegistered) {
@@ -91,10 +132,10 @@ export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
       isTaxDocument,
       vatCharged: false,
       vatRateBp: 0,
-      groundSelectable: input.groundRequired,
+      groundSelectable: isTaxDocument && input.groundRequired,
     };
   }
-  if (input.chargeVat) {
+  if (isVatEstimate || input.chargeVat) {
     return {
       isTaxDocument,
       vatCharged: true,

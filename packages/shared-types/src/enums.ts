@@ -41,7 +41,7 @@ export const DOCUMENT_TYPE_LABELS_FR: Record<DocumentType, string> = {
   invoice: 'Facture',
   proforma: 'Facture pro forma',
   credit_note: 'Avoir',
-  debit_note: 'Note de débit',
+  debit_note: 'Facture rectificative',
   quote: 'Devis',
   delivery_note: 'Bon de livraison',
 };
@@ -68,22 +68,15 @@ export const DOCUMENT_TYPE_LABELS_PL: Record<DocumentType, string> = {
   delivery_note: 'Dowód dostawy',
 };
 
+// Both corrections print as a named "factură" on the document (Codul fiscal
+// art. 330 has no separate "notă de credit"/"notă de debit" document type).
 export const DOCUMENT_TYPE_LABELS_RO: Record<DocumentType, string> = {
   invoice: 'Factură',
   proforma: 'Factură proformă',
-  credit_note: 'Notă de credit',
-  debit_note: 'Notă de debit',
+  credit_note: 'Factură de stornare',
+  debit_note: 'Factură de corecție',
   quote: 'Ofertă',
   delivery_note: 'Aviz de însoțire a mărfii',
-};
-
-export const DOCUMENT_TYPE_LABELS_ES: Record<DocumentType, string> = {
-  invoice: 'Factura',
-  proforma: 'Factura proforma',
-  credit_note: 'Factura rectificativa (abono)',
-  debit_note: 'Factura rectificativa (cargo)',
-  quote: 'Presupuesto',
-  delivery_note: 'Albarán',
 };
 
 const DOCUMENT_TYPE_LABELS_BY_LANGUAGE: Record<DocumentLanguage, Record<DocumentType, string>> = {
@@ -94,7 +87,6 @@ const DOCUMENT_TYPE_LABELS_BY_LANGUAGE: Record<DocumentLanguage, Record<Document
   it: DOCUMENT_TYPE_LABELS_IT,
   pl: DOCUMENT_TYPE_LABELS_PL,
   ro: DOCUMENT_TYPE_LABELS_RO,
-  es: DOCUMENT_TYPE_LABELS_ES,
 };
 
 // Kept in lockstep with server/src/render/templates/classic/labels/<lang>.ts
@@ -113,6 +105,11 @@ export const TAX_DOCUMENT_TYPES: Record<DocumentType, boolean> = {
 };
 
 export const CORRECTION_DOCUMENT_TYPES: readonly DocumentType[] = ['credit_note', 'debit_note'];
+
+// BG ЗДДС чл. 115, ал. 4, т. 2; IE VAT Regulations 2010 Reg. 20: these issuer
+// countries require a stated reason before a credit or debit note can be
+// issued.
+export const CORRECTION_REASON_REQUIRED_COUNTRIES: readonly string[] = ['BG', 'IE'];
 
 export const STORED_DOCUMENT_STATUSES = ['draft', 'sent', 'paid', 'cancelled'] as const;
 export type StoredDocumentStatus = (typeof STORED_DOCUMENT_STATUSES)[number];
@@ -176,14 +173,6 @@ export const DOCUMENT_STATUS_LABELS_RO: Record<DocumentStatus, string> = {
   cancelled: 'ANULATĂ',
 };
 
-export const DOCUMENT_STATUS_LABELS_ES: Record<DocumentStatus, string> = {
-  draft: 'Borrador',
-  sent: 'Emitida',
-  paid: 'PAGADA',
-  overdue: 'VENCIDA',
-  cancelled: 'ANULADA',
-};
-
 const DOCUMENT_STATUS_LABELS_BY_LOCALE: Record<Locale, Record<DocumentStatus, string>> = {
   bg: DOCUMENT_STATUS_LABELS,
   en: DOCUMENT_STATUS_LABELS_EN,
@@ -192,20 +181,18 @@ const DOCUMENT_STATUS_LABELS_BY_LOCALE: Record<Locale, Record<DocumentStatus, st
   it: DOCUMENT_STATUS_LABELS_IT,
   pl: DOCUMENT_STATUS_LABELS_PL,
   ro: DOCUMENT_STATUS_LABELS_RO,
-  es: DOCUMENT_STATUS_LABELS_ES,
 };
 
 // The maps above agree with the feminine document nouns (Rechnung, facture,
-// fattura, faktura, factură, factura are all feminine) except German, whose
-// predicate adjectives don't inflect for gender. "un devis" (FR), "un
-// preventivo" (IT) and "el presupuesto" (ES) are masculine, and FR's "un
-// avoir" (credit_note) is too. The delivery note is masculine in FR, IT, ES and
-// PL, and RO's neuter "aviz" takes the masculine singular form — these override
-// maps supply that form when a documentType is given.
+// fattura, faktura, factură are all feminine) except German, whose predicate
+// adjectives don't inflect for gender. "un devis" (FR) and "un preventivo"
+// (IT) are masculine, and FR's "un avoir" (credit_note) is too. The delivery
+// note is masculine in FR, IT and PL, and RO's neuter "aviz" takes the
+// masculine singular form — these override maps supply that form when a
+// documentType is given.
 const MASCULINE_DOCUMENT_TYPES_BY_LOCALE: Partial<Record<Locale, ReadonlySet<DocumentType>>> = {
   fr: new Set(['credit_note', 'quote', 'delivery_note']),
   it: new Set(['quote', 'delivery_note']),
-  es: new Set(['quote', 'delivery_note']),
   pl: new Set(['delivery_note']),
   ro: new Set(['delivery_note']),
 };
@@ -221,13 +208,6 @@ const DOCUMENT_STATUS_LABELS_IT_MASCULINE: Partial<Record<DocumentStatus, string
   paid: 'PAGATO',
   overdue: 'SCADUTO',
   cancelled: 'ANNULLATO',
-};
-
-const DOCUMENT_STATUS_LABELS_ES_MASCULINE: Partial<Record<DocumentStatus, string>> = {
-  sent: 'Emitido',
-  paid: 'PAGADO',
-  overdue: 'VENCIDO',
-  cancelled: 'ANULADO',
 };
 
 const DOCUMENT_STATUS_LABELS_PL_MASCULINE: Partial<Record<DocumentStatus, string>> = {
@@ -248,7 +228,6 @@ const MASCULINE_STATUS_LABELS_BY_LOCALE: Partial<
 > = {
   fr: DOCUMENT_STATUS_LABELS_FR_MASCULINE,
   it: DOCUMENT_STATUS_LABELS_IT_MASCULINE,
-  es: DOCUMENT_STATUS_LABELS_ES_MASCULINE,
   pl: DOCUMENT_STATUS_LABELS_PL_MASCULINE,
   ro: DOCUMENT_STATUS_LABELS_RO_MASCULINE,
 };

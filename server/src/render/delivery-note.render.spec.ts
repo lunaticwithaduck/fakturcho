@@ -41,7 +41,6 @@ describe('delivery_note rendering', () => {
     { language: 'it', issuerCountry: 'IT', label: 'Documento di trasporto (DDT)' },
     { language: 'pl', issuerCountry: 'PL', label: 'Dowód dostawy' },
     { language: 'ro', issuerCountry: 'RO', label: 'Aviz de însoțire a mărfii' },
-    { language: 'es', issuerCountry: 'ES', label: 'Albarán' },
   ];
 
   for (const { language, issuerCountry, label } of cases) {
@@ -97,8 +96,8 @@ describe('delivery_note rendering', () => {
     const { buffer } = await service.renderPdf(document.id, accountId);
     const text = await extractPdfText(buffer);
     expect(text).toContain('Дата на доставка');
-    expect(text).toContain('Цена');
-    expect(text).toContain('Общо:');
+    expect(text).toContain('Ед. цена без ДДС');
+    expect(text).toContain('Обща стойност:');
     expect(text).not.toContain('Данъчно събитие');
   });
 

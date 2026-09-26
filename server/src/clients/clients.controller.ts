@@ -1,5 +1,5 @@
 import type { ClientDto } from '@fakturcho/shared-types';
-import { DOCUMENT_LANGUAGES } from '@fakturcho/shared-types';
+import { CLIENT_TYPES, DOCUMENT_LANGUAGES } from '@fakturcho/shared-types';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
@@ -35,6 +35,7 @@ const baseClientSchema = z.object({
   peppolScheme: peppolSchemeSchema.nullable().optional(),
   sdiRecipientCode: sdiRecipientCodeSchema.nullable().optional(),
   pec: pecSchema.nullable().optional(),
+  clientType: z.enum(CLIENT_TYPES).nullable().optional(),
 });
 
 export const createClientSchema = withCountryFieldPatterns(baseClientSchema, 'BG');

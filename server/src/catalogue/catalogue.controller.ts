@@ -1,4 +1,5 @@
 import type { CatalogueItemDto } from '@fakturcho/shared-types';
+import { UNIT_CODES } from '@fakturcho/shared-types';
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { z } from 'zod';
 import { AccountId } from '../common/account-id.decorator';
@@ -10,6 +11,7 @@ const createCatalogueItemSchema = z.object({
   name: z.string().min(1),
   defaultUnitPrice: z.number().int(),
   unit: z.string().min(1),
+  unitCode: z.enum(UNIT_CODES).nullish(),
 });
 
 const updateCatalogueItemSchema = createCatalogueItemSchema.partial();

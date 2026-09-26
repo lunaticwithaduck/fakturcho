@@ -508,7 +508,7 @@
                 "bold": true
               },
               {
-                "text": ": Factură, Factură proformă, Notă de credit, Notă de debit, Ofertă sau Aviz de însoțire a mărfii."
+                "text": ": Factură, Factură proformă, Factură de stornare, Factură de corecție, Ofertă sau Aviz de însoțire a mărfii."
               }
             ],
             [
@@ -516,14 +516,14 @@
                 "text": "Pentru o "
               },
               {
-                "text": "Notă de credit",
+                "text": "Factură de stornare",
                 "bold": true
               },
               {
                 "text": " sau o "
               },
               {
-                "text": "Notă de debit",
+                "text": "Factură de corecție",
                 "bold": true
               },
               {
@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": " pentru a obține fișierul de e-factură structurat: formatul propriu al țării dumneavoastră — XRechnung (Germania), UBL (Franța), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (România), Facturae (Spania) — sau, pentru un emitent din Bulgaria și pentru orice altă țară fără format dedicat, un fișier generic EN 16931 UBL. Fakturcho doar generează fișierul; îl descărcați și îl încărcați dumneavoastră pe platforma națională — nu transmite niciodată nimic în numele dumneavoastră. Avizele de însoțire a mărfii nu primesc niciodată unul. Dacă lipsesc date necesare formatului (de exemplu codul de TVA al cumpărătorului pentru taxare inversă, codul de unitate al unei linii, IBAN-ul dumneavoastră), un mesaj sub buton listează exact ce lipsește."
+                "text": " pentru a obține fișierul de e-factură structurat: formatul propriu al țării dumneavoastră — XRechnung (Germania), UBL (Franța), FatturaPA (Italia), FA(3) (Polonia), CIUS-RO (România) — sau, pentru un emitent din Bulgaria și pentru orice altă țară fără format dedicat, un fișier generic EN 16931 UBL. Fakturcho doar generează fișierul; îl descărcați și îl încărcați dumneavoastră pe platforma națională — nu transmite niciodată nimic în numele dumneavoastră. Avizele de însoțire a mărfii nu primesc niciodată unul. Dacă lipsesc date necesare formatului (de exemplu codul de TVA al cumpărătorului pentru taxare inversă, codul de unitate al unei linii, IBAN-ul dumneavoastră), un mesaj sub buton listează exact ce lipsește."
               }
             ],
             [
@@ -869,14 +869,14 @@
                 "text": ", alegeți "
               },
               {
-                "text": "Notă de credit",
+                "text": "Factură de stornare",
                 "bold": true
               },
               {
                 "text": " sau "
               },
               {
-                "text": "Notă de debit",
+                "text": "Factură de corecție",
                 "bold": true
               },
               {
@@ -1085,14 +1085,14 @@
           "text": "Nu puteți edita un document emis. Creați o "
         },
         {
-          "text": "Notă de credit",
+          "text": "Factură de stornare",
           "bold": true
         },
         {
           "text": " sau o "
         },
         {
-          "text": "Notă de debit",
+          "text": "Factură de corecție",
           "bold": true
         },
         {
@@ -1125,7 +1125,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho doar generează fișierul — îl încărcați dumneavoastră pe platforma țării dumneavoastră. Disponibil pentru facturi, note de credit și de debit: Germania, Franța, Italia, Polonia, România și Spania primesc formatul lor național; Bulgaria și orice altă țară primesc un fișier generic EN 16931 UBL."
+          "text": ". Fakturcho doar generează fișierul — îl încărcați dumneavoastră pe platforma țării dumneavoastră. Disponibil pentru facturi, note de credit și de debit: Germania, Franța, Italia, Polonia și România primesc formatul lor național; Bulgaria și orice altă țară primesc un fișier generic EN 16931 UBL."
         }
       ]
     },
