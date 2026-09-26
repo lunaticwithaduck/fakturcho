@@ -93,6 +93,8 @@ export class DocumentsService {
             : getCountryConfig(issuerCountry, issuerIdentifiers, {
                 country: client?.country ?? null,
                 postcode: client?.postcode ?? null,
+                clientType: (client?.clientType as 'business' | 'consumer' | null) ?? null,
+                eik: client?.eik ?? null,
               }).defaultVatRateBp;
 
       return { ...line, vatCategory, vatRateBp };

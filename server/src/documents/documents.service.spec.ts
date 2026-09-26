@@ -462,7 +462,11 @@ describe('DocumentsService', () => {
       vatRegistered: true,
       identifiers: { jungholzMittelbergRate: 'true' },
     });
-    const client = await createTestClient(prisma, accountId, { country: 'AT', postcode: '1060' });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      postcode: '1060',
+      clientType: 'business',
+    });
 
     const draft = await documentsService.saveDraft(
       accountId,

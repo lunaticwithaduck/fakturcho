@@ -1,7 +1,7 @@
 import { type DocumentType, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
-import { line } from './html-utils';
+import { escapeHtml, line } from './html-utils';
 import type { ClassicLabels } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
@@ -73,18 +73,12 @@ export function buildDatesBlock(
     // mentions/fr.ts, so it is skipped here to avoid printing it twice.
     const dueAt = document.dueAt;
     const dueDateApplicable = documentType !== 'credit_note' && locale.issuerCountry !== 'FR';
-    if (
-      dueAt &&
-      dueDateApplicable &&
-      locale.issuerCountry === 'PL' &&
-      document.paymentTermsDays != null
-    ) {
-      // Polish practice merges the due date and the day count into one line
+    if (dueAt && dueDateApplicable && locale.issuerCountry === 'PL') {
+      // Polish practice merges the due date and the agreed terms into one line
       // rather than printing them as two separate rows.
       const dueDate = formatDateForLocale(dueAt, locale.language);
-      rows.push(
-        `<div>${labels.paymentTermsPrefix}${dueDate} (${labels.paymentTermsDaysText(document.paymentTermsDays)})</div>`,
-      );
+      const terms = paymentTerms ? ` (${escapeHtml(paymentTerms)})` : '';
+      rows.push(`<div>${labels.paymentTermsPrefix}${dueDate}${terms}</div>`);
     } else {
       rows.push(line(labels.paymentTermsPrefix, paymentTerms));
       if (dueAt && dueDateApplicable && labels.dueDatePrefix) {

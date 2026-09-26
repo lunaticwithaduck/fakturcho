@@ -95,7 +95,12 @@ export const ro: ClassicLabels = {
   paymentTermsPrefix: 'Termen de plată: ',
   correctionKsefNumberPrefix: 'Numărul KSeF al facturii corectate: ',
   transportVehiclePrefix: 'Mijloc de transport nr.: ',
-  paymentTermsDaysText: (days) => (days === 0 ? 'la primire' : `${days} zile`),
+  paymentTermsDaysText: (days) =>
+    days === 0
+      ? 'la primire'
+      : days % 100 >= 20 || days % 100 === 0
+        ? `${days} de zile`
+        : `${days} zile`,
   companyRegisterLabel: 'Înregistrare în registru',
   dueDatePrefix: 'Data scadenței: ',
 };

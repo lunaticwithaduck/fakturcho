@@ -43,7 +43,13 @@ export function DocumentComposerForm({
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
-  const initialCountryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers);
+  const initialClient = clients.find((client) => client.id === existing?.clientId) ?? null;
+  const initialCountryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers, {
+    country: initialClient?.country ?? null,
+    postcode: initialClient?.postcode ?? null,
+    clientType: initialClient?.clientType ?? null,
+    eik: initialClient?.eik ?? null,
+  });
   const controller = useComposerState(
     existing,
     initialCountryConfig.timeZone,
@@ -58,6 +64,8 @@ export function DocumentComposerForm({
   const countryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers, {
     country: selectedClient?.country ?? null,
     postcode: selectedClient?.postcode ?? null,
+    clientType: selectedClient?.clientType ?? null,
+    eik: selectedClient?.eik ?? null,
   });
   const vat = resolveVatTreatment({
     documentType: state.documentType,

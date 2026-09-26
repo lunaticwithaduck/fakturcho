@@ -233,6 +233,36 @@ describe('due date (dueAt) on the header dates block', () => {
     expect(html).toContain('Termin płatności: 10.10.2026 (14 dni)');
   });
 
+  it('RO uses "de" before zile from twenty days up', () => {
+    const labels = resolveClassicLocale('ro', 'RO').labels;
+    expect(labels.paymentTermsDaysText(14)).toBe('14 zile');
+    expect(labels.paymentTermsDaysText(30)).toBe('30 de zile');
+    expect(labels.paymentTermsDaysText(60)).toBe('60 de zile');
+  });
+
+  it('PL prints a custom due date without a day count', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const document = buildFakeDocument({
+      dueAt: new Date('2026-10-10'),
+      paymentTermsDays: null,
+      paymentTermsNote: null,
+    });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Termin płatności: 10.10.2026');
+    expect(html).not.toContain('10.10.2026 (');
+  });
+
+  it('PL keeps a free-text payment note next to a custom due date', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const document = buildFakeDocument({
+      dueAt: new Date('2026-10-10'),
+      paymentTermsDays: null,
+      paymentTermsNote: 'przelew',
+    });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Termin płatności: 10.10.2026 (przelew)');
+  });
+
   it('FR does not print a due-date row here (mentions/fr.ts already states it)', () => {
     const locale = resolveClassicLocale('fr', 'FR');
     const document = buildFakeDocument({ dueAt: new Date('2026-10-10'), paymentTermsDays: 14 });

@@ -76,6 +76,8 @@ export function isAtJungholzMittelbergPostcode(postcode: string | null | undefin
 export interface AtRecipientLocation {
   country: string | null;
   postcode?: string | null;
+  clientType?: 'business' | 'consumer' | null;
+  eik?: string | null;
 }
 
 // jusline.at / RIS NOR40278068, verified 26.09.2026: Abs. 4's 19% rate
@@ -85,9 +87,14 @@ export interface AtRecipientLocation {
 // Betriebsstätte of an entrepreneur elsewhere in Austria — both keyed on the
 // RECIPIENT's own seat, not the supplier's (that stays Jungholz/Mittelberg
 // throughout, see the flag above).
+// Only a business recipient's Betriebsstätte elsewhere in Austria is excluded;
+// a consumer there still gets 19% (vehicles aside, which the line rate
+// covers). An unset client type falls back to "has a company number".
 function isAtRecipientOutsideJungholzMittelberg(recipient?: AtRecipientLocation | null): boolean {
   if (recipient?.country !== 'AT') return false;
-  return !isAtJungholzMittelbergPostcode(recipient.postcode);
+  if (isAtJungholzMittelbergPostcode(recipient.postcode)) return false;
+  if (recipient.clientType === 'consumer') return false;
+  return recipient.clientType === 'business' || Boolean(recipient.eik?.trim());
 }
 
 const AT_BASE_VAT_RATES = [

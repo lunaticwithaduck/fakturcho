@@ -136,10 +136,34 @@ describe('AT country config — § 10 Abs. 4 UStG 1994 Jungholz/Mittelberg 19% r
     const config = getCountryConfig(
       'AT',
       { jungholzMittelbergRate: 'true' },
-      { country: 'AT', postcode: '1060' },
+      { country: 'AT', postcode: '1060', clientType: 'business' },
     );
     expect(config.defaultVatRateBp).toBe(2000);
     expect(config.vatRates.some((rate) => rate.rateBp === 1900)).toBe(true);
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: keeps 19% for a consumer elsewhere in Austria', () => {
+    const config = getCountryConfig(
+      'AT',
+      { jungholzMittelbergRate: 'true' },
+      { country: 'AT', postcode: '1060', clientType: 'consumer', eik: 'FN 123456a' },
+    );
+    expect(config.defaultVatRateBp).toBe(1900);
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: an unset client type counts as a business only with a company number', () => {
+    const withEik = getCountryConfig(
+      'AT',
+      { jungholzMittelbergRate: 'true' },
+      { country: 'AT', postcode: '1060', clientType: null, eik: 'FN 123456a' },
+    );
+    expect(withEik.defaultVatRateBp).toBe(2000);
+    const withoutEik = getCountryConfig(
+      'AT',
+      { jungholzMittelbergRate: 'true' },
+      { country: 'AT', postcode: '1060', clientType: null, eik: null },
+    );
+    expect(withoutEik.defaultVatRateBp).toBe(1900);
   });
 
   it('§ 10 Abs. 4 UStG 1994: keeps 19% as the default for a recipient inside either Jungholz/Mittelberg postcode', () => {
@@ -165,11 +189,11 @@ describe('AT country config — § 10 Abs. 4 UStG 1994 Jungholz/Mittelberg 19% r
     expect(foreignRecipient.defaultVatRateBp).toBe(1900);
   });
 
-  it('§ 10 Abs. 4 UStG 1994: defaults to 20% for a domestic recipient with no postcode on file', () => {
+  it('§ 10 Abs. 4 UStG 1994: defaults to 20% for a domestic business recipient with no postcode on file', () => {
     const config = getCountryConfig(
       'AT',
       { jungholzMittelbergRate: 'true' },
-      { country: 'AT', postcode: null },
+      { country: 'AT', postcode: null, clientType: 'business' },
     );
     expect(config.defaultVatRateBp).toBe(2000);
   });
