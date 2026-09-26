@@ -626,7 +626,9 @@
       "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Există deja un cont cu acest email.",
       "PASSWORD_TOO_SHORT": "Parola este prea scurtă.",
       "PASSWORD_TOO_LONG": "Parola este prea lungă.",
-      "generic": "A apărut o eroare. Încercați din nou."
+      "generic": "A apărut o eroare. Încercați din nou.",
+      "INVALID_PASSWORD": "Parola actuală este incorectă.",
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Acest cont nu are o parolă de schimbat."
     },
     "countries": {
       "BG": "Bulgaria",
@@ -1021,5 +1023,19 @@
     "title": "Pagina nu a fost găsită",
     "description": "Pagina pe care o căutați nu există sau a fost mutată.",
     "link": "Către Fakturcho"
+  },
+  "account": {
+    "changePassword": {
+      "heading": "Schimbă parola",
+      "currentPasswordLabel": "Parola curentă",
+      "newPasswordLabel": "Parolă nouă",
+      "confirmPasswordLabel": "Confirmă parola nouă",
+      "revokeOtherSessions": "Deconectează celelalte dispozitive",
+      "tooShort": "Parola trebuie să aibă cel puțin 8 caractere.",
+      "mismatch": "Parolele nu coincid.",
+      "saving": "Se salvează...",
+      "save": "Salvează parola",
+      "savedToast": "Parola a fost schimbată"
+    }
   }
 }
