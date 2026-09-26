@@ -1,4 +1,4 @@
-import type { DocumentDto, DocumentType } from '@fakturcho/shared-types';
+import type { DocumentDto, DocumentType, LineItemDto } from '@fakturcho/shared-types';
 import { formatDocumentNumber, roundHalfUp } from '@fakturcho/shared-types';
 import { discountAdjustedLines } from '../../einvoice/discount';
 import { lineBlock } from './fa3-lines';
@@ -44,30 +44,30 @@ function headerBlock(generatedAt: string): string {
 // converted to PLN (P_14_xW), using the same exchange-rate snapshot already
 // resolved for the PDF's local-currency VAT line — never a freshly fetched
 // rate.
-function amountsBlock(document: DocumentDto): string {
-  const lines = discountAdjustedLines(
-    document.lineItems,
-    document.subtotal,
-    document.discountTotal,
-  );
+//
+// Every bucket is summed and rounded from positive line amounts (fa3-vat-
+// groups.ts / computeVatSubtotals), then the sign is applied last, so a
+// credit note's negative figures round to the same absolute value as the
+// PDF (line-items.ts / totals-block.ts `sign`).
+function amountsBlock(document: DocumentDto, lines: readonly LineItemDto[], sign: 1 | -1): string {
   const buckets = groupFa3VatBuckets(lines);
   const localRate = document.exchangeRate ? Number(document.exchangeRate) : null;
   const amountTags = buckets
     .map((bucket) => {
-      const net = textEl(bucket.netTag, toDecimalString(bucket.taxableAmount));
+      const net = textEl(bucket.netTag, toDecimalString(bucket.taxableAmount * sign));
       if (!bucket.vatTag) return net;
-      const vat = textEl(bucket.vatTag, toDecimalString(bucket.vatAmount));
+      const vat = textEl(bucket.vatTag, toDecimalString(bucket.vatAmount * sign));
       const vatLocal =
         localRate !== null
           ? textEl(
               `${bucket.vatTag}W`,
-              toDecimalString(roundHalfUp(bucket.vatAmount * localRate, 0)),
+              toDecimalString(roundHalfUp(bucket.vatAmount * localRate, 0) * sign),
             )
           : '';
       return net + vat + vatLocal;
     })
     .join('');
-  return amountTags + textEl('P_15', toDecimalString(document.amount));
+  return amountTags + textEl('P_15', toDecimalString(document.amount * sign));
 }
 
 // DaneFaKorygowanej is required for RodzajFaktury=KOR (art. 106j ustawy o VAT):
@@ -127,6 +127,11 @@ function annotationsBlock(document: DocumentDto): string {
 
 export function toFa3Xml(document: DocumentDto): string {
   const kind = assertFa3Eligible(document.documentType);
+  // art. 106j ust. 2 pkt 5 ustawy / broszura FA(3) "kwota różnicy": a credit
+  // note carries the difference with a minus sign so the XML's absolute
+  // values match the PDF (line-items.ts / totals-block.ts `sign`); a debit
+  // note (correction in plus) stays positive.
+  const sign: 1 | -1 = kind === 'credit_note' ? -1 : 1;
   const documentNumber = document.number !== null ? formatDocumentNumber(document.number) : '';
   const idWithAffixes = `${document.numberPrefix ?? ''}${documentNumber}${document.numberSuffix ?? ''}`;
   const generatedAt = `${document.issuedAt ? dateOnly(document.issuedAt) : dateOnly(document.createdAt)}T00:00:00Z`;
@@ -134,6 +139,18 @@ export function toFa3Xml(document: DocumentDto): string {
   const saleDate = document.taxEventAt ?? document.deliveryDate;
   const saleDateOnly = saleDate ? dateOnly(saleDate) : null;
   const issueDateOnly = document.issuedAt ? dateOnly(document.issuedAt) : null;
+  const discountedLines = discountAdjustedLines(
+    document.lineItems,
+    document.subtotal,
+    document.discountTotal,
+  );
+  // Broszura FA(3): "podaje się kurs waluty właściwy dla danego wiersza" —
+  // the document only ever resolves one snapshot rate (the same one the
+  // PDF's local-currency VAT line prints), so every line carries it.
+  const kursWaluty = document.exchangeRate ?? null;
+  const hasWdtOrArt100Services = document.lineItems.some(
+    (line) => line.vatCategory === 'K' || line.vatCategory === 'AE',
+  );
 
   const faBody =
     textEl('KodWaluty', document.currency) +
@@ -142,7 +159,7 @@ export function toFa3Xml(document: DocumentDto): string {
     // XSD/broszura P_6: "o ile taka data jest określona i różni się od daty
     // wystawienia faktury" — only filled when it differs from P_1.
     (saleDateOnly && saleDateOnly !== issueDateOnly ? textEl('P_6', saleDateOnly) : '') +
-    amountsBlock(document) +
+    amountsBlock(document, discountedLines, sign) +
     annotationsBlock(document) +
     textEl('RodzajFaktury', RODZAJ_FAKTURY[kind]) +
     // XSD: PrzyczynaKorekty is a direct child of Fa, right after
@@ -150,13 +167,17 @@ export function toFa3Xml(document: DocumentDto): string {
     // inside DaneFaKorygowanej.
     (kind === 'invoice' ? '' : optionalTextEl('PrzyczynaKorekty', document.correctionReason)) +
     (kind === 'invoice' ? '' : correctionBlock(document)) +
-    document.lineItems.map((line, index) => lineBlock(line, index)).join('');
+    document.lineItems
+      .map((line, index) =>
+        lineBlock(line, discountedLines[index] ?? line, index, sign, kursWaluty),
+      )
+      .join('');
 
   return (
     '<?xml version="1.0" encoding="UTF-8"?>' +
     `<Faktura xmlns="${FA3_NAMESPACE}">` +
     headerBlock(generatedAt) +
-    sellerParty(document.issuer) +
+    sellerParty(document.issuer, hasWdtOrArt100Services) +
     buyerParty(document.recipient) +
     `<Fa>${faBody}</Fa>` +
     '</Faktura>'

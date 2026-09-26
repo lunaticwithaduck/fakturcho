@@ -17,13 +17,16 @@ function addressBlock(
   );
 }
 
-export function sellerParty(issuer: IssuerSnapshotDto): string {
+export function sellerParty(issuer: IssuerSnapshotDto, hasWdtOrArt100Services: boolean): string {
   const rawNip = issuer.eik ?? issuer.vatNumber;
   const nip = rawNip ? normalizeNip(rawNip) : '';
   const cityLine = [issuer.postcode, issuer.city].filter(Boolean).join(' ') || null;
-  // XSD: PrefiksPodatnika is reserved for VAT-UE-registered taxpayers (art.
-  // 97 ust. 10 pkt 2 i 3 ustawy) — not every issuer.
-  const prefiks = issuer.vatRegistered ? '<PrefiksPodatnika>PL</PrefiksPodatnika>' : '';
+  // Broszura FA(3), tabela 4: PrefiksPodatnika is filled only for a WDT (art.
+  // 97 ust. 10 pkt 2 i 3 ustawy), an art. 100 ust. 1 pkt 4 service, or a
+  // simplified triangulation delivery (art. 136 ust. 1 pkt 3) — not every
+  // VAT-registered issuer.
+  const prefiks =
+    hasWdtOrArt100Services && issuer.vatRegistered ? '<PrefiksPodatnika>PL</PrefiksPodatnika>' : '';
   return (
     '<Podmiot1>' +
     prefiks +

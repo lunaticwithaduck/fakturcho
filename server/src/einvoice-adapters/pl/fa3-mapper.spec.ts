@@ -60,6 +60,20 @@ describe('toFa3Xml — PL domestic, standard 23% rate', () => {
     expect(xml).toContain('<P_12>23</P_12>');
   });
 
+  it('carries P_8A as the Polish unit label the PDF prints, not the UN/ECE code', () => {
+    expect(xml).toContain('<P_8A>godz.</P_8A>');
+    expect(xml).not.toContain('<P_8A>HUR</P_8A>');
+  });
+
+  it('omits P_8A when the line has no unit, instead of inventing one', () => {
+    const noUnit: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      lineItems: [{ ...baseLineItem, unitCode: null }],
+    };
+    const xmlNoUnit = toFa3Xml(noUnit);
+    expect(xmlNoUnit).not.toContain('P_8A');
+  });
+
   it('carries the net and VAT amounts in the P_13_1/P_14_1 bucket', () => {
     expect(xml).toContain('<P_13_1>1000.00</P_13_1>');
     expect(xml).toContain('<P_14_1>230.00</P_14_1>');
@@ -135,6 +149,19 @@ describe('toFa3Xml — credit note type', () => {
     expect(() => toFa3Xml(unresolved)).toThrow();
   });
 
+  it('negates the P_13_x/P_14_x buckets and P_15, matching the PDF (art. 106j ust. 2 pkt 5 — kwota różnicy)', () => {
+    expect(xml).toContain('<P_13_1>-1000.00</P_13_1>');
+    expect(xml).toContain('<P_14_1>-230.00</P_14_1>');
+    expect(xml).toContain('<P_15>-1230.00</P_15>');
+  });
+
+  it('negates the line P_8B (quantity) and P_11 (net value), per the broszura KOR "Metoda pierwsza"', () => {
+    expect(xml).toContain('<P_8B>-5</P_8B>');
+    expect(xml).toContain('<P_11>-1000.00</P_11>');
+    // P_9A (unit price) is never negated — only the quantity and the totals are.
+    expect(xml).toContain('<P_9A>200.00</P_9A>');
+  });
+
   it('carries PrzyczynaKorekty as a direct child of Fa, after RodzajFaktury and before DaneFaKorygowanej, when a correction reason is set', () => {
     const withReason: DocumentDto = { ...creditNote, correctionReason: 'Zwrot towaru' };
     const xmlWithReason = toFa3Xml(withReason);
@@ -180,6 +207,14 @@ describe('toFa3Xml — debit note type', () => {
         '</DaneFaKorygowanej>',
     );
     expect(xml).not.toContain('NrKSeFFaKorygowanej');
+  });
+
+  it('keeps P_13_x/P_14_x/P_15 and the line P_8B/P_11 positive — only a credit note carries a minus sign', () => {
+    expect(xml).toContain('<P_13_1>1000.00</P_13_1>');
+    expect(xml).toContain('<P_14_1>230.00</P_14_1>');
+    expect(xml).toContain('<P_15>1230.00</P_15>');
+    expect(xml).toContain('<P_8B>5</P_8B>');
+    expect(xml).toContain('<P_11>1000.00</P_11>');
   });
 });
 
@@ -272,15 +307,40 @@ describe('toFa3Xml — exemption annotation', () => {
 });
 
 describe('toFa3Xml — PrefiksPodatnika', () => {
-  it('emits PrefiksPodatnika PL for a VAT-registered issuer', () => {
+  it('omits PrefiksPodatnika for a plain domestic invoice — broszura tabela 4 limits it to WDT/art. 100 ust. 1 pkt 4/art. 136', () => {
     const xml = toFa3Xml(plDomesticStandardInvoice);
+    expect(xml).not.toContain('PrefiksPodatnika');
+  });
+
+  it('emits PrefiksPodatnika PL for a VAT-registered issuer with a K (WDT) line', () => {
+    const wdt: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      lineItems: [{ ...baseLineItem, vatRateBp: 0, vatCategory: 'K' }],
+    };
+    const xml = toFa3Xml(wdt);
     expect(xml).toContain('<PrefiksPodatnika>PL</PrefiksPodatnika>');
   });
 
-  it('omits PrefiksPodatnika for an issuer that is not VAT-registered (art. 113 exempt seller)', () => {
+  it('emits PrefiksPodatnika PL for a VAT-registered issuer with an AE (art. 100 ust. 1 pkt 4 service) line', () => {
+    const art100Service: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      recipient: {
+        ...plDomesticStandardInvoice.recipient,
+        country: 'DE',
+        vatNumber: 'DE123456789',
+      },
+      vatExemptionGround: 'art. 28c(E)(3) 77/388/EEC',
+      lineItems: [{ ...baseLineItem, vatRateBp: 0, vatCategory: 'AE' }],
+    };
+    const xml = toFa3Xml(art100Service);
+    expect(xml).toContain('<PrefiksPodatnika>PL</PrefiksPodatnika>');
+  });
+
+  it('omits PrefiksPodatnika for an issuer that is not VAT-registered (art. 113 exempt seller), even with a K line', () => {
     const notVatRegistered: DocumentDto = {
       ...plDomesticStandardInvoice,
       issuer: { ...plDomesticStandardInvoice.issuer, vatRegistered: false },
+      lineItems: [{ ...baseLineItem, vatRateBp: 0, vatCategory: 'K' }],
     };
     const xml = toFa3Xml(notVatRegistered);
     expect(xml).not.toContain('PrefiksPodatnika');
@@ -321,6 +381,26 @@ describe('toFa3Xml — P_14_xW (VAT converted to PLN) for foreign-currency invoi
   it('omits P_14_xW when the document carries no exchange-rate snapshot', () => {
     const xml = toFa3Xml(plDomesticStandardInvoice);
     expect(xml).not.toContain('P_14_1W');
+  });
+
+  it('carries the document exchange-rate snapshot as FaWiersz/KursWaluty, the same value the PDF prints', () => {
+    const eurInvoice: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      currency: 'EUR',
+      localCurrency: 'PLN',
+      exchangeRate: '4.2512',
+      exchangeRateDate: '2026-09-04',
+      exchangeRateSource: 'NBP',
+      exchangeRateTable: '171/A/NBP/2026',
+      vatAmountLocal: 97777,
+    };
+    const xml = toFa3Xml(eurInvoice);
+    expect(xml).toContain('<P_12>23</P_12><KursWaluty>4.2512</KursWaluty>');
+  });
+
+  it('omits FaWiersz/KursWaluty when the document carries no exchange-rate snapshot', () => {
+    const xml = toFa3Xml(plDomesticStandardInvoice);
+    expect(xml).not.toContain('KursWaluty');
   });
 
   it('emits a P_14_xW per rate bucket for a mixed-rate foreign-currency invoice', () => {
@@ -418,6 +498,46 @@ describe('toFa3Xml — a document discount is reflected in the P_13/P_14 buckets
     expect(xml).toContain('<P_13_2>360.00</P_13_2>');
     expect(xml).toContain('<P_14_2>28.80</P_14_2>');
     expect(xml).toContain('<P_15>1053.00</P_15>');
+  });
+
+  it('emits the per-line allocated discount in P_10, so P_11 sums to P_13_x (art. 106e ust. 1 pkt 10)', () => {
+    const discounted: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      subtotal: 100000,
+      discountTotal: 10000,
+      vatAmount: 15300,
+      amount: 105300,
+      lineItems: [
+        {
+          ...baseLineItem,
+          id: 'line-1',
+          lineTotal: 60000,
+          unitPrice: 60000,
+          vatRateBp: 2300,
+          vatCategory: 'S',
+        },
+        {
+          ...baseLineItem,
+          id: 'line-2',
+          lineTotal: 40000,
+          unitPrice: 40000,
+          vatRateBp: 800,
+          vatCategory: 'S',
+        },
+      ],
+    };
+    const xml = toFa3Xml(discounted);
+
+    expect(xml).toContain('<P_9A>600.00</P_9A><P_10>60.00</P_10><P_11>540.00</P_11>');
+    expect(xml).toContain('<P_9A>400.00</P_9A><P_10>40.00</P_10><P_11>360.00</P_11>');
+    // P_11 (540.00 + 360.00) reconciles with P_13_1 (540.00) and P_13_2 (360.00).
+    expect(xml).toContain('<P_13_1>540.00</P_13_1>');
+    expect(xml).toContain('<P_13_2>360.00</P_13_2>');
+  });
+
+  it('omits P_10 when there is no document discount', () => {
+    const xml = toFa3Xml(plDomesticStandardInvoice);
+    expect(xml).not.toContain('P_10');
   });
 });
 
