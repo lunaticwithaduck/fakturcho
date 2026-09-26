@@ -6,7 +6,7 @@
   "description": "Mandatory fields under § 11 UStG 1994, 2026 VAT rates (20/13/10/4.9%), the Kleinunternehmer threshold and Firmenbuch details for invoices issued from Austria.",
   "h1": "Invoicing in Austria: mandatory fields, VAT rates and the small-business exemption",
   "answer": "An Austrian invoice needs the mandatory fields under § 11 Abs. 1 Z 3 UStG 1994, including a sequential number and, above a gross amount of €10,000 to another business, the recipient's UID number. The standard VAT rate is 20%, alongside 13%, 10% and, from 1 July 2026, a new 4.9% rate for staple foods. A Kleinunternehmer with turnover up to €55,000 a year issues invoices without VAT.",
-  "lastReviewed": "2026-09-29",
+  "lastReviewed": "2026-09-26",
   "sections": [
     {
       "heading": "Who must issue an invoice in Austria — and by when?",
@@ -136,7 +136,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Special case, Jungholz/Mittelberg: a business with its seat or a permanent establishment in these two municipalities (in Tyrol and Vorarlberg respectively) charges 19% instead of 20% as its standard rate (§ 10 Abs. 4 UStG 1994) — the reduced rates stay the same. Fakturcho offers a dedicated checkbox for this in the issuer profile, pre-ticked from the postcode (6691, 6991, 6992, 6993)."
+              "text": "Special case, Jungholz/Mittelberg: a business with its seat or a permanent establishment in these two municipalities (in Tyrol and Vorarlberg respectively) charges 19% instead of 20% as its standard rate (§ 10 Abs. 4 UStG 1994) — the reduced rates stay the same. This excludes the delivery and rental of motor vehicles to recipients with their residence or seat elsewhere in Austria, and supplies to a business establishment (Betriebsstätte) outside these two areas — both stay at 20%. Fakturcho offers a dedicated checkbox for this in the issuer profile, pre-ticked from the postcode (6691, 6991, 6992, 6993)."
             }
           ]
         }
@@ -241,7 +241,7 @@
       ]
     },
     {
-      "heading": "Rechnungskorrektur, Gutschrift and the Stornorechnung",
+      "heading": "Rechnungskorrektur and Gutschrift",
       "id": "credit-notes-and-the-gutschrift-trap",
       "blocks": [
         {
@@ -252,7 +252,7 @@
             },
             { "text": "recipient", "bold": true },
             {
-              "text": " of a supply self-bills (§ 11 Abs. 7 UStG 1994), not a later correction by the supplier. A correction document the seller issues itself should therefore never be called \"Gutschrift\" — Fakturcho calls it \"Rechnungskorrektur,\" or \"Stornorechnung\" for a full cancellation, and a later additional charge \"Nachtragsrechnung\" (not the German \"Belastungsanzeige\")."
+              "text": " of a supply self-bills (§ 11 Abs. 7 UStG 1994), not a later correction by the supplier. A correction document the seller issues itself should therefore never be called \"Gutschrift\" — Fakturcho calls it \"Rechnungskorrektur\" — including for a full cancellation — and a later additional charge \"Nachtragsrechnung\" (not the German \"Belastungsanzeige\")."
             }
           ]
         },
@@ -260,7 +260,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Every correction references the number and date of the original invoice and states the reason for the correction (§ 11 Abs. 12 UStG 1994)."
+              "text": "Every correction references the number and date of the original invoice and states the reason for the correction."
             }
           ]
         }
@@ -317,7 +317,7 @@
       "question": "Do I need to assign an invoice number as a Kleinunternehmer?",
       "answer": [
         {
-          "text": "Yes. § 11 Abs. 1 Z 3 lit. h UStG 1994 requires a sequential number regardless of whether VAT is shown."
+          "text": "Not mandatory — § 11 Abs. 6 UStG 1994 lets a Kleinunternehmer use the simplified invoice with no number; Fakturcho assigns a sequential one anyway."
         }
       ]
     },
@@ -330,10 +330,10 @@
       ]
     },
     {
-      "question": "Is a Stornorechnung the same as a Gutschrift?",
+      "question": "Is a full cancellation the same as a Gutschrift?",
       "answer": [
         {
-          "text": "No. In Austria, \"Gutschrift\" denotes a document with which the customer self-bills. A correction document from the seller is called a Rechnungskorrektur, or a Stornorechnung for a full cancellation."
+          "text": "No. In Austria, \"Gutschrift\" denotes a document with which the customer self-bills. A correction document from the seller is always called a Rechnungskorrektur, including for a full cancellation."
         }
       ]
     },
@@ -357,7 +357,7 @@
       "question": "Does the same VAT rate apply everywhere in Austria?",
       "answer": [
         {
-          "text": "Almost everywhere, yes. Only a business with its seat or a permanent establishment in Jungholz or Kleinwalsertal (Mittelberg) charges 19% instead of 20% as its standard rate (§ 10 Abs. 4 UStG 1994)."
+          "text": "Almost everywhere, yes. Only a business with its seat or a permanent establishment in Jungholz or Kleinwalsertal (Mittelberg) charges 19% instead of 20% as its standard rate (§ 10 Abs. 4 UStG 1994). This excludes motor vehicles and supplies to a business establishment outside these areas, which stay at 20%."
         }
       ]
     }
@@ -366,7 +366,7 @@
     "heading": "How Fakturcho helps",
     "body": [
       {
-        "text": "For Austrian issuers, Fakturcho assigns sequential invoice numbers, prints the Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz and UID number automatically in the invoice footer, and, for a Kleinunternehmer profile, adds the § 6 Abs. 1 Z 27 UStG 1994 note on its own. For a domestic B2B invoice over €10,000 gross, Fakturcho checks that the recipient's UID number is on file before the invoice can be issued. Businesses in Jungholz or Mittelberg can turn on the special 19% rate in the issuer profile. Fakturcho picks the reverse-charge and intra-Community wording automatically from the destination country and the chosen VAT exemption. As of 29 September 2026. This is general information, not tax advice — for your specific case, consult your tax adviser or the tax office (Finanzamt)."
+        "text": "For Austrian issuers, Fakturcho assigns sequential invoice numbers, prints the Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz and UID number automatically in the invoice footer, and, for a Kleinunternehmer profile, adds the § 6 Abs. 1 Z 27 UStG 1994 note on its own. For a domestic B2B invoice over €10,000 gross, Fakturcho checks that the recipient's UID number is on file before the invoice can be issued. Businesses in Jungholz or Mittelberg can turn on the special 19% rate in the issuer profile. Fakturcho picks the reverse-charge and intra-Community wording automatically from the destination country and the chosen VAT exemption. As of 26 September 2026. This is general information, not tax advice — for your specific case, consult your tax adviser or the tax office (Finanzamt)."
       }
     ]
   }

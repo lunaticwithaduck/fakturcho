@@ -106,12 +106,26 @@ describe('renderClassicTemplateHtml', () => {
       language: 'en',
     });
 
-    const watermarkAreaIndex = html.indexOf('class="watermark-area"');
+    const watermarkAreaIndex = html.indexOf('class="watermark-area is-draft"');
     const watermarkIndex = html.indexOf('class="watermark"');
     const issuerBlockIndex = html.indexOf('class="issuer-block"');
     expect(watermarkAreaIndex).toBeGreaterThan(-1);
     expect(watermarkIndex).toBeGreaterThan(watermarkAreaIndex);
     expect(issuerBlockIndex).toBeGreaterThan(watermarkIndex);
+  });
+
+  it('reserves the watermark min-height only on a draft, so an issued document has no blank band', () => {
+    const issued = renderClassicTemplateHtml({
+      document: buildFakeDocument({ number: 1 }),
+      lineItems: buildFakeLineItems(),
+      presentation: vatChargedPresentation,
+      isDraft: false,
+      language: 'en',
+    });
+    expect(issued).toContain('class="watermark-area"');
+    expect(issued).not.toContain('watermark-area is-draft');
+    expect(issued).toContain('.watermark-area.is-draft');
+    expect(issued).not.toMatch(/\.watermark-area\s*\{[^}]*min-height/);
   });
 
   it('threads a resolved (not-yet-snapshotted) issuer country into a draft: DE Steuernummer row and §19 line', () => {

@@ -477,7 +477,7 @@
       "city": "Localitate",
       "phone": "Telefon",
       "invalidFormat": "Format nevalid",
-      "czRegisterHint": "Obligatoriu pentru emitenții cehi: menționați înregistrarea în Registrul Comerțului (instanța, secțiunea, numărul de înregistrare) sau într-un alt registru public – § 435 din Codul civil (Legea nr. 89/2012 Sb.).",
+      "czRegisterHint": "Dacă sunteți înregistrat în Registrul Comerțului sau într-un alt registru public, menționați această înregistrare aici – § 435 din Codul civil (Legea nr. 89/2012 Sb.). Obligatoriu doar pentru antreprenorii înregistrați.",
       "frLegalFormHint": "Sunteți antreprenor individual? Scrieți „EI” sau „entrepreneur individuel” — trebuie să apară lângă nume pe fiecare document (art. L526-22 din Codul comercial francez).",
       "atJungholzMittelbergHint": "Sediul afacerii dvs. este în Jungholz sau Kleinwalsertal (Mittelberg)? Conform § 10 alin. 4 UStG 1994, acolo cota standard este 19% în loc de 20%. Cotele reduse (13%, 10%, 4,9%) rămân neschimbate."
     },

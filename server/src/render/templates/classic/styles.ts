@@ -130,8 +130,10 @@ export function buildStyles(): string {
     }
     .watermark-area {
       position: relative;
-      min-height: 380px;
       overflow: hidden;
+    }
+    .watermark-area.is-draft {
+      min-height: 380px;
     }
     .watermark {
       position: absolute;

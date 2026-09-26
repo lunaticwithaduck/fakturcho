@@ -57,16 +57,21 @@ export function assertIssuable(
     );
   }
 
-  // § 11 Abs. 1 Z 3 lit. b UStG 1994: a domestic AT invoice whose gross total
-  // exceeds €10,000 must show the business recipient's UID. The client's own
-  // clientType is the real signal; when it is unmeasured (null, an existing
-  // client from before this field existed), fall back to "has its own
-  // Firmenbuchnummer/company id (eik) on file" as the business signal.
+  // § 11 Abs. 1 Z 3 lit. b UStG 1994: a domestic AT "Rechnung" whose gross
+  // total exceeds €10,000 must show the business recipient's UID. A
+  // Nachtragsrechnung (debit_note) is itself a Rechnung and counts; a
+  // Rechnungskorrektur (credit_note) only reduces what an earlier, already
+  // UID-checked invoice charged, so it is not one and is excluded. The
+  // client's own clientType is the real signal; when it is unmeasured (null,
+  // an existing client from before this field existed), fall back to "has
+  // its own Firmenbuchnummer/company id (eik) on file" as the business
+  // signal. CURRENCY_CODES is EUR-only today, so existing.amount is always a
+  // EUR amount already; there is no non-EUR document to convert.
   const atRecipientIsBusiness =
     client?.clientType === 'business' || (client?.clientType == null && Boolean(client?.eik));
   if (
     country === 'AT' &&
-    documentType === 'invoice' &&
+    (documentType === 'invoice' || documentType === 'debit_note') &&
     existing.currency === 'EUR' &&
     existing.amount > AT_RECIPIENT_UID_THRESHOLD_CENTS &&
     client?.country === 'AT' &&

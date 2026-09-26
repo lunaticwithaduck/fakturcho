@@ -1,4 +1,4 @@
-import { AT_CONFIG, applyAtSpecialRate } from './countries/at';
+import { AT_CONFIG, type AtRecipientLocation, applyAtSpecialRate } from './countries/at';
 import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
 import { CZ_CONFIG } from './countries/cz';
 import { DE_CONFIG } from './countries/de';
@@ -11,6 +11,7 @@ import type { Locale } from './languages';
 import { PUBLISHED_LOCALES } from './languages';
 import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
+export type { AtRecipientLocation } from './countries/at';
 export {
   AT_JUNGHOLZ_MITTELBERG_POSTCODES,
   AT_VAT_NOTE_GROUNDS,
@@ -107,15 +108,17 @@ const GENERIC_COUNTRY_EXTRAS: Record<string, Partial<CountryConfig>> = {
   IE: { documentTypeTitles: { debit_note: 'Supplementary invoice' } },
 };
 
-// identifiers is the issuer's own IssuerProfileDto.identifiers blob; only AT
-// reads it (§ 10 Abs. 4 UStG 1994 Jungholz/Mittelberg, see countries/at.ts),
-// every other country ignores the argument entirely.
+// identifiers is the issuer's own IssuerProfileDto.identifiers blob; recipient
+// is the client's own country/postcode. Only AT reads either (§ 10 Abs. 4
+// UStG 1994 Jungholz/Mittelberg, see countries/at.ts), every other country
+// ignores both arguments entirely.
 export function getCountryConfig(
   country: string,
   identifiers?: Record<string, string> | null,
+  recipient?: AtRecipientLocation | null,
 ): CountryConfig {
   const configured = COUNTRY_CONFIGS[country];
-  if (configured) return applyAtSpecialRate(resolveLocale(configured), identifiers);
+  if (configured) return applyAtSpecialRate(resolveLocale(configured), identifiers, recipient);
   const rateOverride = EU_RATE_OVERRIDES[country];
   if (rateOverride) {
     return resolveLocale({

@@ -477,7 +477,7 @@
       "city": "City",
       "phone": "Phone",
       "invalidFormat": "Invalid format",
-      "czRegisterHint": "Required for Czech issuers: state your entry in the Commercial Register (court, section, insert number) or another public register — § 435 of the Civil Code (Act No. 89/2012 Sb.).",
+      "czRegisterHint": "If you are entered in the Commercial Register or another public register, state that entry here — § 435 of the Civil Code (Act No. 89/2012 Sb.). Only entrepreneurs entered in a register must give this.",
       "frLegalFormHint": "Sole trader? Write \"EI\" or \"entrepreneur individuel\" — it must print next to your name on every document (C. com. art. L526-22).",
       "atJungholzMittelbergHint": "Is your business seat in Jungholz or Kleinwalsertal (Mittelberg)? Under § 10 Abs. 4 UStG 1994 the standard rate there is 19% instead of 20%. Reduced rates (13%, 10%, 4.9%) stay the same."
     },

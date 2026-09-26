@@ -110,6 +110,15 @@ export interface ClassicLabels {
   taxEventDuzpPrefix?: string;
   // RO delivery_note only: OMFP 2634/2015 model 14-3-6A "mijloc de transport nr.".
   transportVehiclePrefix?: string;
+  // CZ only: NOZ § 435 odst. 1 sets no language for this entry, so the label
+  // on the printed PDF follows the document language rather than the
+  // issuer-profile form's own (Czech) label.
+  companyRegisterLabel?: string;
+  // Printed next to paymentTermsPrefix (or, for PL, merged into the same
+  // line) when the document carries a due date (dueAt) on a qualifying tax
+  // document. Undefined where the due date is already handled elsewhere
+  // (FR: mentions/fr.ts) or merged into paymentTermsPrefix itself (PL).
+  dueDatePrefix?: string;
 }
 
 export const CLASSIC_LABELS: Record<ClassicLanguage, ClassicLabels> = {

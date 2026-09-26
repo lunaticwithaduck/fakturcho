@@ -132,6 +132,48 @@ describe('AT country config — § 10 Abs. 4 UStG 1994 Jungholz/Mittelberg 19% r
     expect(config.defaultVatRateBp).toBe(1900);
   });
 
+  it('§ 10 Abs. 4 UStG 1994: defaults to 20% when the recipient is a domestic client outside the two Jungholz/Mittelberg zones', () => {
+    const config = getCountryConfig(
+      'AT',
+      { jungholzMittelbergRate: 'true' },
+      { country: 'AT', postcode: '1060' },
+    );
+    expect(config.defaultVatRateBp).toBe(2000);
+    expect(config.vatRates.some((rate) => rate.rateBp === 1900)).toBe(true);
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: keeps 19% as the default for a recipient inside either Jungholz/Mittelberg postcode', () => {
+    for (const postcode of AT_JUNGHOLZ_MITTELBERG_POSTCODES) {
+      const config = getCountryConfig(
+        'AT',
+        { jungholzMittelbergRate: 'true' },
+        { country: 'AT', postcode },
+      );
+      expect(config.defaultVatRateBp).toBe(1900);
+    }
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: keeps 19% as the default with no recipient or a non-Austrian recipient', () => {
+    const noRecipient = getCountryConfig('AT', { jungholzMittelbergRate: 'true' });
+    expect(noRecipient.defaultVatRateBp).toBe(1900);
+
+    const foreignRecipient = getCountryConfig(
+      'AT',
+      { jungholzMittelbergRate: 'true' },
+      { country: 'DE', postcode: '80331' },
+    );
+    expect(foreignRecipient.defaultVatRateBp).toBe(1900);
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: defaults to 20% for a domestic recipient with no postcode on file', () => {
+    const config = getCountryConfig(
+      'AT',
+      { jungholzMittelbergRate: 'true' },
+      { country: 'AT', postcode: null },
+    );
+    expect(config.defaultVatRateBp).toBe(2000);
+  });
+
   it('never applies the AT rate override to another country, even with the same identifier key', () => {
     const config = getCountryConfig('DE', { jungholzMittelbergRate: 'true' });
     expect(config.vatRates.some((rate) => rate.rateBp === 1900 && rate.label === '19%')).toBe(

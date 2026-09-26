@@ -676,23 +676,94 @@ describe('toFa3Xml — split payment mechanism (MPP) annotation', () => {
     const xml = toFa3Xml(debitNote);
     expect(xml).toContain('<P_18A>1</P_18A>');
   });
+
+  // art. 106e ust. 1 pkt 18a / XSD note "na rzecz podatnika": MPP only ever
+  // applies to a supply made to a taxpayer.
+  it('flags P_18A as 2 when the recipient is a consumer, even above the threshold', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      amount: 400_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      lineItems: [{ ...baseLineItem, splitPaymentAnnex15: true }],
+      recipient: {
+        ...plDomesticStandardInvoice.recipient,
+        clientType: 'consumer',
+        vatNumber: null,
+      },
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain('<P_18A>2</P_18A>');
+  });
 });
 
 describe('toFa3Xml — payment due date (Platnosc/TerminPlatnosci/Termin)', () => {
-  it('carries the due date in Platnosc/TerminPlatnosci/Termin, after the line items', () => {
+  it('carries the due date in Platnosc/TerminPlatnosci/Termin, before RachunekBankowy, after the line items', () => {
     const document: DocumentDto = { ...plDomesticStandardInvoice, dueAt: '2026-09-19' };
     const xml = toFa3Xml(document);
-    expect(xml).toContain(
-      '<Platnosc><TerminPlatnosci><Termin>2026-09-19</Termin></TerminPlatnosci></Platnosc>',
-    );
+    expect(xml).toContain('<TerminPlatnosci><Termin>2026-09-19</Termin></TerminPlatnosci>');
     const lastWierszIndex = xml.lastIndexOf('</FaWiersz>');
     const platnoscIndex = xml.indexOf('<Platnosc>');
+    const terminIndex = xml.indexOf('<TerminPlatnosci>');
+    const rachunekIndex = xml.indexOf('<RachunekBankowy>');
     expect(platnoscIndex).toBeGreaterThan(lastWierszIndex);
+    expect(rachunekIndex).toBeGreaterThan(terminIndex);
   });
 
-  it('omits Platnosc entirely when there is no due date', () => {
-    const document: DocumentDto = { ...plDomesticStandardInvoice, dueAt: null };
+  it('omits Platnosc entirely when there is no due date and the issuer has no IBAN', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      dueAt: null,
+      issuer: { ...plDomesticStandardInvoice.issuer, iban: null, bic: null, bankName: null },
+    };
     const xml = toFa3Xml(document);
     expect(xml).not.toContain('Platnosc');
+  });
+});
+
+// XSD TRachunekBankowy, right after TerminPlatnosci in the Platnosc sequence.
+describe('toFa3Xml — issuer bank account (Platnosc/RachunekBankowy)', () => {
+  it('carries the IBAN, SWIFT and bank name when the issuer has an IBAN, even with no due date', () => {
+    const document: DocumentDto = { ...plDomesticStandardInvoice, dueAt: null };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain(
+      '<Platnosc><RachunekBankowy><NrRB>PL61109010140000071219812874</NrRB>' +
+        '<SWIFT>WBKPPLPP</SWIFT><NazwaBanku>PKO Bank Polski</NazwaBanku></RachunekBankowy></Platnosc>',
+    );
+  });
+
+  it('strips spaces from a formatted IBAN', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      dueAt: null,
+      issuer: { ...plDomesticStandardInvoice.issuer, iban: 'PL61 1090 1014 0000 0712 1981 2874' },
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain('<NrRB>PL61109010140000071219812874</NrRB>');
+  });
+
+  it('omits SWIFT and NazwaBanku when unset', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      dueAt: null,
+      issuer: { ...plDomesticStandardInvoice.issuer, bic: null, bankName: null },
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain(
+      '<RachunekBankowy><NrRB>PL61109010140000071219812874</NrRB></RachunekBankowy>',
+    );
+    expect(xml).not.toContain('SWIFT');
+    expect(xml).not.toContain('NazwaBanku');
+  });
+
+  it('omits RachunekBankowy when the issuer has no IBAN', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      dueAt: '2026-09-19',
+      issuer: { ...plDomesticStandardInvoice.issuer, iban: null },
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).not.toContain('RachunekBankowy');
+    expect(xml).toContain('<Platnosc><TerminPlatnosci>');
   });
 });

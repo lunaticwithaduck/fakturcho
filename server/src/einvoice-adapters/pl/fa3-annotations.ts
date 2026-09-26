@@ -1,5 +1,5 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
-import { correctedGrossAmountCents, isMppRequired } from './split-payment';
+import { correctedGrossAmountCents, isMppRequired, isRecipientTaxpayer } from './split-payment';
 import { textEl } from './xml-escape';
 
 export type Fa3DocumentType = 'invoice' | 'credit_note' | 'debit_note';
@@ -34,6 +34,10 @@ export function annotationsBlock(document: DocumentDto, kind: Fa3DocumentType): 
     currency: document.currency,
     grossAmountCents,
     exchangeRate: document.exchangeRate ?? null,
+    recipientIsTaxpayer: isRecipientTaxpayer({
+      clientType: document.recipient.clientType,
+      vatNumber: document.recipient.vatNumber,
+    }),
   });
   return (
     '<Adnotacje>' +

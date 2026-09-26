@@ -2,6 +2,7 @@ import { TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import {
   correctedGrossAmountCents,
   isMppRequired,
+  isRecipientTaxpayer,
 } from '../../../../einvoice-adapters/pl/split-payment';
 import { toSharedDocumentType } from '../../../prisma-mappers';
 import type { MentionsBuilder } from './index';
@@ -42,6 +43,10 @@ export const plMentions: MentionsBuilder = ({ document, lineItems, originalDocum
       currency: document.currency,
       grossAmountCents,
       exchangeRate: document.exchangeRate,
+      recipientIsTaxpayer: isRecipientTaxpayer({
+        clientType: document.recipientClientType,
+        vatNumber: document.recipientVatNumber,
+      }),
     });
     if (mppRequired) {
       mentions.push(SPLIT_PAYMENT_MENTION);

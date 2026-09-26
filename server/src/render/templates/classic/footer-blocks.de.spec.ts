@@ -36,7 +36,7 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
     expect(html).toContain('Steuernummer: 27/815/08150');
   });
 
-  it('prints Registergericht, Sitz and Geschäftsführer when set', () => {
+  it('prints Registergericht, Sitz and Geschäftsführer when set, keeping each short value on one line', () => {
     const document = buildFakeDocument({
       issuerIdentifiers: {
         steuernummer: '27/815/08150',
@@ -46,9 +46,22 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
       },
     });
     const html = buildIssuerBlock(document, 'invoice', locale);
-    expect(html).toContain('Registergericht: Amtsgericht München');
+    // Short (<= 40 chars) multi-word values are joined with non-breaking
+    // spaces so a court/name never wraps one word onto its own line.
+    expect(html).toContain('Registergericht: Amtsgericht München');
     expect(html).toContain('Sitz: München');
-    expect(html).toContain('Geschäftsführer: Max Mustermann');
+    expect(html).toContain('Geschäftsführer: Max Mustermann');
+  });
+
+  it('leaves a value longer than 40 characters wrapping normally', () => {
+    const longCourtName = 'Amtsgericht Charlottenburg-Wilmersdorf Berlin-Mitte';
+    expect(longCourtName.length).toBeGreaterThan(40);
+    const document = buildFakeDocument({
+      issuerIdentifiers: { registergericht: longCourtName },
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain(`Registergericht: ${longCourtName}`);
+    expect(html).not.toContain(' ');
   });
 
   it('prints nothing for Registergericht, Sitz or Geschäftsführer for a sole trader who left them blank', () => {

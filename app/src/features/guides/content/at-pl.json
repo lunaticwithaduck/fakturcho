@@ -6,7 +6,7 @@
   "description": "Obowiązkowe elementy faktury według § 11 UStG 1994, stawki VAT 2026 (20/13/10/4,9%), próg dla małych podatników i dane z Firmenbuch dla faktur wystawianych z Austrii — wyjaśnione prosto.",
   "h1": "Wystawianie faktur w Austrii: wymogi, stawki VAT i zasady dla małych podatników",
   "answer": "Austriacka faktura musi zawierać elementy wskazane w § 11 Abs. 1 Z 3 UStG 1994, w tym kolejny numer, a przy kwocie brutto powyżej 10 000 euro dla innej firmy — UID-Nr. odbiorcy. Stawka podstawowa wynosi 20%, obok niej obowiązują 13%, 10% oraz od 1 lipca 2026 nowa stawka 4,9% na podstawowe artykuły spożywcze. Mały podatnik (do 55 000 euro rocznego obrotu) wystawia faktury bez VAT.",
-  "lastReviewed": "2026-09-29",
+  "lastReviewed": "2026-09-26",
   "sections": [
     {
       "heading": "Kto musi wystawić fakturę w Austrii — i w jakim terminie?",
@@ -136,7 +136,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Przypadek szczególny — Jungholz/Mittelberg: firmy z siedzibą lub zakładem w tych dwóch gminach (w Tyrolu i Vorarlbergu) rozliczają 19% zamiast 20% jako stawkę podstawową (§ 10 Abs. 4 UStG 1994) — stawki obniżone pozostają bez zmian. Fakturcho oferuje w profilu wystawcy osobne pole wyboru, zaznaczane automatycznie na podstawie kodu pocztowego (6691, 6991, 6992, 6993)."
+              "text": "Przypadek szczególny — Jungholz/Mittelberg: firmy z siedzibą lub zakładem w tych dwóch gminach (w Tyrolu i Vorarlbergu) rozliczają 19% zamiast 20% jako stawkę podstawową (§ 10 Abs. 4 UStG 1994) — stawki obniżone pozostają bez zmian. Wyjątkiem są dostawa i wynajem pojazdów mechanicznych na rzecz odbiorców mających miejsce zamieszkania lub siedzibę w pozostałej części Austrii oraz transakcje na rzecz zakładu (Betriebsstätte) przedsiębiorcy znajdującego się poza tymi dwiema strefami — w takich przypadkach nadal obowiązuje 20%. Fakturcho oferuje w profilu wystawcy osobne pole wyboru, zaznaczane automatycznie na podstawie kodu pocztowego (6691, 6991, 6992, 6993)."
             }
           ]
         }
@@ -241,7 +241,7 @@
       ]
     },
     {
-      "heading": "Rechnungskorrektur, Gutschrift i Stornorechnung",
+      "heading": "Rechnungskorrektur i Gutschrift",
       "id": "korekta-faktury-i-pulapka-gutschrift",
       "blocks": [
         {
@@ -252,7 +252,7 @@
             },
             { "text": "odbiorca", "bold": true },
             {
-              "text": " świadczenia (§ 11 Abs. 7 UStG 1994), a nie późniejszą korektę wystawioną przez sprzedawcę. Dokument korygujący, który sam wystawia sprzedawca, nigdy nie powinien więc nazywać się „Gutschrift\" — Fakturcho nazywa go „Rechnungskorrektur\", a przy pełnym anulowaniu „Stornorechnung\", natomiast późniejsze dodatkowe obciążenie — „Nachtragsrechnung\" (nie niemieckie „Belastungsanzeige\")."
+              "text": " świadczenia (§ 11 Abs. 7 UStG 1994), a nie późniejszą korektę wystawioną przez sprzedawcę. Dokument korygujący, który sam wystawia sprzedawca, nigdy nie powinien więc nazywać się „Gutschrift\" — Fakturcho nazywa go „Rechnungskorrektur\" — również przy pełnym anulowaniu — a późniejsze dodatkowe obciążenie „Nachtragsrechnung\" (nie niemieckie „Belastungsanzeige\")."
             }
           ]
         },
@@ -260,7 +260,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Każda korekta wskazuje numer i datę pierwotnej faktury oraz podaje przyczynę korekty (§ 11 Abs. 12 UStG 1994)."
+              "text": "Każda korekta wskazuje numer i datę pierwotnej faktury oraz podaje przyczynę korekty."
             }
           ]
         }
@@ -317,7 +317,7 @@
       "question": "Czy jako mały podatnik muszę nadawać numer faktury?",
       "answer": [
         {
-          "text": "Tak. § 11 Abs. 1 Z 3 lit. h UStG 1994 wymaga kolejnego numeru niezależnie od tego, czy na fakturze wykazano VAT."
+          "text": "Nie jest to obowiązkowe — § 11 Abs. 6 UStG 1994 pozwala małemu podatnikowi (Kleinunternehmer) korzystać z uproszczonej faktury bez numeru; Fakturcho i tak nadaje kolejny numer."
         }
       ]
     },
@@ -330,10 +330,10 @@
       ]
     },
     {
-      "question": "Czy Stornorechnung to to samo co Gutschrift?",
+      "question": "Czy pełne anulowanie to to samo co Gutschrift?",
       "answer": [
         {
-          "text": "Nie. W Austrii „Gutschrift\" oznacza dokument, którym rozlicza się sam klient. Dokument korygujący wystawiony przez sprzedawcę to Rechnungskorrektur, a przy pełnym anulowaniu — Stornorechnung."
+          "text": "Nie. W Austrii „Gutschrift\" oznacza dokument, którym rozlicza się sam klient. Dokument korygujący wystawiony przez sprzedawcę to zawsze Rechnungskorrektur, również przy pełnym anulowaniu."
         }
       ]
     },
@@ -357,7 +357,7 @@
       "question": "Czy w całej Austrii obowiązuje ta sama stawka VAT?",
       "answer": [
         {
-          "text": "Niemal wszędzie tak. Tylko firmy z siedzibą lub zakładem w Jungholz albo w Kleinwalsertal (Mittelberg) rozliczają 19% zamiast 20% jako stawkę podstawową (§ 10 Abs. 4 UStG 1994)."
+          "text": "Niemal wszędzie tak. Tylko firmy z siedzibą lub zakładem w Jungholz albo w Kleinwalsertal (Mittelberg) rozliczają 19% zamiast 20% jako stawkę podstawową (§ 10 Abs. 4 UStG 1994). Wyjątkiem są pojazdy mechaniczne oraz transakcje na rzecz zakładu poza tymi strefami — tam nadal obowiązuje 20%."
         }
       ]
     }
@@ -366,7 +366,7 @@
     "heading": "Jak pomaga Fakturcho",
     "body": [
       {
-        "text": "Fakturcho nadaje austriackim wystawcom kolejne numery faktur, drukuje automatycznie w stopce faktury Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz i UID-Nr., a przy profilu małego podatnika samodzielnie wpisuje wzmiankę na podstawie § 6 Abs. 1 Z 27 UStG 1994. Przy krajowej fakturze B2B powyżej 10 000 euro brutto Fakturcho sprawdza, czy w danych odbiorcy zapisano UID-Nr., zanim faktura zostanie wystawiona. Firmy z Jungholz lub Mittelberg mogą włączyć stawkę specjalną 19% w profilu wystawcy. Wzmianki o odwrotnym obciążeniu i transakcjach wewnątrzwspólnotowych Fakturcho dobiera automatycznie na podstawie kraju odbiorcy i wybranego zwolnienia z VAT. Stan na: 29.09.2026. To ogólne informacje, a nie porada podatkowa — w konkretnej sprawie skontaktuj się z doradcą podatkowym lub urzędem skarbowym."
+        "text": "Fakturcho nadaje austriackim wystawcom kolejne numery faktur, drukuje automatycznie w stopce faktury Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz i UID-Nr., a przy profilu małego podatnika samodzielnie wpisuje wzmiankę na podstawie § 6 Abs. 1 Z 27 UStG 1994. Przy krajowej fakturze B2B powyżej 10 000 euro brutto Fakturcho sprawdza, czy w danych odbiorcy zapisano UID-Nr., zanim faktura zostanie wystawiona. Firmy z Jungholz lub Mittelberg mogą włączyć stawkę specjalną 19% w profilu wystawcy. Wzmianki o odwrotnym obciążeniu i transakcjach wewnątrzwspólnotowych Fakturcho dobiera automatycznie na podstawie kraju odbiorcy i wybranego zwolnienia z VAT. Stan na: 26.09.2026. To ogólne informacje, a nie porada podatkowa — w konkretnej sprawie skontaktuj się z doradcą podatkowym lub urzędem skarbowym."
       }
     ]
   }

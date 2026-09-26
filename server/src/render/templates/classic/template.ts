@@ -52,7 +52,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <style>${buildStyles()}</style>
 </head>
 <body>
-  <div class="watermark-area">
+  <div class="watermark-area${isDraft ? ' is-draft' : ''}">
     ${buildWatermark(isDraft, locale)}
     <div class="header">
       ${buildRecipientBlock(document, documentType, locale)}

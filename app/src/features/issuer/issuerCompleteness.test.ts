@@ -132,7 +132,7 @@ describe('getMissingIssuerFields', () => {
     expect(getMissingIssuerFields(usProfile)).toEqual([]);
   });
 
-  it('requires the company-register identifier for a CZ issuer', () => {
+  it('does not require the company-register identifier for a CZ issuer (NOZ §435 odst. 1 only binds registered entrepreneurs)', () => {
     const czProfile: IssuerProfileDto = {
       ...BASE,
       country: 'CZ',
@@ -141,7 +141,7 @@ describe('getMissingIssuerFields', () => {
       postcode: '110 00',
       city: 'Praha',
     };
-    expect(getMissingIssuerFields(czProfile)).toEqual(['identifier:companyRegister']);
+    expect(getMissingIssuerFields(czProfile)).toEqual([]);
 
     const complete: IssuerProfileDto = {
       ...czProfile,

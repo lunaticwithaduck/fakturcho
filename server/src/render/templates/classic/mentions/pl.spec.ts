@@ -91,4 +91,44 @@ describe('plMentions — split payment mechanism (MPP), art. 106e ust. 1 pkt 18a
       plMentions({ document, lineItems, locale: {} as never, originalDocumentAmount: 340_000 }),
     ).toEqual([]);
   });
+
+  // art. 106e ust. 1 pkt 18a / XSD note "na rzecz podatnika": MPP only ever
+  // applies to a supply made to a taxpayer.
+  it('adds no MPP mention when the recipient is a consumer, even above the threshold', () => {
+    const document = buildFakeDocument({
+      amount: 400_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      recipientClientType: 'consumer',
+      recipientVatNumber: null,
+    });
+    const lineItems = buildFakeLineItems({ splitPaymentAnnex15: true });
+    expect(plMentions({ document, lineItems, locale: {} as never })).toEqual([]);
+  });
+
+  it('adds no MPP mention when clientType is unmeasured and the recipient has no VAT number', () => {
+    const document = buildFakeDocument({
+      amount: 400_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      recipientClientType: null,
+      recipientVatNumber: null,
+    });
+    const lineItems = buildFakeLineItems({ splitPaymentAnnex15: true });
+    expect(plMentions({ document, lineItems, locale: {} as never })).toEqual([]);
+  });
+
+  it('adds the MPP mention when clientType is unmeasured but the recipient has a VAT number', () => {
+    const document = buildFakeDocument({
+      amount: 400_000,
+      currency: 'EUR',
+      exchangeRate: '5',
+      recipientClientType: null,
+      recipientVatNumber: 'PL5260001246',
+    });
+    const lineItems = buildFakeLineItems({ splitPaymentAnnex15: true });
+    expect(plMentions({ document, lineItems, locale: {} as never })).toEqual([
+      'mechanizm podzielonej płatności',
+    ]);
+  });
 });

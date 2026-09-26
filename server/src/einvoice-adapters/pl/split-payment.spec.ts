@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   correctedGrossAmountCents,
   isMppRequired,
+  isRecipientTaxpayer,
   MPP_ANNEX_15_THRESHOLD_PLN_CENTS,
 } from './split-payment';
 
@@ -13,6 +14,7 @@ describe('isMppRequired', () => {
         currency: 'EUR',
         grossAmountCents: 100_000_00,
         exchangeRate: '4.30',
+        recipientIsTaxpayer: true,
       }),
     ).toBe(false);
   });
@@ -25,6 +27,7 @@ describe('isMppRequired', () => {
         currency: 'EUR',
         grossAmountCents: 300_000,
         exchangeRate: '5',
+        recipientIsTaxpayer: true,
       }),
     ).toBe(false);
   });
@@ -36,6 +39,7 @@ describe('isMppRequired', () => {
         currency: 'EUR',
         grossAmountCents: 300_001,
         exchangeRate: '5',
+        recipientIsTaxpayer: true,
       }),
     ).toBe(true);
   });
@@ -47,6 +51,7 @@ describe('isMppRequired', () => {
         currency: 'EUR',
         grossAmountCents: 10_000_000,
         exchangeRate: null,
+        recipientIsTaxpayer: true,
       }),
     ).toBe(false);
   });
@@ -58,8 +63,38 @@ describe('isMppRequired', () => {
         currency: 'PLN',
         grossAmountCents: MPP_ANNEX_15_THRESHOLD_PLN_CENTS + 1,
         exchangeRate: null,
+        recipientIsTaxpayer: true,
       }),
     ).toBe(true);
+  });
+
+  // art. 106e ust. 1 pkt 18a / XSD note "na rzecz podatnika": MPP never
+  // applies to a supply made to a consumer, however large.
+  it('is false when the recipient is not a taxpayer, even above the threshold', () => {
+    expect(
+      isMppRequired({
+        hasAnnex15Line: true,
+        currency: 'PLN',
+        grossAmountCents: MPP_ANNEX_15_THRESHOLD_PLN_CENTS + 1,
+        exchangeRate: null,
+        recipientIsTaxpayer: false,
+      }),
+    ).toBe(false);
+  });
+});
+
+describe('isRecipientTaxpayer', () => {
+  it('is true when clientType is business', () => {
+    expect(isRecipientTaxpayer({ clientType: 'business', vatNumber: null })).toBe(true);
+  });
+
+  it('is false when clientType is consumer, even with a VAT number on file', () => {
+    expect(isRecipientTaxpayer({ clientType: 'consumer', vatNumber: 'PL1234563218' })).toBe(false);
+  });
+
+  it('falls back to "has a NIP/VAT number" when clientType is unmeasured (null)', () => {
+    expect(isRecipientTaxpayer({ clientType: null, vatNumber: 'PL1234563218' })).toBe(true);
+    expect(isRecipientTaxpayer({ clientType: null, vatNumber: null })).toBe(false);
   });
 });
 

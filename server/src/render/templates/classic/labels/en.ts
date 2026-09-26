@@ -85,4 +85,6 @@ export const en: ClassicLabels = {
   correctionKsefNumberPrefix: 'KSeF number of the corrected invoice: ',
   taxEventDuzpPrefix: 'Date of taxable supply (DUZP): ',
   paymentTermsDaysText: (days) => (days === 0 ? 'on receipt' : `${days} days`),
+  companyRegisterLabel: 'Register entry',
+  dueDatePrefix: 'Due date: ',
 };

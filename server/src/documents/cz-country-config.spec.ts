@@ -13,12 +13,12 @@ describe('CZ country config', () => {
     expect(config.defaultVatRateBp).toBe(2100);
   });
 
-  it('requires the company-register identifier so NOZ § 435 odst. 1 (89/2012 Sb.) is satisfied', () => {
+  it('keeps the company-register identifier optional — NOZ § 435 odst. 1 (89/2012 Sb.) only binds registered entrepreneurs', () => {
     const companyRegister = config.identifiers.find((field) => field.key === 'companyRegister');
     expect(companyRegister).toMatchObject({
       label: 'Zápis v rejstříku',
       pattern: null,
-      required: true,
+      required: false,
     });
   });
 

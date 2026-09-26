@@ -43,14 +43,22 @@ export function DocumentComposerForm({
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
-  const countryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers);
+  const initialCountryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers);
   const controller = useComposerState(
     existing,
-    countryConfig.timeZone,
-    countryConfig.defaultVatRateBp,
+    initialCountryConfig.timeZone,
+    initialCountryConfig.defaultVatRateBp,
     issuerProfile.defaultPaymentTermsDays,
   );
   const { state, setField, patchState } = controller;
+  // § 10 Abs. 4 UStG 1994: the Jungholz/Mittelberg default rate depends on the
+  // selected client's own seat, not just the issuer's flag — recompute once
+  // the client (and therefore the recipient postcode) is known.
+  const selectedClient = clients.find((client) => client.id === state.clientId) ?? null;
+  const countryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers, {
+    country: selectedClient?.country ?? null,
+    postcode: selectedClient?.postcode ?? null,
+  });
   const vat = resolveVatTreatment({
     documentType: state.documentType,
     vatRegistered: issuerProfile.vatRegistered,

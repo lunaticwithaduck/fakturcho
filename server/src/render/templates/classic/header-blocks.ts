@@ -1,112 +1,11 @@
 import { type DocumentType, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
-import {
-  addressContainsCity,
-  appendCountyRegionSuffix,
-  cityWithCountyRegion,
-  countryName,
-  escapeHtml,
-  identifierLine,
-  keepAbbreviationsWithNextWord,
-  line,
-} from './html-utils';
+import { line } from './html-utils';
 import type { ClassicLabels } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
-// Mirrors formatIssuerAddress in footer-blocks.ts: a legacy client row stores the
-// whole address in recipientAddress (with city, if any, folded into that text); a
-// client with structured fields keeps recipientAddress as the line before the city
-// and prints street, then postcode/city on the same line.
-function formatRecipientAddress(document: Document): string {
-  const country = document.recipientCountry;
-  const city = cityWithCountyRegion(
-    document.recipientCity,
-    document.recipientCountyRegion,
-    country,
-  );
-  const address = document.recipientStreet
-    ? [document.recipientStreet, [document.recipientPostcode, city].filter(Boolean).join(' ')]
-        .filter(Boolean)
-        .join(', ')
-    : [
-        document.recipientAddress,
-        addressContainsCity(document.recipientAddress, document.recipientCity) ? '' : city,
-      ]
-        .filter(Boolean)
-        .join(', ');
-  return appendCountyRegionSuffix(
-    address,
-    document.recipientCity,
-    document.recipientCountyRegion,
-    country,
-  );
-}
-
-// Codul fiscal art. 316/317: the "RO" prefix denotes VAT registration, so a
-// non-VAT-registered party's bare CUI must print without it. Mirrors
-// stripUnregisteredRoCuiPrefix in footer-blocks.ts for the recipient side.
-function stripUnregisteredRoCuiPrefix(
-  eik: string | null,
-  issuerCountry: string,
-  vatRegistered: boolean,
-): string | null {
-  if (issuerCountry !== 'RO' || vatRegistered || !eik) return eik;
-  const stripped = eik.replace(/^ro/i, '').trim();
-  return stripped || eik;
-}
-
-function withForeignCountry(
-  address: string,
-  country: string | null,
-  locale: ClassicLocaleContext,
-): string {
-  if (!address || !country || country === locale.issuerCountry) return address;
-  const name = countryName(country, locale.language);
-  if (address.toLowerCase().includes(name.toLowerCase())) return address;
-  return `${address}, ${name}`;
-}
-
-export function buildRecipientBlock(
-  document: Document,
-  documentType: DocumentType,
-  locale: ClassicLocaleContext,
-): string {
-  const { labels } = locale;
-  const recipientAddress = withForeignCountry(
-    formatRecipientAddress(document),
-    document.recipientCountry,
-    locale,
-  );
-  const isForeignEuVatNumber =
-    Boolean(document.recipientCountry) && document.recipientCountry !== 'IT';
-  const vatNumberPrefix =
-    isForeignEuVatNumber && labels.foreignVatNumberPrefix
-      ? labels.foreignVatNumberPrefix
-      : labels.vatNumberPrefix;
-  const rows = [
-    document.recipientCompanyName
-      ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
-      : '',
-    recipientAddress
-      ? `<div>${keepAbbreviationsWithNextWord(escapeHtml(recipientAddress), locale.language)}</div>`
-      : '',
-    identifierLine(
-      labels.companyIdLabel,
-      stripUnregisteredRoCuiPrefix(
-        document.recipientEik,
-        locale.issuerCountry,
-        Boolean(document.recipientVatNumber),
-      ),
-      locale.language,
-    ),
-    line(vatNumberPrefix, document.recipientVatNumber),
-    locale.showMol ? line(labels.molPrefix, document.recipientMol) : '',
-  ]
-    .filter(Boolean)
-    .join('');
-  return `<div class="recipient"><div class="block-title">${labels.recipientTitle(documentType)}</div>${rows}</div>`;
-}
+export { buildRecipientBlock } from './recipient-block';
 
 function sameCalendarDate(a: Date, b: Date): boolean {
   return a.getTime() === b.getTime();
@@ -169,7 +68,31 @@ export function buildDatesBlock(
       document.paymentTermsDays != null
         ? labels.paymentTermsDaysText(document.paymentTermsDays)
         : document.paymentTermsNote;
-    rows.push(line(labels.paymentTermsPrefix, paymentTerms));
+    // EN 16931 BT-9 (dueAt): printed on every tax document except a credit
+    // note, which carries no due date. FR already states its own due date in
+    // mentions/fr.ts, so it is skipped here to avoid printing it twice.
+    const dueAt = document.dueAt;
+    const dueDateApplicable = documentType !== 'credit_note' && locale.issuerCountry !== 'FR';
+    if (
+      dueAt &&
+      dueDateApplicable &&
+      locale.issuerCountry === 'PL' &&
+      document.paymentTermsDays != null
+    ) {
+      // Polish practice merges the due date and the day count into one line
+      // rather than printing them as two separate rows.
+      const dueDate = formatDateForLocale(dueAt, locale.language);
+      rows.push(
+        `<div>${labels.paymentTermsPrefix}${dueDate} (${labels.paymentTermsDaysText(document.paymentTermsDays)})</div>`,
+      );
+    } else {
+      rows.push(line(labels.paymentTermsPrefix, paymentTerms));
+      if (dueAt && dueDateApplicable && labels.dueDatePrefix) {
+        rows.push(
+          `<div>${labels.dueDatePrefix}${formatDateForLocale(dueAt, locale.language)}</div>`,
+        );
+      }
+    }
   }
   rows.push(buildStatusMarker(document.status, documentType, labels));
   return `<div class="dates">${rows.join('')}</div>`;

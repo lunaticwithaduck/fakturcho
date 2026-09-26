@@ -95,5 +95,8 @@ export const de: ClassicLabels = {
   buyerReferencePrefix: 'Ihre Referenz: ',
   paymentTermsPrefix: 'Zahlungsbedingungen: ',
   correctionKsefNumberPrefix: 'KSeF-Nummer der korrigierten Rechnung: ',
-  paymentTermsDaysText: (days) => (days === 0 ? 'bei Erhalt' : `${days} Tage`),
+  paymentTermsDaysText: (days) =>
+    days === 0 ? 'Sofort nach Erhalt' : `Zahlbar innerhalb von ${days} Tagen`,
+  companyRegisterLabel: 'Registereintrag',
+  dueDatePrefix: 'Zahlbar bis: ',
 };

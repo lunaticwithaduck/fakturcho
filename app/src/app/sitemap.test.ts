@@ -22,7 +22,7 @@ describe('sitemap', () => {
     const indexes = sitemap().filter((entry) => /\/guide$/.test(entry.url));
     expect(indexes).toHaveLength(7);
     for (const entry of indexes) {
-      expect(entry.lastModified).toBe('2026-09-29');
+      expect(entry.lastModified).toBe('2026-09-26');
       expect(entry.alternates?.languages).toMatchObject({
         bg: 'https://www.fakturcho.com/guide',
         de: 'https://www.fakturcho.com/de/guide',

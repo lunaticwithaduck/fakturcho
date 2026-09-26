@@ -6,7 +6,7 @@
   "description": "Mentions obligatoires selon le § 11 UStG 1994, taux de TVA 2026 (20/13/10/4,9 %), seuil du régime des petites entreprises et mentions du Firmenbuch pour les factures émises depuis l'Autriche – expliqué simplement.",
   "h1": "Établir une facture en Autriche : mentions obligatoires, taux de TVA et régime des petites entreprises",
   "answer": "Une facture autrichienne doit comporter les mentions obligatoires du § 11 Abs. 1 Z 3 UStG 1994, dont un numéro chronologique continu et, au-delà d'un montant brut de 10 000 euros facturé à une autre entreprise, l'UID-Nr. du destinataire. Le taux normal est de 20 %, avec des taux réduits de 13 % et 10 %, et depuis le 1er juillet 2026 un nouveau taux de 4,9 % pour certains produits alimentaires de base. En dessous de 55 000 euros de chiffre d'affaires annuel, une petite entreprise (Kleinunternehmer) facture sans TVA.",
-  "lastReviewed": "2026-09-29",
+  "lastReviewed": "2026-09-26",
   "sections": [
     {
       "heading": "Qui doit émettre une facture en Autriche, et dans quel délai ?",
@@ -142,7 +142,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Cas particulier de Jungholz/Mittelberg : les entreprises ayant leur siège ou un établissement stable dans ces deux communes (l'une au Tyrol, l'autre au Vorarlberg) appliquent un taux normal de 19 % au lieu de 20 % (§ 10 Abs. 4 UStG 1994) — les taux réduits restent inchangés. Fakturcho propose pour cela, dans le profil de l'émetteur, une case à cocher dédiée, présélectionnée selon le code postal (6691, 6991, 6992, 6993)."
+              "text": "Cas particulier de Jungholz/Mittelberg : les entreprises ayant leur siège ou un établissement stable dans ces deux communes (l'une au Tyrol, l'autre au Vorarlberg) appliquent un taux normal de 19 % au lieu de 20 % (§ 10 Abs. 4 UStG 1994) — les taux réduits restent inchangés. Sont exclues la livraison et la location de véhicules automobiles à des destinataires ayant leur domicile ou leur siège ailleurs en Autriche, ainsi que les opérations réalisées au profit d'un établissement stable situé en dehors de ces deux zones — le taux de 20 % continue alors de s'appliquer. Fakturcho propose pour cela, dans le profil de l'émetteur, une case à cocher dédiée, présélectionnée selon le code postal (6691, 6991, 6992, 6993)."
             }
           ]
         }
@@ -245,7 +245,7 @@
       ]
     },
     {
-      "heading": "Note de correction, Gutschrift et Stornorechnung",
+      "heading": "Note de correction et Gutschrift",
       "id": "note-de-correction-gutschrift-et-stornorechnung",
       "blocks": [
         {
@@ -254,7 +254,7 @@
             { "text": "En Autriche, « Gutschrift » a un sens juridique précis : ce terme désigne un document par lequel le " },
             { "text": "destinataire", "bold": true },
             {
-              "text": " d'une prestation facture lui-même celle-ci (§ 11 Abs. 7 UStG 1994), et non une correction ultérieure effectuée par l'entreprise qui a fourni la prestation. Un document de correction émis par le vendeur lui-même ne devrait donc jamais s'appeler « Gutschrift » — Fakturcho l'appelle Rechnungskorrektur, ou Stornorechnung en cas d'annulation complète, et Nachtragsrechnung pour un complément de facturation ultérieur (et non Belastungsanzeige, terme utilisé en Allemagne)."
+              "text": " d'une prestation facture lui-même celle-ci (§ 11 Abs. 7 UStG 1994), et non une correction ultérieure effectuée par l'entreprise qui a fourni la prestation. Un document de correction émis par le vendeur lui-même ne devrait donc jamais s'appeler « Gutschrift » — Fakturcho l'appelle Rechnungskorrektur, y compris en cas d'annulation complète, et Nachtragsrechnung pour un complément de facturation ultérieur (et non Belastungsanzeige, terme utilisé en Allemagne)."
             }
           ]
         },
@@ -262,7 +262,7 @@
           "type": "p",
           "inline": [
             {
-              "text": "Toute correction fait référence au numéro et à la date de la facture d'origine et indique le motif de la correction (§ 11 Abs. 12 UStG 1994)."
+              "text": "Toute correction fait référence au numéro et à la date de la facture d'origine et indique le motif de la correction."
             }
           ]
         }
@@ -319,7 +319,7 @@
       "question": "Dois-je attribuer un numéro de facture en tant que petite entreprise (Kleinunternehmer) ?",
       "answer": [
         {
-          "text": "Oui. Le § 11 Abs. 1 Z 3 lit. h UStG 1994 exige un numéro chronologique, que la TVA soit indiquée ou non."
+          "text": "Non, ce n'est pas obligatoire — le § 11 Abs. 6 UStG 1994 permet à un Kleinunternehmer d'utiliser la facture simplifiée sans numéro ; Fakturcho lui attribue tout de même un numéro chronologique."
         }
       ]
     },
@@ -332,10 +332,10 @@
       ]
     },
     {
-      "question": "Une Stornorechnung est-elle la même chose qu'une Gutschrift ?",
+      "question": "Une annulation complète est-elle la même chose qu'une Gutschrift ?",
       "answer": [
         {
-          "text": "Non. En Autriche, « Gutschrift » désigne un document par lequel le client facture lui-même la prestation. Un document de correction émis par le vendeur s'appelle Rechnungskorrektur, ou Stornorechnung en cas d'annulation complète."
+          "text": "Non. En Autriche, « Gutschrift » désigne un document par lequel le client facture lui-même la prestation. Un document de correction émis par le vendeur s'appelle toujours Rechnungskorrektur, y compris en cas d'annulation complète."
         }
       ]
     },
@@ -359,7 +359,7 @@
       "question": "Le même taux de TVA s'applique-t-il partout en Autriche ?",
       "answer": [
         {
-          "text": "Presque partout, oui. Seules les entreprises ayant leur siège ou un établissement stable à Jungholz ou dans le Kleinwalsertal (Mittelberg) appliquent un taux normal de 19 % au lieu de 20 % (§ 10 Abs. 4 UStG 1994)."
+          "text": "Presque partout, oui. Seules les entreprises ayant leur siège ou un établissement stable à Jungholz ou dans le Kleinwalsertal (Mittelberg) appliquent un taux normal de 19 % au lieu de 20 % (§ 10 Abs. 4 UStG 1994). Sont exclus les véhicules automobiles et les opérations à destination d'un établissement stable situé en dehors de ces zones, qui restent taxés à 20 %."
         }
       ]
     }
@@ -368,7 +368,7 @@
     "heading": "Comment Fakturcho vous aide",
     "body": [
       {
-        "text": "Pour les émetteurs autrichiens, Fakturcho attribue des numéros de facture chronologiques, imprime automatiquement le Leistungsdatum, la Firmenbuchnummer, le Firmenbuchgericht, le Sitz et l'UID-Nr. dans le pied de la facture, et ajoute lui-même la mention du § 6 Abs. 1 Z 27 UStG 1994 pour un profil de petite entreprise (Kleinunternehmer). Pour une facture B2B nationale de plus de 10 000 euros bruts, Fakturcho vérifie que l'UID-Nr. du destinataire est renseignée avant de permettre l'émission de la facture. Pour les entreprises situées à Jungholz ou à Mittelberg, le taux particulier de 19 % peut être activé dans le profil de l'émetteur. Fakturcho choisit aussi automatiquement les mentions d'autoliquidation et intracommunautaires selon le pays de destination et l'exonération choisie. *Dernière mise à jour : 29.09.2026. Ces informations sont données à titre général et ne constituent pas un conseil fiscal ; pour votre situation, consultez votre conseiller fiscal ou l'administration compétente.*"
+        "text": "Pour les émetteurs autrichiens, Fakturcho attribue des numéros de facture chronologiques, imprime automatiquement le Leistungsdatum, la Firmenbuchnummer, le Firmenbuchgericht, le Sitz et l'UID-Nr. dans le pied de la facture, et ajoute lui-même la mention du § 6 Abs. 1 Z 27 UStG 1994 pour un profil de petite entreprise (Kleinunternehmer). Pour une facture B2B nationale de plus de 10 000 euros bruts, Fakturcho vérifie que l'UID-Nr. du destinataire est renseignée avant de permettre l'émission de la facture. Pour les entreprises situées à Jungholz ou à Mittelberg, le taux particulier de 19 % peut être activé dans le profil de l'émetteur. Fakturcho choisit aussi automatiquement les mentions d'autoliquidation et intracommunautaires selon le pays de destination et l'exonération choisie. *Dernière mise à jour : 26.09.2026. Ces informations sont données à titre général et ne constituent pas un conseil fiscal ; pour votre situation, consultez votre conseiller fiscal ou l'administration compétente.*"
       }
     ]
   }

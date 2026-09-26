@@ -126,8 +126,8 @@ describe('buyerReference and paymentTermsNote (EN 16931 BT-10/BT-20)', () => {
     ['de', 'Ihre Referenz: ', 'Zahlungsbedingungen: '],
     ['fr', 'Votre référence : ', 'Conditions de paiement : '],
     ['it', 'Vostro riferimento: ', 'Termini di pagamento: '],
-    ['pl', 'Numer referencyjny: ', 'Warunki płatności: '],
-    ['ro', 'Referința dumneavoastră: ', 'Termeni de plată: '],
+    ['pl', 'Numer referencyjny: ', 'Termin płatności: '],
+    ['ro', 'Referința dumneavoastră: ', 'Termen de plată: '],
   ];
 
   it('prints both when set, in every language', () => {
@@ -167,11 +167,11 @@ describe('paymentTermsDays overrides paymentTermsNote with localized text', () =
   const cases: Array<[string, string, string]> = [
     ['bg', 'Условия за плащане: ', '14 дни'],
     ['en', 'Payment terms: ', '14 days'],
-    ['de', 'Zahlungsbedingungen: ', '14 Tage'],
+    ['de', 'Zahlungsbedingungen: ', 'Zahlbar innerhalb von 14 Tagen'],
     ['fr', 'Conditions de paiement : ', '14 jours'],
     ['it', 'Termini di pagamento: ', '14 giorni'],
-    ['pl', 'Warunki płatności: ', '14 dni'],
-    ['ro', 'Termeni de plată: ', '14 zile'],
+    ['pl', 'Termin płatności: ', '14 dni'],
+    ['ro', 'Termen de plată: ', '14 zile'],
   ];
 
   it('prints the localized day count instead of the raw note, in every language', () => {
@@ -191,6 +191,13 @@ describe('paymentTermsDays overrides paymentTermsNote with localized text', () =
     expect(html).toContain('Payment terms: on receipt');
   });
 
+  it('DE: prints "Sofort nach Erhalt" for 0 days', () => {
+    const locale = resolveClassicLocale('de', 'DE');
+    const document = buildFakeDocument({ paymentTermsDays: 0, paymentTermsNote: null });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Zahlungsbedingungen: Sofort nach Erhalt');
+  });
+
   it('falls back to the raw paymentTermsNote when paymentTermsDays is unset', () => {
     const locale = resolveClassicLocale('en', 'IE');
     const document = buildFakeDocument({ paymentTermsDays: null, paymentTermsNote: 'Net 14' });
@@ -198,3 +205,66 @@ describe('paymentTermsDays overrides paymentTermsNote with localized text', () =
     expect(html).toContain('Payment terms: Net 14');
   });
 });
+
+describe('due date (dueAt) on the header dates block', () => {
+  it('prints a localized due-date row for bg/de/it/ro on a due invoice', () => {
+    const cases: Array<[string, string]> = [
+      ['bg', 'Срок за плащане: '],
+      ['de', 'Zahlbar bis: '],
+      ['it', 'Scadenza: '],
+      ['ro', 'Data scadenței: '],
+    ];
+    for (const [language, prefix] of cases) {
+      const locale = resolveClassicLocale(language as never);
+      const document = buildFakeDocument({
+        dueAt: new Date('2026-10-10'),
+        paymentTermsDays: 14,
+      });
+      const html = buildDatesBlock(document, 'invoice', locale);
+      expect(html).toContain(prefix);
+      expect(html).toContain(dueDateTextFor(language));
+    }
+  });
+
+  it('PL merges the due date and the day count into the payment-terms line', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const document = buildFakeDocument({ dueAt: new Date('2026-10-10'), paymentTermsDays: 14 });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Termin płatności: 10.10.2026 (14 dni)');
+  });
+
+  it('FR does not print a due-date row here (mentions/fr.ts already states it)', () => {
+    const locale = resolveClassicLocale('fr', 'FR');
+    const document = buildFakeDocument({ dueAt: new Date('2026-10-10'), paymentTermsDays: 14 });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).not.toContain('échéance');
+    expect(html).toContain('Conditions de paiement : 14 jours');
+  });
+
+  it('is not printed on a credit note, a quote, a proforma or a delivery note', () => {
+    const locale = resolveClassicLocale('en', 'IE');
+    const document = buildFakeDocument({ dueAt: new Date('2026-10-10'), paymentTermsDays: 14 });
+    expect(buildDatesBlock(document, 'credit_note', locale)).not.toContain('Due date');
+    expect(buildDatesBlock(document, 'quote', locale)).not.toContain('Due date');
+    expect(buildDatesBlock(document, 'proforma', locale)).not.toContain('Due date');
+    expect(buildDatesBlock(document, 'delivery_note', locale)).not.toContain('Due date');
+  });
+
+  it('is printed on a debit note', () => {
+    const locale = resolveClassicLocale('en', 'IE');
+    const document = buildFakeDocument({ dueAt: new Date('2026-10-10'), paymentTermsDays: 14 });
+    expect(buildDatesBlock(document, 'debit_note', locale)).toContain('Due date: 10/10/2026');
+  });
+
+  it('is not printed when the document has no due date', () => {
+    const locale = resolveClassicLocale('en', 'IE');
+    const document = buildFakeDocument({ dueAt: null, paymentTermsDays: 14 });
+    expect(buildDatesBlock(document, 'invoice', locale)).not.toContain('Due date');
+  });
+});
+
+function dueDateTextFor(language: string): string {
+  return { bg: '10.10.2026', de: '10.10.2026', it: '10/10/2026', ro: '10.10.2026' }[
+    language
+  ] as string;
+}

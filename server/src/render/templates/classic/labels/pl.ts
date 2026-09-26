@@ -95,7 +95,8 @@ export const pl: ClassicLabels = {
   watermarkSub: 'DOKUMENT BEZ MOCY PRAWNEJ',
   vatBaseWithRatePrefix: (percent) => `Wartość netto (${percent}%):`,
   buyerReferencePrefix: 'Numer referencyjny: ',
-  paymentTermsPrefix: 'Warunki płatności: ',
+  paymentTermsPrefix: 'Termin płatności: ',
   correctionKsefNumberPrefix: 'Nr KSeF faktury korygowanej: ',
   paymentTermsDaysText: (days) => (days === 0 ? 'przy odbiorze' : `${days} dni`),
+  companyRegisterLabel: 'Wpis do rejestru',
 };

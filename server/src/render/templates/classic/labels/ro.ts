@@ -92,8 +92,10 @@ export const ro: ClassicLabels = {
   watermarkSub: 'FĂRĂ VALOARE LEGALĂ',
   vatBaseWithRatePrefix: (percent) => `Bază impozabilă (${percent}%):`,
   buyerReferencePrefix: 'Referința dumneavoastră: ',
-  paymentTermsPrefix: 'Termeni de plată: ',
+  paymentTermsPrefix: 'Termen de plată: ',
   correctionKsefNumberPrefix: 'Numărul KSeF al facturii corectate: ',
   transportVehiclePrefix: 'Mijloc de transport nr.: ',
   paymentTermsDaysText: (days) => (days === 0 ? 'la primire' : `${days} zile`),
+  companyRegisterLabel: 'Înregistrare în registru',
+  dueDatePrefix: 'Data scadenței: ',
 };

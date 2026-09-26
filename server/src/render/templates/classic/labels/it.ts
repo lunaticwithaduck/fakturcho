@@ -92,4 +92,6 @@ export const it: ClassicLabels = {
   foreignVatNumberPrefix: 'Numero identificativo IVA: ',
   correctionKsefNumberPrefix: 'Numero KSeF della fattura corretta: ',
   paymentTermsDaysText: (days) => (days === 0 ? 'alla ricezione' : `${days} giorni`),
+  companyRegisterLabel: 'Iscrizione nel registro',
+  dueDatePrefix: 'Scadenza: ',
 };

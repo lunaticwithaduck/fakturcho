@@ -94,4 +94,6 @@ export const bg: ClassicLabels = {
   paymentTermsPrefix: 'Условия за плащане: ',
   correctionKsefNumberPrefix: 'Номер по KSeF на коригираната фактура: ',
   paymentTermsDaysText: (days) => (days === 0 ? 'при получаване' : `${days} дни`),
+  companyRegisterLabel: 'Вписване в регистър',
+  dueDatePrefix: 'Срок за плащане: ',
 };

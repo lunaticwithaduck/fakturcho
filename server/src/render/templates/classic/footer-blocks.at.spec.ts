@@ -29,7 +29,9 @@ describe('buildIssuerBlock — AT issuer', () => {
       },
     });
     const html = buildIssuerBlock(document, 'invoice', locale);
-    expect(html).toContain('Firmenbuchgericht: Handelsgericht Wien');
+    // A short value (<= 40 chars) is joined with non-breaking spaces so it
+    // never wraps one word onto its own line.
+    expect(html).toContain('Firmenbuchgericht: Handelsgericht Wien');
     expect(html).toContain('Sitz: Wien');
     expect(html).toContain('Rechtsform: GmbH');
   });

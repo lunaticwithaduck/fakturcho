@@ -221,7 +221,7 @@ describe('IssuerCompanyFields', () => {
     expect(screen.queryByText('Невалиден формат')).toBeNull();
   });
 
-  it('renders the Czech company-register identifier as required with its legal hint', () => {
+  it('renders the Czech company-register identifier as optional with its legal hint', () => {
     render(
       <NextIntlClientProvider locale="en" messages={enMessages}>
         <IssuerCompanyFields values={CZ_VALUES} onChange={noop} />
@@ -229,7 +229,7 @@ describe('IssuerCompanyFields', () => {
     );
 
     const field = screen.getByLabelText('Zápis v rejstříku') as HTMLInputElement;
-    expect(field.required).toBe(true);
+    expect(field.required).toBe(false);
     expect(screen.getByText(/§ 435/)).toBeTruthy();
   });
 

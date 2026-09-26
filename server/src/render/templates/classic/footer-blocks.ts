@@ -8,6 +8,7 @@ import {
   escapeHtml,
   identifierLine,
   keepAbbreviationsWithNextWord,
+  keepShortValueTogether,
   labelled,
   line,
 } from './html-utils';
@@ -87,19 +88,27 @@ export function buildIssuerBlock(
   const isIt = locale.issuerCountry === 'IT';
   const isFr = locale.issuerCountry === 'FR';
   const frLegalForm = isFr ? frSoleTraderLegalForm(identifiers) : null;
+  const isCz = locale.issuerCountry === 'CZ';
   const identifierRows = getCountryConfig(locale.issuerCountry)
     .identifiers.filter(
       (field) => field.kind !== 'flag' && !(frLegalForm && field.key === 'legalForm'),
     )
-    .map((field) =>
-      identifierLine(
-        field.label,
+    .map((field) => {
+      const rawValue =
         field.key === 'shareCapital' && isIt
           ? itShareCapitalValue(identifiers)
-          : (identifiers[field.key] ?? null),
+          : (identifiers[field.key] ?? null);
+      return identifierLine(
+        // NOZ § 435 odst. 1 sets no language for this entry: the printed
+        // label follows the document language, not the CZ profile form's
+        // own (Czech) label.
+        isCz && field.key === 'companyRegister' && labels.companyRegisterLabel
+          ? labels.companyRegisterLabel
+          : field.label,
+        rawValue !== null ? keepShortValueTogether(rawValue) : null,
         language,
-      ),
-    )
+      );
+    })
     .join('');
   const socioUnicoRow = isIt && identifiers.socioUnico === 'true' ? '<div>Socio unico</div>' : '';
   const nameSuffix = isIt ? itCompanyNameSuffix(identifiers) : frLegalForm ? ` ${frLegalForm}` : '';

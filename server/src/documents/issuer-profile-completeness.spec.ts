@@ -29,11 +29,11 @@ const BASE: IssuerProfileDto = {
 };
 
 describe('isIssuerProfileComplete — CZ (NOZ § 435 odst. 1)', () => {
-  it('is incomplete without the company-register identifier', () => {
-    expect(isIssuerProfileComplete(BASE)).toBe(false);
+  it('is complete without the company-register identifier — NOZ §435 odst. 1 only binds registered entrepreneurs', () => {
+    expect(isIssuerProfileComplete(BASE)).toBe(true);
   });
 
-  it('is complete once the company-register identifier is set', () => {
+  it('is still complete once the company-register identifier is set', () => {
     const profile: IssuerProfileDto = {
       ...BASE,
       identifiers: { companyRegister: 'C 12345 vedená u Městského soudu v Praze' },

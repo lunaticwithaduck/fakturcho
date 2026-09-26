@@ -477,7 +477,7 @@
       "city": "Ort",
       "phone": "Telefon",
       "invalidFormat": "Ungültiges Format",
-      "czRegisterHint": "Für tschechische Aussteller erforderlich: Angabe der Eintragung im Handelsregister (Gericht, Abteilung, Einlagenummer) oder einem anderen öffentlichen Register – § 435 des Bürgerlichen Gesetzbuchs (Gesetz Nr. 89/2012 Sb.).",
+      "czRegisterHint": "Wenn Sie im Handelsregister oder einem anderen öffentlichen Register eingetragen sind, geben Sie diese Eintragung hier an – § 435 des Bürgerlichen Gesetzbuchs (Gesetz Nr. 89/2012 Sb.). Nur für im Register eingetragene Unternehmer verpflichtend.",
       "frLegalFormHint": "Einzelunternehmer? Schreiben Sie „EI“ oder „entrepreneur individuel“ – die Angabe muss auf jedem Dokument neben dem Namen stehen (Art. L526-22 Code de commerce).",
       "atJungholzMittelbergHint": "Ihr Firmensitz liegt in Jungholz oder im Kleinwalsertal (Mittelberg)? Dort gilt gemäß § 10 Abs. 4 UStG 1994 der Steuersatz von 19 % statt 20 % als Normalsteuersatz. Die ermäßigten Sätze (13 %, 10 %, 4,9 %) bleiben unverändert."
     },

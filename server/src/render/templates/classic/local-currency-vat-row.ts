@@ -19,13 +19,13 @@ const ECB_LABEL: Record<ClassicLanguage, string> = {
   ro: 'BCE',
 };
 
-const CURRENCY_DISPLAY: Record<string, { label: string; symbol: string }> = {
-  PLN: { label: 'PLN', symbol: 'zł' },
-  RON: { label: 'lei', symbol: 'lei' },
-  CZK: { label: 'CZK', symbol: 'Kč' },
-  DKK: { label: 'DKK', symbol: 'kr.' },
-  HUF: { label: 'HUF', symbol: 'Ft' },
-  SEK: { label: 'SEK', symbol: 'kr' },
+const CURRENCY_DISPLAY: Record<string, { label: string }> = {
+  PLN: { label: 'PLN' },
+  RON: { label: 'lei' },
+  CZK: { label: 'CZK' },
+  DKK: { label: 'DKK' },
+  HUF: { label: 'HUF' },
+  SEK: { label: 'SEK' },
 };
 
 function sourceLabelFor(source: string, language: ClassicLanguage): string {
@@ -64,7 +64,6 @@ export function buildLocalCurrencyVatRow(
   }
   const currencyDisplay = CURRENCY_DISPLAY[document.localCurrency] ?? {
     label: document.localCurrency,
-    symbol: document.localCurrency,
   };
   const sourceLabel = sourceLabelFor(document.exchangeRateSource, language);
   const rate = formatRateForLocale(document.exchangeRate, language);
@@ -78,7 +77,7 @@ export function buildLocalCurrencyVatRow(
   ];
   return rows
     .map(({ rateBp, vatAmountLocal }) => {
-      const amount = `${formatCentsForLocale(vatAmountLocal * sign, language)} ${currencyDisplay.symbol}`;
+      const amount = formatCentsForLocale(vatAmountLocal * sign, language);
       const currencyLabel =
         rateBp !== null ? `${currencyDisplay.label} (${rateBp / 100}%)` : currencyDisplay.label;
       const line = labels.vatAmountLocalLine({

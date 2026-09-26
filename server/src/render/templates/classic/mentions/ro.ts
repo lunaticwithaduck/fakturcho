@@ -30,8 +30,7 @@ export const roMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
   // scope, intra-community, export). A mixed invoice that also has a line
   // actually taxed in Romania with VAT charged still needs the mention for
   // that line, so it prints as soon as ANY line qualifies; it is dropped
-  // only when NO line does, or when the document already carries an
-  // exemption ground.
+  // only when NO line does.
   const hasRoTaxedLine = lineItems.some(
     (line) => line.vatRateBp > 0 && !['AE', 'E', 'O', 'K', 'G'].includes(line.vatCategory),
   );

@@ -18,10 +18,28 @@ export interface MppRequiredInput {
   // currency VAT line (document-issuance-local-currency.ts) — art. 106e
   // ust. 1 pkt 18a requires the art. 31a conversion rules, i.e. this rate.
   exchangeRate: string | null;
+  // art. 106e ust. 1 pkt 18a / XSD note "na rzecz podatnika": MPP only ever
+  // applies to a supply made to a taxpayer, never to a consumer.
+  recipientIsTaxpayer: boolean;
+}
+
+export interface RecipientTaxpayerInput {
+  clientType: string | null;
+  vatNumber: string | null;
+}
+
+// clientType is the real signal (mirrors the AT UID rule in
+// document-issuance.rules.ts); when it is unmeasured (null, an existing
+// client from before the field existed), fall back to "has a NIP/VAT number
+// on file" as the business signal.
+export function isRecipientTaxpayer(input: RecipientTaxpayerInput): boolean {
+  if (input.clientType === 'consumer') return false;
+  if (input.clientType === 'business') return true;
+  return Boolean(input.vatNumber);
 }
 
 export function isMppRequired(input: MppRequiredInput): boolean {
-  if (!input.hasAnnex15Line) return false;
+  if (!input.hasAnnex15Line || !input.recipientIsTaxpayer) return false;
   const grossPlnCents =
     input.currency === 'PLN'
       ? input.grossAmountCents

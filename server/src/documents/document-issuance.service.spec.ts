@@ -659,6 +659,77 @@ describe('DocumentIssuanceService', () => {
     expect(issued.status).toBe('sent');
   });
 
+  it('an Austrian Nachtragsrechnung (debit_note) over €10,000 to a business client cannot be issued without the recipient UID', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      clientType: 'business',
+    });
+    const original = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'debit_note',
+        originalDocumentId: original.id,
+        clientId: client.id,
+        lineItems: [{ name: 'Nachtrag', quantity: '1', unitPrice: 900_000, sortOrder: 0 }],
+      }),
+    );
+
+    await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+      code: 'RECIPIENT_VAT_NUMBER_REQUIRED',
+    });
+  });
+
+  it('an Austrian Rechnungskorrektur (credit_note) over €10,000 issues without the recipient UID, unlike a debit_note', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      clientType: 'business',
+    });
+    const original = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: original.id,
+        clientId: client.id,
+        lineItems: [
+          { name: 'Rechnungskorrektur', quantity: '1', unitPrice: 900_000, sortOrder: 0 },
+        ],
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
+
   it('an Austrian invoice over €10,000 to a clientType: business recipient with no eik still cannot be issued without the UID', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {

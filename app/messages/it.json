@@ -477,7 +477,7 @@
       "city": "Città",
       "phone": "Telefono",
       "invalidFormat": "Formato non valido",
-      "czRegisterHint": "Obbligatorio per gli emittenti cechi: indicare l'iscrizione nel Registro di commercio (tribunale, sezione, numero di iscrizione) o in un altro registro pubblico – § 435 del Codice civile (legge n. 89/2012 Sb.).",
+      "czRegisterHint": "Se siete iscritti nel Registro di commercio o in un altro registro pubblico, indicate qui tale iscrizione – § 435 del Codice civile (legge n. 89/2012 Sb.). Obbligatorio solo per gli imprenditori iscritti.",
       "frLegalFormHint": "Imprenditore individuale? Scrivere «EI» o «entrepreneur individuel»: deve comparire accanto al nome su ogni documento (art. L526-22 del Code de commerce).",
       "atJungholzMittelbergHint": "La sede della tua attività si trova a Jungholz o nel Kleinwalsertal (Mittelberg)? Ai sensi del § 10 comma 4 UStG 1994, lì l'aliquota standard è del 19% invece del 20%. Le aliquote ridotte (13%, 10%, 4,9%) restano invariate."
     },

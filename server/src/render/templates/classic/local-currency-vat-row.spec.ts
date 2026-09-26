@@ -22,7 +22,7 @@ describe('buildLocalCurrencyVatRow', () => {
     });
     const html = buildLocalCurrencyVatRow(document, getClassicLabels('pl'), 'pl', 1);
     expect(html).toContain(
-      'Kwota VAT w PLN: 5 249,33 zł (kurs NBP 4,2512 z dnia 17.09.2026, tabela nr 181/A/NBP/2026)',
+      'Kwota VAT w PLN: 5 249,33 (kurs NBP 4,2512 z dnia 17.09.2026, tabela nr 181/A/NBP/2026)',
     );
   });
 
@@ -36,7 +36,7 @@ describe('buildLocalCurrencyVatRow', () => {
       vatAmountLocal: 123456,
     });
     const html = buildLocalCurrencyVatRow(document, getClassicLabels('ro'), 'ro', 1);
-    expect(html).toContain('TVA în lei: 1.234,56 lei (curs BNR 4,9771 din 17.09.2026)');
+    expect(html).toContain('TVA în lei: 1.234,56 (curs BNR 4,9771 din 17.09.2026)');
     expect(html).not.toContain('tabelul');
   });
 
@@ -50,7 +50,7 @@ describe('buildLocalCurrencyVatRow', () => {
       vatAmountLocal: 524933,
     });
     const html = buildLocalCurrencyVatRow(document, getClassicLabels('pl'), 'pl', -1);
-    expect(html).toContain('-5 249,33 zł');
+    expect(html).toContain('-5 249,33');
   });
 
   it('localizes the ECB acronym per document language, for CZ/DK/HU/SE', () => {
@@ -87,8 +87,8 @@ describe('buildLocalCurrencyVatRow', () => {
       ],
     });
     const html = buildLocalCurrencyVatRow(document, getClassicLabels('pl'), 'pl', 1);
-    expect(html).toContain('Kwota VAT w PLN (23%): 5 867,00 zł');
-    expect(html).toContain('Kwota VAT w PLN (8%): 918,00 zł');
+    expect(html).toContain('Kwota VAT w PLN (23%): 5 867,00');
+    expect(html).toContain('Kwota VAT w PLN (8%): 918,00');
     expect((html.match(/vat-local-currency/g) ?? []).length).toBe(2);
   });
 
@@ -103,7 +103,7 @@ describe('buildLocalCurrencyVatRow', () => {
       vatAmountLocalByRate: [{ rateBp: 2300, vatAmountLocal: 524933 }],
     });
     const html = buildLocalCurrencyVatRow(document, getClassicLabels('pl'), 'pl', 1);
-    expect(html).toContain('Kwota VAT w PLN: 5 249,33 zł');
+    expect(html).toContain('Kwota VAT w PLN: 5 249,33');
     expect((html.match(/vat-local-currency/g) ?? []).length).toBe(1);
   });
 

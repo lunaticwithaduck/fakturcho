@@ -90,7 +90,10 @@ export class DocumentsService {
           ? line.vatRateBp
           : vatCategory === 'AE' || vatCategory === 'O' || vatCategory === 'E'
             ? 0
-            : getCountryConfig(issuerCountry, issuerIdentifiers).defaultVatRateBp;
+            : getCountryConfig(issuerCountry, issuerIdentifiers, {
+                country: client?.country ?? null,
+                postcode: client?.postcode ?? null,
+              }).defaultVatRateBp;
 
       return { ...line, vatCategory, vatRateBp };
     });

@@ -69,6 +69,17 @@ export function appendCountyRegionSuffix(
   return address;
 }
 
+// A short multi-word identifier value (e.g. "Landesgericht Feldkirch") must
+// not wrap one word onto its own line at the column's edge — join it with
+// non-breaking spaces instead of ordinary ones. Only below the length where
+// doing so still reliably fits on one line; a longer value keeps wrapping
+// normally rather than being forced onto one overlong line.
+const NON_BREAKING_VALUE_MAX_LENGTH = 40;
+
+export function keepShortValueTogether(value: string): string {
+  return value.length <= NON_BREAKING_VALUE_MAX_LENGTH ? value.replace(/ /g, ' ') : value;
+}
+
 export function labelled(label: string, language: string): string {
   return language === 'fr' ? `${label} : ` : `${label}: `;
 }

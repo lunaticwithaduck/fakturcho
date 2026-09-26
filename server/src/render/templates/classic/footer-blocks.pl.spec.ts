@@ -18,7 +18,9 @@ describe('buildIssuerBlock — PL identifiers', () => {
     expect(html).toContain(
       'Sąd rejestrowy: Sąd Rejonowy dla m.st. Warszawy, XII Wydział Gospodarczy KRS',
     );
-    expect(html).toContain('Kapitał zakładowy: 5 000 PLN');
+    // A short value (<= 40 chars) is joined with non-breaking spaces so it
+    // never wraps one word onto its own line.
+    expect(html).toContain('Kapitał zakładowy: 5 000 PLN');
   });
 
   it('prints nothing for a sole trader who left them blank', () => {

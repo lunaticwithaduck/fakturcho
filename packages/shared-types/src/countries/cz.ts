@@ -1,10 +1,10 @@
 import { type CountryConfig, GENERIC_EU_CONFIG } from './base';
 
-// NOZ § 435 odst. 1 (zákon č. 89/2012 Sb.): every entrepreneur must state
-// their entry in the Commercial Register (court, section, insert) — or, for
-// an entrepreneur entered in another public register instead, that entry —
-// on business documents. Unlike the free-text field GENERIC_EU_CONFIG offers
-// unconfigured EU countries, CZ requires it.
+// NOZ § 435 odst. 1 (zákon č. 89/2012 Sb.): only an entrepreneur entered in
+// the Commercial Register — or, instead, in another public register or other
+// evidence — must state that entry (court, section, insert) on business
+// documents; an entrepreneur in no register at all owes nothing here. The
+// field is therefore optional, unlike the once-blanket "required" reading.
 export const CZ_CONFIG: CountryConfig = {
   ...GENERIC_EU_CONFIG,
   country: 'CZ',
@@ -16,7 +16,7 @@ export const CZ_CONFIG: CountryConfig = {
   ],
   defaultVatRateBp: 2100,
   identifiers: [
-    { key: 'companyRegister', label: 'Zápis v rejstříku', pattern: null, required: true },
+    { key: 'companyRegister', label: 'Zápis v rejstříku', pattern: null, required: false },
   ],
   // §29 odst. 1 písm. h) zákona o DPH: DUZP is not a mandatory element once it
   // matches the issue date, but Czech practice prints it unconditionally.

@@ -437,6 +437,62 @@ describe('DocumentsService', () => {
     expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'S', vatRateBp: 2100 });
   });
 
+  it('§ 10 Abs. 4 UStG 1994: an AT issuer with the Jungholz/Mittelberg flag defaults a new line to 19% for a client inside the zone', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      identifiers: { jungholzMittelbergRate: 'true' },
+    });
+    const client = await createTestClient(prisma, accountId, { country: 'AT', postcode: '6991' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatRateBp: 1900 });
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: the same flag defaults to 20% for a domestic client outside Jungholz/Mittelberg (Betriebsstätte carve-out)', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      identifiers: { jungholzMittelbergRate: 'true' },
+    });
+    const client = await createTestClient(prisma, accountId, { country: 'AT', postcode: '1060' });
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: client.id }),
+    );
+
+    expect(draft.lineItems[0]).toMatchObject({ vatRateBp: 2000 });
+  });
+
+  it('§ 10 Abs. 4 UStG 1994: the flag still defaults to 19% with no client selected or a foreign client', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      identifiers: { jungholzMittelbergRate: 'true' },
+    });
+
+    const noClientDraft = await documentsService.saveDraft(accountId, null, draftRequest());
+    expect(noClientDraft.lineItems[0]).toMatchObject({ vatRateBp: 1900 });
+
+    const foreignClient = await createTestClient(prisma, accountId, { country: 'DE' });
+    const foreignDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: foreignClient.id }),
+    );
+    expect(foreignDraft.lineItems[0]).toMatchObject({ vatRateBp: 1900 });
+  });
+
   it('reverse-charge: an explicit vatCategory is always honored, even cross-border', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, { country: 'BG' });

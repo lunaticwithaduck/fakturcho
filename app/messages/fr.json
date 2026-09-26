@@ -477,7 +477,7 @@
       "city": "Ville",
       "phone": "Téléphone",
       "invalidFormat": "Format invalide",
-      "czRegisterHint": "Obligatoire pour les émetteurs tchèques : indiquez votre immatriculation au registre du commerce (tribunal, section, numéro d'inscription) ou à un autre registre public – § 435 du Code civil (loi n° 89/2012 Sb.).",
+      "czRegisterHint": "Si vous êtes immatriculé au registre du commerce ou à un autre registre public, indiquez cette immatriculation ici – § 435 du Code civil (loi n° 89/2012 Sb.). Obligatoire uniquement pour les entrepreneurs immatriculés.",
       "frLegalFormHint": "Entrepreneur individuel ? Indiquez « EI » ou « entrepreneur individuel » : la mention doit figurer à côté de votre nom sur chaque document (art. L526-22 du code de commerce).",
       "atJungholzMittelbergHint": "Le siège de votre entreprise est à Jungholz ou dans le Kleinwalsertal (Mittelberg) ? En vertu du § 10 al. 4 UStG 1994, le taux normal y est de 19 % au lieu de 20 %. Les taux réduits (13 %, 10 %, 4,9 %) restent inchangés."
     },

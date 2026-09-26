@@ -56,7 +56,7 @@ const AT_EXEMPTION_GROUNDS = [
 ] as const;
 
 // § 10 Abs. 4 UStG 1994 (RIS NOR40278068, idF BGBl. I 37/2026), verified
-// against the consolidated text on ris.bka.gv.at / jusline.at 29.09.2026: the
+// against the consolidated text on ris.bka.gv.at / jusline.at 26.09.2026: the
 // standard rate is reduced to 19% "für die in den Gebieten Jungholz und
 // Mittelberg bewirkten Umsätze ... durch Unternehmer, die einen Wohnsitz
 // (Sitz), gewöhnlichen Aufenthalt oder eine Betriebsstätte in diesen Gebieten
@@ -71,6 +71,23 @@ const AT_JUNGHOLZ_MITTELBERG_IDENTIFIER_KEY = 'jungholzMittelbergRate';
 export function isAtJungholzMittelbergPostcode(postcode: string | null | undefined): boolean {
   if (!postcode) return false;
   return (AT_JUNGHOLZ_MITTELBERG_POSTCODES as readonly string[]).includes(postcode.trim());
+}
+
+export interface AtRecipientLocation {
+  country: string | null;
+  postcode?: string | null;
+}
+
+// jusline.at / RIS NOR40278068, verified 26.09.2026: Abs. 4's 19% rate
+// excludes "die Lieferung und die Vermietung von Kraftfahrzeugen an
+// Leistungsempfänger, die ihren Wohnsitz oder Sitz im Inland, ausgenommen in
+// den Gebieten Jungholz und Mittelberg, haben" and any supply to the
+// Betriebsstätte of an entrepreneur elsewhere in Austria — both keyed on the
+// RECIPIENT's own seat, not the supplier's (that stays Jungholz/Mittelberg
+// throughout, see the flag above).
+function isAtRecipientOutsideJungholzMittelberg(recipient?: AtRecipientLocation | null): boolean {
+  if (recipient?.country !== 'AT') return false;
+  return !isAtJungholzMittelbergPostcode(recipient.postcode);
 }
 
 const AT_BASE_VAT_RATES = [
@@ -131,14 +148,18 @@ export const AT_CONFIG: CountryConfig = {
 // Applied wherever an AT issuer's own vatRates/defaultVatRateBp drive a
 // choice (composer rate list, the default rate for a new line, the
 // whole-document default when VAT is charged): once the issuer has confirmed
-// their seat is in Jungholz/Mittelberg, 19% replaces 20% as the default and
-// both are offered (a line can still be a supply taxed outside the zone).
-// Reduced rates (13%/10%/4,9%) and everything else about AT_CONFIG is
-// unchanged. Never derives the flag from a postcode itself — only the
-// issuer's own explicit confirmation (see AT-SPEC follow-up, item 3) counts.
+// their seat is in Jungholz/Mittelberg, 19% and 20% are both offered, and 19%
+// is the default UNLESS the recipient's own seat excludes it (Abs. 4's
+// vehicle/Betriebsstätte carve-out, see isAtRecipientOutsideJungholzMittelberg
+// above) — then 20% defaults instead, still with both selectable, since a
+// line can be a different supply. Reduced rates (13%/10%/4,9%) and everything
+// else about AT_CONFIG is unchanged. Never derives the flag from a postcode
+// itself — only the issuer's own explicit confirmation (see AT-SPEC
+// follow-up, item 3) counts; the recipient postcode only picks the default.
 export function applyAtSpecialRate(
   config: CountryConfig,
   identifiers?: Record<string, string> | null,
+  recipient?: AtRecipientLocation | null,
 ): CountryConfig {
   if (config.country !== 'AT') return config;
   if (identifiers?.[AT_JUNGHOLZ_MITTELBERG_IDENTIFIER_KEY] !== 'true') return config;
@@ -152,6 +173,6 @@ export function applyAtSpecialRate(
       { rateBp: 490, label: '4,9%' },
       { rateBp: 0, label: '0%' },
     ],
-    defaultVatRateBp: 1900,
+    defaultVatRateBp: isAtRecipientOutsideJungholzMittelberg(recipient) ? 2000 : 1900,
   };
 }

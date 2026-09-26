@@ -477,7 +477,7 @@
       "city": "Miejscowość",
       "phone": "Telefon",
       "invalidFormat": "Nieprawidłowy format",
-      "czRegisterHint": "Wymagane dla czeskich wystawców: podaj wpis do rejestru handlowego (sąd, dział, numer wpisu) lub innego rejestru publicznego – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.).",
+      "czRegisterHint": "Jeśli jesteś wpisany do rejestru handlowego lub innego rejestru publicznego, podaj ten wpis tutaj – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.). Obowiązkowe tylko dla wpisanych przedsiębiorców.",
       "frLegalFormHint": "Jednoosobowa działalność gospodarcza? Wpisz „EI” lub „entrepreneur individuel” — musi pojawić się obok nazwy na każdym dokumencie (art. L526-22 francuskiego kodeksu handlowego).",
       "atJungholzMittelbergHint": "Siedziba Twojej firmy znajduje się w Jungholz lub Kleinwalsertal (Mittelberg)? Zgodnie z § 10 ust. 4 UStG 1994 obowiązuje tam stawka podstawowa 19% zamiast 20%. Stawki obniżone (13%, 10%, 4,9%) pozostają bez zmian."
     },
