@@ -87,4 +87,29 @@ describe('roMentions — TVA la încasare', () => {
     const lineItems = buildFakeLineItems();
     expect(roMentions({ document, lineItems, locale })).toEqual([]);
   });
+
+  it('adds no mention when a line is not taxable in Romania with VAT charged (art. 282 alin. (6))', () => {
+    for (const vatCategory of ['AE', 'E', 'O', 'K', 'G']) {
+      const document = buildFakeDocument({
+        issuerCountry: 'RO',
+        documentType: 'INVOICE',
+        issuerVatOnCashBasis: true,
+        vatAmount: 0,
+        vatRateBp: 0,
+      });
+      const lineItems = buildFakeLineItems({ vatCategory, vatRateBp: 0 });
+      expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+    }
+  });
+
+  it('adds no mention when the document already carries an exemption ground', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+      vatExemptionGround: 'Taxare inversă',
+    });
+    const lineItems = buildFakeMixedLineItems();
+    expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+  });
 });

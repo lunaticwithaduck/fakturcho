@@ -109,12 +109,14 @@ export function toFa3Xml(document: DocumentDto): string {
   const documentNumber = document.number !== null ? formatDocumentNumber(document.number) : '';
   const idWithAffixes = `${document.numberPrefix ?? ''}${documentNumber}${document.numberSuffix ?? ''}`;
   const generatedAt = `${document.issuedAt ? dateOnly(document.issuedAt) : dateOnly(document.createdAt)}T00:00:00Z`;
+  // Matches the PDF's "Data sprzedaży" (header-blocks.ts), which reads taxEventAt.
+  const saleDate = document.taxEventAt ?? document.deliveryDate;
 
   const faBody =
     textEl('KodWaluty', document.currency) +
     textEl('P_1', document.issuedAt ? dateOnly(document.issuedAt) : '') +
     textEl('P_2', idWithAffixes) +
-    (document.deliveryDate ? textEl('P_6', dateOnly(document.deliveryDate)) : '') +
+    (saleDate ? textEl('P_6', dateOnly(saleDate)) : '') +
     amountsBlock(document) +
     annotationsBlock(document) +
     textEl('RodzajFaktury', RODZAJ_FAKTURY[kind]) +

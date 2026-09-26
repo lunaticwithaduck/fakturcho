@@ -272,7 +272,8 @@
           "nip": "Missing recipient NIP, required for a domestic Polish buyer.",
           "nipChecksum": "The recipient NIP fails the checksum validation."
         }
-      }
+      },
+      "ksefNumberInvalid": "The KSeF number format is invalid."
     }
   },
   "billing": {
@@ -560,7 +561,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "This provider does not support status checks.",
       "INTERNAL_ERROR": "An unexpected error occurred. Please try again.",
       "OPERATION_NATURE_REQUIRED": "French tax documents must state the nature of the operation before they can be issued.",
-      "EXCHANGE_RATE_UNAVAILABLE": "Could not fetch the exchange rate needed to issue this document. Please try again shortly."
+      "EXCHANGE_RATE_UNAVAILABLE": "Could not fetch the exchange rate needed to issue this document. Please try again shortly.",
+      "INVALID_KSEF_NUMBER": "The KSeF number format is invalid."
     },
     "guideLink": "Invoicing guide",
     "helpLink": "View setup guide",

@@ -272,7 +272,8 @@
           "nip": "Brak numeru NIP nabywcy, wymaganego w przypadku nabywcy krajowego.",
           "nipChecksum": "Numer NIP nabywcy ma nieprawidłową sumę kontrolną."
         }
-      }
+      },
+      "ksefNumberInvalid": "Nieprawidłowy format numeru KSeF."
     }
   },
   "billing": {
@@ -560,7 +561,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Ten dostawca nie obsługuje sprawdzania statusu.",
       "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.",
       "OPERATION_NATURE_REQUIRED": "Francuskie dokumenty podatkowe muszą wskazywać rodzaj czynności przed wystawieniem.",
-      "EXCHANGE_RATE_UNAVAILABLE": "Nie udało się pobrać kursu wymiany potrzebnego do wystawienia tego dokumentu. Spróbuj ponownie za chwilę."
+      "EXCHANGE_RATE_UNAVAILABLE": "Nie udało się pobrać kursu wymiany potrzebnego do wystawienia tego dokumentu. Spróbuj ponownie za chwilę.",
+      "INVALID_KSEF_NUMBER": "Nieprawidłowy format numeru KSeF."
     },
     "guideLink": "Poradnik fakturowania",
     "helpLink": "Zobacz przewodnik",

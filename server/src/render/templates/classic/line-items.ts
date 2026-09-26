@@ -17,9 +17,30 @@ function formatUnit(unitCode: string | null, labels: ClassicLabels): string {
   return labels.unitLabels[unitCode as UnitCode] ?? unitCode;
 }
 
-function formatLineVatRate(item: LineItem, labels: ClassicLabels): string {
+// Space before "%" for de/fr per DIN 5008 / French typography; decimal comma
+// wherever the language uses one (money/format.ts CONVENTIONS).
+function formatPercentForLocale(rateBp: number, language: ClassicLanguage): string {
+  const value = String(rateBp / 100).replace('.', decimalSeparatorForLocale(language));
+  return language === 'de' || language === 'fr' ? `${value} %` : `${value}%`;
+}
+
+function formatLineVatRate(
+  item: LineItem,
+  labels: ClassicLabels,
+  language: ClassicLanguage,
+  issuerCountry: string,
+  issuerVatRegistered: boolean,
+): string {
   if (item.vatCategory === 'AE') return labels.reverseChargeLineMarker;
-  return `${item.vatRateBp / 100}%`;
+  // art. 106e ust. 1 pkt 12 + ust. 4 pkt 3 ustawy o VAT: the Polish paper
+  // convention for an exempt or out-of-scope line, distinct from the FA(3)
+  // XML codes in einvoice-adapters/pl/fa3-vat-groups.ts.
+  if (issuerCountry === 'PL') {
+    if (item.vatCategory === 'E') return 'zw';
+    if (item.vatCategory === 'O') return 'np.';
+  }
+  if (!issuerVatRegistered && item.vatRateBp === 0) return labels.reverseChargeLineMarker;
+  return formatPercentForLocale(item.vatRateBp, language);
 }
 
 function hasMixedVatRates(lineItems: readonly LineItem[]): boolean {
@@ -31,6 +52,7 @@ export function buildLineItemsTable(
   locale: ClassicLocaleContext,
   documentType: DocumentType,
   showPrices = true,
+  issuerVatRegistered = true,
 ): string {
   const { labels, language, issuerCountry } = locale;
   const sign = documentType === 'credit_note' ? -1 : 1;
@@ -51,7 +73,7 @@ export function buildLineItemsTable(
       : '';
   const vatRateCell = (item: LineItem) =>
     showVatRateColumn
-      ? `<td class="col-narrow">${escapeHtml(formatLineVatRate(item, labels))}</td>`
+      ? `<td class="col-narrow">${escapeHtml(formatLineVatRate(item, labels, language, issuerCountry, issuerVatRegistered))}</td>`
       : '';
 
   const rows = lineItems

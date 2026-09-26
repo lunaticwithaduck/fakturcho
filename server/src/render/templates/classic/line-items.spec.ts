@@ -52,7 +52,8 @@ describe('buildLineItemsTable — VAT rate column', () => {
     const locale = resolveClassicLocale('de', 'DE');
     const html = buildLineItemsTable(buildFakeMixedLineItems(), locale, 'invoice');
     expect(html).toContain('USt.-Satz');
-    expect(html).toContain('>20%<');
+    // DIN 5008: a space between the number and "%".
+    expect(html).toContain('>20 %<');
     expect(html).toContain('>—<');
   });
 
@@ -72,5 +73,28 @@ describe('buildLineItemsTable — VAT rate column', () => {
     ];
     const html = buildLineItemsTable(lineItems, locale, 'invoice');
     expect(html).toContain('>0%<');
+  });
+
+  it('never prints 0% for an untaxed line when the issuer is not VAT-registered', () => {
+    const locale = resolveClassicLocale('bg', 'BG');
+    const lineItems = [
+      ...buildFakeLineItems({ id: 'li_1', vatRateBp: 2000, vatCategory: 'S' }),
+      ...buildFakeLineItems({ id: 'li_2', vatRateBp: 0, vatCategory: 'E' }),
+    ];
+    const html = buildLineItemsTable(lineItems, locale, 'invoice', true, false);
+    expect(html).not.toContain('>0%<');
+    expect(html).toContain('>—<');
+  });
+
+  it('PL: prints "zw" for an exempt line and "np." for an out-of-scope line (art. 106e ust. 1 pkt 12 + ust. 4 pkt 3)', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const lineItems = [
+      ...buildFakeLineItems({ id: 'li_1', vatRateBp: 2000, vatCategory: 'S' }),
+      ...buildFakeLineItems({ id: 'li_2', vatRateBp: 0, vatCategory: 'E' }),
+      ...buildFakeLineItems({ id: 'li_3', vatRateBp: 0, vatCategory: 'O' }),
+    ];
+    const html = buildLineItemsTable(lineItems, locale, 'invoice');
+    expect(html).toContain('>zw<');
+    expect(html).toContain('>np.<');
   });
 });

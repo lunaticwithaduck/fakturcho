@@ -74,6 +74,7 @@ const BG_CONFIG: CountryConfig = {
   showOriginalStamp: true,
   deliveryNotePricesShown: true,
   deliveryNoteTransportReasons: [],
+  taxEventDateAlwaysShown: true,
 };
 
 const COUNTRY_CONFIGS: Record<string, CountryConfig> = {

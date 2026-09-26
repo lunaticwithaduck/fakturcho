@@ -130,8 +130,20 @@ function toOriginalDocumentReferenceDto(
     numberPrefix: original.numberPrefix,
     numberSuffix: original.numberSuffix,
     issuedAt: toIsoDate(original.issuedAt),
-    ksefNumber: readKsefNumber(original.einvoiceTransmission),
+    ksefNumber: resolveOriginalKsefNumber(original),
   };
+}
+
+// art. 106j ustawy o VAT: a correction must cite the corrected invoice's own
+// KSeF number. The user-pasted `ksefNumber` (documents.service.setKsefNumber)
+// is the number that invoice actually got; the transmission receipt is only
+// a fallback for a document fakturcho itself submitted to KSeF.
+export function resolveOriginalKsefNumber(
+  original: Pick<PrismaDocument, 'ksefNumber'> & {
+    einvoiceTransmission: PrismaEinvoiceTransmission | null;
+  },
+): string | null {
+  return original.ksefNumber ?? readKsefNumber(original.einvoiceTransmission);
 }
 
 function readKsefNumber(transmission: PrismaEinvoiceTransmission | null): string | null {

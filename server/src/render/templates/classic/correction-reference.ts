@@ -8,6 +8,7 @@ export interface OriginalDocumentRef {
   numberPrefix: string | null;
   numberSuffix: string | null;
   issuedAt: Date | null;
+  ksefNumber?: string | null;
 }
 
 export function buildCorrectionReference(
@@ -21,8 +22,14 @@ export function buildCorrectionReference(
   const number = `${original.numberPrefix ?? ''}${formatDocumentNumber(Number(original.number))}${original.numberSuffix ?? ''}`;
   const date = original.issuedAt ? formatDateForLocale(original.issuedAt, locale.language) : '—';
   const referenceLine = `<div class="correction-reference">${escapeHtml(locale.labels.correctsInvoice(number, date))}</div>`;
+  // art. 106j ustawy o VAT: a correction of a KSeF-submitted invoice carries
+  // that invoice's KSeF number in the FA(3) export (fa3-mapper.ts); print it
+  // here so the PDF and the XML agree.
+  const ksefLine = original.ksefNumber
+    ? `<div class="correction-ksef">${escapeHtml(locale.labels.correctionKsefNumberPrefix + original.ksefNumber)}</div>`
+    : '';
   const reasonLine = reason
     ? `<div class="correction-reason">${escapeHtml(locale.labels.correctionReasonPrefix + reason)}</div>`
     : '';
-  return referenceLine + reasonLine;
+  return referenceLine + ksefLine + reasonLine;
 }

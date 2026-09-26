@@ -272,7 +272,8 @@
           "nip": "Lipsește NIP-ul destinatarului, necesar pentru un cumpărător cu sediul în Polonia.",
           "nipChecksum": "NIP-ul destinatarului nu este valid (cifra de control nu corespunde)."
         }
-      }
+      },
+      "ksefNumberInvalid": "Formatul numărului KSeF nu este valid."
     }
   },
   "billing": {
@@ -560,7 +561,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Acest furnizor nu permite verificarea statusului.",
       "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou.",
       "OPERATION_NATURE_REQUIRED": "Documentele fiscale franceze trebuie să indice natura operațiunii înainte de a putea fi emise.",
-      "EXCHANGE_RATE_UNAVAILABLE": "Nu s-a putut obține cursul de schimb necesar pentru emiterea acestui document. Încercați din nou peste puțin timp."
+      "EXCHANGE_RATE_UNAVAILABLE": "Nu s-a putut obține cursul de schimb necesar pentru emiterea acestui document. Încercați din nou peste puțin timp.",
+      "INVALID_KSEF_NUMBER": "Formatul numărului KSeF nu este valid."
     },
     "guideLink": "Ghid de facturare",
     "helpLink": "Vedeți ghidul",

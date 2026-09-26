@@ -60,6 +60,35 @@ describe('resolveVatTreatment', () => {
     expect(treatment).toEqual({ vatCharged: false, vatRateBp: 0, vatExemptionGround: null });
   });
 
+  it('never charges VAT on a proforma or quote from a non-registered issuer', () => {
+    for (const documentType of ['proforma', 'quote'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: false,
+          requestedGround: null,
+          issuerCountry: 'DE',
+        }),
+      ).toEqual({ vatCharged: false, vatRateBp: 0, vatExemptionGround: null });
+    }
+  });
+
+  // FIXRULES item 3: a VAT-registered issuer's proforma/quote must show VAT
+  // exactly like an invoice would (SPEC §5 forbids only the exemption line
+  // and "(Original)" on these two types, not the VAT amount itself).
+  it('charges the standard rate on a proforma or quote from a VAT-registered issuer', () => {
+    for (const documentType of ['proforma', 'quote'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: true,
+          requestedGround: null,
+          issuerCountry: 'DE',
+        }),
+      ).toEqual({ vatCharged: true, vatRateBp: 1900, vatExemptionGround: null });
+    }
+  });
+
   it('rejects an apartado outside the ES statutory list', () => {
     expect(() =>
       resolveVatTreatment({

@@ -12,12 +12,28 @@ export function line(label: string, value: string | null | undefined): string {
   return `<div>${escapeHtml(label)}${escapeHtml(value)}</div>`;
 }
 
+function normalizeForComparison(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function namesMatch(a: string | null | undefined, b: string | null | undefined): boolean {
+  if (!a || !b) return false;
+  return normalizeForComparison(a) === normalizeForComparison(b);
+}
+
+const BUCHAREST_NORMALIZED = 'bucuresti';
+
 export function cityWithCountyRegion(
   city: string | null | undefined,
   countyRegion: string | null | undefined,
   country: string | null | undefined,
 ): string | null | undefined {
-  if (country === 'IT' && city && countyRegion) return `${city} (${countyRegion})`;
+  if (country === 'IT' && city && countyRegion && !namesMatch(city, countyRegion)) {
+    return `${city} (${countyRegion})`;
+  }
   return city;
 }
 
@@ -28,8 +44,17 @@ export function appendCountyRegionSuffix(
   country: string | null | undefined,
 ): string {
   if (!address || !countyRegion) return address;
-  if (country === 'RO') return `${address}, jud. ${countyRegion}`;
-  if (country === 'ES' && (!city || city.toLowerCase() !== countyRegion.toLowerCase())) {
+  // Never repeat the city when the county/province/județ is the same name (IT/ES/RO).
+  if (namesMatch(city, countyRegion)) return address;
+  if (country === 'RO') {
+    // București is a municipality, not a județ, so it never takes "jud." (Legea
+    // nr. 2/1968 art. 3); this only fires when countyRegion differs from city
+    // (e.g. a sector of Bucharest), since the identical-name case returned above.
+    return normalizeForComparison(countyRegion) === BUCHAREST_NORMALIZED
+      ? `${address}, Municipiul ${countyRegion}`
+      : `${address}, jud. ${countyRegion}`;
+  }
+  if (country === 'ES') {
     return `${address}, ${countyRegion}`;
   }
   return address;

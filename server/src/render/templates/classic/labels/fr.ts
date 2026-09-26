@@ -86,4 +86,8 @@ export const fr: ClassicLabels = {
   },
   watermarkMain: 'BROUILLON',
   watermarkSub: 'SANS VALEUR LÉGALE',
+  vatBaseWithRatePrefix: (percent) => `Base HT (${String(percent).replace('.', ',')} %) :`,
+  buyerReferencePrefix: 'Votre référence : ',
+  paymentTermsPrefix: 'Conditions de paiement : ',
+  correctionKsefNumberPrefix: 'Numéro KSeF de la facture corrigée : ',
 };

@@ -61,4 +61,5 @@ export const DE_CONFIG: CountryConfig = {
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  taxEventDateAlwaysShown: true,
 };

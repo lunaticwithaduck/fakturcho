@@ -29,6 +29,29 @@ function issuanceServiceWithRate(
   );
 }
 
+function issuanceServiceWithRates(
+  prismaService: PrismaService,
+  rates: readonly [string, string][],
+) {
+  let call = 0;
+  const stub = async () => {
+    const [rate, rateDate] = rates[Math.min(call, rates.length - 1)] as [string, string];
+    call += 1;
+    return { rate, rateDate, table: null };
+  };
+  const exchangeRateService = new ExchangeRateService({
+    NBP: { fetchRateOn: stub },
+    BNR: { fetchRateOn: stub },
+    ECB: { fetchRateOn: stub },
+  });
+  return new DocumentIssuanceService(
+    prismaService,
+    new NumberingService(prismaService),
+    new CreditsService(prismaService),
+    exchangeRateService,
+  );
+}
+
 describe('DocumentIssuanceService: VAT amount in national currency (art. 230)', () => {
   let db: TestDatabase;
   let prisma: PrismaClient;
@@ -103,5 +126,72 @@ describe('DocumentIssuanceService: VAT amount in national currency (art. 230)', 
     const stillDraft = await prisma.document.findUnique({ where: { id: draft.id } });
     expect(stillDraft?.status).toBe('DRAFT');
     expect(stillDraft?.number).toBeNull();
+  }, 30_000);
+
+  it('splits the PL local VAT per rate when the invoice has more than one charged rate', async () => {
+    const prismaService = prisma as unknown as PrismaService;
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, 'Jan Kowalski', {
+      country: 'PL',
+      street: 'ul. Testowa 1',
+      postcode: '00-001',
+      vatRegistered: true,
+      vatNumber: 'PL1234567890',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        lineItems: [
+          { name: 'A', quantity: '1', unitPrice: 60000, sortOrder: 0, vatRateBp: 2300 },
+          { name: 'B', quantity: '1', unitPrice: 27000, sortOrder: 1, vatRateBp: 800 },
+        ],
+      }),
+    );
+    const issuanceService = issuanceServiceWithRate(prismaService, '4.2512');
+
+    await issuanceService.issue(accountId, draft.id, {});
+    const record = await prisma.document.findUnique({ where: { id: draft.id } });
+
+    expect(record?.vatAmountLocalByRate).toEqual([
+      { rateBp: 2300, vatAmountLocal: Math.round(13800 * 4.2512) },
+      { rateBp: 800, vatAmountLocal: Math.round(2160 * 4.2512) },
+    ]);
+  }, 30_000);
+
+  it('a RO credit note reuses the original invoice exchange rate instead of fetching a fresh one', async () => {
+    const prismaService = prisma as unknown as PrismaService;
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, 'Ion Popescu', {
+      country: 'RO',
+      street: 'Str. Test 1',
+      postcode: '010101',
+      countyRegion: 'București',
+      vatRegistered: true,
+      vatNumber: 'RO12345678',
+    });
+    const invoiceDraft = await documentsService.saveDraft(accountId, null, draftRequest());
+    const invoiceIssuance = issuanceServiceWithRates(prismaService, [['4.9771', '2026-09-16']]);
+    const invoice = await invoiceIssuance.issue(accountId, invoiceDraft.id, {});
+
+    const creditNoteDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: invoice.id,
+        correctionReason: 'Test correction',
+      }),
+    );
+    // A different rate is available for the correction's own (later) date —
+    // it must be ignored in favour of the original invoice's snapshot rate.
+    const creditNoteIssuance = issuanceServiceWithRates(prismaService, [['5.1000', '2026-10-01']]);
+    const creditNote = await creditNoteIssuance.issue(accountId, creditNoteDraft.id, {});
+
+    expect(creditNote.exchangeRate).toBe(invoice.exchangeRate);
+    expect(creditNote.exchangeRateDate).toBe(invoice.exchangeRateDate);
+    expect(creditNote.vatAmountLocal).toBe(
+      Math.round((creditNote.vatAmount as number) * Number(invoice.exchangeRate)),
+    );
   }, 30_000);
 });

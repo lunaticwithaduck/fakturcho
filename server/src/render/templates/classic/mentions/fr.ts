@@ -28,7 +28,11 @@ export const frMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
     mentions.push(EXPORT_MENTION);
   }
 
-  if (document.issuerVatOnDebits && TAX_DOCUMENT_TYPES[sharedType]) {
+  // CGI art. 283: the debits option only shifts VAT collection timing on a taxed
+  // supply — it makes no sense (and must not print) on an autoliquidation or
+  // exempt invoice where the supplier collects no VAT to begin with.
+  const hasTaxedLine = lineItems.some((line) => line.vatRateBp > 0);
+  if (document.issuerVatOnDebits && TAX_DOCUMENT_TYPES[sharedType] && hasTaxedLine) {
     mentions.push(VAT_ON_DEBITS_MENTION);
   }
   if (TAX_DOCUMENT_TYPES[sharedType]) {
@@ -46,6 +50,12 @@ export const frMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
   if (TAX_DOCUMENT_TYPES[sharedType] && sharedType !== 'credit_note') {
     if (document.dueAt) {
       mentions.push(`Date d'échéance : ${formatDateForLocale(document.dueAt, 'fr')}`);
+    } else if (document.issuedAt) {
+      // C. com. art. L441-10 I: absent an agreed term, payment is due 30 days
+      // after the issue date by default.
+      const defaultDue = new Date(document.issuedAt);
+      defaultDue.setUTCDate(defaultDue.getUTCDate() + 30);
+      mentions.push(`Date d'échéance : ${formatDateForLocale(defaultDue, 'fr')}`);
     }
     mentions.push('Escompte pour paiement anticipé : néant');
     mentions.push(

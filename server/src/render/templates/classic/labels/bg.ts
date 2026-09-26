@@ -17,7 +17,7 @@ export const bg: ClassicLabels = {
   molPrefix: 'МОЛ: ',
   issuedAtPrefix: () => 'Дата на издаване: ',
   taxEventPrefix: 'Дата на данъчното събитие: ',
-  validUntilPrefix: () => 'Валидно до: ',
+  validUntilPrefix: () => 'Валидна до: ',
   deliveryDatePrefix: 'Дата на доставка: ',
   transportReasonPrefix: 'Основание за транспорта: ',
   transportedAtPrefix: 'Дата и час на транспорта: ',
@@ -89,4 +89,8 @@ export const bg: ClassicLabels = {
   },
   watermarkMain: 'ЧЕРНОВА',
   watermarkSub: 'БЕЗ ПРАВНА СИЛА',
+  vatBaseWithRatePrefix: (percent) => `Данъчна основа (${percent}%):`,
+  buyerReferencePrefix: 'Ваша референция: ',
+  paymentTermsPrefix: 'Условия за плащане: ',
+  correctionKsefNumberPrefix: 'Номер по KSeF на коригираната фактура: ',
 };

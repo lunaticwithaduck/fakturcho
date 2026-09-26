@@ -215,12 +215,18 @@ model NumberSeries {
   accountId    String
   account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
   documentType DocumentType
+  // Art. 226(2)+219 EU VAT Directive: invoice/credit_note/debit_note draw one
+  // shared, uniquely-identifying sequence per issuer country group (ES keeps
+  // corrections in their own series per RD 1619/2012 art. 6.1.a). This key,
+  // not documentType, is what claimNumber locks and increments on.
+  seriesKey    String?
   nextNumber   BigInt       @default(1)
   issuedCount  Int          @default(0)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
   @@unique([accountId, documentType])
+  @@unique([accountId, seriesKey])
   @@map("number_series")
 }
 
@@ -290,6 +296,11 @@ model Document {
   exchangeRateSource String?
   exchangeRateTable  String?
   vatAmountLocal     Int?
+  // PL art. 106e ust. 11 (pkt 14) / RO art. 319 alin. (20) lit. j): the local-
+  // currency VAT split by rate, [{rateBp, vatAmountLocal}]. Null whenever the
+  // document only ever had one charged rate — vatAmountLocal above still
+  // carries that single total unchanged.
+  vatAmountLocalByRate Json?
 
   clientId String?
   client   Client? @relation(fields: [clientId], references: [id], onDelete: SetNull)

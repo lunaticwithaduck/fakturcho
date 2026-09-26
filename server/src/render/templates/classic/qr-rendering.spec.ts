@@ -51,6 +51,18 @@ describe('renderClassicTemplateHtml — PL KOD I / ES VERI*FACTU QR blocks', () 
     expect(html).not.toContain('class="qr-legend"');
   });
 
+  it('prints the literal "QR tributario:" caption above the code, centred at the top of the page', () => {
+    const html = renderClassicTemplateHtml(
+      baseInput({ verifactuQr: { svg: '<svg data-fake="verifactu"></svg>', legend: null } }),
+    );
+    expect(html).toContain('<div class="qr-tributario-label">QR tributario:</div>');
+    const labelIndex = html.indexOf('qr-tributario-label');
+    const imageIndex = html.indexOf('data-fake="verifactu"');
+    expect(labelIndex).toBeGreaterThan(-1);
+    expect(labelIndex).toBeLessThan(imageIndex);
+    expect(html.indexOf('verifactu-qr-row')).toBeLessThan(html.indexOf('class="header"'));
+  });
+
   it('prints the VERI*FACTU legend only when one is supplied', () => {
     const html = renderClassicTemplateHtml(
       baseInput({ verifactuQr: { svg: '<svg></svg>', legend: 'VERI*FACTU' } }),

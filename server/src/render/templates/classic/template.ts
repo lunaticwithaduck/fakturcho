@@ -67,7 +67,7 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   </div>
   <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
   ${buildCorrectionReference(documentType, originalDocument, document.correctionReason, locale)}
-  ${buildLineItemsTable(lineItems, locale, documentType, showPrices)}
+  ${buildLineItemsTable(lineItems, locale, documentType, showPrices, document.issuerVatRegistered ?? false)}
   ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
   ${
     showPrices

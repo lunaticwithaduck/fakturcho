@@ -272,7 +272,8 @@
           "nip": "NIP des Empfängers fehlt (bei inländischen polnischen Käufern erforderlich).",
           "nipChecksum": "Die Prüfsumme der NIP des Empfängers ist ungültig."
         }
-      }
+      },
+      "ksefNumberInvalid": "Das Format der KSeF-Nummer ist ungültig."
     }
   },
   "billing": {
@@ -560,7 +561,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Dieser Anbieter unterstützt keine Statusabfragen.",
       "INTERNAL_ERROR": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
       "OPERATION_NATURE_REQUIRED": "Französische Steuerdokumente müssen vor der Ausstellung die Art des Umsatzes angeben.",
-      "EXCHANGE_RATE_UNAVAILABLE": "Der für die Ausstellung dieses Dokuments benötigte Wechselkurs konnte nicht abgerufen werden. Bitte versuchen Sie es in Kürze erneut."
+      "EXCHANGE_RATE_UNAVAILABLE": "Der für die Ausstellung dieses Dokuments benötigte Wechselkurs konnte nicht abgerufen werden. Bitte versuchen Sie es in Kürze erneut.",
+      "INVALID_KSEF_NUMBER": "Das Format der KSeF-Nummer ist ungültig."
     },
     "guideLink": "Rechnungsleitfaden",
     "helpLink": "Anleitung ansehen",

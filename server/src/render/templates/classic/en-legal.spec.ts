@@ -14,6 +14,34 @@ describe('English PDF wording (generic EU issuer, e.g. IE)', () => {
       documentType: 'invoice',
     });
     const html = renderClassicTemplateHtml({
+      document: buildFakeDocument({
+        issuerCountry: 'IE',
+        taxEventAt: new Date('2026-08-01'),
+      }),
+      lineItems: buildFakeLineItems(),
+      presentation,
+      isDraft: false,
+      language: 'en',
+      issuerCountry: 'IE',
+    });
+
+    expect(html).toContain('Date of supply: 01/08/2026');
+    expect(html).not.toContain('Tax event:');
+    expect(html).toContain('Net amount (excl. VAT):');
+    expect(html).not.toContain('Taxable amount:');
+    expect(html).toContain('Total (incl. VAT):');
+  });
+
+  // en-cz report: art. 226(7) (and the IE VATCA transposition) only requires
+  // the date of supply when it differs from the issue date.
+  it('hides the date of supply when it matches the issue date (art. 226(7))', () => {
+    const presentation = resolveVatPresentation({
+      vatRegistered: true,
+      vatRateBp: 2000,
+      vatExemptionGround: null,
+      documentType: 'invoice',
+    });
+    const html = renderClassicTemplateHtml({
       document: buildFakeDocument({ issuerCountry: 'IE' }),
       lineItems: buildFakeLineItems(),
       presentation,
@@ -22,11 +50,7 @@ describe('English PDF wording (generic EU issuer, e.g. IE)', () => {
       issuerCountry: 'IE',
     });
 
-    expect(html).toContain('Date of supply: 02/08/2026');
-    expect(html).not.toContain('Tax event:');
-    expect(html).toContain('Net amount (excl. VAT):');
-    expect(html).not.toContain('Taxable amount:');
-    expect(html).toContain('Total (incl. VAT):');
+    expect(html).not.toContain('Date of supply:');
   });
 
   it('prints the reverse-charge ground on its own, not as a VAT exemption', () => {

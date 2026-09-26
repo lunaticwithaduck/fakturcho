@@ -64,6 +64,7 @@ export function buildFakeDocument(overrides: Record<string, unknown> = {}): Docu
     recipientEmail: null,
     recipientMol: 'Петър Георгиев',
     documentLanguage: null,
+    vatAmountLocalByRate: null,
     createdAt: new Date('2026-08-02'),
     updatedAt: new Date('2026-08-02'),
     ...overrides,

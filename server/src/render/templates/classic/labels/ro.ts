@@ -90,4 +90,8 @@ export const ro: ClassicLabels = {
   },
   watermarkMain: 'CIORNĂ',
   watermarkSub: 'FĂRĂ VALOARE LEGALĂ',
+  vatBaseWithRatePrefix: (percent) => `Bază impozabilă (${percent}%):`,
+  buyerReferencePrefix: 'Referința dumneavoastră: ',
+  paymentTermsPrefix: 'Termeni de plată: ',
+  correctionKsefNumberPrefix: 'Numărul KSeF al facturii corectate: ',
 };

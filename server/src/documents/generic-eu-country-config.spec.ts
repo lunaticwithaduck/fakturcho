@@ -20,6 +20,16 @@ describe('generic EU country config (e.g. NL)', () => {
       'Exempt supply, Article 135 of Council Directive 2006/112/EC',
     ]);
   });
+
+  it('offers an optional free-text company-register identifier (e.g. a Czech s.r.o.)', () => {
+    const czConfig = getCountryConfig('CZ');
+    expect(czConfig.identifiers).toContainEqual({
+      key: 'companyRegister',
+      label: 'Company register',
+      pattern: null,
+      required: false,
+    });
+  });
 });
 
 describe('generic non-EU country config (e.g. US)', () => {

@@ -108,4 +108,40 @@ describe('correction reference', () => {
     const issuerBlock = html.slice(html.indexOf('class="issuer-block"'));
     expect(issuerBlock).toContain('USt-IdNr.: BG123456789');
   });
+
+  const KSEF_NUMBER = '1234563218-20260905-0102030405AB-7A';
+  const EXPECTED_KSEF: Record<ClassicLanguage, string> = {
+    bg: `Номер по KSeF на коригираната фактура: ${KSEF_NUMBER}`,
+    en: `KSeF number of the corrected invoice: ${KSEF_NUMBER}`,
+    de: `KSeF-Nummer der korrigierten Rechnung: ${KSEF_NUMBER}`,
+    fr: `Numéro KSeF de la facture corrigée : ${KSEF_NUMBER}`,
+    it: `Numero KSeF della fattura corretta: ${KSEF_NUMBER}`,
+    pl: `Nr KSeF faktury korygowanej: ${KSEF_NUMBER}`,
+    ro: `Numărul KSeF al facturii corectate: ${KSEF_NUMBER}`,
+    es: `Número KSeF de la factura rectificada: ${KSEF_NUMBER}`,
+  };
+
+  function renderWithKsef(language: ClassicLanguage, ksefNumber: string | null) {
+    return renderClassicTemplateHtml({
+      document: buildFakeDocument({ documentType: 'CREDIT_NOTE', number: 42 }),
+      lineItems: buildFakeLineItems(),
+      presentation,
+      isDraft: false,
+      language,
+      originalDocument: { ...original, ksefNumber },
+    });
+  }
+
+  for (const [language, expected] of Object.entries(EXPECTED_KSEF)) {
+    it(`prints the corrected invoice's KSeF number under the reference line (${language})`, () => {
+      const html = renderWithKsef(language as ClassicLanguage, KSEF_NUMBER);
+      expect(html).toContain(expected);
+      expect(html.indexOf('correction-reference')).toBeLessThan(html.indexOf('correction-ksef'));
+    });
+  }
+
+  it('prints no KSeF line when the original has none', () => {
+    const html = renderWithKsef('en', null);
+    expect(html).not.toContain('class="correction-ksef"');
+  });
 });

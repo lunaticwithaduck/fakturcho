@@ -1,5 +1,6 @@
 import { TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { toSharedDocumentType } from '../../../prisma-mappers';
+import { discountAdjustedVatGroups } from '../totals-block';
 import type { MentionsBuilder } from './index';
 
 const BOLLO_THRESHOLD_CENTS = 7747;
@@ -30,19 +31,26 @@ export const itMentions: MentionsBuilder = ({ document, lineItems }) => {
   }
 
   const isTaxDocument = TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)];
-  const noneExcluded = [...categories].every(
-    (category) => category !== 'K' && !(category === 'AE' && !crossBorder),
-  );
+  const excludedFromBollo = (category: string) =>
+    category === 'K' || (category === 'AE' && !crossBorder);
   const groundExcluded =
     document.vatExemptionGround === INTRA_EU_TEXT ||
     document.vatExemptionGround === REVERSE_CHARGE_DOMESTIC_TEXT;
-  if (
-    isTaxDocument &&
-    noneExcluded &&
-    !groundExcluded &&
-    document.vatAmount === 0 &&
-    document.amount > BOLLO_THRESHOLD_CENTS
-  ) {
+  const isMixed =
+    new Set(lineItems.map((item) => `${item.vatCategory}:${item.vatRateBp}`)).size > 1;
+  // Ris. AdE 444/E/2008: on a mixed invoice, bollo is due once the sum of the
+  // untaxed lines (excluding domestic reverse charge and art. 41 goods, which
+  // stay within IVA's alternativity principle) exceeds the threshold — not
+  // the whole invoice total.
+  const untaxedAmount = isMixed
+    ? discountAdjustedVatGroups(document, lineItems)
+        .filter((group) => group.rateBp === 0 && !excludedFromBollo(group.vatCategory))
+        .reduce((sum, group) => sum + group.taxableAmount, 0)
+    : document.vatAmount === 0 && ![...categories].some(excludedFromBollo)
+      ? document.amount
+      : 0;
+
+  if (isTaxDocument && !groundExcluded && untaxedAmount > BOLLO_THRESHOLD_CENTS) {
     mentions.push(BOLLO_TEXT);
   }
 

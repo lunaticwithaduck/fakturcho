@@ -59,6 +59,10 @@ export function buildStyles(): string {
       text-align: center;
       margin: -16px 0 24px;
     }
+    .correction-ksef {
+      text-align: center;
+      margin: -16px 0 24px;
+    }
     .correction-reason {
       text-align: center;
       margin: -20px 0 24px;
@@ -153,7 +157,7 @@ export function buildStyles(): string {
     }
     .verifactu-qr-row {
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
       margin-bottom: 16px;
     }
     .ksef-qr,
@@ -174,6 +178,11 @@ export function buildStyles(): string {
     .qr-label,
     .qr-legend {
       font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .qr-tributario-label {
+      font-size: 11px;
       font-weight: 700;
       text-align: center;
     }

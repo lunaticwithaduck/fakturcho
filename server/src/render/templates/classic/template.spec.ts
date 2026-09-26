@@ -53,7 +53,7 @@ describe('renderClassicTemplateHtml', () => {
 
   it('renders an English-resolved document without the Bulgarian-only blocks', () => {
     const html = renderClassicTemplateHtml({
-      document: buildFakeDocument(),
+      document: buildFakeDocument({ taxEventAt: new Date('2026-08-01') }),
       lineItems: buildFakeLineItems(),
       presentation: vatChargedPresentation,
       isDraft: false,
@@ -65,7 +65,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Company registration no.: 987654321');
     expect(html).toContain('VAT no.: BG987654321');
     expect(html).toContain('Issue date: 02/08/2026');
-    expect(html).toContain('Date of supply: 02/08/2026');
+    expect(html).toContain('Date of supply: 01/08/2026');
     expect(html).toContain('Invoice no. 0000000001');
     expect(html).not.toContain('(Original)');
     expect(html).not.toContain('Оригинал');
@@ -147,7 +147,7 @@ describe('renderClassicTemplateHtml', () => {
     expect(enHtml).toContain('<td>2.5</td>');
   });
 
-  it('marks a quote as Валидно до in Bulgarian and without a tax event line', () => {
+  it('marks a quote as Валидна до in Bulgarian and without a tax event line', () => {
     const html = renderClassicTemplateHtml({
       document: buildFakeDocument({ documentType: 'QUOTE' }),
       lineItems: buildFakeLineItems(),
@@ -156,7 +156,7 @@ describe('renderClassicTemplateHtml', () => {
       language: 'bg',
     });
 
-    expect(html).toContain('Валидно до: 02.09.2026');
+    expect(html).toContain('Валидна до: 02.09.2026');
     expect(html).not.toContain('Данъчно събитие');
     expect(html).not.toContain('(Оригинал)');
   });
@@ -186,6 +186,7 @@ describe('renderClassicTemplateHtml', () => {
     });
 
     expect(html).toContain('Данъчна основа:');
+    expect(html).toContain('Данъчна основа (20%):');
     expect(html).toContain('500,00 €');
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('100,00 €');
@@ -193,7 +194,8 @@ describe('renderClassicTemplateHtml', () => {
       '<div class="exemption">Обратно начисляване – чл. 21, ал. 2 от ЗДДС</div>',
     );
     expect(html).not.toContain('ДДС (0%):');
-    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(2);
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect((html.match(/Данъчна основа \(20%\):/g) ?? []).length).toBe(1);
     expect(html).toContain('1 100,00 €');
   });
 
@@ -222,12 +224,14 @@ describe('renderClassicTemplateHtml', () => {
     });
 
     expect(html).toContain('Net amount (excl. VAT):');
+    expect(html).toContain('Net amount at 20%:');
     expect(html).toContain('€500.00');
     expect(html).toContain('VAT (20%):');
     expect(html).toContain('€100.00');
     expect(html).toContain('VAT exemption ground: Обратно начисляване – чл. 21, ал. 2 от ЗДДС');
     expect(html).not.toContain('VAT (0%):');
-    expect((html.match(/Net amount \(excl\. VAT\):/g) ?? []).length).toBe(2);
+    expect((html.match(/Net amount \(excl\. VAT\):/g) ?? []).length).toBe(1);
+    expect((html.match(/Net amount at 20%:/g) ?? []).length).toBe(1);
     expect(html).toContain('€1,100.00');
   });
 
@@ -392,13 +396,15 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('Отстъпка:');
     expect(html).toContain('-100,00 €');
     expect(html).toContain('Данъчна основа:');
+    expect(html).toContain('Данъчна основа (20%):');
     expect(html).toContain('450,00 €');
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('90,00 €');
     expect(html).toContain(
       '<div class="exemption">Обратно начисляване – чл. 21, ал. 2 от ЗДДС</div>',
     );
-    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(2);
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect((html.match(/Данъчна основа \(20%\):/g) ?? []).length).toBe(1);
     expect((html.match(/Междинна сума:/g) ?? []).length).toBe(1);
     expect(html).toContain('990,00 €');
   });

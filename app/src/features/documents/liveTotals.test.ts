@@ -155,25 +155,53 @@ describe('computeLiveTotals', () => {
 });
 
 describe('resolveVatTreatment', () => {
-  it('never charges VAT for non-tax documents', () => {
-    expect(
-      resolveVatTreatment({
-        documentType: 'quote',
-        vatRegistered: true,
-        chargeVat: true,
+  it('never offers a ground selector for a non-tax document (isTaxDocument stays false)', () => {
+    for (const documentType of ['quote', 'proforma'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: false,
+          chargeVat: true,
+          vatRateBp: 2000,
+          groundRequired: true,
+        }),
+      ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+    }
+  });
+
+  // Mirrors server/src/documents/vat-treatment.ts: a proforma/quote from a
+  // VAT-registered issuer computes VAT like an invoice, with no ground to pick.
+  it('charges VAT on a proforma or quote for a VAT-registered issuer, regardless of chargeVat', () => {
+    for (const documentType of ['quote', 'proforma'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: true,
+          chargeVat: false,
+          vatRateBp: 2000,
+          groundRequired: true,
+        }),
+      ).toEqual({
+        isTaxDocument: false,
+        vatCharged: true,
         vatRateBp: 2000,
-        groundRequired: true,
-      }),
-    ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
-    expect(
-      resolveVatTreatment({
-        documentType: 'proforma',
-        vatRegistered: true,
-        chargeVat: true,
-        vatRateBp: 2000,
-        groundRequired: true,
-      }),
-    ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+        groundSelectable: false,
+      });
+    }
+  });
+
+  it('never charges VAT on a proforma or quote for a non-registered issuer', () => {
+    for (const documentType of ['quote', 'proforma'] as const) {
+      expect(
+        resolveVatTreatment({
+          documentType,
+          vatRegistered: false,
+          chargeVat: true,
+          vatRateBp: 2000,
+          groundRequired: true,
+        }),
+      ).toEqual({ isTaxDocument: false, vatCharged: false, vatRateBp: 0, groundSelectable: false });
+    }
   });
 
   it('does not offer a ground select for a non-registered issuer with a country default', () => {

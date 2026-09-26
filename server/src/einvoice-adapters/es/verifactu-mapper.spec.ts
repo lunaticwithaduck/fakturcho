@@ -109,6 +109,13 @@ describe('buildRegistroAlta — credit note', () => {
     const result = buildRegistroAlta(creditNote, null, SYSTEM, GENERATED_AT);
     expect(result.xml).toContain('<sf:TipoFactura>R1</sf:TipoFactura>');
   });
+
+  it('carries a negative ImporteTotal, matching the printed total and the QR importe', () => {
+    const creditNote: DocumentDto = { ...esDomesticStandardInvoice, documentType: 'credit_note' };
+    const result = buildRegistroAlta(creditNote, null, SYSTEM, GENERATED_AT);
+    expect(result.xml).toContain('<sf:ImporteTotal>-1210.00</sf:ImporteTotal>');
+    expect(result.xml).toContain('<sf:CuotaTotal>210.00</sf:CuotaTotal>');
+  });
 });
 
 describe('buildRegistroAlta — recipient without a usable tax id', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildVerifactuQr } from './es-verifactu-qr.builder';
+import { buildVerifactuQr, verifactuQrAmountSign } from './es-verifactu-qr.builder';
 import { buildFakeDocument } from './templates/classic/testing/fake-document';
 
 function esDocument(overrides: Record<string, unknown> = {}) {
@@ -48,5 +48,19 @@ describe('buildVerifactuQr', () => {
     const document = esDocument({ documentType: 'CREDIT_NOTE' });
     const result = await buildVerifactuQr(document, 'credit_note', 'ES', false);
     expect(result).not.toBeNull();
+  });
+
+  it('also applies to a debit note (factura rectificativa por cargo)', async () => {
+    const document = esDocument({ documentType: 'DEBIT_NOTE' });
+    const result = await buildVerifactuQr(document, 'debit_note', 'ES', false);
+    expect(result).not.toBeNull();
+  });
+});
+
+describe('verifactuQrAmountSign', () => {
+  it('is negative only for a credit note, matching the printed total', () => {
+    expect(verifactuQrAmountSign('credit_note')).toBe(-1);
+    expect(verifactuQrAmountSign('invoice')).toBe(1);
+    expect(verifactuQrAmountSign('debit_note')).toBe(1);
   });
 });

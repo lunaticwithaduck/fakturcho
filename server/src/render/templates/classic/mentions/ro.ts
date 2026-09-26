@@ -23,9 +23,18 @@ export const roMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
   ) {
     mentions.push(note);
   }
+  // art. 282 alin. (6): the cash-VAT mention only makes sense on a supply that
+  // is actually taxable in Romania with VAT charged — skip it on any line
+  // that is reverse-charged, exempt, out of scope, intra-community or an
+  // export, or when the document already carries an exemption ground.
+  const hasUntaxedLine = lineItems.some((line) =>
+    ['AE', 'E', 'O', 'K', 'G'].includes(line.vatCategory),
+  );
   if (
     document.issuerVatOnCashBasis &&
-    TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)]
+    TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)] &&
+    !hasUntaxedLine &&
+    !document.vatExemptionGround
   ) {
     mentions.push(VAT_ON_CASH_BASIS_MENTION);
   }

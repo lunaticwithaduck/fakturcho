@@ -10,6 +10,7 @@ export * from './enums';
 export * from './errors';
 export * from './feature-flags';
 export * from './issuer';
+export * from './ksef-number';
 export * from './me';
 export * from './money';
 export * from './units';

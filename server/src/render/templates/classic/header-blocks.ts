@@ -1,4 +1,4 @@
-import type { DocumentType } from '@fakturcho/shared-types';
+import { type DocumentType, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
 import {
@@ -58,18 +58,28 @@ export function buildRecipientBlock(
     document.recipientCountry,
     locale,
   );
+  const isForeignEuVatNumber =
+    Boolean(document.recipientCountry) && document.recipientCountry !== 'IT';
+  const vatNumberPrefix =
+    isForeignEuVatNumber && labels.foreignVatNumberPrefix
+      ? labels.foreignVatNumberPrefix
+      : labels.vatNumberPrefix;
   const rows = [
     document.recipientCompanyName
       ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
       : '',
     recipientAddress ? `<div>${escapeHtml(recipientAddress)}</div>` : '',
     identifierLine(labels.companyIdLabel, document.recipientEik, locale.language),
-    line(labels.vatNumberPrefix, document.recipientVatNumber),
+    line(vatNumberPrefix, document.recipientVatNumber),
     locale.showMol ? line(labels.molPrefix, document.recipientMol) : '',
   ]
     .filter(Boolean)
     .join('');
   return `<div class="recipient"><div class="block-title">${labels.recipientTitle(documentType)}</div>${rows}</div>`;
+}
+
+function sameCalendarDate(a: Date, b: Date): boolean {
+  return a.getTime() === b.getTime();
 }
 
 export function buildDatesBlock(
@@ -88,15 +98,36 @@ export function buildDatesBlock(
       : '—';
     rows.push(`<div>${labels.validUntilPrefix(documentType)}${validUntil}</div>`);
   } else if (documentType === 'delivery_note') {
-    const deliveryDate = document.deliveryDate
-      ? formatDateForLocale(document.deliveryDate, locale.language)
-      : '—';
-    rows.push(`<div>${labels.deliveryDatePrefix}${deliveryDate}</div>`);
+    // Delivery date is only ever an optional, user-entered field; a blank one
+    // has no fallback (unlike taxEventAt below), so hide the row instead of
+    // printing a dash for a date that was never asked for.
+    if (document.deliveryDate) {
+      const deliveryDate = formatDateForLocale(document.deliveryDate, locale.language);
+      rows.push(`<div>${labels.deliveryDatePrefix}${deliveryDate}</div>`);
+    }
   } else if (documentType !== 'proforma') {
-    const taxEventAt = document.taxEventAt
-      ? formatDateForLocale(document.taxEventAt, locale.language)
-      : '—';
-    rows.push(`<div>${labels.taxEventPrefix}${taxEventAt}</div>`);
+    // Issuance now stores taxEventAt = issuedAt when the user left it blank
+    // (document-issuance.service.ts), so a null value here only happens on a
+    // draft or on a document issued before that fix — hide the row rather
+    // than print a dash for a mandatory date. Once set, BG and DE print it
+    // even when it matches the issue date (their statutes have no "only when
+    // different" carve-out); every other country prints it only when it
+    // differs from the issue date (EU directive art. 226(7) default).
+    const taxEventAt = document.taxEventAt;
+    const showTaxEvent =
+      taxEventAt !== null &&
+      (locale.taxEventDateAlwaysShown ||
+        document.issuedAt === null ||
+        !sameCalendarDate(taxEventAt, document.issuedAt));
+    if (showTaxEvent) {
+      rows.push(
+        `<div>${labels.taxEventPrefix}${formatDateForLocale(taxEventAt, locale.language)}</div>`,
+      );
+    }
+  }
+  if (TAX_DOCUMENT_TYPES[documentType]) {
+    rows.push(line(labels.buyerReferencePrefix, document.buyerReference));
+    rows.push(line(labels.paymentTermsPrefix, document.paymentTermsNote));
   }
   rows.push(buildStatusMarker(document.status, documentType, labels));
   return `<div class="dates">${rows.join('')}</div>`;

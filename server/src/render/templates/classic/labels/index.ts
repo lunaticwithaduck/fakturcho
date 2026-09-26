@@ -60,6 +60,9 @@ export interface ClassicLabels {
   reverseChargeLineMarker: string;
   vatBasePrefix: string;
   vatRatePrefix: (percent: number) => string;
+  // Printed instead of vatBasePrefix for a taxable-base row on a mixed-rate
+  // document, where several rows must each say which rate they belong to.
+  vatBaseWithRatePrefix: (percent: number) => string;
   subtotalLabel: string;
   discountRowLabel: (percent: number | null, customLabel: string | null) => string;
   totalLabel: string;
@@ -89,6 +92,16 @@ export interface ClassicLabels {
   documentType: Record<DocumentType, string>;
   watermarkMain: string;
   watermarkSub: string;
+  // EN 16931 BT-10/BT-20, printed on tax documents only when the field is set.
+  buyerReferencePrefix: string;
+  paymentTermsPrefix: string;
+  // IT only: art. 21 c.2 lett. f D.P.R. 633/1972 requires an Italian-language
+  // invoice to a non-Italian client to call their EU VAT number this rather
+  // than "P. IVA", which denotes the Italian national scheme.
+  foreignVatNumberPrefix?: string;
+  // PL only: printed under the correction reference line when the corrected
+  // invoice carries a KSeF number (art. 106j ustawy o VAT).
+  correctionKsefNumberPrefix: string;
 }
 
 export const CLASSIC_LABELS: Record<ClassicLanguage, ClassicLabels> = {

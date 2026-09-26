@@ -93,4 +93,8 @@ export const pl: ClassicLabels = {
   },
   watermarkMain: 'WERSJA ROBOCZA',
   watermarkSub: 'DOKUMENT BEZ MOCY PRAWNEJ',
+  vatBaseWithRatePrefix: (percent) => `Wartość netto (${percent}%):`,
+  buyerReferencePrefix: 'Numer referencyjny: ',
+  paymentTermsPrefix: 'Warunki płatności: ',
+  correctionKsefNumberPrefix: 'Nr KSeF faktury korygowanej: ',
 };

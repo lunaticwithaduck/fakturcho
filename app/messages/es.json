@@ -272,7 +272,8 @@
           "nip": "Falta el NIP del cliente, obligatorio si el comprador está establecido en Polonia.",
           "nipChecksum": "El NIP del cliente no supera la validación del dígito de control."
         }
-      }
+      },
+      "ksefNumberInvalid": "El formato del número KSeF no es válido."
     }
   },
   "billing": {
@@ -560,7 +561,8 @@
       "EINVOICE_STATUS_POLLING_NOT_SUPPORTED": "Este proveedor no admite la consulta de estado.",
       "INTERNAL_ERROR": "Se ha producido un error inesperado. Inténtelo de nuevo.",
       "OPERATION_NATURE_REQUIRED": "Los documentos fiscales franceses deben indicar la naturaleza de la operación antes de poder emitirse.",
-      "EXCHANGE_RATE_UNAVAILABLE": "No se pudo obtener el tipo de cambio necesario para emitir este documento. Inténtelo de nuevo en unos instantes."
+      "EXCHANGE_RATE_UNAVAILABLE": "No se pudo obtener el tipo de cambio necesario para emitir este documento. Inténtelo de nuevo en unos instantes.",
+      "INVALID_KSEF_NUMBER": "El formato del número KSeF no es válido."
     },
     "guideLink": "Guía de facturación",
     "helpLink": "Ver la guía",

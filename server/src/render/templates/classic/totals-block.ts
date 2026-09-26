@@ -71,7 +71,7 @@ function mixedVatBlock(
     .map(
       (group) =>
         totalsRow(
-          labels.vatBasePrefix,
+          labels.vatBaseWithRatePrefix(group.rateBp / 100),
           formatMoneyForLocale(group.taxableAmount * sign, language),
         ) +
         totalsRow(

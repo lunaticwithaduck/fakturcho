@@ -7,6 +7,11 @@ import {
 import { DomainError } from '../common/domain-error';
 import type { ExchangeRateService } from './exchange-rate.service';
 
+export interface LocalCurrencyVatRateBreakdown {
+  rateBp: number;
+  vatAmountLocal: number;
+}
+
 export interface LocalCurrencyVatSnapshot {
   localCurrency: string;
   exchangeRate: string;
@@ -14,6 +19,16 @@ export interface LocalCurrencyVatSnapshot {
   exchangeRateSource: 'NBP' | 'BNR' | 'ECB';
   exchangeRateTable: string | null;
   vatAmountLocal: number;
+  // PL art. 106e ust. 11 (referring to pkt 14) and RO art. 319 alin. (20) lit.
+  // j) both require the local-currency VAT split by rate, not one total. Only
+  // set once there is more than one charged rate; a single-rate document
+  // keeps the plain vatAmountLocal above, unchanged from before this existed.
+  vatAmountLocalByRate: LocalCurrencyVatRateBreakdown[] | null;
+}
+
+export interface LocalCurrencyVatGroup {
+  rateBp: number;
+  vatAmount: number;
 }
 
 export interface LocalCurrencyVatInput {
@@ -23,6 +38,9 @@ export interface LocalCurrencyVatInput {
   vatAmount: number;
   taxEventAt: Date | null;
   issuedAt: Date;
+  // Charged VAT groups (rateBp > 0), one per distinct rate on the document,
+  // used only to build vatAmountLocalByRate when there is more than one.
+  vatGroups?: readonly LocalCurrencyVatGroup[];
 }
 
 function toIsoDate(date: Date): string {
@@ -31,6 +49,51 @@ function toIsoDate(date: Date): string {
 
 function dayBefore(date: Date): Date {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - 1));
+}
+
+function earlierOf(a: Date, b: Date): Date {
+  return a.getTime() <= b.getTime() ? a : b;
+}
+
+function buildVatAmountLocalByRate(
+  vatGroups: readonly LocalCurrencyVatGroup[] | undefined,
+  rate: string,
+): LocalCurrencyVatRateBreakdown[] | null {
+  const chargedGroups = (vatGroups ?? []).filter((group) => group.rateBp > 0);
+  if (chargedGroups.length <= 1) return null;
+  const byRate = new Map<number, number>();
+  for (const group of chargedGroups) {
+    byRate.set(group.rateBp, (byRate.get(group.rateBp) ?? 0) + group.vatAmount);
+  }
+  return Array.from(byRate.entries()).map(([rateBp, vatAmount]) => ({
+    rateBp,
+    vatAmountLocal: roundHalfUp(vatAmount * Number(rate), 0),
+  }));
+}
+
+// RO and PL corrections (credit_note/debit_note with an original) must use the
+// original invoice's own exchange rate, never a freshly fetched one (RO Codul
+// fiscal art. 282 alin. (9)/(10) + Norme metodologice pct. 35 alin. (2); PL
+// follows the same accepted KIS practice). This applies that already-known
+// rate to the correction's own (possibly different) VAT amount and groups.
+export function applyReusedLocalCurrencyRate(input: {
+  localCurrency: string;
+  exchangeRate: string;
+  exchangeRateDate: Date;
+  exchangeRateSource: 'NBP' | 'BNR' | 'ECB';
+  exchangeRateTable: string | null;
+  vatAmount: number;
+  vatGroups?: readonly LocalCurrencyVatGroup[];
+}): LocalCurrencyVatSnapshot {
+  return {
+    localCurrency: input.localCurrency,
+    exchangeRate: input.exchangeRate,
+    exchangeRateDate: input.exchangeRateDate,
+    exchangeRateSource: input.exchangeRateSource,
+    exchangeRateTable: input.exchangeRateTable,
+    vatAmountLocal: roundHalfUp(input.vatAmount * Number(input.exchangeRate), 0),
+    vatAmountLocalByRate: buildVatAmountLocalByRate(input.vatGroups, input.exchangeRate),
+  };
 }
 
 // VAT Directive art. 230 + 91(2): only tax documents (invoice, credit_note,
@@ -47,9 +110,20 @@ export async function resolveLocalCurrencyVatSnapshot(
   if (!localCountry) return null;
 
   const taxPointDate = input.taxEventAt ?? input.issuedAt;
-  const onOrBeforeDate = toIsoDate(
-    localCountry.rateSource === 'NBP' ? dayBefore(taxPointDate) : taxPointDate,
-  );
+  // PL (ustawa o VAT art. 31a ust. 1-2): last business day before the EARLIER
+  // of the tax point and the issue date — an invoice issued before the sale
+  // uses the issue date, not a tax point that hasn't happened yet.
+  // RO (Codul fiscal art. 290 + Norme metodologice pct. 35 alin. (1)): the
+  // rate BNR published the business day before the tax point itself.
+  let rateAsOfDate: Date;
+  if (localCountry.rateSource === 'NBP') {
+    rateAsOfDate = dayBefore(earlierOf(taxPointDate, input.issuedAt));
+  } else if (localCountry.rateSource === 'BNR') {
+    rateAsOfDate = dayBefore(taxPointDate);
+  } else {
+    rateAsOfDate = taxPointDate;
+  }
+  const onOrBeforeDate = toIsoDate(rateAsOfDate);
 
   let quote: Awaited<ReturnType<ExchangeRateService['fetchRate']>>;
   try {
@@ -76,5 +150,6 @@ export async function resolveLocalCurrencyVatSnapshot(
     exchangeRateSource: localCountry.rateSource,
     exchangeRateTable: quote.table,
     vatAmountLocal: roundHalfUp(input.vatAmount * Number(quote.rate), 0),
+    vatAmountLocalByRate: buildVatAmountLocalByRate(input.vatGroups, quote.rate),
   };
 }

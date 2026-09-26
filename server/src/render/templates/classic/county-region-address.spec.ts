@@ -31,6 +31,63 @@ describe('issuer address county/province printing', () => {
     expect(html).toContain('Str. Exemplu 1, 300001 Timișoara, jud. Timiș');
   });
 
+  it('RO: prints nothing extra for București since city already says it (never repeat the city)', () => {
+    const locale = resolveClassicLocale('ro', 'RO');
+    const document = buildFakeDocument({
+      issuerAddressLine: null,
+      issuerStreet: 'Str. Exemplu 1',
+      issuerPostcode: '010101',
+      issuerCity: 'București',
+      issuerCountyRegion: 'București',
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain('Str. Exemplu 1, 010101 București<');
+    expect(html).not.toContain('jud. București');
+    expect(html).not.toContain('București, București');
+  });
+
+  it('RO: labels București "Municipiul", never "jud.", when the county differs from the city (e.g. a sector)', () => {
+    const locale = resolveClassicLocale('ro', 'RO');
+    const document = buildFakeDocument({
+      issuerAddressLine: null,
+      issuerStreet: 'Str. Exemplu 1',
+      issuerPostcode: '010101',
+      issuerCity: 'Sector 1',
+      issuerCountyRegion: 'București',
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain('Str. Exemplu 1, 010101 Sector 1, Municipiul București');
+    expect(html).not.toContain('jud. București');
+  });
+
+  it('RO: matches București case- and diacritic-insensitively', () => {
+    const locale = resolveClassicLocale('ro', 'RO');
+    const document = buildFakeDocument({
+      issuerAddressLine: null,
+      issuerStreet: 'Str. Exemplu 1',
+      issuerPostcode: '010101',
+      issuerCity: 'Bucuresti',
+      issuerCountyRegion: 'BUCUREȘTI',
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).not.toContain('jud.');
+    expect(html).not.toContain('Municipiul');
+  });
+
+  it('IT: prints the plain city, no parenthetical repeat, when the province name equals the city', () => {
+    const locale = resolveClassicLocale('it', 'IT');
+    const document = buildFakeDocument({
+      issuerAddressLine: null,
+      issuerStreet: 'Via Roma 1',
+      issuerPostcode: '00100',
+      issuerCity: 'Roma',
+      issuerCountyRegion: 'Roma',
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain('Via Roma 1, 00100 Roma<');
+    expect(html).not.toContain('Roma (Roma)');
+  });
+
   it('ES: appends ", <provincia>" only when it differs from the city', () => {
     const locale = resolveClassicLocale('es', 'ES');
     const differing = buildFakeDocument({

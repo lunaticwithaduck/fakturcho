@@ -91,4 +91,8 @@ export const de: ClassicLabels = {
   },
   watermarkMain: 'ENTWURF',
   watermarkSub: 'KEINE GÜLTIGE RECHNUNG',
+  vatBaseWithRatePrefix: (percent) => `Nettobetrag ${percent} %:`,
+  buyerReferencePrefix: 'Ihre Referenz: ',
+  paymentTermsPrefix: 'Zahlungsbedingungen: ',
+  correctionKsefNumberPrefix: 'KSeF-Nummer der korrigierten Rechnung: ',
 };

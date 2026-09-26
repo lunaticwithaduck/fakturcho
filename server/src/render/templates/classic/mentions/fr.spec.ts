@@ -21,14 +21,18 @@ describe('frMentions — standard-rate invoice', () => {
     expect(mentions.some((line) => line.includes('262 ter'))).toBe(false);
   });
 
-  it('omits the due-date line when there is no due date', () => {
+  it('defaults the due date to issue date + 30 days when none is set (C. com. L441-10 I)', () => {
     const mentions = buildStatutoryMentions({
-      document: buildFakeDocument({ issuerCountry: 'FR', dueAt: null }),
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        dueAt: null,
+        issuedAt: new Date('2026-08-02'),
+      }),
       lineItems: buildFakeLineItems({ vatCategory: 'S' }),
       locale,
     });
 
-    expect(mentions.some((line) => line.startsWith("Date d'échéance"))).toBe(false);
+    expect(mentions).toContain("Date d'échéance : 01/09/2026");
   });
 });
 
@@ -133,6 +137,18 @@ describe('frMentions — option pour le paiement de la taxe d’après les débi
     });
 
     expect(mentions).toContain("Option pour le paiement de la taxe d'après les débits");
+  });
+
+  it('adds no mention when every line is untaxed, even if the issuer opted in (CGI art. 283)', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', issuerVatOnDebits: true }),
+      lineItems: buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 }),
+      locale,
+    });
+
+    expect(mentions.some((line) => line.startsWith('Option pour le paiement de la taxe'))).toBe(
+      false,
+    );
   });
 
   it('adds no mention on a quote even when the issuer opted for it', () => {

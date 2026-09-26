@@ -115,9 +115,16 @@ export interface VatTreatment {
   groundSelectable: boolean;
 }
 
+// Mirrors server/src/documents/vat-treatment.ts: a proforma or quote from a
+// VAT-registered issuer computes VAT like an invoice (SPEC §5 forbids only
+// the exemption line and "(Original)"), with no ground selector since the
+// ground is a tax-document concept.
+const VAT_ESTIMATE_DOCUMENT_TYPES: readonly DocumentType[] = ['proforma', 'quote'];
+
 export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
   const isTaxDocument = TAX_DOCUMENT_TYPES[input.documentType];
-  if (!isTaxDocument) {
+  const isVatEstimate = VAT_ESTIMATE_DOCUMENT_TYPES.includes(input.documentType);
+  if (!isTaxDocument && !isVatEstimate) {
     return { isTaxDocument, vatCharged: false, vatRateBp: 0, groundSelectable: false };
   }
   if (!input.vatRegistered) {
@@ -125,10 +132,10 @@ export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
       isTaxDocument,
       vatCharged: false,
       vatRateBp: 0,
-      groundSelectable: input.groundRequired,
+      groundSelectable: isTaxDocument && input.groundRequired,
     };
   }
-  if (input.chargeVat) {
+  if (isVatEstimate || input.chargeVat) {
     return {
       isTaxDocument,
       vatCharged: true,

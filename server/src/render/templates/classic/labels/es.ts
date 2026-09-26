@@ -85,4 +85,8 @@ export const es: ClassicLabels = {
   },
   watermarkMain: 'BORRADOR',
   watermarkSub: 'SIN VALIDEZ LEGAL',
+  vatBaseWithRatePrefix: (percent) => `Base imponible (${percent}%):`,
+  buyerReferencePrefix: 'Su referencia: ',
+  paymentTermsPrefix: 'Condiciones de pago: ',
+  correctionKsefNumberPrefix: 'Número KSeF de la factura rectificada: ',
 };

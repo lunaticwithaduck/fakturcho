@@ -10,6 +10,7 @@ export interface ClassicLocaleContext {
   showSignatureRow: boolean;
   showOriginalStamp: boolean;
   showDeliveryNotePrices: boolean;
+  taxEventDateAlwaysShown: boolean;
 }
 
 export function resolveClassicLocale(
@@ -26,5 +27,6 @@ export function resolveClassicLocale(
     showSignatureRow: country.showSignatureRow,
     showOriginalStamp: country.showOriginalStamp,
     showDeliveryNotePrices: country.deliveryNotePricesShown,
+    taxEventDateAlwaysShown: country.taxEventDateAlwaysShown,
   };
 }

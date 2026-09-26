@@ -143,7 +143,8 @@ describe('mixed invoices', () => {
       language: 'bg',
       issuerCountry: 'BG',
     });
-    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(2);
+    expect((html.match(/Данъчна основа:/g) ?? []).length).toBe(1);
+    expect(html).toContain('Данъчна основа (20%):');
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('ДДС (0%):');
     expect(html).toContain('Основание за прилагане на нулева ставка: чл. 53, ал. 1 от ЗДДС');

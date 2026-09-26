@@ -58,7 +58,7 @@ export const it: ClassicLabels = {
   creditDueLabel: 'Totale a credito:',
   paidLabel: 'Importo pagato:',
   exemptionPrefix: 'Natura dell’operazione: ',
-  operationNaturePrefix: "Natura dell'operazione (Francia): ",
+  operationNaturePrefix: 'Natura dell’operazione (Francia): ',
   operationNatureLabels: {
     goods: 'Cessione di beni',
     services: 'Prestazione di servizi',
@@ -86,4 +86,9 @@ export const it: ClassicLabels = {
   },
   watermarkMain: 'BOZZA',
   watermarkSub: 'DOCUMENTO NON VALIDO AI FINI FISCALI',
+  vatBaseWithRatePrefix: (percent) => `Imponibile (${percent}%):`,
+  buyerReferencePrefix: 'Vostro riferimento: ',
+  paymentTermsPrefix: 'Termini di pagamento: ',
+  foreignVatNumberPrefix: 'Numero identificativo IVA: ',
+  correctionKsefNumberPrefix: 'Numero KSeF della fattura corretta: ',
 };

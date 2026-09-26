@@ -37,6 +37,17 @@ function formatRateForLocale(rate: string, language: ClassicLanguage): string {
   return rate.replace('.', decimalSeparatorForLocale(language));
 }
 
+interface LocalVatRateBreakdown {
+  rateBp: number;
+  vatAmountLocal: number;
+}
+
+function readVatAmountLocalByRate(document: Document): LocalVatRateBreakdown[] | null {
+  const value = document.vatAmountLocalByRate;
+  if (!Array.isArray(value) || value.length <= 1) return null;
+  return value as unknown as LocalVatRateBreakdown[];
+}
+
 export function buildLocalCurrencyVatRow(
   document: Document,
   labels: ClassicLabels,
@@ -56,14 +67,30 @@ export function buildLocalCurrencyVatRow(
     label: document.localCurrency,
     symbol: document.localCurrency,
   };
-  const amount = `${formatCentsForLocale(document.vatAmountLocal * sign, language)} ${currencyDisplay.symbol}`;
-  const line = labels.vatAmountLocalLine({
-    currencyLabel: currencyDisplay.label,
-    amount,
-    sourceLabel: sourceLabelFor(document.exchangeRateSource, language),
-    rate: formatRateForLocale(document.exchangeRate, language),
-    date: formatDateForLocale(document.exchangeRateDate, language),
-    table: document.exchangeRateTable,
-  });
-  return `<div class="totals-row vat-local-currency"><span>${escapeHtml(line)}</span></div>`;
+  const sourceLabel = sourceLabelFor(document.exchangeRateSource, language);
+  const rate = formatRateForLocale(document.exchangeRate, language);
+  const date = formatDateForLocale(document.exchangeRateDate, language);
+  // PL art. 106e ust. 11 (pkt 14) / RO art. 319 alin. (20) lit. j): once the
+  // document carries more than one charged rate, the local-currency VAT is
+  // printed per rate rather than as a single total.
+  const byRate = readVatAmountLocalByRate(document);
+  const rows = byRate ?? [
+    { rateBp: null as number | null, vatAmountLocal: document.vatAmountLocal },
+  ];
+  return rows
+    .map(({ rateBp, vatAmountLocal }) => {
+      const amount = `${formatCentsForLocale(vatAmountLocal * sign, language)} ${currencyDisplay.symbol}`;
+      const currencyLabel =
+        rateBp !== null ? `${currencyDisplay.label} (${rateBp / 100}%)` : currencyDisplay.label;
+      const line = labels.vatAmountLocalLine({
+        currencyLabel,
+        amount,
+        sourceLabel,
+        rate,
+        date,
+        table: document.exchangeRateTable,
+      });
+      return `<div class="totals-row vat-local-currency"><span>${escapeHtml(line)}</span></div>`;
+    })
+    .join('');
 }

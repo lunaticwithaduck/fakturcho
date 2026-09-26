@@ -23,6 +23,7 @@ export const DOMAIN_ERROR_CODES = [
   'EINVOICE_STATUS_POLLING_NOT_SUPPORTED',
   'EXCHANGE_RATE_UNAVAILABLE',
   'INTERNAL_ERROR',
+  'INVALID_KSEF_NUMBER',
 ] as const;
 
 export type DomainErrorCode = (typeof DOMAIN_ERROR_CODES)[number];

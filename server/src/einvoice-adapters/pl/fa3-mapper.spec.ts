@@ -303,3 +303,36 @@ describe('toFa3Xml — a document discount is reflected in the P_13/P_14 buckets
     expect(xml).toContain('<P_15>1053.00</P_15>');
   });
 });
+
+describe('toFa3Xml — P_6 (date of sale) agrees with the PDF\'s "Data sprzedaży"', () => {
+  it('takes P_6 from taxEventAt when it differs from deliveryDate', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      taxEventAt: '2026-09-03',
+      deliveryDate: '2026-09-05',
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain('<P_6>2026-09-03</P_6>');
+    expect(xml).not.toContain('<P_6>2026-09-05</P_6>');
+  });
+
+  it('falls back to deliveryDate when there is no taxEventAt', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      taxEventAt: null,
+      deliveryDate: '2026-09-05',
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).toContain('<P_6>2026-09-05</P_6>');
+  });
+
+  it('omits P_6 when neither date is set', () => {
+    const document: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      taxEventAt: null,
+      deliveryDate: null,
+    };
+    const xml = toFa3Xml(document);
+    expect(xml).not.toContain('<P_6>');
+  });
+});

@@ -66,7 +66,10 @@ export function buildRegistroAlta(
   const destinatario = destinatarioBlock(document);
   const tipo = tipoFactura(document, destinatario.identified);
   const cuotaTotal = toDecimalString(document.vatAmount);
-  const importeTotal = toDecimalString(document.amount);
+  // Same sign as the printed total and the QR's importe: negative for a
+  // credit note (rectificativa por diferencias negativas).
+  const importeSign = document.documentType === 'credit_note' ? -1 : 1;
+  const importeTotal = toDecimalString(document.amount * importeSign);
   const fechaHoraHusoGenRegistro = madridTimestamp(generatedAt);
 
   const huella = computeRegistroAltaHuella({

@@ -48,6 +48,11 @@ export interface CountryConfig {
   // records goods movement, not a sale); BG and RO commonly carry a value column.
   deliveryNotePricesShown: boolean;
   deliveryNoteTransportReasons: readonly string[];
+  // Whether the tax-point/supply date prints even when it equals the issue
+  // date. BG (ЗДДС чл. 114, ал. 1, т. 10) and DE (§14 Abs. 4 Nr. 6 UStG) require
+  // it unconditionally; the EU directive default (art. 226(7)) — ES, FR, IT,
+  // PL, RO and every generic EU country — needs it only when the dates differ.
+  taxEventDateAlwaysShown: boolean;
 }
 
 const EU_DIRECTIVE_SME_EXEMPTION_GROUND =
@@ -83,7 +88,12 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   exemptionGrounds: EU_DIRECTIVE_EXEMPTION_GROUNDS,
   defaultExemptionGround: EU_DIRECTIVE_SME_EXEMPTION_GROUND,
   vatNoteGrounds: [EU_DIRECTIVE_REVERSE_CHARGE_GROUND],
-  identifiers: [],
+  // No dedicated country config knows the local register name (e.g. Czech NOZ
+  // § 435 obchodní rejstřík), so this optional free-text field lets an issuer
+  // in any unconfigured EU country print their own company-register entry.
+  identifiers: [
+    { key: 'companyRegister', label: 'Company register', pattern: null, required: false },
+  ],
   numberingUsesFixedWidth: false,
   requiredIssuerFields: ['companyName', 'street', 'city', 'postcode'],
   showMol: false,
@@ -91,6 +101,7 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   showOriginalStamp: false,
   deliveryNotePricesShown: false,
   deliveryNoteTransportReasons: [],
+  taxEventDateAlwaysShown: false,
 };
 
 export const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {

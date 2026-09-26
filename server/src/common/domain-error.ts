@@ -25,6 +25,7 @@ const STATUS_BY_CODE: Record<DomainErrorCode, number> = {
   EINVOICE_STATUS_POLLING_NOT_SUPPORTED: 409,
   EXCHANGE_RATE_UNAVAILABLE: 503,
   INTERNAL_ERROR: 500,
+  INVALID_KSEF_NUMBER: 422,
 };
 
 export class DomainError extends Error {

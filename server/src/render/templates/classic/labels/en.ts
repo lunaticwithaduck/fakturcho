@@ -79,4 +79,8 @@ export const en: ClassicLabels = {
   },
   watermarkMain: 'DRAFT',
   watermarkSub: 'NOT LEGALLY VALID',
+  vatBaseWithRatePrefix: (percent) => `Net amount at ${percent}%:`,
+  buyerReferencePrefix: 'Your reference: ',
+  paymentTermsPrefix: 'Payment terms: ',
+  correctionKsefNumberPrefix: 'KSeF number of the corrected invoice: ',
 };

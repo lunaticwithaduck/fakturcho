@@ -73,6 +73,40 @@ describe('buildLocalCurrencyVatRow', () => {
     );
   });
 
+  it('prints one line per rate once vatAmountLocalByRate has more than one entry', () => {
+    const document = buildFakeDocument({
+      localCurrency: 'PLN',
+      exchangeRate: '4.2512',
+      exchangeRateDate: new Date('2026-09-17T00:00:00.000Z'),
+      exchangeRateSource: 'NBP',
+      exchangeRateTable: null,
+      vatAmountLocal: 703697,
+      vatAmountLocalByRate: [
+        { rateBp: 2300, vatAmountLocal: 586700 },
+        { rateBp: 800, vatAmountLocal: 91800 },
+      ],
+    });
+    const html = buildLocalCurrencyVatRow(document, getClassicLabels('pl'), 'pl', 1);
+    expect(html).toContain('Kwota VAT w PLN (23%): 5 867,00 zł');
+    expect(html).toContain('Kwota VAT w PLN (8%): 918,00 zł');
+    expect((html.match(/vat-local-currency/g) ?? []).length).toBe(2);
+  });
+
+  it('still prints a single line when vatAmountLocalByRate has only one entry', () => {
+    const document = buildFakeDocument({
+      localCurrency: 'PLN',
+      exchangeRate: '4.2512',
+      exchangeRateDate: new Date('2026-09-17T00:00:00.000Z'),
+      exchangeRateSource: 'NBP',
+      exchangeRateTable: null,
+      vatAmountLocal: 524933,
+      vatAmountLocalByRate: [{ rateBp: 2300, vatAmountLocal: 524933 }],
+    });
+    const html = buildLocalCurrencyVatRow(document, getClassicLabels('pl'), 'pl', 1);
+    expect(html).toContain('Kwota VAT w PLN: 5 249,33 zł');
+    expect((html.match(/vat-local-currency/g) ?? []).length).toBe(1);
+  });
+
   it('escapes HTML in the composed line', () => {
     const document = buildFakeDocument({
       localCurrency: 'PLN',
