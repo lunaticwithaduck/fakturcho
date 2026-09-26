@@ -111,6 +111,17 @@
         "taxEventAt": "Data livrării/prestării",
         "dueAt": "Data scadenței"
       },
+      "paymentTerms": {
+        "label": "Termeni de plată",
+        "dueOnReceipt": "Plată la primire",
+        "days7": "7 zile",
+        "days14": "14 zile",
+        "days15": "15 zile",
+        "days30": "30 zile",
+        "days45": "45 zile",
+        "days60": "60 zile",
+        "customDate": "Dată personalizată"
+      },
       "delivery": {
         "heading": "Detalii livrare",
         "deliveryDateLabel": "Data livrării",
@@ -118,7 +129,8 @@
         "transportReasonLabel": "Scopul transportului",
         "transportReasonPlaceholder": "Selectați scopul",
         "carrierNameLabel": "Transportator",
-        "transportNoteLabel": "Detalii transport"
+        "transportNoteLabel": "Detalii transport",
+        "transportVehicleLabel": "Mijloc de transport nr."
       },
       "frMentions": {
         "operationNatureLabel": "Natura operațiunii",
@@ -273,7 +285,8 @@
           "nipChecksum": "NIP-ul destinatarului nu este valid (cifra de control nu corespunde)."
         }
       },
-      "ksefNumberInvalid": "Formatul numărului KSeF nu este valid."
+      "ksefNumberInvalid": "Formatul numărului KSeF nu este valid.",
+      "ksefNumberDateInvalid": "Data din numărul KSeF nu poate fi anterioară datei emiterii facturii și nici din viitor."
     }
   },
   "billing": {
@@ -459,7 +472,8 @@
       "city": "Localitate",
       "phone": "Telefon",
       "invalidFormat": "Format nevalid",
-      "czRegisterHint": "Obligatoriu pentru emitenții cehi: menționați înregistrarea în Registrul Comerțului (instanța, secțiunea, numărul de înregistrare) sau într-un alt registru public – § 435 din Codul civil (Legea nr. 89/2012 Sb.)."
+      "czRegisterHint": "Obligatoriu pentru emitenții cehi: menționați înregistrarea în Registrul Comerțului (instanța, secțiunea, numărul de înregistrare) sau într-un alt registru public – § 435 din Codul civil (Legea nr. 89/2012 Sb.).",
+      "frLegalFormHint": "Sunteți antreprenor individual? Scrieți „EI” sau „entrepreneur individuel” — trebuie să apară lângă nume pe fiecare document (art. L526-22 din Codul comercial francez)."
     },
     "vatFields": {
       "heading": "Înregistrare TVA",
@@ -467,6 +481,18 @@
       "vatNumber": "Cod TVA",
       "vatOnCashBasis": "TVA la încasare",
       "vatOnDebits": "Opțiunea TVA la debite (Franța)"
+    },
+    "paymentTerms": {
+      "heading": "Termeni de plată",
+      "defaultLabel": "Termen implicit",
+      "none": "Fără termen implicit — se alege pentru fiecare document",
+      "dueOnReceipt": "Plată la primire",
+      "days7": "7 zile",
+      "days14": "14 zile",
+      "days15": "15 zile",
+      "days30": "30 zile",
+      "days45": "45 zile",
+      "days60": "60 zile"
     },
     "bankFields": {
       "heading": "Cont bancar",

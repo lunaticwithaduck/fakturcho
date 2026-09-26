@@ -59,21 +59,23 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
   <style>${buildStyles()}</style>
 </head>
 <body>
-  ${buildWatermark(isDraft, locale)}
-  ${buildVerifactuQrBlock(verifactuQr)}
-  <div class="header">
-    ${buildRecipientBlock(document, documentType, locale)}
-    ${buildDatesBlock(document, documentType, locale)}
+  <div class="watermark-area">
+    ${buildWatermark(isDraft, locale)}
+    ${buildVerifactuQrBlock(verifactuQr)}
+    <div class="header">
+      ${buildRecipientBlock(document, documentType, locale)}
+      ${buildDatesBlock(document, documentType, locale)}
+    </div>
+    <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
+    ${buildCorrectionReference(documentType, originalDocument, document.correctionReason, locale)}
+    ${buildLineItemsTable(lineItems, locale, documentType, showPrices, document.issuerVatRegistered ?? false)}
+    ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
+    ${
+      showPrices
+        ? `${isDeliveryNote ? '' : buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, documentType, discounts)}`
+        : ''
+    }
   </div>
-  <div class="title">${buildTitle(documentType, document.numberPrefix, number, document.numberSuffix, locale)}</div>
-  ${buildCorrectionReference(documentType, originalDocument, document.correctionReason, locale)}
-  ${buildLineItemsTable(lineItems, locale, documentType, showPrices, document.issuerVatRegistered ?? false)}
-  ${isDeliveryNote ? buildTransportBlock(document, locale) : ''}
-  ${
-    showPrices
-      ? `${isDeliveryNote ? '' : buildAmountWordsBlock(document, locale)}${buildTotalsBlock(document, lineItems, presentation, locale, documentType, discounts)}`
-      : ''
-  }
   ${buildMentionsBlock({ document, lineItems, locale })}
   ${buildIssuerBlock(document, documentType, locale)}
   ${buildKsefQrBlock(ksefQr)}

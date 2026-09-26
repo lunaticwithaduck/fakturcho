@@ -8,6 +8,7 @@ describe('saveDraftRequestSchema', () => {
       buyerReference: 'PO-1234',
       paymentMeansCode: '30',
       paymentTermsNote: 'Net 30',
+      paymentTermsDays: 14,
       deliveryDate: '2026-09-15',
       operationNature: 'services',
       deliveryAddress: '12 rue de la Gare, 69001 Lyon',
@@ -36,6 +37,28 @@ describe('saveDraftRequestSchema', () => {
         lineItems: [],
       }),
     ).toThrow();
+  });
+
+  it('rejects a paymentTermsDays value the composer never offers', () => {
+    expect(() =>
+      saveDraftRequestSchema.parse({
+        documentType: 'invoice',
+        paymentTermsDays: 10,
+        lineItems: [],
+      }),
+    ).toThrow();
+  });
+
+  it('accepts null and every offered paymentTermsDays value', () => {
+    for (const days of [null, 0, 7, 14, 15, 30, 45, 60]) {
+      expect(() =>
+        saveDraftRequestSchema.parse({
+          documentType: 'invoice',
+          paymentTermsDays: days,
+          lineItems: [],
+        }),
+      ).not.toThrow();
+    }
   });
 
   it('rejects an invalid vatCategory', () => {

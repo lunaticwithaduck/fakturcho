@@ -74,6 +74,7 @@ interface EinvoicePanelProps {
   status: DocumentStatus;
   issuerCountry?: string | null;
   ksefNumber?: string | null | undefined;
+  issuedAt?: string | null;
 }
 
 export function EinvoicePanel({
@@ -82,6 +83,7 @@ export function EinvoicePanel({
   status,
   issuerCountry = null,
   ksefNumber = null,
+  issuedAt = null,
 }: EinvoicePanelProps) {
   const t = useTranslations('documents.einvoice');
   const { EINVOICE } = useFeatureFlags();
@@ -113,7 +115,7 @@ export function EinvoicePanel({
       ) : null}
 
       {issuerCountry === 'PL' ? (
-        <KsefNumberField documentId={documentId} ksefNumber={ksefNumber} />
+        <KsefNumberField documentId={documentId} ksefNumber={ksefNumber} issuedAt={issuedAt} />
       ) : null}
     </div>
   );

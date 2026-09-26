@@ -123,7 +123,7 @@ describe('issuer address county/province printing', () => {
       issuerCountyRegion: null,
     });
     const html = buildIssuerBlock(document, 'invoice', locale);
-    expect(html).toContain('ул. „Раковски“ 55, гр. Варна');
+    expect(html).toContain('ул. „Раковски“ 55, гр. Варна');
     expect(html).not.toContain('Варна, гр. Варна');
   });
 

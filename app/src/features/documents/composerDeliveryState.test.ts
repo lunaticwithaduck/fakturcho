@@ -118,4 +118,16 @@ describe('deliveryRequestFields round trip', () => {
     );
     expect(fields.transportedAt).toBeNull();
   });
+
+  it('round-trips the RO transport vehicle registration', () => {
+    const document = fakeDocument({ transportVehicle: 'B 123 XYZ' });
+    const state = deliveryStateFromDocument(document, 'Europe/Bucharest');
+    expect(state.transportVehicle).toBe('B 123 XYZ');
+    expect(deliveryRequestFields(state, true).transportVehicle).toBe('B 123 XYZ');
+  });
+
+  it('sends null for a blank transport vehicle registration', () => {
+    const fields = deliveryRequestFields(blankDeliveryState(), true);
+    expect(fields.transportVehicle).toBeNull();
+  });
 });

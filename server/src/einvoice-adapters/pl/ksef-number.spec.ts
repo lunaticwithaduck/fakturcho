@@ -1,6 +1,7 @@
 import {
   isValidKsefNumber,
   isValidKsefNumberChecksum,
+  isValidKsefNumberDate,
   isValidKsefNumberFormat,
   normalizeKsefNumber,
 } from '@fakturcho/shared-types';
@@ -54,5 +55,28 @@ describe('isValidKsefNumber', () => {
     expect(isValidKsefNumber(VALID)).toBe(true);
     expect(isValidKsefNumber('1234563218-20260905-0102030405AB-00')).toBe(false);
     expect(isValidKsefNumber('not-a-ksef-number')).toBe(false);
+  });
+});
+
+// VALID's date segment is 2026-09-05 (see above).
+describe('isValidKsefNumberDate', () => {
+  it('accepts a KSeF date on or after the issue date and not after now', () => {
+    expect(isValidKsefNumberDate(VALID, new Date('2026-09-05'), new Date('2026-09-10'))).toBe(true);
+  });
+
+  it('rejects a KSeF date before the invoice issue date', () => {
+    expect(isValidKsefNumberDate(VALID, new Date('2026-09-06'), new Date('2026-09-10'))).toBe(
+      false,
+    );
+  });
+
+  it('rejects a KSeF date in the future', () => {
+    expect(isValidKsefNumberDate(VALID, new Date('2026-09-01'), new Date('2026-09-04'))).toBe(
+      false,
+    );
+  });
+
+  it('rejects a malformed KSeF number outright', () => {
+    expect(isValidKsefNumberDate('not-a-ksef-number', new Date('2026-09-05'))).toBe(false);
   });
 });

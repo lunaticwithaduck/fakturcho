@@ -1,4 +1,4 @@
-import { TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
+import { FORFETTARIO_GROUND, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { toSharedDocumentType } from '../../../prisma-mappers';
 import { discountAdjustedVatGroups } from '../totals-block';
 import type { MentionsBuilder } from './index';
@@ -16,6 +16,13 @@ const REVERSE_CHARGE_DOMESTIC_TEXT =
   'Inversione contabile ai sensi dell’art. 17, comma 6, D.P.R. 633/1972';
 const REVERSE_CHARGE_CROSS_BORDER_TEXT =
   'Inversione contabile – art. 7-ter, comma 1, lett. a), D.P.R. 633/1972';
+
+// L. 190/2014 art. 1, comma 67: a flat-rate (forfettario) issuer's fees are
+// not subject to withholding tax; the invoice must ask the withholding agent
+// not to apply it. Only meaningful when the client is itself an Italian
+// business (has a P. IVA) able to act as a substituto d'imposta.
+const FORFETTARIO_RITENUTA_TEXT =
+  'Si richiede la non applicazione della ritenuta d’acconto ai sensi dell’art. 1, comma 67, L. 190/2014';
 
 export const itMentions: MentionsBuilder = ({ document, lineItems }) => {
   const mentions: string[] = [];
@@ -52,6 +59,14 @@ export const itMentions: MentionsBuilder = ({ document, lineItems }) => {
 
   if (isTaxDocument && !groundExcluded && untaxedAmount > BOLLO_THRESHOLD_CENTS) {
     mentions.push(BOLLO_TEXT);
+  }
+
+  if (
+    isTaxDocument &&
+    document.vatExemptionGround === FORFETTARIO_GROUND &&
+    document.recipientVatNumber
+  ) {
+    mentions.push(FORFETTARIO_RITENUTA_TEXT);
   }
 
   return mentions.filter((mention) => mention !== document.vatExemptionGround);

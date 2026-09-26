@@ -12,6 +12,10 @@ export interface IssuerIdentifierField {
   label: string;
   pattern: RegExp | null;
   required: boolean;
+  // 'flag' renders as a checkbox and stores 'true'/'false' rather than free
+  // text (e.g. IT art. 2250 c.c. "socio unico"/"in liquidazione"). Defaults
+  // to 'text' when omitted.
+  kind?: 'text' | 'flag';
 }
 
 export interface CountyRegionField {
@@ -53,6 +57,9 @@ export interface CountryConfig {
   // it unconditionally; the EU directive default (art. 226(7)) — ES, FR, IT,
   // PL, RO and every generic EU country — needs it only when the dates differ.
   taxEventDateAlwaysShown: boolean;
+  // Highest day count the payment-terms selector may offer for this country's
+  // issuers; undefined means no statutory cap. Set only where verified.
+  maxPaymentTermsDays?: number;
 }
 
 const EU_DIRECTIVE_SME_EXEMPTION_GROUND =

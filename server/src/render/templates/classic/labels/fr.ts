@@ -90,4 +90,5 @@ export const fr: ClassicLabels = {
   buyerReferencePrefix: 'Votre référence : ',
   paymentTermsPrefix: 'Conditions de paiement : ',
   correctionKsefNumberPrefix: 'Numéro KSeF de la facture corrigée : ',
+  paymentTermsDaysText: (days) => (days === 0 ? 'à réception' : `${days} jours`),
 };

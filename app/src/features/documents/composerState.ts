@@ -1,3 +1,4 @@
+import { todayIsoDate } from '@app/features/shared/format';
 import { CORRECTION_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { DiscountInput, DocumentDto, DocumentType, SaveDraftRequest } from '@shared/types';
 import {
@@ -19,6 +20,7 @@ import {
   type LineItemFormState,
   lineItemFormStateFromDto,
 } from './composerLineItemState';
+import { addDaysToIsoDate } from './composerPaymentTermsState';
 import type { VatTreatment } from './liveTotals';
 
 export type { LineItemFormState } from './composerLineItemState';
@@ -40,6 +42,7 @@ export interface ComposerFormState extends ComposerDeliveryFormState, ComposerFr
   referenceNumber: string;
   taxEventAt: string;
   dueAt: string;
+  paymentTermsDays: number | null;
   validUntil: string;
   chargeVat: boolean;
   vatExemptionGround: string | null;
@@ -63,7 +66,9 @@ export function createDiscount(): DiscountFormState {
   return { key: makeKey(), label: '', mode: 'percent', percentBp: null, amount: null };
 }
 
-export function blankComposerState(): ComposerFormState {
+export function blankComposerState(
+  defaultPaymentTermsDays: number | null = null,
+): ComposerFormState {
   return {
     documentType: 'invoice',
     clientId: null,
@@ -71,7 +76,11 @@ export function blankComposerState(): ComposerFormState {
     correctionReason: '',
     referenceNumber: '',
     taxEventAt: '',
-    dueAt: '',
+    dueAt:
+      defaultPaymentTermsDays !== null
+        ? addDaysToIsoDate(todayIsoDate(), defaultPaymentTermsDays)
+        : '',
+    paymentTermsDays: defaultPaymentTermsDays,
     validUntil: '',
     ...blankDeliveryState(),
     ...blankFrMentionsState(),
@@ -97,6 +106,7 @@ export function composerStateFromDocument(
     referenceNumber: document.referenceNumber ?? '',
     taxEventAt: document.taxEventAt ?? '',
     dueAt: document.dueAt ?? '',
+    paymentTermsDays: document.paymentTermsDays ?? null,
     validUntil: document.validUntil ?? '',
     ...deliveryStateFromDocument(document, timeZone),
     ...frMentionsStateFromDocument(document),
@@ -151,6 +161,7 @@ export function toSaveDraftRequest(
     correctionReason: isCorrection ? state.correctionReason.trim() || null : null,
     taxEventAt: state.taxEventAt || null,
     dueAt: state.dueAt || null,
+    paymentTermsDays: state.paymentTermsDays,
     validUntil: state.validUntil || null,
     ...deliveryRequestFields(state, isDeliveryNote),
     ...frMentionsRequestFields(state, isFrenchTaxDocument(issuerCountry, vat.isTaxDocument)),

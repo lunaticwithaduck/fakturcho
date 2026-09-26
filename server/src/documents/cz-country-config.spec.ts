@@ -25,4 +25,8 @@ describe('CZ country config', () => {
   it('requires the structured address fields shared with every generic EU country', () => {
     expect(config.requiredIssuerFields).toEqual(['companyName', 'street', 'city', 'postcode']);
   });
+
+  it('always shows the DUZP tax-event date (§29 odst. 1 písm. h) zákona o DPH, common practice)', () => {
+    expect(config.taxEventDateAlwaysShown).toBe(true);
+  });
 });

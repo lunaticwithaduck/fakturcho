@@ -151,6 +151,7 @@ const ISSUER_PROFILE: IssuerProfileDto = {
   identifiers: {},
   vatOnCashBasis: false,
   vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 const CATALOGUE_ITEMS: CatalogueItemDto[] = [
@@ -394,12 +395,14 @@ describe('ComposerDetailsFields', () => {
         referenceNumber=""
         taxEventAt=""
         dueAt=""
+        paymentTermsDays={null}
         validUntil=""
         onChange={() => {}}
       />,
     );
     expect(screen.getByText('Референтен номер')).toBeTruthy();
     expect(screen.getByText('Данъчно събитие')).toBeTruthy();
+    expect(screen.getByText('Условия за плащане')).toBeTruthy();
     expect(screen.getByText('Падеж')).toBeTruthy();
     unmount();
 
@@ -410,6 +413,7 @@ describe('ComposerDetailsFields', () => {
         referenceNumber=""
         taxEventAt=""
         dueAt=""
+        paymentTermsDays={null}
         validUntil=""
         onChange={() => {}}
       />,
@@ -428,12 +432,14 @@ describe('ComposerDetailsFields', () => {
         referenceNumber=""
         taxEventAt=""
         dueAt=""
+        paymentTermsDays={null}
         validUntil=""
         onChange={() => {}}
       />,
     );
     expect(screen.getByText('Reference number')).toBeTruthy();
     expect(screen.getByText('Tax event date')).toBeTruthy();
+    expect(screen.getByText('Payment terms')).toBeTruthy();
     expect(screen.getByText('Due date')).toBeTruthy();
     unmount();
 
@@ -444,6 +450,7 @@ describe('ComposerDetailsFields', () => {
         referenceNumber=""
         taxEventAt=""
         dueAt=""
+        paymentTermsDays={null}
         validUntil=""
         onChange={() => {}}
       />,
@@ -453,6 +460,40 @@ describe('ComposerDetailsFields', () => {
 
     expect(consoleError).not.toHaveBeenCalled();
     consoleError.mockRestore();
+  });
+
+  it('shows a fixed due date and hides the custom date picker once a day-count term is chosen', () => {
+    renderWithLocale(
+      'en',
+      <ComposerDetailsFields
+        documentType="invoice"
+        referenceNumber=""
+        taxEventAt=""
+        dueAt="2026-10-10"
+        paymentTermsDays={14}
+        validUntil=""
+        onChange={() => {}}
+      />,
+    );
+    expect(screen.getByText('14 days')).toBeTruthy();
+    expect(screen.queryByText('Due date')).toBeNull();
+  });
+
+  it('shows the selected day term even when it is the country cap', () => {
+    renderWithLocale(
+      'en',
+      <ComposerDetailsFields
+        documentType="invoice"
+        referenceNumber=""
+        taxEventAt=""
+        dueAt="2026-11-25"
+        paymentTermsDays={60}
+        maxPaymentTermsDays={60}
+        validUntil=""
+        onChange={() => {}}
+      />,
+    );
+    expect(screen.getByText('60 days')).toBeTruthy();
   });
 });
 

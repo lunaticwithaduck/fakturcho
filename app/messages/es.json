@@ -111,6 +111,17 @@
         "taxEventAt": "Fecha de la operación",
         "dueAt": "Fecha de vencimiento"
       },
+      "paymentTerms": {
+        "label": "Condiciones de pago",
+        "dueOnReceipt": "Pago al recibo",
+        "days7": "7 días",
+        "days14": "14 días",
+        "days15": "15 días",
+        "days30": "30 días",
+        "days45": "45 días",
+        "days60": "60 días",
+        "customDate": "Fecha personalizada"
+      },
       "delivery": {
         "heading": "Datos de entrega",
         "deliveryDateLabel": "Fecha de entrega",
@@ -118,7 +129,8 @@
         "transportReasonLabel": "Motivo del transporte",
         "transportReasonPlaceholder": "Seleccionar motivo",
         "carrierNameLabel": "Transportista",
-        "transportNoteLabel": "Detalles del transporte"
+        "transportNoteLabel": "Detalles del transporte",
+        "transportVehicleLabel": "Matrícula del vehículo"
       },
       "frMentions": {
         "operationNatureLabel": "Naturaleza de la operación",
@@ -273,7 +285,8 @@
           "nipChecksum": "El NIP del cliente no supera la validación del dígito de control."
         }
       },
-      "ksefNumberInvalid": "El formato del número KSeF no es válido."
+      "ksefNumberInvalid": "El formato del número KSeF no es válido.",
+      "ksefNumberDateInvalid": "La fecha del número KSeF no puede ser anterior a la fecha de emisión de la factura ni futura."
     }
   },
   "billing": {
@@ -459,7 +472,8 @@
       "city": "Ciudad",
       "phone": "Teléfono",
       "invalidFormat": "Formato no válido",
-      "czRegisterHint": "Obligatorio para emisores checos: indique su inscripción en el Registro Mercantil (tribunal, sección, número de inscripción) u otro registro público – § 435 del Código Civil (Ley n.º 89/2012 Sb.)."
+      "czRegisterHint": "Obligatorio para emisores checos: indique su inscripción en el Registro Mercantil (tribunal, sección, número de inscripción) u otro registro público – § 435 del Código Civil (Ley n.º 89/2012 Sb.).",
+      "frLegalFormHint": "¿Empresario individual? Escriba «EI» o «entrepreneur individuel»: debe figurar junto al nombre en todos los documentos (art. L526-22 del Code de commerce)."
     },
     "vatFields": {
       "heading": "Registro de IVA",
@@ -467,6 +481,18 @@
       "vatNumber": "NIF-IVA",
       "vatOnCashBasis": "IVA de caja (TVA la încasare, Rumanía)",
       "vatOnDebits": "Opción de IVA sobre cargos (Francia)"
+    },
+    "paymentTerms": {
+      "heading": "Condiciones de pago",
+      "defaultLabel": "Plazo predeterminado",
+      "none": "Sin valor predeterminado: se elige en cada documento",
+      "dueOnReceipt": "Pago al recibo",
+      "days7": "7 días",
+      "days14": "14 días",
+      "days15": "15 días",
+      "days30": "30 días",
+      "days45": "45 días",
+      "days60": "60 días"
     },
     "bankFields": {
       "heading": "Cuenta bancaria",

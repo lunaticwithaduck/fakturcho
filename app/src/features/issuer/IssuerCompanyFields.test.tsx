@@ -29,6 +29,7 @@ const BG_VALUES: IssuerProfileFormValues = {
   identifiers: {},
   vatOnCashBasis: false,
   vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 const DE_VALUES: IssuerProfileFormValues = {
@@ -279,5 +280,46 @@ describe('IssuerCompanyFields', () => {
 
     expect((screen.getByLabelText('Registergericht') as HTMLInputElement).required).toBe(true);
     expect((screen.getByLabelText('Sitz') as HTMLInputElement).required).toBe(true);
+  });
+
+  it('renders the IT art. 2250 c.c. flags as checkboxes and toggles them', () => {
+    const IT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'IT',
+      addressLine: '',
+      street: 'Via Roma 1',
+      postcode: '00100',
+      countyRegion: 'RM',
+    };
+    const onChange = vi.fn();
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={IT_VALUES} onChange={onChange} />
+      </NextIntlClientProvider>,
+    );
+
+    fireEvent.click(screen.getByLabelText('Socio unico'));
+    expect(onChange).toHaveBeenCalledWith('identifiers', { socioUnico: 'true' });
+
+    fireEvent.click(screen.getByLabelText('In liquidazione'));
+    expect(onChange).toHaveBeenCalledWith('identifiers', { inLiquidazione: 'true' });
+  });
+
+  it('shows the FR legal-form hint on the free-text field', () => {
+    const FR_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'FR',
+      addressLine: '',
+      street: 'Rue de Rivoli 1',
+      postcode: '75001',
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={FR_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByLabelText('Forme juridique')).toBeTruthy();
+    expect(screen.getByText(/entrepreneur individuel/)).toBeTruthy();
   });
 });

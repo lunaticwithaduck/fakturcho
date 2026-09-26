@@ -50,7 +50,11 @@ export const frMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
   if (TAX_DOCUMENT_TYPES[sharedType] && sharedType !== 'credit_note') {
     if (document.dueAt) {
       mentions.push(`Date d'échéance : ${formatDateForLocale(document.dueAt, 'fr')}`);
-    } else if (document.issuedAt && !document.paymentTermsNote) {
+    } else if (
+      document.issuedAt &&
+      !document.paymentTermsNote &&
+      document.paymentTermsDays == null
+    ) {
       // C. com. art. L441-10 I: the 30-day default applies only when the
       // parties agreed no term; a paymentTermsNote means they did.
       const defaultDue = new Date(document.issuedAt);

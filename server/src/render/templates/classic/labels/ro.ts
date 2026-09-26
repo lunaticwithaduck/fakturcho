@@ -94,4 +94,6 @@ export const ro: ClassicLabels = {
   buyerReferencePrefix: 'Referința dumneavoastră: ',
   paymentTermsPrefix: 'Termeni de plată: ',
   correctionKsefNumberPrefix: 'Numărul KSeF al facturii corectate: ',
+  transportVehiclePrefix: 'Mijloc de transport nr.: ',
+  paymentTermsDaysText: (days) => (days === 0 ? 'la primire' : `${days} zile`),
 };

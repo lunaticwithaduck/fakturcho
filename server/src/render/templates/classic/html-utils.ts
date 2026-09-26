@@ -93,3 +93,36 @@ export function countryName(country: string, language: string): string {
     return country;
   }
 }
+
+const BG_NON_BREAKING_ABBREVIATIONS = [
+  'ж.к.',
+  'бул.',
+  'обл.',
+  'гр.',
+  'ул.',
+  'ет.',
+  'ап.',
+  'вх.',
+  'бл.',
+  'с.',
+  '№',
+];
+
+function buildAbbreviationPattern(abbreviations: readonly string[]): RegExp {
+  const alternation = abbreviations
+    .map((abbreviation) => abbreviation.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|');
+  return new RegExp(`(?<![\\p{L}\\p{N}])(${alternation}) `, 'gu');
+}
+
+const NON_BREAKING_ABBREVIATION_PATTERNS: Partial<Record<string, RegExp>> = {
+  bg: buildAbbreviationPattern(BG_NON_BREAKING_ABBREVIATIONS),
+};
+
+// A short abbreviation ("гр.", "ул.", "№"...) must stay glued to the word it
+// qualifies, or a line break can strand it alone at the end of a line.
+export function keepAbbreviationsWithNextWord(address: string, language: string): string {
+  const pattern = NON_BREAKING_ABBREVIATION_PATTERNS[language];
+  if (!pattern) return address;
+  return address.replace(pattern, '$1 ');
+}

@@ -55,9 +55,15 @@ describe('IT_CONFIG', () => {
     ]);
   });
 
-  it('declares the REA and share capital identifiers, both optional', () => {
+  it('declares the REA, share capital and art. 2250 c.c. flags, all optional', () => {
     const keys = IT_CONFIG.identifiers.map((field) => field.key);
-    expect(keys).toEqual(['rea', 'shareCapital']);
+    expect(keys).toEqual([
+      'rea',
+      'shareCapital',
+      'socioUnico',
+      'inLiquidazione',
+      'capitaleVersato',
+    ]);
     expect(IT_CONFIG.identifiers.every((field) => !field.required)).toBe(true);
   });
 

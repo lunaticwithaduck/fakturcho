@@ -10,6 +10,7 @@ import { z } from 'zod';
 import {
   isoDateSchema,
   paymentMeansCodeSchema,
+  paymentTermsDaysSchema,
   wallClockDateTimeSchema,
 } from '../common/eu-field-schemas';
 
@@ -41,10 +42,12 @@ export const saveDraftRequestSchema = z.object({
   buyerReference: z.string().nullish(),
   paymentMeansCode: paymentMeansCodeSchema.nullish(),
   paymentTermsNote: z.string().nullish(),
+  paymentTermsDays: paymentTermsDaysSchema.nullish(),
   transportReason: z.string().nullish(),
   transportedAt: wallClockDateTimeSchema.nullish(),
   carrierName: z.string().nullish(),
   transportNote: z.string().nullish(),
+  transportVehicle: z.string().nullish(),
   correctionReason: z.string().nullish(),
   operationNature: z.enum(OPERATION_NATURES).nullish(),
   deliveryAddress: z.string().nullish(),

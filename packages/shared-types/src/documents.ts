@@ -9,6 +9,15 @@ import type { VatCategory } from './vat';
 export const OPERATION_NATURES = ['goods', 'services', 'mixed'] as const;
 export type OperationNature = (typeof OPERATION_NATURES)[number];
 
+// The composer's payment-terms selector; dueAt = issue date + N days,
+// recomputed from the actual issue date at issuance (0 = due on receipt).
+export const PAYMENT_TERMS_DAY_OPTIONS = [0, 7, 14, 15, 30, 45, 60] as const;
+export type PaymentTermsDayOption = (typeof PAYMENT_TERMS_DAY_OPTIONS)[number];
+
+export function isPaymentTermsDayOption(value: number): value is PaymentTermsDayOption {
+  return (PAYMENT_TERMS_DAY_OPTIONS as readonly number[]).includes(value);
+}
+
 export interface LineItemDto {
   id: string;
   name: string;
@@ -92,10 +101,14 @@ export interface DocumentDto {
   buyerReference: string | null;
   paymentMeansCode: string | null;
   paymentTermsNote: string | null;
+  paymentTermsDays?: number | null;
   transportReason: string | null;
   transportedAt: string | null;
   carrierName: string | null;
   transportNote: string | null;
+  // RO delivery_note only, added after the other transport fields — optional
+  // so existing DocumentDto fixtures don't all need updating.
+  transportVehicle?: string | null;
   correctionReason: string | null;
   operationNature?: OperationNature | null;
   deliveryAddress?: string | null;
@@ -174,10 +187,12 @@ export interface SaveDraftRequest {
   buyerReference?: string | null;
   paymentMeansCode?: string | null;
   paymentTermsNote?: string | null;
+  paymentTermsDays?: number | null;
   transportReason?: string | null;
   transportedAt?: string | null;
   carrierName?: string | null;
   transportNote?: string | null;
+  transportVehicle?: string | null;
   correctionReason?: string | null;
   operationNature?: OperationNature | null;
   deliveryAddress?: string | null;

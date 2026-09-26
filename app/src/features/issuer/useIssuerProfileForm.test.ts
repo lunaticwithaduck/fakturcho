@@ -25,6 +25,7 @@ const BASE: IssuerProfileFormValues = {
   identifiers: {},
   vatOnCashBasis: false,
   vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 describe('computeIssuerFieldErrors', () => {

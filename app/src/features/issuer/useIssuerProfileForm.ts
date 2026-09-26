@@ -25,6 +25,7 @@ export interface IssuerProfileFormValues {
   identifiers: Record<string, string>;
   vatOnCashBasis: boolean;
   vatOnDebits: boolean;
+  defaultPaymentTermsDays: number | null;
 }
 
 function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
@@ -48,6 +49,7 @@ function toValues(profile: IssuerProfileDto): IssuerProfileFormValues {
     identifiers: { ...profile.identifiers },
     vatOnCashBasis: profile.vatOnCashBasis,
     vatOnDebits: profile.vatOnDebits,
+    defaultPaymentTermsDays: profile.defaultPaymentTermsDays,
   };
 }
 
@@ -79,6 +81,7 @@ function toRequestBody(values: IssuerProfileFormValues): UpdateIssuerProfileRequ
     ),
     vatOnCashBasis: values.vatOnCashBasis,
     vatOnDebits: values.vatOnDebits,
+    defaultPaymentTermsDays: values.defaultPaymentTermsDays,
   };
 }
 

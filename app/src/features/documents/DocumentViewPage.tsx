@@ -105,6 +105,7 @@ export function DocumentViewPage({ documentId, autoOpenIssue }: DocumentViewPage
         status={document.status}
         issuerCountry={document.issuer.country}
         ksefNumber={document.ksefNumber}
+        issuedAt={document.issuedAt}
       />
 
       <DocumentPdfViewer

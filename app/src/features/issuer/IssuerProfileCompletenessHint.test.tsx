@@ -30,6 +30,7 @@ const BASE: IssuerProfileDto = {
   identifiers: {},
   vatOnCashBasis: false,
   vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 afterEach(cleanup);

@@ -111,6 +111,17 @@
         "taxEventAt": "Date de livraison / prestation",
         "dueAt": "Date d'échéance"
       },
+      "paymentTerms": {
+        "label": "Conditions de paiement",
+        "dueOnReceipt": "Paiement à réception",
+        "days7": "7 jours",
+        "days14": "14 jours",
+        "days15": "15 jours",
+        "days30": "30 jours",
+        "days45": "45 jours",
+        "days60": "60 jours",
+        "customDate": "Date personnalisée"
+      },
       "delivery": {
         "heading": "Détails de la livraison",
         "deliveryDateLabel": "Date de livraison",
@@ -118,7 +129,8 @@
         "transportReasonLabel": "Motif du transport",
         "transportReasonPlaceholder": "Sélectionner un motif",
         "carrierNameLabel": "Transporteur",
-        "transportNoteLabel": "Détails du transport"
+        "transportNoteLabel": "Détails du transport",
+        "transportVehicleLabel": "Immatriculation du véhicule"
       },
       "frMentions": {
         "operationNatureLabel": "Nature de l'opération",
@@ -273,7 +285,8 @@
           "nipChecksum": "Le NIP du destinataire est invalide (clé de contrôle incorrecte)."
         }
       },
-      "ksefNumberInvalid": "Le format du numéro KSeF n'est pas valide."
+      "ksefNumberInvalid": "Le format du numéro KSeF n'est pas valide.",
+      "ksefNumberDateInvalid": "La date du numéro KSeF ne peut pas être antérieure à la date d'émission de la facture ni future."
     }
   },
   "billing": {
@@ -459,7 +472,8 @@
       "city": "Ville",
       "phone": "Téléphone",
       "invalidFormat": "Format invalide",
-      "czRegisterHint": "Obligatoire pour les émetteurs tchèques : indiquez votre immatriculation au registre du commerce (tribunal, section, numéro d'inscription) ou à un autre registre public – § 435 du Code civil (loi n° 89/2012 Sb.)."
+      "czRegisterHint": "Obligatoire pour les émetteurs tchèques : indiquez votre immatriculation au registre du commerce (tribunal, section, numéro d'inscription) ou à un autre registre public – § 435 du Code civil (loi n° 89/2012 Sb.).",
+      "frLegalFormHint": "Entrepreneur individuel ? Indiquez « EI » ou « entrepreneur individuel » : la mention doit figurer à côté de votre nom sur chaque document (art. L526-22 du code de commerce)."
     },
     "vatFields": {
       "heading": "Assujettissement à la TVA",
@@ -467,6 +481,18 @@
       "vatNumber": "Numéro de TVA",
       "vatOnCashBasis": "TVA sur les encaissements (TVA la încasare, Roumanie)",
       "vatOnDebits": "Option pour le paiement de la taxe d'après les débits"
+    },
+    "paymentTerms": {
+      "heading": "Conditions de paiement",
+      "defaultLabel": "Délai par défaut",
+      "none": "Aucun délai par défaut — à choisir pour chaque document",
+      "dueOnReceipt": "Paiement à réception",
+      "days7": "7 jours",
+      "days14": "14 jours",
+      "days15": "15 jours",
+      "days30": "30 jours",
+      "days45": "45 jours",
+      "days60": "60 jours"
     },
     "bankFields": {
       "heading": "Compte bancaire",

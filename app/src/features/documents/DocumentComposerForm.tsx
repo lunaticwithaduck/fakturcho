@@ -12,13 +12,10 @@ import type {
 } from '@shared/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { ComposerActions } from './ComposerActions';
-import { ComposerClientField } from './ComposerClientField';
-import { ComposerCorrectionFields } from './ComposerCorrectionFields';
-import { ComposerDeliveryFields } from './ComposerDeliveryFields';
-import { ComposerDetailsFields } from './ComposerDetailsFields';
+import { ComposerDeliverySection } from './ComposerDeliverySection';
 import { ComposerDiscountsList } from './ComposerDiscountsList';
-import { ComposerDocumentTypeField } from './ComposerDocumentTypeField';
 import { ComposerFrMentionsFields } from './ComposerFrMentionsFields';
+import { ComposerHeaderCard } from './ComposerHeaderCard';
 import { ComposerLineItemsTable } from './ComposerLineItemsTable';
 import { ComposerNotesFields } from './ComposerNotesFields';
 import { ComposerTotalsPanel } from './ComposerTotalsPanel';
@@ -51,6 +48,7 @@ export function DocumentComposerForm({
     existing,
     countryConfig.timeZone,
     countryConfig.defaultVatRateBp,
+    issuerProfile.defaultPaymentTermsDays,
   );
   const { state, setField, patchState } = controller;
   const vat = resolveVatTreatment({
@@ -85,53 +83,28 @@ export function DocumentComposerForm({
         {documentId ? t('composer.titleEdit') : t('composer.titleNew')}
       </h1>
 
-      <Card className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <ComposerDocumentTypeField
-            value={state.documentType}
-            onChange={(value) => setField('documentType', value)}
-          />
-          <ComposerClientField
-            clientId={state.clientId}
-            clients={clients}
-            onChange={(value) => setField('clientId', value)}
-          />
-        </div>
-        <ComposerCorrectionFields
-          documentType={state.documentType}
-          documentId={documentId}
-          isCorrection={isCorrection}
-          isDeliveryNote={isDeliveryNote}
-          issuerCountry={issuerProfile.country}
-          originalDocumentId={state.originalDocumentId}
-          correctionReason={state.correctionReason}
-          hasError={!!error}
-          onOriginalChange={(value) => setField('originalDocumentId', value)}
-          onReasonChange={(value) => setField('correctionReason', value)}
-        />
-        <ComposerDetailsFields
-          documentType={state.documentType}
-          referenceNumber={state.referenceNumber}
-          taxEventAt={state.taxEventAt}
-          dueAt={state.dueAt}
-          validUntil={state.validUntil}
-          onChange={patchState}
-        />
-      </Card>
+      <ComposerHeaderCard
+        documentId={documentId}
+        clients={clients}
+        issuerCountry={issuerProfile.country}
+        {...(countryConfig.maxPaymentTermsDays !== undefined
+          ? { maxPaymentTermsDays: countryConfig.maxPaymentTermsDays }
+          : {})}
+        isCorrection={isCorrection}
+        isDeliveryNote={isDeliveryNote}
+        hasError={!!error}
+        state={state}
+        setField={setField}
+        patchState={patchState}
+      />
 
-      {isDeliveryNote ? (
-        <Card>
-          <ComposerDeliveryFields
-            deliveryDate={state.deliveryDate}
-            transportReason={state.transportReason}
-            transportedAt={state.transportedAt}
-            carrierName={state.carrierName}
-            transportNote={state.transportNote}
-            transportReasonOptions={countryConfig.deliveryNoteTransportReasons}
-            onChange={patchState}
-          />
-        </Card>
-      ) : null}
+      <ComposerDeliverySection
+        documentType={state.documentType}
+        state={state}
+        issuerCountry={issuerProfile.country}
+        transportReasonOptions={countryConfig.deliveryNoteTransportReasons}
+        onChange={patchState}
+      />
 
       {showFrMentions ? (
         <Card>

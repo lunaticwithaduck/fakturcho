@@ -9,7 +9,7 @@ import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { fromPrismaDocumentType } from '../numbering/document-type.mapper';
 import { NumberingService } from '../numbering/numbering.service';
 import { ExchangeRateService } from '../vat-eu/exchange-rate.service';
-import { parseDateOnly, startOfTodayUtc } from './date.util';
+import { addDaysUtc, parseDateOnly, startOfTodayUtc } from './date.util';
 import { toDocumentDto } from './document.mapper';
 import { DOCUMENT_INCLUDE } from './document-include';
 import { assertIssuable, issuedNumberPrefix } from './document-issuance.rules';
@@ -66,6 +66,13 @@ export class DocumentIssuanceService {
     const taxEventAt = TAX_DOCUMENT_TYPES[documentType]
       ? (existing.taxEventAt ?? issuedAt)
       : existing.taxEventAt;
+    // Composer's structured payment-terms selector: dueAt is always the
+    // actual issue date plus the chosen day count, not whatever was on the
+    // draft when it was saved (issuance can happen long after).
+    const dueAt =
+      existing.paymentTermsDays != null
+        ? addDaysUtc(issuedAt, existing.paymentTermsDays)
+        : existing.dueAt;
 
     const country = issuerProfile?.country ?? null;
     assertIssuable(existing, documentType, country);
@@ -115,6 +122,7 @@ export class DocumentIssuanceService {
             status: PrismaDocumentStatus.SENT,
             issuedAt,
             taxEventAt,
+            dueAt,
             localCurrency: localCurrencyVat?.localCurrency ?? null,
             exchangeRate: localCurrencyVat?.exchangeRate ?? null,
             exchangeRateDate: localCurrencyVat?.exchangeRateDate ?? null,

@@ -111,6 +111,17 @@
         "taxEventAt": "Data di effettuazione",
         "dueAt": "Scadenza"
       },
+      "paymentTerms": {
+        "label": "Termini di pagamento",
+        "dueOnReceipt": "Pagamento alla ricezione",
+        "days7": "7 giorni",
+        "days14": "14 giorni",
+        "days15": "15 giorni",
+        "days30": "30 giorni",
+        "days45": "45 giorni",
+        "days60": "60 giorni",
+        "customDate": "Data personalizzata"
+      },
       "delivery": {
         "heading": "Dati di consegna",
         "deliveryDateLabel": "Data di consegna",
@@ -118,7 +129,8 @@
         "transportReasonLabel": "Causale del trasporto",
         "transportReasonPlaceholder": "Seleziona la causale",
         "carrierNameLabel": "Vettore",
-        "transportNoteLabel": "Dati del trasporto"
+        "transportNoteLabel": "Dati del trasporto",
+        "transportVehicleLabel": "Targa del mezzo di trasporto"
       },
       "frMentions": {
         "operationNatureLabel": "Natura dell'operazione",
@@ -273,7 +285,8 @@
           "nipChecksum": "Il NIP del destinatario non è valido (cifra di controllo errata)."
         }
       },
-      "ksefNumberInvalid": "Il formato del numero KSeF non è valido."
+      "ksefNumberInvalid": "Il formato del numero KSeF non è valido.",
+      "ksefNumberDateInvalid": "La data del numero KSeF non può essere precedente alla data di emissione della fattura né futura."
     }
   },
   "billing": {
@@ -459,7 +472,8 @@
       "city": "Città",
       "phone": "Telefono",
       "invalidFormat": "Formato non valido",
-      "czRegisterHint": "Obbligatorio per gli emittenti cechi: indicare l'iscrizione nel Registro di commercio (tribunale, sezione, numero di iscrizione) o in un altro registro pubblico – § 435 del Codice civile (legge n. 89/2012 Sb.)."
+      "czRegisterHint": "Obbligatorio per gli emittenti cechi: indicare l'iscrizione nel Registro di commercio (tribunale, sezione, numero di iscrizione) o in un altro registro pubblico – § 435 del Codice civile (legge n. 89/2012 Sb.).",
+      "frLegalFormHint": "Imprenditore individuale? Scrivere «EI» o «entrepreneur individuel»: deve comparire accanto al nome su ogni documento (art. L526-22 del Code de commerce)."
     },
     "vatFields": {
       "heading": "Registrazione IVA",
@@ -467,6 +481,18 @@
       "vatNumber": "Partita IVA",
       "vatOnCashBasis": "IVA per cassa (TVA la încasare, Romania)",
       "vatOnDebits": "Opzione IVA sui debiti (Francia)"
+    },
+    "paymentTerms": {
+      "heading": "Termini di pagamento",
+      "defaultLabel": "Termine predefinito",
+      "none": "Nessun predefinito — da scegliere per ogni documento",
+      "dueOnReceipt": "Pagamento alla ricezione",
+      "days7": "7 giorni",
+      "days14": "14 giorni",
+      "days15": "15 giorni",
+      "days30": "30 giorni",
+      "days45": "45 giorni",
+      "days60": "60 giorni"
     },
     "bankFields": {
       "heading": "Conto bancario",

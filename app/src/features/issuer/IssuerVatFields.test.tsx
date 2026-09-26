@@ -28,6 +28,7 @@ const BASE_VALUES: IssuerProfileFormValues = {
   identifiers: {},
   vatOnCashBasis: false,
   vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 afterEach(cleanup);

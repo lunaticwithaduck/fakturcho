@@ -239,6 +239,23 @@ describe('DocumentsService', () => {
     expect(refetched.deliveryDate).toBe('2026-09-15');
   });
 
+  it('paymentTermsDays round-trips through a save, independent of paymentTermsNote', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ paymentTermsDays: 14 }),
+    );
+
+    expect(draft.paymentTermsDays).toBe(14);
+    expect(draft.paymentTermsNote).toBeNull();
+
+    const refetched = await documentsService.get(accountId, draft.id);
+    expect(refetched.paymentTermsDays).toBe(14);
+  });
+
   it('per-line vatRateBp, vatCategory and unitCode round-trip through a save', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);

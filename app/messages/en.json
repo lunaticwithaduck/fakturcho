@@ -111,6 +111,17 @@
         "taxEventAt": "Tax event date",
         "dueAt": "Due date"
       },
+      "paymentTerms": {
+        "label": "Payment terms",
+        "dueOnReceipt": "Due on receipt",
+        "days7": "7 days",
+        "days14": "14 days",
+        "days15": "15 days",
+        "days30": "30 days",
+        "days45": "45 days",
+        "days60": "60 days",
+        "customDate": "Custom date"
+      },
       "delivery": {
         "heading": "Delivery details",
         "deliveryDateLabel": "Delivery date",
@@ -118,7 +129,8 @@
         "transportReasonLabel": "Transport reason",
         "transportReasonPlaceholder": "Select reason",
         "carrierNameLabel": "Carrier",
-        "transportNoteLabel": "Transport details"
+        "transportNoteLabel": "Transport details",
+        "transportVehicleLabel": "Vehicle registration no."
       },
       "frMentions": {
         "operationNatureLabel": "Nature of operation",
@@ -273,7 +285,8 @@
           "nipChecksum": "The recipient NIP fails the checksum validation."
         }
       },
-      "ksefNumberInvalid": "The KSeF number format is invalid."
+      "ksefNumberInvalid": "The KSeF number format is invalid.",
+      "ksefNumberDateInvalid": "The KSeF number's date cannot be before the invoice's issue date or in the future."
     }
   },
   "billing": {
@@ -459,7 +472,8 @@
       "city": "City",
       "phone": "Phone",
       "invalidFormat": "Invalid format",
-      "czRegisterHint": "Required for Czech issuers: state your entry in the Commercial Register (court, section, insert number) or another public register — § 435 of the Civil Code (Act No. 89/2012 Sb.)."
+      "czRegisterHint": "Required for Czech issuers: state your entry in the Commercial Register (court, section, insert number) or another public register — § 435 of the Civil Code (Act No. 89/2012 Sb.).",
+      "frLegalFormHint": "Sole trader? Write \"EI\" or \"entrepreneur individuel\" — it must print next to your name on every document (C. com. art. L526-22)."
     },
     "vatFields": {
       "heading": "VAT registration",
@@ -467,6 +481,18 @@
       "vatNumber": "VAT number",
       "vatOnCashBasis": "Cash-basis VAT scheme (TVA la încasare)",
       "vatOnDebits": "VAT on debits option (paiement d'après les débits)"
+    },
+    "paymentTerms": {
+      "heading": "Payment terms",
+      "defaultLabel": "Default term",
+      "none": "No default — choose per document",
+      "dueOnReceipt": "Due on receipt",
+      "days7": "7 days",
+      "days14": "14 days",
+      "days15": "15 days",
+      "days30": "30 days",
+      "days45": "45 days",
+      "days60": "60 days"
     },
     "bankFields": {
       "heading": "Bank account",

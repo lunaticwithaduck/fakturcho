@@ -1,3 +1,4 @@
+import { isPaymentTermsDayOption } from '@fakturcho/shared-types';
 import { z } from 'zod';
 
 export const countryCodeSchema = z
@@ -33,3 +34,7 @@ export const wallClockDateTimeSchema = z
 export const paymentMeansCodeSchema = z
   .string()
   .regex(/^\d{1,3}$/, 'must be a UNCL4461 numeric code');
+export const paymentTermsDaysSchema = z
+  .number()
+  .int()
+  .refine(isPaymentTermsDayOption, 'must be one of the offered payment-term day counts');

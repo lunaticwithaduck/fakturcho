@@ -18,4 +18,7 @@ export const CZ_CONFIG: CountryConfig = {
   identifiers: [
     { key: 'companyRegister', label: 'Zápis v rejstříku', pattern: null, required: true },
   ],
+  // §29 odst. 1 písm. h) zákona o DPH: DUZP is not a mandatory element once it
+  // matches the issue date, but Czech practice prints it unconditionally.
+  taxEventDateAlwaysShown: true,
 };

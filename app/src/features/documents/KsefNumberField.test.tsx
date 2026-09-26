@@ -18,10 +18,10 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-function renderField(ksefNumber: string | null = null) {
+function renderField(ksefNumber: string | null = null, issuedAt: string | null = null) {
   return render(
     <NextIntlClientProvider locale="bg" messages={bgMessages}>
-      <KsefNumberField documentId="doc-1" ksefNumber={ksefNumber} />
+      <KsefNumberField documentId="doc-1" ksefNumber={ksefNumber} issuedAt={issuedAt} />
     </NextIntlClientProvider>,
   );
 }
@@ -63,6 +63,21 @@ describe('KsefNumberField', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
 
     expect(screen.getByText('Форматът на номера по KSeF е невалиден.')).toBeTruthy();
+    expect(setKsefNumber).not.toHaveBeenCalled();
+  });
+
+  it('rejects a KSeF number dated before the invoice issue date and does not save it', () => {
+    renderField(null, '2026-09-10');
+    fireEvent.change(screen.getByLabelText('Номер в KSeF'), {
+      target: { value: VALID_KSEF_NUMBER },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Запази' }));
+
+    expect(
+      screen.getByText(
+        'Датата в номера по KSeF не може да бъде преди датата на издаване на фактурата или в бъдещето.',
+      ),
+    ).toBeTruthy();
     expect(setKsefNumber).not.toHaveBeenCalled();
   });
 });

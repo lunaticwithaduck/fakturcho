@@ -25,6 +25,7 @@ const BASE: IssuerProfileDto = {
   identifiers: {},
   vatOnCashBasis: false,
   vatOnDebits: false,
+  defaultPaymentTermsDays: null,
 };
 
 describe('isIssuerProfileComplete — CZ (NOZ § 435 odst. 1)', () => {

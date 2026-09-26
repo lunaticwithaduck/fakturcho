@@ -164,3 +164,40 @@ describe('buyerReference and paymentTermsNote (EN 16931 BT-10/BT-20)', () => {
     expect(html).not.toContain('Payment terms');
   });
 });
+
+describe('paymentTermsDays overrides paymentTermsNote with localized text', () => {
+  const cases: Array<[string, string, string]> = [
+    ['bg', 'Условия за плащане: ', '14 дни'],
+    ['en', 'Payment terms: ', '14 days'],
+    ['de', 'Zahlungsbedingungen: ', '14 Tage'],
+    ['fr', 'Conditions de paiement : ', '14 jours'],
+    ['it', 'Termini di pagamento: ', '14 giorni'],
+    ['pl', 'Warunki płatności: ', '14 dni'],
+    ['ro', 'Termeni de plată: ', '14 zile'],
+    ['es', 'Condiciones de pago: ', '14 días'],
+  ];
+
+  it('prints the localized day count instead of the raw note, in every language', () => {
+    for (const [language, prefix, expectedDays] of cases) {
+      const locale = resolveClassicLocale(language as never);
+      const document = buildFakeDocument({ paymentTermsDays: 14, paymentTermsNote: 'Net 14' });
+      const html = buildDatesBlock(document, 'invoice', locale);
+      expect(html).toContain(`${prefix}${expectedDays}`);
+      expect(html).not.toContain('Net 14');
+    }
+  });
+
+  it('prints "due on receipt" wording for 0 days', () => {
+    const locale = resolveClassicLocale('en', 'IE');
+    const document = buildFakeDocument({ paymentTermsDays: 0, paymentTermsNote: null });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Payment terms: on receipt');
+  });
+
+  it('falls back to the raw paymentTermsNote when paymentTermsDays is unset', () => {
+    const locale = resolveClassicLocale('en', 'IE');
+    const document = buildFakeDocument({ paymentTermsDays: null, paymentTermsNote: 'Net 14' });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Payment terms: Net 14');
+  });
+});

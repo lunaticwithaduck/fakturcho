@@ -109,6 +109,7 @@ export function buildStyles(): string {
     }
     .exemption {
       margin-bottom: 16px;
+      font-size: 10px;
     }
     .mentions {
       margin-bottom: 16px;
@@ -127,12 +128,14 @@ export function buildStyles(): string {
       justify-content: space-between;
       margin-top: 32px;
     }
+    .watermark-area {
+      position: relative;
+      min-height: 380px;
+      overflow: hidden;
+    }
     .watermark {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -144,15 +147,15 @@ export function buildStyles(): string {
       z-index: 10;
     }
     .watermark-main {
-      font-size: 86px;
+      font-size: 64px;
       font-weight: 700;
-      letter-spacing: 10px;
+      letter-spacing: 8px;
       white-space: nowrap;
     }
     .watermark-sub {
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 700;
-      letter-spacing: 6px;
+      letter-spacing: 5px;
       white-space: nowrap;
     }
     .verifactu-qr-row {

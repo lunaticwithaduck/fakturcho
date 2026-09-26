@@ -44,4 +44,7 @@ export const FR_CONFIG: CountryConfig = {
   showMol: false,
   showSignatureRow: false,
   showOriginalStamp: false,
+  // C. com. art. L441-10 I: between professionals, the agreed payment term
+  // cannot exceed 60 days from the invoice date (or 45 days end-of-month).
+  maxPaymentTermsDays: 60,
 };

@@ -27,6 +27,9 @@ export interface IssuerProfileDto {
   // CGI art. 242 nonies A I 17°: FR option for VAT on debits, printed as
   // "Option pour le paiement de la taxe d'après les débits" when set.
   vatOnDebits: boolean;
+  // Prefills the composer's payment-terms selector for a new document; null
+  // means no default (chosen per document).
+  defaultPaymentTermsDays: number | null;
 }
 
 export interface UpdateIssuerProfileRequest {
@@ -51,6 +54,7 @@ export interface UpdateIssuerProfileRequest {
   identifiers?: Record<string, string>;
   vatOnCashBasis?: boolean;
   vatOnDebits?: boolean;
+  defaultPaymentTermsDays?: number | null;
 }
 
 export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boolean {

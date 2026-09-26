@@ -7,6 +7,7 @@ import { DomainError } from '../common/domain-error';
 import {
   countryCodeSchema,
   countyRegionSchema,
+  paymentTermsDaysSchema,
   peppolEndpointIdSchema,
   peppolSchemeSchema,
   postcodeSchema,
@@ -37,6 +38,7 @@ const baseUpdateIssuerProfileSchema = z.object({
   peppolScheme: peppolSchemeSchema.nullable().optional(),
   vatOnCashBasis: z.boolean().optional(),
   vatOnDebits: z.boolean().optional(),
+  defaultPaymentTermsDays: paymentTermsDaysSchema.nullable().optional(),
 });
 
 export const updateIssuerProfileSchema = withCountryFieldPatterns(baseUpdateIssuerProfileSchema);

@@ -27,5 +27,6 @@ export function toIssuerProfileDto(profile: PrismaIssuerProfile | null): IssuerP
     identifiers: readIdentifiers(profile.identifiers),
     vatOnCashBasis: profile.vatOnCashBasis,
     vatOnDebits: profile.vatOnDebits,
+    defaultPaymentTermsDays: profile.defaultPaymentTermsDays,
   };
 }

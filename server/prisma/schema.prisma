@@ -159,6 +159,9 @@ model IssuerProfile {
   identifiers      Json?
   vatOnCashBasis   Boolean  @default(false)
   vatOnDebits      Boolean  @default(false)
+  // Prefills the composer's payment-terms selector for a new document; the
+  // document itself always carries its own paymentTermsDays once saved.
+  defaultPaymentTermsDays Int?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -263,6 +266,10 @@ model Document {
   buyerReference   String?
   paymentMeansCode String?
   paymentTermsNote String?
+  // Set by the composer's structured payment-terms selector (0 = due on
+  // receipt); when set, dueAt is recomputed from it at issuance. Null keeps
+  // the legacy free-text paymentTermsNote / manually-picked dueAt behaviour.
+  paymentTermsDays Int?
 
   // delivery_note only: IT DDT causale del trasporto / RO aviz scop, and its
   // date+time of dispatch (DPR 472/1996 art.1 requires date AND time, unlike
@@ -271,6 +278,9 @@ model Document {
   transportedAt   DateTime?
   carrierName     String?
   transportNote   String?
+  // RO aviz de însoțire a mărfii only: vehicle registration number (OMFP
+  // 2634/2015 model 14-3-6A "mijloc de transport nr.").
+  transportVehicle String?
 
   // CGI art. 242 nonies A (French e-invoicing reform): nature of the
   // operation ("goods" | "services" | "mixed") and, when it differs from the

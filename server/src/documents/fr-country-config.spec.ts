@@ -1,4 +1,4 @@
-import { getCountryConfig } from '@fakturcho/shared-types';
+import { getCountryConfig, PAYMENT_TERMS_DAY_OPTIONS } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { resolveVatTreatment } from './vat-treatment';
 
@@ -95,6 +95,15 @@ describe('FR country config — exemption grounds', () => {
       issuerCountry: 'FR',
     });
     expect(treatment).toEqual({ vatCharged: true, vatRateBp: 2000, vatExemptionGround: null });
+  });
+});
+
+describe('FR country config — payment terms cap (C. com. art. L441-10 I)', () => {
+  it('caps the payment-terms selector at 60 days net from the invoice date', () => {
+    expect(FR.maxPaymentTermsDays).toBe(60);
+    expect(
+      PAYMENT_TERMS_DAY_OPTIONS.every((days) => days <= (FR.maxPaymentTermsDays as number)),
+    ).toBe(true);
   });
 });
 

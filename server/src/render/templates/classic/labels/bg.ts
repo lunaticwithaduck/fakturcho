@@ -93,4 +93,5 @@ export const bg: ClassicLabels = {
   buyerReferencePrefix: 'Ваша референция: ',
   paymentTermsPrefix: 'Условия за плащане: ',
   correctionKsefNumberPrefix: 'Номер по KSeF на коригираната фактура: ',
+  paymentTermsDaysText: (days) => (days === 0 ? 'при получаване' : `${days} дни`),
 };

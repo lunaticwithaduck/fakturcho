@@ -34,3 +34,30 @@ export function isValidKsefNumberChecksum(raw: string): boolean {
 export function isValidKsefNumber(raw: string): boolean {
   return isValidKsefNumberFormat(raw) && isValidKsefNumberChecksum(raw);
 }
+
+// The RRRRMMDD segment is the date KSeF assigned the number (on submission),
+// which can only be on or after the invoice's own issue date, and never in
+// the future relative to now — real KSeF cannot produce either case.
+export function ksefNumberDateSegment(raw: string): string | null {
+  const normalized = normalizeKsefNumber(raw);
+  if (!isValidKsefNumberFormat(normalized)) return null;
+  return normalized.slice(11, 19);
+}
+
+function utcDateOnly(date: Date): number {
+  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+}
+
+export function isValidKsefNumberDate(
+  raw: string,
+  issuedAt: Date,
+  now: Date = new Date(),
+): boolean {
+  const segment = ksefNumberDateSegment(raw);
+  if (segment === null) return false;
+  const year = Number(segment.slice(0, 4));
+  const month = Number(segment.slice(4, 6));
+  const day = Number(segment.slice(6, 8));
+  const ksefDate = Date.UTC(year, month - 1, day);
+  return ksefDate >= utcDateOnly(issuedAt) && ksefDate <= utcDateOnly(now);
+}

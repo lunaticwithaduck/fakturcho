@@ -95,6 +95,9 @@ export interface ClassicLabels {
   // EN 16931 BT-10/BT-20, printed on tax documents only when the field is set.
   buyerReferencePrefix: string;
   paymentTermsPrefix: string;
+  // Printed after paymentTermsPrefix instead of the raw paymentTermsNote when
+  // the composer's structured payment-terms selector (days) was used.
+  paymentTermsDaysText: (days: number) => string;
   // IT only: art. 21 c.2 lett. f D.P.R. 633/1972 requires an Italian-language
   // invoice to a non-Italian client to call their EU VAT number this rather
   // than "P. IVA", which denotes the Italian national scheme.
@@ -102,6 +105,11 @@ export interface ClassicLabels {
   // PL only: printed under the correction reference line when the corrected
   // invoice carries a KSeF number (art. 106j ustawy o VAT).
   correctionKsefNumberPrefix: string;
+  // CZ only: DUZP (datum uskutečnění zdanitelného plnění), §29 odst. 1 písm.
+  // h) zákona o DPH — printed instead of taxEventPrefix, unconditionally.
+  taxEventDuzpPrefix?: string;
+  // RO delivery_note only: OMFP 2634/2015 model 14-3-6A "mijloc de transport nr.".
+  transportVehiclePrefix?: string;
 }
 
 export const CLASSIC_LABELS: Record<ClassicLanguage, ClassicLabels> = {

@@ -12,6 +12,7 @@ import { PUBLISHED_LOCALES } from './languages';
 import { DEFAULT_EXEMPTION_GROUND, VAT_EXEMPTION_GROUNDS } from './vat';
 
 export * from './countries/base';
+export { FORFETTARIO_GROUND } from './countries/it';
 export * from './countries/non-euro';
 export * from './languages';
 

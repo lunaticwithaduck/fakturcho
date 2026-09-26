@@ -1,4 +1,4 @@
-import { Input, Select, SelectItem } from '@design/components';
+import { Checkbox, Input, Select, SelectItem } from '@design/components';
 import { companyIdLabelFor, getCountryConfig, type Locale } from '@fakturcho/shared-types';
 import { useLocale, useTranslations } from 'next-intl';
 import { ISSUER_COUNTRY_CODES } from './issuerCountries';
@@ -63,21 +63,41 @@ export function IssuerCompanyFields({
       </div>
       {identifiers.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {identifiers.map((field) => (
-            <Input
-              key={field.key}
-              label={field.label}
-              required={isIdentifierRequired(field)}
-              value={values.identifiers[field.key] ?? ''}
-              onChange={(event) =>
-                onChange('identifiers', { ...values.identifiers, [field.key]: event.target.value })
-              }
-              {...(values.country === 'CZ' && field.key === 'companyRegister'
-                ? { hint: t('companyFields.czRegisterHint') }
-                : {})}
-              {...(fieldErrors.identifiers[field.key] ? { error: invalidFormat } : {})}
-            />
-          ))}
+          {identifiers.map((field) =>
+            field.kind === 'flag' ? (
+              <Checkbox
+                key={field.key}
+                label={field.label}
+                checked={values.identifiers[field.key] === 'true'}
+                onCheckedChange={(checked) =>
+                  onChange('identifiers', {
+                    ...values.identifiers,
+                    [field.key]: checked === true ? 'true' : 'false',
+                  })
+                }
+              />
+            ) : (
+              <Input
+                key={field.key}
+                label={field.label}
+                required={isIdentifierRequired(field)}
+                value={values.identifiers[field.key] ?? ''}
+                onChange={(event) =>
+                  onChange('identifiers', {
+                    ...values.identifiers,
+                    [field.key]: event.target.value,
+                  })
+                }
+                {...(values.country === 'CZ' && field.key === 'companyRegister'
+                  ? { hint: t('companyFields.czRegisterHint') }
+                  : {})}
+                {...(values.country === 'FR' && field.key === 'legalForm'
+                  ? { hint: t('companyFields.frLegalFormHint') }
+                  : {})}
+                {...(fieldErrors.identifiers[field.key] ? { error: invalidFormat } : {})}
+              />
+            ),
+          )}
         </div>
       ) : null}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

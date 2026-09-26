@@ -1,7 +1,10 @@
 import { getCountryConfig } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { amountInWords } from '../../../money/amount-in-words';
+import { buildIssuerBlock } from './footer-blocks';
+import { buildRecipientBlock } from './header-blocks';
 import { bg } from './labels/bg';
+import { resolveClassicLocale } from './locale';
 import { renderClassicTemplateHtml } from './template';
 import { buildFakeDocument, buildFakeLineItems } from './testing/fake-document';
 
@@ -73,6 +76,39 @@ describe('BG classic labels — gender agreement and wording fixes', () => {
     expect(bg.taxEventPrefix).toBe('Дата на данъчното събитие: ');
     expect(bg.colPrice).toBe('Ед. цена без ДДС');
     expect(bg.colTotal).toBe('Стойност');
+  });
+});
+
+describe('BG addresses — abbreviation glued to the next word with U+00A0', () => {
+  const locale = resolveClassicLocale('bg', 'BG');
+
+  it('keeps "ул." and "гр." glued to the street/city so a line break never strands them alone', () => {
+    const document = buildFakeDocument({
+      issuerAddressLine: 'ул. Витоша 15',
+      issuerCity: 'гр. София',
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain('ул. Витоша 15, гр. София');
+    expect(html).not.toContain('ул. Витоша');
+    expect(html).not.toContain('гр. София');
+  });
+
+  it('keeps "бул." glued to the street name in the recipient block', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'гр. Пловдив, бул. Свобода 5',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('гр. Пловдив, бул. Свобода 5');
+  });
+
+  it('does not touch abbreviations on a non-bg template language', () => {
+    const deLocale = resolveClassicLocale('de', 'DE');
+    const document = buildFakeDocument({
+      issuerAddressLine: 'ул. Витоша 15',
+      issuerCity: 'гр. София',
+    });
+    const html = buildIssuerBlock(document, 'invoice', deLocale);
+    expect(html).toContain('ул. Витоша 15, гр. София');
   });
 });
 

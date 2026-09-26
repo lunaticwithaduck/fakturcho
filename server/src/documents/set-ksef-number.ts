@@ -1,4 +1,8 @@
-import { type DocumentDto, isValidKsefNumber } from '@fakturcho/shared-types';
+import {
+  type DocumentDto,
+  isValidKsefNumber,
+  isValidKsefNumberDate,
+} from '@fakturcho/shared-types';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import type { PrismaService } from '../infrastructure/prisma/prisma.service';
@@ -27,6 +31,18 @@ export async function setDocumentKsefNumber(
   // Structure NIP(10)-RRRRMMDD(8)-hex(12)-CRC-8(2) (CIRFMF/ksef-docs, faktury/numer-ksef.md).
   if (ksefNumber !== null && !isValidKsefNumber(ksefNumber)) {
     throw new DomainError('INVALID_KSEF_NUMBER', 'The KSeF number format is invalid.');
+  }
+  // The RRRRMMDD segment is when KSeF assigned the number (on submission), so
+  // it can never be before the invoice's own issue date, nor in the future.
+  if (
+    ksefNumber !== null &&
+    existing.issuedAt !== null &&
+    !isValidKsefNumberDate(ksefNumber, existing.issuedAt)
+  ) {
+    throw new DomainError(
+      'INVALID_KSEF_NUMBER',
+      'The KSeF number date cannot be before the invoice issue date or in the future.',
+    );
   }
 
   const record = await prisma.document.update({

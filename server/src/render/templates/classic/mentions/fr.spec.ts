@@ -49,6 +49,21 @@ describe('frMentions — standard-rate invoice', () => {
 
     expect(mentions.some((line) => line.includes("Date d'échéance"))).toBe(false);
   });
+
+  it('does not print the computed default due date when a structured payment term is set but dueAt has not been recomputed yet', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        dueAt: null,
+        issuedAt: new Date('2026-08-02'),
+        paymentTermsDays: 14,
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions.some((line) => line.includes("Date d'échéance"))).toBe(false);
+  });
 });
 
 describe('frMentions — reverse charge (AE)', () => {

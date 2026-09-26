@@ -91,4 +91,5 @@ export const it: ClassicLabels = {
   paymentTermsPrefix: 'Termini di pagamento: ',
   foreignVatNumberPrefix: 'Numero identificativo IVA: ',
   correctionKsefNumberPrefix: 'Numero KSeF della fattura corretta: ',
+  paymentTermsDaysText: (days) => (days === 0 ? 'alla ricezione' : `${days} giorni`),
 };

@@ -15,7 +15,7 @@ const IT_TRANSPORT_REASONS = [
   'Altro',
 ] as const;
 
-const FORFETTARIO_GROUND =
+export const FORFETTARIO_GROUND =
   'Operazione senza applicazione dell’IVA ai sensi dell’art. 1, commi da 54 a 89, L. 190/2014';
 
 export const IT_CONFIG: CountryConfig = {
@@ -46,6 +46,23 @@ export const IT_CONFIG: CountryConfig = {
   identifiers: [
     { key: 'rea', label: 'Numero REA', pattern: /^[A-Z]{2}-\d{1,7}$/, required: false },
     { key: 'shareCapital', label: 'Capitale sociale', pattern: null, required: false },
+    // Art. 2250 c.c.: SpA/Srl must state a sole shareholder, liquidation
+    // status, and (by convention, "i.v.") that the capital is fully paid up.
+    { key: 'socioUnico', label: 'Socio unico', pattern: null, required: false, kind: 'flag' },
+    {
+      key: 'inLiquidazione',
+      label: 'In liquidazione',
+      pattern: null,
+      required: false,
+      kind: 'flag',
+    },
+    {
+      key: 'capitaleVersato',
+      label: 'Capitale interamente versato (i.v.)',
+      pattern: null,
+      required: false,
+      kind: 'flag',
+    },
   ],
   requiredIssuerFields: [
     'companyName',

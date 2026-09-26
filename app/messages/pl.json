@@ -111,6 +111,17 @@
         "taxEventAt": "Data sprzedaży",
         "dueAt": "Termin płatności"
       },
+      "paymentTerms": {
+        "label": "Warunki płatności",
+        "dueOnReceipt": "Płatność przy odbiorze",
+        "days7": "7 dni",
+        "days14": "14 dni",
+        "days15": "15 dni",
+        "days30": "30 dni",
+        "days45": "45 dni",
+        "days60": "60 dni",
+        "customDate": "Inna data"
+      },
       "delivery": {
         "heading": "Szczegóły dostawy",
         "deliveryDateLabel": "Data dostawy",
@@ -118,7 +129,8 @@
         "transportReasonLabel": "Powód transportu",
         "transportReasonPlaceholder": "Wybierz powód",
         "carrierNameLabel": "Przewoźnik",
-        "transportNoteLabel": "Szczegóły transportu"
+        "transportNoteLabel": "Szczegóły transportu",
+        "transportVehicleLabel": "Nr rejestracyjny pojazdu"
       },
       "frMentions": {
         "operationNatureLabel": "Rodzaj czynności",
@@ -273,7 +285,8 @@
           "nipChecksum": "Numer NIP nabywcy ma nieprawidłową sumę kontrolną."
         }
       },
-      "ksefNumberInvalid": "Nieprawidłowy format numeru KSeF."
+      "ksefNumberInvalid": "Nieprawidłowy format numeru KSeF.",
+      "ksefNumberDateInvalid": "Data w numerze KSeF nie może być wcześniejsza niż data wystawienia faktury ani przyszła."
     }
   },
   "billing": {
@@ -459,7 +472,8 @@
       "city": "Miejscowość",
       "phone": "Telefon",
       "invalidFormat": "Nieprawidłowy format",
-      "czRegisterHint": "Wymagane dla czeskich wystawców: podaj wpis do rejestru handlowego (sąd, dział, numer wpisu) lub innego rejestru publicznego – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.)."
+      "czRegisterHint": "Wymagane dla czeskich wystawców: podaj wpis do rejestru handlowego (sąd, dział, numer wpisu) lub innego rejestru publicznego – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.).",
+      "frLegalFormHint": "Jednoosobowa działalność gospodarcza? Wpisz „EI” lub „entrepreneur individuel” — musi pojawić się obok nazwy na każdym dokumencie (art. L526-22 francuskiego kodeksu handlowego)."
     },
     "vatFields": {
       "heading": "Rejestracja VAT",
@@ -467,6 +481,18 @@
       "vatNumber": "Numer VAT",
       "vatOnCashBasis": "Metoda kasowa VAT (TVA la încasare, Rumunia)",
       "vatOnDebits": "Opcja VAT od obciążeń (Francja)"
+    },
+    "paymentTerms": {
+      "heading": "Warunki płatności",
+      "defaultLabel": "Domyślny termin",
+      "none": "Brak domyślnego — wybór przy każdym dokumencie",
+      "dueOnReceipt": "Płatność przy odbiorze",
+      "days7": "7 dni",
+      "days14": "14 dni",
+      "days15": "15 dni",
+      "days30": "30 dni",
+      "days45": "45 dni",
+      "days60": "60 dni"
     },
     "bankFields": {
       "heading": "Rachunek bankowy",

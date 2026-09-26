@@ -97,6 +97,23 @@ describe('renderClassicTemplateHtml', () => {
     expect(html).toContain('NOT LEGALLY VALID');
   });
 
+  it('confines the draft watermark to the pre-footer area, never the mentions/issuer/bank footer', () => {
+    const html = renderClassicTemplateHtml({
+      document: buildFakeDocument({ number: null }),
+      lineItems: buildFakeLineItems(),
+      presentation: vatChargedPresentation,
+      isDraft: true,
+      language: 'en',
+    });
+
+    const watermarkAreaIndex = html.indexOf('class="watermark-area"');
+    const watermarkIndex = html.indexOf('class="watermark"');
+    const issuerBlockIndex = html.indexOf('class="issuer-block"');
+    expect(watermarkAreaIndex).toBeGreaterThan(-1);
+    expect(watermarkIndex).toBeGreaterThan(watermarkAreaIndex);
+    expect(issuerBlockIndex).toBeGreaterThan(watermarkIndex);
+  });
+
   it('threads a resolved (not-yet-snapshotted) issuer country into a draft: DE Steuernummer row and §19 line', () => {
     const document = buildFakeDocument({
       status: 'DRAFT',

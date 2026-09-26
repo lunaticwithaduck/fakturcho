@@ -8,6 +8,7 @@ import {
   countryName,
   escapeHtml,
   identifierLine,
+  keepAbbreviationsWithNextWord,
   line,
 } from './html-utils';
 import type { ClassicLabels } from './labels';
@@ -42,6 +43,19 @@ function formatRecipientAddress(document: Document): string {
   );
 }
 
+// Codul fiscal art. 316/317: the "RO" prefix denotes VAT registration, so a
+// non-VAT-registered party's bare CUI must print without it. Mirrors
+// stripUnregisteredRoCuiPrefix in footer-blocks.ts for the recipient side.
+function stripUnregisteredRoCuiPrefix(
+  eik: string | null,
+  issuerCountry: string,
+  vatRegistered: boolean,
+): string | null {
+  if (issuerCountry !== 'RO' || vatRegistered || !eik) return eik;
+  const stripped = eik.replace(/^ro/i, '').trim();
+  return stripped || eik;
+}
+
 function withForeignCountry(
   address: string,
   country: string | null,
@@ -74,8 +88,18 @@ export function buildRecipientBlock(
     document.recipientCompanyName
       ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
       : '',
-    recipientAddress ? `<div>${escapeHtml(recipientAddress)}</div>` : '',
-    identifierLine(labels.companyIdLabel, document.recipientEik, locale.language),
+    recipientAddress
+      ? `<div>${keepAbbreviationsWithNextWord(escapeHtml(recipientAddress), locale.language)}</div>`
+      : '',
+    identifierLine(
+      labels.companyIdLabel,
+      stripUnregisteredRoCuiPrefix(
+        document.recipientEik,
+        locale.issuerCountry,
+        Boolean(document.recipientVatNumber),
+      ),
+      locale.language,
+    ),
     line(vatNumberPrefix, document.recipientVatNumber),
     locale.showMol ? line(labels.molPrefix, document.recipientMol) : '',
   ]
@@ -132,14 +156,20 @@ export function buildDatesBlock(
         document.issuedAt === null ||
         !sameCalendarDate(taxEventAt, document.issuedAt));
     if (showTaxEvent) {
-      rows.push(
-        `<div>${labels.taxEventPrefix}${formatDateForLocale(taxEventAt, locale.language)}</div>`,
-      );
+      const taxEventPrefix =
+        locale.issuerCountry === 'CZ' && labels.taxEventDuzpPrefix
+          ? labels.taxEventDuzpPrefix
+          : labels.taxEventPrefix;
+      rows.push(`<div>${taxEventPrefix}${formatDateForLocale(taxEventAt, locale.language)}</div>`);
     }
   }
   if (TAX_DOCUMENT_TYPES[documentType]) {
     rows.push(line(labels.buyerReferencePrefix, document.buyerReference));
-    rows.push(line(labels.paymentTermsPrefix, document.paymentTermsNote));
+    const paymentTerms =
+      document.paymentTermsDays != null
+        ? labels.paymentTermsDaysText(document.paymentTermsDays)
+        : document.paymentTermsNote;
+    rows.push(line(labels.paymentTermsPrefix, paymentTerms));
   }
   rows.push(buildStatusMarker(document.status, documentType, labels));
   return `<div class="dates">${rows.join('')}</div>`;

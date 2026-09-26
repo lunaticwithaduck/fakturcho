@@ -3,7 +3,7 @@
 import { useSetDocumentKsefNumberMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import { Button, Input, toast } from '@design/components';
-import { isValidKsefNumber } from '@fakturcho/shared-types';
+import { isValidKsefNumber, isValidKsefNumberDate } from '@fakturcho/shared-types';
 import type { Locale } from '@shared/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -11,15 +11,21 @@ import { useState } from 'react';
 interface KsefNumberFieldProps {
   documentId: string;
   ksefNumber: string | null;
+  issuedAt: string | null;
 }
 
-export function KsefNumberField({ documentId, ksefNumber }: KsefNumberFieldProps) {
+export function KsefNumberField({ documentId, ksefNumber, issuedAt }: KsefNumberFieldProps) {
   const t = useTranslations('documents.einvoice');
   const locale = useLocale() as Locale;
   const [value, setValue] = useState(ksefNumber ?? '');
   const [setKsefNumber, { isLoading }] = useSetDocumentKsefNumberMutation();
   const trimmed = value.trim();
-  const formatError = trimmed !== '' && !isValidKsefNumber(trimmed) ? t('ksefNumberInvalid') : null;
+  const formatError =
+    trimmed !== '' && !isValidKsefNumber(trimmed)
+      ? t('ksefNumberInvalid')
+      : trimmed !== '' && issuedAt && !isValidKsefNumberDate(trimmed, new Date(issuedAt))
+        ? t('ksefNumberDateInvalid')
+        : null;
 
   async function handleSave() {
     if (formatError) return;

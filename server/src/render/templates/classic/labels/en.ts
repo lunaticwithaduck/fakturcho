@@ -83,4 +83,6 @@ export const en: ClassicLabels = {
   buyerReferencePrefix: 'Your reference: ',
   paymentTermsPrefix: 'Payment terms: ',
   correctionKsefNumberPrefix: 'KSeF number of the corrected invoice: ',
+  taxEventDuzpPrefix: 'Date of taxable supply (DUZP): ',
+  paymentTermsDaysText: (days) => (days === 0 ? 'on receipt' : `${days} days`),
 };

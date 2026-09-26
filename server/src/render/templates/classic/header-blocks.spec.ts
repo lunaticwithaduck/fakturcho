@@ -171,4 +171,34 @@ describe('buildDatesBlock — never a dash for a missing optional date', () => {
     const html = buildDatesBlock(document, 'invoice', locale);
     expect(html).toContain('Date of supply: 01/08/2026');
   });
+
+  it('CZ prints the DUZP wording even when it equals the issue date (§29 odst. 1 písm. h))', () => {
+    const locale = resolveClassicLocale('en', 'CZ');
+    const document = buildFakeDocument({
+      issuedAt: new Date('2026-08-02'),
+      taxEventAt: new Date('2026-08-02'),
+    });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).toContain('Date of taxable supply (DUZP): 02/08/2026');
+  });
+});
+
+describe('buildRecipientBlock — RO CUI prints without the VAT-registration prefix', () => {
+  const locale = resolveClassicLocale('ro', 'RO');
+
+  it('strips a leading RO from the CUI when the recipient has no VAT number', () => {
+    const document = buildFakeDocument({ recipientEik: 'RO11224455', recipientVatNumber: null });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('CUI: 11224455');
+    expect(html).not.toContain('CUI: RO11224455');
+  });
+
+  it('keeps the CUI as stored when the recipient is VAT-registered', () => {
+    const document = buildFakeDocument({
+      recipientEik: 'RO11224455',
+      recipientVatNumber: 'RO11224455',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('CUI: RO11224455');
+  });
 });

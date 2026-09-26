@@ -1,3 +1,4 @@
+import { FORFETTARIO_GROUND } from '@fakturcho/shared-types';
 import { describe, expect, it } from 'vitest';
 import { CLASSIC_LABELS } from '../labels';
 import type { ClassicLocaleContext } from '../locale';
@@ -151,5 +152,45 @@ describe('itMentions', () => {
     expect(itMentions(input)).toEqual([
       'Operazione non imponibile ai sensi dell’art. 41, comma 1, lett. a), D.L. 331/1993',
     ]);
+  });
+
+  it('asks for no ritenuta d’acconto when the forfettario issuer bills an Italian business (art. 1, comma 67, L. 190/2014)', () => {
+    const input = buildInput(
+      {
+        vatExemptionGround: FORFETTARIO_GROUND,
+        vatAmount: 0,
+        amount: 100000,
+        recipientCountry: 'IT',
+        recipientVatNumber: 'IT12345678901',
+      },
+      [{ vatCategory: 'O', vatRateBp: 0 }],
+    );
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
+      'Si richiede la non applicazione della ritenuta d’acconto ai sensi dell’art. 1, comma 67, L. 190/2014',
+    ]);
+  });
+
+  it('does not ask for the ritenuta exemption when the forfettario issuer bills a private client (no P.IVA)', () => {
+    const input = buildInput(
+      {
+        vatExemptionGround: FORFETTARIO_GROUND,
+        vatAmount: 0,
+        amount: 100000,
+        recipientCountry: 'IT',
+        recipientVatNumber: null,
+      },
+      [{ vatCategory: 'O', vatRateBp: 0 }],
+    );
+    expect(itMentions(input)).toEqual([
+      'Imposta di bollo assolta in modo virtuale ai sensi dell’art. 6 del D.M. 17 giugno 2014',
+    ]);
+  });
+
+  it('does not ask for the ritenuta exemption when the issuer is not on the forfettario regime', () => {
+    const input = buildInput({ vatExemptionGround: null, recipientVatNumber: 'IT12345678901' }, [
+      { vatCategory: 'S', vatRateBp: 2200 },
+    ]);
+    expect(itMentions(input)).toEqual([]);
   });
 });

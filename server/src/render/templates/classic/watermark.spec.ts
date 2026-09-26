@@ -39,4 +39,19 @@ describe('buildWatermark', () => {
     const html = buildWatermark(true, roLocale);
     expect(html).toContain('<div class="watermark-sub">FĂRĂ VALOARE LEGALĂ</div>');
   });
+
+  it('shrinks the long Polish main word ("WERSJA ROBOCZA") to the reference footprint', () => {
+    const plLocale = resolveClassicLocale('pl');
+    const html = buildWatermark(true, plLocale);
+    expect(html).toContain('WERSJA ROBOCZA');
+    const match = html.match(/watermark-main" style="font-size: ([\d.]+)px/);
+    expect(match).not.toBeNull();
+    expect(Number(match?.[1])).toBeLessThan(64);
+  });
+
+  it('leaves a short main word (e.g. FR "BROUILLON") at the default size', () => {
+    const frLocale = resolveClassicLocale('fr');
+    const html = buildWatermark(true, frLocale);
+    expect(html).toContain('<div class="watermark-main">BROUILLON</div>');
+  });
 });

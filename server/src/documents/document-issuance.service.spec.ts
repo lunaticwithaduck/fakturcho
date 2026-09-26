@@ -562,4 +562,44 @@ describe('DocumentIssuanceService', () => {
     const issued = await issuanceService.issue(accountId, draft.id, {});
     expect(issued.status).toBe('sent');
   });
+
+  it('computes dueAt from paymentTermsDays using the actual issue date, not whatever was on the draft', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ paymentTermsDays: 14, dueAt: '2026-01-01' }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, { issuedAt: '2026-09-10' });
+    expect(issued.issuedAt).toBe('2026-09-10');
+    expect(issued.dueAt).toBe('2026-09-24');
+  });
+
+  it('treats 0 as due on receipt: dueAt equals the issue date', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ paymentTermsDays: 0 }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, { issuedAt: '2026-09-10' });
+    expect(issued.dueAt).toBe('2026-09-10');
+  });
+
+  it('leaves a manually-picked dueAt untouched when paymentTermsDays is unset', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ dueAt: '2026-12-25' }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, { issuedAt: '2026-09-10' });
+    expect(issued.dueAt).toBe('2026-12-25');
+  });
 });
