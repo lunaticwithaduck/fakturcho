@@ -626,7 +626,9 @@
       "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Esiste già un account con questa email.",
       "PASSWORD_TOO_SHORT": "La password è troppo corta.",
       "PASSWORD_TOO_LONG": "La password è troppo lunga.",
-      "generic": "Si è verificato un errore. Riprova."
+      "generic": "Si è verificato un errore. Riprova.",
+      "INVALID_PASSWORD": "La password attuale non è corretta.",
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Questo account non ha una password da modificare."
     },
     "countries": {
       "BG": "Bulgaria",
@@ -1021,5 +1023,19 @@
     "title": "Pagina non trovata",
     "description": "La pagina che stai cercando non esiste o è stata spostata.",
     "link": "Vai a Fakturcho"
+  },
+  "account": {
+    "changePassword": {
+      "heading": "Cambia password",
+      "currentPasswordLabel": "Password attuale",
+      "newPasswordLabel": "Nuova password",
+      "confirmPasswordLabel": "Conferma nuova password",
+      "revokeOtherSessions": "Disconnetti gli altri dispositivi",
+      "tooShort": "La password deve contenere almeno 8 caratteri.",
+      "mismatch": "Le password non coincidono.",
+      "saving": "Salvataggio...",
+      "save": "Salva password",
+      "savedToast": "Password modificata"
+    }
   }
 }

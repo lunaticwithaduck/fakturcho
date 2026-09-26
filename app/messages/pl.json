@@ -626,7 +626,9 @@
       "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Konto z tym adresem e-mail już istnieje.",
       "PASSWORD_TOO_SHORT": "Hasło jest za krótkie.",
       "PASSWORD_TOO_LONG": "Hasło jest za długie.",
-      "generic": "Coś poszło nie tak. Spróbuj ponownie."
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "INVALID_PASSWORD": "Obecne hasło jest nieprawidłowe.",
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "To konto nie ma ustawionego hasła do zmiany."
     },
     "countries": {
       "BG": "Bułgaria",
@@ -1021,5 +1023,19 @@
     "title": "Nie znaleziono strony",
     "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
     "link": "Przejdź do Fakturcho"
+  },
+  "account": {
+    "changePassword": {
+      "heading": "Zmiana hasła",
+      "currentPasswordLabel": "Obecne hasło",
+      "newPasswordLabel": "Nowe hasło",
+      "confirmPasswordLabel": "Potwierdź nowe hasło",
+      "revokeOtherSessions": "Wyloguj z innych urządzeń",
+      "tooShort": "Hasło musi mieć co najmniej 8 znaków.",
+      "mismatch": "Hasła nie są takie same.",
+      "saving": "Zapisywanie...",
+      "save": "Zapisz hasło",
+      "savedToast": "Hasło zostało zmienione"
+    }
   }
 }
