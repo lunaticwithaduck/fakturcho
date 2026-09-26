@@ -295,4 +295,66 @@ describe('IssuerCompanyFields', () => {
     expect(screen.getByLabelText('Forme juridique')).toBeTruthy();
     expect(screen.getByText(/entrepreneur individuel/)).toBeTruthy();
   });
+
+  it('pre-ticks the Jungholz/Mittelberg 19% flag for an AT issuer whose postcode is in the zone', () => {
+    const AT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'AT',
+      addressLine: '',
+      street: 'Dorfstraße 1',
+      postcode: '6991',
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={AT_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const checkbox = screen.getByLabelText(
+      '19 % statt 20 % (Jungholz/Mittelberg, § 10 Abs. 4 UStG 1994)',
+    );
+    expect(checkbox.getAttribute('data-state')).toBe('checked');
+    expect(screen.getByText(/Jungholz or Kleinwalsertal \(Mittelberg\)/)).toBeTruthy();
+  });
+
+  it('does not pre-tick the Jungholz/Mittelberg flag for an AT issuer outside the zone', () => {
+    const AT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'AT',
+      addressLine: '',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={AT_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const checkbox = screen.getByLabelText(
+      '19 % statt 20 % (Jungholz/Mittelberg, § 10 Abs. 4 UStG 1994)',
+    );
+    expect(checkbox.getAttribute('data-state')).toBe('unchecked');
+  });
+
+  it('respects an explicit "false" over the postcode guess once the issuer has unticked it', () => {
+    const AT_VALUES: IssuerProfileFormValues = {
+      ...BG_VALUES,
+      country: 'AT',
+      addressLine: '',
+      street: 'Dorfstraße 1',
+      postcode: '6991',
+      identifiers: { jungholzMittelbergRate: 'false' },
+    };
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={AT_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const checkbox = screen.getByLabelText(
+      '19 % statt 20 % (Jungholz/Mittelberg, § 10 Abs. 4 UStG 1994)',
+    );
+    expect(checkbox.getAttribute('data-state')).toBe('unchecked');
+  });
 });

@@ -70,6 +70,7 @@ export const bgDomesticStandardInvoice: DocumentDto = {
     mol: 'Петър Георгиев',
     sdiRecipientCode: null,
     pec: null,
+    clientType: null,
   },
   lineItems: [
     {

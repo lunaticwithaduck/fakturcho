@@ -411,6 +411,12 @@
     "cityLabel": "Città",
     "emailLabel": "Email",
     "molLabel": "Rappresentante",
+    "clientTypeLabel": "Tipo di cliente",
+    "clientTypeOptionUnknown": "Non impostato",
+    "clientTypeOptions": {
+      "business": "Azienda",
+      "consumer": "Privato"
+    },
     "invalidFormat": "Formato non valido",
     "countryLabel": "Paese",
     "documentLanguageLabel": "Lingua dei documenti",
@@ -472,7 +478,8 @@
       "phone": "Telefono",
       "invalidFormat": "Formato non valido",
       "czRegisterHint": "Obbligatorio per gli emittenti cechi: indicare l'iscrizione nel Registro di commercio (tribunale, sezione, numero di iscrizione) o in un altro registro pubblico – § 435 del Codice civile (legge n. 89/2012 Sb.).",
-      "frLegalFormHint": "Imprenditore individuale? Scrivere «EI» o «entrepreneur individuel»: deve comparire accanto al nome su ogni documento (art. L526-22 del Code de commerce)."
+      "frLegalFormHint": "Imprenditore individuale? Scrivere «EI» o «entrepreneur individuel»: deve comparire accanto al nome su ogni documento (art. L526-22 del Code de commerce).",
+      "atJungholzMittelbergHint": "La sede della tua attività si trova a Jungholz o nel Kleinwalsertal (Mittelberg)? Ai sensi del § 10 comma 4 UStG 1994, lì l'aliquota standard è del 19% invece del 20%. Le aliquote ridotte (13%, 10%, 4,9%) restano invariate."
     },
     "vatFields": {
       "heading": "Registrazione IVA",
@@ -587,7 +594,8 @@
       "INTERNAL_ERROR": "Si è verificato un errore imprevisto. Riprovare.",
       "OPERATION_NATURE_REQUIRED": "I documenti fiscali francesi devono indicare la natura dell'operazione prima di poter essere emessi.",
       "EXCHANGE_RATE_UNAVAILABLE": "Impossibile recuperare il tasso di cambio necessario per emettere questo documento. Riprova tra poco.",
-      "INVALID_KSEF_NUMBER": "Il formato del numero KSeF non è valido."
+      "INVALID_KSEF_NUMBER": "Il formato del numero KSeF non è valido.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "Una fattura austriaca superiore a 10.000 € verso un'azienda richiede il numero UID del destinatario prima di poter essere emessa."
     },
     "guideLink": "Guida alla fatturazione",
     "helpLink": "Vedi la guida",
@@ -889,6 +897,10 @@
         "DE": {
           "name": "Germania",
           "line": "IVA al 19%, fatture in tedesco, fatture elettroniche in formato XRechnung."
+        },
+        "AT": {
+          "name": "Austria",
+          "line": "IVA al 20%, fatture in tedesco, fatture PDF senza obbligo di fattura elettronica."
         },
         "FR": {
           "name": "Francia",

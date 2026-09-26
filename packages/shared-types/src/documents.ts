@@ -1,3 +1,4 @@
+import type { ClientType } from './clients';
 import type { DocumentLanguage } from './countries';
 import type { DocumentStatus, DocumentType } from './enums';
 import type { Cents, CurrencyCode } from './money';
@@ -75,6 +76,7 @@ export interface RecipientSnapshotDto {
   mol: string | null;
   sdiRecipientCode: string | null;
   pec: string | null;
+  clientType: ClientType | null;
 }
 
 export interface OriginalDocumentReferenceDto {

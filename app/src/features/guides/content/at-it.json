@@ -1,0 +1,373 @@
+{
+  "country": "AT",
+  "locale": "it",
+  "slug": "fattura-austria-requisiti-obbligatori",
+  "title": "Fattura in Austria: requisiti obbligatori, aliquote UStG e regime forfettario 2026 | Fakturcho",
+  "description": "Dati obbligatori secondo il § 11 UStG 1994, aliquote IVA 2026 (20/13/10/4,9%), soglia Kleinunternehmer e indicazioni del Firmenbuch per le fatture emesse dall'Austria – spiegato in modo semplice.",
+  "h1": "Fatturare in Austria: dati obbligatori, aliquote IVA e regime dei piccoli imprenditori",
+  "answer": "Una fattura austriaca deve contenere i dati obbligatori del § 11 Abs. 1 Z 3 UStG 1994, tra cui un numero progressivo e — sopra un importo lordo di 10.000 euro verso un'altra impresa — la UID-Nr. del destinatario. L'aliquota ordinaria è del 20%, accanto alle aliquote del 13%, del 10% e, dal 1° luglio 2026, una nuova aliquota del 4,9% per i generi alimentari di base. Un piccolo imprenditore (Kleinunternehmer) fino a 55.000 euro di fatturato annuo emette fatture senza IVA.",
+  "lastReviewed": "2026-09-29",
+  "sections": [
+    {
+      "heading": "Chi deve emettere fattura in Austria — ed entro quando?",
+      "id": "obbligo-di-fatturazione-e-termini",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ai sensi del § 11 Abs. 1 UStG 1994 la fattura è obbligatoria quando la cessione o prestazione è resa a un'altra impresa per la sua attività o a una persona giuridica, e per le Werklieferungen imponibili e le prestazioni relative a immobili verso privati. Il termine per l'emissione è di "
+            },
+            { "text": "sei mesi", "bold": true },
+            { "text": " dall'esecuzione della prestazione." }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Due casi hanno termini più brevi: per una prestazione di servizi verso un'impresa UE in cui il debito d'imposta si sposta sul destinatario (Art. 196 MwStSystRL), la fattura va emessa entro il 15 del mese successivo alla prestazione — lo stesso vale per una cessione intracomunitaria (Art. 11 Abs. 1 BMR)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Dati obbligatori in fattura (§ 11 Abs. 1 Z 3 UStG 1994)",
+      "id": "dati-obbligatori-11-ustg",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Una fattura completa oltre i 400 euro (vedi la Kleinbetragsrechnung più sotto) deve contenere:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": ["lit.", "Dato obbligatorio"],
+          "rows": [
+            ["a", "Nome e indirizzo dell'impresa cedente o prestatrice"],
+            [
+              "b",
+              "Nome e indirizzo del destinatario; sopra un importo lordo di 10.000 euro verso un'altra impresa, anche la sua UID-Nr."
+            ],
+            ["c", "Quantità e denominazione commerciale dei beni, oppure natura ed entità della prestazione"],
+            [
+              "d",
+              "Giorno della cessione/prestazione o il periodo di riferimento (Leistungsdatum — su Fakturcho sempre indicato)"
+            ],
+            ["e", "Il corrispettivo e l'aliquota applicabile, oppure un'indicazione dell'esenzione"],
+            ["f", "L'importo d'imposta relativo al corrispettivo"],
+            ["g", "La data di emissione"],
+            ["h", "Un numero di fattura progressivo, assegnato una sola volta"],
+            [
+              "i",
+              "La UID-Nr. dell'impresa prestatrice, tranne per i Kleinunternehmer o per operazioni solo esenti senza detrazione"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Con più aliquote, il corrispettivo e l'imposta vanno indicati separatamente per ciascuna aliquota (§ 11 Abs. 5 UStG 1994). Se la fattura è espressa in valuta estera, l'importo d'imposta va indicato anche in euro (§ 20 Abs. 6 UStG 1994) — Fakturcho stampa a tal fine una riga dedicata con il cambio BCE."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kleinbetragsrechnung: dati semplificati fino a 400 euro",
+      "id": "fattura-di-modico-importo",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Se l'importo totale non supera i 400 euro lordi, oppure se la fattura è emessa da un Kleinunternehmer, ai sensi del § 11 Abs. 6 UStG 1994 bastano data di emissione, nome e indirizzo dell'emittente, quantità e denominazione della prestazione, la Leistungsdatum, l'importo lordo con l'imposta indicati in un'unica somma e l'aliquota. Nome/indirizzo del destinatario, numero di fattura e UID-Nr. non sono allora necessari."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Sono escluse le operazioni transfrontaliere come le cessioni intracomunitarie, le prestazioni in reverse charge verso l'estero UE e le operazioni triangolari — in questi casi serve sempre la fattura completa. Fakturcho stampa comunque sempre la fattura completa; la semplificazione resta puramente facoltativa."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Aliquote IVA in Austria nel 2026",
+      "id": "aliquote-iva-2026",
+      "blocks": [
+        {
+          "type": "table",
+          "head": ["Aliquota", "Per cosa"],
+          "rows": [
+            ["20%", "Aliquota ordinaria (§ 10 Abs. 1 UStG 1994)"],
+            [
+              "13%",
+              "es. arte, cultura, eventi sportivi, voli nazionali (§ 10 Abs. 3, Anlage 2)"
+            ],
+            [
+              "10%",
+              "es. generi alimentari, libri, ristorazione, locazione abitativa, trasporto persone (§ 10 Abs. 2, Anlage 1)"
+            ],
+            [
+              "4,9%",
+              "Novità dal 1° luglio 2026: latte, uova, alcuni tipi di frutta/verdura, riso, farina, pane e altri generi alimentari di base secondo l'Anlage 3 (§ 10 Abs. 1a UStG 1994)"
+            ],
+            ["0%", "Operazioni esenti, in reverse charge e intracomunitarie"]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La locazione abitativa è imponibile al 10%, non esente (il § 6 Abs. 1 Z 16 UStG 1994 la esclude espressamente dall'esenzione). La precedente aliquota dello 0% per i moduli fotovoltaici è scaduta e nel 2026 non si applica più."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Caso speciale Jungholz/Mittelberg: le imprese con sede o stabile organizzazione in questi due comuni (rispettivamente in Tirolo e nel Vorarlberg) applicano il 19% invece del 20% come aliquota ordinaria (§ 10 Abs. 4 UStG 1994) — le aliquote ridotte restano invariate. Fakturcho offre nel profilo dell'emittente un'apposita casella, pre-selezionata in base al codice postale (6691, 6991, 6992, 6993)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kleinunternehmerregelung: fino a quando nessuna IVA?",
+      "id": "regime-kleinunternehmer",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dal 1° gennaio 2025 l'esenzione per i piccoli imprenditori ai sensi del § 6 Abs. 1 Z 27 UStG 1994 si applica fino a un "
+            },
+            { "text": "fatturato lordo di 55.000 euro", "bold": true },
+            {
+              "text": " nell'anno solare precedente e in quello in corso. Se la soglia viene superata di non oltre il 10%, l'esenzione resta valida fino a fine anno; con un superamento maggiore, cessa immediatamente a partire dall'operazione interessata."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Un Kleinunternehmer emette fatture senza indicazione separata dell'imposta e non ha bisogno di una UID-Nr. per farlo. Fakturcho inserisce automaticamente l'annotazione «Umsatzsteuerfrei aufgrund der Kleinunternehmerregelung gemäß § 6 Abs. 1 Z 27 UStG 1994.» al posto di una riga IVA."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Attenzione: se un Kleinunternehmer vende servizi a un'impresa di un altro paese UE, il luogo della prestazione è all'estero (§ 3a Abs. 6 UStG 1994) — in questo caso serve comunque una UID-Nr. e si applicano le regole del reverse charge."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Reverse charge e operazioni intracomunitarie",
+      "id": "reverse-charge-e-operazioni-ue",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Quando il debito d'imposta si sposta sul destinatario della prestazione (§ 11 Abs. 1a UStG 1994), non va indicata alcuna IVA; devono invece comparire la UID-Nr. del destinatario e un'annotazione sull'inversione del debito d'imposta. Riguarda in particolare:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Servizi B2B intra-UE: luogo della prestazione presso il destinatario (§ 3a Abs. 6 UStG 1994), debito d'imposta secondo l'Art. 196 MwStSystRL — fattura entro il 15 del mese successivo, con comunicazione anche nella Zusammenfassende Meldung (ZM)."
+              }
+            ],
+            [
+              {
+                "text": "Cessioni intracomunitarie: esenti ai sensi dell'Art. 6 Abs. 1 iVm Art. 7 UStG 1994, devono comparire entrambe le UID-Nr."
+              }
+            ],
+            [
+              {
+                "text": "Reverse charge interno: tra l'altro prestazioni edili (§ 19 Abs. 1a), cessioni con riserva di proprietà a scopo di garanzia (§ 19 Abs. 1b), determinati beni elettronici/metalli (§ 19 Abs. 1d) e cellulari/quote di emissione (§ 19 Abs. 1e)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho sceglie automaticamente la formula corretta: per i servizi UE transfrontalieri la formula basata sull'Art. 196, per i casi interni quella selezionata oppure una formula generale ai sensi del § 19 UStG, e per le cessioni intracomunitarie l'annotazione basata sull'Art. 6/7 BMR."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Firma, Firmenbuch e forma giuridica sui documenti commerciali (UGB § 14)",
+      "id": "firmenbuch-e-ugb-14",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ogni impresa iscritta nel Firmenbuch — dalla ditta individuale (e.U.) alle società OG e KG fino alla GmbH — deve indicare sui documenti commerciali diretti a un destinatario specifico la Firma, la Rechtsform, il Sitz e la Firmenbuchnummer, nonché il Firmenbuchgericht (§ 14 Abs. 1 UGB). Una ditta individuale non registrata (ad esempio sotto le soglie del § 189 UGB) non è tenuta a farlo — bastano nome e indirizzo secondo il § 11 UStG."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho richiede automaticamente il Firmenbuchgericht e il Sitz non appena viene inserita una Firmenbuchnummer nel profilo dell'emittente, e li stampa insieme alla UID-Nr. nel piè di pagina della fattura."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Rechnungskorrektur, Gutschrift e la Stornorechnung",
+      "id": "rechnungskorrektur-e-gutschrift",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "In Austria «Gutschrift» è un termine giuridico a sé: indica un documento con cui è il "
+            },
+            { "text": "destinatario", "bold": true },
+            {
+              "text": " della prestazione a fatturare a se stesso (§ 11 Abs. 7 UStG 1994), non una correzione successiva da parte dell'impresa prestatrice. Un documento di correzione emesso dal venditore stesso non dovrebbe quindi mai chiamarsi «Gutschrift» — Fakturcho lo chiama «Rechnungskorrektur», oppure, in caso di storno completo, «Stornorechnung», e un addebito successivo «Nachtragsrechnung» (non la «Belastungsanzeige» tedesca)."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ogni correzione richiama il numero e la data della fattura originaria e indica il motivo della correzione (§ 11 Abs. 12 UStG 1994)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Fattura elettronica: per chi è obbligatoria in Austria?",
+      "id": "fattura-elettronica-in-austria",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Per le fatture B2B e B2C nel 2026 in Austria non esiste alcun obbligo di fattura elettronica; un PDF vale come fattura elettronica se il destinatario acconsente (§ 11 Abs. 2 UStG 1994). Per le amministrazioni federali (B2G), invece, la fattura elettronica strutturata è obbligatoria già dal 2014, tramite USP.gv.at o PEPPOL, nei formati ebInterface o Peppol-UBL."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dal 1° luglio 2030 la fattura elettronica strutturata diventerà obbligatoria per le operazioni B2B intracomunitarie ai sensi della direttiva UE 2025/516 (ViDA); finora non è stata annunciata una data nazionale anticipata."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Per le fatture austriache Fakturcho genera su richiesta un file XML UBL generico; un formato dedicato per l'invio alle amministrazioni federali (ebInterface/PEPPOL) non è al momento offerto da Fakturcho."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Conservazione e obbligo di registratore di cassa",
+      "id": "conservazione-e-registratore-di-cassa",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Le fatture vanno conservate per sette anni (§ 11 Abs. 2 UStG 1994, § 132 BAO). L'obbligo di registratore di cassa (§ 131b BAO) riguarda solo gli incassi in contanti — vi rientrano anche i pagamenti con bancomat o carta di credito effettuati di persona, ma non i bonifici. Fakturcho non è un registratore di cassa e non sostituisce quindi una cassa conforme alla RKSV per i pagamenti in contanti."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Domande frequenti",
+  "faq": [
+    {
+      "question": "Devo assegnare un numero di fattura anche come Kleinunternehmer?",
+      "answer": [
+        {
+          "text": "Sì. Il § 11 Abs. 1 Z 3 lit. h UStG 1994 richiede un numero progressivo indipendentemente dal fatto che sia indicata o meno l'IVA."
+        }
+      ]
+    },
+    {
+      "question": "Ho sempre bisogno della UID-Nr. del mio cliente?",
+      "answer": [
+        {
+          "text": "No, solo per le operazioni in reverse charge, le cessioni intracomunitarie e le operazioni triangolari — nonché per una fattura B2B interna con importo lordo superiore a 10.000 euro (§ 11 Abs. 1 Z 3 lit. b UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Una Stornorechnung è la stessa cosa di una Gutschrift?",
+      "answer": [
+        {
+          "text": "No. In Austria «Gutschrift» indica un documento con cui è il cliente stesso a fatturare a se stesso. Un documento di correzione del venditore si chiama Rechnungskorrektur oppure, in caso di storno completo, Stornorechnung."
+        }
+      ]
+    },
+    {
+      "question": "Cosa cambia il 1° luglio 2026 per le aliquote IVA?",
+      "answer": [
+        {
+          "text": "Da questa data si applica una nuova aliquota ridotta del 4,9% per alcuni generi alimentari di base come latte, uova, pane, farina e riso (§ 10 Abs. 1a UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Devo poter emettere o ricevere fatture elettroniche?",
+      "answer": [
+        {
+          "text": "Non è obbligatorio verso clienti privati; solo chi fornisce alle amministrazioni federali deve inviare fatture elettroniche strutturate (ebInterface o Peppol-UBL)."
+        }
+      ]
+    },
+    {
+      "question": "In tutta l'Austria si applica la stessa aliquota?",
+      "answer": [
+        {
+          "text": "Quasi ovunque sì. Solo le imprese con sede o stabile organizzazione a Jungholz o nel Kleinwalsertal (Mittelberg) applicano il 19% invece del 20% come aliquota ordinaria (§ 10 Abs. 4 UStG 1994)."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Come aiuta Fakturcho",
+    "body": [
+      {
+        "text": "Per gli emittenti austriaci Fakturcho assegna numeri di fattura progressivi, stampa automaticamente nel piè di pagina la Leistungsdatum, la Firmenbuchnummer, il Firmenbuchgericht, il Sitz e la UID-Nr., e inserisce da solo, per un profilo Kleinunternehmer, l'annotazione ai sensi del § 6 Abs. 1 Z 27 UStG 1994. Per una fattura B2B interna sopra i 10.000 euro lordi, Fakturcho verifica che la UID-Nr. del destinatario sia registrata prima che la fattura possa essere emessa. Per le imprese di Jungholz o Mittelberg è possibile attivare l'aliquota speciale del 19% nel profilo dell'emittente. Le annotazioni per reverse charge e operazioni intracomunitarie vengono scelte automaticamente da Fakturcho in base al paese di destinazione e all'esenzione selezionata. Aggiornato al 29.09.2026. Queste sono informazioni generali, non una consulenza fiscale — per il singolo caso rivolgiti al tuo consulente fiscale o al tuo Finanzamt."
+      }
+    ]
+  }
+}

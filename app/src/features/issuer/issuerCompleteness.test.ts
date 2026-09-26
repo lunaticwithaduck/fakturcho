@@ -190,4 +190,41 @@ describe('getMissingIssuerFields', () => {
     };
     expect(getMissingIssuerFields(complete)).toEqual([]);
   });
+
+  it('does not require Firmenbuchgericht/Sitz for an AT sole trader with no Firmenbuchnummer', () => {
+    const atProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'AT',
+      addressLine: null,
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      city: 'Wien',
+      eik: null,
+      identifiers: {},
+    };
+    expect(getMissingIssuerFields(atProfile)).toEqual([]);
+  });
+
+  it('requires Firmenbuchgericht and Sitz for an AT issuer once a Firmenbuchnummer is entered', () => {
+    const atProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'AT',
+      addressLine: null,
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      city: 'Wien',
+      eik: 'FN 123456a',
+      identifiers: {},
+    };
+    expect(getMissingIssuerFields(atProfile)).toEqual([
+      'identifier:firmenbuchgericht',
+      'identifier:sitz',
+    ]);
+
+    const complete: IssuerProfileDto = {
+      ...atProfile,
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    };
+    expect(getMissingIssuerFields(complete)).toEqual([]);
+  });
 });

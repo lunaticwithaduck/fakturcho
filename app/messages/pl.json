@@ -411,6 +411,12 @@
     "cityLabel": "Miejscowość",
     "emailLabel": "E-mail",
     "molLabel": "Reprezentant",
+    "clientTypeLabel": "Typ klienta",
+    "clientTypeOptionUnknown": "Nie ustawiono",
+    "clientTypeOptions": {
+      "business": "Firma",
+      "consumer": "Osoba prywatna"
+    },
     "invalidFormat": "Nieprawidłowy format",
     "countryLabel": "Kraj",
     "documentLanguageLabel": "Język dokumentów",
@@ -472,7 +478,8 @@
       "phone": "Telefon",
       "invalidFormat": "Nieprawidłowy format",
       "czRegisterHint": "Wymagane dla czeskich wystawców: podaj wpis do rejestru handlowego (sąd, dział, numer wpisu) lub innego rejestru publicznego – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.).",
-      "frLegalFormHint": "Jednoosobowa działalność gospodarcza? Wpisz „EI” lub „entrepreneur individuel” — musi pojawić się obok nazwy na każdym dokumencie (art. L526-22 francuskiego kodeksu handlowego)."
+      "frLegalFormHint": "Jednoosobowa działalność gospodarcza? Wpisz „EI” lub „entrepreneur individuel” — musi pojawić się obok nazwy na każdym dokumencie (art. L526-22 francuskiego kodeksu handlowego).",
+      "atJungholzMittelbergHint": "Siedziba Twojej firmy znajduje się w Jungholz lub Kleinwalsertal (Mittelberg)? Zgodnie z § 10 ust. 4 UStG 1994 obowiązuje tam stawka podstawowa 19% zamiast 20%. Stawki obniżone (13%, 10%, 4,9%) pozostają bez zmian."
     },
     "vatFields": {
       "heading": "Rejestracja VAT",
@@ -587,7 +594,8 @@
       "INTERNAL_ERROR": "Wystąpił nieoczekiwany błąd. Spróbuj ponownie.",
       "OPERATION_NATURE_REQUIRED": "Francuskie dokumenty podatkowe muszą wskazywać rodzaj czynności przed wystawieniem.",
       "EXCHANGE_RATE_UNAVAILABLE": "Nie udało się pobrać kursu wymiany potrzebnego do wystawienia tego dokumentu. Spróbuj ponownie za chwilę.",
-      "INVALID_KSEF_NUMBER": "Nieprawidłowy format numeru KSeF."
+      "INVALID_KSEF_NUMBER": "Nieprawidłowy format numeru KSeF.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "Austriacka faktura powyżej 10 000 € dla firmy wymaga numeru UID odbiorcy przed wystawieniem."
     },
     "guideLink": "Poradnik fakturowania",
     "helpLink": "Zobacz przewodnik",
@@ -889,6 +897,10 @@
         "DE": {
           "name": "Niemcy",
           "line": "VAT 19%, faktury w języku niemieckim, e-faktury w formacie XRechnung."
+        },
+        "AT": {
+          "name": "Austria",
+          "line": "VAT 20%, faktury w języku niemieckim, faktury PDF bez obowiązku e-faktury."
         },
         "FR": {
           "name": "Francja",

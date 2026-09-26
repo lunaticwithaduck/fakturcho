@@ -411,6 +411,12 @@
     "cityLabel": "Localitate",
     "emailLabel": "Email",
     "molLabel": "Reprezentant legal",
+    "clientTypeLabel": "Tip client",
+    "clientTypeOptionUnknown": "Nesetat",
+    "clientTypeOptions": {
+      "business": "Companie",
+      "consumer": "Persoană fizică"
+    },
     "invalidFormat": "Format nevalid",
     "countryLabel": "Țară",
     "documentLanguageLabel": "Limba documentelor",
@@ -472,7 +478,8 @@
       "phone": "Telefon",
       "invalidFormat": "Format nevalid",
       "czRegisterHint": "Obligatoriu pentru emitenții cehi: menționați înregistrarea în Registrul Comerțului (instanța, secțiunea, numărul de înregistrare) sau într-un alt registru public – § 435 din Codul civil (Legea nr. 89/2012 Sb.).",
-      "frLegalFormHint": "Sunteți antreprenor individual? Scrieți „EI” sau „entrepreneur individuel” — trebuie să apară lângă nume pe fiecare document (art. L526-22 din Codul comercial francez)."
+      "frLegalFormHint": "Sunteți antreprenor individual? Scrieți „EI” sau „entrepreneur individuel” — trebuie să apară lângă nume pe fiecare document (art. L526-22 din Codul comercial francez).",
+      "atJungholzMittelbergHint": "Sediul afacerii dvs. este în Jungholz sau Kleinwalsertal (Mittelberg)? Conform § 10 alin. 4 UStG 1994, acolo cota standard este 19% în loc de 20%. Cotele reduse (13%, 10%, 4,9%) rămân neschimbate."
     },
     "vatFields": {
       "heading": "Înregistrare TVA",
@@ -587,7 +594,8 @@
       "INTERNAL_ERROR": "A apărut o eroare neașteptată. Încercați din nou.",
       "OPERATION_NATURE_REQUIRED": "Documentele fiscale franceze trebuie să indice natura operațiunii înainte de a putea fi emise.",
       "EXCHANGE_RATE_UNAVAILABLE": "Nu s-a putut obține cursul de schimb necesar pentru emiterea acestui document. Încercați din nou peste puțin timp.",
-      "INVALID_KSEF_NUMBER": "Formatul numărului KSeF nu este valid."
+      "INVALID_KSEF_NUMBER": "Formatul numărului KSeF nu este valid.",
+      "RECIPIENT_VAT_NUMBER_REQUIRED": "O factură austriacă de peste 10.000 € către o firmă necesită numărul UID al destinatarului înainte de a fi emisă."
     },
     "guideLink": "Ghid de facturare",
     "helpLink": "Vedeți ghidul",
@@ -889,6 +897,10 @@
         "DE": {
           "name": "Germania",
           "line": "TVA 19%, facturi în limba germană, e-facturi în format XRechnung."
+        },
+        "AT": {
+          "name": "Austria",
+          "line": "TVA 20%, facturi în limba germană, facturi PDF fără obligația e-facturii."
         },
         "FR": {
           "name": "Franța",

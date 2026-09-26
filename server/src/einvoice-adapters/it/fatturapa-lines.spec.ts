@@ -88,6 +88,7 @@ function document(lineItems: LineItemDto[]): DocumentDto {
       mol: null,
       sdiRecipientCode: null,
       pec: null,
+      clientType: null,
     },
     lineItems,
     discounts: [],

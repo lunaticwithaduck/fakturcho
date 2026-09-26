@@ -22,6 +22,7 @@ export interface CreateClientInput {
   peppolScheme?: string | null | undefined;
   sdiRecipientCode?: string | null | undefined;
   pec?: string | null | undefined;
+  clientType?: ClientDto['clientType'] | undefined;
 }
 
 export interface UpdateClientInput {
@@ -41,6 +42,7 @@ export interface UpdateClientInput {
   peppolScheme?: string | null | undefined;
   sdiRecipientCode?: string | null | undefined;
   pec?: string | null | undefined;
+  clientType?: ClientDto['clientType'] | undefined;
 }
 
 function toDto(client: Client): ClientDto {
@@ -62,6 +64,7 @@ function toDto(client: Client): ClientDto {
     peppolScheme: client.peppolScheme,
     sdiRecipientCode: client.sdiRecipientCode,
     pec: client.pec,
+    clientType: client.clientType as ClientDto['clientType'],
   };
 }
 
@@ -116,6 +119,7 @@ export class ClientsService {
           peppolScheme: input.peppolScheme ?? null,
           sdiRecipientCode: input.sdiRecipientCode ?? null,
           pec: input.pec ?? null,
+          clientType: input.clientType ?? null,
         },
       });
       return toDto(client);
@@ -158,6 +162,7 @@ export class ClientsService {
             ? { sdiRecipientCode: input.sdiRecipientCode }
             : {}),
           ...(input.pec !== undefined ? { pec: input.pec } : {}),
+          ...(input.clientType !== undefined ? { clientType: input.clientType } : {}),
         },
       });
       return toDto(client);

@@ -12,7 +12,10 @@ import BgGuideSlugPage, { generateMetadata, generateStaticParams } from './page'
 
 describe('generateStaticParams', () => {
   it('returns one entry per registered bg guide', () => {
-    expect(generateStaticParams()).toEqual([{ slug: 'faktura-zadalzhitelni-rekviziti-zdds' }]);
+    expect(generateStaticParams()).toEqual([
+      { slug: 'faktura-zadalzhitelni-rekviziti-zdds' },
+      { slug: 'faktura-avstriya-zadalzhitelni-rekviziti' },
+    ]);
   });
 });
 

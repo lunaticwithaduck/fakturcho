@@ -4,6 +4,7 @@ import type {
   OperationNature,
   UnitCode,
 } from '@fakturcho/shared-types';
+import { atLabelOverrides } from './at-overrides';
 import { bg } from './bg';
 import { de } from './de';
 import { en } from './en';
@@ -121,6 +122,18 @@ export const CLASSIC_LABELS: Record<ClassicLanguage, ClassicLabels> = {
   ro,
 };
 
-export function getClassicLabels(language: ClassicLanguage): ClassicLabels {
-  return CLASSIC_LABELS[language];
+// Labels are keyed by document language, but AT issuers write German with
+// their own administrative terms — this is the one issuer-country override
+// layer, kept minimal (extend this map, not the mechanism, for the next one).
+const LABEL_OVERRIDES_BY_ISSUER_COUNTRY: Record<string, Partial<ClassicLabels>> = {
+  AT: atLabelOverrides,
+};
+
+export function getClassicLabels(
+  language: ClassicLanguage,
+  issuerCountry?: string | null,
+): ClassicLabels {
+  const base = CLASSIC_LABELS[language];
+  const override = issuerCountry ? LABEL_OVERRIDES_BY_ISSUER_COUNTRY[issuerCountry] : undefined;
+  return override ? { ...base, ...override } : base;
 }

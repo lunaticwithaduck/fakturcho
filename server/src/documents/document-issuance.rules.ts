@@ -3,13 +3,16 @@ import {
   type DocumentType,
   TAX_DOCUMENT_TYPES,
 } from '@fakturcho/shared-types';
-import type { Document } from '@prisma/client';
+import type { Client, Document } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
+
+const AT_RECIPIENT_UID_THRESHOLD_CENTS = 1_000_000;
 
 export function assertIssuable(
   existing: Document,
   documentType: DocumentType,
   country: string | null,
+  client: Pick<Client, 'vatNumber' | 'eik' | 'country' | 'clientType'> | null = null,
 ): void {
   if (documentType === 'delivery_note') {
     // DPR 472/1996 art. 1: an Italian DDT is not valid without its causale del
@@ -51,6 +54,28 @@ export function assertIssuable(
     throw new DomainError(
       'OPERATION_NATURE_REQUIRED',
       'A French tax document requires the nature of the operation before issuing.',
+    );
+  }
+
+  // § 11 Abs. 1 Z 3 lit. b UStG 1994: a domestic AT invoice whose gross total
+  // exceeds €10,000 must show the business recipient's UID. The client's own
+  // clientType is the real signal; when it is unmeasured (null, an existing
+  // client from before this field existed), fall back to "has its own
+  // Firmenbuchnummer/company id (eik) on file" as the business signal.
+  const atRecipientIsBusiness =
+    client?.clientType === 'business' || (client?.clientType == null && Boolean(client?.eik));
+  if (
+    country === 'AT' &&
+    documentType === 'invoice' &&
+    existing.currency === 'EUR' &&
+    existing.amount > AT_RECIPIENT_UID_THRESHOLD_CENTS &&
+    client?.country === 'AT' &&
+    atRecipientIsBusiness &&
+    !client.vatNumber
+  ) {
+    throw new DomainError(
+      'RECIPIENT_VAT_NUMBER_REQUIRED',
+      'An Austrian invoice over €10,000 to a business recipient requires the recipient’s UID before it can be issued.',
     );
   }
 }

@@ -51,6 +51,13 @@ describe('getApiErrorMessage', () => {
     );
   });
 
+  it('maps RECIPIENT_VAT_NUMBER_REQUIRED to a German message', () => {
+    const error = { status: 422, data: { code: 'RECIPIENT_VAT_NUMBER_REQUIRED' } };
+    expect(getApiErrorMessage(error, 'de')).toBe(
+      'Eine österreichische Rechnung über 10.000 € an ein Unternehmen benötigt die UID-Nummer des Empfängers, bevor sie ausgestellt werden kann.',
+    );
+  });
+
   it('maps CLIENT_EIK_DUPLICATE to an English message', () => {
     const error = { status: 409, data: { code: 'CLIENT_EIK_DUPLICATE' } };
     expect(getApiErrorMessage(error, 'en')).toBe('A client with this company ID already exists.');

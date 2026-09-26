@@ -1,0 +1,373 @@
+{
+  "country": "AT",
+  "locale": "ro",
+  "slug": "factura-austria-cerinte-tva",
+  "title": "Factura în Austria: cerințe obligatorii, cote TVA și regimul întreprinderilor mici 2026 | Fakturcho",
+  "description": "Elementele obligatorii conform § 11 UStG 1994, cotele de TVA 2026 (20/13/10/4,9 %), pragul pentru întreprinderile mici și mențiunile de Firmenbuch pentru facturile emise din Austria – explicate simplu.",
+  "h1": "Cum emiți o factură în Austria: cerințe obligatorii, cote de TVA și regimul întreprinderilor mici",
+  "answer": "O factură austriacă trebuie să conțină elementele obligatorii de la § 11 Abs. 1 Z 3 UStG 1994, printre care un număr secvențial și — de la o valoare brută de peste 10.000 euro către o altă firmă — UID-Nr. al beneficiarului. Cota standard de TVA este 20 %, alături de 13 %, 10 % și, din 1 iulie 2026, o cotă nouă de 4,9 % pentru produse alimentare de bază. O întreprindere mică (Kleinunternehmer) cu o cifră de afaceri anuală de până la 55.000 euro emite facturi fără TVA.",
+  "lastReviewed": "2026-09-29",
+  "sections": [
+    {
+      "heading": "Cine trebuie să emită o factură în Austria – și până când?",
+      "id": "obligatia-de-emitere-si-termene",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Conform § 11 Abs. 1 UStG 1994, o factură trebuie emisă atunci când livrarea sau prestarea se face către o altă firmă pentru activitatea acesteia sau către o persoană juridică, precum și pentru lucrări de construcție impozabile și prestații legate de un imobil către persoane fizice. Termenul este de "
+            },
+            { "text": "șase luni", "bold": true },
+            { "text": " de la efectuarea prestației." }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Două situații au termene mai scurte: pentru un serviciu prestat către o firmă din UE, la care taxa devine exigibilă la beneficiar (Art. 196 MwStSystRL), factura trebuie emisă până la data de 15 a lunii următoare prestației – la fel ca pentru o livrare intracomunitară (Art. 11 Abs. 1 BMR)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Elementele obligatorii ale facturii (§ 11 Abs. 1 Z 3 UStG 1994)",
+      "id": "elemente-obligatorii-ale-facturii",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "O factură completă cu o valoare peste 400 euro (vezi mai jos factura simplificată, Kleinbetragsrechnung) trebuie să conțină următoarele elemente:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": ["lit.", "Element obligatoriu"],
+          "rows": [
+            ["a", "Numele și adresa firmei care livrează sau prestează"],
+            [
+              "b",
+              "Numele și adresa beneficiarului; la o valoare brută de peste 10.000 euro către o altă firmă, suplimentar UID-Nr. al acesteia"
+            ],
+            ["c", "Cantitatea și denumirea comercială a bunurilor, respectiv tipul și volumul prestației"],
+            [
+              "d",
+              "Data livrării/prestării sau perioada de prestare (Leistungsdatum – la Fakturcho apare întotdeauna)"
+            ],
+            ["e", "Contravaloarea și cota de TVA aplicabilă, iar în caz de scutire, mențiunea corespunzătoare"],
+            ["f", "Suma de TVA aferentă contravalorii"],
+            ["g", "Data emiterii"],
+            ["h", "Un număr de factură secvențial, atribuit o singură dată"],
+            [
+              "i",
+              "UID-Nr. al firmei care prestează, cu excepția întreprinderilor mici (Kleinunternehmer) sau a operațiunilor exclusiv scutite fără drept de deducere"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Când se aplică mai multe cote, contravaloarea și suma de TVA trebuie indicate separat pe fiecare cotă (§ 11 Abs. 5 UStG 1994). Dacă factura este emisă într-o altă monedă decât euro, suma de TVA trebuie indicată suplimentar și în euro (§ 20 Abs. 6 UStG 1994) – Fakturcho tipărește pentru acest caz un rând separat cu cursul EZB (BCE)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kleinbetragsrechnung: elemente simplificate până la 400 euro",
+      "id": "factura-simplificata-kleinbetragsrechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Dacă valoarea totală nu depășește 400 euro brut, sau dacă factura este emisă de o întreprindere mică (Kleinunternehmer), conform § 11 Abs. 6 UStG 1994 sunt suficiente: data emiterii, numele și adresa emitentului, cantitatea și denumirea prestației, data prestării (Leistungsdatum), valoarea brută împreună cu suma de TVA într-o singură sumă, și cota de TVA. Numele/adresa beneficiarului, numărul facturii și UID-Nr. nu mai sunt necesare în acest caz."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Sunt exceptate situațiile transfrontaliere, precum livrările intracomunitare, prestațiile cu taxare inversă către alt stat UE și operațiunile triunghiulare – acolo este necesară întotdeauna factura completă. Fakturcho tipărește oricum întotdeauna factura completă; simplificarea este pur opțională."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Cotele de TVA în Austria în 2026",
+      "id": "cotele-de-tva-in-2026",
+      "blocks": [
+        {
+          "type": "table",
+          "head": ["Cotă", "Pentru ce se aplică"],
+          "rows": [
+            ["20 %", "Cota standard (§ 10 Abs. 1 UStG 1994)"],
+            [
+              "13 %",
+              "de ex. artă, cultură, evenimente sportive, zboruri interne (§ 10 Abs. 3, Anlage 2)"
+            ],
+            [
+              "10 %",
+              "de ex. alimente, cărți, mese la restaurant, chirii de locuințe, transport de persoane (§ 10 Abs. 2, Anlage 1)"
+            ],
+            [
+              "4,9 %",
+              "Nou, din 1 iulie 2026: lapte, ouă, anumite fructe/legume, orez, făină, pâine și alte produse alimentare de bază conform Anlage 3 (§ 10 Abs. 1a UStG 1994)"
+            ],
+            ["0 %", "Operațiuni scutite, cu taxare inversă și intracomunitare"]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Închirierea de locuințe este impozabilă cu 10 %, nu este scutită (§ 6 Abs. 1 Z 16 UStG 1994 o exceptează expres de la scutire). Fosta cotă de 0 % pentru panourile fotovoltaice a expirat și nu se mai aplică în 2026."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Caz special Jungholz/Mittelberg: firmele cu sediul (Sitz) sau un sediu permanent (Betriebsstätte) în aceste două localități din Tirol, respectiv Vorarlberg, aplică 19 % în loc de 20 % ca și cotă standard (§ 10 Abs. 4 UStG 1994) – cotele reduse rămân neschimbate. Fakturcho oferă în profilul emitentului o casetă de bifat dedicată, preselectată automat pe baza codului poștal (6691, 6991, 6992, 6993)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Regimul întreprinderilor mici (Kleinunternehmerregelung): până când nu se aplică TVA?",
+      "id": "regimul-intreprinderilor-mici-kleinunternehmerregelung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "De la 1 ianuarie 2025, scutirea pentru întreprinderi mici conform § 6 Abs. 1 Z 27 UStG 1994 se aplică până la o "
+            },
+            { "text": "cifră de afaceri brută de 55.000 euro", "bold": true },
+            {
+              "text": " în anul calendaristic precedent și în cel curent. Dacă pragul este depășit cu cel mult 10 %, scutirea rămâne valabilă până la sfârșitul anului; la o depășire mai mare, scutirea încetează imediat, chiar de la operațiunea respectivă."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "O întreprindere mică emite facturi fără a evidenția separat TVA și nu are nevoie de UID-Nr. pentru aceasta. Fakturcho adaugă automat mențiunea „Umsatzsteuerfrei aufgrund der Kleinunternehmerregelung gemäß § 6 Abs. 1 Z 27 UStG 1994.\" în locul unui rând de TVA."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Important: dacă o întreprindere mică vinde servicii unei firme dintr-un alt stat UE, locul prestării este considerat în străinătate (§ 3a Abs. 6 UStG 1994) – în acest caz este totuși nevoie de UID-Nr., iar regulile de taxare inversă se aplică."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Taxare inversă (Reverse Charge) și operațiuni intracomunitare",
+      "id": "taxare-inversa-si-operatiuni-intracomunitare",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Când taxa devine exigibilă la beneficiar (§ 11 Abs. 1a UStG 1994), pe factură nu se evidențiază TVA; în schimb trebuie să apară UID-Nr. al beneficiarului și o mențiune privind obligația de plată a acestuia. Acest lucru vizează în special:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Servicii B2B în UE: locul prestării este la beneficiar (§ 3a Abs. 6 UStG 1994), taxa este exigibilă conform Art. 196 MwStSystRL – factura se emite până la data de 15 a lunii următoare, cu raportare suplimentară prin Zusammenfassende Meldung (ZM)."
+              }
+            ],
+            [
+              {
+                "text": "Livrări intracomunitare: scutite conform Art. 6 Abs. 1 iVm Art. 7 UStG 1994, ambele UID-Nr. trebuie să apară pe factură."
+              }
+            ],
+            [
+              {
+                "text": "Taxare inversă internă: printre altele lucrări de construcții (§ 19 Abs. 1a), transferuri de proprietate cu titlu de garanție (§ 19 Abs. 1b), anumite produse electronice/metale (§ 19 Abs. 1d) și telefoane mobile/certificate de emisii (§ 19 Abs. 1e)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho alege automat formularea potrivită: pentru servicii transfrontaliere în UE, formularea conform Art. 196, pentru situațiile interne, formularea aleasă sau una generală conform § 19 UStG, iar pentru livrările intracomunitare, mențiunea conform Art. 6/7 BMR."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Firma, Firmenbuch și forma juridică pe documentele comerciale (UGB § 14)",
+      "id": "firma-firmenbuch-si-forma-juridica",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Orice firmă înscrisă în Firmenbuch – de la întreprinderea individuală (e.U.), OG și KG, până la GmbH – trebuie să indice pe documentele comerciale adresate unui destinatar anume firma, forma juridică (Rechtsform), sediul (Sitz) și numărul Firmenbuchnummer, precum și instanța Firmenbuchgericht (§ 14 Abs. 1 UGB). O întreprindere individuală neînregistrată (de exemplu sub pragurile de la § 189 UGB) nu are această obligație – este suficient numele și adresa conform § 11 UStG."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho solicită automat Firmenbuchgericht și Sitz de îndată ce se introduce un Firmenbuchnummer în profilul emitentului, și tipărește ambele elemente împreună cu UID-Nr. în subsolul facturii."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Rechnungskorrektur, Gutschrift și Stornorechnung",
+      "id": "rechnungskorrektur-gutschrift-si-stornorechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "În Austria, „Gutschrift\" este un termen juridic propriu: desemnează documentul prin care "
+            },
+            { "text": "beneficiarul", "bold": true },
+            {
+              "text": " unei prestații facturează el însuși (§ 11 Abs. 7 UStG 1994), nu o corectură ulterioară făcută de firma care a prestat. Un document de corectură emis chiar de vânzător nu ar trebui deci niciodată numit „Gutschrift\" – Fakturcho îl numește „Rechnungskorrektur\", respectiv, la o stornare completă, „Stornorechnung\", iar o sumă suplimentară facturată ulterior o numește „Nachtragsrechnung\" (nu termenul german „Belastungsanzeige\")."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fiecare corectură face trimitere la numărul și data facturii inițiale și indică motivul corecturii (§ 11 Abs. 12 UStG 1994)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Factura electronică: pentru cine este obligatorie în Austria?",
+      "id": "factura-electronica-in-austria",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pentru facturile B2B și B2C, în 2026 nu există în Austria o obligație de facturare electronică; un PDF este considerat factură electronică dacă beneficiarul este de acord (§ 11 Abs. 2 UStG 1994). Pentru instituțiile federale (B2G), facturile electronice structurate sunt însă obligatorii deja din 2014, transmise prin USP.gv.at sau PEPPOL, în formatele ebInterface sau Peppol-UBL."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "De la 1 iulie 2030, factura electronică structurată va deveni obligatorie pentru operațiunile B2B intracomunitare, conform Directivei UE 2025/516 (ViDA); un termen național mai devreme nu a fost anunțat până acum."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pentru facturile emise din Austria, Fakturcho generează la cerere un fișier XML general în format UBL; un format dedicat pentru transmiterea către instituțiile federale (ebInterface/PEPPOL) nu este oferit momentan de Fakturcho."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Arhivare și obligația de casă de marcat (Registrierkassenpflicht)",
+      "id": "arhivare-si-obligatia-de-casa-de-marcat",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Facturile trebuie păstrate șapte ani (§ 11 Abs. 2 UStG 1994, § 132 BAO). Obligația de casă de marcat (§ 131b BAO) vizează doar încasările în numerar – aici intră și plățile cu cardul (Bankomat/credit) efectuate față în față, dar nu și transferurile bancare. Fakturcho nu este o casă de marcat și nu înlocuiește o casă de marcat conformă RKSV pentru plățile în numerar."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Întrebări frecvente",
+  "faq": [
+    {
+      "question": "Trebuie să atribui un număr de factură și ca întreprindere mică (Kleinunternehmer)?",
+      "answer": [
+        {
+          "text": "Da. § 11 Abs. 1 Z 3 lit. h UStG 1994 cere un număr secvențial indiferent dacă se evidențiază sau nu TVA."
+        }
+      ]
+    },
+    {
+      "question": "Am nevoie întotdeauna de UID-Nr. al clientului meu?",
+      "answer": [
+        {
+          "text": "Nu, doar la operațiuni cu taxare inversă, livrări intracomunitare și operațiuni triunghiulare – precum și la o factură internă B2B cu o valoare brută de peste 10.000 euro (§ 11 Abs. 1 Z 3 lit. b UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Stornorechnung este același lucru cu Gutschrift?",
+      "answer": [
+        {
+          "text": "Nu. În Austria, „Gutschrift\" desemnează documentul prin care clientul facturează el însuși. Un document de corectură emis de vânzător se numește Rechnungskorrektur sau, la o stornare completă, Stornorechnung."
+        }
+      ]
+    },
+    {
+      "question": "Ce se schimbă la 1 iulie 2026 privind cotele de TVA?",
+      "answer": [
+        {
+          "text": "De la această dată se aplică o nouă cotă redusă de 4,9 % pentru anumite produse alimentare de bază precum lapte, ouă, pâine, făină și orez (§ 10 Abs. 1a UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Trebuie să pot emite sau primi facturi electronice?",
+      "answer": [
+        {
+          "text": "Pentru clienți privați, nu este obligatoriu; doar cine livrează către instituții federale trebuie să transmită facturi electronice structurate (ebInterface sau Peppol-UBL)."
+        }
+      ]
+    },
+    {
+      "question": "Se aplică aceeași cotă de TVA în toată Austria?",
+      "answer": [
+        {
+          "text": "Aproape peste tot, da. Doar firmele cu sediul (Sitz) sau un sediu permanent în Jungholz sau în Kleinwalsertal (Mittelberg) aplică 19 % în loc de 20 % ca și cotă standard (§ 10 Abs. 4 UStG 1994)."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Cum te ajută Fakturcho",
+    "body": [
+      {
+        "text": "Pentru emitenții din Austria, Fakturcho atribuie numere de factură secvențiale, tipărește automat în subsolul facturii Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz și UID-Nr., iar pentru un profil de întreprindere mică (Kleinunternehmer) adaugă automat mențiunea conform § 6 Abs. 1 Z 27 UStG 1994. La o factură internă B2B de peste 10.000 euro brut, Fakturcho verifică dacă UID-Nr. al beneficiarului este completat, înainte ca factura să poată fi emisă. Pentru firmele din Jungholz sau Mittelberg, cota specială de 19 % poate fi activată din profilul emitentului. Mențiunile de taxare inversă și cele intracomunitare sunt alese automat de Fakturcho în funcție de țara de destinație și de scutirea de TVA selectată. Ultima actualizare: 29.09.2026. Acest ghid oferă informații generale, nu constituie consultanță fiscală; pentru situația ta specifică, consultă un contabil sau un consultant fiscal autorizat."
+      }
+    ]
+  }
+}

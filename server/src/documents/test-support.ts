@@ -46,9 +46,11 @@ export async function createTestClient(
     postcode: string | null;
     countyRegion: string | null;
     documentLanguage: string | null;
+    eik: string | null;
     vatNumber: string | null;
     sdiRecipientCode: string | null;
     pec: string | null;
+    clientType: string | null;
   }> = {},
 ) {
   return prisma.client.create({ data: { accountId, companyName: 'Клиент ООД', ...overrides } });

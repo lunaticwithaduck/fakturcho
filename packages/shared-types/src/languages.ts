@@ -26,5 +26,5 @@ export function isDocumentLanguage(value: string | null | undefined): value is D
   return (DOCUMENT_LANGUAGES as readonly string[]).includes(value ?? '');
 }
 
-export const TARGET_COUNTRIES = ['BG', 'DE', 'FR', 'IT', 'PL', 'RO'] as const;
+export const TARGET_COUNTRIES = ['BG', 'DE', 'AT', 'FR', 'IT', 'PL', 'RO'] as const;
 export type TargetCountry = (typeof TARGET_COUNTRIES)[number];

@@ -1,0 +1,373 @@
+{
+  "country": "AT",
+  "locale": "de",
+  "slug": "rechnung-oesterreich-pflichtangaben-ustg",
+  "title": "Rechnung Österreich: Pflichtangaben, UStG-Sätze & Kleinunternehmer 2026 | Fakturcho",
+  "description": "Pflichtangaben nach § 11 UStG 1994, Umsatzsteuersätze 2026 (20/13/10/4,9 %), Kleinunternehmergrenze und Firmenbuch-Angaben für Rechnungen aus Österreich – verständlich erklärt.",
+  "h1": "Rechnung schreiben in Österreich: Pflichtangaben, Steuersätze und Kleinunternehmerregelung",
+  "answer": "Eine österreichische Rechnung braucht die Pflichtangaben nach § 11 Abs. 1 Z 3 UStG 1994, darunter eine fortlaufende Nummer und – ab einem Bruttobetrag über 10.000 Euro an ein anderes Unternehmen – die UID-Nummer des Empfängers. Der Standardsteuersatz beträgt 20 %, daneben gelten 13 %, 10 % und seit 1. Juli 2026 ein neuer Satz von 4,9 % für Grundnahrungsmittel. Ein Kleinunternehmer bis 55.000 Euro Jahresumsatz stellt Rechnungen ohne Umsatzsteuer aus.",
+  "lastReviewed": "2026-09-29",
+  "sections": [
+    {
+      "heading": "Wer muss in Österreich eine Rechnung ausstellen – und bis wann?",
+      "id": "rechnungspflicht-und-fristen",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Nach § 11 Abs. 1 UStG 1994 muss eine Rechnung ausgestellt werden, wenn an ein anderes Unternehmen für dessen Unternehmen oder an eine juristische Person geliefert oder geleistet wird, sowie für steuerpflichtige Werklieferungen und grundstücksbezogene Leistungen an Private. Die Frist dafür beträgt "
+            },
+            { "text": "sechs Monate", "bold": true },
+            { "text": " nach Ausführung der Leistung." }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Zwei Fälle haben kürzere Fristen: Bei einer sonstigen Leistung an ein EU-Unternehmen, bei der die Steuerschuld auf den Empfänger übergeht (Art. 196 MwStSystRL), muss die Rechnung bis zum 15. des auf die Leistung folgenden Monats ausgestellt werden – ebenso bei einer innergemeinschaftlichen Lieferung (Art. 11 Abs. 1 BMR)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Pflichtangaben auf der Rechnung (§ 11 Abs. 1 Z 3 UStG 1994)",
+      "id": "pflichtangaben-11-ustg",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Eine vollständige Rechnung über 400 Euro (siehe Kleinbetragsrechnung unten) braucht folgende Angaben:"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": ["lit.", "Pflichtangabe"],
+          "rows": [
+            ["a", "Name und Anschrift des liefernden oder leistenden Unternehmers"],
+            [
+              "b",
+              "Name und Anschrift des Abnehmers; bei einem Bruttobetrag über 10.000 Euro an ein anderes Unternehmen zusätzlich dessen UID-Nummer"
+            ],
+            ["c", "Menge und handelsübliche Bezeichnung bzw. Art und Umfang der Leistung"],
+            [
+              "d",
+              "Tag der Lieferung/Leistung oder der Leistungszeitraum (Leistungsdatum – bei Fakturcho immer angeführt)"
+            ],
+            ["e", "Entgelt und anzuwendender Steuersatz, bei Steuerbefreiung ein Hinweis darauf"],
+            ["f", "Der auf das Entgelt entfallende Steuerbetrag"],
+            ["g", "Das Ausstellungsdatum"],
+            ["h", "Eine fortlaufende, einmalig vergebene Rechnungsnummer"],
+            [
+              "i",
+              "Die UID-Nummer des leistenden Unternehmers, außer bei Kleinunternehmern oder rein unecht steuerbefreiten Umsätzen"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Bei mehreren Steuersätzen müssen Entgelt und Steuerbetrag je Satz getrennt ausgewiesen werden (§ 11 Abs. 5 UStG 1994). Rechnet die Rechnung in einer Fremdwährung ab, muss der Steuerbetrag zusätzlich in Euro angegeben werden (§ 20 Abs. 6 UStG 1994) – Fakturcho druckt dafür eine eigene Zeile mit dem EZB-Kurs."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kleinbetragsrechnung: vereinfachte Angaben bis 400 Euro",
+      "id": "kleinbetragsrechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Beträgt der Gesamtbetrag höchstens 400 Euro brutto, oder stammt die Rechnung von einem Kleinunternehmer, genügen nach § 11 Abs. 6 UStG 1994 Ausstellungsdatum, Name und Anschrift des Ausstellers, Menge und Bezeichnung der Leistung, das Leistungsdatum, der Bruttobetrag samt Steuerbetrag in einer Summe und der Steuersatz. Name/Anschrift des Empfängers, Rechnungsnummer und UID sind dann nicht nötig."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ausgenommen sind grenzüberschreitende Fälle wie innergemeinschaftliche Lieferungen, Reverse-Charge-Leistungen ins EU-Ausland und Dreiecksgeschäfte – dort ist immer die vollständige Rechnung nötig. Fakturcho druckt ohnehin immer die vollständige Rechnung; die Vereinfachung ist rein optional."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Umsatzsteuersätze in Österreich 2026",
+      "id": "umsatzsteuersaetze-2026",
+      "blocks": [
+        {
+          "type": "table",
+          "head": ["Satz", "Wofür"],
+          "rows": [
+            ["20 %", "Regelsteuersatz (§ 10 Abs. 1 UStG 1994)"],
+            [
+              "13 %",
+              "z. B. Kunst, Kultur, Sportveranstaltungen, Inlandsflüge (§ 10 Abs. 3, Anlage 2)"
+            ],
+            [
+              "10 %",
+              "z. B. Lebensmittel, Bücher, Restaurantessen, Wohnraummiete, Personenbeförderung (§ 10 Abs. 2, Anlage 1)"
+            ],
+            [
+              "4,9 %",
+              "Neu ab 1. Juli 2026: Milch, Eier, bestimmtes Obst/Gemüse, Reis, Mehl, Brot u. a. Grundnahrungsmittel nach Anlage 3 (§ 10 Abs. 1a UStG 1994)"
+            ],
+            ["0 %", "Steuerbefreite, reverse-charge- und innergemeinschaftliche Umsätze"]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Wohnraumvermietung ist mit 10 % steuerpflichtig, nicht steuerbefreit (§ 6 Abs. 1 Z 16 UStG 1994 nimmt sie ausdrücklich aus). Die frühere 0-%-Regelung für Photovoltaikmodule ist ausgelaufen und gilt 2026 nicht mehr."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Sonderfall Jungholz/Mittelberg: Unternehmer mit Sitz oder Betriebsstätte in diesen beiden Tiroler bzw. Vorarlberger Gemeinden verrechnen 19 % statt 20 % als Normalsteuersatz (§ 10 Abs. 4 UStG 1994) – die ermäßigten Sätze bleiben gleich. Fakturcho bietet dafür im Ausstellerprofil ein eigenes Kontrollkästchen, das anhand der Postleitzahl (6691, 6991, 6992, 6993) vorausgewählt wird."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Kleinunternehmerregelung: bis wann keine Umsatzsteuer?",
+      "id": "kleinunternehmerregelung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Seit 1. Januar 2025 gilt die Kleinunternehmerbefreiung nach § 6 Abs. 1 Z 27 UStG 1994 bis zu einem "
+            },
+            { "text": "Bruttoumsatz von 55.000 Euro", "bold": true },
+            {
+              "text": " im vorangegangenen und im laufenden Kalenderjahr. Wird die Grenze um höchstens 10 % überschritten, bleibt die Befreiung bis Jahresende bestehen; bei einer größeren Überschreitung endet sie sofort mit dem betreffenden Umsatz."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ein Kleinunternehmer stellt Rechnungen ohne gesonderten Steuerausweis aus und braucht dafür keine UID-Nummer. Fakturcho trägt dafür automatisch den Hinweis „Umsatzsteuerfrei aufgrund der Kleinunternehmerregelung gemäß § 6 Abs. 1 Z 27 UStG 1994.\" ein, statt einer Umsatzsteuerzeile."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Wichtig: Verkauft ein Kleinunternehmer Dienstleistungen an ein Unternehmen in einem anderen EU-Land, liegt der Leistungsort im Ausland (§ 3a Abs. 6 UStG 1994) – dafür braucht es dann doch eine UID-Nummer und die Reverse-Charge-Regeln gelten."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Reverse Charge und innergemeinschaftliche Geschäfte",
+      "id": "reverse-charge-und-eu-geschaefte",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Geht die Steuerschuld auf den Leistungsempfänger über (§ 11 Abs. 1a UStG 1994), darf keine Umsatzsteuer ausgewiesen werden; stattdessen müssen die UID-Nummer des Empfängers und ein Hinweis auf die Steuerschuldnerschaft aufscheinen. Das betrifft vor allem:"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "EU-B2B-Dienstleistungen: Leistungsort beim Empfänger (§ 3a Abs. 6 UStG 1994), Steuerschuld nach Art. 196 MwStSystRL – Rechnung bis zum 15. des Folgemonats, zusätzlich Meldung in der Zusammenfassenden Meldung (ZM)."
+              }
+            ],
+            [
+              {
+                "text": "Innergemeinschaftliche Lieferungen: steuerfrei nach Art. 6 Abs. 1 iVm Art. 7 UStG 1994, beide UID-Nummern müssen aufscheinen."
+              }
+            ],
+            [
+              {
+                "text": "Inländisches Reverse Charge: u. a. Bauleistungen (§ 19 Abs. 1a), Sicherungsübereignungen (§ 19 Abs. 1b), bestimmte Elektronik/Metalle (§ 19 Abs. 1d) und Mobiltelefone/Emissionszertifikate (§ 19 Abs. 1e)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho wählt die passende Formulierung automatisch: für grenzüberschreitende EU-Dienstleistungen die Art.-196-Formulierung, für inländische Fälle die gewählte oder eine allgemeine § 19-UStG-Formulierung, und für innergemeinschaftliche Lieferungen den Art.-6/7-BMR-Hinweis."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Firma, Firmenbuch und Rechtsform auf Geschäftsbriefen (UGB § 14)",
+      "id": "firmenbuch-ugb-14",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Jedes im Firmenbuch eingetragene Unternehmen – vom Einzelunternehmen (e.U.) über OG und KG bis zur GmbH – muss auf Geschäftsbriefen an einen bestimmten Empfänger die Firma, Rechtsform, den Sitz und die Firmenbuchnummer sowie das Firmenbuchgericht angeben (§ 14 Abs. 1 UGB). Ein unregistrierter Einzelunternehmer (etwa unter den Schwellenwerten des § 189 UGB) braucht das nicht – hier genügen Name und Anschrift nach § 11 UStG."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho verlangt Firmenbuchgericht und Sitz automatisch, sobald eine Firmenbuchnummer im Ausstellerprofil eingetragen wird, und druckt beides zusammen mit der UID-Nummer im Rechnungsfuß."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Rechnungskorrektur, Gutschrift und die Stornorechnung",
+      "id": "rechnungskorrektur-gutschrift",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "In Österreich ist „Gutschrift\" ein eigener rechtlicher Begriff: Sie bezeichnet ein Dokument, mit dem der "
+            },
+            { "text": "Empfänger", "bold": true },
+            {
+              "text": " einer Leistung selbst abrechnet (§ 11 Abs. 7 UStG 1994), nicht eine nachträgliche Korrektur durch den leistenden Unternehmer. Ein Korrekturdokument, das der Verkäufer selbst ausstellt, sollte daher nie „Gutschrift\" heißen – Fakturcho nennt es „Rechnungskorrektur\" bzw. bei einer vollständigen Stornierung „Stornorechnung\", und einen nachträglichen Zusatzbetrag „Nachtragsrechnung\" (nicht die deutsche „Belastungsanzeige\")."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Jede Korrektur verweist auf die Nummer und das Datum der ursprünglichen Rechnung und nennt den Korrekturgrund (§ 11 Abs. 12 UStG 1994)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "E-Rechnung: für wen ist sie in Österreich Pflicht?",
+      "id": "e-rechnung-in-oesterreich",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Für B2B- und B2C-Rechnungen gibt es 2026 in Österreich keine E-Rechnungspflicht; ein PDF gilt als elektronische Rechnung, sofern der Empfänger zustimmt (§ 11 Abs. 2 UStG 1994). Für Bundes-Auftraggeber (B2G) sind strukturierte E-Rechnungen dagegen bereits seit 2014 verpflichtend, per USP.gv.at oder PEPPOL, in den Formaten ebInterface oder Peppol-UBL."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Ab 1. Juli 2030 wird die strukturierte E-Rechnung für innergemeinschaftliche B2B-Umsätze nach der EU-Richtlinie 2025/516 (ViDA) verpflichtend; ein früherer nationaler Termin wurde bisher nicht angekündigt."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho erzeugt für österreichische Rechnungen auf Wunsch eine allgemeine UBL-XML-Datei; ein eigenes Format für die Einreichung an Bundesbehörden (ebInterface/PEPPOL) bietet Fakturcho aktuell nicht an."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Aufbewahrung und Registrierkassenpflicht",
+      "id": "aufbewahrung-und-registrierkasse",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Rechnungen sind sieben Jahre aufzubewahren (§ 11 Abs. 2 UStG 1994, § 132 BAO). Die Registrierkassenpflicht (§ 131b BAO) betrifft nur Barumsätze – dazu zählen auch Bankomat- und Kreditkartenzahlungen vor Ort, aber nicht Überweisungen. Fakturcho ist keine Registrierkasse und ersetzt daher keine RKSV-konforme Kasse für Barzahlungen."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Häufige Fragen",
+  "faq": [
+    {
+      "question": "Muss ich als Kleinunternehmer eine Rechnungsnummer vergeben?",
+      "answer": [
+        {
+          "text": "Ja. § 11 Abs. 1 Z 3 lit. h UStG 1994 verlangt eine fortlaufende Nummer unabhängig davon, ob Umsatzsteuer ausgewiesen wird."
+        }
+      ]
+    },
+    {
+      "question": "Brauche ich immer die UID-Nummer meines Kunden?",
+      "answer": [
+        {
+          "text": "Nein, nur bei Reverse-Charge-Umsätzen, innergemeinschaftlichen Lieferungen und Dreiecksgeschäften – sowie bei einer inländischen B2B-Rechnung mit einem Bruttobetrag über 10.000 Euro (§ 11 Abs. 1 Z 3 lit. b UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Ist eine Stornorechnung dasselbe wie eine Gutschrift?",
+      "answer": [
+        {
+          "text": "Nein. In Österreich bezeichnet „Gutschrift\" ein Dokument, mit dem der Kunde selbst abrechnet. Ein Korrekturdokument des Verkäufers heißt Rechnungskorrektur oder – bei vollständiger Stornierung – Stornorechnung."
+        }
+      ]
+    },
+    {
+      "question": "Was ändert sich am 1. Juli 2026 bei den Steuersätzen?",
+      "answer": [
+        {
+          "text": "Ein neuer ermäßigter Satz von 4,9 % gilt ab diesem Datum für bestimmte Grundnahrungsmittel wie Milch, Eier, Brot, Mehl und Reis (§ 10 Abs. 1a UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Muss ich E-Rechnungen ausstellen oder empfangen können?",
+      "answer": [
+        {
+          "text": "Für private Geschäftskunden nicht verpflichtend; nur wer an Bundesbehörden liefert, muss strukturierte E-Rechnungen (ebInterface oder Peppol-UBL) einreichen."
+        }
+      ]
+    },
+    {
+      "question": "Gilt in ganz Österreich derselbe Steuersatz?",
+      "answer": [
+        {
+          "text": "Fast überall ja. Nur Unternehmer mit Sitz oder Betriebsstätte in Jungholz oder im Kleinwalsertal (Mittelberg) verrechnen 19 % statt 20 % als Normalsteuersatz (§ 10 Abs. 4 UStG 1994)."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Wie Fakturcho hilft",
+    "body": [
+      {
+        "text": "Fakturcho vergibt für österreichische Aussteller fortlaufende Rechnungsnummern, druckt Leistungsdatum, Firmenbuchnummer, Firmenbuchgericht, Sitz und UID-Nummer automatisch im Rechnungsfuß und trägt bei einem Kleinunternehmer-Profil selbstständig den Hinweis auf § 6 Abs. 1 Z 27 UStG 1994 ein. Bei einer inländischen B2B-Rechnung über 10.000 Euro brutto prüft Fakturcho, ob die UID-Nummer des Empfängers hinterlegt ist, bevor die Rechnung ausgestellt werden kann. Für Unternehmer in Jungholz oder Mittelberg lässt sich der Sondersatz von 19 % im Ausstellerprofil aktivieren. Reverse-Charge- und innergemeinschaftliche Hinweise wählt Fakturcho automatisch anhand des Ziellandes und der gewählten Steuerbefreiung. Stand: 29.09.2026. Dies sind allgemeine Informationen, keine Steuerberatung – für den Einzelfall wende dich an deinen Steuerberater oder dein Finanzamt."
+      }
+    ]
+  }
+}

@@ -77,6 +77,7 @@ const document: DocumentDto = {
     mol: null,
     sdiRecipientCode: null,
     pec: null,
+    clientType: null,
   },
   lineItems: [],
   discounts: [],

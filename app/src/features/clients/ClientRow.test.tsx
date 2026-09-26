@@ -24,6 +24,7 @@ const client = {
   peppolScheme: null,
   sdiRecipientCode: null,
   pec: null,
+  clientType: null,
 };
 
 afterEach(cleanup);

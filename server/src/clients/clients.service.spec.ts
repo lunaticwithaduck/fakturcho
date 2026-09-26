@@ -69,4 +69,22 @@ describe('ClientsService', () => {
     expect(updated.companyName).toBe('Self Renamed');
     expect(updated.eik).toBe('444555666');
   });
+
+  it('leaves clientType null (unmeasured) when not given', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const client = await service.create(account.id, { companyName: 'No Type' });
+    expect(client.clientType).toBeNull();
+  });
+
+  it('stores and updates clientType', async () => {
+    const account = await db.prisma.account.create({ data: {} });
+    const created = await service.create(account.id, {
+      companyName: 'Business Client',
+      clientType: 'business',
+    });
+    expect(created.clientType).toBe('business');
+
+    const updated = await service.update(account.id, created.id, { clientType: 'consumer' });
+    expect(updated.clientType).toBe('consumer');
+  });
 });

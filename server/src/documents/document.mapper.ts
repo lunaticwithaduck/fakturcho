@@ -6,6 +6,7 @@ import type {
   LineItemDto,
   OperationNature,
   OriginalDocumentReferenceDto,
+  RecipientSnapshotDto,
 } from '@fakturcho/shared-types';
 import type {
   Discount as PrismaDiscount,
@@ -111,6 +112,7 @@ export function toDocumentDto(
       mol: document.recipientMol,
       sdiRecipientCode: document.recipientSdiRecipientCode,
       pec: document.recipientPec,
+      clientType: document.recipientClientType as RecipientSnapshotDto['clientType'],
     },
     lineItems: document.lineItems.map(toLineItemDto).sort((a, b) => a.sortOrder - b.sortOrder),
     discounts: document.discounts.map(toDiscountDto).sort((a, b) => a.sortOrder - b.sortOrder),

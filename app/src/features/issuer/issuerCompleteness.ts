@@ -45,5 +45,12 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
     if (isBlank(profile.identifiers.registergericht)) missing.push('identifier:registergericht');
     if (isBlank(profile.identifiers.sitz)) missing.push('identifier:sitz');
   }
+  // UGB § 14 Abs. 1: Firmenbuchgericht and Sitz become required once a
+  // Firmenbuchnummer (eik) is entered.
+  if (profile.country === 'AT' && !isBlank(profile.eik)) {
+    if (isBlank(profile.identifiers.firmenbuchgericht))
+      missing.push('identifier:firmenbuchgericht');
+    if (isBlank(profile.identifiers.sitz)) missing.push('identifier:sitz');
+  }
   return missing;
 }

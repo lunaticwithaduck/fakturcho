@@ -81,5 +81,11 @@ export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boole
   if (profile.country === 'DE' && (profile.eik ?? '').trim() !== '') {
     required.push(profile.identifiers.registergericht ?? null, profile.identifiers.sitz ?? null);
   }
+  // UGB § 14 Abs. 1: an AT business entered in the Firmenbuch must print the
+  // Firmenbuchgericht and Sitz once a Firmenbuchnummer (stored as eik) is
+  // entered — optional only for an unregistered sole trader.
+  if (profile.country === 'AT' && (profile.eik ?? '').trim() !== '') {
+    required.push(profile.identifiers.firmenbuchgericht ?? null, profile.identifiers.sitz ?? null);
+  }
   return required.every((value) => value !== null && value.trim() !== '');
 }

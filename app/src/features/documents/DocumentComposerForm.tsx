@@ -43,7 +43,7 @@ export function DocumentComposerForm({
 }: DocumentComposerFormProps) {
   const t = useTranslations('documents');
   const locale = useLocale() as Locale;
-  const countryConfig = getCountryConfig(issuerProfile.country);
+  const countryConfig = getCountryConfig(issuerProfile.country, issuerProfile.identifiers);
   const controller = useComposerState(
     existing,
     countryConfig.timeZone,

@@ -83,3 +83,41 @@ describe('isIssuerProfileComplete — DE (§ 37a HGB, § 35a GmbHG)', () => {
     expect(isIssuerProfileComplete(profile)).toBe(false);
   });
 });
+
+describe('isIssuerProfileComplete — AT (UGB § 14 Abs. 1)', () => {
+  const atBase: IssuerProfileDto = {
+    ...BASE,
+    country: 'AT',
+    street: 'Mariahilfer Straße 1',
+    postcode: '1060',
+    city: 'Wien',
+    identifiers: {},
+  };
+
+  it('is complete for a sole trader with no Firmenbuchnummer at all', () => {
+    expect(isIssuerProfileComplete(atBase)).toBe(true);
+  });
+
+  it('is incomplete once a Firmenbuchnummer is entered without Firmenbuchgericht/Sitz', () => {
+    const profile: IssuerProfileDto = { ...atBase, eik: 'FN 123456a' };
+    expect(isIssuerProfileComplete(profile)).toBe(false);
+  });
+
+  it('is complete once Firmenbuchgericht and Sitz are also set', () => {
+    const profile: IssuerProfileDto = {
+      ...atBase,
+      eik: 'FN 123456a',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    };
+    expect(isIssuerProfileComplete(profile)).toBe(true);
+  });
+
+  it('is still incomplete with only Firmenbuchgericht and not Sitz', () => {
+    const profile: IssuerProfileDto = {
+      ...atBase,
+      eik: 'FN 123456a',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien' },
+    };
+    expect(isIssuerProfileComplete(profile)).toBe(false);
+  });
+});

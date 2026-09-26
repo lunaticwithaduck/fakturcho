@@ -1,5 +1,6 @@
 import type { Document, LineItem } from '@prisma/client';
 import type { ClassicLocaleContext } from '../locale';
+import { atMentions } from './at';
 import { deMentions } from './de';
 import { frMentions } from './fr';
 import { genericMentions } from './generic';
@@ -20,6 +21,7 @@ export interface MentionsInput {
 export type MentionsBuilder = (input: MentionsInput) => string[];
 
 const BY_COUNTRY: Record<string, MentionsBuilder> = {
+  AT: atMentions,
   DE: deMentions,
   FR: frMentions,
   IT: itMentions,

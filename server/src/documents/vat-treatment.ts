@@ -16,6 +16,9 @@ export interface VatTreatmentInput {
   vatRegistered: boolean;
   requestedGround: string | null;
   issuerCountry: string;
+  // AT only (§ 10 Abs. 4 UStG 1994 Jungholz/Mittelberg): swaps the standard
+  // rate 20% -> 19% for this issuer. Every other country ignores it.
+  issuerIdentifiers?: Record<string, string> | null;
 }
 
 export interface VatTreatment {
@@ -33,7 +36,7 @@ export interface VatTreatment {
 const VAT_ESTIMATE_DOCUMENT_TYPES: readonly DocumentType[] = ['proforma', 'quote'];
 
 export function resolveVatTreatment(input: VatTreatmentInput): VatTreatment {
-  const country = getCountryConfig(input.issuerCountry);
+  const country = getCountryConfig(input.issuerCountry, input.issuerIdentifiers);
   const isTaxDocument = TAX_DOCUMENT_TYPES[input.documentType];
   const isVatEstimate = VAT_ESTIMATE_DOCUMENT_TYPES.includes(input.documentType);
   if (!isTaxDocument && !isVatEstimate) {

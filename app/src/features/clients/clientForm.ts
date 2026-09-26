@@ -2,6 +2,7 @@ import { useCreateClientMutation, useUpdateClientMutation } from '@app/api';
 import { getApiErrorMessage } from '@app/features/shared/apiError';
 import {
   type ClientDto,
+  type ClientType,
   type CreateClientRequest,
   type DocumentLanguage,
   getCountryConfig,
@@ -25,6 +26,8 @@ export interface ClientFormValues {
   documentLanguage: DocumentLanguage | null;
   peppolEndpointId: string;
   peppolScheme: string;
+  // '' means unmeasured (never guessed): the client record stays null.
+  clientType: ClientType | '';
 }
 
 export function usesStructuredClientAddress(country: string): boolean {
@@ -47,6 +50,7 @@ export function clientToFormValues(client: ClientDto | null): ClientFormValues {
     documentLanguage: client?.documentLanguage ?? null,
     peppolEndpointId: client?.peppolEndpointId ?? '',
     peppolScheme: client?.peppolScheme ?? '',
+    clientType: client?.clientType ?? '',
   };
 }
 
@@ -76,6 +80,7 @@ function toRequestBody(values: ClientFormValues): CreateClientRequest {
     documentLanguage: values.documentLanguage,
     peppolEndpointId: values.peppolEndpointId.trim() || null,
     peppolScheme: values.peppolScheme.trim() || null,
+    clientType: values.clientType || null,
   };
 }
 

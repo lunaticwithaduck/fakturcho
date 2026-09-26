@@ -158,6 +158,29 @@ describe('DocumentIssuanceService', () => {
     expect(issued.recipient.postcode).toBe('10117');
   });
 
+  it('issuance snapshots the recipient clientType, and leaves it null when unmeasured', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId);
+    const businessClient = await createTestClient(prisma, accountId, { clientType: 'business' });
+    const unknownClient = await createTestClient(prisma, accountId, {});
+
+    const businessDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: businessClient.id }),
+    );
+    const issuedBusiness = await issuanceService.issue(accountId, businessDraft.id, {});
+    expect(issuedBusiness.recipient.clientType).toBe('business');
+
+    const unknownDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({ clientId: unknownClient.id }),
+    );
+    const issuedUnknown = await issuanceService.issue(accountId, unknownDraft.id, {});
+    expect(issuedUnknown.recipient.clientType).toBeNull();
+  });
+
   it('issuance persists every draft field: document metadata, per-line VAT fields, and both party snapshots', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {
@@ -526,6 +549,167 @@ describe('DocumentIssuanceService', () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId);
     const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
+
+  it('an Austrian invoice over €10,000 to a business client cannot be issued without the recipient UID', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, { country: 'AT' });
+    await prisma.client.update({ where: { id: client.id }, data: { eik: 'FN 999999b' } });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [{ name: 'Beratung', quantity: '1', unitPrice: 900_000, sortOrder: 0 }],
+      }),
+    );
+
+    await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+      code: 'RECIPIENT_VAT_NUMBER_REQUIRED',
+    });
+
+    const stillDraft = await documentsService.get(accountId, draft.id);
+    expect(stillDraft.status).toBe('draft');
+  });
+
+  it('an Austrian invoice over €10,000 issues once the recipient UID is set', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      vatNumber: 'ATU87654321',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [{ name: 'Beratung', quantity: '1', unitPrice: 900_000, sortOrder: 0 }],
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
+
+  it('an Austrian invoice over €10,000 issues without a UID when the recipient is not on file as a business', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, { country: 'AT' });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [{ name: 'Beratung', quantity: '1', unitPrice: 900_000, sortOrder: 0 }],
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
+
+  it('an Austrian invoice at or under €10,000 issues without a recipient UID', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, { country: 'AT' });
+    await prisma.client.update({ where: { id: client.id }, data: { eik: 'FN 999999b' } });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [{ name: 'Beratung', quantity: '1', unitPrice: 800_000, sortOrder: 0 }],
+      }),
+    );
+
+    const issued = await issuanceService.issue(accountId, draft.id, {});
+    expect(issued.status).toBe('sent');
+  });
+
+  it('an Austrian invoice over €10,000 to a clientType: business recipient with no eik still cannot be issued without the UID', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      clientType: 'business',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [{ name: 'Beratung', quantity: '1', unitPrice: 900_000, sortOrder: 0 }],
+      }),
+    );
+
+    await expect(issuanceService.issue(accountId, draft.id, {})).rejects.toMatchObject({
+      code: 'RECIPIENT_VAT_NUMBER_REQUIRED',
+    });
+  });
+
+  it('an Austrian invoice over €10,000 to a clientType: consumer recipient issues without a UID even with an eik on file', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, {
+      country: 'AT',
+      vatRegistered: true,
+      vatNumber: 'ATU12345678',
+      street: 'Mariahilfer Straße 1',
+      postcode: '1060',
+      identifiers: { firmenbuchgericht: 'Handelsgericht Wien', sitz: 'Wien' },
+    });
+    const client = await createTestClient(prisma, accountId, {
+      country: 'AT',
+      eik: 'FN 999999b',
+      clientType: 'consumer',
+    });
+    const draft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        clientId: client.id,
+        lineItems: [{ name: 'Beratung', quantity: '1', unitPrice: 900_000, sortOrder: 0 }],
+      }),
+    );
 
     const issued = await issuanceService.issue(accountId, draft.id, {});
     expect(issued.status).toBe('sent');

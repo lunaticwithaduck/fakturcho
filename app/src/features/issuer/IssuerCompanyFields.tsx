@@ -1,5 +1,10 @@
 import { Checkbox, Input, Select, SelectItem } from '@design/components';
-import { companyIdLabelFor, getCountryConfig, type Locale } from '@fakturcho/shared-types';
+import {
+  companyIdLabelFor,
+  getCountryConfig,
+  isAtJungholzMittelbergPostcode,
+  type Locale,
+} from '@fakturcho/shared-types';
 import { useLocale, useTranslations } from 'next-intl';
 import { ISSUER_COUNTRY_CODES } from './issuerCountries';
 import type { IssuerProfileFieldErrors, IssuerProfileFormValues } from './useIssuerProfileForm';
@@ -26,12 +31,29 @@ export function IssuerCompanyFields({
   const invalidFormat = t('companyFields.invalidFormat');
   // § 37a HGB, § 35a GmbHG: Registergericht and Sitz become required once a
   // Handelsregisternummer (eik) is entered — kept in sync with
-  // issuerCompleteness.ts and isIssuerProfileComplete.
+  // issuerCompleteness.ts and isIssuerProfileComplete. UGB § 14 Abs. 1: same
+  // rule for AT's Firmenbuchgericht/Sitz once a Firmenbuchnummer is entered.
   const isIdentifierRequired = (field: { key: string; required: boolean }) =>
     field.required ||
     (values.country === 'DE' &&
       (field.key === 'registergericht' || field.key === 'sitz') &&
+      values.eik.trim() !== '') ||
+    (values.country === 'AT' &&
+      (field.key === 'firmenbuchgericht' || field.key === 'sitz') &&
       values.eik.trim() !== '');
+  // § 10 Abs. 4 UStG 1994: pre-tick 19% instead of 20% once the issuer's own
+  // postcode is Jungholz/Mittelberg, but only until the issuer says otherwise
+  // — an explicit 'true'/'false' always wins over the postcode-based guess.
+  const isFlagChecked = (field: { key: string }): boolean => {
+    const stored = values.identifiers[field.key];
+    if (stored === 'true') return true;
+    if (stored === 'false') return false;
+    return (
+      values.country === 'AT' &&
+      field.key === 'jungholzMittelbergRate' &&
+      isAtJungholzMittelbergPostcode(values.postcode)
+    );
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -65,17 +87,23 @@ export function IssuerCompanyFields({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {identifiers.map((field) =>
             field.kind === 'flag' ? (
-              <Checkbox
-                key={field.key}
-                label={field.label}
-                checked={values.identifiers[field.key] === 'true'}
-                onCheckedChange={(checked) =>
-                  onChange('identifiers', {
-                    ...values.identifiers,
-                    [field.key]: checked === true ? 'true' : 'false',
-                  })
-                }
-              />
+              <div key={field.key} className="flex flex-col gap-1.5">
+                <Checkbox
+                  label={field.label}
+                  checked={isFlagChecked(field)}
+                  onCheckedChange={(checked) =>
+                    onChange('identifiers', {
+                      ...values.identifiers,
+                      [field.key]: checked === true ? 'true' : 'false',
+                    })
+                  }
+                />
+                {values.country === 'AT' && field.key === 'jungholzMittelbergRate' ? (
+                  <p className="text-sm text-text-muted">
+                    {t('companyFields.atJungholzMittelbergHint')}
+                  </p>
+                ) : null}
+              </div>
             ) : (
               <Input
                 key={field.key}

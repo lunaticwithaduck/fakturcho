@@ -3,7 +3,8 @@ import {
   guideIndexLocales,
   latestGuideReview,
 } from '@app/features/guides/indexAlternates';
-import { allGuides } from '@app/features/guides/registry';
+import { allGuides, guideHref } from '@app/features/guides/registry';
+import type { GuideContent } from '@app/features/guides/types';
 import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
 import { PUBLISHED_LOCALES } from '@shared/types';
 import type { MetadataRoute } from 'next';
@@ -51,13 +52,39 @@ function legalEntries(basePath: string): MetadataRoute.Sitemap {
   ];
 }
 
+function guideUrl(guide: GuideContent): string {
+  return `${BASE_URL}${guideHref(guide)}`;
+}
+
+// Guides sharing a country (e.g. the AT guide, published in every app
+// language, unlike the original one-guide-per-locale country pages) are
+// language versions of the same page and get hreflang alternates between
+// each other; a country with only one guide is unaffected — no alternates.
 function guideEntries(): MetadataRoute.Sitemap {
-  return allGuides().map((guide) => ({
-    url: `${BASE_URL}${toLocalePath(`/guide/${guide.slug}`, guide.locale)}`,
-    lastModified: guide.lastReviewed,
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
+  const guides = allGuides();
+  const byCountry = new Map<string, GuideContent[]>();
+  for (const guide of guides) {
+    byCountry.set(guide.country, [...(byCountry.get(guide.country) ?? []), guide]);
+  }
+  return guides.map((guide) => {
+    const siblings = byCountry.get(guide.country) ?? [guide];
+    const alternates =
+      siblings.length > 1
+        ? {
+            languages: {
+              ...Object.fromEntries(siblings.map((sibling) => [sibling.locale, guideUrl(sibling)])),
+              'x-default': guideUrl(siblings[0] ?? guide),
+            },
+          }
+        : undefined;
+    return {
+      url: guideUrl(guide),
+      lastModified: guide.lastReviewed,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+      ...(alternates ? { alternates } : {}),
+    };
+  });
 }
 
 function guideIndexEntries(): MetadataRoute.Sitemap {

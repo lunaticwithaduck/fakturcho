@@ -81,6 +81,7 @@ const RECIPIENT_SNAPSHOT: RecipientSnapshotDto = {
   mol: null,
   sdiRecipientCode: null,
   pec: null,
+  clientType: null,
 };
 
 const BASE_DOCUMENT: DocumentDto = {
@@ -177,6 +178,7 @@ const CLIENTS: ClientDto[] = [
     peppolScheme: null,
     sdiRecipientCode: null,
     pec: null,
+    clientType: null,
   },
 ];
 

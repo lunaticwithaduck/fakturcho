@@ -75,7 +75,7 @@ export class DocumentIssuanceService {
         : existing.dueAt;
 
     const country = issuerProfile?.country ?? null;
-    assertIssuable(existing, documentType, country);
+    assertIssuable(existing, documentType, country, client);
     const numberPrefix = issuedNumberPrefix(existing);
 
     const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';

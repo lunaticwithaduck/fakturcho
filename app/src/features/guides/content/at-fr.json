@@ -1,0 +1,375 @@
+{
+  "country": "AT",
+  "locale": "fr",
+  "slug": "facture-autriche-mentions-obligatoires",
+  "title": "Facture Autriche : mentions obligatoires, taux de TVA et régime des petites entreprises 2026 | Fakturcho",
+  "description": "Mentions obligatoires selon le § 11 UStG 1994, taux de TVA 2026 (20/13/10/4,9 %), seuil du régime des petites entreprises et mentions du Firmenbuch pour les factures émises depuis l'Autriche – expliqué simplement.",
+  "h1": "Établir une facture en Autriche : mentions obligatoires, taux de TVA et régime des petites entreprises",
+  "answer": "Une facture autrichienne doit comporter les mentions obligatoires du § 11 Abs. 1 Z 3 UStG 1994, dont un numéro chronologique continu et, au-delà d'un montant brut de 10 000 euros facturé à une autre entreprise, l'UID-Nr. du destinataire. Le taux normal est de 20 %, avec des taux réduits de 13 % et 10 %, et depuis le 1er juillet 2026 un nouveau taux de 4,9 % pour certains produits alimentaires de base. En dessous de 55 000 euros de chiffre d'affaires annuel, une petite entreprise (Kleinunternehmer) facture sans TVA.",
+  "lastReviewed": "2026-09-29",
+  "sections": [
+    {
+      "heading": "Qui doit émettre une facture en Autriche, et dans quel délai ?",
+      "id": "obligation-de-facturer-et-delais",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Selon le § 11 Abs. 1 UStG 1994, une facture doit être émise pour toute livraison ou prestation à une autre entreprise pour les besoins de son activité ou à une personne morale, ainsi que pour les travaux immobiliers imposables et les prestations liées à un immeuble fournies à un particulier. Le délai est de "
+            },
+            { "text": "six mois", "bold": true },
+            { "text": " après la réalisation de la prestation." }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Deux cas ont un délai plus court : pour une prestation de services à une entreprise de l'UE dont la taxe est due par le preneur (Art. 196 MwStSystRL), la facture doit être émise au plus tard le 15 du mois suivant la prestation — de même que pour une livraison intracommunautaire (Art. 11 Abs. 1 BMR)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Mentions obligatoires sur la facture (§ 11 Abs. 1 Z 3 UStG 1994)",
+      "id": "mentions-obligatoires-11-ustg-1994",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Une facture complète de plus de 400 euros (voir la facture de faible montant ci-dessous) doit comporter les mentions suivantes :"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "head": ["lit.", "Mention obligatoire"],
+          "rows": [
+            ["a", "Nom et adresse de l'entreprise qui livre ou effectue la prestation"],
+            [
+              "b",
+              "Nom et adresse du preneur ; au-delà d'un montant brut de 10 000 euros facturé à une autre entreprise, également son UID-Nr."
+            ],
+            [
+              "c",
+              "Quantité et désignation commerciale usuelle, ou nature et étendue de la prestation"
+            ],
+            [
+              "d",
+              "Date de la livraison/prestation ou période de prestation (Leistungsdatum — toujours indiquée chez Fakturcho)"
+            ],
+            [
+              "e",
+              "Contrepartie et taux de TVA applicable, ou mention de l'exonération le cas échéant"
+            ],
+            ["f", "Le montant de TVA correspondant à la contrepartie"],
+            ["g", "La date d'émission"],
+            ["h", "Un numéro de facture chronologique, attribué une seule fois"],
+            [
+              "i",
+              "L'UID-Nr. de l'entreprise qui effectue la prestation, sauf pour les petites entreprises (Kleinunternehmer) ou les opérations purement exonérées sans droit à déduction"
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "En cas de plusieurs taux de TVA, la contrepartie et le montant de TVA doivent être indiqués séparément par taux (§ 11 Abs. 5 UStG 1994). Si la facture est libellée dans une devise étrangère, le montant de TVA doit en plus être indiqué en euros (§ 20 Abs. 6 UStG 1994) — Fakturcho imprime pour cela une ligne dédiée avec le taux de la BCE."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Facture de faible montant : mentions simplifiées jusqu'à 400 euros",
+      "id": "facture-de-faible-montant",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Si le montant total ne dépasse pas 400 euros brut, ou si la facture est émise par une petite entreprise (Kleinunternehmer), le § 11 Abs. 6 UStG 1994 se contente de la date d'émission, du nom et de l'adresse de l'émetteur, de la quantité et de la désignation de la prestation, de la date de prestation (Leistungsdatum), du montant brut avec le montant de TVA en une seule somme, et du taux de TVA. Le nom/l'adresse du destinataire, le numéro de facture et l'UID-Nr. ne sont alors pas nécessaires."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Sont exclus les cas transfrontaliers comme les livraisons intracommunautaires, les prestations en autoliquidation vers l'UE et les opérations triangulaires — la facture complète y est toujours requise. Fakturcho imprime de toute façon toujours la facture complète ; la simplification reste purement facultative."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Taux de TVA en Autriche en 2026",
+      "id": "taux-de-tva-en-autriche-2026",
+      "blocks": [
+        {
+          "type": "table",
+          "head": ["Taux", "Pour quoi"],
+          "rows": [
+            ["20 %", "Taux normal (§ 10 Abs. 1 UStG 1994)"],
+            [
+              "13 %",
+              "p. ex. art, culture, manifestations sportives, vols intérieurs (§ 10 Abs. 3, Anlage 2)"
+            ],
+            [
+              "10 %",
+              "p. ex. denrées alimentaires, livres, restauration, location de logement, transport de personnes (§ 10 Abs. 2, Anlage 1)"
+            ],
+            [
+              "4,9 %",
+              "Nouveau depuis le 1er juillet 2026 : lait, œufs, certains fruits/légumes, riz, farine, pain et autres produits alimentaires de base selon l'Anlage 3 (§ 10 Abs. 1a UStG 1994)"
+            ],
+            ["0 %", "Opérations exonérées, en autoliquidation et intracommunautaires"]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "La location de logement est imposable à 10 %, elle n'est pas exonérée (le § 6 Abs. 1 Z 16 UStG 1994 l'exclut expressément de l'exonération). L'ancien taux de 0 % pour les modules photovoltaïques a expiré et ne s'applique plus en 2026."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Cas particulier de Jungholz/Mittelberg : les entreprises ayant leur siège ou un établissement stable dans ces deux communes (l'une au Tyrol, l'autre au Vorarlberg) appliquent un taux normal de 19 % au lieu de 20 % (§ 10 Abs. 4 UStG 1994) — les taux réduits restent inchangés. Fakturcho propose pour cela, dans le profil de l'émetteur, une case à cocher dédiée, présélectionnée selon le code postal (6691, 6991, 6992, 6993)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Régime des petites entreprises (Kleinunternehmerregelung) : jusqu'à quand pas de TVA ?",
+      "id": "regime-des-petites-entreprises",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            { "text": "Depuis le 1er janvier 2025, l'exonération des petites entreprises du § 6 Abs. 1 Z 27 UStG 1994 s'applique jusqu'à un " },
+            { "text": "chiffre d'affaires brut de 55 000 euros", "bold": true },
+            {
+              "text": " sur l'année civile précédente et sur l'année en cours. En cas de dépassement du seuil de 10 % au maximum, l'exonération reste acquise jusqu'à la fin de l'année ; en cas de dépassement plus important, elle cesse immédiatement dès l'opération concernée."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Une petite entreprise (Kleinunternehmer) émet ses factures sans TVA distincte et n'a pas besoin d'UID-Nr. pour cela. Fakturcho ajoute automatiquement la mention « Umsatzsteuerfrei aufgrund der Kleinunternehmerregelung gemäß § 6 Abs. 1 Z 27 UStG 1994. » à la place d'une ligne de TVA."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Important : si une petite entreprise vend des services à une entreprise d'un autre État membre de l'UE, le lieu de la prestation se situe à l'étranger (§ 3a Abs. 6 UStG 1994) — une UID-Nr. devient alors nécessaire et les règles de l'autoliquidation s'appliquent."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Autoliquidation (Reverse Charge) et opérations intracommunautaires",
+      "id": "autoliquidation-et-operations-intracommunautaires",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Lorsque la taxe est due par le preneur (§ 11 Abs. 1a UStG 1994), aucune TVA ne doit être indiquée ; l'UID-Nr. du destinataire et une mention du transfert de la dette fiscale doivent en revanche figurer sur la facture. Cela concerne surtout :"
+            }
+          ]
+        },
+        {
+          "type": "ul",
+          "items": [
+            [
+              {
+                "text": "Prestations de services B2B intra-UE : lieu de la prestation chez le preneur (§ 3a Abs. 6 UStG 1994), taxe due selon l'Art. 196 MwStSystRL — facture au plus tard le 15 du mois suivant, avec déclaration dans l'état récapitulatif (Zusammenfassende Meldung, ZM)."
+              }
+            ],
+            [
+              {
+                "text": "Livraisons intracommunautaires : exonérées selon l'Art. 6 Abs. 1 iVm Art. 7 UStG 1994, les deux UID-Nr. doivent figurer sur la facture."
+              }
+            ],
+            [
+              {
+                "text": "Autoliquidation nationale : notamment les travaux de construction (§ 19 Abs. 1a), les cessions de garantie (§ 19 Abs. 1b), certains produits électroniques/métaux (§ 19 Abs. 1d) et les téléphones mobiles/quotas d'émission (§ 19 Abs. 1e)."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho choisit automatiquement la formule adaptée : la mention Art. 196 pour les prestations de services transfrontalières vers l'UE, la mention choisie ou une formule générale du § 19 UStG pour les cas nationaux, et la mention Art. 6/7 BMR pour les livraisons intracommunautaires."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Raison sociale, Firmenbuch et forme juridique sur les documents commerciaux (UGB § 14)",
+      "id": "firmenbuch-et-forme-juridique",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Toute entreprise inscrite au Firmenbuch — de l'entreprise individuelle (e.U.) aux sociétés OG et KG jusqu'à la GmbH — doit indiquer, sur ses documents commerciaux adressés à un destinataire déterminé, sa raison sociale, sa forme juridique (Rechtsform), son siège (Sitz), son numéro d'immatriculation (Firmenbuchnummer) ainsi que le tribunal d'immatriculation (Firmenbuchgericht), conformément au § 14 Abs. 1 UGB. Un entrepreneur individuel non inscrit (par exemple sous les seuils du § 189 UGB) n'y est pas tenu — le nom et l'adresse selon le § 11 UStG suffisent alors."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Fakturcho exige automatiquement le Firmenbuchgericht et le Sitz dès qu'une Firmenbuchnummer est renseignée dans le profil de l'émetteur, et imprime les deux avec l'UID-Nr. dans le pied de la facture."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Note de correction, Gutschrift et Stornorechnung",
+      "id": "note-de-correction-gutschrift-et-stornorechnung",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            { "text": "En Autriche, « Gutschrift » a un sens juridique précis : ce terme désigne un document par lequel le " },
+            { "text": "destinataire", "bold": true },
+            {
+              "text": " d'une prestation facture lui-même celle-ci (§ 11 Abs. 7 UStG 1994), et non une correction ultérieure effectuée par l'entreprise qui a fourni la prestation. Un document de correction émis par le vendeur lui-même ne devrait donc jamais s'appeler « Gutschrift » — Fakturcho l'appelle Rechnungskorrektur, ou Stornorechnung en cas d'annulation complète, et Nachtragsrechnung pour un complément de facturation ultérieur (et non Belastungsanzeige, terme utilisé en Allemagne)."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Toute correction fait référence au numéro et à la date de la facture d'origine et indique le motif de la correction (§ 11 Abs. 12 UStG 1994)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Facture électronique : qui est concerné en Autriche ?",
+      "id": "facture-electronique-en-autriche",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pour les factures B2B et B2C, il n'existe en 2026 aucune obligation de facturation électronique en Autriche ; un PDF vaut facture électronique dès lors que le destinataire l'accepte (§ 11 Abs. 2 UStG 1994). Pour les pouvoirs adjudicateurs fédéraux (B2G) en revanche, la facture électronique structurée est obligatoire depuis 2014 déjà, via USP.gv.at ou PEPPOL, aux formats ebInterface ou Peppol-UBL."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "À partir du 1er juillet 2030, la facture électronique structurée deviendra obligatoire pour les opérations B2B intracommunautaires en application de la directive UE 2025/516 (ViDA) ; aucune date nationale antérieure n'a été annoncée à ce jour."
+            }
+          ]
+        },
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Pour les factures autrichiennes, Fakturcho génère sur demande un fichier XML UBL générique ; Fakturcho ne propose actuellement pas de format dédié pour le dépôt auprès des administrations fédérales (ebInterface/PEPPOL)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "heading": "Conservation des factures et obligation de caisse enregistreuse",
+      "id": "conservation-et-obligation-de-caisse-enregistreuse",
+      "blocks": [
+        {
+          "type": "p",
+          "inline": [
+            {
+              "text": "Les factures doivent être conservées pendant sept ans (§ 11 Abs. 2 UStG 1994, § 132 BAO). L'obligation de caisse enregistreuse (§ 131b BAO) ne concerne que les opérations en espèces — ce qui inclut les paiements par carte bancaire ou de crédit sur place, mais pas les virements. Fakturcho n'est pas une caisse enregistreuse et ne remplace donc pas une caisse conforme à la RKSV pour les paiements en espèces."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faqHeading": "Foire aux questions",
+  "faq": [
+    {
+      "question": "Dois-je attribuer un numéro de facture en tant que petite entreprise (Kleinunternehmer) ?",
+      "answer": [
+        {
+          "text": "Oui. Le § 11 Abs. 1 Z 3 lit. h UStG 1994 exige un numéro chronologique, que la TVA soit indiquée ou non."
+        }
+      ]
+    },
+    {
+      "question": "Ai-je toujours besoin de l'UID-Nr. de mon client ?",
+      "answer": [
+        {
+          "text": "Non, uniquement pour les opérations en autoliquidation, les livraisons intracommunautaires et les opérations triangulaires — ainsi que pour une facture B2B nationale dont le montant brut dépasse 10 000 euros (§ 11 Abs. 1 Z 3 lit. b UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Une Stornorechnung est-elle la même chose qu'une Gutschrift ?",
+      "answer": [
+        {
+          "text": "Non. En Autriche, « Gutschrift » désigne un document par lequel le client facture lui-même la prestation. Un document de correction émis par le vendeur s'appelle Rechnungskorrektur, ou Stornorechnung en cas d'annulation complète."
+        }
+      ]
+    },
+    {
+      "question": "Qu'est-ce qui change le 1er juillet 2026 pour les taux de TVA ?",
+      "answer": [
+        {
+          "text": "Un nouveau taux réduit de 4,9 % s'applique à partir de cette date à certains produits alimentaires de base comme le lait, les œufs, le pain, la farine et le riz (§ 10 Abs. 1a UStG 1994)."
+        }
+      ]
+    },
+    {
+      "question": "Dois-je pouvoir émettre ou recevoir des factures électroniques ?",
+      "answer": [
+        {
+          "text": "Ce n'est pas obligatoire pour les clients professionnels privés ; seules les entreprises qui facturent des administrations fédérales doivent déposer des factures électroniques structurées (ebInterface ou Peppol-UBL)."
+        }
+      ]
+    },
+    {
+      "question": "Le même taux de TVA s'applique-t-il partout en Autriche ?",
+      "answer": [
+        {
+          "text": "Presque partout, oui. Seules les entreprises ayant leur siège ou un établissement stable à Jungholz ou dans le Kleinwalsertal (Mittelberg) appliquent un taux normal de 19 % au lieu de 20 % (§ 10 Abs. 4 UStG 1994)."
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Comment Fakturcho vous aide",
+    "body": [
+      {
+        "text": "Pour les émetteurs autrichiens, Fakturcho attribue des numéros de facture chronologiques, imprime automatiquement le Leistungsdatum, la Firmenbuchnummer, le Firmenbuchgericht, le Sitz et l'UID-Nr. dans le pied de la facture, et ajoute lui-même la mention du § 6 Abs. 1 Z 27 UStG 1994 pour un profil de petite entreprise (Kleinunternehmer). Pour une facture B2B nationale de plus de 10 000 euros bruts, Fakturcho vérifie que l'UID-Nr. du destinataire est renseignée avant de permettre l'émission de la facture. Pour les entreprises situées à Jungholz ou à Mittelberg, le taux particulier de 19 % peut être activé dans le profil de l'émetteur. Fakturcho choisit aussi automatiquement les mentions d'autoliquidation et intracommunautaires selon le pays de destination et l'exonération choisie. *Dernière mise à jour : 29.09.2026. Ces informations sont données à titre général et ne constituent pas un conseil fiscal ; pour votre situation, consultez votre conseiller fiscal ou l'administration compétente.*"
+      }
+    ]
+  }
+}

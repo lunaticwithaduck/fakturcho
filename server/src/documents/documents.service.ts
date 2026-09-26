@@ -9,6 +9,7 @@ import { Injectable } from '@nestjs/common';
 import { DocumentStatus as PrismaDocumentStatus } from '@prisma/client';
 import { DomainError } from '../common/domain-error';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
+import { readIdentifiers } from '../issuer/identifiers';
 import { computeLineTotal } from '../money/totals';
 import { hasValidVatNumberFormat, resolveLineVatCategory } from '../vat-eu/reverse-charge';
 import { toDocumentDto } from './document.mapper';
@@ -56,6 +57,7 @@ export class DocumentsService {
 
     const issuerCountry = issuerProfile?.country ?? 'BG';
     const issuerVatRegistered = issuerProfile?.vatRegistered ?? false;
+    const issuerIdentifiers = readIdentifiers(issuerProfile?.identifiers);
     const clientHasValidVatNumber = client
       ? hasValidVatNumberFormat(client.vatNumber, client.country)
       : false;
@@ -65,6 +67,7 @@ export class DocumentsService {
       vatRegistered: issuerVatRegistered,
       requestedGround: request.vatExemptionGround ?? null,
       issuerCountry,
+      issuerIdentifiers,
     });
 
     const resolvedLineItems = request.lineItems.map((line) => {
@@ -87,7 +90,7 @@ export class DocumentsService {
           ? line.vatRateBp
           : vatCategory === 'AE' || vatCategory === 'O' || vatCategory === 'E'
             ? 0
-            : getCountryConfig(issuerCountry).defaultVatRateBp;
+            : getCountryConfig(issuerCountry, issuerIdentifiers).defaultVatRateBp;
 
       return { ...line, vatCategory, vatRateBp };
     });

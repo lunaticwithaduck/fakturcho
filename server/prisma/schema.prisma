@@ -188,6 +188,10 @@ model Client {
   peppolScheme     String?
   sdiRecipientCode String?
   pec              String?
+  // 'business' | 'consumer', nullable — existing clients are unmeasured
+  // (null), never guessed. AT §11 Abs. 1 Z 3 lit. b UStG 1994 needs this to
+  // tell a business recipient from a private one; every country can use it.
+  clientType       String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -354,6 +358,7 @@ model Document {
   recipientMol              String?
   recipientSdiRecipientCode String?
   recipientPec              String?
+  recipientClientType       String?
   documentLanguage          String?
 
   lineItems            LineItem[]

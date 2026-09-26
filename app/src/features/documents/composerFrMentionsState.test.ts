@@ -79,6 +79,7 @@ function fakeDocument(overrides: Partial<DocumentDto>): DocumentDto {
       mol: null,
       sdiRecipientCode: null,
       pec: null,
+      clientType: null,
     },
     lineItems: [],
     discounts: [],

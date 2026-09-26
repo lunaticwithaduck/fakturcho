@@ -1,5 +1,5 @@
 import { getCountryConfig } from '@fakturcho/shared-types';
-import { CLASSIC_LABELS, type ClassicLabels, type ClassicLanguage } from './labels';
+import { type ClassicLabels, type ClassicLanguage, getClassicLabels } from './labels';
 
 export interface ClassicLocaleContext {
   language: ClassicLanguage;
@@ -20,7 +20,7 @@ export function resolveClassicLocale(
   const country = getCountryConfig(issuerCountry ?? (language === 'bg' ? 'BG' : ''));
   return {
     language,
-    labels: CLASSIC_LABELS[language],
+    labels: getClassicLabels(language, country.country),
     issuerCountry: country.country,
     timeZone: country.timeZone,
     showMol: country.showMol,

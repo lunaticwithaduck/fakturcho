@@ -1,5 +1,6 @@
 import { Input, Select, SelectItem } from '@design/components';
 import {
+  CLIENT_TYPES,
   companyIdLabelFor,
   DOCUMENT_LANGUAGES,
   type DocumentLanguage,
@@ -23,6 +24,7 @@ interface ClientFormFieldsProps {
 const OTHER_COUNTRY = 'OTHER';
 const COUNTRY_OPTIONS = [...EU_VAT_AREA_COUNTRIES, OTHER_COUNTRY];
 const SAME_AS_ISSUER = 'same';
+const CLIENT_TYPE_UNKNOWN = 'unknown';
 
 export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientFormFieldsProps) {
   const t = useTranslations('clients');
@@ -122,6 +124,23 @@ export function ClientFormFields({ values, onChange, fieldErrors = {} }: ClientF
         value={values.mol}
         onChange={(event) => onChange('mol', event.target.value)}
       />
+      <Select
+        label={t('clientTypeLabel')}
+        value={values.clientType || CLIENT_TYPE_UNKNOWN}
+        onValueChange={(value) =>
+          onChange(
+            'clientType',
+            value === CLIENT_TYPE_UNKNOWN ? '' : (value as ClientFormValues['clientType']),
+          )
+        }
+      >
+        <SelectItem value={CLIENT_TYPE_UNKNOWN}>{t('clientTypeOptionUnknown')}</SelectItem>
+        {CLIENT_TYPES.map((type) => (
+          <SelectItem key={type} value={type}>
+            {t(`clientTypeOptions.${type}`)}
+          </SelectItem>
+        ))}
+      </Select>
     </div>
   );
 }
