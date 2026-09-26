@@ -10,7 +10,7 @@ import {
   keepAbbreviationsWithNextWord,
   line,
 } from './html-utils';
-import type { ClassicLabels } from './labels';
+import type { ClassicLabels, ClassicLanguage } from './labels';
 import type { ClassicLocaleContext } from './locale';
 
 // Mirrors formatIssuerAddress in footer-blocks.ts: a legacy client row stores the
@@ -51,8 +51,19 @@ const CLIENT_REGISTRATION_ID_OVERRIDES: Partial<Record<string, string>> = {
 };
 // Printed via line(), which unlike identifierLine() adds no separator of its
 // own — the label must carry its own trailing ": ", same as vatNumberPrefix.
-const CLIENT_VAT_ID_OVERRIDES: Partial<Record<string, string>> = {
-  CH: 'MWST-Nr.: ',
+// Keyed by document language, not client country: a Swiss VAT number is a
+// German "MWST-Nr." only on a German-language document — an English or
+// French document must name it in that document's own language.
+const CLIENT_VAT_ID_OVERRIDES: Partial<Record<string, Partial<Record<ClassicLanguage, string>>>> = {
+  CH: {
+    en: 'VAT no.: ',
+    de: 'MWST-Nr.: ',
+    fr: 'N° TVA : ',
+    it: 'N. IVA: ',
+    pl: 'Nr VAT: ',
+    ro: 'Nr. TVA: ',
+    bg: 'ДДС №: ',
+  },
 };
 
 function resolveClientRegistrationIdLabel(
@@ -64,15 +75,23 @@ function resolveClientRegistrationIdLabel(
   return CLIENT_REGISTRATION_ID_OVERRIDES[clientCountry] ?? labels.foreignRegistrationIdFallback;
 }
 
-function resolveVatNumberLabel(document: Document, labels: ClassicLabels): string {
+function resolveVatNumberLabel(
+  document: Document,
+  issuerCountry: string,
+  language: ClassicLanguage,
+  labels: ClassicLabels,
+): string {
   const clientCountry = document.recipientCountry;
-  if (clientCountry && !isEuVatAreaCountry(clientCountry)) {
-    return CLIENT_VAT_ID_OVERRIDES[clientCountry] ?? labels.foreignTaxIdFallback;
+  // A same-country client keeps the ordinary domestic VAT label regardless of
+  // whether the issuer's own country happens to be inside or outside the EU
+  // VAT area — the branch below is only for a client foreign to the issuer.
+  if (!clientCountry || clientCountry === issuerCountry) return labels.vatNumberPrefix;
+  if (!isEuVatAreaCountry(clientCountry)) {
+    return CLIENT_VAT_ID_OVERRIDES[clientCountry]?.[language] ?? labels.foreignTaxIdFallback;
   }
   // IT: art. 21 c.2 lett. f D.P.R. 633/1972 calls a foreign EU client's VAT
   // number this rather than "P. IVA", which denotes the Italian national scheme.
-  const isForeignEuVatNumber = Boolean(clientCountry) && clientCountry !== 'IT';
-  return isForeignEuVatNumber && labels.foreignVatNumberPrefix
+  return clientCountry !== 'IT' && labels.foreignVatNumberPrefix
     ? labels.foreignVatNumberPrefix
     : labels.vatNumberPrefix;
 }
@@ -112,7 +131,12 @@ export function buildRecipientBlock(
     document.recipientCountry,
     locale,
   );
-  const vatNumberPrefix = resolveVatNumberLabel(document, labels);
+  const vatNumberPrefix = resolveVatNumberLabel(
+    document,
+    locale.issuerCountry,
+    locale.language,
+    labels,
+  );
   const rows = [
     document.recipientCompanyName
       ? `<div class="no-break">${escapeHtml(document.recipientCompanyName)}</div>`
