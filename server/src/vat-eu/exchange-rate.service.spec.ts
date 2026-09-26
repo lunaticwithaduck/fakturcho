@@ -72,7 +72,43 @@ describe('ExchangeRateService', () => {
     expect(quote).toBeNull();
   });
 
-  it('propagates a hard fetch failure instead of walking further back', async () => {
+  it('retries a transient fetch error and returns the rate once it succeeds', async () => {
+    let calls = 0;
+    const nbp: ExchangeRateHttpClient = {
+      fetchRateOn: vi.fn(async (_currency: string, isoDate: string) => {
+        calls += 1;
+        if (calls === 1) throw new Error('ECONNRESET');
+        return { rate: '4.2512', rateDate: isoDate, table: null };
+      }),
+    };
+    const service = new ExchangeRateService(clientsWith(nbp));
+    const quote = await service.fetchRate({
+      source: 'NBP',
+      currency: 'PLN',
+      onOrBeforeDate: '2026-09-17',
+    });
+    expect(quote).toEqual({ rate: '4.2512', rateDate: '2026-09-17', table: null });
+    expect(nbp.fetchRateOn).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not cache a date that failed every retry, so a later call retries it again', async () => {
+    const nbp = {
+      fetchRateOn: vi.fn(async () => {
+        throw new Error('network down');
+      }),
+    } satisfies ExchangeRateHttpClient;
+    const service = new ExchangeRateService(clientsWith(nbp));
+    await expect(
+      service.fetchRate({ source: 'NBP', currency: 'PLN', onOrBeforeDate: '2026-09-17' }),
+    ).rejects.toThrow('network down');
+    nbp.fetchRateOn.mockClear();
+    await expect(
+      service.fetchRate({ source: 'NBP', currency: 'PLN', onOrBeforeDate: '2026-09-17' }),
+    ).rejects.toThrow('network down');
+    expect(nbp.fetchRateOn).toHaveBeenCalled();
+  });
+
+  it('propagates a hard fetch failure once retries are exhausted, instead of walking further back', async () => {
     const nbp: ExchangeRateHttpClient = {
       fetchRateOn: vi.fn(async () => {
         throw new Error('network down');
@@ -82,6 +118,7 @@ describe('ExchangeRateService', () => {
     await expect(
       service.fetchRate({ source: 'NBP', currency: 'PLN', onOrBeforeDate: '2026-09-17' }),
     ).rejects.toThrow('network down');
-    expect(nbp.fetchRateOn).toHaveBeenCalledTimes(1);
+    // 1 initial attempt + 2 retries for the same date, then it gives up.
+    expect(nbp.fetchRateOn).toHaveBeenCalledTimes(3);
   });
 });

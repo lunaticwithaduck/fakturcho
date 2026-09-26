@@ -16,12 +16,20 @@ const DE_DOMESTIC_REVERSE_CHARGE_GROUND =
 // under Art. 196 MwStSystRL rather than § 13b, which only covers domestic cases.
 const DE_CROSS_BORDER_REVERSE_CHARGE_GROUND =
   'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Steuerschuldnerschaft des Leistungsempfängers (Art. 196 MwStSystRL)';
+// § 3a Abs. 2 UStG is the same place-of-supply rule, but it also covers a
+// recipient established in a third country — there is no EU reverse-charge
+// liability to shift there (the recipient is outside the EU VAT area), so
+// this drops the Steuerschuldnerschaft/Art. 196 framing that only fits an EU
+// counterparty.
+const DE_THIRD_COUNTRY_B2B_SERVICE_GROUND =
+  'Nicht im Inland steuerbare Leistung (§ 3a Abs. 2 UStG) – Leistungsempfänger im Drittland';
 
 const DE_EXEMPTION_GROUNDS = [
   DE_INTRA_COMMUNITY_SUPPLY_GROUND,
   DE_EXPORT_GROUND,
   DE_DOMESTIC_REVERSE_CHARGE_GROUND,
   DE_CROSS_BORDER_REVERSE_CHARGE_GROUND,
+  DE_THIRD_COUNTRY_B2B_SERVICE_GROUND,
   'Steuerfreie Finanzumsätze gemäß § 4 Nr. 8 UStG',
   'Steuerfreie Umsätze aus der Tätigkeit als Versicherungsvertreter oder -makler gemäß § 4 Nr. 11 UStG',
   'Steuerfreie Vermietung und Verpachtung gemäß § 4 Nr. 12 UStG',
@@ -48,7 +56,12 @@ export const DE_CONFIG: CountryConfig = {
   vatNumberPattern: /^DE\d{9}$/,
   exemptionGrounds: DE_EXEMPTION_GROUNDS,
   defaultExemptionGround: DE_DEFAULT_EXEMPTION_GROUND,
-  vatNoteGrounds: [DE_DOMESTIC_REVERSE_CHARGE_GROUND, DE_CROSS_BORDER_REVERSE_CHARGE_GROUND],
+  vatNoteGrounds: [
+    DE_DOMESTIC_REVERSE_CHARGE_GROUND,
+    DE_CROSS_BORDER_REVERSE_CHARGE_GROUND,
+    DE_THIRD_COUNTRY_B2B_SERVICE_GROUND,
+  ],
+  nonEuB2bServicesGround: DE_THIRD_COUNTRY_B2B_SERVICE_GROUND,
   // Registergericht/Sitz/Geschäftsführer (§ 35a GmbHG, § 37a HGB, § 80 AktG)
   // are optional here since a sole trader has none of them.
   identifiers: [

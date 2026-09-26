@@ -327,6 +327,74 @@ describe('render pipeline', () => {
     expect(text).not.toContain('"Клиентска Фирма" ООД');
   });
 
+  it('a draft to a consumer client omits the FR B2B-only mentions (recipientClientType must be hydrated from the live client)', async () => {
+    const frAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({
+      data: {
+        accountId: frAccount.id,
+        country: 'FR',
+        companyName: 'Boulangerie Test SARL',
+        vatRegistered: true,
+        vatNumber: 'FR12345678901',
+      },
+    });
+    const consumerClient = await db.prisma.client.create({
+      data: {
+        accountId: frAccount.id,
+        companyName: 'Hélène Dupré',
+        country: 'FR',
+        clientType: 'consumer',
+      },
+    });
+    const draft = await seedDocument(db.prisma, {
+      accountId: frAccount.id,
+      documentType: 'INVOICE',
+      status: 'DRAFT',
+      number: null,
+      overrides: { clientId: consumerClient.id, dueAt: new Date('2026-10-10') },
+    });
+
+    const { buffer } = await service.renderPdf(draft.id, frAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Hélène Dupré');
+    expect(text).not.toContain('Indemnité forfaitaire');
+    expect(text).not.toContain('Taux des pénalités de retard');
+    // The due date itself is not B2B-only — it still prints.
+    expect(text).toContain("Date d'échéance : 10/10/2026");
+  });
+
+  it('a draft to a business client keeps the FR B2B-only mentions', async () => {
+    const frAccount = await db.prisma.account.create({ data: {} });
+    await db.prisma.issuerProfile.create({
+      data: {
+        accountId: frAccount.id,
+        country: 'FR',
+        companyName: 'Boulangerie Test SARL',
+        vatRegistered: true,
+        vatNumber: 'FR12345678901',
+      },
+    });
+    const businessClient = await db.prisma.client.create({
+      data: {
+        accountId: frAccount.id,
+        companyName: 'Client Pro SARL',
+        country: 'FR',
+        clientType: 'business',
+      },
+    });
+    const draft = await seedDocument(db.prisma, {
+      accountId: frAccount.id,
+      documentType: 'INVOICE',
+      status: 'DRAFT',
+      number: null,
+      overrides: { clientId: businessClient.id, dueAt: new Date('2026-10-10') },
+    });
+
+    const { buffer } = await service.renderPdf(draft.id, frAccount.id);
+    const text = await extractPdfText(buffer);
+    expect(text).toContain('Indemnité forfaitaire');
+  });
+
   it('EN_LOCALE off: renders Bulgarian even for a document tagged documentLanguage=en', async () => {
     await flags.setEnabled('EN_LOCALE', false);
     try {

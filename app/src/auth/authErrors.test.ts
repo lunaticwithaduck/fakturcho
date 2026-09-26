@@ -20,6 +20,10 @@ describe('mapAuthErrorMessage', () => {
     );
   });
 
+  it('returns the reset-password invalid-token code as its own message key', () => {
+    expect(mapAuthErrorMessage('INVALID_TOKEN')).toBe('INVALID_TOKEN');
+  });
+
   it('falls back to the generic message key for an unknown code', () => {
     expect(mapAuthErrorMessage('SOME_UNMAPPED_CODE')).toBe('generic');
   });

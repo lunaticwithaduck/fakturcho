@@ -20,6 +20,16 @@ const RO_DEFAULT_EXEMPTION_GROUND = 'Scutit de TVA conform art. 310 din Codul fi
 const RO_NOT_SUBJECT_B2B_SERVICES_GROUND =
   'Neimpozabil în România conform art. 278 alin. (2) din Codul fiscal';
 
+// Art. 278 alin. (2) is not limited to a customer established in another EU
+// member state — a business established outside the EU has its place of
+// supply there too, just with no EU reverse charge for it to self-assess.
+// Worded as its own sentence, without the exact "art. 278 alin. (2)" phrase,
+// on purpose: mentions/ro.ts pattern-matches that phrase to also print the
+// "Taxare inversă" reverse-charge note, which would misstate the position for
+// a non-EU business.
+const RO_THIRD_COUNTRY_B2B_SERVICES_GROUND =
+  'Neimpozabil în România – locul prestării serviciului este în afara Uniunii Europene, beneficiar stabilit într-un stat terț (art. 278 din Codul fiscal)';
+
 const RO_VAT_EXEMPTION_GROUNDS = [
   'Scutit cu drept de deducere conform art. 294 alin. (1) lit. a) din Codul fiscal',
   'Scutit cu drept de deducere conform art. 294 alin. (1) lit. c) din Codul fiscal',
@@ -32,6 +42,7 @@ const RO_VAT_EXEMPTION_GROUNDS = [
   'Scutit fără drept de deducere conform art. 292 alin. (1) din Codul fiscal',
   'Scutit fără drept de deducere conform art. 292 alin. (2) din Codul fiscal',
   RO_NOT_SUBJECT_B2B_SERVICES_GROUND,
+  RO_THIRD_COUNTRY_B2B_SERVICES_GROUND,
 ] as const;
 
 export const RO_CONFIG: CountryConfig = {
@@ -49,7 +60,8 @@ export const RO_CONFIG: CountryConfig = {
   vatNumberPattern: /^RO\d{2,10}$/i,
   exemptionGrounds: RO_VAT_EXEMPTION_GROUNDS,
   defaultExemptionGround: RO_DEFAULT_EXEMPTION_GROUND,
-  vatNoteGrounds: [RO_NOT_SUBJECT_B2B_SERVICES_GROUND],
+  vatNoteGrounds: [RO_NOT_SUBJECT_B2B_SERVICES_GROUND, RO_THIRD_COUNTRY_B2B_SERVICES_GROUND],
+  nonEuB2bServicesGround: RO_THIRD_COUNTRY_B2B_SERVICES_GROUND,
   identifiers: [
     {
       key: 'regCom',

@@ -23,10 +23,21 @@ export type ExchangeRateHttpClients = Record<ExchangeRateSource, ExchangeRateHtt
 // weekends and holidays, which surface as "no rate this date", not an error.
 const MAX_WALKBACK_DAYS = 10;
 
+// A thrown fetch error (timeout, 5xx, DNS blip) is transient far more often
+// than it is a real outage; retry a couple of times with a short backoff
+// before letting it propagate, rather than failing the whole lookup on the
+// first hiccup.
+const FETCH_RETRIES = 2;
+const RETRY_BASE_DELAY_MS = 50;
+
 function isoDateMinusDays(isoDate: string, days: number): string {
   const date = new Date(`${isoDate}T00:00:00.000Z`);
   date.setUTCDate(date.getUTCDate() - days);
   return date.toISOString().slice(0, 10);
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function defaultClients(): ExchangeRateHttpClients {
@@ -61,7 +72,7 @@ export class ExchangeRateService {
         if (cached) return cached;
         continue;
       }
-      const quote = await client.fetchRateOn(params.currency, isoDate);
+      const quote = await this.fetchRateOnWithRetries(client, params.currency, isoDate);
       this.cache.set(cacheKey, quote);
       if (quote) return quote;
     }
@@ -69,5 +80,23 @@ export class ExchangeRateService {
       `No ${params.source} rate for ${params.currency} within ${MAX_WALKBACK_DAYS} days on or before ${params.onOrBeforeDate}`,
     );
     return null;
+  }
+
+  private async fetchRateOnWithRetries(
+    client: ExchangeRateHttpClient,
+    currency: string,
+    isoDate: string,
+  ): Promise<ExchangeRateQuote | null> {
+    for (let attempt = 0; ; attempt += 1) {
+      try {
+        return await client.fetchRateOn(currency, isoDate);
+      } catch (error) {
+        if (attempt >= FETCH_RETRIES) throw error;
+        this.logger.warn(
+          `Retrying rate fetch for ${currency} on ${isoDate} after error (attempt ${attempt + 1}/${FETCH_RETRIES}): ${error}`,
+        );
+        await delay(RETRY_BASE_DELAY_MS * (attempt + 1));
+      }
+    }
   }
 }

@@ -87,4 +87,7 @@ export const en: ClassicLabels = {
   paymentTermsDaysText: (days) => (days === 0 ? 'on receipt' : `${days} days`),
   companyRegisterLabel: 'Register entry',
   dueDatePrefix: 'Due date: ',
+  foreignRegistrationIdFallback: 'Registration no.',
+  foreignTaxIdFallback: 'Tax ID: ',
+  totalVatLabel: 'Total VAT:',
 };

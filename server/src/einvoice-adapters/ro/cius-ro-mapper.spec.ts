@@ -46,38 +46,104 @@ describe('toCiusRoXml — RO domestic, standard rate', () => {
 });
 
 describe('toCiusRoXml — options: countyRegion (CountrySubentity)', () => {
-  it('emits the issuer county on the supplier postal address when supplied', () => {
-    const xml = toCiusRoXml(roDomesticStandardInvoice, { issuerCountyRegion: 'București' });
+  it('emits the issuer county on the supplier postal address in ISO 3166-2:RO form', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, { issuerCountyRegion: 'B' });
     const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
     expect(xml.slice(0, customerPartyIndex)).toContain(
-      '<cbc:CountrySubentity>București</cbc:CountrySubentity><cac:Country>',
+      '<cbc:CountrySubentity>RO-B</cbc:CountrySubentity><cac:Country>',
     );
     expect(xml.slice(customerPartyIndex)).not.toContain('CountrySubentity');
   });
 
-  it('emits the recipient county on the customer postal address when supplied', () => {
-    const xml = toCiusRoXml(roDomesticStandardInvoice, { recipientCountyRegion: 'Cluj' });
+  it('emits the recipient county on the customer postal address in ISO 3166-2:RO form', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, { recipientCountyRegion: 'CJ' });
     const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
     expect(xml.slice(0, customerPartyIndex)).not.toContain('CountrySubentity');
     expect(xml.slice(customerPartyIndex)).toContain(
-      '<cbc:CountrySubentity>Cluj</cbc:CountrySubentity><cac:Country>',
+      '<cbc:CountrySubentity>RO-CJ</cbc:CountrySubentity><cac:Country>',
     );
   });
 
   it('emits both counties independently in their own party blocks', () => {
     const xml = toCiusRoXml(roDomesticStandardInvoice, {
-      issuerCountyRegion: 'București',
-      recipientCountyRegion: 'Cluj',
+      issuerCountyRegion: 'B',
+      recipientCountyRegion: 'CJ',
     });
     const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
     expect(xml.slice(0, customerPartyIndex)).toContain(
-      '<cbc:CountrySubentity>București</cbc:CountrySubentity>',
+      '<cbc:CountrySubentity>RO-B</cbc:CountrySubentity>',
     );
     expect(xml.slice(customerPartyIndex)).toContain(
-      '<cbc:CountrySubentity>Cluj</cbc:CountrySubentity>',
+      '<cbc:CountrySubentity>RO-CJ</cbc:CountrySubentity>',
     );
-    expect(xml.slice(0, customerPartyIndex)).not.toContain('Cluj');
-    expect(xml.slice(customerPartyIndex)).not.toContain('București');
+    expect(xml.slice(0, customerPartyIndex)).not.toContain('RO-CJ');
+    expect(xml.slice(customerPartyIndex)).not.toContain('RO-B<');
+  });
+
+  it('does not double-prefix a county already given in ISO 3166-2:RO form', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, { issuerCountyRegion: 'RO-CJ' });
+    expect(xml).toContain('<cbc:CountrySubentity>RO-CJ</cbc:CountrySubentity>');
+    expect(xml).not.toContain('RO-RO-CJ');
+  });
+
+  it('does not prefix a foreign party county with RO-', () => {
+    const foreignRecipient: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: { ...roDomesticStandardInvoice.recipient, country: 'DE', vatNumber: null },
+    };
+    const xml = toCiusRoXml(foreignRecipient, { recipientCountyRegion: 'Bayern' });
+    expect(xml).toContain('<cbc:CountrySubentity>Bayern</cbc:CountrySubentity>');
+    expect(xml).not.toContain('RO-Bayern');
+  });
+});
+
+describe('toCiusRoXml — PartyLegalEntity/CompanyID carries the bare CUI', () => {
+  it('strips the RO prefix from the legal registration identifier of a VAT-registered issuer', () => {
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, eik: 'RO18547290' },
+    };
+    const xml = toCiusRoXml(prefixed);
+    const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    const supplierSegment = xml.slice(0, customerPartyIndex);
+    expect(supplierSegment).toContain(
+      '<cac:PartyLegalEntity><cbc:RegistrationName>Exemplu Consulting SRL</cbc:RegistrationName><cbc:CompanyID>18547290</cbc:CompanyID></cac:PartyLegalEntity>',
+    );
+    // The VAT identifier keeps its RO prefix.
+    expect(supplierSegment).toContain(
+      '<cac:PartyTaxScheme><cbc:CompanyID>RO18547290</cbc:CompanyID>',
+    );
+  });
+
+  it('strips the RO prefix from the legal registration identifier of a VAT-registered recipient', () => {
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: { ...roDomesticStandardInvoice.recipient, eik: 'RO14399840' },
+    };
+    const xml = toCiusRoXml(prefixed);
+    const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    const customerSegment = xml.slice(customerPartyIndex);
+    expect(customerSegment).toContain(
+      '<cac:PartyLegalEntity><cbc:RegistrationName>Client Exemplu SA</cbc:RegistrationName><cbc:CompanyID>14399840</cbc:CompanyID></cac:PartyLegalEntity>',
+    );
+    expect(customerSegment).toContain(
+      '<cac:PartyTaxScheme><cbc:CompanyID>RO14399840</cbc:CompanyID>',
+    );
+  });
+
+  it('leaves a foreign party legal registration identifier unchanged', () => {
+    const foreignRecipient: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: {
+        ...roDomesticStandardInvoice.recipient,
+        country: 'DE',
+        vatNumber: 'DE123456789',
+        eik: 'HRB 654321',
+      },
+    };
+    expect(toCiusRoXml(foreignRecipient)).toContain(
+      '<cbc:CompanyID>HRB 654321</cbc:CompanyID></cac:PartyLegalEntity>',
+    );
   });
 });
 
@@ -114,6 +180,26 @@ describe('toCiusRoXml — Romanian CUI/VAT validation', () => {
     expect(() => toCiusRoXml(invalid)).toThrow(/CUI/);
   });
 
+  it('accepts an issuer eik carrying the same RO-prefixed value as its VAT number', () => {
+    // A VAT-registered RO issuer's CUI field commonly holds the RO-prefixed
+    // CIF, exactly like its vatNumber (see prod RO-31-inv-rc-issued: both
+    // "RO18467557") — the checksum applies to the bare digits, not the raw
+    // field value.
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, eik: 'RO18547290' },
+    };
+    expect(() => toCiusRoXml(prefixed)).not.toThrow();
+  });
+
+  it('accepts a recipient eik carrying the same RO-prefixed value as its VAT number', () => {
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      recipient: { ...roDomesticStandardInvoice.recipient, eik: 'RO14399840' },
+    };
+    expect(() => toCiusRoXml(prefixed)).not.toThrow();
+  });
+
   it('does not validate CUI format for a non-Romanian party', () => {
     const notRomanian: DocumentDto = {
       ...roDomesticStandardInvoice,
@@ -125,6 +211,33 @@ describe('toCiusRoXml — Romanian CUI/VAT validation', () => {
       },
     };
     expect(() => toCiusRoXml(notRomanian)).not.toThrow();
+  });
+});
+
+describe('toCiusRoXml — automatic EU B2B reverse charge (no user-set ground)', () => {
+  it('derives the Romanian "Taxare inversă" wording instead of the generic VATEX fallback', () => {
+    const [line] = roDomesticStandardInvoice.lineItems;
+    if (!line) throw new Error('expected fixture to carry a line item');
+    // resolveLineVatCategory sets AE automatically; nothing asks the issuer
+    // for a ground, so a real reverse-charge document keeps
+    // vatExemptionGround null (see prod RO-31-inv-rc-issued).
+    const reverseCharge: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      vatExemptionGround: null,
+      vatRateBp: 0,
+      vatAmount: 0,
+      amount: roDomesticStandardInvoice.subtotal,
+      recipient: {
+        ...roDomesticStandardInvoice.recipient,
+        country: 'DE',
+        vatNumber: 'DE123456788',
+      },
+      lineItems: [{ ...line, vatRateBp: 0, vatCategory: 'AE' }],
+    };
+    const xml = toCiusRoXml(reverseCharge);
+    expect(xml).toContain('<cbc:TaxExemptionReasonCode>VATEX-EU-AE</cbc:TaxExemptionReasonCode>');
+    expect(xml).toContain('<cbc:TaxExemptionReason>Taxare inversă</cbc:TaxExemptionReason>');
+    expect(xml).not.toContain('Reverse charge');
   });
 });
 
@@ -174,5 +287,23 @@ describe('toCiusRoXml — inherits the discount-adjusted VAT breakdown from the 
     const xml = toCiusRoXml(discounted);
     expect(xml).toContain('<cbc:TaxableAmount currencyID="EUR">900.00</cbc:TaxableAmount>');
     expect(xml).toContain('<cbc:TaxAmount currencyID="EUR">171.00</cbc:TaxAmount>');
+  });
+});
+
+describe('toCiusRoXml — Bucharest sector city (BR-RO-100)', () => {
+  it('names the sector as the city for a Bucharest issuer when the address gives it', () => {
+    const document = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, city: 'București, Sector 3' },
+    };
+    const xml = toCiusRoXml(document, { issuerCountyRegion: 'București' });
+    const supplier = xml.slice(0, xml.indexOf('<cac:AccountingCustomerParty>'));
+    expect(supplier).toContain('<cbc:CityName>SECTOR3</cbc:CityName>');
+    expect(supplier).toContain('<cbc:CountrySubentity>RO-B</cbc:CountrySubentity>');
+  });
+
+  it('leaves the city as entered when no sector is given', () => {
+    const xml = toCiusRoXml(roDomesticStandardInvoice, { issuerCountyRegion: 'B' });
+    expect(xml).toContain('<cbc:CityName>București</cbc:CityName>');
   });
 });

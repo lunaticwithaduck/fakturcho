@@ -119,6 +119,18 @@ export interface ClassicLabels {
   // document. Undefined where the due date is already handled elsewhere
   // (FR: mentions/fr.ts) or merged into paymentTermsPrefix itself (PL).
   dueDatePrefix?: string;
+  // A foreign client's own registration number/VAT id must not borrow the
+  // issuer's own scheme label (e.g. Polish "NIP" on a German client's
+  // Handelsregister number) — these are the generic, translated fallbacks
+  // used once the client's country has no specific label of its own (see
+  // recipient-block.ts). Bare, like companyIdLabel: identifierLine() appends
+  // its own ": " separator.
+  foreignRegistrationIdFallback: string;
+  // Unlike foreignRegistrationIdFallback, this one is printed via line() (see
+  // vatNumberPrefix), so it must carry its own trailing ": " (" : " for fr).
+  foreignTaxIdFallback: string;
+  // Printed once, below the per-rate VAT rows, on a mixed-rate document only.
+  totalVatLabel: string;
 }
 
 export const CLASSIC_LABELS: Record<ClassicLanguage, ClassicLabels> = {

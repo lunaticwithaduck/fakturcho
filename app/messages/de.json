@@ -7,7 +7,31 @@
     "submitting": "Anmeldung läuft...",
     "submit": "Anmelden",
     "noAccount": "Noch kein Konto?",
-    "signupLink": "Registrieren"
+    "signupLink": "Registrieren",
+    "forgotPasswordLink": "Passwort vergessen?",
+    "resetSuccessToast": "Passwort geändert. Melden Sie sich mit dem neuen Passwort an."
+  },
+  "forgotPassword": {
+    "title": "Passwort vergessen",
+    "subtitle": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+    "emailLabel": "E-Mail",
+    "submitting": "Wird gesendet...",
+    "submit": "Link senden",
+    "sentMessage": "Falls für diese E-Mail-Adresse ein Konto existiert, haben wir einen Link zum Zurücksetzen des Passworts gesendet.",
+    "backToLogin": "Zurück zur Anmeldung"
+  },
+  "resetPassword": {
+    "title": "Passwort zurücksetzen",
+    "subtitle": "Wählen Sie ein neues Passwort für Ihr Konto.",
+    "newPasswordLabel": "Neues Passwort",
+    "confirmPasswordLabel": "Neues Passwort bestätigen",
+    "tooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "mismatch": "Die Passwörter stimmen nicht überein.",
+    "submitting": "Wird gespeichert...",
+    "submit": "Neues Passwort speichern",
+    "invalidTitle": "Ungültiger Link",
+    "invalidMessage": "Dieser Link zum Zurücksetzen des Passworts ist ungültig oder abgelaufen.",
+    "requestNewLink": "Neuen Link anfordern"
   },
   "documents": {
     "list": {
@@ -628,7 +652,8 @@
       "PASSWORD_TOO_LONG": "Das Passwort ist zu lang.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       "INVALID_PASSWORD": "Das aktuelle Passwort ist falsch.",
-      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Für dieses Konto ist kein Passwort hinterlegt."
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Für dieses Konto ist kein Passwort hinterlegt.",
+      "INVALID_TOKEN": "Dieser Link ist ungültig oder abgelaufen."
     },
     "countries": {
       "BG": "Bulgarien",
@@ -1003,6 +1028,14 @@
     "signup": {
       "title": "Registrieren",
       "description": "Erstellen Sie ein kostenloses Konto und stellen Sie in wenigen Minuten Ihre erste Rechnung aus. 1,00 € Startguthaben, kein Abo erforderlich."
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "description": "Setzen Sie das Passwort für Ihr Fakturcho-Konto zurück."
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Wählen Sie ein neues Passwort für Ihr Fakturcho-Konto."
     }
   },
   "guides": {

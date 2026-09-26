@@ -8,6 +8,7 @@ const KNOWN_AUTH_ERROR_CODES = new Set([
   'PASSWORD_TOO_LONG',
   'INVALID_PASSWORD',
   'CREDENTIAL_ACCOUNT_NOT_FOUND',
+  'INVALID_TOKEN',
 ]);
 
 export function mapAuthErrorMessage(code?: string | null): string {

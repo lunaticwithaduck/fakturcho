@@ -125,11 +125,35 @@ describe('checkEinvoiceReadiness — reverse charge and exemption grounds', () =
     );
   });
 
-  it('flags a missing exemption ground when a non-standard category has none', () => {
-    const incomplete: DocumentDto = { ...bgToEuReverseChargeInvoice, vatExemptionGround: null };
+  it('flags a missing exemption ground when a non-standard, non-AE category has none', () => {
+    const incomplete: DocumentDto = {
+      ...bgToEuReverseChargeInvoice,
+      vatExemptionGround: null,
+      lineItems: bgToEuReverseChargeInvoice.lineItems.map((line) => ({
+        ...line,
+        vatCategory: 'E',
+      })),
+    };
     expect(checkEinvoiceReadiness(incomplete).missingFields).toContain(
       EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround,
     );
+  });
+
+  // resolveLineVatCategory sets AE automatically for an EU B2B reverse
+  // charge and nothing ever asks the issuer for a ground on it, so a real
+  // document reaches export with vatExemptionGround still null (see prod
+  // RO-31-inv-rc-issued: vatExemptionGround: null, line vatCategory: "AE").
+  // monetary.ts derives its own VATEX-EU-AE reason for the XML, so this must
+  // not block readiness the way it would for an E/K/G/O line.
+  it('does not require an exemption ground for an automatic AE (reverse charge) line', () => {
+    const automaticReverseCharge: DocumentDto = {
+      ...bgToEuReverseChargeInvoice,
+      vatExemptionGround: null,
+    };
+    expect(checkEinvoiceReadiness(automaticReverseCharge)).toEqual({
+      ready: true,
+      missingFields: [],
+    });
   });
 
   it('does not require an exemption ground for the standard category', () => {

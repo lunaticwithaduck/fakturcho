@@ -105,8 +105,12 @@ export function checkEinvoiceReadiness(document: DocumentDto): EinvoiceReadiness
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientVatNumberReverseCharge);
   }
 
+  // AE (reverse charge) is worked out automatically per line
+  // (resolveLineVatCategory) and monetary.ts derives its own VATEX-EU-AE
+  // exemption reason when the document has none, so it never needs the
+  // issuer to pick a ground the way an exempt/export/out-of-scope line does.
   const needsExemptionGround = document.lineItems.some(
-    (line) => line.vatCategory !== 'S' && line.vatCategory !== 'Z',
+    (line) => line.vatCategory !== 'S' && line.vatCategory !== 'Z' && line.vatCategory !== 'AE',
   );
   if (needsExemptionGround && !document.vatExemptionGround) {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround);

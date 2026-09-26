@@ -1,9 +1,11 @@
-import type { FeatureFlagKey } from '@fakturcho/shared-types';
+import type { FeatureFlagKey, Locale } from '@fakturcho/shared-types';
 import { getCountryConfig, isEuVatAreaCountry, isPublishedLocale } from '@fakturcho/shared-types';
 import type { PrismaClient } from '@prisma/client';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { grantSignupCredits } from '../billing/signup-grant';
+import type { EmailSender } from '../email/ports';
+import { buildResetPasswordEmail } from '../email/reset-password-templates';
 
 export interface AuthConfigOptions {
   secret: string;
@@ -16,6 +18,12 @@ export interface FeatureFlagsReader {
 }
 
 const ALWAYS_ENABLED: FeatureFlagsReader = { isEnabled: async () => true };
+const NOOP_SENDER: EmailSender = { send: async () => {} };
+
+function buildResetPasswordUrl(appOrigin: string, locale: Locale, token: string): string {
+  const path = locale === 'bg' ? '/reset-password' : `/${locale}/reset-password`;
+  return `${appOrigin}${path}?token=${token}`;
+}
 
 /**
  * Runs inside databaseHooks.user.create.before, not .after: the User row has
@@ -43,6 +51,7 @@ export function createAuth(
   prisma: PrismaClient,
   options: AuthConfigOptions,
   flags: FeatureFlagsReader = ALWAYS_ENABLED,
+  sender: EmailSender = NOOP_SENDER,
 ) {
   return betterAuth({
     secret: options.secret,
@@ -59,6 +68,25 @@ export function createAuth(
     database: prismaAdapter(prisma, { provider: 'postgresql' }),
     emailAndPassword: {
       enabled: true,
+      revokeSessionsOnPasswordReset: true,
+      sendResetPassword: async ({ user, token }) => {
+        const rawLocale = 'locale' in user ? user.locale : undefined;
+        const locale: Locale = isPublishedLocale(rawLocale) ? rawLocale : 'en';
+        const url = buildResetPasswordUrl(
+          options.trustedOrigins[0] ?? options.baseURL,
+          locale,
+          token,
+        );
+        const email = buildResetPasswordEmail(locale, url);
+        await sender.send({
+          to: user.email,
+          subject: email.subject,
+          text: email.text,
+          locale,
+          issuerName: null,
+          replyTo: null,
+        });
+      },
     },
     user: {
       additionalFields: {

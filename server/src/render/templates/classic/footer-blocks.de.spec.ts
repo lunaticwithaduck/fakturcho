@@ -74,3 +74,31 @@ describe('buildIssuerBlock — structured street/postcode/city address', () => {
     expect(html).not.toContain('Geschäftsführer');
   });
 });
+
+describe('buildIssuerBlock — DE issuer, English document', () => {
+  const enLocale = resolveClassicLocale('en', 'DE');
+
+  it('translates Steuernummer, Registergericht, Sitz and Geschäftsführer instead of keeping the German labels', () => {
+    const document = buildFakeDocument({
+      issuerIdentifiers: {
+        steuernummer: '27/815/08150',
+        registergericht: 'Amtsgericht München',
+        sitz: 'München',
+        geschaeftsfuehrer: 'Max Mustermann',
+      },
+    });
+    const html = buildIssuerBlock(document, 'invoice', enLocale);
+    expect(html).toContain('Tax number: 27/815/08150');
+    // Multi-word values under 40 chars are joined with U+00A0 (see
+    // NON_BREAKING_VALUE_MAX_LENGTH in html-utils.ts) — assert the label only.
+    expect(html).toContain('Register court (Registergericht): ');
+    expect(html.replace(/ /g, ' ')).toContain(
+      'Register court (Registergericht): Amtsgericht München',
+    );
+    expect(html).toContain('Registered seat: München');
+    expect(html.replace(/ /g, ' ')).toContain('Managing director: Max Mustermann');
+    expect(html).not.toContain('Steuernummer:');
+    expect(html).not.toContain('Sitz:');
+    expect(html).not.toContain('Geschäftsführer:');
+  });
+});

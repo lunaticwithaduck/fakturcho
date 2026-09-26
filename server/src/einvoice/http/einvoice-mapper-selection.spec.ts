@@ -63,11 +63,13 @@ describe('selectEinvoiceXmlMapper', () => {
     };
     const xml = selectEinvoiceXmlMapper(document.issuer.country)(document);
     const customerPartyIndex = xml.indexOf('<cac:AccountingCustomerParty>');
+    // CIUS-RO wants the country subdivision in ISO 3166-2:RO form
+    // (RO-<county>), not the bare county name/code — see cius-ro-mapper.ts.
     expect(xml.slice(0, customerPartyIndex)).toContain(
-      '<cbc:CountrySubentity>București</cbc:CountrySubentity><cac:Country>',
+      '<cbc:CountrySubentity>RO-B</cbc:CountrySubentity><cac:Country>',
     );
     expect(xml.slice(customerPartyIndex)).toContain(
-      '<cbc:CountrySubentity>Cluj</cbc:CountrySubentity><cac:Country>',
+      '<cbc:CountrySubentity>RO-CJ</cbc:CountrySubentity><cac:Country>',
     );
   });
 

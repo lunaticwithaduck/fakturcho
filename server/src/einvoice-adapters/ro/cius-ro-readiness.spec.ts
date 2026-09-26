@@ -59,6 +59,16 @@ describe('checkCiusRoReadiness — Romanian CUI checks', () => {
     );
   });
 
+  it('accepts an issuer eik carrying the same RO-prefixed value as its VAT number', () => {
+    const prefixed: DocumentDto = {
+      ...roDomesticStandardInvoice,
+      issuer: { ...roDomesticStandardInvoice.issuer, eik: 'RO18547290' },
+    };
+    expect(checkCiusRoReadiness(prefixed).missingFields).not.toContain(
+      EINVOICE_MISSING_FIELD_CODES.issuerCuiChecksum,
+    );
+  });
+
   it('flags an issuer CUI that fails the checksum', () => {
     const incomplete: DocumentDto = {
       ...roDomesticStandardInvoice,

@@ -4,6 +4,13 @@ import { type CountryConfig, GENERIC_EU_CONFIG } from './base';
 // same pattern as de.ts — these grounds double as the printed mention text.
 const AT_EU_B2B_SERVICE_GROUND =
   'Übergang der Steuerschuld auf den Leistungsempfänger (Reverse Charge) – Leistungsort gemäß § 3a Abs. 6 UStG 1994 im Mitgliedstaat des Leistungsempfängers, Steuerschuldnerschaft des Leistungsempfängers gemäß Art. 196 MwStSystRL.';
+// § 3a Abs. 6 UStG 1994 is the same general B2B place-of-supply rule as
+// above, but it is not limited to recipients in another member state — a
+// business established in a third country is covered the same way. There is
+// no EU reverse-charge liability to invoke there, so this is a plain
+// not-taxable note, not a Steuerschuldnerschaft one.
+const AT_THIRD_COUNTRY_B2B_SERVICE_GROUND =
+  'Nicht steuerbare sonstige Leistung gemäß § 3a Abs. 6 UStG 1994 (Leistungsempfänger im Drittland, Leistungsort am Empfängersitz).';
 const AT_INTRA_COMMUNITY_SUPPLY_GROUND =
   'Steuerfreie innergemeinschaftliche Lieferung gemäß Art. 6 Abs. 1 iVm Art. 7 UStG 1994 (Binnenmarktregelung).';
 const AT_TRIANGULATION_GROUND =
@@ -24,6 +31,10 @@ const AT_DOMESTIC_REVERSE_CHARGE_1E_GROUND =
 // Every ground above is a liability-shift note, not a "Steuerbefreiung" — the
 // renderer must not prepend "Hinweis: " to it (see groundPrefix in
 // totals-block.ts), same treatment as DE's two vatNoteGrounds.
+// mentions/at.ts reads AT_VAT_NOTE_GROUNDS[0] (the EU B2B ground) and
+// .slice(2) (every domestic reverse-charge ground) by position — the new
+// third-country ground goes at the end, not inserted in the middle, so it
+// does not shift either of those.
 export const AT_VAT_NOTE_GROUNDS = [
   AT_EU_B2B_SERVICE_GROUND,
   AT_TRIANGULATION_GROUND,
@@ -33,6 +44,7 @@ export const AT_VAT_NOTE_GROUNDS = [
   AT_DOMESTIC_REVERSE_CHARGE_1D_USTBBKV_GROUND,
   AT_DOMESTIC_REVERSE_CHARGE_1D_SCRAP_GROUND,
   AT_DOMESTIC_REVERSE_CHARGE_1E_GROUND,
+  AT_THIRD_COUNTRY_B2B_SERVICE_GROUND,
 ] as const;
 
 // § 6 Abs. 1 Z 27 UStG 1994 (Kleinunternehmerregelung, from 01.01.2025). The
@@ -118,6 +130,7 @@ export const AT_CONFIG: CountryConfig = {
   vatNumberPattern: /^ATU\d{8}$/,
   exemptionGrounds: AT_EXEMPTION_GROUNDS,
   defaultExemptionGround: AT_DEFAULT_EXEMPTION_GROUND,
+  nonEuB2bServicesGround: AT_THIRD_COUNTRY_B2B_SERVICE_GROUND,
   vatNoteGrounds: AT_VAT_NOTE_GROUNDS,
   // AT usage (kalkuel.at, sevdesk.at): a seller-issued correction/cancellation
   // document is never called "Gutschrift" in Austria (§ 11 Abs. 7/8 Z 3 UStG

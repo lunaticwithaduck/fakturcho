@@ -38,6 +38,17 @@ export interface CountryConfig {
   vatNumberPattern: RegExp | null;
   exemptionGrounds: readonly VatExemptionGround[];
   defaultExemptionGround: VatExemptionGround | null;
+  // Directive 2006/112/EC art. 44 (general B2B place-of-supply rule): a
+  // service supplied to a business established outside the EU is not taxed
+  // here regardless of whether the customer is in another member state or a
+  // third country — only the consequence differs (EU: the customer
+  // self-assesses under the reverse charge, art. 196; a third country: there
+  // is simply no EU VAT to charge). This is the ground for the latter case,
+  // used as the default when a business client's country is outside
+  // EU_VAT_AREA_COUNTRIES and nothing else was requested. null means this
+  // issuer country is not itself in the EU VAT area, so the rule does not
+  // apply to it at all.
+  nonEuB2bServicesGround: VatExemptionGround | null;
   vatNoteGrounds?: readonly string[];
   zeroRateGrounds?: readonly string[];
   documentTypeTitles?: Partial<Record<DocumentType, string>>;
@@ -70,9 +81,17 @@ const EU_DIRECTIVE_SME_EXEMPTION_GROUND =
 const EU_DIRECTIVE_REVERSE_CHARGE_GROUND =
   'Reverse charge – Article 196 of Council Directive 2006/112/EC';
 
+// B2B service to a business established outside the EU: art. 44 puts the
+// place of supply at the customer's own location, so it is out of scope here,
+// with no EU reverse-charge mechanism to invoke (the customer is not in the
+// EU VAT area to begin with).
+const EU_DIRECTIVE_THIRD_COUNTRY_B2B_GROUND =
+  'Not subject to VAT – place of supply outside the EU, Article 44 of Council Directive 2006/112/EC';
+
 const EU_DIRECTIVE_EXEMPTION_GROUNDS = [
   EU_DIRECTIVE_SME_EXEMPTION_GROUND,
   EU_DIRECTIVE_REVERSE_CHARGE_GROUND,
+  EU_DIRECTIVE_THIRD_COUNTRY_B2B_GROUND,
   'Intra-Community supply, Article 138 of Council Directive 2006/112/EC',
   'Export, Article 146 of Council Directive 2006/112/EC',
   'Exempt supply, Article 132 of Council Directive 2006/112/EC',
@@ -94,7 +113,8 @@ export const GENERIC_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   vatNumberPattern: null,
   exemptionGrounds: EU_DIRECTIVE_EXEMPTION_GROUNDS,
   defaultExemptionGround: EU_DIRECTIVE_SME_EXEMPTION_GROUND,
-  vatNoteGrounds: [EU_DIRECTIVE_REVERSE_CHARGE_GROUND],
+  vatNoteGrounds: [EU_DIRECTIVE_REVERSE_CHARGE_GROUND, EU_DIRECTIVE_THIRD_COUNTRY_B2B_GROUND],
+  nonEuB2bServicesGround: EU_DIRECTIVE_THIRD_COUNTRY_B2B_GROUND,
   // No dedicated country config knows the local register name (e.g. Czech NOZ
   // § 435 obchodní rejstřík), so this optional free-text field lets an issuer
   // in any unconfigured EU country print their own company-register entry.
@@ -117,6 +137,8 @@ export const GENERIC_NON_EU_CONFIG: Omit<CountryConfig, 'country'> = {
   defaultVatRateBp: 0,
   exemptionGrounds: [],
   defaultExemptionGround: null,
+  // Directive 2006/112/EC does not govern a non-EU issuer at all.
+  nonEuB2bServicesGround: null,
   // Outside the EU there is no capital-zone shortlist to fall back on.
   timeZone: 'UTC',
 };

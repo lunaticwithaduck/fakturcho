@@ -2,17 +2,18 @@
 
 import { mapAuthErrorMessage, signIn } from '@app/auth';
 import { toLocalePath } from '@app/i18n/localeRedirect';
-import { Button, Card, Input } from '@design/components';
+import { Button, Card, Input, toast } from '@design/components';
 import type { Locale } from '@shared/types';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 
 interface LoginFormProps {
   locale?: Locale;
+  resetSuccess?: boolean;
 }
 
-export function LoginForm({ locale = 'bg' }: LoginFormProps) {
+export function LoginForm({ locale = 'bg', resetSuccess = false }: LoginFormProps) {
   const t = useTranslations('login');
   const tErrors = useTranslations('auth.errors');
   const router = useRouter();
@@ -21,6 +22,13 @@ export function LoginForm({ locale = 'bg' }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const signupHref = toLocalePath('/signup', locale);
+  const forgotPasswordHref = toLocalePath('/forgot-password', locale);
+
+  useEffect(() => {
+    if (resetSuccess) {
+      toast({ title: t('resetSuccessToast'), variant: 'success' });
+    }
+  }, [resetSuccess, t]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,6 +68,9 @@ export function LoginForm({ locale = 'bg' }: LoginFormProps) {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
+        <a className="self-end text-sm font-medium text-accent" href={forgotPasswordHref}>
+          {t('forgotPasswordLink')}
+        </a>
         {error ? <p className="text-sm text-danger">{error}</p> : null}
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? t('submitting') : t('submit')}

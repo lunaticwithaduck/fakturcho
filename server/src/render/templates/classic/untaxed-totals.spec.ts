@@ -57,6 +57,17 @@ describe('tax invoices without VAT', () => {
   });
 });
 
+describe('PL export line — full pipeline (matches the PL-04 prod scenario)', () => {
+  it('prints "0%" in the line-items VAT-rate column, not "zw" (export is a 0%-rate ground, not an exemption)', () => {
+    const ground = 'eksport towarów – art. 41 ust. 4 i 5 ustawy o podatku od towarów i usług';
+    const html = render('pl', 'PL', {}, ground, { vatCategory: 'E' });
+    expect(html).toContain('>0%<');
+    expect(html).not.toContain('>zw<');
+    // The document-level note keeps printing bare, with no exemption prefix.
+    expect(html).toContain(`<div class="exemption">${ground}</div>`);
+  });
+});
+
 describe('reverse-charge wording when the user picks the EU-services ground', () => {
   it('pl adds "odwrotne obciążenie" to the art. 28b ground', () => {
     const ground =
@@ -141,5 +152,41 @@ describe('mixed invoices', () => {
     expect(html).toContain('ДДС (20%):');
     expect(html).toContain('ДДС (0%):');
     expect(html).toContain('Основание за прилагане на нулева ставка: чл. 53, ал. 1 от ЗДДС');
+  });
+
+  it('adds a total-VAT row summing every rate, matching the BG-01 prod scenario (20% + 9%)', () => {
+    const html = renderClassicTemplateHtml({
+      document: buildFakeDocument({
+        issuerCountry: 'BG',
+        subtotal: 109000,
+        vatAmount: 19160,
+        amount: 128160,
+        vatExemptionGround: null,
+      }),
+      lineItems: [
+        ...buildFakeLineItems({ lineTotal: 85000, vatRateBp: 2000, vatCategory: 'S' }),
+        ...buildFakeLineItems({ id: 'li_2', lineTotal: 24000, vatRateBp: 900, vatCategory: 'S' }),
+      ],
+      presentation: { vatCharged: true, showExemptionLine: false, exemptionGround: null },
+      isDraft: false,
+      language: 'bg',
+      issuerCountry: 'BG',
+    });
+    expect(html).toContain('ДДС (20%):');
+    expect(html).toContain('ДДС (9%):');
+    // 170,00 + 21,60 = 191,60
+    expect(html).toContain('Общо ДДС:</span><span>191,60 €');
+  });
+
+  it('does not add a total-VAT row on a single-rate document', () => {
+    const html = renderClassicTemplateHtml({
+      document: buildFakeDocument({ issuerCountry: 'BG', vatAmount: 91667 }),
+      lineItems: buildFakeLineItems(),
+      presentation: { vatCharged: true, showExemptionLine: false, exemptionGround: null },
+      isDraft: false,
+      language: 'bg',
+      issuerCountry: 'BG',
+    });
+    expect(html).not.toContain('Общо ДДС:');
   });
 });

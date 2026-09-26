@@ -116,6 +116,57 @@ describe('frMentions — intra-community supply (K) and export (G)', () => {
   });
 });
 
+describe('frMentions — FR issuer, English document', () => {
+  const enLocale = resolveClassicLocale('en', 'FR');
+
+  it('translates the autoliquidation and export notes instead of keeping French wording', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({ issuerCountry: 'FR', vatExemptionGround: null }),
+      lineItems: buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 }),
+      locale: enLocale,
+    });
+
+    expect(mentions).toContain(
+      'Reverse charge – VAT due by the customer, Art. 259-1 of the CGI and Art. 196 of Council Directive 2006/112/EC',
+    );
+  });
+});
+
+describe('frMentions — FR consumer (B2C) invoice', () => {
+  it('omits the early-payment discount, late-penalty-rate and 40 € recovery-cost mentions for a consumer client (C. com. L441-9/L441-10/D441-5 apply only entre professionnels)', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        dueAt: new Date('2026-09-15'),
+        recipientClientType: 'consumer',
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).not.toContain('Escompte pour paiement anticipé : néant');
+    expect(mentions).not.toContain('Indemnité forfaitaire pour frais de recouvrement : 40 €');
+    expect(mentions.some((line) => line.includes('BCE'))).toBe(false);
+    // The due date itself is not a B2B-only mention — it still prints.
+    expect(mentions).toContain("Date d'échéance : 15/09/2026");
+  });
+
+  it('keeps the three mentions for a business client', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        dueAt: new Date('2026-09-15'),
+        recipientClientType: 'business',
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions).toContain('Escompte pour paiement anticipé : néant');
+    expect(mentions).toContain('Indemnité forfaitaire pour frais de recouvrement : 40 €');
+  });
+});
+
 describe('frMentions — non-tax documents', () => {
   it('carries no payment-terms boilerplate on a quote', () => {
     const mentions = buildStatutoryMentions({

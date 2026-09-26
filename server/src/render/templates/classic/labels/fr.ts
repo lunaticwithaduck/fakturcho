@@ -92,4 +92,7 @@ export const fr: ClassicLabels = {
   correctionKsefNumberPrefix: 'Numéro KSeF de la facture corrigée : ',
   paymentTermsDaysText: (days) => (days === 0 ? 'à réception' : `${days} jours`),
   companyRegisterLabel: 'Immatriculation au registre',
+  foreignRegistrationIdFallback: "Numéro d'immatriculation",
+  foreignTaxIdFallback: 'Numéro fiscal : ',
+  totalVatLabel: 'Total TVA :',
 };

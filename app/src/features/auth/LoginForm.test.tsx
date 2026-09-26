@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import * as designComponents from '@design/components';
 import bgMessages from '@messages/bg.json';
 import enMessages from '@messages/en.json';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
@@ -113,5 +114,60 @@ describe('LoginForm', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Log in' }));
 
     expect(await screen.findByText('Incorrect email or password.')).toBeTruthy();
+  });
+
+  it('links to the Bulgarian forgot-password page by default', () => {
+    render(
+      <NextIntlClientProvider locale="bg" messages={bgMessages}>
+        <LoginForm />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Забравена парола?' })).toHaveProperty(
+      'href',
+      'http://localhost:3000/forgot-password',
+    );
+  });
+
+  it('links to the English forgot-password page when rendered for the en route', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <LoginForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Forgot your password?' })).toHaveProperty(
+      'href',
+      'http://localhost:3000/en/forgot-password',
+    );
+  });
+
+  it('shows a success toast when rendered after a password reset', () => {
+    const toastSpy = vi.spyOn(designComponents, 'toast').mockImplementation(() => 'toast-id');
+
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <LoginForm locale="en" resetSuccess />
+      </NextIntlClientProvider>,
+    );
+
+    expect(toastSpy).toHaveBeenCalledWith({
+      title: 'Password changed. Log in with your new password.',
+      variant: 'success',
+    });
+    toastSpy.mockRestore();
+  });
+
+  it('does not show the toast on an ordinary login visit', () => {
+    const toastSpy = vi.spyOn(designComponents, 'toast').mockImplementation(() => 'toast-id');
+
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <LoginForm locale="en" />
+      </NextIntlClientProvider>,
+    );
+
+    expect(toastSpy).not.toHaveBeenCalled();
+    toastSpy.mockRestore();
   });
 });

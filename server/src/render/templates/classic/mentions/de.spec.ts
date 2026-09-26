@@ -75,3 +75,41 @@ describe('deMentions', () => {
     ]);
   });
 });
+
+describe('deMentions — DE issuer, English document', () => {
+  const enLocale = resolveClassicLocale('en', 'DE');
+
+  it('translates the domestic § 13b reverse-charge note into English', () => {
+    const document = buildFakeDocument({
+      vatExemptionGround: null,
+      issuerCountry: 'DE',
+      recipientCountry: 'DE',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(deMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'Reverse charge – VAT to be accounted for by the recipient (§ 13b UStG)',
+    ]);
+  });
+
+  it("translates the cross-border Art. 196 reverse-charge note into English (the repo's existing English wording)", () => {
+    const document = buildFakeDocument({
+      vatExemptionGround: null,
+      issuerCountry: 'DE',
+      recipientCountry: 'FR',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(deMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'Reverse charge – Article 196 of Council Directive 2006/112/EC',
+    ]);
+  });
+
+  it('still suppresses the note when the ground (always stored in German) already states it', () => {
+    const document = buildFakeDocument({
+      vatExemptionGround: 'Steuerschuldnerschaft des Leistungsempfängers gemäß § 13b UStG',
+      issuerCountry: 'DE',
+      recipientCountry: 'DE',
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(deMentions({ document, lineItems, locale: enLocale })).toEqual([]);
+  });
+});

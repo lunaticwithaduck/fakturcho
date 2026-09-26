@@ -15,6 +15,6 @@ import { ResendService } from './resend.service';
     { provide: RENDER_SERVICE, useExisting: RenderService },
     { provide: EMAIL_SENDER, useExisting: ResendService },
   ],
-  exports: [EmailService],
+  exports: [EmailService, EMAIL_SENDER],
 })
 export class EmailModule {}

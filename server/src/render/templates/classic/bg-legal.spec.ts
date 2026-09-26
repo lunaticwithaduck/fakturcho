@@ -110,6 +110,29 @@ describe('BG addresses — abbreviation glued to the next word with U+00A0', () 
     const html = buildIssuerBlock(document, 'invoice', deLocale);
     expect(html).toContain('ул. Витоша 15, гр. София');
   });
+
+  it('prints the postcode before the city (Bulgarian postal convention) for the issuer, even when a legacy addressLine is set', () => {
+    const document = buildFakeDocument({
+      issuerAddressLine: 'ул. Раковски 15',
+      issuerCity: 'София',
+      issuerPostcode: '1000',
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    // "ул." glues to the next word (U+00A0, covered by the test above); the
+    // postcode/city join itself uses a plain space, same as the structured
+    // street/postcode branch below.
+    expect(html).toContain(', 1000 София');
+  });
+
+  it('prints the postcode before the city for the recipient too, even when a legacy address is set', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'Раковски 3',
+      recipientCity: 'Пловдив',
+      recipientPostcode: '4000',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('Раковски 3, 4000 Пловдив');
+  });
 });
 
 describe('BG rendered invoice — end-to-end wording', () => {

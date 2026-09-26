@@ -1,5 +1,6 @@
 import type { LineItem } from '@prisma/client';
 import { describe, expect, it } from 'vitest';
+import { resolveClassicLocale } from '../locale';
 import { buildFakeDocument, buildFakeLineItems } from '../testing/fake-document';
 import { plMentions } from './pl';
 
@@ -43,6 +44,18 @@ describe('plMentions', () => {
     const document = buildFakeDocument();
     const lineItems = withCategory('E');
     expect(plMentions({ document, lineItems, locale: {} as never })).toEqual([]);
+  });
+});
+
+describe('plMentions — PL issuer, English document', () => {
+  const enLocale = resolveClassicLocale('en', 'PL');
+
+  it('translates "odwrotne obciążenie" into English instead of keeping the Polish word', () => {
+    const document = buildFakeDocument();
+    const lineItems = withCategory('AE');
+    expect(plMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'Reverse charge – VAT to be accounted for by the recipient, Art. 196 Directive 2006/112/EC',
+    ]);
   });
 });
 
@@ -129,6 +142,16 @@ describe('plMentions — split payment mechanism (MPP), art. 106e ust. 1 pkt 18a
     const lineItems = buildFakeLineItems({ splitPaymentAnnex15: true });
     expect(plMentions({ document, lineItems, locale: {} as never })).toEqual([
       'mechanizm podzielonej płatności',
+    ]);
+  });
+});
+
+describe('plMentions — other document languages', () => {
+  it('translates the MPP mention and keeps the statutory Polish words in brackets', () => {
+    const document = buildFakeDocument({ amount: 400_000, currency: 'EUR', exchangeRate: '5' });
+    const lineItems = buildFakeLineItems({ splitPaymentAnnex15: true });
+    expect(plMentions({ document, lineItems, locale: { language: 'en' } as never })).toEqual([
+      'Split payment mechanism (mechanizm podzielonej płatności)',
     ]);
   });
 });

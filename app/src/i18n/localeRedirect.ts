@@ -6,7 +6,16 @@ export const LOCALE_COOKIE_NAME = 'fakturcho_lang';
 export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 export const LOCALE_QUERY_PARAM = 'lang';
 
-const PUBLIC_BASE_PATHS = ['/', '/login', '/signup', '/privacy', '/terms', '/refunds'] as const;
+const PUBLIC_BASE_PATHS = [
+  '/',
+  '/login',
+  '/signup',
+  '/forgot-password',
+  '/reset-password',
+  '/privacy',
+  '/terms',
+  '/refunds',
+] as const;
 
 const BOT_UA_REGEX = /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|lighthouse/i;
 

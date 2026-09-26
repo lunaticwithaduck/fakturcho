@@ -99,4 +99,7 @@ export const de: ClassicLabels = {
     days === 0 ? 'Sofort nach Erhalt' : `Zahlbar innerhalb von ${days} Tagen`,
   companyRegisterLabel: 'Registereintrag',
   dueDatePrefix: 'Zahlbar bis: ',
+  foreignRegistrationIdFallback: 'Registernummer',
+  foreignTaxIdFallback: 'Steuernummer: ',
+  totalVatLabel: 'Summe USt:',
 };

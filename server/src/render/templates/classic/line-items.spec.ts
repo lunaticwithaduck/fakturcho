@@ -97,4 +97,42 @@ describe('buildLineItemsTable — VAT rate column', () => {
     expect(html).toContain('>zw<');
     expect(html).toContain('>np.<');
   });
+
+  it('PL: prints "0%" for an export line, not "zw" — export is a 0%-rate ground, not an exemption (art. 41 ust. 4 i 5)', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const ground = 'eksport towarów – art. 41 ust. 4 i 5 ustawy o podatku od towarów i usług';
+    const lineItems = buildFakeLineItems({ vatRateBp: 0, vatCategory: 'E' });
+    const html = buildLineItemsTable(lineItems, locale, 'invoice', true, true, ground);
+    expect(html).toContain('>0%<');
+    expect(html).not.toContain('>zw<');
+  });
+
+  it('PL: prints "0%" for an intra-Community supply (WDT) line, not "zw" (art. 42 ust. 1)', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const ground =
+      'wewnątrzwspólnotowa dostawa towarów – art. 42 ust. 1 ustawy o podatku od towarów i usług';
+    const lineItems = buildFakeLineItems({ vatRateBp: 0, vatCategory: 'E' });
+    const html = buildLineItemsTable(lineItems, locale, 'invoice', true, true, ground);
+    expect(html).toContain('>0%<');
+    expect(html).not.toContain('>zw<');
+  });
+
+  it('PL: prints "np." for the art. 28b cross-border B2B service ground, not "zw" — it is out of scope, not an exemption', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const ground =
+      'usługa niepodlegająca opodatkowaniu na terytorium kraju – art. 28b ustawy o podatku od towarów i usług';
+    const lineItems = buildFakeLineItems({ vatRateBp: 0, vatCategory: 'E' });
+    const html = buildLineItemsTable(lineItems, locale, 'invoice', true, true, ground);
+    expect(html).toContain('>np.<');
+    expect(html).not.toContain('>zw<');
+  });
+
+  it('PL: still prints "zw" for a real exemption ground (art. 43/113)', () => {
+    const locale = resolveClassicLocale('pl', 'PL');
+    const ground =
+      'usługi w zakresie opieki medycznej – art. 43 ust. 1 pkt 18 ustawy o podatku od towarów i usług';
+    const lineItems = buildFakeLineItems({ vatRateBp: 0, vatCategory: 'E' });
+    const html = buildLineItemsTable(lineItems, locale, 'invoice', true, true, ground);
+    expect(html).toContain('>zw<');
+  });
 });
