@@ -147,3 +147,18 @@ describe('roMentions — TVA la încasare', () => {
     expect(roMentions({ document, lineItems, locale })).toContain('TVA la încasare');
   });
 });
+
+describe('roMentions — other document languages', () => {
+  it('translates TVA la încasare and keeps the statutory words in brackets', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+    });
+    const lineItems = buildFakeLineItems();
+    const enLocale = resolveClassicLocale('en', 'RO');
+    expect(roMentions({ document, lineItems, locale: enLocale })).toEqual([
+      'VAT on cash basis (TVA la încasare)',
+    ]);
+  });
+});

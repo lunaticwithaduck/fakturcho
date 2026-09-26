@@ -145,3 +145,13 @@ describe('plMentions — split payment mechanism (MPP), art. 106e ust. 1 pkt 18a
     ]);
   });
 });
+
+describe('plMentions — other document languages', () => {
+  it('translates the MPP mention and keeps the statutory Polish words in brackets', () => {
+    const document = buildFakeDocument({ amount: 400_000, currency: 'EUR', exchangeRate: '5' });
+    const lineItems = buildFakeLineItems({ splitPaymentAnnex15: true });
+    expect(plMentions({ document, lineItems, locale: { language: 'en' } as never })).toEqual([
+      'Split payment mechanism (mechanizm podzielonej płatności)',
+    ]);
+  });
+});

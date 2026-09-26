@@ -1,11 +1,22 @@
 import { TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import { toSharedDocumentType } from '../../../prisma-mappers';
+import type { ClassicLanguage } from '../labels';
 import type { MentionsBuilder } from './index';
 
 // Codul fiscal art. 282 alin. (3)-(8): a supplier registered for the cash VAT
 // scheme collects VAT on payment, not on invoicing, and art. 319 alin. (20)
 // lit. p) requires the invoice to say so.
 const VAT_ON_CASH_BASIS_MENTION = 'TVA la încasare';
+// The statutory words stay in brackets on a document in another language.
+const VAT_ON_CASH_BASIS_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  ro: VAT_ON_CASH_BASIS_MENTION,
+  en: 'VAT on cash basis (TVA la încasare)',
+  de: 'Umsatzsteuer nach vereinnahmten Entgelten (TVA la încasare)',
+  fr: 'TVA sur les encaissements (TVA la încasare)',
+  it: 'IVA per cassa (TVA la încasare)',
+  pl: 'Metoda kasowa VAT (TVA la încasare)',
+  bg: 'Касова отчетност на ДДС (TVA la încasare)',
+};
 
 // AE lines are only ever the cross-border EU B2B reverse charge (see
 // server/src/vat-eu/reverse-charge.ts): the client is VAT-registered in
@@ -39,7 +50,7 @@ export const roMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
     TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)] &&
     hasRoTaxedLine
   ) {
-    mentions.push(VAT_ON_CASH_BASIS_MENTION);
+    mentions.push(VAT_ON_CASH_BASIS_NOTE_BY_LANGUAGE[locale.language] ?? VAT_ON_CASH_BASIS_MENTION);
   }
   return mentions;
 };

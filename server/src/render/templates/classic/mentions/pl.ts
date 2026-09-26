@@ -13,10 +13,18 @@ const NOT_SUBJECT_EU_SERVICES_GROUND =
 const INTRA_EU_SUPPLY_NOTE =
   'Wewnątrzwspólnotowa dostawa towarów – art. 42 ustawy o podatku od towarów i usług.';
 const REVERSE_CHARGE_MENTION = 'odwrotne obciążenie';
-// art. 106e ust. 1 pkt 18a: the exact statutory words, printed in Polish
-// regardless of the document's own language (like every other PL-mandated
-// annotation in this file).
+// art. 106e ust. 1 pkt 18a: the exact statutory words must appear, so a
+// document in another language keeps them in brackets after the translation.
 const SPLIT_PAYMENT_MENTION = 'mechanizm podzielonej płatności';
+const SPLIT_PAYMENT_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  pl: SPLIT_PAYMENT_MENTION,
+  en: 'Split payment mechanism (mechanizm podzielonej płatności)',
+  de: 'Split-Payment-Verfahren (mechanizm podzielonej płatności)',
+  fr: 'Mécanisme de paiement fractionné (mechanizm podzielonej płatności)',
+  it: 'Meccanismo della scissione dei pagamenti (mechanizm podzielonej płatności)',
+  ro: 'Mecanismul de plată defalcată (mechanizm podzielonej płatności)',
+  bg: 'Механизъм на разделено плащане (mechanizm podzielonej płatności)',
+};
 
 // The art. 28b cross-border B2B service ground and the art. 42 intra-Community
 // supply ground are PL's own statutory citations (Polish, since PL issues only
@@ -80,7 +88,7 @@ export const plMentions: MentionsBuilder = ({
       }),
     });
     if (mppRequired) {
-      mentions.push(SPLIT_PAYMENT_MENTION);
+      mentions.push(SPLIT_PAYMENT_NOTE_BY_LANGUAGE[locale.language] ?? SPLIT_PAYMENT_MENTION);
     }
   }
 

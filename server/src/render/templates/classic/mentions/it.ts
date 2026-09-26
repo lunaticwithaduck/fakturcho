@@ -57,6 +57,27 @@ const REVERSE_CHARGE_CROSS_BORDER_NOTE_BY_LANGUAGE: Partial<Record<ClassicLangua
 const FORFETTARIO_RITENUTA_TEXT =
   'Si richiede la non applicazione della ritenuta d’acconto ai sensi dell’art. 1, comma 67, L. 190/2014';
 
+// Bollo and ritenuta are Italian-only procedures with no directive article to
+// cite, so a translated note keeps the Italian statutory words in brackets.
+const BOLLO_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  it: BOLLO_TEXT,
+  en: 'Stamp duty paid virtually (imposta di bollo assolta in modo virtuale, art. 6 D.M. 17 giugno 2014)',
+  de: 'Stempelsteuer virtuell entrichtet (imposta di bollo assolta in modo virtuale, art. 6 D.M. 17 giugno 2014)',
+  fr: 'Droit de timbre acquitté de manière virtuelle (imposta di bollo assolta in modo virtuale, art. 6 D.M. 17 giugno 2014)',
+  pl: 'Opłata stemplowa uiszczona w sposób wirtualny (imposta di bollo assolta in modo virtuale, art. 6 D.M. 17 giugno 2014)',
+  ro: 'Taxă de timbru achitată virtual (imposta di bollo assolta in modo virtuale, art. 6 D.M. 17 giugno 2014)',
+  bg: 'Гербов налог, платен виртуално (imposta di bollo assolta in modo virtuale, art. 6 D.M. 17 giugno 2014)',
+};
+const FORFETTARIO_RITENUTA_NOTE_BY_LANGUAGE: Partial<Record<ClassicLanguage, string>> = {
+  it: FORFETTARIO_RITENUTA_TEXT,
+  en: 'Please do not apply withholding tax (non applicazione della ritenuta d’acconto, art. 1, comma 67, L. 190/2014)',
+  de: 'Bitte keinen Steuerabzug vornehmen (non applicazione della ritenuta d’acconto, art. 1, comma 67, L. 190/2014)',
+  fr: 'Merci de ne pas appliquer de retenue à la source (non applicazione della ritenuta d’acconto, art. 1, comma 67, L. 190/2014)',
+  pl: 'Prosimy o niepobieranie zaliczki na podatek (non applicazione della ritenuta d’acconto, art. 1, comma 67, L. 190/2014)',
+  ro: 'Vă rugăm să nu aplicați reținerea la sursă (non applicazione della ritenuta d’acconto, art. 1, comma 67, L. 190/2014)',
+  bg: 'Моля, не удържайте данък при източника (non applicazione della ritenuta d’acconto, art. 1, comma 67, L. 190/2014)',
+};
+
 export const itMentions: MentionsBuilder = ({ document, lineItems, locale }) => {
   const mentions: string[] = [];
   const categories = new Set(lineItems.map((line) => line.vatCategory));
@@ -97,7 +118,7 @@ export const itMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
       : 0;
 
   if (isTaxDocument && !groundExcluded && untaxedAmount > BOLLO_THRESHOLD_CENTS) {
-    mentions.push(BOLLO_TEXT);
+    mentions.push(BOLLO_NOTE_BY_LANGUAGE[locale.language] ?? BOLLO_TEXT);
   }
 
   if (
@@ -105,7 +126,9 @@ export const itMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
     document.vatExemptionGround === FORFETTARIO_GROUND &&
     document.recipientVatNumber
   ) {
-    mentions.push(FORFETTARIO_RITENUTA_TEXT);
+    mentions.push(
+      FORFETTARIO_RITENUTA_NOTE_BY_LANGUAGE[locale.language] ?? FORFETTARIO_RITENUTA_TEXT,
+    );
   }
 
   return mentions.filter((mention) => mention !== document.vatExemptionGround);
