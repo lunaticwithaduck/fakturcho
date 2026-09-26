@@ -8,12 +8,7 @@ import type { ClassicLanguage } from './labels';
 import { buildLineItemsTable } from './line-items';
 import { resolveClassicLocale } from './locale';
 import { buildMentionsBlock } from './mentions-block';
-import {
-  buildKsefQrBlock,
-  buildVerifactuQrBlock,
-  type KsefQrBlock,
-  type VerifactuQrBlock,
-} from './qr-block';
+import { buildKsefQrBlock, type KsefQrBlock } from './qr-block';
 import { buildStyles } from './styles';
 import { buildTitle } from './title';
 import { buildAmountWordsBlock, buildTotalsBlock } from './totals-block';
@@ -30,7 +25,6 @@ export interface ClassicTemplateInput {
   discounts?: readonly Discount[];
   originalDocument?: OriginalDocumentRef | null;
   ksefQr?: KsefQrBlock | null;
-  verifactuQr?: VerifactuQrBlock | null;
 }
 
 export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
@@ -44,7 +38,6 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
     discounts = [],
     originalDocument = null,
     ksefQr = null,
-    verifactuQr = null,
   } = input;
   const locale = resolveClassicLocale(language, issuerCountry);
   const documentType = toSharedDocumentType(document.documentType);
@@ -61,7 +54,6 @@ export function renderClassicTemplateHtml(input: ClassicTemplateInput): string {
 <body>
   <div class="watermark-area">
     ${buildWatermark(isDraft, locale)}
-    ${buildVerifactuQrBlock(verifactuQr)}
     <div class="header">
       ${buildRecipientBlock(document, documentType, locale)}
       ${buildDatesBlock(document, documentType, locale)}

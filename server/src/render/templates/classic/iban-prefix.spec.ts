@@ -5,7 +5,7 @@ import { resolveClassicLocale } from './locale';
 import { buildFakeDocument } from './testing/fake-document';
 
 describe('the IBAN row is labelled, grouped in fours and keeps the no-break class', () => {
-  const languages: ClassicLanguage[] = ['bg', 'en', 'de', 'fr', 'it', 'pl', 'ro', 'es'];
+  const languages: ClassicLanguage[] = ['bg', 'en', 'de', 'fr', 'it', 'pl', 'ro'];
 
   for (const language of languages) {
     it(`prints IBAN: <value> for ${language}`, () => {

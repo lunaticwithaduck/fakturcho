@@ -7,7 +7,6 @@ import type {
 import { bg } from './bg';
 import { de } from './de';
 import { en } from './en';
-import { es } from './es';
 import { fr } from './fr';
 import { it } from './it';
 import { pl } from './pl';
@@ -120,7 +119,6 @@ export const CLASSIC_LABELS: Record<ClassicLanguage, ClassicLabels> = {
   it,
   pl,
   ro,
-  es,
 };
 
 export function getClassicLabels(language: ClassicLanguage): ClassicLabels {

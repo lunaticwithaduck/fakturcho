@@ -28,7 +28,6 @@ describe('generateStaticParams', () => {
       { locale: 'it' },
       { locale: 'pl' },
       { locale: 'ro' },
-      { locale: 'es' },
     ]);
   });
 });

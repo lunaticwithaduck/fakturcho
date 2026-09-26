@@ -68,13 +68,6 @@ describe('reverse-charge wording when the user picks the EU-services ground', ()
     const ground = 'Neimpozabil în România conform art. 278 alin. (2) din Codul fiscal';
     expect(render('ro', 'RO', {}, ground)).toContain('Taxare inversă');
   });
-
-  it('es adds the art. 196 reverse-charge mention to the art. 69 ground', () => {
-    const ground = 'Operación no sujeta a IVA (artículo 69.Uno.1º de la Ley 37/1992 del IVA)';
-    expect(render('es', 'ES', {}, ground)).toContain(
-      'Inversión del sujeto pasivo (artículo 196 de la Directiva 2006/112/CE)',
-    );
-  });
 });
 
 describe('Italian stamp duty', () => {

@@ -31,9 +31,8 @@ export function assertIssuable(
   }
 
   const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';
-  // BG ЗДДС чл. 115, ал. 4, т. 2; IE VAT Regulations 2010 Reg. 20; ES RD
-  // 1619/2012 art. 15: these issuers must state a reason before a credit or
-  // debit note can be issued.
+  // BG ЗДДС чл. 115, ал. 4, т. 2; IE VAT Regulations 2010 Reg. 20: these
+  // issuers must state a reason before a credit or debit note can be issued.
   if (
     isCorrection &&
     country &&
@@ -42,7 +41,7 @@ export function assertIssuable(
   ) {
     throw new DomainError(
       'CORRECTION_REASON_REQUIRED',
-      'A credit or debit note issued from Bulgaria, Ireland or Spain requires a reason for the correction before it can be issued.',
+      'A credit or debit note issued from Bulgaria or Ireland requires a reason for the correction before it can be issued.',
     );
   }
 
@@ -56,15 +55,6 @@ export function assertIssuable(
   }
 }
 
-export function issuedNumberPrefix(
-  existing: Document,
-  documentType: DocumentType,
-  country: string | null,
-): string | null {
-  const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';
-  // RD 1619/2012 art. 6.1.a / art. 15.5: a Spanish rectificativa is issued in
-  // its own series, printed with an "R-" prefix when none was set explicitly.
-  return isCorrection && country === 'ES' && existing.numberPrefix === null
-    ? 'R-'
-    : existing.numberPrefix;
+export function issuedNumberPrefix(existing: Document): string | null {
+  return existing.numberPrefix;
 }

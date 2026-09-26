@@ -10,6 +10,18 @@ const PUBLIC_BASE_PATHS = ['/', '/login', '/signup', '/privacy', '/terms', '/ref
 
 const BOT_UA_REGEX = /bot|crawl|spider|slurp|preview|facebookexternalhit|embedly|lighthouse/i;
 
+// Locales dropped after having been published: an old bookmark, backlink or
+// cookie must still land somewhere real, never 404 or crash.
+const REMOVED_LOCALES = ['es'] as const;
+
+function stripRemovedLocalePrefix(pathname: string): string | null {
+  for (const locale of REMOVED_LOCALES) {
+    if (pathname === `/${locale}`) return '/';
+    if (pathname.startsWith(`/${locale}/`)) return pathname.slice(locale.length + 1);
+  }
+  return null;
+}
+
 export function toBasePath(pathname: string): string {
   for (const locale of NON_DEFAULT_PUBLISHED_LOCALES) {
     if (pathname === `/${locale}`) return '/';
@@ -88,6 +100,15 @@ export function decideLocaleRedirect(input: LocaleRedirectInput): LocaleRedirect
     enEnabled,
     clientIsBulgarian,
   } = input;
+
+  const strippedRemovedLocalePath = stripRemovedLocalePrefix(pathname);
+  if (strippedRemovedLocalePath !== null) {
+    return {
+      redirect: { pathname: strippedRemovedLocalePath, search: searchString(searchParams) },
+      setLocaleCookie: null,
+      vary: false,
+    };
+  }
 
   if (!isPublicPath(pathname)) return NO_OP;
 

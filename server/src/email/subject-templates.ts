@@ -58,14 +58,6 @@ const DOCUMENT_LABELS: Record<Locale, Record<DocumentType, string>> = {
     quote: 'Ofertă',
     delivery_note: 'Aviz de însoțire a mărfii',
   },
-  es: {
-    invoice: 'Factura',
-    proforma: 'Factura proforma',
-    credit_note: 'Factura rectificativa (abono)',
-    debit_note: 'Factura rectificativa (cargo)',
-    quote: 'Presupuesto',
-    delivery_note: 'Albarán',
-  },
 };
 
 const NUMBER_MARKER: Record<Locale, string> = {
@@ -76,7 +68,6 @@ const NUMBER_MARKER: Record<Locale, string> = {
   it: 'n.',
   pl: 'nr',
   ro: 'nr.',
-  es: 'n.º',
 };
 
 export function buildDocumentSubject(

@@ -15,7 +15,6 @@ const EXPECTED_HREF: Record<string, string> = {
   IT: '/it/guide/fattura-elettronica-obbligatoria',
   PL: '/pl/guide/faktura-ksef',
   RO: '/ro/guide/factura-efactura-anaf-spv',
-  ES: '/es/guide/factura-obligatoria-espana',
 };
 const EU_HREF = '/en/guide/eu-vat-invoice-requirements';
 

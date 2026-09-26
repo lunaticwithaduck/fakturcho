@@ -103,11 +103,11 @@ describe('buildRecipientBlock — structured street/postcode/city address', () =
 
 describe('buildDatesBlock — never a dash for a missing optional date', () => {
   it('hides the issue-date row on a draft (issuedAt null)', () => {
-    const locale = resolveClassicLocale('es', 'ES');
+    const locale = resolveClassicLocale('fr', 'FR');
     const document = buildFakeDocument({ issuedAt: null });
     const html = buildDatesBlock(document, 'invoice', locale);
     expect(html).not.toContain('—');
-    expect(html).not.toContain('Fecha de expedición');
+    expect(html).not.toContain("Date d'émission");
   });
 
   it('hides the valid-until row on a draft quote (validUntil null)', () => {

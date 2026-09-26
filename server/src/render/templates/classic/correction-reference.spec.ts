@@ -25,7 +25,6 @@ const EXPECTED: Record<ClassicLanguage, string> = {
   it: 'Riferita alla fattura n. 0000000041 del 15/07/2026',
   pl: 'Dotyczy faktury nr 0000000041 z dnia 15.07.2026',
   ro: 'Referitoare la factura nr. 0000000041 din 15.07.2026',
-  es: 'Factura rectificada: n.º 0000000041 de 15/07/2026',
 };
 
 const EXPECTED_REASON: Record<ClassicLanguage, string> = {
@@ -36,7 +35,6 @@ const EXPECTED_REASON: Record<ClassicLanguage, string> = {
   it: 'Causale: Reso della merce',
   pl: 'Przyczyna korekty: Zwrot towaru',
   ro: 'Motivul corecției: Returnarea mărfii',
-  es: 'Motivo de la rectificación: Devolución de mercancía',
 };
 
 function render(
@@ -76,7 +74,6 @@ describe('correction reference', () => {
     it: 'Reso della merce',
     pl: 'Zwrot towaru',
     ro: 'Returnarea mărfii',
-    es: 'Devolución de mercancía',
   };
 
   for (const [language, expected] of Object.entries(EXPECTED_REASON)) {
@@ -118,7 +115,6 @@ describe('correction reference', () => {
     it: `Numero KSeF della fattura corretta: ${KSEF_NUMBER}`,
     pl: `Nr KSeF faktury korygowanej: ${KSEF_NUMBER}`,
     ro: `Numărul KSeF al facturii corectate: ${KSEF_NUMBER}`,
-    es: `Número KSeF de la factura rectificada: ${KSEF_NUMBER}`,
   };
 
   function renderWithKsef(language: ClassicLanguage, ksefNumber: string | null) {

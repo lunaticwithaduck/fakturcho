@@ -56,7 +56,7 @@ export function appendCountyRegionSuffix(
   country: string | null | undefined,
 ): string {
   if (!address || !countyRegion) return address;
-  // Never repeat the city when the county/province/județ is the same name (IT/ES/RO).
+  // Never repeat the city when the county/province/județ is the same name (IT/RO).
   if (namesMatch(city, countyRegion)) return address;
   if (country === 'RO') {
     // București is a municipality, not a județ, so it never takes "jud." (Legea
@@ -65,9 +65,6 @@ export function appendCountyRegionSuffix(
     return normalizeForComparison(countyRegion) === BUCHAREST_NORMALIZED
       ? `${address}, Municipiul ${countyRegion}`
       : `${address}, jud. ${countyRegion}`;
-  }
-  if (country === 'ES') {
-    return `${address}, ${countyRegion}`;
   }
   return address;
 }

@@ -9,7 +9,6 @@ const OG_LOCALE_TAGS: Record<Locale, string> = {
   it: 'it_IT',
   pl: 'pl_PL',
   ro: 'ro_RO',
-  es: 'es_ES',
 };
 
 export function ogLocaleTag(locale: Locale): string {

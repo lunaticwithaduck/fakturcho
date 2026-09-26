@@ -24,7 +24,7 @@ const ALWAYS_ENABLED: FeatureFlagsReader = { isEnabled: async () => true };
  */
 async function provisionTenant(prisma: PrismaClient, signupCountry: unknown): Promise<string> {
   const country =
-    typeof signupCountry === 'string' && isEuVatAreaCountry(signupCountry)
+    typeof signupCountry === 'string' && signupCountry !== 'ES' && isEuVatAreaCountry(signupCountry)
       ? signupCountry
       : undefined;
   const account = await prisma.$transaction(async (tx) => {

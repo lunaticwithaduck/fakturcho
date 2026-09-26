@@ -14,7 +14,6 @@ describe('a fractional quantity uses the locale decimal separator in every langu
     ['it', '2,5'],
     ['pl', '2,5'],
     ['ro', '2,5'],
-    ['es', '2,5'],
   ];
 
   for (const [language, expected] of cases) {

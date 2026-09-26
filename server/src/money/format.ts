@@ -16,7 +16,6 @@ const CONVENTIONS: Record<DocumentLanguage, NumberConvention> = {
   it: { thousands: '.', decimal: ',', dateSeparator: '/' },
   pl: { thousands: ' ', decimal: ',', dateSeparator: '.' },
   ro: { thousands: '.', decimal: ',', dateSeparator: '.' },
-  es: { thousands: '.', decimal: ',', dateSeparator: '/' },
 };
 
 export function decimalSeparatorForLocale(language: DocumentLanguage): string {

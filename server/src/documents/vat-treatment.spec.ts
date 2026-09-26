@@ -17,49 +17,6 @@ describe('resolveVatTreatment', () => {
     });
   });
 
-  it('requires an explicit ground for a non-registered ES issuer (no franchise regime)', () => {
-    expect(() =>
-      resolveVatTreatment({
-        documentType: 'invoice',
-        vatRegistered: false,
-        requestedGround: null,
-        issuerCountry: 'ES',
-      }),
-    ).toThrow(DomainError);
-    expect(() =>
-      resolveVatTreatment({
-        documentType: 'invoice',
-        vatRegistered: false,
-        requestedGround: null,
-        issuerCountry: 'ES',
-      }),
-    ).toThrow(/ES has no default VAT exemption ground/);
-  });
-
-  it('accepts the apartado the non-registered ES issuer picked', () => {
-    const treatment = resolveVatTreatment({
-      documentType: 'invoice',
-      vatRegistered: false,
-      requestedGround: 'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
-      issuerCountry: 'ES',
-    });
-    expect(treatment).toEqual({
-      vatCharged: false,
-      vatRateBp: 0,
-      vatExemptionGround: 'artículo 20.Uno.9º de la Ley 37/1992 del IVA',
-    });
-  });
-
-  it('does not require a ground for a non-tax document from a non-registered ES issuer', () => {
-    const treatment = resolveVatTreatment({
-      documentType: 'quote',
-      vatRegistered: false,
-      requestedGround: null,
-      issuerCountry: 'ES',
-    });
-    expect(treatment).toEqual({ vatCharged: false, vatRateBp: 0, vatExemptionGround: null });
-  });
-
   it('never charges VAT on a proforma or quote from a non-registered issuer', () => {
     for (const documentType of ['proforma', 'quote'] as const) {
       expect(
@@ -87,17 +44,6 @@ describe('resolveVatTreatment', () => {
         }),
       ).toEqual({ vatCharged: true, vatRateBp: 1900, vatExemptionGround: null });
     }
-  });
-
-  it('rejects an apartado outside the ES statutory list', () => {
-    expect(() =>
-      resolveVatTreatment({
-        documentType: 'invoice',
-        vatRegistered: false,
-        requestedGround: 'foo',
-        issuerCountry: 'ES',
-      }),
-    ).toThrow(DomainError);
   });
 
   it('rejects a made-up ground for a VAT-registered issuer at 0%', () => {

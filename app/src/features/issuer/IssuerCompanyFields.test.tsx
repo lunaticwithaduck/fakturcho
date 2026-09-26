@@ -49,15 +49,6 @@ const RO_VALUES: IssuerProfileFormValues = {
   countyRegion: '',
 };
 
-const ES_VALUES: IssuerProfileFormValues = {
-  ...BG_VALUES,
-  country: 'ES',
-  addressLine: '',
-  street: 'Calle Ejemplo 1',
-  postcode: '28001',
-  countyRegion: '',
-};
-
 const CZ_VALUES: IssuerProfileFormValues = {
   ...BG_VALUES,
   country: 'CZ',
@@ -168,25 +159,7 @@ describe('IssuerCompanyFields', () => {
     expect((screen.getByLabelText('Județ') as HTMLInputElement).required).toBe(true);
   });
 
-  it('renders Provincia as optional for an ES issuer', () => {
-    render(
-      <NextIntlClientProvider locale="bg" messages={bgMessages}>
-        <IssuerCompanyFields values={ES_VALUES} onChange={noop} />
-      </NextIntlClientProvider>,
-    );
-
-    expect((screen.getByLabelText('Provincia') as HTMLInputElement).required).toBe(false);
-  });
-
-  it('labels the identifier field NIF/CIF for an ES issuer and CUI/CIF for a RO issuer', () => {
-    render(
-      <NextIntlClientProvider locale="bg" messages={bgMessages}>
-        <IssuerCompanyFields values={ES_VALUES} onChange={noop} />
-      </NextIntlClientProvider>,
-    );
-    expect(screen.getByLabelText('NIF/CIF')).toBeTruthy();
-    cleanup();
-
+  it('labels the identifier field CUI/CIF for a RO issuer', () => {
     render(
       <NextIntlClientProvider locale="bg" messages={bgMessages}>
         <IssuerCompanyFields values={RO_VALUES} onChange={noop} />

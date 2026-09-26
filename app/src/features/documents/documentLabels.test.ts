@@ -55,19 +55,16 @@ describe('getDocumentStatusLabel — gender agreement', () => {
   it('defaults to the feminine form with no documentType', () => {
     expect(getDocumentStatusLabel('sent', 'fr')).toBe('Émise');
     expect(getDocumentStatusLabel('paid', 'it')).toBe('PAGATA');
-    expect(getDocumentStatusLabel('cancelled', 'es')).toBe('ANULADA');
   });
 
-  it('agrees with a masculine document type (un devis, il preventivo, el presupuesto)', () => {
+  it('agrees with a masculine document type (un devis, il preventivo)', () => {
     expect(getDocumentStatusLabel('sent', 'fr', 'quote')).toBe('Émis');
     expect(getDocumentStatusLabel('paid', 'it', 'quote')).toBe('PAGATO');
-    expect(getDocumentStatusLabel('cancelled', 'es', 'quote')).toBe('ANULADO');
   });
 
-  it('agrees with the delivery note in FR, IT, ES, PL and RO', () => {
+  it('agrees with the delivery note in FR, IT, PL and RO', () => {
     expect(getDocumentStatusLabel('cancelled', 'fr', 'delivery_note')).toBe('ANNULÉ');
     expect(getDocumentStatusLabel('sent', 'it', 'delivery_note')).toBe('Emesso');
-    expect(getDocumentStatusLabel('paid', 'es', 'delivery_note')).toBe('PAGADO');
     expect(getDocumentStatusLabel('cancelled', 'pl', 'delivery_note')).toBe('ANULOWANY');
     expect(getDocumentStatusLabel('paid', 'pl', 'delivery_note')).toBe('ZAPŁACONO');
     expect(getDocumentStatusLabel('sent', 'ro', 'delivery_note')).toBe('Emis');
@@ -109,12 +106,12 @@ describe('getDocumentStatusLabel', () => {
 
   it.each(DOCUMENT_STATUSES)('renders a non-English, non-Bulgarian label for %s', (status) => {
     const expected: Record<(typeof DOCUMENT_STATUSES)[number], string> = {
-      draft: 'Borrador',
-      sent: 'Emitida',
-      paid: 'PAGADA',
-      overdue: 'VENCIDA',
-      cancelled: 'ANULADA',
+      draft: 'Brouillon',
+      sent: 'Émise',
+      paid: 'PAYÉE',
+      overdue: 'EN RETARD',
+      cancelled: 'ANNULÉE',
     };
-    expect(getDocumentStatusLabel(status, 'es')).toBe(expected[status]);
+    expect(getDocumentStatusLabel(status, 'fr')).toBe(expected[status]);
   });
 });

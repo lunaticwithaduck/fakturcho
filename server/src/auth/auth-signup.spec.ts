@@ -171,6 +171,23 @@ describe('signup provisions a tenant', () => {
     expect(issuerProfile?.country).toBe('DE');
   });
 
+  it('rejects Spain as a signup issuer country, falling back to the BG default', async () => {
+    const auth = createAuth(db.prisma, AUTH_OPTIONS);
+
+    const result = await auth.api.signUpEmail({
+      body: {
+        name: 'Spanish Country User',
+        email: 'es-country-profile@example.com',
+        password: 'correct-horse-battery',
+        country: 'ES',
+      },
+    });
+
+    const accountId = result.user.accountId;
+    const issuerProfile = await db.prisma.issuerProfile.findUnique({ where: { accountId } });
+    expect(issuerProfile?.country).toBe('BG');
+  });
+
   it('provisions the issuer profile with the default country when none is given', async () => {
     const auth = createAuth(db.prisma, AUTH_OPTIONS);
 

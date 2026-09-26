@@ -12,7 +12,6 @@ const INTL_TAGS: Partial<Record<Locale, string>> = {
   it: 'it-IT',
   pl: 'pl-PL',
   ro: 'ro-RO',
-  es: 'es-ES',
 };
 
 function groupThousands(value: number): string {

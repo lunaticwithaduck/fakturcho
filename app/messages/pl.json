@@ -147,7 +147,7 @@
       },
       "correctionReason": {
         "label": "Przyczyna korekty",
-        "requiredHint": "Wymagane dla wystawców z Bułgarii, Irlandii i Hiszpanii."
+        "requiredHint": "Wymagane dla wystawców z Bułgarii i Irlandii."
       },
       "deliveryReference": {
         "label": "Powiązana faktura",
@@ -257,8 +257,6 @@
           "countyRegion": "Brak okręgu (județ) wystawcy.",
           "sirenOrSiret": "Brak numeru SIREN lub SIRET wystawcy.",
           "vatNumberFrFormat": "Numer VAT wystawcy musi być w formacie francuskim.",
-          "esTaxId": "Brak identyfikatora podatkowego wystawcy (NIF/CIF/NIE).",
-          "esTaxIdInvalid": "Identyfikator podatkowy wystawcy nie jest prawidłowym hiszpańskim numerem NIF, NIE ani CIF.",
           "partitaIva": "Brak numeru Partita IVA wystawcy.",
           "partitaIvaInvalid": "Numer Partita IVA wystawcy nie jest prawidłowym włoskim numerem VAT.",
           "codiceFiscale": "Brak numeru Codice Fiscale wystawcy.",
@@ -279,8 +277,6 @@
           "countyRegion": "Brak okręgu (județ) nabywcy.",
           "sirenOrSiret": "Brak numeru SIREN lub SIRET nabywcy.",
           "vatNumberFrFormat": "Numer VAT nabywcy musi być w formacie francuskim.",
-          "esTaxId": "Brak identyfikatora podatkowego nabywcy (NIF/CIF/NIE).",
-          "esTaxIdInvalid": "Identyfikator podatkowy nabywcy nie jest prawidłowym hiszpańskim numerem NIF, NIE ani CIF.",
           "partitaIvaOrCodiceFiscale": "Brak numeru Partita IVA lub Codice Fiscale nabywcy.",
           "partitaIvaInvalid": "Numer Partita IVA nabywcy nie jest prawidłowym włoskim numerem VAT.",
           "codiceFiscaleInvalid": "Numer Codice Fiscale nabywcy ma nieprawidłowy format.",
@@ -456,8 +452,7 @@
       "fr": "Francuski",
       "it": "Włoski",
       "pl": "Polski",
-      "ro": "Rumuński",
-      "es": "Hiszpański"
+      "ro": "Rumuński"
     }
   },
   "issuer": {
@@ -529,7 +524,6 @@
       "DE": "Niemcy",
       "DK": "Dania",
       "EE": "Estonia",
-      "ES": "Hiszpania",
       "FI": "Finlandia",
       "FR": "Francja",
       "GB": "Wielka Brytania",
@@ -576,7 +570,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Wybierz dokument pierwotny, aby kontynuować.",
       "ISSUER_PROFILE_INCOMPLETE": "Profil wystawcy jest niekompletny. Uzupełnij dane firmy, aby wystawiać dokumenty.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Dowód dostawy dla tego kraju wymaga uzupełnienia danych transportu przed wystawieniem.",
-      "CORRECTION_REASON_REQUIRED": "Faktura korygująca (nota kredytowa lub debetowa) z Bułgarii, Irlandii lub Hiszpanii wymaga podania przyczyny korekty przed wystawieniem.",
+      "CORRECTION_REASON_REQUIRED": "Faktura korygująca (nota kredytowa lub debetowa) z Bułgarii lub Irlandii wymaga podania przyczyny korekty przed wystawieniem.",
       "VAT_GROUND_NOT_ALLOWED": "Ta podstawa zwolnienia z VAT jest niedozwolona.",
       "CLIENT_EIK_DUPLICATE": "Klient z tym numerem identyfikacyjnym już istnieje.",
       "SUBSCRIPTION_REQUIRED": "Wymagany jest aktywny abonament.",
@@ -635,7 +629,6 @@
       "DE": "Niemcy",
       "DK": "Dania",
       "EE": "Estonia",
-      "ES": "Hiszpania",
       "FI": "Finlandia",
       "FR": "Francja",
       "GR": "Grecja",
@@ -912,10 +905,6 @@
         "RO": {
           "name": "Rumunia",
           "line": "VAT 21%, faktury w języku rumuńskim, e-faktury w formacie RO CIUS-RO do systemu SPV ANAF."
-        },
-        "ES": {
-          "name": "Hiszpania",
-          "line": "VAT 21%, faktury w języku hiszpańskim, e-faktury w formacie Facturae na platformę FACe."
         }
       }
     },
@@ -925,7 +914,7 @@
         "Faktury, faktury pro forma, faktury korygujące, oferty oraz dowody dostawy.",
         "Ciągła numeracja — bez luk i powtórzeń.",
         "VAT zależny od kraju: lokalne stawki, zwolnienia i odwrotne obciążenie w transgranicznych transakcjach B2B, z weryfikacją numeru VAT klienta w systemie VIES na bieżąco.",
-        "E-faktury zgodne z EN 16931 w formacie Twojego kraju — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gotowe do przesłania na krajową platformę (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "E-faktury zgodne z EN 16931 w formacie Twojego kraju — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — gotowe do przesłania na krajową platformę (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "Gotowy plik PDF w języku Twojego kraju, do pobrania lub wysyłki e-mailem."
       ]
     },
@@ -961,7 +950,7 @@
         },
         {
           "question": "Które kraje są obsługiwane?",
-          "answer": "Dokumenty może wystawiać każda firma zarejestrowana w obszarze VAT UE. Ustrukturyzowane e-faktury w formacie krajowym są generowane dla Niemiec, Francji, Włoch, Polski, Rumunii i Hiszpanii — gotowe do przesłania na krajową platformę; dla Bułgarii w europejskim formacie EN 16931 (UBL)."
+          "answer": "Dokumenty może wystawiać każda firma zarejestrowana w obszarze VAT UE. Ustrukturyzowane e-faktury w formacie krajowym są generowane dla Niemiec, Francji, Włoch, Polski i Rumunii — gotowe do przesłania na krajową platformę; dla Bułgarii w europejskim formacie EN 16931 (UBL)."
         },
         {
           "question": "Jak obsługiwany jest VAT w przypadku klienta z innego kraju UE?",
@@ -969,7 +958,7 @@
         },
         {
           "question": "Czy można wystawiać faktury bez rejestracji do VAT?",
-          "answer": "To zależy od kraju. Bułgaria, Niemcy (§ 19 UStG), Francja (franchise en base), Włochy (regime forfettario), Polska (art. 113) i Rumunia (art. 310) mają zwolnienie podmiotowe dla małych podmiotów, a Fakturcho automatycznie drukuje właściwą podstawę zwolnienia. Hiszpania nie ma ogólnego zwolnienia dla małych firm — niezarejestrowany do VAT wystawca z Hiszpanii sam wybiera dla każdego dokumentu właściwą zwolnioną czynność na podstawie art. 20 hiszpańskiej ustawy o VAT."
+          "answer": "To zależy od kraju. Bułgaria, Niemcy (§ 19 UStG), Francja (franchise en base), Włochy (regime forfettario), Polska (art. 113) i Rumunia (art. 310) mają zwolnienie podmiotowe dla małych podmiotów, a Fakturcho automatycznie drukuje właściwą podstawę zwolnienia."
         },
         {
           "question": "Czym różni się faktura pro forma od faktury?",

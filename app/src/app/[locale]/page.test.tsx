@@ -8,7 +8,7 @@ describe('LocaleHomePage metadata', () => {
 
     expect(metadata.openGraph?.locale).toBe('en_US');
     expect(metadata.openGraph).toMatchObject({
-      alternateLocale: ['bg_BG', 'de_DE', 'fr_FR', 'it_IT', 'pl_PL', 'ro_RO', 'es_ES'],
+      alternateLocale: ['bg_BG', 'de_DE', 'fr_FR', 'it_IT', 'pl_PL', 'ro_RO'],
     });
   });
 
@@ -17,7 +17,7 @@ describe('LocaleHomePage metadata', () => {
 
     expect(metadata.openGraph?.locale).toBe('de_DE');
     expect(metadata.openGraph).toMatchObject({
-      alternateLocale: ['bg_BG', 'en_US', 'fr_FR', 'it_IT', 'pl_PL', 'ro_RO', 'es_ES'],
+      alternateLocale: ['bg_BG', 'en_US', 'fr_FR', 'it_IT', 'pl_PL', 'ro_RO'],
     });
   });
 });

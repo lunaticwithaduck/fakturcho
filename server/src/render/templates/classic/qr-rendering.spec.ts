@@ -19,11 +19,10 @@ function baseInput(overrides: Record<string, unknown> = {}) {
   };
 }
 
-describe('renderClassicTemplateHtml — PL KOD I / ES VERI*FACTU QR blocks', () => {
-  it('omits both QR blocks when neither is supplied', () => {
+describe('renderClassicTemplateHtml — PL KOD I QR block', () => {
+  it('omits the QR block when none is supplied', () => {
     const html = renderClassicTemplateHtml(baseInput());
     expect(html).not.toContain('class="ksef-qr"');
-    expect(html).not.toContain('class="verifactu-qr-row"');
   });
 
   it('prints the KOD I QR with the KSeF number label when set', () => {
@@ -40,34 +39,6 @@ describe('renderClassicTemplateHtml — PL KOD I / ES VERI*FACTU QR blocks', () 
     expect(html).toContain(
       '<div class="qr-label">1234563218-20260905-010203ABCDEF-4A5B6C-7D</div>',
     );
-  });
-
-  it('prints the VERI*FACTU QR with no legend when the record was not sent to AEAT', () => {
-    const html = renderClassicTemplateHtml(
-      baseInput({ verifactuQr: { svg: '<svg data-fake="verifactu"></svg>', legend: null } }),
-    );
-    expect(html).toContain('class="verifactu-qr-row"');
-    expect(html).toContain('<svg data-fake="verifactu"></svg>');
-    expect(html).not.toContain('class="qr-legend"');
-  });
-
-  it('prints the literal "QR tributario:" caption above the code, centred at the top of the page', () => {
-    const html = renderClassicTemplateHtml(
-      baseInput({ verifactuQr: { svg: '<svg data-fake="verifactu"></svg>', legend: null } }),
-    );
-    expect(html).toContain('<div class="qr-tributario-label">QR tributario:</div>');
-    const labelIndex = html.indexOf('qr-tributario-label');
-    const imageIndex = html.indexOf('data-fake="verifactu"');
-    expect(labelIndex).toBeGreaterThan(-1);
-    expect(labelIndex).toBeLessThan(imageIndex);
-    expect(html.indexOf('verifactu-qr-row')).toBeLessThan(html.indexOf('class="header"'));
-  });
-
-  it('prints the VERI*FACTU legend only when one is supplied', () => {
-    const html = renderClassicTemplateHtml(
-      baseInput({ verifactuQr: { svg: '<svg></svg>', legend: 'VERI*FACTU' } }),
-    );
-    expect(html).toContain('<div class="qr-legend">VERI*FACTU</div>');
   });
 
   it('escapes the KOD I label', () => {

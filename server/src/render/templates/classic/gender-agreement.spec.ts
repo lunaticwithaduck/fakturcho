@@ -12,7 +12,7 @@ const vatChargedPresentation: VatPresentation = {
 };
 
 function renderStatus(
-  language: 'it' | 'fr' | 'es' | 'ro' | 'pl',
+  language: 'it' | 'fr' | 'ro' | 'pl',
   documentType: string,
   status: 'SENT' | 'PAID' | 'CANCELLED',
 ): string {
@@ -25,8 +25,8 @@ function renderStatus(
   });
 }
 
-// il preventivo / un devis / el presupuesto are masculine, as is the delivery
-// note in IT/FR/ES/PL; RO's neuter "aviz" takes the masculine singular form.
+// il preventivo / un devis are masculine, as is the delivery note in
+// IT/FR/PL; RO's neuter "aviz" takes the masculine singular form.
 describe('gender agreement per document type', () => {
   it('IT: agrees with il preventivo (masculine) on a quote and la fattura (feminine) elsewhere', () => {
     const invoice = renderStatus('it', 'INVOICE', 'PAID');
@@ -53,14 +53,6 @@ describe('gender agreement per document type', () => {
     expect(debitNote).toContain('Statut : ANNULÉE');
   });
 
-  it('ES: agrees with el presupuesto (masculine) and la factura (feminine)', () => {
-    const invoice = renderStatus('es', 'INVOICE', 'PAID');
-    expect(invoice).toContain('Estado: PAGADA');
-    const quote = renderStatus('es', 'QUOTE', 'PAID');
-    expect(quote).toContain('Estado: PAGADO');
-    expect(quote).toContain('Válido hasta:');
-  });
-
   it('RO: ofertă is feminine, the aviz of a delivery note takes the masculine form', () => {
     const invoice = renderStatus('ro', 'INVOICE', 'PAID');
     expect(invoice).toContain('Status: ACHITATĂ');
@@ -72,10 +64,9 @@ describe('gender agreement per document type', () => {
     expect(deliveryNote).toContain('Întocmit de:');
   });
 
-  it('delivery notes take the masculine form in IT, FR, ES and PL', () => {
+  it('delivery notes take the masculine form in IT, FR and PL', () => {
     expect(renderStatus('it', 'DELIVERY_NOTE', 'CANCELLED')).toContain('Stato: ANNULLATO');
     expect(renderStatus('fr', 'DELIVERY_NOTE', 'CANCELLED')).toContain('Statut : ANNULÉ<');
-    expect(renderStatus('es', 'DELIVERY_NOTE', 'CANCELLED')).toContain('Estado: ANULADO');
     expect(renderStatus('pl', 'DELIVERY_NOTE', 'CANCELLED')).toContain('Status: ANULOWANY');
     expect(renderStatus('pl', 'INVOICE', 'CANCELLED')).toContain('Status: ANULOWANA');
   });

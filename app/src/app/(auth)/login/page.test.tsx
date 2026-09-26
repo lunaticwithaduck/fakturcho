@@ -14,7 +14,6 @@ describe('LoginPage metadata', () => {
       it: '/it/login',
       pl: '/pl/login',
       ro: '/ro/login',
-      es: '/es/login',
       'x-default': '/login',
     });
   });

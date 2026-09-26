@@ -147,7 +147,7 @@
       },
       "correctionReason": {
         "label": "Motivul corecției",
-        "requiredHint": "Obligatoriu pentru emitenții din Bulgaria, Irlanda și Spania."
+        "requiredHint": "Obligatoriu pentru emitenții din Bulgaria și Irlanda."
       },
       "deliveryReference": {
         "label": "Factură asociată",
@@ -257,8 +257,6 @@
           "countyRegion": "Lipsește județul emitentului.",
           "sirenOrSiret": "Lipsește codul SIREN sau SIRET al emitentului.",
           "vatNumberFrFormat": "Codul de TVA al emitentului trebuie să fie în formatul francez.",
-          "esTaxId": "Lipsește identificatorul fiscal (NIF/CIF/NIE) al emitentului.",
-          "esTaxIdInvalid": "Identificatorul fiscal al emitentului nu este un NIF, NIE sau CIF spaniol valid.",
           "partitaIva": "Lipsește Partita IVA a emitentului.",
           "partitaIvaInvalid": "Partita IVA a emitentului nu este un cod de TVA italian valid.",
           "codiceFiscale": "Lipsește codul Codice Fiscale al emitentului.",
@@ -279,8 +277,6 @@
           "countyRegion": "Lipsește județul destinatarului.",
           "sirenOrSiret": "Lipsește codul SIREN sau SIRET al destinatarului.",
           "vatNumberFrFormat": "Codul de TVA al destinatarului trebuie să fie în formatul francez.",
-          "esTaxId": "Lipsește identificatorul fiscal (NIF/CIF/NIE) al destinatarului.",
-          "esTaxIdInvalid": "Identificatorul fiscal al destinatarului nu este un NIF, NIE sau CIF spaniol valid.",
           "partitaIvaOrCodiceFiscale": "Lipsește Partita IVA sau codul Codice Fiscale al destinatarului.",
           "partitaIvaInvalid": "Partita IVA a destinatarului nu este un cod de TVA italian valid.",
           "codiceFiscaleInvalid": "Codul Codice Fiscale al destinatarului nu are un format valid.",
@@ -456,8 +452,7 @@
       "fr": "Franceză",
       "it": "Italiană",
       "pl": "Polonă",
-      "ro": "Română",
-      "es": "Spaniolă"
+      "ro": "Română"
     }
   },
   "issuer": {
@@ -529,7 +524,6 @@
       "DE": "Germania",
       "DK": "Danemarca",
       "EE": "Estonia",
-      "ES": "Spania",
       "FI": "Finlanda",
       "FR": "Franța",
       "GB": "Regatul Unit",
@@ -576,7 +570,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Selectați documentul original pentru a continua.",
       "ISSUER_PROFILE_INCOMPLETE": "Profilul emitentului este incomplet. Completați datele firmei pentru a putea emite documente.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Avizul de însoțire a mărfii pentru această țară necesită completarea datelor de transport înainte de a fi emis.",
-      "CORRECTION_REASON_REQUIRED": "Nota de credit sau de debit din Bulgaria, Irlanda sau Spania necesită un motiv al corecției înainte de a fi emisă.",
+      "CORRECTION_REASON_REQUIRED": "Nota de credit sau de debit din Bulgaria sau Irlanda necesită un motiv al corecției înainte de a fi emisă.",
       "VAT_GROUND_NOT_ALLOWED": "Acest temei de scutire de TVA nu este permis.",
       "CLIENT_EIK_DUPLICATE": "Există deja un client cu acest cod de identificare fiscală.",
       "SUBSCRIPTION_REQUIRED": "Este necesar un abonament activ.",
@@ -635,7 +629,6 @@
       "DE": "Germania",
       "DK": "Danemarca",
       "EE": "Estonia",
-      "ES": "Spania",
       "FI": "Finlanda",
       "FR": "Franța",
       "GR": "Grecia",
@@ -912,10 +905,6 @@
         "RO": {
           "name": "România",
           "line": "TVA 21%, facturi în limba română, e-facturi în format RO CIUS-RO pentru SPV-ul ANAF."
-        },
-        "ES": {
-          "name": "Spania",
-          "line": "TVA 21%, facturi în limba spaniolă, e-facturi în format Facturae pentru platforma FACe."
         }
       }
     },
@@ -925,7 +914,7 @@
         "Facturi, facturi proforme, note de credit și de debit, oferte și avize de însoțire a mărfii.",
         "Numerotare continuă — fără goluri și fără dubluri.",
         "TVA în funcție de țară: cote locale, scutiri și taxare inversă pentru tranzacții B2B transfrontaliere, cu verificarea în timp real în VIES a codului de TVA al clientului.",
-        "E-facturi EN 16931 în formatul specific țării dumneavoastră — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — gata de încărcat pe platforma națională (SPV ANAF, SDI, KSeF, Chorus Pro, FACe).",
+        "E-facturi EN 16931 în formatul specific țării dumneavoastră — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — gata de încărcat pe platforma națională (SPV ANAF, SDI, KSeF, Chorus Pro).",
         "PDF gata făcut, în limba țării dumneavoastră, pe care îl descărcați sau îl trimiteți prin email."
       ]
     },
@@ -961,7 +950,7 @@
         },
         {
           "question": "Pentru ce țări funcționează?",
-          "answer": "Orice firmă cu sediul în spațiul de TVA al UE poate emite documente. E-facturile structurate în formatul național sunt generate pentru Germania, Franța, Italia, Polonia, România și Spania, gata de încărcat pe platforma națională; pentru Bulgaria, în formatul european EN 16931 (UBL)."
+          "answer": "Orice firmă cu sediul în spațiul de TVA al UE poate emite documente. E-facturile structurate în formatul național sunt generate pentru Germania, Franța, Italia, Polonia și România, gata de încărcat pe platforma națională; pentru Bulgaria, în formatul european EN 16931 (UBL)."
         },
         {
           "question": "Cum se aplică TVA pentru un client din altă țară UE?",
@@ -969,7 +958,7 @@
         },
         {
           "question": "Pot emite facturi fără înregistrare în scopuri de TVA?",
-          "answer": "Depinde de țară. Bulgaria, Germania (§ 19 UStG), Franța (franchise en base), Italia (regime forfettario), Polonia (art. 113) și România (art. 310) au fiecare un regim de scutire pentru întreprinderile mici, iar Fakturcho tipărește automat temeiul de scutire corect. Spania nu are un regim general de scutire pentru întreprinderile mici — un emitent spaniol neînregistrat în scopuri de TVA trebuie să aleagă el însuși, pentru fiecare document, activitatea scutită aplicabilă conform art. 20 din legea spaniolă a TVA."
+          "answer": "Depinde de țară. Bulgaria, Germania (§ 19 UStG), Franța (franchise en base), Italia (regime forfettario), Polonia (art. 113) și România (art. 310) au fiecare un regim de scutire pentru întreprinderile mici, iar Fakturcho tipărește automat temeiul de scutire corect."
         },
         {
           "question": "Care este diferența dintre o factură proformă și o factură?",

@@ -17,7 +17,6 @@ const ECB_LABEL: Record<ClassicLanguage, string> = {
   it: 'BCE',
   pl: 'EBC',
   ro: 'BCE',
-  es: 'BCE',
 };
 
 const CURRENCY_DISPLAY: Record<string, { label: string; symbol: string }> = {

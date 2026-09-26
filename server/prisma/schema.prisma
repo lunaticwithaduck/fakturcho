@@ -478,14 +478,3 @@ model FeatureFlag {
 
   @@map("feature_flag")
 }
-
-model EsVerifactuChainLink {
-  id              String   @id @default(cuid())
-  issuerNif       String   @unique
-  numSerieFactura String
-  fechaExpedicion String
-  huella          String
-  updatedAt       DateTime @updatedAt
-
-  @@map("es_verifactu_chain_link")
-}

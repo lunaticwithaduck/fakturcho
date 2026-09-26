@@ -707,9 +707,7 @@ describe('ComposerCorrectionReasonField', () => {
   it('renders the Bulgarian label and required hint', () => {
     renderWithLocale('bg', <ComposerCorrectionReasonField value="" required onChange={() => {}} />);
     expect(screen.getByText('Основание за корекцията')).toBeTruthy();
-    expect(
-      screen.getByText('Задължително за издатели от България, Ирландия и Испания.'),
-    ).toBeTruthy();
+    expect(screen.getByText('Задължително за издатели от България и Ирландия.')).toBeTruthy();
   });
 
   it('renders the English label without a hint when not required, without missing-key warnings', () => {
@@ -720,7 +718,7 @@ describe('ComposerCorrectionReasonField', () => {
       <ComposerCorrectionReasonField value="" required={false} onChange={() => {}} />,
     );
     expect(screen.getByText('Reason for the correction')).toBeTruthy();
-    expect(screen.queryByText('Required for issuers in Bulgaria, Ireland and Spain.')).toBeNull();
+    expect(screen.queryByText('Required for issuers in Bulgaria and Ireland.')).toBeNull();
 
     expect(consoleError).not.toHaveBeenCalled();
     consoleError.mockRestore();

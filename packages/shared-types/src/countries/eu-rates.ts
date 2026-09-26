@@ -49,6 +49,15 @@ const RAW_EU_STANDARD_RATES: Record<string, { rates: RawRates; timeZone: string 
     ],
     timeZone: 'Europe/Tallinn',
   },
+  ES: {
+    rates: [
+      [2100, '21%'],
+      [1000, '10%'],
+      [400, '4%'],
+      [0, '0%'],
+    ],
+    timeZone: 'Europe/Madrid',
+  },
   FI: {
     rates: [
       [2550, '25.5%'],

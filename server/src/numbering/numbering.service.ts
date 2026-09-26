@@ -22,14 +22,13 @@ export class NumberingService {
     tx: Prisma.TransactionClient,
     accountId: string,
     documentType: DocumentType,
-    country: string | null,
     overrideNumber?: number,
   ): Promise<bigint> {
     if (overrideNumber !== undefined && (!Number.isInteger(overrideNumber) || overrideNumber < 1)) {
       throw new DomainError('VALIDATION_FAILED', 'overrideNumber must be a positive integer.');
     }
 
-    const group = seriesGroupFor(documentType, country);
+    const group = seriesGroupFor(documentType);
     const prismaTypes = group.types.map(toPrismaDocumentType);
     const representativeType = prismaTypes[0];
 
@@ -81,15 +80,12 @@ export class NumberingService {
   }
 
   async getSeriesInfo(accountId: string): Promise<SeriesInfoDto[]> {
-    const issuerProfile = await this.prisma.issuerProfile.findUnique({ where: { accountId } });
-    const country = issuerProfile?.country ?? null;
-
     const rows = await this.prisma.numberSeries.findMany({ where: { accountId } });
     const bySeriesKey = new Map(
       rows.filter((row) => row.seriesKey !== null).map((row) => [row.seriesKey as string, row]),
     );
     return DOCUMENT_TYPES.map((documentType) => {
-      const group = seriesGroupFor(documentType, country);
+      const group = seriesGroupFor(documentType);
       const row = bySeriesKey.get(group.key);
       if (!row) {
         return { documentType, previousNumber: null, nextNumber: 1, overridable: true };

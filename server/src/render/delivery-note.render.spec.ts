@@ -41,7 +41,6 @@ describe('delivery_note rendering', () => {
     { language: 'it', issuerCountry: 'IT', label: 'Documento di trasporto (DDT)' },
     { language: 'pl', issuerCountry: 'PL', label: 'Dowód dostawy' },
     { language: 'ro', issuerCountry: 'RO', label: 'Aviz de însoțire a mărfii' },
-    { language: 'es', issuerCountry: 'ES', label: 'Albarán' },
   ];
 
   for (const { language, issuerCountry, label } of cases) {

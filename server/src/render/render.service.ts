@@ -6,7 +6,6 @@ import { FeatureFlagsService } from '../feature-flags/feature-flags.service';
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 import { resolveVatPresentation } from '../money/vat';
 import { buildDownloadFilename } from './content-disposition';
-import { buildVerifactuQr } from './es-verifactu-qr.builder';
 import { resolveDocumentIssuerCountry, resolveDocumentLanguage } from './language';
 import { resolveOriginalDocumentRef } from './original-document-ref';
 import { buildKsefQr } from './pl-ksef-qr.builder';
@@ -140,12 +139,14 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       document.originalDocumentId,
       documentType,
     );
-
-    const [ksefQr, verifactuQr] = await Promise.all([
-      buildKsefQr(this.prisma, accountId, document, documentType, issuerCountry, isDraft),
-      buildVerifactuQr(document, documentType, issuerCountry, isDraft),
-    ]);
-
+    const ksefQr = await buildKsefQr(
+      this.prisma,
+      accountId,
+      document,
+      documentType,
+      issuerCountry,
+      isDraft,
+    );
     const html = renderClassicTemplateHtml({
       document: effectiveDocument,
       lineItems: document.lineItems,
@@ -156,7 +157,6 @@ export class RenderService implements OnModuleInit, OnModuleDestroy {
       issuerCountry,
       originalDocument,
       ksefQr,
-      verifactuQr,
     });
 
     const buffer = await this.renderHtmlToPdf(html);

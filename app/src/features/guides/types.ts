@@ -1,6 +1,6 @@
 import type { Locale } from '@shared/types';
 
-export type GuideCountryCode = 'BG' | 'DE' | 'FR' | 'IT' | 'PL' | 'RO' | 'ES' | 'EU';
+export type GuideCountryCode = 'BG' | 'DE' | 'FR' | 'IT' | 'PL' | 'RO' | 'EU';
 
 export interface InlineRun {
   text: string;

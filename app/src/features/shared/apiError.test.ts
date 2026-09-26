@@ -40,14 +40,14 @@ describe('getApiErrorMessage', () => {
   it('maps CORRECTION_REASON_REQUIRED to a Bulgarian message', () => {
     const error = { status: 422, data: { code: 'CORRECTION_REASON_REQUIRED' } };
     expect(getApiErrorMessage(error, 'bg')).toBe(
-      'Кредитното или дебитно известие от България, Ирландия или Испания изисква основание за корекцията, преди да бъде издадено.',
+      'Кредитното или дебитно известие от България или Ирландия изисква основание за корекцията, преди да бъде издадено.',
     );
   });
 
   it('maps CORRECTION_REASON_REQUIRED to an English message', () => {
     const error = { status: 422, data: { code: 'CORRECTION_REASON_REQUIRED' } };
     expect(getApiErrorMessage(error, 'en')).toBe(
-      'A credit or debit note from Bulgaria, Ireland or Spain needs a reason for the correction before it can be issued.',
+      'A credit or debit note from Bulgaria or Ireland needs a reason for the correction before it can be issued.',
     );
   });
 

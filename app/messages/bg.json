@@ -147,7 +147,7 @@
       },
       "correctionReason": {
         "label": "Основание за корекцията",
-        "requiredHint": "Задължително за издатели от България, Ирландия и Испания."
+        "requiredHint": "Задължително за издатели от България и Ирландия."
       },
       "deliveryReference": {
         "label": "Свързана фактура",
@@ -257,8 +257,6 @@
           "countyRegion": "Липсва област/județ на издателя.",
           "sirenOrSiret": "Липсва SIREN или SIRET на издателя.",
           "vatNumberFrFormat": "ДДС номерът на издателя трябва да е във френски формат.",
-          "esTaxId": "Липсва данъчен идентификатор (NIF/CIF/NIE) на издателя.",
-          "esTaxIdInvalid": "Данъчният идентификатор на издателя не е валиден испански NIF, NIE или CIF.",
           "partitaIva": "Липсва Partita IVA на издателя.",
           "partitaIvaInvalid": "Partita IVA на издателя не е валиден италиански ДДС номер.",
           "codiceFiscale": "Липсва Codice Fiscale на издателя.",
@@ -279,8 +277,6 @@
           "countyRegion": "Липсва област/județ на получателя.",
           "sirenOrSiret": "Липсва SIREN или SIRET на получателя.",
           "vatNumberFrFormat": "ДДС номерът на получателя трябва да е във френски формат.",
-          "esTaxId": "Липсва данъчен идентификатор (NIF/CIF/NIE) на получателя.",
-          "esTaxIdInvalid": "Данъчният идентификатор на получателя не е валиден испански NIF, NIE или CIF.",
           "partitaIvaOrCodiceFiscale": "Липсва Partita IVA или Codice Fiscale на получателя.",
           "partitaIvaInvalid": "Partita IVA на получателя не е валиден италиански ДДС номер.",
           "codiceFiscaleInvalid": "Codice Fiscale на получателя няма валиден формат.",
@@ -456,8 +452,7 @@
       "fr": "Френски",
       "it": "Италиански",
       "pl": "Полски",
-      "ro": "Румънски",
-      "es": "Испански"
+      "ro": "Румънски"
     }
   },
   "issuer": {
@@ -529,7 +524,6 @@
       "DE": "Германия",
       "DK": "Дания",
       "EE": "Естония",
-      "ES": "Испания",
       "FI": "Финландия",
       "FR": "Франция",
       "GB": "Обединено кралство",
@@ -576,7 +570,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Изберете оригиналния документ, за да продължите.",
       "ISSUER_PROFILE_INCOMPLETE": "Профилът на издателя не е попълнен. Допълнете фирмените данни, за да издавате документи.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Стоковата разписка за тази държава изисква попълнени данни за транспорта, преди да бъде издадена.",
-      "CORRECTION_REASON_REQUIRED": "Кредитното или дебитно известие от България, Ирландия или Испания изисква основание за корекцията, преди да бъде издадено.",
+      "CORRECTION_REASON_REQUIRED": "Кредитното или дебитно известие от България или Ирландия изисква основание за корекцията, преди да бъде издадено.",
       "VAT_GROUND_NOT_ALLOWED": "Този избор на основание за неначисляване на ДДС не е разрешен.",
       "CLIENT_EIK_DUPLICATE": "Вече има клиент с този ЕИК.",
       "SUBSCRIPTION_REQUIRED": "Нужен е активен абонамент.",
@@ -635,7 +629,6 @@
       "DE": "Германия",
       "DK": "Дания",
       "EE": "Естония",
-      "ES": "Испания",
       "FI": "Финландия",
       "FR": "Франция",
       "GR": "Гърция",
@@ -973,10 +966,6 @@
         "RO": {
           "name": "Romania",
           "line": "21% VAT, invoices in Romanian, e-invoices in the RO CIUS-RO format for ANAF's SPV."
-        },
-        "ES": {
-          "name": "Spain",
-          "line": "21% VAT, invoices in Spanish, e-invoices in Facturae format for the FACe platform."
         }
       }
     },

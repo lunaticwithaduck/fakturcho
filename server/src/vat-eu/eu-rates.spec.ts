@@ -28,6 +28,10 @@ describe('getCountryConfig VAT rates for countries without a dedicated config', 
     expect(getCountryConfig('FI').defaultVatRateBp).toBe(2550);
   });
 
+  it('gives Spain the 21% standard rate, unconfigured as an issuer but still a real EU VAT area country', () => {
+    expect(getCountryConfig('ES').defaultVatRateBp).toBe(2100);
+  });
+
   it('resolves every EU_VAT_AREA_COUNTRIES entry away from the generic 20% fallback', () => {
     for (const country of EU_VAT_AREA_COUNTRIES) {
       const { defaultVatRateBp } = getCountryConfig(country);

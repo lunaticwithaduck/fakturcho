@@ -18,7 +18,6 @@ const EXPECTED: Record<ClassicLanguage, string> = {
   it: 'Documento privo di valenza fiscale ai sensi dell’art. 21 D.P.R. 633/1972; la fattura sarà emessa al pagamento.',
   pl: 'Faktura pro forma nie jest fakturą VAT.',
   ro: 'Factura proformă nu este document fiscal.',
-  es: 'Documento sin validez fiscal.',
 };
 
 describe('proforma prints the not-a-VAT-invoice notice under the totals', () => {

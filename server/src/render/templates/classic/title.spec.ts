@@ -3,7 +3,7 @@ import { resolveClassicLocale } from './locale';
 import { buildTitle } from './title';
 
 describe('buildTitle — number sign and draft title per language', () => {
-  const cases: Array<{ language: 'bg' | 'en' | 'de' | 'fr' | 'it' | 'pl' | 'ro' | 'es' }> = [
+  const cases: Array<{ language: 'bg' | 'en' | 'de' | 'fr' | 'it' | 'pl' | 'ro' }> = [
     { language: 'bg' },
     { language: 'en' },
     { language: 'de' },
@@ -11,7 +11,6 @@ describe('buildTitle — number sign and draft title per language', () => {
     { language: 'it' },
     { language: 'pl' },
     { language: 'ro' },
-    { language: 'es' },
   ];
 
   const expectedSign: Record<string, string> = {
@@ -22,7 +21,6 @@ describe('buildTitle — number sign and draft title per language', () => {
     it: 'n.',
     pl: 'nr',
     ro: 'nr.',
-    es: 'n.º',
   };
 
   const expectedDraft: Record<string, string> = {
@@ -33,7 +31,6 @@ describe('buildTitle — number sign and draft title per language', () => {
     it: 'Bozza di fattura',
     pl: 'Faktura – wersja robocza',
     ro: 'Factură – ciornă',
-    es: 'Factura (borrador)',
   };
 
   for (const { language } of cases) {

@@ -147,7 +147,7 @@
       },
       "correctionReason": {
         "label": "Motif de la correction",
-        "requiredHint": "Obligatoire pour les émetteurs établis en Bulgarie, en Irlande et en Espagne."
+        "requiredHint": "Obligatoire pour les émetteurs établis en Bulgarie et en Irlande."
       },
       "deliveryReference": {
         "label": "Facture liée",
@@ -257,8 +257,6 @@
           "countyRegion": "Département/județ de l'émetteur manquant.",
           "sirenOrSiret": "SIREN ou SIRET de l'émetteur manquant.",
           "vatNumberFrFormat": "Le numéro de TVA de l'émetteur doit être au format français.",
-          "esTaxId": "Identifiant fiscal (NIF/CIF/NIE) de l'émetteur manquant.",
-          "esTaxIdInvalid": "L'identifiant fiscal de l'émetteur n'est pas un NIF, NIE ou CIF espagnol valide.",
           "partitaIva": "Partita IVA de l'émetteur manquante.",
           "partitaIvaInvalid": "La Partita IVA de l'émetteur n'est pas un numéro de TVA italien valide.",
           "codiceFiscale": "Codice Fiscale de l'émetteur manquant.",
@@ -279,8 +277,6 @@
           "countyRegion": "Département/județ du destinataire manquant.",
           "sirenOrSiret": "SIREN ou SIRET du destinataire manquant.",
           "vatNumberFrFormat": "Le numéro de TVA du destinataire doit être au format français.",
-          "esTaxId": "Identifiant fiscal (NIF/CIF/NIE) du destinataire manquant.",
-          "esTaxIdInvalid": "L'identifiant fiscal du destinataire n'est pas un NIF, NIE ou CIF espagnol valide.",
           "partitaIvaOrCodiceFiscale": "Partita IVA ou Codice Fiscale du destinataire manquant.",
           "partitaIvaInvalid": "La Partita IVA du destinataire n'est pas un numéro de TVA italien valide.",
           "codiceFiscaleInvalid": "Le Codice Fiscale du destinataire n'a pas un format valide.",
@@ -456,8 +452,7 @@
       "fr": "Français",
       "it": "Italien",
       "pl": "Polonais",
-      "ro": "Roumain",
-      "es": "Espagnol"
+      "ro": "Roumain"
     }
   },
   "issuer": {
@@ -529,7 +524,6 @@
       "DE": "Allemagne",
       "DK": "Danemark",
       "EE": "Estonie",
-      "ES": "Espagne",
       "FI": "Finlande",
       "FR": "France",
       "GB": "Royaume-Uni",
@@ -576,7 +570,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Sélectionnez le document d'origine pour continuer.",
       "ISSUER_PROFILE_INCOMPLETE": "Le profil de l'émetteur est incomplet. Renseignez les informations de l'entreprise pour émettre des documents.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "Un bon de livraison pour ce pays nécessite que les informations de transport soient renseignées avant de pouvoir être émis.",
-      "CORRECTION_REASON_REQUIRED": "Un avoir ou une note de débit émis depuis la Bulgarie, l'Irlande ou l'Espagne nécessite un motif de correction avant de pouvoir être émis.",
+      "CORRECTION_REASON_REQUIRED": "Un avoir ou une note de débit émis depuis la Bulgarie ou l'Irlande nécessite un motif de correction avant de pouvoir être émis.",
       "VAT_GROUND_NOT_ALLOWED": "Ce motif d'exonération de TVA n'est pas autorisé.",
       "CLIENT_EIK_DUPLICATE": "Un client avec ce numéro d'identification existe déjà.",
       "SUBSCRIPTION_REQUIRED": "Un abonnement actif est requis.",
@@ -635,7 +629,6 @@
       "DE": "Allemagne",
       "DK": "Danemark",
       "EE": "Estonie",
-      "ES": "Espagne",
       "FI": "Finlande",
       "FR": "France",
       "GR": "Grèce",
@@ -912,10 +905,6 @@
         "RO": {
           "name": "Roumanie",
           "line": "TVA à 21 %, factures en roumain, factures électroniques au format RO CIUS-RO pour le SPV de l'ANAF."
-        },
-        "ES": {
-          "name": "Espagne",
-          "line": "TVA à 21 %, factures en espagnol, factures électroniques au format Facturae pour la plateforme FACe."
         }
       }
     },
@@ -925,7 +914,7 @@
         "Factures, factures pro forma, avoirs, notes de débit, devis et bons de livraison.",
         "Numérotation séquentielle — sans rupture ni doublon.",
         "TVA par pays : taux locaux, exonérations et autoliquidation pour les opérations B2B transfrontalières, avec vérification en temps réel du numéro de TVA du client via VIES.",
-        "Factures électroniques EN 16931 au format de votre pays — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — prêtes à être déposées sur votre plateforme nationale (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "Factures électroniques EN 16931 au format de votre pays — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — prêtes à être déposées sur votre plateforme nationale (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "Un PDF prêt à l'emploi dans la langue de votre pays, à télécharger ou à envoyer par e-mail."
       ]
     },
@@ -961,7 +950,7 @@
         },
         {
           "question": "Quels pays sont pris en charge ?",
-          "answer": "Toute entreprise établie sur le territoire TVA de l'UE peut émettre des documents. Les factures électroniques structurées au format national sont générées pour l'Allemagne, la France, l'Italie, la Pologne, la Roumanie et l'Espagne, prêtes à être déposées sur la plateforme nationale ; pour la Bulgarie, au format européen EN 16931 (UBL)."
+          "answer": "Toute entreprise établie sur le territoire TVA de l'UE peut émettre des documents. Les factures électroniques structurées au format national sont générées pour l'Allemagne, la France, l'Italie, la Pologne et la Roumanie, prêtes à être déposées sur la plateforme nationale ; pour la Bulgarie, au format européen EN 16931 (UBL)."
         },
         {
           "question": "Comment la TVA est-elle gérée pour un client dans un autre pays de l'UE ?",
@@ -969,7 +958,7 @@
         },
         {
           "question": "Puis-je émettre des factures sans être assujetti à la TVA ?",
-          "answer": "Cela dépend de votre pays. La Bulgarie, l'Allemagne (§ 19 UStG), la France (franchise en base), l'Italie (regime forfettario), la Pologne (art. 113) et la Roumanie (art. 310) prévoient chacune un régime de franchise pour les petites entreprises, et Fakturcho imprime automatiquement le motif d'exonération applicable. L'Espagne n'a pas de régime général de franchise : un émetteur espagnol non assujetti à la TVA doit choisir lui-même, pour chaque document, l'activité exonérée applicable au titre de l'article 20 de la loi espagnole sur la TVA."
+          "answer": "Cela dépend de votre pays. La Bulgarie, l'Allemagne (§ 19 UStG), la France (franchise en base), l'Italie (regime forfettario), la Pologne (art. 113) et la Roumanie (art. 310) prévoient chacune un régime de franchise pour les petites entreprises, et Fakturcho imprime automatiquement le motif d'exonération applicable."
         },
         {
           "question": "Quelle est la différence entre une facture pro forma et une facture ?",

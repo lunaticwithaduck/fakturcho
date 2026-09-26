@@ -147,7 +147,7 @@
       },
       "correctionReason": {
         "label": "Reason for the correction",
-        "requiredHint": "Required for issuers in Bulgaria, Ireland and Spain."
+        "requiredHint": "Required for issuers in Bulgaria and Ireland."
       },
       "deliveryReference": {
         "label": "Related invoice",
@@ -257,8 +257,6 @@
           "countyRegion": "Missing issuer county/județ.",
           "sirenOrSiret": "Missing issuer SIREN or SIRET.",
           "vatNumberFrFormat": "The issuer VAT number must be in the French format.",
-          "esTaxId": "Missing issuer NIF/CIF/NIE tax identifier.",
-          "esTaxIdInvalid": "The issuer tax identifier is not a valid Spanish NIF, NIE or CIF.",
           "partitaIva": "Missing issuer Partita IVA.",
           "partitaIvaInvalid": "The issuer Partita IVA is not a valid Italian VAT number.",
           "codiceFiscale": "Missing issuer Codice Fiscale.",
@@ -279,8 +277,6 @@
           "countyRegion": "Missing recipient county/județ.",
           "sirenOrSiret": "Missing recipient SIREN or SIRET.",
           "vatNumberFrFormat": "The recipient VAT number must be in the French format.",
-          "esTaxId": "Missing recipient NIF/CIF/NIE tax identifier.",
-          "esTaxIdInvalid": "The recipient tax identifier is not a valid Spanish NIF, NIE or CIF.",
           "partitaIvaOrCodiceFiscale": "Missing recipient Partita IVA or Codice Fiscale.",
           "partitaIvaInvalid": "The recipient Partita IVA is not a valid Italian VAT number.",
           "codiceFiscaleInvalid": "The recipient Codice Fiscale is not a valid format.",
@@ -456,8 +452,7 @@
       "fr": "French",
       "it": "Italian",
       "pl": "Polish",
-      "ro": "Romanian",
-      "es": "Spanish"
+      "ro": "Romanian"
     }
   },
   "issuer": {
@@ -529,7 +524,6 @@
       "DE": "Germany",
       "DK": "Denmark",
       "EE": "Estonia",
-      "ES": "Spain",
       "FI": "Finland",
       "FR": "France",
       "GB": "United Kingdom",
@@ -576,7 +570,7 @@
       "ORIGINAL_DOCUMENT_REQUIRED": "Select the original document to continue.",
       "ISSUER_PROFILE_INCOMPLETE": "The issuer profile is incomplete. Fill in the company details to issue documents.",
       "DELIVERY_NOTE_TRANSPORT_DATA_REQUIRED": "A delivery note in this country needs its transport details filled in before it can be issued.",
-      "CORRECTION_REASON_REQUIRED": "A credit or debit note from Bulgaria, Ireland or Spain needs a reason for the correction before it can be issued.",
+      "CORRECTION_REASON_REQUIRED": "A credit or debit note from Bulgaria or Ireland needs a reason for the correction before it can be issued.",
       "VAT_GROUND_NOT_ALLOWED": "This VAT exemption ground is not allowed.",
       "CLIENT_EIK_DUPLICATE": "A client with this company ID already exists.",
       "SUBSCRIPTION_REQUIRED": "An active subscription is required.",
@@ -635,7 +629,6 @@
       "DE": "Germany",
       "DK": "Denmark",
       "EE": "Estonia",
-      "ES": "Spain",
       "FI": "Finland",
       "FR": "France",
       "GR": "Greece",
@@ -912,10 +905,6 @@
         "RO": {
           "name": "Romania",
           "line": "21% VAT, invoices in Romanian, e-invoices in the RO CIUS-RO format for ANAF's SPV."
-        },
-        "ES": {
-          "name": "Spain",
-          "line": "21% VAT, invoices in Spanish, e-invoices in Facturae format for the FACe platform."
         }
       }
     },
@@ -925,7 +914,7 @@
         "Invoices, proformas, credit and debit notes, quotes and delivery notes.",
         "Sequential numbering — no gaps, no repeats.",
         "VAT by country: local rates, exemptions, and reverse charge for cross-border B2B with a live VIES check of the customer's VAT ID.",
-        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), Facturae, CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro, FACe).",
+        "EN 16931 e-invoices in your country's format — XRechnung, UBL, FatturaPA, KSeF FA(3), CIUS-RO — ready to upload to your national platform (ANAF SPV, SDI, KSeF, Chorus Pro).",
         "A ready PDF in your country's language, downloadable or sent by email."
       ]
     },
@@ -961,7 +950,7 @@
         },
         {
           "question": "Which countries are supported?",
-          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland, Romania and Spain, ready to upload to the national platform; for Bulgaria it's generated in the EU EN 16931 (UBL) format."
+          "answer": "Any business established in the EU VAT area can issue documents. Structured e-invoicing in the national format is generated for Germany, France, Italy, Poland and Romania, ready to upload to the national platform; for Bulgaria it's generated in the EU EN 16931 (UBL) format."
         },
         {
           "question": "How is VAT handled for a customer in another EU country?",
@@ -969,7 +958,7 @@
         },
         {
           "question": "Can I issue invoices without VAT registration?",
-          "answer": "It depends on your country. Bulgaria, Germany (§ 19 UStG), France (franchise en base), Italy (regime forfettario), Poland (art. 113) and Romania (art. 310) all have a small-business VAT exemption, and Fakturcho prints the correct legal ground automatically. Spain has no general small-business exemption — a non-VAT-registered Spanish issuer selects the specific exempt activity under art. 20 of the VAT law for each document."
+          "answer": "It depends on your country. Bulgaria, Germany (§ 19 UStG), France (franchise en base), Italy (regime forfettario), Poland (art. 113) and Romania (art. 310) all have a small-business VAT exemption, and Fakturcho prints the correct legal ground automatically."
         },
         {
           "question": "What is the difference between a proforma and an invoice?",

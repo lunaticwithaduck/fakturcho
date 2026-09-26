@@ -20,7 +20,7 @@ describe('sitemap', () => {
 
   it('links the guide index pages to each other as language versions', () => {
     const indexes = sitemap().filter((entry) => /\/guide$/.test(entry.url));
-    expect(indexes).toHaveLength(8);
+    expect(indexes).toHaveLength(7);
     for (const entry of indexes) {
       expect(entry.lastModified).toBe('2026-09-25');
       expect(entry.alternates?.languages).toMatchObject({

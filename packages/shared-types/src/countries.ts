@@ -1,7 +1,6 @@
 import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
 import { CZ_CONFIG } from './countries/cz';
 import { DE_CONFIG } from './countries/de';
-import { ES_CONFIG } from './countries/es';
 import { EU_RATE_OVERRIDES } from './countries/eu-rates';
 import { FR_CONFIG } from './countries/fr';
 import { IT_CONFIG } from './countries/it';
@@ -87,7 +86,6 @@ const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
   IT: IT_CONFIG,
   PL: PL_CONFIG,
   RO: RO_CONFIG,
-  ES: ES_CONFIG,
 };
 
 // A country's own language is its UI locale, but only once translators have

@@ -76,7 +76,7 @@ export class DocumentIssuanceService {
 
     const country = issuerProfile?.country ?? null;
     assertIssuable(existing, documentType, country);
-    const numberPrefix = issuedNumberPrefix(existing, documentType, country);
+    const numberPrefix = issuedNumberPrefix(existing);
 
     const isCorrection = documentType === 'credit_note' || documentType === 'debit_note';
     const originalDocument =
@@ -111,7 +111,6 @@ export class DocumentIssuanceService {
           tx,
           accountId,
           documentType,
-          country,
           request.overrideNumber,
         );
         return tx.document.update({

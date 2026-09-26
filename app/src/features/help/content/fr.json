@@ -830,7 +830,7 @@
                 "bold": true
               },
               {
-                "text": " pour obtenir le fichier de facture électronique structuré : le format propre à votre pays — XRechnung (Allemagne), UBL (France), FatturaPA (Italie), FA(3) (Pologne), CIUS-RO (Roumanie), Facturae (Espagne) — ou, pour un émetteur bulgare et tout autre pays sans format dédié, un fichier UBL générique EN 16931. Fakturcho génère uniquement le fichier ; vous le téléchargez et le téléversez vous-même sur votre plateforme nationale — l'application ne soumet jamais rien en votre nom. Les bons de livraison n'en obtiennent jamais. Si des données requises par le format manquent (par ex. un numéro de TVA de l'acheteur pour l'autoliquidation, le code d'unité d'une ligne, votre IBAN), un message sous le bouton liste précisément ce qui manque."
+                "text": " pour obtenir le fichier de facture électronique structuré : le format propre à votre pays — XRechnung (Allemagne), UBL (France), FatturaPA (Italie), FA(3) (Pologne), CIUS-RO (Roumanie) — ou, pour un émetteur bulgare et tout autre pays sans format dédié, un fichier UBL générique EN 16931. Fakturcho génère uniquement le fichier ; vous le téléchargez et le téléversez vous-même sur votre plateforme nationale — l'application ne soumet jamais rien en votre nom. Les bons de livraison n'en obtiennent jamais. Si des données requises par le format manquent (par ex. un numéro de TVA de l'acheteur pour l'autoliquidation, le code d'unité d'une ligne, votre IBAN), un message sous le bouton liste précisément ce qui manque."
               }
             ],
             [
@@ -1132,7 +1132,7 @@
           "bold": true
         },
         {
-          "text": ". Fakturcho génère uniquement le fichier — vous le téléversez vous-même sur la plateforme de votre pays. Disponible pour les factures, avoirs et factures rectificatives : l'Allemagne, la France, l'Italie, la Pologne, la Roumanie et l'Espagne obtiennent leur format national ; la Bulgarie et tout autre pays obtiennent un fichier UBL générique EN 16931."
+          "text": ". Fakturcho génère uniquement le fichier — vous le téléversez vous-même sur la plateforme de votre pays. Disponible pour les factures, avoirs et factures rectificatives : l'Allemagne, la France, l'Italie, la Pologne et la Roumanie obtiennent leur format national ; la Bulgarie et tout autre pays obtiennent un fichier UBL générique EN 16931."
         }
       ]
     },

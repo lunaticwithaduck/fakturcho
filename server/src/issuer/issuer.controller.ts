@@ -25,7 +25,9 @@ const baseUpdateIssuerProfileSchema = z.object({
   postcode: postcodeSchema.nullable().optional(),
   countyRegion: countyRegionSchema.nullable().optional(),
   city: z.string().nullable().optional(),
-  country: countryCodeSchema.optional(),
+  country: countryCodeSchema
+    .refine((value) => value !== 'ES', 'ES is not a supported issuer country')
+    .optional(),
   phone: z.string().nullable().optional(),
   vatRegistered: z.boolean().optional(),
   vatNumber: z.string().nullable().optional(),

@@ -10,7 +10,6 @@ export const AUTONYMS: Record<Locale, string> = {
   it: 'Italiano',
   pl: 'Polski',
   ro: 'Română',
-  es: 'Español',
 };
 
 export const NAV_LABELS: Record<Locale, string> = {
@@ -21,5 +20,4 @@ export const NAV_LABELS: Record<Locale, string> = {
   it: 'Lingua',
   pl: 'Język',
   ro: 'Limbă',
-  es: 'Idioma',
 };

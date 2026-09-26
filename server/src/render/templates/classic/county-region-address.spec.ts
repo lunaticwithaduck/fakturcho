@@ -88,31 +88,6 @@ describe('issuer address county/province printing', () => {
     expect(html).not.toContain('Roma (Roma)');
   });
 
-  it('ES: appends ", <provincia>" only when it differs from the city', () => {
-    const locale = resolveClassicLocale('es', 'ES');
-    const differing = buildFakeDocument({
-      issuerAddressLine: null,
-      issuerStreet: 'Calle Mayor 1',
-      issuerPostcode: '28001',
-      issuerCity: 'Madrid',
-      issuerCountyRegion: 'Guadalajara',
-    });
-    expect(buildIssuerBlock(differing, 'invoice', locale)).toContain(
-      'Calle Mayor 1, 28001 Madrid, Guadalajara',
-    );
-
-    const same = buildFakeDocument({
-      issuerAddressLine: null,
-      issuerStreet: 'Calle Mayor 1',
-      issuerPostcode: '28001',
-      issuerCity: 'Madrid',
-      issuerCountyRegion: 'Madrid',
-    });
-    const html = buildIssuerBlock(same, 'invoice', locale);
-    expect(html).toContain('Calle Mayor 1, 28001 Madrid');
-    expect(html).not.toContain('Madrid, Madrid');
-  });
-
   it('does not duplicate the city when the free-text issuer address line already contains it', () => {
     const locale = resolveClassicLocale('bg', 'BG');
     const document = buildFakeDocument({

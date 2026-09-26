@@ -365,7 +365,7 @@ describe('DocumentIssuanceService', () => {
     vatNumber: `${country}123456789`,
   });
 
-  it.each(['BG', 'IE', 'ES'])(
+  it.each(['BG', 'IE'])(
     'a %s credit note cannot be issued without a correction reason',
     async (country) => {
       const accountId = await createAccount(prisma);
@@ -391,7 +391,7 @@ describe('DocumentIssuanceService', () => {
     },
   );
 
-  it.each(['BG', 'IE', 'ES'])(
+  it.each(['BG', 'IE'])(
     'a %s debit note issues once a correction reason is set',
     async (country) => {
       const accountId = await createAccount(prisma);
@@ -435,38 +435,6 @@ describe('DocumentIssuanceService', () => {
     const issued = await issuanceService.issue(accountId, draft.id, {});
     expect(issued.status).toBe('sent');
     expect(issued.correctionReason).toBeNull();
-  });
-
-  it('a Spanish credit or debit note is issued with an "R-" prefix when no explicit prefix is set, sharing one series', async () => {
-    const accountId = await createAccount(prisma);
-    await createCompleteIssuerProfile(prisma, accountId, null, completeIssuerOverridesFor('ES'));
-    const original = await documentsService.saveDraft(accountId, null, draftRequest());
-
-    const numbers: (number | null)[] = [];
-    for (const documentType of ['credit_note', 'debit_note'] as const) {
-      const draft = await documentsService.saveDraft(
-        accountId,
-        null,
-        draftRequest({
-          documentType,
-          originalDocumentId: original.id,
-          correctionReason: 'Devolución de mercancía',
-        }),
-      );
-      const issued = await issuanceService.issue(accountId, draft.id, {});
-      expect(issued.numberPrefix).toBe('R-');
-      numbers.push(issued.number);
-    }
-
-    expect(numbers).toEqual([1, 2]);
-  });
-
-  it('a Spanish invoice keeps no number prefix', async () => {
-    const accountId = await createAccount(prisma);
-    await createCompleteIssuerProfile(prisma, accountId, null, completeIssuerOverridesFor('ES'));
-    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
-    const issued = await issuanceService.issue(accountId, draft.id, {});
-    expect(issued.numberPrefix).toBeNull();
   });
 
   it('snapshots issuerVatOnCashBasis and issuerVatOnDebits at issuance and never updates them retroactively', async () => {

@@ -158,34 +158,19 @@ export function buildStyles(): string {
       letter-spacing: 5px;
       white-space: nowrap;
     }
-    .verifactu-qr-row {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .ksef-qr,
-    .verifactu-qr {
+    .ksef-qr {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-    }
-    .ksef-qr {
       margin-top: 20px;
     }
-    .ksef-qr .qr-image,
-    .verifactu-qr .qr-image {
+    .ksef-qr .qr-image {
       width: 35mm;
       height: 35mm;
     }
-    .qr-label,
-    .qr-legend {
+    .qr-label {
       font-size: 9px;
-      font-weight: 700;
-      text-align: center;
-    }
-    .qr-tributario-label {
-      font-size: 11px;
       font-weight: 700;
       text-align: center;
     }

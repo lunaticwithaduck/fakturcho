@@ -1,8 +1,6 @@
 import type { DocumentDto } from '@fakturcho/shared-types';
 import { toXRechnungXml } from '../../einvoice-adapters/de/xrechnung-mapper';
 import { checkXRechnungReadiness } from '../../einvoice-adapters/de/xrechnung-readiness';
-import { toFacturaeXml } from '../../einvoice-adapters/es/facturae-mapper';
-import { checkFacturaeReadiness } from '../../einvoice-adapters/es/facturae-readiness';
 import { toFrenchUblXml } from '../../einvoice-adapters/fr/fr-mapper';
 import { checkFrenchEinvoiceReadiness } from '../../einvoice-adapters/fr/fr-readiness';
 import {
@@ -47,7 +45,6 @@ const XML_MAPPERS_BY_ISSUER_COUNTRY: Record<string, XmlMapper> = {
   DE: (document) => toXRechnungXml(document),
   RO: (document) => toCiusRoXml(document, ciusRoOptions(document)),
   FR: (document) => toFrenchUblXml(document),
-  ES: (document) => toFacturaeXml(document),
   IT: (document) => toFatturaPaXml(document, fatturaPaOptions(document)),
   PL: (document) => toFa3Xml(document),
 };
@@ -56,7 +53,6 @@ const READINESS_CHECKS_BY_ISSUER_COUNTRY: Record<string, ReadinessCheck> = {
   DE: (document) => checkXRechnungReadiness(document),
   RO: (document) => checkCiusRoReadiness(document, ciusRoOptions(document)),
   FR: (document) => checkFrenchEinvoiceReadiness(document),
-  ES: (document) => checkFacturaeReadiness(document),
   IT: (document) => checkFatturaPaReadiness(document, fatturaPaOptions(document)),
   PL: (document) => checkFa3Readiness(document),
 };

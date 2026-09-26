@@ -14,7 +14,6 @@ describe('supplier heading', () => {
       ['it', 'Cedente/prestatore:'],
       ['pl', 'Sprzedawca:'],
       ['ro', 'Furnizor:'],
-      ['es', 'Emisor:'],
     ];
     for (const [language, expected] of cases) {
       const locale = resolveClassicLocale(language as never);
@@ -129,7 +128,6 @@ describe('buyerReference and paymentTermsNote (EN 16931 BT-10/BT-20)', () => {
     ['it', 'Vostro riferimento: ', 'Termini di pagamento: '],
     ['pl', 'Numer referencyjny: ', 'Warunki płatności: '],
     ['ro', 'Referința dumneavoastră: ', 'Termeni de plată: '],
-    ['es', 'Su referencia: ', 'Condiciones de pago: '],
   ];
 
   it('prints both when set, in every language', () => {
@@ -174,7 +172,6 @@ describe('paymentTermsDays overrides paymentTermsNote with localized text', () =
     ['it', 'Termini di pagamento: ', '14 giorni'],
     ['pl', 'Warunki płatności: ', '14 dni'],
     ['ro', 'Termeni de plată: ', '14 zile'],
-    ['es', 'Condiciones de pago: ', '14 días'],
   ];
 
   it('prints the localized day count instead of the raw note, in every language', () => {
