@@ -7,7 +7,31 @@
     "submitting": "Connexion...",
     "submit": "Se connecter",
     "noAccount": "Vous n'avez pas de compte ?",
-    "signupLink": "S'inscrire"
+    "signupLink": "S'inscrire",
+    "forgotPasswordLink": "Mot de passe oublié ?",
+    "resetSuccessToast": "Mot de passe modifié. Connectez-vous avec votre nouveau mot de passe."
+  },
+  "forgotPassword": {
+    "title": "Mot de passe oublié",
+    "subtitle": "Saisissez votre e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    "emailLabel": "E-mail",
+    "submitting": "Envoi...",
+    "submit": "Envoyer le lien",
+    "sentMessage": "Si un compte existe avec cet e-mail, nous avons envoyé un lien de réinitialisation du mot de passe.",
+    "backToLogin": "Retour à la connexion"
+  },
+  "resetPassword": {
+    "title": "Réinitialiser le mot de passe",
+    "subtitle": "Choisissez un nouveau mot de passe pour votre compte.",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "confirmPasswordLabel": "Confirmer le nouveau mot de passe",
+    "tooShort": "Le mot de passe doit contenir au moins 8 caractères.",
+    "mismatch": "Les mots de passe ne correspondent pas.",
+    "submitting": "Enregistrement...",
+    "submit": "Enregistrer le nouveau mot de passe",
+    "invalidTitle": "Lien invalide",
+    "invalidMessage": "Ce lien de réinitialisation du mot de passe est invalide ou a expiré.",
+    "requestNewLink": "Demander un nouveau lien"
   },
   "documents": {
     "list": {
@@ -628,7 +652,8 @@
       "PASSWORD_TOO_LONG": "Le mot de passe est trop long.",
       "generic": "Une erreur est survenue. Veuillez réessayer.",
       "INVALID_PASSWORD": "Le mot de passe actuel est incorrect.",
-      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Ce compte n'a pas de mot de passe à modifier."
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Ce compte n'a pas de mot de passe à modifier.",
+      "INVALID_TOKEN": "Ce lien est invalide ou a expiré."
     },
     "countries": {
       "BG": "Bulgarie",
@@ -1003,6 +1028,14 @@
     "signup": {
       "title": "Inscription",
       "description": "Créez un compte gratuit et émettez votre première facture en quelques minutes. 1,00 € de crédit offert, sans abonnement."
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "description": "Réinitialisez le mot de passe de votre compte Fakturcho."
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "description": "Choisissez un nouveau mot de passe pour votre compte Fakturcho."
     }
   },
   "guides": {

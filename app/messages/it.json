@@ -7,7 +7,31 @@
     "submitting": "Accesso...",
     "submit": "Accedi",
     "noAccount": "Non hai un account?",
-    "signupLink": "Registrati"
+    "signupLink": "Registrati",
+    "forgotPasswordLink": "Password dimenticata?",
+    "resetSuccessToast": "Password modificata. Accedi con la nuova password."
+  },
+  "forgotPassword": {
+    "title": "Password dimenticata",
+    "subtitle": "Inserisci la tua email e ti invieremo un link per reimpostare la password.",
+    "emailLabel": "Email",
+    "submitting": "Invio...",
+    "submit": "Invia link",
+    "sentMessage": "Se esiste un account con questa email, abbiamo inviato un link per reimpostare la password.",
+    "backToLogin": "Torna al login"
+  },
+  "resetPassword": {
+    "title": "Reimposta password",
+    "subtitle": "Scegli una nuova password per il tuo account.",
+    "newPasswordLabel": "Nuova password",
+    "confirmPasswordLabel": "Conferma nuova password",
+    "tooShort": "La password deve contenere almeno 8 caratteri.",
+    "mismatch": "Le password non coincidono.",
+    "submitting": "Salvataggio...",
+    "submit": "Salva nuova password",
+    "invalidTitle": "Link non valido",
+    "invalidMessage": "Questo link per reimpostare la password non è valido o è scaduto.",
+    "requestNewLink": "Richiedi un nuovo link"
   },
   "documents": {
     "list": {
@@ -628,7 +652,8 @@
       "PASSWORD_TOO_LONG": "La password è troppo lunga.",
       "generic": "Si è verificato un errore. Riprova.",
       "INVALID_PASSWORD": "La password attuale non è corretta.",
-      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Questo account non ha una password da modificare."
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Questo account non ha una password da modificare.",
+      "INVALID_TOKEN": "Questo link non è valido o è scaduto."
     },
     "countries": {
       "BG": "Bulgaria",
@@ -1003,6 +1028,14 @@
     "signup": {
       "title": "Registrati",
       "description": "Crea un account gratuito ed emetti la tua prima fattura in pochi minuti. 1,00 € di credito iniziale, nessun abbonamento richiesto."
+    },
+    "forgotPassword": {
+      "title": "Password dimenticata",
+      "description": "Reimposta la password del tuo account Fakturcho."
+    },
+    "resetPassword": {
+      "title": "Reimposta password",
+      "description": "Scegli una nuova password per il tuo account Fakturcho."
     }
   },
   "guides": {

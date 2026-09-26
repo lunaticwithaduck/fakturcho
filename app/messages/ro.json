@@ -7,7 +7,31 @@
     "submitting": "Se conectează...",
     "submit": "Conectare",
     "noAccount": "Nu aveți cont?",
-    "signupLink": "Înregistrare"
+    "signupLink": "Înregistrare",
+    "forgotPasswordLink": "Ați uitat parola?",
+    "resetSuccessToast": "Parola a fost schimbată. Conectați-vă cu noua parolă."
+  },
+  "forgotPassword": {
+    "title": "Ați uitat parola",
+    "subtitle": "Introduceți adresa de email și vă vom trimite un link pentru a reseta parola.",
+    "emailLabel": "Email",
+    "submitting": "Se trimite...",
+    "submit": "Trimite link",
+    "sentMessage": "Dacă există un cont cu acest email, am trimis un link pentru resetarea parolei.",
+    "backToLogin": "Înapoi la conectare"
+  },
+  "resetPassword": {
+    "title": "Resetează parola",
+    "subtitle": "Alegeți o parolă nouă pentru contul dumneavoastră.",
+    "newPasswordLabel": "Parolă nouă",
+    "confirmPasswordLabel": "Confirmă parola nouă",
+    "tooShort": "Parola trebuie să aibă cel puțin 8 caractere.",
+    "mismatch": "Parolele nu coincid.",
+    "submitting": "Se salvează...",
+    "submit": "Salvează parola nouă",
+    "invalidTitle": "Link invalid",
+    "invalidMessage": "Acest link de resetare a parolei este invalid sau a expirat.",
+    "requestNewLink": "Solicită un link nou"
   },
   "documents": {
     "list": {
@@ -628,7 +652,8 @@
       "PASSWORD_TOO_LONG": "Parola este prea lungă.",
       "generic": "A apărut o eroare. Încercați din nou.",
       "INVALID_PASSWORD": "Parola actuală este incorectă.",
-      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Acest cont nu are o parolă de schimbat."
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "Acest cont nu are o parolă de schimbat.",
+      "INVALID_TOKEN": "Acest link este invalid sau a expirat."
     },
     "countries": {
       "BG": "Bulgaria",
@@ -1003,6 +1028,14 @@
     "signup": {
       "title": "Înregistrare",
       "description": "Creați un cont gratuit și emiteți prima factură în câteva minute. Credit inițial de 1,00 €, fără abonament."
+    },
+    "forgotPassword": {
+      "title": "Ați uitat parola",
+      "description": "Resetați parola contului dumneavoastră Fakturcho."
+    },
+    "resetPassword": {
+      "title": "Resetează parola",
+      "description": "Alegeți o parolă nouă pentru contul dumneavoastră Fakturcho."
     }
   },
   "guides": {

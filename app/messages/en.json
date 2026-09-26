@@ -7,7 +7,31 @@
     "submitting": "Signing in...",
     "submit": "Log in",
     "noAccount": "Don't have an account?",
-    "signupLink": "Sign up"
+    "signupLink": "Sign up",
+    "forgotPasswordLink": "Forgot your password?",
+    "resetSuccessToast": "Password changed. Log in with your new password."
+  },
+  "forgotPassword": {
+    "title": "Forgot password",
+    "subtitle": "Enter your email and we'll send you a link to reset your password.",
+    "emailLabel": "Email",
+    "submitting": "Sending...",
+    "submit": "Send reset link",
+    "sentMessage": "If an account exists for this email, we've sent a password reset link.",
+    "backToLogin": "Back to log in"
+  },
+  "resetPassword": {
+    "title": "Reset password",
+    "subtitle": "Choose a new password for your account.",
+    "newPasswordLabel": "New password",
+    "confirmPasswordLabel": "Confirm new password",
+    "tooShort": "Password must be at least 8 characters.",
+    "mismatch": "Passwords do not match.",
+    "submitting": "Saving...",
+    "submit": "Save new password",
+    "invalidTitle": "Invalid link",
+    "invalidMessage": "This password reset link is invalid or has expired.",
+    "requestNewLink": "Request a new link"
   },
   "documents": {
     "list": {
@@ -628,7 +652,8 @@
       "PASSWORD_TOO_LONG": "Password is too long.",
       "generic": "Something went wrong. Please try again.",
       "INVALID_PASSWORD": "Current password is incorrect.",
-      "CREDENTIAL_ACCOUNT_NOT_FOUND": "This account has no password to change."
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "This account has no password to change.",
+      "INVALID_TOKEN": "This link is invalid or has expired."
     },
     "countries": {
       "BG": "Bulgaria",
@@ -1003,6 +1028,14 @@
     "signup": {
       "title": "Sign up",
       "description": "Create a free account and issue your first invoice in minutes. 1.00 € starting credit, no subscription."
+    },
+    "forgotPassword": {
+      "title": "Forgot password",
+      "description": "Reset the password for your Fakturcho account."
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "description": "Choose a new password for your Fakturcho account."
     }
   },
   "guides": {

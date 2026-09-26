@@ -183,4 +183,22 @@ describe('ResendService', () => {
       }),
     );
   });
+
+  it('sends a plain email with no attachments field when none is given', async () => {
+    delete process.env.EMAIL_FROM;
+    const service = new ResendService();
+
+    await service.send({
+      to: 'user@example.com',
+      subject: 'Reset your Fakturcho password',
+      text: 'Open this link: https://www.fakturcho.com/reset-password?token=x',
+      locale: 'en',
+      issuerName: null,
+      replyTo: null,
+    });
+
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.not.objectContaining({ attachments: expect.anything() }),
+    );
+  });
 });

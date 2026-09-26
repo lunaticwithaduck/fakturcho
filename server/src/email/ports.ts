@@ -13,7 +13,7 @@ export interface SendEmailInput {
   to: string;
   subject: string;
   text: string;
-  attachment: { filename: string; content: Buffer };
+  attachment?: { filename: string; content: Buffer };
   locale: Locale;
   issuerName: string | null;
   replyTo: string | null;

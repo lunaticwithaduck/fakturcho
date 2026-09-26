@@ -52,12 +52,16 @@ export class ResendService implements EmailSender {
       subject: input.subject,
       text: input.text,
       ...(input.replyTo ? { replyTo: input.replyTo } : {}),
-      attachments: [
-        {
-          filename: input.attachment.filename,
-          content: input.attachment.content.toString('base64'),
-        },
-      ],
+      ...(input.attachment
+        ? {
+            attachments: [
+              {
+                filename: input.attachment.filename,
+                content: input.attachment.content.toString('base64'),
+              },
+            ],
+          }
+        : {}),
     });
     if (result.error) {
       throw new Error(`Resend failed to send email: ${result.error.message}`);

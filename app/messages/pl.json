@@ -7,7 +7,31 @@
     "submitting": "Logowanie...",
     "submit": "Zaloguj się",
     "noAccount": "Nie masz konta?",
-    "signupLink": "Zarejestruj się"
+    "signupLink": "Zarejestruj się",
+    "forgotPasswordLink": "Nie pamiętasz hasła?",
+    "resetSuccessToast": "Hasło zostało zmienione. Zaloguj się nowym hasłem."
+  },
+  "forgotPassword": {
+    "title": "Nie pamiętasz hasła",
+    "subtitle": "Podaj swój e-mail, a wyślemy Ci link do zresetowania hasła.",
+    "emailLabel": "E-mail",
+    "submitting": "Wysyłanie...",
+    "submit": "Wyślij link",
+    "sentMessage": "Jeśli konto z tym adresem e-mail istnieje, wysłaliśmy link do zresetowania hasła.",
+    "backToLogin": "Powrót do logowania"
+  },
+  "resetPassword": {
+    "title": "Zresetuj hasło",
+    "subtitle": "Wybierz nowe hasło do swojego konta.",
+    "newPasswordLabel": "Nowe hasło",
+    "confirmPasswordLabel": "Potwierdź nowe hasło",
+    "tooShort": "Hasło musi mieć co najmniej 8 znaków.",
+    "mismatch": "Hasła nie są takie same.",
+    "submitting": "Zapisywanie...",
+    "submit": "Zapisz nowe hasło",
+    "invalidTitle": "Nieprawidłowy link",
+    "invalidMessage": "Ten link do resetowania hasła jest nieprawidłowy lub wygasł.",
+    "requestNewLink": "Poproś o nowy link"
   },
   "documents": {
     "list": {
@@ -628,7 +652,8 @@
       "PASSWORD_TOO_LONG": "Hasło jest za długie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie.",
       "INVALID_PASSWORD": "Obecne hasło jest nieprawidłowe.",
-      "CREDENTIAL_ACCOUNT_NOT_FOUND": "To konto nie ma ustawionego hasła do zmiany."
+      "CREDENTIAL_ACCOUNT_NOT_FOUND": "To konto nie ma ustawionego hasła do zmiany.",
+      "INVALID_TOKEN": "Ten link jest nieprawidłowy lub wygasł."
     },
     "countries": {
       "BG": "Bułgaria",
@@ -1003,6 +1028,14 @@
     "signup": {
       "title": "Rejestracja",
       "description": "Załóż bezpłatne konto i wystaw pierwszą fakturę w kilka minut. 1,00 € środków na start, bez abonamentu."
+    },
+    "forgotPassword": {
+      "title": "Nie pamiętasz hasła",
+      "description": "Zresetuj hasło do swojego konta Fakturcho."
+    },
+    "resetPassword": {
+      "title": "Zresetuj hasło",
+      "description": "Wybierz nowe hasło do swojego konta Fakturcho."
     }
   },
   "guides": {

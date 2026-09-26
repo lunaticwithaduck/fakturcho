@@ -60,7 +60,7 @@ describe('EmailService', () => {
     expect(sentInput?.to).toBe('client@example.com');
     expect(sentInput?.subject).toBe('Фактура № 0000000016');
     expect(sentInput?.locale).toBe('bg');
-    expect(sentInput?.attachment.filename).toBe('Фактура_0000000016.pdf');
+    expect(sentInput?.attachment?.filename).toBe('Фактура_0000000016.pdf');
     expect(sentInput?.issuerName).toBeNull();
     expect(sentInput?.replyTo).toBe(userEmail);
 
