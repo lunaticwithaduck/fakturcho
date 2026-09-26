@@ -115,6 +115,27 @@ describe('checkFa3Readiness — NIP validation', () => {
   });
 });
 
+describe('checkFa3Readiness — exemption ground', () => {
+  it('flags an exempt (E) line with no vatExemptionGround (XSD requires P_19A/B/C when P_19=1)', () => {
+    const [line] = plDomesticStandardInvoice.lineItems;
+    if (!line) throw new Error('expected fixture to carry a line item');
+    const exemptNoGround: DocumentDto = {
+      ...plDomesticStandardInvoice,
+      vatExemptionGround: null,
+      lineItems: [{ ...line, vatRateBp: 0, vatCategory: 'E' }],
+    };
+    expect(checkFa3Readiness(exemptNoGround).missingFields).toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround,
+    );
+  });
+
+  it('does not require a ground when there is no exempt line', () => {
+    expect(checkFa3Readiness(plDomesticStandardInvoice).missingFields).not.toContain(
+      EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround,
+    );
+  });
+});
+
 describe('checkFa3Readiness — line items', () => {
   it('flags a document with no line items', () => {
     const incomplete: DocumentDto = { ...plDomesticStandardInvoice, lineItems: [] };

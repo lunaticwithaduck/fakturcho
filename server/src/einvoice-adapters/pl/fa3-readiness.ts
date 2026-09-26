@@ -55,6 +55,14 @@ export function checkFa3Readiness(document: DocumentDto): Fa3Readiness {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.recipientVatNumberReverseCharge);
   }
 
+  // XSD/broszura FA(3): P_19=1 (an exempt "E" line) requires one of
+  // P_19A/P_19B/P_19C — toFa3Xml throws on this, so surface it as a
+  // pre-export missing field instead.
+  const hasExempt = document.lineItems.some((line) => line.vatCategory === 'E');
+  if (hasExempt && !document.vatExemptionGround) {
+    missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentVatExemptionGround);
+  }
+
   if (document.lineItems.length === 0) {
     missingFields.push(EINVOICE_MISSING_FIELD_CODES.documentLineItems);
   }

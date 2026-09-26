@@ -64,6 +64,14 @@ describe('groupFa3VatBuckets', () => {
     ]);
   });
 
+  it('orders buckets per the FA(3) XSD sequence even when the 8% line comes first', () => {
+    const buckets = groupFa3VatBuckets([
+      line({ id: 'line-1', lineTotal: 100000, vatRateBp: 800, vatCategory: 'S' }),
+      line({ id: 'line-2', lineTotal: 100000, vatRateBp: 2300, vatCategory: 'S' }),
+    ]);
+    expect(buckets.map((bucket) => bucket.netTag)).toEqual(['P_13_1', 'P_13_2']);
+  });
+
   it('merges lines that share a bucket, without merging distinct buckets', () => {
     const buckets = groupFa3VatBuckets([
       line({ id: 'line-1', lineTotal: 10000, vatRateBp: 2300, vatCategory: 'S' }),
