@@ -16,6 +16,6 @@ export const CZ_CONFIG: CountryConfig = {
   ],
   defaultVatRateBp: 2100,
   identifiers: [
-    { key: 'companyRegister', label: 'Zápis v obchodním rejstříku', pattern: null, required: true },
+    { key: 'companyRegister', label: 'Zápis v rejstříku', pattern: null, required: true },
   ],
 };

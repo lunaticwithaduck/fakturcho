@@ -136,7 +136,7 @@ describe('roMentions — TVA la încasare', () => {
     expect(roMentions({ document, lineItems, locale })).toContain('TVA la încasare');
   });
 
-  it('adds no mention when the document already carries an exemption ground', () => {
+  it('keeps the mention on a mixed invoice that also carries an exemption ground (art. 282 alin. (6))', () => {
     const document = buildFakeDocument({
       issuerCountry: 'RO',
       documentType: 'INVOICE',
@@ -144,6 +144,6 @@ describe('roMentions — TVA la încasare', () => {
       vatExemptionGround: 'Taxare inversă',
     });
     const lineItems = buildFakeMixedLineItems();
-    expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+    expect(roMentions({ document, lineItems, locale })).toContain('TVA la încasare');
   });
 });

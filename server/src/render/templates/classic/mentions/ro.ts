@@ -38,8 +38,7 @@ export const roMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
   if (
     document.issuerVatOnCashBasis &&
     TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)] &&
-    hasRoTaxedLine &&
-    !document.vatExemptionGround
+    hasRoTaxedLine
   ) {
     mentions.push(VAT_ON_CASH_BASIS_MENTION);
   }

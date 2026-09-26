@@ -254,7 +254,7 @@ describe('IssuerCompanyFields', () => {
       </NextIntlClientProvider>,
     );
 
-    const field = screen.getByLabelText('Zápis v obchodním rejstříku') as HTMLInputElement;
+    const field = screen.getByLabelText('Zápis v rejstříku') as HTMLInputElement;
     expect(field.required).toBe(true);
     expect(screen.getByText(/§ 435/)).toBeTruthy();
   });

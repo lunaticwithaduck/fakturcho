@@ -35,7 +35,7 @@ describe('buildIssuerBlock — CZ company register (NOZ § 435)', () => {
       },
     });
     const html = buildIssuerBlock(document, 'invoice', locale);
-    expect(html).toContain('Zápis v obchodním rejstříku: C 12345 vedená u Městského soudu v Praze');
+    expect(html).toContain('Zápis v rejstříku: C 12345 vedená u Městského soudu v Praze');
   });
 
   it('prints nothing when left blank', () => {

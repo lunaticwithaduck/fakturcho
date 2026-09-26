@@ -16,7 +16,7 @@ describe('CZ country config', () => {
   it('requires the company-register identifier so NOZ § 435 odst. 1 (89/2012 Sb.) is satisfied', () => {
     const companyRegister = config.identifiers.find((field) => field.key === 'companyRegister');
     expect(companyRegister).toMatchObject({
-      label: 'Zápis v obchodním rejstříku',
+      label: 'Zápis v rejstříku',
       pattern: null,
       required: true,
     });

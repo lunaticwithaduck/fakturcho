@@ -29,7 +29,11 @@ export function addressContainsCity(
   city: string | null | undefined,
 ): boolean {
   if (!address || !city) return false;
-  return normalizeForComparison(address).includes(normalizeForComparison(city));
+  const normalizedAddress = normalizeForComparison(address).replace(/[\s,.;]+$/u, '');
+  const normalizedCity = normalizeForComparison(city).trim();
+  if (!normalizedCity || !normalizedAddress.endsWith(normalizedCity)) return false;
+  const before = normalizedAddress.charAt(normalizedAddress.length - normalizedCity.length - 1);
+  return before === '' || !/[\p{L}\p{N}]/u.test(before);
 }
 
 const BUCHAREST_NORMALIZED = 'bucuresti';

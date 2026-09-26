@@ -52,6 +52,28 @@ describe('buildRecipientBlock — structured street/postcode/city address', () =
     expect(html).not.toContain('Warszawa, Warszawa');
   });
 
+  it('keeps the city when it only appears inside a street name', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'Berliner Straße 5',
+      recipientStreet: null,
+      recipientPostcode: null,
+      recipientCity: 'Berlin',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('Berliner Straße 5, Berlin');
+  });
+
+  it('keeps the city when the free-text address ends with a longer word containing it', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'Rue de Neu',
+      recipientStreet: null,
+      recipientPostcode: null,
+      recipientCity: 'Eu',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('Rue de Neu, Eu');
+  });
+
   it('does not duplicate a Cyrillic city already inside the free-text address', () => {
     const document = buildFakeDocument({
       recipientAddress: 'ул. „Раковски“ 55, гр. Варна',
