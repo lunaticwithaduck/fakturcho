@@ -24,6 +24,14 @@ function namesMatch(a: string | null | undefined, b: string | null | undefined):
   return normalizeForComparison(a) === normalizeForComparison(b);
 }
 
+export function addressContainsCity(
+  address: string | null | undefined,
+  city: string | null | undefined,
+): boolean {
+  if (!address || !city) return false;
+  return normalizeForComparison(address).includes(normalizeForComparison(city));
+}
+
 const BUCHAREST_NORMALIZED = 'bucuresti';
 
 export function cityWithCountyRegion(

@@ -33,14 +33,6 @@ const RAW_EU_STANDARD_RATES: Record<string, { rates: RawRates; timeZone: string 
     ],
     timeZone: 'Asia/Nicosia',
   },
-  CZ: {
-    rates: [
-      [2100, '21%'],
-      [1200, '12%'],
-      [0, '0%'],
-    ],
-    timeZone: 'Europe/Prague',
-  },
   DK: {
     rates: [
       [2500, '25%'],

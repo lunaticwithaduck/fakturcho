@@ -458,7 +458,8 @@
       "postcode": "Postal code",
       "city": "City",
       "phone": "Phone",
-      "invalidFormat": "Invalid format"
+      "invalidFormat": "Invalid format",
+      "czRegisterHint": "Required for Czech issuers: state your entry in the Commercial Register (court, section, insert number) or another public register — § 435 of the Civil Code (Act No. 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "VAT registration",

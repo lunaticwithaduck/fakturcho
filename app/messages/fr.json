@@ -458,7 +458,8 @@
       "postcode": "Code postal",
       "city": "Ville",
       "phone": "Téléphone",
-      "invalidFormat": "Format invalide"
+      "invalidFormat": "Format invalide",
+      "czRegisterHint": "Obligatoire pour les émetteurs tchèques : indiquez votre immatriculation au registre du commerce (tribunal, section, numéro d'inscription) ou à un autre registre public – § 435 du Code civil (loi n° 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "Assujettissement à la TVA",

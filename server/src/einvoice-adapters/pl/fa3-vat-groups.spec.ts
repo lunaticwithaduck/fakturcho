@@ -55,6 +55,15 @@ describe('groupFa3VatBuckets', () => {
     ]);
   });
 
+  it('buckets EU B2B services (art. 28b, category AE) under P_13_9, not the domestic-reverse-charge P_13_10', () => {
+    const buckets = groupFa3VatBuckets([
+      line({ id: 'line-1', lineTotal: 200000, vatRateBp: 0, vatCategory: 'AE' }),
+    ]);
+    expect(buckets).toEqual([
+      { netTag: 'P_13_9', vatTag: null, taxableAmount: 200000, vatAmount: 0 },
+    ]);
+  });
+
   it('merges lines that share a bucket, without merging distinct buckets', () => {
     const buckets = groupFa3VatBuckets([
       line({ id: 'line-1', lineTotal: 10000, vatRateBp: 2300, vatCategory: 'S' }),
@@ -78,7 +87,7 @@ describe('vatRateCode', () => {
     expect(vatRateCode('K', 0)).toBe('0 WDT');
     expect(vatRateCode('G', 0)).toBe('0 EX');
     expect(vatRateCode('E', 0)).toBe('zw');
-    expect(vatRateCode('AE', 0)).toBe('oo');
+    expect(vatRateCode('AE', 0)).toBe('np II');
     expect(vatRateCode('O', 0)).toBe('np I');
   });
 });

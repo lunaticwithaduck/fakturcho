@@ -72,7 +72,9 @@ export class DocumentsService {
         line.vatCategory !== undefined
           ? line.vatCategory
           : !vat.vatCharged
-            ? 'O'
+            ? issuerCountry === 'PL' && vat.vatExemptionGround
+              ? 'E'
+              : 'O'
             : resolveLineVatCategory(
                 issuerCountry,
                 client?.country ?? null,
@@ -83,7 +85,7 @@ export class DocumentsService {
       const vatRateBp =
         line.vatRateBp !== undefined
           ? line.vatRateBp
-          : vatCategory === 'AE' || vatCategory === 'O'
+          : vatCategory === 'AE' || vatCategory === 'O' || vatCategory === 'E'
             ? 0
             : getCountryConfig(issuerCountry).defaultVatRateBp;
 

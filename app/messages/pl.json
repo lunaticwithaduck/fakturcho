@@ -458,7 +458,8 @@
       "postcode": "Kod pocztowy",
       "city": "Miejscowość",
       "phone": "Telefon",
-      "invalidFormat": "Nieprawidłowy format"
+      "invalidFormat": "Nieprawidłowy format",
+      "czRegisterHint": "Wymagane dla czeskich wystawców: podaj wpis do rejestru handlowego (sąd, dział, numer wpisu) lub innego rejestru publicznego – § 435 kodeksu cywilnego (ustawa nr 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "Rejestracja VAT",

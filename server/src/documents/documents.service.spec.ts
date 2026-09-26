@@ -334,6 +334,26 @@ describe('DocumentsService', () => {
     expect(draft.vatAmount).toBe(0);
   });
 
+  it('PL art. 113 exempt issuer: an unset line vatCategory resolves to E (zw), not O (np.)', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'PL' });
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    expect(draft.vatExemptionGround).toContain('art. 113');
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'E', vatRateBp: 0 });
+    expect(draft.vatAmount).toBe(0);
+  });
+
+  it('other countries keep O for a non-VAT-registered issuer, unaffected by the PL exemption fix', async () => {
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, null, { country: 'DE' });
+
+    const draft = await documentsService.saveDraft(accountId, null, draftRequest());
+
+    expect(draft.lineItems[0]).toMatchObject({ vatCategory: 'O', vatRateBp: 0 });
+  });
+
   it('reverse-charge: a cross-border EU client with no VAT number stays S at the issuer standard rate', async () => {
     const accountId = await createAccount(prisma);
     await createCompleteIssuerProfile(prisma, accountId, null, {

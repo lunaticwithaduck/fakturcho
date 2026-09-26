@@ -19,6 +19,7 @@ export async function createCompleteIssuerProfile(
     vatNumber: string | null;
     vatOnCashBasis: boolean;
     vatOnDebits: boolean;
+    identifiers: Record<string, string>;
   }> = {},
 ) {
   return prisma.issuerProfile.create({

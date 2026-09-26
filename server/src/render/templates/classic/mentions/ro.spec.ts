@@ -102,6 +102,40 @@ describe('roMentions — TVA la încasare', () => {
     }
   });
 
+  it('adds no mention on a pure reverse-charge (AE) invoice', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+      vatAmount: 0,
+      vatRateBp: 0,
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'AE', vatRateBp: 0 });
+    expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+  });
+
+  it('adds no mention on a pure exempt (E) invoice', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+      vatAmount: 0,
+      vatRateBp: 0,
+    });
+    const lineItems = buildFakeLineItems({ vatCategory: 'E', vatRateBp: 0 });
+    expect(roMentions({ document, lineItems, locale })).not.toContain('TVA la încasare');
+  });
+
+  it('adds the mention on a mixed invoice with a reverse-charge line and a taxed RO line (art. 282 alin. (6))', () => {
+    const document = buildFakeDocument({
+      issuerCountry: 'RO',
+      documentType: 'INVOICE',
+      issuerVatOnCashBasis: true,
+    });
+    const lineItems = buildFakeMixedLineItems();
+    expect(roMentions({ document, lineItems, locale })).toContain('TVA la încasare');
+  });
+
   it('adds no mention when the document already carries an exemption ground', () => {
     const document = buildFakeDocument({
       issuerCountry: 'RO',

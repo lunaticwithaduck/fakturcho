@@ -24,4 +24,19 @@ describe('buildWatermark', () => {
     expect(html).toContain('NOT LEGALLY VALID');
     expect(html).not.toContain(DRAFT_WATERMARK_TEXT);
   });
+
+  it('shrinks the long Italian sub-line so it does not swing into the footer', () => {
+    const itLocale = resolveClassicLocale('it');
+    const html = buildWatermark(true, itLocale);
+    expect(html).toContain('DOCUMENTO NON VALIDO AI FINI FISCALI');
+    const match = html.match(/watermark-sub" style="font-size: ([\d.]+)px/);
+    expect(match).not.toBeNull();
+    expect(Number(match?.[1])).toBeLessThan(26);
+  });
+
+  it('leaves a short sub-line (e.g. RO) at the default size', () => {
+    const roLocale = resolveClassicLocale('ro');
+    const html = buildWatermark(true, roLocale);
+    expect(html).toContain('<div class="watermark-sub">FĂRĂ VALOARE LEGALĂ</div>');
+  });
 });

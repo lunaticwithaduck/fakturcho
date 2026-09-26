@@ -2,6 +2,7 @@ import { type DocumentType, getCountryConfig } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { readIdentifiers } from '../../../issuer/identifiers';
 import {
+  addressContainsCity,
   appendCountyRegionSuffix,
   cityWithCountyRegion,
   escapeHtml,
@@ -18,7 +19,12 @@ function formatIssuerAddress(document: Document, issuerCountry: string): string 
     issuerCountry,
   );
   const address = document.issuerAddressLine
-    ? [document.issuerAddressLine, city].filter(Boolean).join(', ')
+    ? [
+        document.issuerAddressLine,
+        addressContainsCity(document.issuerAddressLine, document.issuerCity) ? '' : city,
+      ]
+        .filter(Boolean)
+        .join(', ')
     : [document.issuerStreet, [document.issuerPostcode, city].filter(Boolean).join(' ')]
         .filter(Boolean)
         .join(', ');

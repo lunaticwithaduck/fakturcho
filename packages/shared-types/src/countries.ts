@@ -1,4 +1,5 @@
 import { type CountryConfig, GENERIC_EU_CONFIG, GENERIC_NON_EU_CONFIG } from './countries/base';
+import { CZ_CONFIG } from './countries/cz';
 import { DE_CONFIG } from './countries/de';
 import { ES_CONFIG } from './countries/es';
 import { EU_RATE_OVERRIDES } from './countries/eu-rates';
@@ -79,6 +80,7 @@ const BG_CONFIG: CountryConfig = {
 
 const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
   BG: BG_CONFIG,
+  CZ: CZ_CONFIG,
   DE: DE_CONFIG,
   FR: FR_CONFIG,
   IT: IT_CONFIG,

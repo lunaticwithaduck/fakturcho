@@ -458,7 +458,8 @@
       "postcode": "Código postal",
       "city": "Ciudad",
       "phone": "Teléfono",
-      "invalidFormat": "Formato no válido"
+      "invalidFormat": "Formato no válido",
+      "czRegisterHint": "Obligatorio para emisores checos: indique su inscripción en el Registro Mercantil (tribunal, sección, número de inscripción) u otro registro público – § 435 del Código Civil (Ley n.º 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "Registro de IVA",

@@ -458,7 +458,8 @@
       "postcode": "Postleitzahl",
       "city": "Ort",
       "phone": "Telefon",
-      "invalidFormat": "Ungültiges Format"
+      "invalidFormat": "Ungültiges Format",
+      "czRegisterHint": "Für tschechische Aussteller erforderlich: Angabe der Eintragung im Handelsregister (Gericht, Abteilung, Einlagenummer) oder einem anderen öffentlichen Register – § 435 des Bürgerlichen Gesetzbuchs (Gesetz Nr. 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "USt-Registrierung",

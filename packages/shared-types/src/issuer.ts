@@ -71,5 +71,11 @@ export function isIssuerProfileComplete(profile: IssuerProfileDto | null): boole
     if (field.required) required.push(profile.identifiers[field.key] ?? null);
   }
   if (profile.vatRegistered) required.push(profile.vatNumber);
+  // § 37a HGB, § 35a GmbHG: a registered merchant must print Registergericht
+  // and Sitz once a register number (the Handelsregisternummer, stored as
+  // eik) is entered — optional only for a sole trader with no entry at all.
+  if (profile.country === 'DE' && (profile.eik ?? '').trim() !== '') {
+    required.push(profile.identifiers.registergericht ?? null, profile.identifiers.sitz ?? null);
+  }
   return required.every((value) => value !== null && value.trim() !== '');
 }

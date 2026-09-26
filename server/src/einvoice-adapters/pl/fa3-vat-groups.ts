@@ -34,8 +34,12 @@ function bucketTags(
       return { netTag: 'P_13_6_3', vatTag: null };
     case 'E':
       return { netTag: 'P_13_7', vatTag: null };
+    // resolveLineVatCategory only ever sets AE for a cross-border EU B2B
+    // service (art. 28b, place of supply outside PL) — not the domestic
+    // reverse charge of art. 17 ust. 1 pkt 7-8, which is what P_13_10/"oo"
+    // are for. Art. 100 ust. 1 pkt 4 is the applicable ground here.
     case 'AE':
-      return { netTag: 'P_13_10', vatTag: null };
+      return { netTag: 'P_13_9', vatTag: null };
     case 'O':
       return { netTag: 'P_13_8', vatTag: null };
   }
@@ -70,7 +74,7 @@ export function vatRateCode(category: VatCategory, rateBp: number): string {
     case 'E':
       return 'zw';
     case 'AE':
-      return 'oo';
+      return 'np II';
     case 'O':
       return 'np I';
   }

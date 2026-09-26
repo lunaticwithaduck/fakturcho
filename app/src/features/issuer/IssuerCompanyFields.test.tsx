@@ -57,6 +57,31 @@ const ES_VALUES: IssuerProfileFormValues = {
   countyRegion: '',
 };
 
+const CZ_VALUES: IssuerProfileFormValues = {
+  ...BG_VALUES,
+  country: 'CZ',
+  eik: '',
+  addressLine: '',
+  street: 'Václavské náměstí 1',
+  postcode: '110 00',
+  city: 'Praha',
+};
+
+const DE_VALUES_NO_HRB: IssuerProfileFormValues = {
+  ...BG_VALUES,
+  country: 'DE',
+  eik: '',
+  addressLine: '',
+  street: 'Musterstraße 1',
+  postcode: '10115',
+  city: 'Berlin',
+};
+
+const DE_VALUES_WITH_HRB: IssuerProfileFormValues = {
+  ...DE_VALUES_NO_HRB,
+  eik: 'HRB 12345',
+};
+
 afterEach(cleanup);
 
 describe('IssuerCompanyFields', () => {
@@ -220,5 +245,39 @@ describe('IssuerCompanyFields', () => {
     );
 
     expect(screen.queryByText('Невалиден формат')).toBeNull();
+  });
+
+  it('renders the Czech company-register identifier as required with its legal hint', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={CZ_VALUES} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    const field = screen.getByLabelText('Zápis v obchodním rejstříku') as HTMLInputElement;
+    expect(field.required).toBe(true);
+    expect(screen.getByText(/§ 435/)).toBeTruthy();
+  });
+
+  it('does not mark Registergericht/Sitz as required for a DE issuer with no Handelsregisternummer', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={DE_VALUES_NO_HRB} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    expect((screen.getByLabelText('Registergericht') as HTMLInputElement).required).toBe(false);
+    expect((screen.getByLabelText('Sitz') as HTMLInputElement).required).toBe(false);
+  });
+
+  it('marks Registergericht/Sitz as required for a DE issuer once a Handelsregisternummer is entered', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <IssuerCompanyFields values={DE_VALUES_WITH_HRB} onChange={noop} />
+      </NextIntlClientProvider>,
+    );
+
+    expect((screen.getByLabelText('Registergericht') as HTMLInputElement).required).toBe(true);
+    expect((screen.getByLabelText('Sitz') as HTMLInputElement).required).toBe(true);
   });
 });

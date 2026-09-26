@@ -215,8 +215,8 @@ describe('toFa3Xml — reverse charge annotation', () => {
     expect(xml).toContain('<P_18>1</P_18>');
     expect(xml).toContain('<KodUE>DE</KodUE>');
     expect(xml).toContain('<NrVatUE>DE123456789</NrVatUE>');
-    expect(xml).toContain('<P_12>oo</P_12>');
-    expect(xml).toContain('<P_13_10>');
+    expect(xml).toContain('<P_12>np II</P_12>');
+    expect(xml).toContain('<P_13_9>');
   });
 });
 

@@ -39,5 +39,11 @@ export function getMissingIssuerFields(profile: IssuerProfileDto): MissingIssuer
   if (profile.vatRegistered && isBlank(profile.vatNumber) && !missing.includes('vatNumber')) {
     missing.push('vatNumber');
   }
+  // § 37a HGB, § 35a GmbHG: Registergericht and Sitz become required once a
+  // Handelsregisternummer (eik) is entered.
+  if (profile.country === 'DE' && !isBlank(profile.eik)) {
+    if (isBlank(profile.identifiers.registergericht)) missing.push('identifier:registergericht');
+    if (isBlank(profile.identifiers.sitz)) missing.push('identifier:sitz');
+  }
   return missing;
 }

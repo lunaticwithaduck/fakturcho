@@ -23,17 +23,22 @@ export const roMentions: MentionsBuilder = ({ document, lineItems, locale }) => 
   ) {
     mentions.push(note);
   }
-  // art. 282 alin. (6): the cash-VAT mention only makes sense on a supply that
-  // is actually taxable in Romania with VAT charged — skip it on any line
-  // that is reverse-charged, exempt, out of scope, intra-community or an
-  // export, or when the document already carries an exemption ground.
-  const hasUntaxedLine = lineItems.some((line) =>
-    ['AE', 'E', 'O', 'K', 'G'].includes(line.vatCategory),
+  // art. 282 alin. (6): the cash-VAT system, and so the "TVA la încasare"
+  // mention, applies per operation, not per invoice — it only excludes
+  // supplies where the recipient owes the tax (reverse charge), exempt
+  // supplies, and supplies whose place of supply is not Romania (out of
+  // scope, intra-community, export). A mixed invoice that also has a line
+  // actually taxed in Romania with VAT charged still needs the mention for
+  // that line, so it prints as soon as ANY line qualifies; it is dropped
+  // only when NO line does, or when the document already carries an
+  // exemption ground.
+  const hasRoTaxedLine = lineItems.some(
+    (line) => line.vatRateBp > 0 && !['AE', 'E', 'O', 'K', 'G'].includes(line.vatCategory),
   );
   if (
     document.issuerVatOnCashBasis &&
     TAX_DOCUMENT_TYPES[toSharedDocumentType(document.documentType)] &&
-    !hasUntaxedLine &&
+    hasRoTaxedLine &&
     !document.vatExemptionGround
   ) {
     mentions.push(VAT_ON_CASH_BASIS_MENTION);

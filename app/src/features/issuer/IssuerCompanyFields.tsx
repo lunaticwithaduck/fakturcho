@@ -24,6 +24,14 @@ export function IssuerCompanyFields({
   const companyIdLabel = companyIdLabelFor(values.country, locale);
   const isRequired = (field: string) => requiredIssuerFields.includes(field);
   const invalidFormat = t('companyFields.invalidFormat');
+  // § 37a HGB, § 35a GmbHG: Registergericht and Sitz become required once a
+  // Handelsregisternummer (eik) is entered — kept in sync with
+  // issuerCompleteness.ts and isIssuerProfileComplete.
+  const isIdentifierRequired = (field: { key: string; required: boolean }) =>
+    field.required ||
+    (values.country === 'DE' &&
+      (field.key === 'registergericht' || field.key === 'sitz') &&
+      values.eik.trim() !== '');
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,11 +67,14 @@ export function IssuerCompanyFields({
             <Input
               key={field.key}
               label={field.label}
-              required={field.required}
+              required={isIdentifierRequired(field)}
               value={values.identifiers[field.key] ?? ''}
               onChange={(event) =>
                 onChange('identifiers', { ...values.identifiers, [field.key]: event.target.value })
               }
+              {...(values.country === 'CZ' && field.key === 'companyRegister'
+                ? { hint: t('companyFields.czRegisterHint') }
+                : {})}
               {...(fieldErrors.identifiers[field.key] ? { error: invalidFormat } : {})}
             />
           ))}

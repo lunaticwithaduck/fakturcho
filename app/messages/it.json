@@ -458,7 +458,8 @@
       "postcode": "CAP",
       "city": "Città",
       "phone": "Telefono",
-      "invalidFormat": "Formato non valido"
+      "invalidFormat": "Formato non valido",
+      "czRegisterHint": "Obbligatorio per gli emittenti cechi: indicare l'iscrizione nel Registro di commercio (tribunale, sezione, numero di iscrizione) o in un altro registro pubblico – § 435 del Codice civile (legge n. 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "Registrazione IVA",

@@ -458,7 +458,8 @@
       "postcode": "Cod poștal",
       "city": "Localitate",
       "phone": "Telefon",
-      "invalidFormat": "Format nevalid"
+      "invalidFormat": "Format nevalid",
+      "czRegisterHint": "Obligatoriu pentru emitenții cehi: menționați înregistrarea în Registrul Comerțului (instanța, secțiunea, numărul de înregistrare) sau într-un alt registru public – § 435 din Codul civil (Legea nr. 89/2012 Sb.)."
     },
     "vatFields": {
       "heading": "Înregistrare TVA",

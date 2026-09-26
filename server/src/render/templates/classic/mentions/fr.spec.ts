@@ -34,6 +34,21 @@ describe('frMentions — standard-rate invoice', () => {
 
     expect(mentions).toContain("Date d'échéance : 01/09/2026");
   });
+
+  it('does not print the computed default due date when a payment-terms note is set (C. com. L441-10 I applies only absent agreement)', () => {
+    const mentions = buildStatutoryMentions({
+      document: buildFakeDocument({
+        issuerCountry: 'FR',
+        dueAt: null,
+        issuedAt: new Date('2026-08-02'),
+        paymentTermsNote: '14 days',
+      }),
+      lineItems: buildFakeLineItems({ vatCategory: 'S' }),
+      locale,
+    });
+
+    expect(mentions.some((line) => line.includes("Date d'échéance"))).toBe(false);
+  });
 });
 
 describe('frMentions — reverse charge (AE)', () => {

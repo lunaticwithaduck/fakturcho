@@ -113,6 +113,20 @@ describe('issuer address county/province printing', () => {
     expect(html).not.toContain('Madrid, Madrid');
   });
 
+  it('does not duplicate the city when the free-text issuer address line already contains it', () => {
+    const locale = resolveClassicLocale('bg', 'BG');
+    const document = buildFakeDocument({
+      issuerAddressLine: 'ул. „Раковски“ 55, гр. Варна',
+      issuerStreet: null,
+      issuerPostcode: null,
+      issuerCity: 'гр. Варна',
+      issuerCountyRegion: null,
+    });
+    const html = buildIssuerBlock(document, 'invoice', locale);
+    expect(html).toContain('ул. „Раковски“ 55, гр. Варна');
+    expect(html).not.toContain('Варна, гр. Варна');
+  });
+
   it('other countries print the address unchanged even with a countyRegion set', () => {
     const locale = resolveClassicLocale('de', 'DE');
     const document = buildFakeDocument({

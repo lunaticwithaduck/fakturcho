@@ -114,12 +114,15 @@ export async function resolveLocalCurrencyVatSnapshot(
   // of the tax point and the issue date — an invoice issued before the sale
   // uses the issue date, not a tax point that hasn't happened yet.
   // RO (Codul fiscal art. 290 + Norme metodologice pct. 35 alin. (1)): the
-  // rate BNR published the business day before the tax point itself.
+  // rate BNR published the business day before the tax point; but art. 282
+  // alin. (2) lit. a) makes the issue date itself the chargeability event
+  // when the invoice is issued before the tax point, so the EARLIER of the
+  // two governs here too.
   let rateAsOfDate: Date;
   if (localCountry.rateSource === 'NBP') {
     rateAsOfDate = dayBefore(earlierOf(taxPointDate, input.issuedAt));
   } else if (localCountry.rateSource === 'BNR') {
-    rateAsOfDate = dayBefore(taxPointDate);
+    rateAsOfDate = dayBefore(earlierOf(taxPointDate, input.issuedAt));
   } else {
     rateAsOfDate = taxPointDate;
   }

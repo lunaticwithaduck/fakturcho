@@ -130,4 +130,63 @@ describe('getMissingIssuerFields', () => {
     };
     expect(getMissingIssuerFields(usProfile)).toEqual([]);
   });
+
+  it('requires the company-register identifier for a CZ issuer', () => {
+    const czProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'CZ',
+      addressLine: null,
+      street: 'Václavské náměstí 1',
+      postcode: '110 00',
+      city: 'Praha',
+    };
+    expect(getMissingIssuerFields(czProfile)).toEqual(['identifier:companyRegister']);
+
+    const complete: IssuerProfileDto = {
+      ...czProfile,
+      identifiers: { companyRegister: 'C 12345 vedená u Městského soudu v Praze' },
+    };
+    expect(getMissingIssuerFields(complete)).toEqual([]);
+  });
+
+  it('does not require Registergericht/Sitz for a DE sole trader with no Handelsregisternummer', () => {
+    const deProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'DE',
+      addressLine: null,
+      street: 'Musterstraße 1',
+      postcode: '10115',
+      city: 'Berlin',
+      eik: null,
+      identifiers: { steuernummer: '21/815/08150' },
+    };
+    expect(getMissingIssuerFields(deProfile)).toEqual([]);
+  });
+
+  it('requires Registergericht and Sitz for a DE issuer once a Handelsregisternummer is entered', () => {
+    const deProfile: IssuerProfileDto = {
+      ...BASE,
+      country: 'DE',
+      addressLine: null,
+      street: 'Musterstraße 1',
+      postcode: '10115',
+      city: 'Berlin',
+      eik: 'HRB 12345',
+      identifiers: { steuernummer: '21/815/08150' },
+    };
+    expect(getMissingIssuerFields(deProfile)).toEqual([
+      'identifier:registergericht',
+      'identifier:sitz',
+    ]);
+
+    const complete: IssuerProfileDto = {
+      ...deProfile,
+      identifiers: {
+        ...deProfile.identifiers,
+        registergericht: 'Amtsgericht Charlottenburg',
+        sitz: 'Berlin',
+      },
+    };
+    expect(getMissingIssuerFields(complete)).toEqual([]);
+  });
 });

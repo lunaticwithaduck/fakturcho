@@ -2,6 +2,7 @@ import { type DocumentType, TAX_DOCUMENT_TYPES } from '@fakturcho/shared-types';
 import type { Document } from '@prisma/client';
 import { formatDateForLocale } from '../../../money/format';
 import {
+  addressContainsCity,
   appendCountyRegionSuffix,
   cityWithCountyRegion,
   countryName,
@@ -27,7 +28,12 @@ function formatRecipientAddress(document: Document): string {
     ? [document.recipientStreet, [document.recipientPostcode, city].filter(Boolean).join(' ')]
         .filter(Boolean)
         .join(', ')
-    : [document.recipientAddress, city].filter(Boolean).join(', ');
+    : [
+        document.recipientAddress,
+        addressContainsCity(document.recipientAddress, document.recipientCity) ? '' : city,
+      ]
+        .filter(Boolean)
+        .join(', ');
   return appendCountyRegionSuffix(
     address,
     document.recipientCity,
@@ -88,15 +94,21 @@ export function buildDatesBlock(
   locale: ClassicLocaleContext,
 ): string {
   const { labels } = locale;
-  const issuedAt = document.issuedAt
-    ? formatDateForLocale(document.issuedAt, locale.language)
-    : '—';
-  const rows = [`<div>${labels.issuedAtPrefix(documentType)}${issuedAt}</div>`];
+  // A draft has no issuedAt yet (it is assigned at issuance, alongside the
+  // document number); hide the row rather than print a dash for a date that
+  // does not exist yet.
+  const rows = document.issuedAt
+    ? [
+        `<div>${labels.issuedAtPrefix(documentType)}${formatDateForLocale(document.issuedAt, locale.language)}</div>`,
+      ]
+    : [];
   if (documentType === 'quote') {
-    const validUntil = document.validUntil
-      ? formatDateForLocale(document.validUntil, locale.language)
-      : '—';
-    rows.push(`<div>${labels.validUntilPrefix(documentType)}${validUntil}</div>`);
+    // A draft quote may have no validUntil yet (user-entered, optional at
+    // draft stage) — hide the row rather than print a dash.
+    if (document.validUntil) {
+      const validUntil = formatDateForLocale(document.validUntil, locale.language);
+      rows.push(`<div>${labels.validUntilPrefix(documentType)}${validUntil}</div>`);
+    }
   } else if (documentType === 'delivery_note') {
     // Delivery date is only ever an optional, user-entered field; a blank one
     // has no fallback (unlike taxEventAt below), so hide the row instead of

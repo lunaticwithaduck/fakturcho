@@ -194,4 +194,70 @@ describe('DocumentIssuanceService: VAT amount in national currency (art. 230)', 
       Math.round((creditNote.vatAmount as number) * Number(invoice.exchangeRate)),
     );
   }, 30_000);
+
+  it('a CZ credit note reuses the original invoice ECB rate instead of fetching a fresh one (zákon 235/2004 Sb. §42 odst. 7, §43 odst. 3)', async () => {
+    const prismaService = prisma as unknown as PrismaService;
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, 'Jan Novák', {
+      country: 'CZ',
+      street: 'Testovací 1',
+      postcode: '110 00',
+      vatRegistered: true,
+      vatNumber: 'CZ12345678',
+      identifiers: { companyRegister: 'C 12345 vedená u Městského soudu v Praze' },
+    });
+    const invoiceDraft = await documentsService.saveDraft(accountId, null, draftRequest());
+    const invoiceIssuance = issuanceServiceWithRates(prismaService, [['24.6100', '2026-09-16']]);
+    const invoice = await invoiceIssuance.issue(accountId, invoiceDraft.id, {});
+
+    const creditNoteDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: invoice.id,
+        correctionReason: 'Test correction',
+      }),
+    );
+    // A different ECB rate is available for the correction's own (later)
+    // date — it must be ignored in favour of the original invoice's rate.
+    const creditNoteIssuance = issuanceServiceWithRates(prismaService, [['25.0000', '2026-10-01']]);
+    const creditNote = await creditNoteIssuance.issue(accountId, creditNoteDraft.id, {});
+
+    expect(creditNote.exchangeRate).toBe(invoice.exchangeRate);
+    expect(creditNote.exchangeRateDate).toBe(invoice.exchangeRateDate);
+    expect(creditNote.vatAmountLocal).toBe(
+      Math.round((creditNote.vatAmount as number) * Number(invoice.exchangeRate)),
+    );
+  }, 30_000);
+
+  it('a DK credit note does NOT reuse the original invoice rate — DK has no per-invoice fixed rate to reuse', async () => {
+    const prismaService = prisma as unknown as PrismaService;
+    const accountId = await createAccount(prisma);
+    await createCompleteIssuerProfile(prisma, accountId, 'Anna Jensen', {
+      country: 'DK',
+      street: 'Testvej 1',
+      postcode: '1000',
+      vatRegistered: true,
+      vatNumber: 'DK12345678',
+    });
+    const invoiceDraft = await documentsService.saveDraft(accountId, null, draftRequest());
+    const invoiceIssuance = issuanceServiceWithRates(prismaService, [['7.4600', '2026-09-16']]);
+    const invoice = await invoiceIssuance.issue(accountId, invoiceDraft.id, {});
+
+    const creditNoteDraft = await documentsService.saveDraft(
+      accountId,
+      null,
+      draftRequest({
+        documentType: 'credit_note',
+        originalDocumentId: invoice.id,
+        correctionReason: 'Test correction',
+      }),
+    );
+    const creditNoteIssuance = issuanceServiceWithRates(prismaService, [['7.5000', '2026-10-01']]);
+    const creditNote = await creditNoteIssuance.issue(accountId, creditNoteDraft.id, {});
+
+    expect(creditNote.exchangeRate).toBe('7.5000');
+    expect(creditNote.exchangeRate).not.toBe(invoice.exchangeRate);
+  }, 30_000);
 });

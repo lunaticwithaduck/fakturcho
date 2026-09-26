@@ -21,9 +21,8 @@ describe('generic EU country config (e.g. NL)', () => {
     ]);
   });
 
-  it('offers an optional free-text company-register identifier (e.g. a Czech s.r.o.)', () => {
-    const czConfig = getCountryConfig('CZ');
-    expect(czConfig.identifiers).toContainEqual({
+  it('offers an optional free-text company-register identifier for a country with no dedicated config', () => {
+    expect(config.identifiers).toContainEqual({
       key: 'companyRegister',
       label: 'Company register',
       pattern: null,

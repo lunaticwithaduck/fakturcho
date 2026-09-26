@@ -50,10 +50,30 @@ export interface IssuanceLocalCurrencyVatInput {
   originalDocument: PrismaDocument | null;
 }
 
-// RO Codul fiscal art. 282 alin. (9)/(10) + Norme metodologice pct. 35 alin.
-// (2); PL follows the same KIS-accepted practice: a correction reuses the
-// original invoice's own snapshot rate rather than fetching a fresh one for
-// the correction's own (possibly much later) date.
+// A correction (credit_note/debit_note with an original) reuses the original
+// invoice's own snapshot rate rather than fetching a fresh one for the
+// correction's own (possibly much later) date, in every state whose law ties
+// the applicable rate to the (unchanged) original supply/tax point:
+// - PL: art. 106j + KIS-accepted practice.
+// - RO: Codul fiscal art. 282 alin. (9)/(10) + Norme metodologice pct. 35
+//   alin. (2).
+// - CZ: zákon č. 235/2004 Sb. §42 odst. 7 písm. a) a §43 odst. 3 — the
+//   corrective document uses the rate applied to the original taxable
+//   supply, not a new one.
+// - HU: 2007. évi CXXVII. törvény (Áfa tv.) §80 (1) b) — "a számla
+//   kibocsátásakor [érvényes árfolyam]" means the ORIGINAL invoice's issue
+//   date; a helyesbítő/jóváíró számla does not create a new teljesítés
+//   (tax point), so the rate cannot change either.
+// - SE: mervärdesskattelagen, per Skatteverket's rättslig vägledning
+//   "Omräkningskurs vid beräkning av beskattningsunderlag" — the rate
+//   follows skattskyldighetens inträde (the tax point), which a
+//   kreditfaktura/ändringsfaktura correcting the same supply does not move.
+// DK is deliberately NOT included: SKAT's Den juridiske vejledning
+// (E.B.2.6.3/F.A.10.8) converts at the taxpayer's chosen periodic ECB rate
+// (e.g. the rate on the last day of the return period), not a rate fixed to
+// the individual original invoice, so there is no original rate to reuse.
+const RATE_REUSE_ON_CORRECTION_COUNTRIES = new Set(['PL', 'RO', 'CZ', 'HU', 'SE']);
+
 export async function resolveIssuanceLocalCurrencyVat(
   input: IssuanceLocalCurrencyVatInput,
   exchangeRateService: ExchangeRateService,
@@ -64,7 +84,7 @@ export async function resolveIssuanceLocalCurrencyVat(
   const reusableOriginalRate =
     input.isCorrection &&
     localCountry &&
-    (localCountry.rateSource === 'NBP' || localCountry.rateSource === 'BNR') &&
+    RATE_REUSE_ON_CORRECTION_COUNTRIES.has(input.issuerCountry ?? '') &&
     original?.localCurrency &&
     original.exchangeRate &&
     original.exchangeRateDate &&

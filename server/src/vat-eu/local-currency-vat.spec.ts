@@ -129,6 +129,52 @@ describe('resolveLocalCurrencyVatSnapshot', () => {
     expect(result?.localCurrency).toBe('RON');
   });
 
+  it('RO: an invoice issued before the supply uses the day before the issue date (art. 282 alin. (2) lit. a) CF)', async () => {
+    let requestedDate = '';
+    const service = new ExchangeRateService({
+      NBP: { fetchRateOn: async () => null },
+      BNR: {
+        fetchRateOn: async (currency, isoDate) => {
+          requestedDate = isoDate;
+          return currency === 'RON' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
+        },
+      },
+      ECB: { fetchRateOn: async () => null },
+    });
+    await resolveLocalCurrencyVatSnapshot(
+      baseInput({
+        issuerCountry: 'RO',
+        issuedAt: new Date('2026-09-17T00:00:00.000Z'),
+        taxEventAt: new Date('2026-09-20T00:00:00.000Z'),
+      }),
+      service,
+    );
+    expect(requestedDate).toBe('2026-09-16');
+  });
+
+  it('RO: uses deliveryDate/taxEventAt when it is BEFORE the issue date (supply precedes invoicing)', async () => {
+    let requestedDate = '';
+    const service = new ExchangeRateService({
+      NBP: { fetchRateOn: async () => null },
+      BNR: {
+        fetchRateOn: async (currency, isoDate) => {
+          requestedDate = isoDate;
+          return currency === 'RON' ? { rate: '4.9771', rateDate: isoDate, table: null } : null;
+        },
+      },
+      ECB: { fetchRateOn: async () => null },
+    });
+    await resolveLocalCurrencyVatSnapshot(
+      baseInput({
+        issuerCountry: 'RO',
+        issuedAt: new Date('2026-09-20T00:00:00.000Z'),
+        taxEventAt: new Date('2026-09-17T00:00:00.000Z'),
+      }),
+      service,
+    );
+    expect(requestedDate).toBe('2026-09-16');
+  });
+
   it('prints the local VAT per rate once there is more than one charged rate', async () => {
     const service = serviceWithRate('4.2512', '2026-09-16');
     const result = await resolveLocalCurrencyVatSnapshot(

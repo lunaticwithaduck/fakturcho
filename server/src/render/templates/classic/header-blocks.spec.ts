@@ -39,9 +39,62 @@ describe('buildRecipientBlock — structured street/postcode/city address', () =
     const html = buildRecipientBlock(document, 'invoice', locale);
     expect(html).toContain('ул. Тестова 1, София');
   });
+
+  it('does not duplicate the city when the free-text address already contains it', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'ul. Marszałkowska 10, 00-590 Warszawa',
+      recipientStreet: null,
+      recipientPostcode: null,
+      recipientCity: 'Warszawa',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('ul. Marszałkowska 10, 00-590 Warszawa');
+    expect(html).not.toContain('Warszawa, Warszawa');
+  });
+
+  it('does not duplicate a Cyrillic city already inside the free-text address', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'ул. „Раковски“ 55, гр. Варна',
+      recipientStreet: null,
+      recipientPostcode: null,
+      recipientCity: 'гр. Варна',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('ул. „Раковски“ 55, гр. Варна');
+    expect(html).not.toContain('Варна, гр. Варна');
+  });
+
+  it('does not duplicate the city when it equals the recipient region (Dublin/Dublin)', () => {
+    const document = buildFakeDocument({
+      recipientAddress: 'D02 XY45 Dublin',
+      recipientStreet: null,
+      recipientPostcode: null,
+      recipientCity: 'Dublin',
+      recipientCountyRegion: 'Dublin',
+      recipientCountry: 'IE',
+    });
+    const html = buildRecipientBlock(document, 'invoice', locale);
+    expect(html).toContain('D02 XY45 Dublin');
+    expect(html).not.toContain('Dublin, Dublin');
+  });
 });
 
 describe('buildDatesBlock — never a dash for a missing optional date', () => {
+  it('hides the issue-date row on a draft (issuedAt null)', () => {
+    const locale = resolveClassicLocale('es', 'ES');
+    const document = buildFakeDocument({ issuedAt: null });
+    const html = buildDatesBlock(document, 'invoice', locale);
+    expect(html).not.toContain('—');
+    expect(html).not.toContain('Fecha de expedición');
+  });
+
+  it('hides the valid-until row on a draft quote (validUntil null)', () => {
+    const locale = resolveClassicLocale('fr', 'FR');
+    const document = buildFakeDocument({ issuedAt: null, validUntil: null });
+    const html = buildDatesBlock(document, 'quote', locale);
+    expect(html).not.toContain('—');
+  });
+
   it('hides the tax-event row on a draft (taxEventAt null)', () => {
     const locale = resolveClassicLocale('bg', 'BG');
     const document = buildFakeDocument({ taxEventAt: null });
