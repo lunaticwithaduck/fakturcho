@@ -28,7 +28,7 @@ export function GuideIndexPage({
       <BackToAppLink label={backToAppLabel} />
       <h1 className="text-3xl font-bold text-text">{heading}</h1>
       <p className="text-lg leading-relaxed text-text-muted">{description}</p>
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-5">
         {guides.map((guide) => (
           <li key={guide.slug}>
             <Link
@@ -37,6 +37,7 @@ export function GuideIndexPage({
             >
               {guide.h1}
             </Link>
+            <p className="mt-1 text-sm leading-relaxed text-text-muted">{guide.description}</p>
           </li>
         ))}
         {euOverview && locale !== 'en' ? (
@@ -47,6 +48,9 @@ export function GuideIndexPage({
             >
               {euOverviewLabel}
             </Link>
+            <p lang={euOverview.locale} className="mt-1 text-sm leading-relaxed text-text-muted">
+              {euOverview.description}
+            </p>
           </li>
         ) : null}
       </ul>

@@ -43,6 +43,7 @@ describe('GuideIndexPage', () => {
     const link = screen.getByRole('link', { name: 'DE h1' });
     expect(link.getAttribute('href')).toBe('/de/guide/de-slug');
     expect(screen.getByText('Intro text').tagName).toBe('P');
+    expect(screen.getByText('DE description').tagName).toBe('P');
   });
 
   it('adds a link to the EU overview when locale is not en', () => {
@@ -59,6 +60,9 @@ describe('GuideIndexPage', () => {
     );
     const link = screen.getByRole('link', { name: 'EU-Überblick' });
     expect(link.getAttribute('href')).toBe('/en/guide/eu-slug');
+    const description = screen.getByText('EU description');
+    expect(description.tagName).toBe('P');
+    expect(description.getAttribute('lang')).toBe('en');
   });
 
   it('does not duplicate the EU overview link on the en index itself', () => {
