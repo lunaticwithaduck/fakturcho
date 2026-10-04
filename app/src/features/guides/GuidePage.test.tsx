@@ -2,6 +2,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { GuidePage } from './GuidePage';
+import { euGuide, guidesForLocale } from './registry';
 import type { GuideContent } from './types';
 
 vi.mock('@app/auth/hooks', () => ({
@@ -37,6 +38,7 @@ const CHROME = {
   signupLabel: 'Konto erstellen',
   brand: 'Fakturcho',
   backToAppLabel: 'Back to the app',
+  euOverviewLabel: 'EU overview',
 };
 
 afterEach(cleanup);
@@ -86,5 +88,26 @@ describe('GuidePage', () => {
     const types = parsed['@graph'].map((node: { '@type': string }) => node['@type']);
     expect(types).toEqual(['Article', 'BreadcrumbList']);
     expect(script?.textContent).not.toContain('FAQPage');
+  });
+
+  it('lists the other guides of the locale after the CTA, never the current one', () => {
+    const [current, ...others] = guidesForLocale('de');
+    if (!current) throw new Error('no de guide');
+    render(<GuidePage guide={current} chrome={CHROME} />);
+    const section = screen.getByRole('heading', { level: 2, name: 'Leitfäden' }).closest('section');
+    expect(section).toBeTruthy();
+    const names = Array.from(section?.querySelectorAll('a') ?? []).map((a) => a.textContent);
+    expect(names).not.toContain(current.h1);
+    for (const other of others) expect(names).toContain(other.h1);
+    expect(names).toContain('EU overview');
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+  });
+
+  it('keeps the EU overview out of the list on English guides, as the index does', () => {
+    const [current] = guidesForLocale('en');
+    if (!current) throw new Error('no en guide');
+    render(<GuidePage guide={current} chrome={CHROME} />);
+    expect(screen.queryByRole('link', { name: 'EU overview' })).toBeNull();
+    expect(euGuide()?.locale).toBe('en');
   });
 });

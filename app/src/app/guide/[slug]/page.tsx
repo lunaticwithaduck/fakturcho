@@ -52,6 +52,7 @@ export default async function BgGuideSlugPage({ params }: BgGuideSlugPageProps) 
         signupLabel: bgMessages.marketing.nav.signup,
         brand: bgMessages.marketing.brand,
         backToAppLabel: bgMessages.guides.backToApp,
+        euOverviewLabel: bgMessages.guides.euOverviewLink,
       }}
     />
   );
