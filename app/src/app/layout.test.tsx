@@ -13,9 +13,6 @@ vi.mock('@app/feature-flags', () => ({
   FeatureFlagsProvider: ({ children }: { children: ReactNode }) => children,
 }));
 vi.mock('next-intl/server', () => ({ getLocale: getLocaleMock }));
-vi.mock('next-intl', () => ({
-  NextIntlClientProvider: ({ children }: { children: ReactNode }) => children,
-}));
 vi.mock('../store/providers', () => ({
   Providers: ({ children }: { children: ReactNode }) => children,
 }));
