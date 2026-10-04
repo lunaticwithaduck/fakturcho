@@ -19,7 +19,7 @@ export async function generateMetadata({
   const [{ locale }, sp] = await Promise.all([params, searchParams]);
   const seo = (await loadMessages(locale as Locale)).seo.signup;
   return {
-    title: { absolute: seo.title },
+    title: seo.title,
     description: seo.description,
     alternates: pageAlternates('/signup', locale as Locale, sp),
   };

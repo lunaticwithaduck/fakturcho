@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: LocaleLoginPageProps): Promis
   const { locale } = await params;
   const seo = (await loadMessages(locale as Locale)).seo.login;
   return {
-    title: { absolute: seo.title },
+    title: seo.title,
     description: seo.description,
     robots: { index: false, follow: true },
     alternates: {

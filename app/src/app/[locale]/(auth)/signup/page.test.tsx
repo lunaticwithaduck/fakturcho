@@ -42,7 +42,7 @@ describe('LocaleSignupPage metadata', () => {
       searchParams: Promise.resolve({}),
     });
 
-    expect(metadata.title).toEqual({ absolute: 'Sign up' });
+    expect(metadata.title).toBe('Sign up');
     expect(metadata.alternates?.canonical).toBe('/en/signup');
     expect(metadata.alternates?.languages).toEqual({
       bg: '/signup',

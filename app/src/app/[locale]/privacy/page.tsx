@@ -13,7 +13,7 @@ interface LocalePrivacyPageProps {
 export async function generateMetadata({ params }: LocalePrivacyPageProps): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: { absolute: doc.metaTitle },
+    title: doc.metaTitle,
     description: doc.metaDescription,
     alternates: legalAlternates('privacy', locale),
   };

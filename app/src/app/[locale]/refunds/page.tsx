@@ -13,7 +13,7 @@ interface LocaleRefundsPageProps {
 export async function generateMetadata({ params }: LocaleRefundsPageProps): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: { absolute: doc.metaTitle },
+    title: doc.metaTitle,
     description: doc.metaDescription,
     alternates: legalAlternates('refunds', locale),
   };

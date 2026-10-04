@@ -11,10 +11,10 @@ describe('locale legal page metadata', () => {
     ['terms', termsMetadata, 'Terms of Service'],
     ['refunds', refundsMetadata, 'Refunds'],
   ] as const)(
-    '%s title is absolute so the Bulgarian brand template never appends',
+    '%s title is a plain string so the root layout brand template applies',
     async (_doc, generate, title) => {
       const metadata = await generate(params('en'));
-      expect(metadata.title).toEqual({ absolute: title });
+      expect(metadata.title).toBe(title);
     },
   );
 
