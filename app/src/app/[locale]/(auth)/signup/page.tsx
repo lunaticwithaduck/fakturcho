@@ -1,4 +1,5 @@
 import { SignupForm } from '@app/features/auth/SignupForm';
+import { SignupHighlights } from '@app/features/auth/SignupHighlights';
 import { defaultCountryForLocale } from '@app/features/marketing/targetCountries';
 import { firstSearchParam } from '@app/features/shared/searchParams';
 import { loadMessages } from '@app/i18n/locale';
@@ -27,5 +28,11 @@ export async function generateMetadata({
 export default async function LocaleSignupPage({ params, searchParams }: LocaleSignupPageProps) {
   const [{ locale }, sp] = await Promise.all([params, searchParams]);
   const country = firstSearchParam(sp.country) ?? defaultCountryForLocale(locale as Locale);
-  return <SignupForm locale={locale as Locale} initialCountry={country} />;
+  const { capabilities, faq } = (await loadMessages(locale as Locale)).marketing;
+  return (
+    <div className="flex flex-col gap-10">
+      <SignupForm locale={locale as Locale} initialCountry={country} />
+      <SignupHighlights capabilities={capabilities} faq={faq} />
+    </div>
+  );
 }

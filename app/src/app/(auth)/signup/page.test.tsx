@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { generateMetadata } from './page';
+import SignupPage, { generateMetadata } from './page';
 
 describe('SignupPage metadata', () => {
   it('carries the Bulgarian canonical and every published-locale alternate', async () => {
@@ -24,5 +24,15 @@ describe('SignupPage metadata', () => {
       searchParams: Promise.resolve({ country: 'DE' }),
     });
     expect(metadata.alternates).toEqual({ canonical: '/signup' });
+  });
+});
+
+describe('SignupPage', () => {
+  it('puts the form first and the landing highlights after it', async () => {
+    const element = await SignupPage();
+    const [form, highlights] = element.props.children;
+    expect(form.type.name).toBe('SignupForm');
+    expect(highlights.type.name).toBe('SignupHighlights');
+    expect(highlights.props.faq.items.length).toBeGreaterThan(0);
   });
 });
