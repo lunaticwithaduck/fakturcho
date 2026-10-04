@@ -2,14 +2,19 @@ import { toLocalePath } from '@app/i18n/localeRedirect';
 import type { Locale } from '@shared/types';
 import Link from 'next/link';
 import { COMPANY, describeEntityForLocale } from './company';
-import { getLegalFooterLinks } from './legalContent';
+import { getGuidesFooterLabel, getLegalFooterLinks } from './legalContent';
 
 interface LegalFooterProps {
   locale?: Locale;
   entity?: boolean;
+  guideIndex?: boolean;
 }
 
-export function LegalFooter({ locale = 'bg', entity = true }: LegalFooterProps) {
+export function LegalFooter({
+  locale = 'bg',
+  entity = true,
+  guideIndex = false,
+}: LegalFooterProps) {
   const links = getLegalFooterLinks(locale);
 
   return (
@@ -24,6 +29,11 @@ export function LegalFooter({ locale = 'bg', entity = true }: LegalFooterProps) 
         <Link href={toLocalePath('/refunds', locale)} className="text-sm text-text-muted underline">
           {links.refunds}
         </Link>
+        {guideIndex ? (
+          <Link href={toLocalePath('/guide', locale)} className="text-sm text-text-muted underline">
+            {getGuidesFooterLabel(locale)}
+          </Link>
+        ) : null}
         <a href={`mailto:${COMPANY.supportEmail}`} className="text-sm text-text-muted underline">
           {links.contact}
         </a>

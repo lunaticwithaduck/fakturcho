@@ -1,8 +1,13 @@
 import { toLocalePath } from '@app/i18n/localeRedirect';
-import { allGuides } from './registry';
+import type { Locale } from '@shared/types';
+import { allGuides, euGuide, guidesForLocale } from './registry';
 
 export function guideIndexLocales() {
   return [...new Set(allGuides().map((guide) => guide.locale))];
+}
+
+export function hasGuideIndex(locale: Locale): boolean {
+  return guidesForLocale(locale).length > 0 || euGuide() !== undefined;
 }
 
 export function guideIndexAlternates(): Record<string, string> {

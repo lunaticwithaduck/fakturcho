@@ -14,7 +14,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const seo = (await loadMessages(locale as Locale)).seo.forgotPassword;
   return {
-    title: { absolute: seo.title },
+    title: seo.title,
     description: seo.description,
     robots: { index: false, follow: true },
     alternates: {

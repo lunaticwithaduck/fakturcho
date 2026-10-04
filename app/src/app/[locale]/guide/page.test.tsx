@@ -1,3 +1,4 @@
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
 const { notFoundMock } = vi.hoisted(() => ({
@@ -29,5 +30,12 @@ describe('LocaleGuideIndexPage', () => {
       LocaleGuideIndexPage({ params: Promise.resolve({ locale: 'de' }) }),
     ).resolves.toBeTruthy();
     expect(notFoundMock).not.toHaveBeenCalled();
+  });
+
+  it('shows the index description as an intro paragraph', async () => {
+    const html = renderToStaticMarkup(
+      await LocaleGuideIndexPage({ params: Promise.resolve({ locale: 'de' }) }),
+    );
+    expect(html).toContain('Länderspezifische Rechnungsleitfäden von Fakturcho.</p>');
   });
 });

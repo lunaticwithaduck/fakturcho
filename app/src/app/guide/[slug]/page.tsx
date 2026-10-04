@@ -1,4 +1,5 @@
 import { GuidePage } from '@app/features/guides/GuidePage';
+import { guideAlternates } from '@app/features/guides/guideAlternates';
 import { getGuide, guidesForLocale } from '@app/features/guides/registry';
 import { ogLocaleTag } from '@app/i18n/ogLocale';
 import bgMessages from '@messages/bg.json';
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: BgGuideSlugPageProps): Promis
   return {
     title: { absolute: guide.title },
     description: guide.description,
-    alternates: { canonical: `/guide/${guide.slug}` },
+    alternates: { canonical: `/guide/${guide.slug}`, languages: guideAlternates(guide) },
     openGraph: {
       type: 'article',
       locale: ogLocaleTag('bg'),
@@ -51,6 +52,7 @@ export default async function BgGuideSlugPage({ params }: BgGuideSlugPageProps) 
         signupLabel: bgMessages.marketing.nav.signup,
         brand: bgMessages.marketing.brand,
         backToAppLabel: bgMessages.guides.backToApp,
+        euOverviewLabel: bgMessages.guides.euOverviewLink,
       }}
     />
   );

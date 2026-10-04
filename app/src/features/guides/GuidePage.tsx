@@ -5,9 +5,11 @@ import { BackToAppLink } from './BackToAppLink';
 import { GuideBreadcrumb } from './GuideBreadcrumb';
 import { GuideCta } from './GuideCta';
 import { GuideFaq } from './GuideFaq';
+import { GuideMoreGuides } from './GuideMoreGuides';
 import { GuideSections } from './GuideSections';
 import { GuideToc } from './GuideToc';
 import { buildGuideJsonLd } from './jsonLd';
+import { euGuide, guidesForLocale } from './registry';
 import type { GuideContent } from './types';
 
 export interface GuidePageChrome {
@@ -18,6 +20,7 @@ export interface GuidePageChrome {
   signupLabel: string;
   brand: string;
   backToAppLabel: string;
+  euOverviewLabel: string;
 }
 
 interface GuidePageProps {
@@ -44,7 +47,7 @@ export function GuidePage({ guide, chrome }: GuidePageProps) {
         title={guide.h1}
       />
       <header className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold text-text">{guide.h1}</h1>
+        <h1 className="text-3xl font-bold break-words text-text">{guide.h1}</h1>
         <p className="text-lg leading-relaxed text-text-muted">{guide.answer}</p>
         <p className="text-sm text-text-subtle">{lastReviewedText}</p>
       </header>
@@ -58,6 +61,13 @@ export function GuidePage({ guide, chrome }: GuidePageProps) {
         locale={locale}
         signupLabel={chrome.signupLabel}
         brand={chrome.brand}
+      />
+      <GuideMoreGuides
+        locale={locale}
+        heading={chrome.guidesLabel}
+        guides={guidesForLocale(locale).filter((other) => other.slug !== guide.slug)}
+        euOverview={euGuide()}
+        euOverviewLabel={chrome.euOverviewLabel}
       />
       <LegalFooter locale={locale} entity={locale === 'bg'} />
     </div>

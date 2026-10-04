@@ -1,3 +1,4 @@
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
 const { notFoundMock } = vi.hoisted(() => ({
@@ -27,5 +28,10 @@ describe('BgGuideIndexPage', () => {
   it('renders the bg guide index without calling notFound', () => {
     expect(BgGuideIndexPage()).toBeTruthy();
     expect(notFoundMock).not.toHaveBeenCalled();
+  });
+
+  it('shows the index description as an intro paragraph', () => {
+    const html = renderToStaticMarkup(BgGuideIndexPage());
+    expect(html).toContain('Наръчници за фактуриране по държави от Фактурчо.</p>');
   });
 });

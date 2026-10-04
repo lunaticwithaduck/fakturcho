@@ -4,7 +4,6 @@ import { ogLocaleAlternates, ogLocaleTag } from '@app/i18n/ogLocale';
 import type { Locale } from '@shared/types';
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { THEME_COLOR } from '../../theme-colors';
@@ -73,9 +72,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale} className={uiFont.variable}>
       <body className="bg-surface font-sans text-text antialiased">
         <FeatureFlagsProvider flags={flags}>
-          <NextIntlClientProvider>
-            <Providers>{children}</Providers>
-          </NextIntlClientProvider>
+          <Providers>{children}</Providers>
         </FeatureFlagsProvider>
         {umamiSrc && umamiWebsiteId ? (
           <>

@@ -1,17 +1,28 @@
 import { SignupForm } from '@app/features/auth/SignupForm';
-import { hreflangAlternates } from '@app/i18n/localeRedirect';
+import { SignupHighlights } from '@app/features/auth/SignupHighlights';
+import { loadMessages } from '@app/i18n/locale';
+import { pageAlternates } from '@app/i18n/pageAlternates';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Регистрация',
-  description:
-    'Създайте безплатен акаунт и издайте първата си фактура за минути. 1,00 € начален кредит, без абонамент.',
-  alternates: {
-    canonical: '/signup',
-    languages: hreflangAlternates('/signup'),
-  },
-};
+interface SignupPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
 
-export default function SignupPage() {
-  return <SignupForm />;
+export async function generateMetadata({ searchParams }: SignupPageProps): Promise<Metadata> {
+  return {
+    title: 'Регистрация',
+    description:
+      'Създайте безплатен акаунт и издайте първата си фактура за минути. 1,00 € начален кредит, без абонамент.',
+    alternates: pageAlternates('/signup', 'bg', await searchParams),
+  };
+}
+
+export default async function SignupPage() {
+  const { capabilities, faq } = (await loadMessages('bg')).marketing;
+  return (
+    <div className="flex flex-col gap-10">
+      <SignupForm />
+      <SignupHighlights capabilities={capabilities} faq={faq} />
+    </div>
+  );
 }

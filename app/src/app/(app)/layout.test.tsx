@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
+vi.mock('next-intl', () => ({
+  NextIntlClientProvider: ({ children }: { children: ReactNode }) => children,
+}));
 vi.mock('@app/auth', () => ({
   RequireAuth: ({ children }: { children: ReactNode }) => children,
 }));

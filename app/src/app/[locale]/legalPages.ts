@@ -1,5 +1,6 @@
 import { loadMessages } from '@app/i18n/locale';
 import type { Locale } from '@shared/types';
+import type { Metadata } from 'next';
 
 export type LegalDocId = 'privacy' | 'terms' | 'refunds';
 
@@ -14,6 +15,15 @@ const HREFLANG: Record<LegalDocId, Record<string, string>> = {
 
 export function legalHreflang(doc: LegalDocId): Record<string, string> {
   return HREFLANG[doc];
+}
+
+// Only the bg and en versions are language alternates. The other locales
+// serve the same English text canonicalised to /en, so they carry no hreflang
+// set of their own.
+export function legalAlternates(doc: LegalDocId, locale: string): Metadata['alternates'] {
+  const canonical = legalCanonical(doc);
+  if (locale !== 'en') return { canonical };
+  return { canonical, languages: legalHreflang(doc) };
 }
 
 export function legalCanonical(doc: LegalDocId): string {

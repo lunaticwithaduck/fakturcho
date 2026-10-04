@@ -9,7 +9,7 @@ describe('LocaleSignupPage', () => {
       searchParams: Promise.resolve({ country: ['DE', 'FR'] }),
     });
 
-    expect(element.props.initialCountry).toBe('DE');
+    expect(element.props.children[0].props.initialCountry).toBe('DE');
   });
 
   it('passes a plain string country through unchanged', async () => {
@@ -18,7 +18,20 @@ describe('LocaleSignupPage', () => {
       searchParams: Promise.resolve({ country: 'DE' }),
     });
 
-    expect(element.props.initialCountry).toBe('DE');
+    expect(element.props.children[0].props.initialCountry).toBe('DE');
+  });
+});
+
+describe('LocaleSignupPage highlights', () => {
+  it.each(['en', 'de', 'pl'])('puts the form first and %s highlights after it', async (locale) => {
+    const element = await LocaleSignupPage({
+      params: Promise.resolve({ locale }),
+      searchParams: Promise.resolve({ country: 'AT' }),
+    });
+    const [form, highlights] = element.props.children;
+    expect(form.type.name).toBe('SignupForm');
+    expect(highlights.type.name).toBe('SignupHighlights');
+    expect(highlights.props.capabilities.items.length).toBeGreaterThan(0);
   });
 });
 
@@ -29,7 +42,7 @@ describe('LocaleSignupPage metadata', () => {
       searchParams: Promise.resolve({}),
     });
 
-    expect(metadata.title).toEqual({ absolute: 'Sign up' });
+    expect(metadata.title).toBe('Sign up');
     expect(metadata.alternates?.canonical).toBe('/en/signup');
     expect(metadata.alternates?.languages).toEqual({
       bg: '/signup',
@@ -42,4 +55,15 @@ describe('LocaleSignupPage metadata', () => {
       'x-default': '/signup',
     });
   });
+
+  it.each(['en', 'de', 'ro'])(
+    'keeps only the canonical for %s when a country is in the query',
+    async (locale) => {
+      const metadata = await generateMetadata({
+        params: Promise.resolve({ locale }),
+        searchParams: Promise.resolve({ country: 'AT' }),
+      });
+      expect(metadata.alternates).toEqual({ canonical: `/${locale}/signup` });
+    },
+  );
 });

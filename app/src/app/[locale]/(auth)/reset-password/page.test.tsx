@@ -6,7 +6,7 @@ describe('LocaleResetPasswordPage metadata', () => {
   it('carries an English-only title and the full hreflang set for en', async () => {
     const metadata = await generateMetadata({ params: Promise.resolve({ locale: 'en' }) });
 
-    expect(metadata.title).toEqual({ absolute: 'Reset password' });
+    expect(metadata.title).toBe('Reset password');
     expect(metadata.robots).toEqual({ index: false, follow: true });
     expect(metadata.alternates?.canonical).toBe('/en/reset-password');
     expect(metadata.alternates?.languages).toEqual({

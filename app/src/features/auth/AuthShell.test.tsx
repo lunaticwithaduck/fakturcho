@@ -100,4 +100,15 @@ describe('AuthShell', () => {
       '/en/signup?lang=bg',
     );
   });
+
+  it('links the guide index from the footer', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages}>
+        <AuthShell locale="en" guideIndex>
+          <p>content</p>
+        </AuthShell>
+      </NextIntlClientProvider>,
+    );
+    expect(screen.getByRole('link', { name: 'Guides' }).getAttribute('href')).toBe('/en/guide');
+  });
 });

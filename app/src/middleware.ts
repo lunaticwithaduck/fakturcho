@@ -9,7 +9,26 @@ import {
   LOCALE_COOKIE_NAME,
 } from './i18n/localeRedirect';
 
+const APEX_HOST = 'fakturcho.com';
+const CANONICAL_ORIGIN = 'https://www.fakturcho.com';
+
+// Done here rather than in next.config redirects(): Next skips headers() for
+// those responses, and a preloaded HSTS domain must send the header from the
+// bare domain too. The matcher below hands this function every apex path.
+function redirectApexToWww(request: NextRequest): NextResponse | null {
+  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
+  if (host !== APEX_HOST) return null;
+  const { pathname, search } = request.nextUrl;
+  return new NextResponse(null, {
+    status: 308,
+    headers: { Location: `${CANONICAL_ORIGIN}${pathname === '/' ? '' : pathname}${search}` },
+  });
+}
+
 export async function middleware(request: NextRequest) {
+  const apexRedirect = redirectApexToWww(request);
+  if (apexRedirect) return apexRedirect;
+
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set(LOCALE_HEADER, localeForPathname(request.nextUrl.pathname));
 
@@ -47,5 +66,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|.*\\..*).*)'],
+  matcher: [
+    '/((?!_next|api|.*\\..*).*)',
+    {
+      source: '/((?!_next/static|_next/image).*)',
+      has: [{ type: 'host', value: 'fakturcho.com' }],
+    },
+  ],
 };
