@@ -47,7 +47,7 @@ export function GuidePage({ guide, chrome }: GuidePageProps) {
         title={guide.h1}
       />
       <header className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold text-text">{guide.h1}</h1>
+        <h1 className="text-3xl font-bold break-words text-text">{guide.h1}</h1>
         <p className="text-lg leading-relaxed text-text-muted">{guide.answer}</p>
         <p className="text-sm text-text-subtle">{lastReviewedText}</p>
       </header>

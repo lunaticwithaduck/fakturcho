@@ -44,6 +44,11 @@ const CHROME = {
 afterEach(cleanup);
 
 describe('GuidePage', () => {
+  it('lets a long unbreakable word in the H1 wrap instead of widening the page', () => {
+    render(<GuidePage guide={GUIDE} chrome={CHROME} />);
+    expect(screen.getByRole('heading', { level: 1 }).className).toContain('break-words');
+  });
+
   it('renders the breadcrumb, H1 and the answer as the lead paragraph', () => {
     render(<GuidePage guide={GUIDE} chrome={CHROME} />);
     expect(screen.getByRole('heading', { level: 1, name: GUIDE.h1 })).toBeTruthy();
