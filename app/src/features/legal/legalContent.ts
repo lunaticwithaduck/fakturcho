@@ -78,6 +78,10 @@ export function getLegalDoc(doc: LegalDocId, locale: Locale): LegalDocContent {
   };
 }
 
+export function getGuidesFooterLabel(locale: Locale) {
+  return messagesFor(locale).guides.breadcrumbGuides;
+}
+
 export function getLegalFooterLinks(locale: Locale) {
   return messagesFor(locale).legal.footerLinks;
 }

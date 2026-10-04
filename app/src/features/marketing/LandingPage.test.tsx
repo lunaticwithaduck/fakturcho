@@ -96,4 +96,9 @@ describe('LandingPage', () => {
     const button = screen.getByRole('button', { name: 'Language: English' });
     expect(button.textContent).toContain('English');
   });
+
+  it('links the locale guide index from the footer', () => {
+    render(<LandingPage locale="de" />);
+    expect(screen.getByRole('link', { name: 'Leitfäden' }).getAttribute('href')).toBe('/de/guide');
+  });
 });

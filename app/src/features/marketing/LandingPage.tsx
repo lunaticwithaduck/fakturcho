@@ -1,5 +1,6 @@
 'use client';
 
+import { hasGuideIndex } from '@app/features/guides/indexAlternates';
 import { pricingForLocale } from '@app/features/legal/company';
 import { interpolate } from '@app/features/legal/interpolate';
 import { LegalFooter } from '@app/features/legal/LegalFooter';
@@ -158,7 +159,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
         <LandingFaq locale={locale} />
       </main>
 
-      <LegalFooter locale={locale} entity={locale === 'bg'} />
+      <LegalFooter locale={locale} entity={locale === 'bg'} guideIndex={hasGuideIndex(locale)} />
     </div>
   );
 }

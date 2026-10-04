@@ -14,10 +14,16 @@ import type { ReactNode } from 'react';
 interface AuthShellProps {
   locale?: Locale;
   enEnabled?: boolean;
+  guideIndex?: boolean;
   children: ReactNode;
 }
 
-export function AuthShell({ locale = 'bg', enEnabled = false, children }: AuthShellProps) {
+export function AuthShell({
+  locale = 'bg',
+  enEnabled = false,
+  guideIndex = false,
+  children,
+}: AuthShellProps) {
   const t = useTranslations('auth');
   const pathname = usePathname();
   const homeHref = toLocalePath('/', locale);
@@ -37,7 +43,7 @@ export function AuthShell({ locale = 'bg', enEnabled = false, children }: AuthSh
         />
         <div className="w-full">{children}</div>
       </main>
-      <LegalFooter locale={locale} />
+      <LegalFooter locale={locale} guideIndex={guideIndex} />
     </div>
   );
 }

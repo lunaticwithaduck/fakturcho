@@ -1,3 +1,4 @@
+import { hasGuideIndex } from '@app/features/guides/indexAlternates';
 import { LegalFooter } from '@app/features/legal/LegalFooter';
 import brandIcon from '@app/features/shell/brand-icon.png';
 import Image from 'next/image';
@@ -12,7 +13,7 @@ export default function LegalLayout({ children }: { children: ReactNode }) {
         <span className="text-lg font-bold text-text">Фактурчо</span>
       </Link>
       <main className="flex-1">{children}</main>
-      <LegalFooter />
+      <LegalFooter guideIndex={hasGuideIndex('bg')} />
     </div>
   );
 }
