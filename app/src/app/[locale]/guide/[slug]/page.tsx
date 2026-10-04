@@ -1,4 +1,5 @@
 import { GuidePage } from '@app/features/guides/GuidePage';
+import { guideAlternates } from '@app/features/guides/guideAlternates';
 import { getGuide } from '@app/features/guides/registry';
 import { loadMessages } from '@app/i18n/locale';
 import { ogLocaleTag } from '@app/i18n/ogLocale';
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: LocaleGuideSlugPageProps): Pr
   return {
     title: { absolute: guide.title },
     description: guide.description,
-    alternates: { canonical: `/${locale}/guide/${guide.slug}` },
+    alternates: { canonical: `/${locale}/guide/${guide.slug}`, languages: guideAlternates(guide) },
     openGraph: {
       type: 'article',
       locale: ogLocaleTag(locale as Locale),

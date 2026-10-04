@@ -4,7 +4,7 @@ import sitemap from './sitemap';
 describe('sitemap', () => {
   it('always lists the home, signup and legal pages for every published locale', () => {
     const urls = sitemap().map((entry) => entry.url);
-    expect(urls).toContain('https://www.fakturcho.com/');
+    expect(urls).toContain('https://www.fakturcho.com');
     expect(urls).toContain('https://www.fakturcho.com/en/signup');
     expect(urls).toContain('https://www.fakturcho.com/en/privacy');
   });
@@ -51,5 +51,28 @@ describe('sitemap', () => {
 
   it('never crashes when no guides are registered yet', () => {
     expect(() => sitemap()).not.toThrow();
+  });
+
+  it('writes the home URL the way the page declares its canonical, without a trailing slash', () => {
+    const home = sitemap().find((entry) => entry.url === 'https://www.fakturcho.com');
+    expect(home?.alternates?.languages).toMatchObject({
+      bg: 'https://www.fakturcho.com',
+      en: 'https://www.fakturcho.com/en',
+      'x-default': 'https://www.fakturcho.com',
+    });
+    expect(sitemap().some((entry) => entry.url === 'https://www.fakturcho.com/')).toBe(false);
+  });
+
+  it('lists every entry in its own hreflang set, with identical sets across a group', () => {
+    const entries = sitemap();
+    for (const entry of entries) {
+      const languages = entry.alternates?.languages;
+      if (!languages) continue;
+      expect(Object.values(languages)).toContain(entry.url);
+      for (const target of Object.values(languages)) {
+        const targetEntry = entries.find((other) => other.url === target);
+        expect(targetEntry?.alternates?.languages).toEqual(languages);
+      }
+    }
   });
 });

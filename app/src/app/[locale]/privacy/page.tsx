@@ -2,21 +2,21 @@ import { LegalDocument } from '@app/features/legal/LegalDocument';
 import { getLegalDoc } from '@app/features/legal/legalContent';
 import type { Locale } from '@shared/types';
 import type { Metadata } from 'next';
-import { legalCanonical, legalHreflang, providedInEnglishNote } from '../legalPages';
+import { legalAlternates, providedInEnglishNote } from '../legalPages';
 
 const doc = getLegalDoc('privacy', 'en');
 
-export const metadata: Metadata = {
-  title: { absolute: doc.metaTitle },
-  description: doc.metaDescription,
-  alternates: {
-    canonical: legalCanonical('privacy'),
-    languages: legalHreflang('privacy'),
-  },
-};
-
 interface LocalePrivacyPageProps {
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: LocalePrivacyPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: { absolute: doc.metaTitle },
+    description: doc.metaDescription,
+    alternates: legalAlternates('privacy', locale),
+  };
 }
 
 export default async function LocalePrivacyPage({ params }: LocalePrivacyPageProps) {

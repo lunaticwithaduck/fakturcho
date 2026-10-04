@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { metadata as privacyMetadata } from './privacy/page';
-import { metadata as refundsMetadata } from './refunds/page';
-import { metadata as termsMetadata } from './terms/page';
+import { generateMetadata as privacyMetadata } from './privacy/page';
+import { generateMetadata as refundsMetadata } from './refunds/page';
+import { generateMetadata as termsMetadata } from './terms/page';
+
+const params = (locale: string) => ({ params: Promise.resolve({ locale }) });
 
 describe('locale legal page metadata', () => {
   it.each([
@@ -10,7 +12,8 @@ describe('locale legal page metadata', () => {
     ['refunds', refundsMetadata, 'Refunds'],
   ] as const)(
     '%s title is absolute so the Bulgarian brand template never appends',
-    (_doc, metadata, title) => {
+    async (_doc, generate, title) => {
+      const metadata = await generate(params('en'));
       expect(metadata.title).toEqual({ absolute: title });
     },
   );
@@ -19,12 +22,31 @@ describe('locale legal page metadata', () => {
     ['privacy', privacyMetadata],
     ['terms', termsMetadata],
     ['refunds', refundsMetadata],
-  ] as const)('%s canonicalizes to the English original for every locale', (doc, metadata) => {
-    expect(metadata.alternates?.canonical).toBe(`/en/${doc}`);
-    expect(metadata.alternates?.languages).toEqual({
-      bg: `/${doc}`,
-      en: `/en/${doc}`,
-      'x-default': `/${doc}`,
-    });
-  });
+  ] as const)(
+    '%s en page is self-canonical and carries the bg/en hreflang set',
+    async (doc, generate) => {
+      const { alternates } = await generate(params('en'));
+      expect(alternates?.canonical).toBe(`/en/${doc}`);
+      expect(alternates?.languages).toEqual({
+        bg: `/${doc}`,
+        en: `/en/${doc}`,
+        'x-default': `/${doc}`,
+      });
+    },
+  );
+
+  it.each([
+    ['privacy', privacyMetadata],
+    ['terms', termsMetadata],
+    ['refunds', refundsMetadata],
+  ] as const)(
+    '%s proxy locales canonicalize to /en and declare no hreflang of their own',
+    async (doc, generate) => {
+      for (const locale of ['de', 'fr', 'it', 'pl', 'ro']) {
+        const { alternates } = await generate(params(locale));
+        expect(alternates?.canonical).toBe(`/en/${doc}`);
+        expect(alternates?.languages).toBeUndefined();
+      }
+    },
+  );
 });

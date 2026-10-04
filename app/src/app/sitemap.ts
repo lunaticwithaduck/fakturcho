@@ -1,3 +1,4 @@
+import { guideAlternates } from '@app/features/guides/guideAlternates';
 import {
   guideIndexAlternates,
   guideIndexLocales,
@@ -11,13 +12,18 @@ import type { MetadataRoute } from 'next';
 
 const BASE_URL = 'https://www.fakturcho.com';
 
-function absoluteAlternates(basePath: string): Record<string, string> {
+function absoluteUrl(path: string): string {
+  return path === '/' ? BASE_URL : `${BASE_URL}${path}`;
+}
+
+function absoluteUrls(paths: Record<string, string>): Record<string, string> {
   return Object.fromEntries(
-    Object.entries(hreflangAlternates(basePath)).map(([locale, path]) => [
-      locale,
-      `${BASE_URL}${path}`,
-    ]),
+    Object.entries(paths).map(([locale, path]) => [locale, absoluteUrl(path)]),
   );
+}
+
+function absoluteAlternates(basePath: string): Record<string, string> {
+  return absoluteUrls(hreflangAlternates(basePath));
 }
 
 // Home and signup have real per-locale content, so every published
@@ -31,7 +37,7 @@ function localizedEntries(
 ): MetadataRoute.Sitemap {
   const alternates = { languages: absoluteAlternates(basePath) };
   return PUBLISHED_LOCALES.map((locale) => ({
-    url: `${BASE_URL}${toLocalePath(basePath, locale)}`,
+    url: absoluteUrl(toLocalePath(basePath, locale)),
     changeFrequency,
     priority,
     alternates,
@@ -56,41 +62,21 @@ function guideUrl(guide: GuideContent): string {
   return `${BASE_URL}${guideHref(guide)}`;
 }
 
-// Guides sharing a country (e.g. the AT guide, published in every app
-// language, unlike the original one-guide-per-locale country pages) are
-// language versions of the same page and get hreflang alternates between
-// each other; a country with only one guide is unaffected — no alternates.
 function guideEntries(): MetadataRoute.Sitemap {
-  const guides = allGuides();
-  const byCountry = new Map<string, GuideContent[]>();
-  for (const guide of guides) {
-    byCountry.set(guide.country, [...(byCountry.get(guide.country) ?? []), guide]);
-  }
-  return guides.map((guide) => {
-    const siblings = byCountry.get(guide.country) ?? [guide];
-    const alternates =
-      siblings.length > 1
-        ? {
-            languages: {
-              ...Object.fromEntries(siblings.map((sibling) => [sibling.locale, guideUrl(sibling)])),
-              'x-default': guideUrl(siblings[0] ?? guide),
-            },
-          }
-        : undefined;
+  return allGuides().map((guide) => {
+    const languages = guideAlternates(guide);
     return {
       url: guideUrl(guide),
       lastModified: guide.lastReviewed,
       changeFrequency: 'monthly',
       priority: 0.6,
-      ...(alternates ? { alternates } : {}),
+      ...(languages ? { alternates: { languages: absoluteUrls(languages) } } : {}),
     };
   });
 }
 
 function guideIndexEntries(): MetadataRoute.Sitemap {
-  const languages = Object.fromEntries(
-    Object.entries(guideIndexAlternates()).map(([locale, path]) => [locale, `${BASE_URL}${path}`]),
-  );
+  const languages = absoluteUrls(guideIndexAlternates());
   const lastModified = latestGuideReview();
   return guideIndexLocales().map((locale) => ({
     url: `${BASE_URL}${toLocalePath('/guide', locale)}`,

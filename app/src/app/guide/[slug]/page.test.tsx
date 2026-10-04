@@ -29,4 +29,14 @@ describe('BgGuideSlugPage', () => {
       BgGuideSlugPage({ params: Promise.resolve({ slug: 'does-not-exist' }) }),
     ).rejects.toThrow('NEXT_NOT_FOUND');
   });
+
+  it('lists itself among the hreflang alternates of the Austria guide', async () => {
+    const slug = 'faktura-avstriya-zadalzhitelni-rekviziti';
+    const metadata = await generateMetadata({ params: Promise.resolve({ slug }) });
+    expect(metadata.alternates?.canonical).toBe(`/guide/${slug}`);
+    expect(metadata.alternates?.languages).toMatchObject({
+      bg: `/guide/${slug}`,
+      de: '/de/guide/rechnung-oesterreich-pflichtangaben-ustg',
+    });
+  });
 });
