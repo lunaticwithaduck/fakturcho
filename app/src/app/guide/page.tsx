@@ -20,6 +20,7 @@ export default function BgGuideIndexPage() {
     <GuideIndexPage
       locale="bg"
       heading={bgMessages.guides.breadcrumbGuides}
+      description={bgMessages.guides.indexDescription}
       guides={guides}
       euOverview={eu}
       euOverviewLabel={bgMessages.guides.euOverviewLink}

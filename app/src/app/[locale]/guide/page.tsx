@@ -32,6 +32,7 @@ export default async function LocaleGuideIndexPage({ params }: LocaleGuideIndexP
     <GuideIndexPage
       locale={typedLocale}
       heading={messages.guides.breadcrumbGuides}
+      description={messages.guides.indexDescription}
       guides={guides}
       euOverview={eu}
       euOverviewLabel={messages.guides.euOverviewLink}
