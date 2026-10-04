@@ -1,4 +1,5 @@
 import { LegalDocument } from '@app/features/legal/LegalDocument';
+import { LegalShell } from '@app/features/legal/LegalShell';
 import { getLegalDoc } from '@app/features/legal/legalContent';
 import type { Locale } from '@shared/types';
 import type { Metadata } from 'next';
@@ -23,15 +24,17 @@ export default async function LocaleRefundsPage({ params }: LocaleRefundsPagePro
   const { locale } = await params;
   const note = await providedInEnglishNote(locale as Locale);
   return (
-    <LegalDocument
-      title={doc.title}
-      intro={doc.intro}
-      sections={doc.sections}
-      lastUpdatedLabel={doc.lastUpdatedLabel}
-      locale={locale as Locale}
-      currentPath={`/${locale}/refunds`}
-      enEnabled
-      note={note}
-    />
+    <LegalShell locale={locale as Locale}>
+      <LegalDocument
+        title={doc.title}
+        intro={doc.intro}
+        sections={doc.sections}
+        lastUpdatedLabel={doc.lastUpdatedLabel}
+        locale={locale as Locale}
+        currentPath={`/${locale}/refunds`}
+        enEnabled
+        note={note}
+      />
+    </LegalShell>
   );
 }
