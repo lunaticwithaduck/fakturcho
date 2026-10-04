@@ -1,16 +1,19 @@
 import { SignupForm } from '@app/features/auth/SignupForm';
-import { hreflangAlternates } from '@app/i18n/localeRedirect';
+import { pageAlternates } from '@app/i18n/pageAlternates';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Регистрация',
-  description:
-    'Създайте безплатен акаунт и издайте първата си фактура за минути. 1,00 € начален кредит, без абонамент.',
-  alternates: {
-    canonical: '/signup',
-    languages: hreflangAlternates('/signup'),
-  },
-};
+interface SignupPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export async function generateMetadata({ searchParams }: SignupPageProps): Promise<Metadata> {
+  return {
+    title: 'Регистрация',
+    description:
+      'Създайте безплатен акаунт и издайте първата си фактура за минути. 1,00 € начален кредит, без абонамент.',
+    alternates: pageAlternates('/signup', 'bg', await searchParams),
+  };
+}
 
 export default function SignupPage() {
   return <SignupForm />;

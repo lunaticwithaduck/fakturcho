@@ -42,4 +42,15 @@ describe('LocaleSignupPage metadata', () => {
       'x-default': '/signup',
     });
   });
+
+  it.each(['en', 'de', 'ro'])(
+    'keeps only the canonical for %s when a country is in the query',
+    async (locale) => {
+      const metadata = await generateMetadata({
+        params: Promise.resolve({ locale }),
+        searchParams: Promise.resolve({ country: 'AT' }),
+      });
+      expect(metadata.alternates).toEqual({ canonical: `/${locale}/signup` });
+    },
+  );
 });

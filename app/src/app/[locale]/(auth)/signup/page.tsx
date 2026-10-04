@@ -2,7 +2,7 @@ import { SignupForm } from '@app/features/auth/SignupForm';
 import { defaultCountryForLocale } from '@app/features/marketing/targetCountries';
 import { firstSearchParam } from '@app/features/shared/searchParams';
 import { loadMessages } from '@app/i18n/locale';
-import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
+import { pageAlternates } from '@app/i18n/pageAlternates';
 import type { Locale } from '@shared/types';
 import type { Metadata } from 'next';
 
@@ -11,16 +11,16 @@ interface LocaleSignupPageProps {
   searchParams: Promise<{ country?: string | string[] }>;
 }
 
-export async function generateMetadata({ params }: LocaleSignupPageProps): Promise<Metadata> {
-  const { locale } = await params;
+export async function generateMetadata({
+  params,
+  searchParams,
+}: LocaleSignupPageProps): Promise<Metadata> {
+  const [{ locale }, sp] = await Promise.all([params, searchParams]);
   const seo = (await loadMessages(locale as Locale)).seo.signup;
   return {
     title: { absolute: seo.title },
     description: seo.description,
-    alternates: {
-      canonical: toLocalePath('/signup', locale as Locale),
-      languages: hreflangAlternates('/signup'),
-    },
+    alternates: pageAlternates('/signup', locale as Locale, sp),
   };
 }
 
