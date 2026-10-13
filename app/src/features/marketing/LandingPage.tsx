@@ -7,6 +7,7 @@ import { LegalFooter } from '@app/features/legal/LegalFooter';
 import { formatMoneyForLocale } from '@app/features/shared/format';
 import brandIcon from '@app/features/shell/brand-icon.png';
 import { LanguageMenu } from '@app/i18n/LanguageMenu';
+import { LanguageSwitcher } from '@app/i18n/LanguageSwitcher';
 import { toLocalePath } from '@app/i18n/localeRedirect';
 import { Button, Card } from '@design/components';
 import {
@@ -21,6 +22,7 @@ import { CountryCardGuideLink } from './CountryCardGuideLink';
 import { getCountriesContent, getMarketingContent } from './content';
 import { HeroGuideLink } from './HeroGuideLink';
 import { LandingFaq } from './LandingFaq';
+import { LandingGuides } from './LandingGuides';
 import { TARGET_COUNTRIES } from './targetCountries';
 
 const tierPerDocumentCents = SUBSCRIPTION_TIER_IDS.map((id) =>
@@ -156,9 +158,16 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
           </p>
         </section>
 
+        <LandingGuides locale={locale} />
         <LandingFaq locale={locale} />
       </main>
 
+      <LanguageSwitcher
+        locale={locale}
+        currentPath={homeHref}
+        enabled={enEnabled}
+        className="justify-center"
+      />
       <LegalFooter locale={locale} entity={locale === 'bg'} guideIndex={hasGuideIndex(locale)} />
     </div>
   );

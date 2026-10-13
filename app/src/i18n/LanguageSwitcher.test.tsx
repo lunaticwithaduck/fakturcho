@@ -23,7 +23,7 @@ describe('LanguageSwitcher', () => {
     const bg = screen.getByRole('link', { name: 'Български' });
     const en = screen.getByRole('link', { name: 'English' });
     expect(bg.getAttribute('href')).toBe('/login?lang=bg');
-    expect(en.getAttribute('href')).toBe('/login?lang=en');
+    expect(en.getAttribute('href')).toBe('/en/login?lang=en');
     expect(bg.getAttribute('aria-current')).toBe('true');
     expect(en.getAttribute('aria-current')).toBeNull();
   });
@@ -33,7 +33,7 @@ describe('LanguageSwitcher', () => {
 
     const bg = screen.getByRole('link', { name: 'Български' });
     const en = screen.getByRole('link', { name: 'English' });
-    expect(bg.getAttribute('href')).toBe('/en/terms?lang=bg');
+    expect(bg.getAttribute('href')).toBe('/terms?lang=bg');
     expect(en.getAttribute('href')).toBe('/en/terms?lang=en');
     expect(en.getAttribute('aria-current')).toBe('true');
     expect(bg.getAttribute('aria-current')).toBeNull();

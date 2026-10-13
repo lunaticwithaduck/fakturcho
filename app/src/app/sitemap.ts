@@ -6,11 +6,14 @@ import {
 } from '@app/features/guides/indexAlternates';
 import { allGuides, guideHref } from '@app/features/guides/registry';
 import type { GuideContent } from '@app/features/guides/types';
+import { COMPANY } from '@app/features/legal/company';
 import { hreflangAlternates, toLocalePath } from '@app/i18n/localeRedirect';
 import { PUBLISHED_LOCALES } from '@shared/types';
 import type { MetadataRoute } from 'next';
 
 const BASE_URL = 'https://www.fakturcho.com';
+const LANDING_LAST_MODIFIED = '2026-10-04';
+const LEGAL_LAST_MODIFIED = COMPANY.lastUpdated.split('.').reverse().join('-');
 
 function absoluteUrl(path: string): string {
   return path === '/' ? BASE_URL : `${BASE_URL}${path}`;
@@ -38,6 +41,7 @@ function localizedEntries(
   const alternates = { languages: absoluteAlternates(basePath) };
   return PUBLISHED_LOCALES.map((locale) => ({
     url: absoluteUrl(toLocalePath(basePath, locale)),
+    lastModified: LANDING_LAST_MODIFIED,
     changeFrequency,
     priority,
     alternates,
@@ -53,8 +57,20 @@ function legalEntries(basePath: string): MetadataRoute.Sitemap {
     },
   };
   return [
-    { url: `${BASE_URL}${basePath}`, changeFrequency: 'yearly', priority: 0.3, alternates },
-    { url: `${BASE_URL}/en${basePath}`, changeFrequency: 'yearly', priority: 0.3, alternates },
+    {
+      url: `${BASE_URL}${basePath}`,
+      lastModified: LEGAL_LAST_MODIFIED,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+      alternates,
+    },
+    {
+      url: `${BASE_URL}/en${basePath}`,
+      lastModified: LEGAL_LAST_MODIFIED,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+      alternates,
+    },
   ];
 }
 

@@ -34,6 +34,7 @@ export default async function LocaleTermsPage({ params }: LocaleTermsPageProps) 
         currentPath={`/${locale}/terms`}
         enEnabled
         note={note}
+        lang="en"
       />
     </LegalShell>
   );

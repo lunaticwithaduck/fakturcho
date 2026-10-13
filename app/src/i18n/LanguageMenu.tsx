@@ -12,7 +12,7 @@ import {
 import type { Locale } from '@shared/types';
 import { PUBLISHED_LOCALES } from '@shared/types';
 import { AUTONYMS, NAV_LABELS } from './languageNames';
-import { LOCALE_QUERY_PARAM } from './localeRedirect';
+import { localeHref } from './localeRedirect';
 
 interface LanguageMenuProps {
   locale: Locale;
@@ -40,7 +40,7 @@ export function LanguageMenu({ locale, currentPath, enabled }: LanguageMenuProps
         {PUBLISHED_LOCALES.map((code) => (
           <DropdownMenuItem key={code} asChild>
             <a
-              href={`${currentPath}?${LOCALE_QUERY_PARAM}=${code}`}
+              href={localeHref(currentPath, code)}
               lang={code}
               aria-current={locale === code ? 'true' : undefined}
               className={locale === code ? 'font-semibold' : undefined}
