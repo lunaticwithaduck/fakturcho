@@ -22,6 +22,7 @@ import { CountryCardGuideLink } from './CountryCardGuideLink';
 import { getCountriesContent, getMarketingContent } from './content';
 import { HeroGuideLink } from './HeroGuideLink';
 import { LandingFaq } from './LandingFaq';
+import { LandingGuides } from './LandingGuides';
 import { TARGET_COUNTRIES } from './targetCountries';
 
 const tierPerDocumentCents = SUBSCRIPTION_TIER_IDS.map((id) =>
@@ -157,6 +158,7 @@ export function LandingPage({ locale = 'bg', enEnabled = false }: LandingPagePro
           </p>
         </section>
 
+        <LandingGuides locale={locale} />
         <LandingFaq locale={locale} />
       </main>
 
