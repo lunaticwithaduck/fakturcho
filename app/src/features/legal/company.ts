@@ -19,6 +19,7 @@ interface CompanyDetails {
   productName: string;
   website: string;
   lastUpdated: string;
+  profiles: readonly string[];
 }
 
 export const COMPANY: CompanyDetails = {
@@ -32,6 +33,10 @@ export const COMPANY: CompanyDetails = {
   productName: 'Фактурчо',
   website: 'https://www.fakturcho.com',
   lastUpdated: '15.09.2026',
+  profiles: [
+    'https://firma.bg/fakturcho-pacheliev-konsulting-eood-f097lil',
+    'https://firmi.v.bg/f-53717.html',
+  ],
 };
 
 export function describeEntity(): string {

@@ -34,6 +34,7 @@ export default async function LocalePrivacyPage({ params }: LocalePrivacyPagePro
         currentPath={`/${locale}/privacy`}
         enEnabled
         note={note}
+        lang="en"
       />
     </LegalShell>
   );

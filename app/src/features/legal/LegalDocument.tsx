@@ -16,6 +16,7 @@ interface LegalDocumentProps {
   currentPath?: string;
   enEnabled?: boolean;
   note?: string | undefined;
+  lang?: string;
 }
 
 export function LegalDocument({
@@ -27,10 +28,11 @@ export function LegalDocument({
   currentPath,
   enEnabled = false,
   note,
+  lang,
 }: LegalDocumentProps) {
   const updatedLabel = lastUpdatedLabel ?? `Последна актуализация: ${COMPANY.lastUpdated}`;
   return (
-    <article className="flex flex-col gap-8">
+    <article lang={lang} className="flex flex-col gap-8">
       <header className="flex flex-col gap-3">
         {currentPath ? (
           <div className="flex justify-end">

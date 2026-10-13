@@ -34,6 +34,7 @@ export default async function LocaleRefundsPage({ params }: LocaleRefundsPagePro
         currentPath={`/${locale}/refunds`}
         enEnabled
         note={note}
+        lang="en"
       />
     </LegalShell>
   );

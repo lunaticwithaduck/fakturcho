@@ -49,6 +49,13 @@ describe('sitemap', () => {
     expect(deEntry?.alternates).toBeUndefined();
   });
 
+  it('dates every entry', () => {
+    for (const entry of sitemap()) expect(entry.lastModified).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(sitemap().find((entry) => entry.url.endsWith('/privacy'))?.lastModified).toBe(
+      '2026-09-15',
+    );
+  });
+
   it('never crashes when no guides are registered yet', () => {
     expect(() => sitemap()).not.toThrow();
   });

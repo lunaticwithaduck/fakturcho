@@ -31,7 +31,7 @@ describe('LanguageMenu', () => {
     const en = screen.getByRole('menuitem', { name: 'English' });
     expect(bg.tagName).toBe('A');
     expect(bg.getAttribute('href')).toBe('/?lang=bg');
-    expect(en.getAttribute('href')).toBe('/?lang=en');
+    expect(en.getAttribute('href')).toBe('/en?lang=en');
     expect(bg.getAttribute('aria-current')).toBe('true');
     expect(en.getAttribute('aria-current')).toBeNull();
   });
@@ -41,7 +41,7 @@ describe('LanguageMenu', () => {
     open('Language: English');
 
     expect(screen.getByRole('menuitem', { name: 'Deutsch' }).getAttribute('href')).toBe(
-      '/en?lang=de',
+      '/de?lang=de',
     );
     expect(screen.getByRole('menuitem', { name: 'English' }).getAttribute('aria-current')).toBe(
       'true',

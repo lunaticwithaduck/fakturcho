@@ -44,6 +44,10 @@ export function toLocalePath(basePath: string, locale: Locale): string {
   return basePath === '/' ? `/${locale}` : `/${locale}${basePath}`;
 }
 
+export function localeHref(currentPath: string, locale: Locale): string {
+  return `${toLocalePath(toBasePath(currentPath), locale)}?${LOCALE_QUERY_PARAM}=${locale}`;
+}
+
 export function hreflangAlternates(basePath: string): Record<string, string> {
   const entries = PUBLISHED_LOCALES.map((locale) => [locale, toLocalePath(basePath, locale)]);
   return { ...Object.fromEntries(entries), 'x-default': basePath };

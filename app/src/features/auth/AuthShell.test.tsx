@@ -79,7 +79,7 @@ describe('AuthShell', () => {
       '/login?lang=bg',
     );
     expect(screen.getByRole('link', { name: 'English' }).getAttribute('href')).toBe(
-      '/login?lang=en',
+      '/en/login?lang=en',
     );
   });
 
@@ -97,7 +97,7 @@ describe('AuthShell', () => {
       '/en/signup?lang=en',
     );
     expect(screen.getByRole('link', { name: 'Български' }).getAttribute('href')).toBe(
-      '/en/signup?lang=bg',
+      '/signup?lang=bg',
     );
   });
 

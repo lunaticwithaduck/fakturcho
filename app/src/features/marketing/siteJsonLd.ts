@@ -12,6 +12,7 @@ export function buildSiteJsonLd(): string {
     url: COMPANY.website,
     logo: `${COMPANY.website}/icon.png`,
     email: COMPANY.supportEmail,
+    sameAs: [...COMPANY.profiles],
   };
   const website = {
     '@type': 'WebSite',
